@@ -3,5 +3,17 @@
 .RData
 .Ruserdata
 
+
+D-Apul/code/.bashvars
 D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
+
+
+E-Peve/code/.bashvars
+E-Peve/data/01-Peve-RNA-trimming-FastQC/raw-reads
+E-Peve/data/01-Peve-RNA-trimming-FastQC/trimmed-reads
+
+
+F-Ptuh/code/.bashvars
+F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/raw-reads
+F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
