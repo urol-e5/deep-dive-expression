@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	RNA-ACR-145-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-145-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-150-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-150-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-178-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-178-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-173-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-173-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-150-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-150-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-178-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-178-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-140-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-140-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-145-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-145-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-140-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-140-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-ACR-173-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/RNA-ACR-173-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
