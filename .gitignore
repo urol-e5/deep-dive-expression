@@ -3,5 +3,5 @@
 .RData
 .Ruserdata
 
-./D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads/
-./D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads/
+D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
+D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
