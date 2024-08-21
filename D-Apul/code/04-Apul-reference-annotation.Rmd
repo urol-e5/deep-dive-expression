@@ -1,0 +1,290 @@
+---
+title: "04-Apul-reference-annotation"
+author: "Kathleen Durkin"
+date: "2024-08-20"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+Code to annotate our *A. pulchra* reference files (the *A. millipora* transcriptome and genome) with GO information
+
+# Transcriptome
+## Retrieve transcriptome fasta file
+
+We'll be using the *A. millipora* [NCBI](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_013753865.1/) rna.fna file, stored [here](https://gannet.fish.washington.edu/acropora/E5-deep-dive/Transcripts/Apul_GCF_013753865.1_rna.fna) and accessible on the `deep-dive` [genomic resources page](https://github.com/urol-e5/deep-dive/wiki/Species-Characteristics-and-Genomic-Resources#genomic-resources)
+
+```{r download-transcriptome, engine='bash'}
+curl https://gannet.fish.washington.edu/acropora/E5-deep-dive/Transcripts/Apul_GCF_013753865.1_rna.fna \
+-k \
+> ../../data/Apul_GCF_013753865.1_rna.fna
+```
+
+Let's check the file
+
+```{r transcriptome-view-query, engine='bash', eval=TRUE}
+echo "First few lines:"
+head -3 ../../data/Apul_GCF_013753865.1_rna.fna
+
+echo ""
+echo "How many sequences are there?"
+grep -c ">" ../../data/Apul_GCF_013753865.1_rna.fna
+```
+
+```{r transcriptome-seqlength-histogram, eval=TRUE}
+# Read FASTA file
+fasta_file <- "../../data/Apul_GCF_013753865.1_rna.fna"  # Replace with the name of your FASTA file
+sequences <- readDNAStringSet(fasta_file)
+
+# Calculate sequence lengths
+sequence_lengths <- width(sequences)
+
+# Create a data frame
+sequence_lengths_df <- data.frame(Length = sequence_lengths)
+
+# Plot histogram using ggplot2
+ggplot(sequence_lengths_df, aes(x = Length)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "blue", alpha = 0.75) +
+  labs(title = "Histogram of Sequence Lengths",
+       x = "Sequence Length",
+       y = "Frequency") +
+  theme_minimal()
+
+summary(sequence_lengths_df)
+```
+
+```{r transcriptome-ACGT-composition, eval=TRUE}
+
+# Calculate base composition
+base_composition <- alphabetFrequency(sequences, baseOnly = TRUE)
+
+# Convert to data frame and reshape for ggplot2
+base_composition_df <- as.data.frame(base_composition)
+base_composition_df$ID <- rownames(base_composition_df)
+base_composition_melted <- reshape2::melt(base_composition_df, id.vars = "ID", variable.name = "Base", value.name = "Count")
+
+# Plot base composition bar chart using ggplot2
+ggplot(base_composition_melted, aes(x = Base, y = Count, fill = Base)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "Base Composition",
+       x = "Base",
+       y = "Count") +
+  theme_minimal() +
+  scale_fill_manual(values = c("A" = "green", "C" = "blue", "G" = "yellow", "T" = "red"))
+```
+
+
+```{r transcriptome-cg-motifs, eval=TRUE}
+
+# Count CG motifs in each sequence
+count_cg_motifs <- function(sequence) {
+  cg_motif <- "CG"
+  return(length(gregexpr(cg_motif, sequence, fixed = TRUE)[[1]]))
+}
+
+cg_motifs_counts <- sapply(sequences, count_cg_motifs)
+
+# Create a data frame
+cg_motifs_counts_df <- data.frame(CG_Count = cg_motifs_counts)
+
+# Plot CG motifs distribution using ggplot2
+ggplot(cg_motifs_counts_df, aes(x = CG_Count)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "blue", alpha = 0.75) +
+  labs(title = "Distribution of CG Motifs",
+       x = "Number of CG Motifs",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Database Creation
+
+### Obtain Fasta (UniProt/Swiss-Prot)
+
+```{r download-UniPSwissP-data, engine='bash'}
+cd ../../data
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2023_04.fasta.gz
+gunzip -k uniprot_sprot_r2023_04.fasta.gz
+```
+
+### Making the database
+
+```{r make-UniPSwissP-blastdb, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../../data/uniprot_sprot_r2023_04.fasta \
+-dbtype prot \
+-out ../../blastdb/uniprot_sprot_r2023_04
+```
+
+
+## Running Blastx
+
+```{r transcriptome-blastx, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastx \
+-query ../../data/Apul_GCF_013753865.1_rna.fna \
+-db ../../blastdb/uniprot_sprot_r2023_04 \
+-out ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx.tab \
+-evalue 1E-20 \
+-num_threads 20 \
+-max_target_seqs 1 \
+-outfmt 6
+```
+
+```{r transcriptome-blast-look, engine='bash', eval=TRUE}
+echo "First few lines:"
+head -2 ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx.tab
+
+echo "Number of lines in output:"
+wc -l ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx.tab
+```
+
+
+## Joining Blast table with annoations.
+
+### Prepping Blast table for easy join
+
+```{r transcriptome-separate, engine='bash', eval=TRUE}
+tr '|' '\t' < ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx.tab \
+> ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx_sep.tab
+
+head -1 ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx_sep.tab
+
+```
+
+### Could do some cool stuff in R here reading in table
+
+```{r transcriptome-read-data, eval=TRUE, cache=TRUE}
+bltabl <- read.csv("../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-uniprot_blastx_sep.tab", sep = '\t', header = FALSE)
+
+spgo <- read.csv("https://gannet.fish.washington.edu/seashell/snaps/uniprot_table_r2023_01.tab", sep = '\t', header = TRUE)
+
+datatable(head(bltabl), options = list(scrollX = TRUE, scrollY = "400px", scrollCollapse = TRUE, paging = FALSE))
+```
+
+```{r transcriptome-spgo-table, eval=TRUE}
+datatable(head(spgo), options = list(scrollX = TRUE, scrollY = "400px", scrollCollapse = TRUE, paging = FALSE))
+```
+
+```{r transcriptome-see, eval=TRUE}
+datatable(
+  left_join(bltabl, spgo,  by = c("V3" = "Entry")) %>%
+  select(V1, V3, V13, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs) 
+ # %>% mutate(V1 = str_replace_all(V1,pattern = "solid0078_20110412_FRAG_BC_WHITE_WHITE_F3_QV_SE_trimmed", replacement = "Ab"))
+)
+```
+
+```{r transcriptome-join, eval=TRUE}
+annot_tab <-
+  left_join(bltabl, spgo,  by = c("V3" = "Entry")) %>%
+  select(V1, V3, V13, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+
+write.table(annot_tab, file = "../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-IDmapping-2024_08_21.tab", sep = "\t",
+            row.names = TRUE, col.names = NA)
+```
+
+```{r transcriptome-view-headers, engine='bash'}
+head -n 3 ../output/04-Apul-reference-annotation/Apul_GCF_013753865.1_rna-IDmapping-2024_08_21.tab
+```
+
+```{r transcriptome-species-hits, eval=TRUE}
+# Read dataset
+#dataset <- read.csv("../output/blast_annot_go.tab", sep = '\t')  # Replace with the path to your dataset
+
+# Select the column of interest
+column_name <- "Organism"  # Replace with the name of the column of interest
+column_data <- annot_tab[[column_name]]
+
+# Count the occurrences of the strings in the column
+string_counts <- table(column_data)
+
+# Convert to a data frame, sort by count, and select the top 10
+string_counts_df <- as.data.frame(string_counts)
+colnames(string_counts_df) <- c("String", "Count")
+string_counts_df <- string_counts_df[order(string_counts_df$Count, decreasing = TRUE), ]
+top_10_strings <- head(string_counts_df, n = 10)
+
+# Plot the top 10 most common strings using ggplot2
+ggplot(top_10_strings, aes(x = reorder(String, -Count), y = Count, fill = String)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "Top 10 Species hits",
+       x = column_name,
+       y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+```
+
+```{r transcriptome-top-go, eval=TRUE}
+
+#data <- read.csv("../output/blast_annot_go.tab", sep = '\t')
+
+# Rename the `Gene.Ontology..biological.process.` column to `Biological_Process`
+colnames(annot_tab)[colnames(annot_tab) == "Gene.Ontology..biological.process."] <- "Biological_Process"
+
+# Separate the `Biological_Process` column into individual biological processes
+data_separated <- unlist(strsplit(annot_tab$Biological_Process, split = ";"))
+
+# Trim whitespace from the biological processes
+data_separated <- gsub("^\\s+|\\s+$", "", data_separated)
+
+# Count the occurrences of each biological process
+process_counts <- table(data_separated)
+process_counts <- data.frame(Biological_Process = names(process_counts), Count = as.integer(process_counts))
+process_counts <- process_counts[order(-process_counts$Count), ]
+
+# Select the 20 most predominant biological processes
+top_20_processes <- process_counts[1:20, ]
+
+# Create a color palette for the bars
+bar_colors <- rainbow(nrow(top_20_processes))
+
+# Create a staggered vertical bar plot with different colors for each bar
+barplot(top_20_processes$Count, names.arg = rep("", nrow(top_20_processes)), col = bar_colors,
+        ylim = c(0, max(top_20_processes$Count) * 1.25),
+        main = "Occurrences of the 20 Most Predominant Biological Processes", xlab = "Biological Process", ylab = "Count")
+
+
+# Create a separate plot for the legend
+png("../output/04-Apul-reference-annotation/GOlegend.png", width = 800, height = 600)
+par(mar = c(0, 0, 0, 0))
+plot.new()
+legend("center", legend = top_20_processes$Biological_Process, fill = bar_colors, cex = 1, title = "Biological Processes")
+dev.off()
+```
+
+```{r transcriptome-go-legend, eval=TRUE, fig.width = 100 ,fig.height = 100}
+knitr::include_graphics("../output/04-Apul-reference-annotation/GOlegend.png")
+```
+
+```{r transcriptome-remove-legend-file, engine='bash', eval=TRUE}
+rm ../output/04-Apul-reference-annotation/GOlegend.png
+```

@@ -4,9 +4,17 @@
 .Ruserdata
 
 
+data/*.fna
+data/*.fasta
+data/*.fasta.gz
+
+blastdb
+
 D-Apul/code/.bashvars
+D-Apul/code/*_cache
 D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
+
 
 
 E-Peve/code/.bashvars
