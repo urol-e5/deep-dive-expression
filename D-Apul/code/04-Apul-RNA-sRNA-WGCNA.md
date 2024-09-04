@@ -564,8 +564,16 @@ cor <- temp_cor     # Return cor function to original namespace
 ```
 
 ``` bash
-mv ER-block* ../output/04-Apul-RNA-sRNA-WGCNA
+# Check if there are any files starting with "ER" in the current directory
+if ls ER-block* 1> /dev/null 2>&1; then
+    # Move the files if they exist
+    mv ER-block* ../output/04-Apul-RNA-sRNA-WGCNA
+else
+    echo "No files starting with 'ER' found."
+fi
 ```
+
+    No files starting with 'ER' found.
 
 Take a look
 
