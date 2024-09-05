@@ -1,0 +1,207 @@
+---
+title: "03-Peve-RNA-summary"
+author: "Kathleen Durkin"
+date: "2024-09-04"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Gene expression summary for *Porites evermanni* RNA-seq data.
+
+-   trimmed reads generated in `deep-dive` project, trimming and QC details in `01-Peve-RNA-trimming-FastQC`
+
+-   Reads aligned to *Porites evermanni* transcriptome, details [here](https://github.com/urol-e5/deep-dive/blob/main/E-Peve/code/12-Peve-RNAseq-kallisto.md)
+
+### Install and load packages
+
+```{r load_libraries, inlcude = TRUE}
+library(tidyverse)
+library(ggplot2)
+library(reshape2)
+```
+
+# Load data
+
+## Load count data
+
+Load in the count matrix we generated after kallisto pseudoalignment using the Trinity abundance_estimates_to_matrix.pl script. We also need to slightly reformat the count matrix
+
+```{r load-count-data}
+# Read in counts data. This is a gene-level counts matrix generated from kallisto transcript abundances using Trinity
+Peve_counts_data_OG <- read_delim("../../../deep-dive/E-Peve/output/12-Peve-RNAseq-kallisto/kallisto/kallisto.isoform.counts.matrix") 
+head(Peve_counts_data_OG)
+
+# Read in ID mapping of transcripts and associated GO terms etc.
+Peve_IDmapping <- read_delim("../output/02-Peve-reference-annotation/Porites_evermanni_CDS-IDmapping-2024_09_04.tab") %>%
+  select(-...1)
+head(Peve_IDmapping)
+```
+
+## Count data munging
+
+```{r count-data-munging}
+# We need to modify this data frame so that the row names are actually row names, instead of comprising the first column
+Peve_counts_data <- Peve_counts_data_OG %>%
+  column_to_rownames(var = "...1")
+
+# Additional formatting
+# Round all estimated counts to integers
+Peve_counts_data <- round(Peve_counts_data, digits = 0)
+
+# Remove all transcripts with 5 or fewer counts in all samples
+Peve_counts_data <- Peve_counts_data[!apply(Peve_counts_data, 1, function(row) all(row < 6)), ]
+
+# Remove the "kallisto_quant_" portion of the column names, to leave just the sample names
+colnames(Peve_counts_data) <- sub("kallisto_quant_", "", colnames(Peve_counts_data))
+
+# Reorder the columns into alphabetical order (to make it easier to create an associated metadata spreadsheet)
+Peve_counts_data <- Peve_counts_data[, order(colnames(Peve_counts_data))]
+
+Peve_sample_names <- names(Peve_counts_data)
+
+head(Peve_counts_data)
+Peve_sample_names
+```
+
+```{r join-counts-annotations, eval=TRUE}
+Peve_counts_GO <- Peve_counts_data %>%
+  rownames_to_column(var = "transcript") %>%
+  left_join(Peve_IDmapping, by = c("transcript" = "V1"))
+
+head(Peve_counts_GO)
+```
+
+# Summary stats and visualizations
+
+## Expression levels
+
+Plot histograms of the expression levels in each sample
+
+```{r expression-level-histograms}
+# Melt the count matrix into long format
+Peve_counts_melted <- melt(Peve_counts_data, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Peve_counts_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#1E2761", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Transcript counts
+
+First let's check the total number of transcripts in each sample -- keep in mind this expression data has *not* been normalized yet, so there may be different totals for each sample
+```{r transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts <- colSums(Peve_counts_data)
+
+# Create a data frame for plotting
+total_transcripts_df <- data.frame(sample = names(total_transcripts),
+                                   totals = total_transcripts)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+Now let's check the number of unique transcripts in each sample -- that is, how many genes are expressed in each sample? This should be pretty much the same across samples, even without normalization.
+
+```{r total-unique-transcripts-plot}
+# Calculate the number of unique transcripts (non-zero counts) for each sample
+unique_transcripts <- colSums(Peve_counts_data > 0)
+
+# Create a data frame for plotting
+unique_transcripts_df <- data.frame(sample = names(unique_transcripts),
+                                    uniques = unique_transcripts)
+
+# Plot the total number of unique transcripts for each sample
+ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of Unique Expressed Transcripts per Sample",
+       x = "Sample",
+       y = "Unique Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+   
+
+
+## Most common biological processes
+
+Similar to the plot generated in `02-Peve-reference-annotation`, let's plot the biological processes most represented in these samples' expression
+
+```{r most-common-processes}
+
+# Rename the `Gene.Ontology..biological.process.` column to `Biological_Process`
+colnames(Peve_counts_GO)[colnames(Peve_counts_GO) == "Gene.Ontology..biological.process."] <- "Biological_Process"
+
+# Separate the `Biological_Process` column into individual biological processes
+data_separated <- unlist(strsplit(Peve_counts_GO$Biological_Process, split = ";"))
+
+# Trim whitespace from the biological processes
+data_separated <- gsub("^\\s+|\\s+$", "", data_separated)
+
+# Count the occurrences of each biological process
+process_counts <- table(data_separated)
+process_counts <- data.frame(Biological_Process = names(process_counts), Count = as.integer(process_counts))
+process_counts <- process_counts[order(-process_counts$Count), ]
+
+# Select the 20 most predominant biological processes
+top_20_processes <- process_counts[1:20, ]
+
+# Create a color palette for the bars
+bar_colors <- rainbow(nrow(top_20_processes))
+
+# Create a staggered vertical bar plot with different colors for each bar
+barplot(top_20_processes$Count, names.arg = rep("", nrow(top_20_processes)), col = bar_colors,
+        ylim = c(0, max(top_20_processes$Count) * 1.25),
+        main = "Occurrences of the 20 Most Predominant Biological Processes", xlab = "Biological Process", ylab = "Count")
+
+
+# Create a separate plot for the legend
+png("../output/03-Peve-RNA-summary/GOlegend.png", width = 800, height = 600)
+par(mar = c(0, 0, 0, 0))
+plot.new()
+legend("center", legend = top_20_processes$Biological_Process, fill = bar_colors, cex = 1, title = "Biological Processes")
+dev.off()
+```
+
+```{r go-legend, eval=TRUE, fig.width = 100 ,fig.height = 100}
+knitr::include_graphics("../output/03-Peve-RNA-summary/GOlegend.png")
+```
+
+```{r remove-legend-file, engine='bash', eval=TRUE}
+rm ../output/03-Peve-RNA-summary/GOlegend.png
+```
