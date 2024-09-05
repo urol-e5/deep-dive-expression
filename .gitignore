@@ -18,10 +18,12 @@ D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
 
 
 E-Peve/code/.bashvars
+E-Peve/code/*_cache
 E-Peve/data/01-Peve-RNA-trimming-FastQC/raw-reads
 E-Peve/data/01-Peve-RNA-trimming-FastQC/trimmed-reads
 
 
 F-Ptuh/code/.bashvars
+F-Ptuh/code/*_cache
 F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/raw-reads
 F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
