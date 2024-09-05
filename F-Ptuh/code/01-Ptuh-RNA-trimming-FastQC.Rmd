@@ -1,0 +1,336 @@
+---
+title: "01-Ptuh-RNA-trimming-FastQC"
+author: "Kathleen Durkin"
+date: "2024-09-04"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Code for trimming and QCing RNAseq data, to be used on *Pocillapora tuahiniensis* (note that *P. tuahiniensis* samples were originally incorrectly identified as *P. meandrina*, so there may be some residual labeling as such)
+
+
+For now I'm just going to QC the [raw reads](https://owl.fish.washington.edu/nightingales/P_meandrina/30-789513166/) and the [trimmed reads](https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/) generated as a part of the [deep-dive](https://github.com/urol-e5/deep-dive/tree/main) project. If additional/different trimming needs to be done for this expression work, it will be performed here.
+
+
+Inputs:
+
+- RNA-seq gzipped FastQs (e.g. `*.fastq.gz`)
+
+Outputs:
+
+- [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) HTML reports for raw and trimmed reads.
+
+- [`MultiQC`](https://multiqc.info/) HTML summaries of [`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) for raw and trimmed reads.
+
+
+[Sequencing report](https://github.com/urol-e5/deep-dive/wiki/Azenta_30-789513166_Data_Report.html)
+[Trimming details](https://robertslab.github.io/sams-notebook/posts/2023/2023-05-19-FastQ-QC-and-Trimming---E5-Coral-RNA-seq-Data-for-A.pulchra-P.evermanni-and-P.meandrina-Using-FastQC-fastp-and-MultiQC-on-Mox/)
+
+---
+
+# Create a Bash variables file
+
+This allows usage of Bash variables (e.g. paths to common directories) across R Markdown chunks.
+```{r save-bash-variables-to-rvars-file, engine='bash', eval=TRUE}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Data directories"
+echo 'export expression_dir=/home/shared/8TB_HDD_02/shedurkin/expression'
+echo 'export output_dir_top=${expression_dir}/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC'
+echo 'export raw_fastqc_dir=${output_dir_top}/raw-fastqc'
+echo 'export raw_reads_dir=${expression_dir}/F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/raw-reads'
+echo 'export raw_reads_url="https://owl.fish.washington.edu/nightingales/P_meandrina/30-789513166/"'
+echo 'export trimmed_fastqc_dir=${output_dir_top}/trimmed-fastqc'
+echo 'export trimmed_reads_dir=${expression_dir}/F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads'
+echo 'export trimmed_reads_url="https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"'
+echo ""
+
+echo "# Paths to programs"
+echo 'export fastqc=/home/shared/FastQC-0.12.1/fastqc'
+echo 'export multiqc=/home/sam/programs/mambaforge/bin/multiqc'
+echo 'export flexbar=/home/shared/flexbar-3.5.0-linux/flexbar'
+echo ""
+
+echo "# Set FastQ filename patterns"
+echo "export fastq_pattern='*.fastq.gz'"
+echo "export R1_fastq_pattern='*_R1_*.fastq.gz'"
+echo "export R2_fastq_pattern='*_R2_*.fastq.gz'"
+echo ""
+
+echo "# Set number of CPUs to use"
+echo 'export threads=20'
+echo ""
+
+echo "# Input/output files"
+echo 'export raw_checksums=checksums.md5'
+echo 'export trimmed_checksums=trimmed_fastq_checksums.md5'
+echo ""
+
+
+
+echo "## Inititalize arrays"
+echo 'export fastq_array_R1=()'
+echo 'export fastq_array_R2=()'
+echo 'export raw_fastqs_array=()'
+echo 'export R1_names_array=()'
+echo 'export R2_names_array=()'
+echo 'export trimmed_fastqs_array=()'
+echo ""
+
+echo "# Programs associative array"
+echo "declare -A programs_array"
+echo "programs_array=("
+echo '[fastqc]="${fastqc}" \'
+echo '[multiqc]="${multiqc}" \'
+echo '[flexbar]="${flexbar}"'
+echo ")"
+} > .bashvars
+
+cat .bashvars
+```
+
+
+# Raw reads
+## Download raw RNA-seq reads
+
+Reads are downloaded from: https://owl.fish.washington.edu/nightingales/P_meandrina/30-789513166/
+
+The `--cut-dirs 3` command cuts the preceding directory structure (i.e. `nightingales/P_meandrina/30-789513166/`) so that we just end up with the reads.
+
+```{r download-raw-reads, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+wget \
+--directory-prefix ${raw_reads_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 3 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--accept ${fastq_pattern} ${raw_reads_url}
+```
+
+```{r check-raw-reads, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+ls -lh "${raw_reads_dir}"
+```
+
+## Verify raw read checksums
+```{r verify-raw-read-checksums, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+wget \
+--directory-prefix ${raw_reads_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 3 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--accept checksums.md5 ${raw_reads_url}
+
+cd "${raw_reads_dir}"
+
+md5sum checksums.md5 --check
+```
+
+
+## FastQC/MultiQC on raw reads
+```{r raw-fastqc-multiqc, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+############ RUN FASTQC ############
+
+
+# Create array of raw FastQs
+raw_fastqs_array=(${raw_reads_dir}/${fastq_pattern})
+
+# Pass array contents to new variable as space-delimited list
+raw_fastqc_list=$(echo "${raw_fastqs_array[*]}")
+
+echo "Beginning FastQC on raw reads..."
+echo ""
+
+# Run FastQC
+### NOTE: Do NOT quote raw_fastqc_list
+${programs_array[fastqc]} \
+--threads ${threads} \
+--outdir ${raw_fastqc_dir} \
+--quiet \
+${raw_fastqc_list}
+
+echo "FastQC on raw reads complete!"
+echo ""
+
+############ END FASTQC ############
+
+############ RUN MULTIQC ############
+echo "Beginning MultiQC on raw FastQC..."
+echo ""
+
+${programs_array[multiqc]} ${raw_fastqc_dir} -o ${raw_fastqc_dir}
+
+echo ""
+echo "MultiQC on raw FastQs complete."
+echo ""
+
+############ END MULTIQC ############
+
+echo "Removing FastQC zip files."
+echo ""
+rm ${raw_fastqc_dir}/*.zip
+echo "FastQC zip files removed."
+echo ""
+```
+
+
+```{r check-raw-reads-QC-files, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# View directory contents
+ls -lh ${raw_fastqc_dir}
+```
+
+
+# Trimmed reads
+## Download trimmed RNA-seq reads
+
+Reads are downloaded from: https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/
+
+```{r download-trimmed-reads, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+wget \
+--directory-prefix ${trimmed_reads_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 4 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--accept ${fastq_pattern} ${trimmed_reads_url}
+```
+
+```{r check-trimmed-reads, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+ls -lh "${trimmed_reads_dir}"
+```
+
+## Verify raw read checksums
+```{r verify-trimmed-read-checksums, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+wget \
+--directory-prefix ${trimmed_reads_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 4 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--accept trimmed_fastq_checksums.md5 ${trimmed_reads_url}
+
+cd "${trimmed_reads_dir}"
+
+md5sum trimmed_fastq_checksums.md5 --check
+```
+
+
+## FastQC/MultiQC on trimmed reads
+
+```{r FastQC-MultiQC-trimmed-reads, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+############ RUN FASTQC ############
+
+### NOTE: Do NOT quote raw_fastqc_list
+# Create array of trimmed FastQs
+trimmed_fastqs_array=(${trimmed_reads_dir}/${fastq_pattern})
+
+# Pass array contents to new variable as space-delimited list
+trimmed_fastqc_list=$(echo "${trimmed_fastqs_array[*]}")
+
+echo "Beginning FastQC on raw reads..."
+echo ""
+
+# Run FastQC
+${programs_array[fastqc]} \
+--threads ${threads} \
+--outdir ${trimmed_fastqc_dir} \
+--quiet \
+${trimmed_fastqc_list}
+
+echo "FastQC on trimmed reads complete!"
+echo ""
+
+############ END FASTQC ############
+
+############ RUN MULTIQC ############
+echo "Beginning MultiQC on raw FastQC..."
+echo ""
+
+${programs_array[multiqc]} ${trimmed_fastqc_dir} -o ${trimmed_fastqc_dir}
+
+echo ""
+echo "MultiQC on trimmed FastQs complete."
+echo ""
+
+############ END MULTIQC ############
+
+echo "Removing FastQC zip files."
+echo ""
+rm ${trimmed_fastqc_dir}/*.zip
+echo "FastQC zip files removed."
+echo ""
+```
+
+```{r view-trimmed-reads-QC-files, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# View directory contents
+ls -lh ${trimmed_fastqc_dir}
+```
+
+# Summary

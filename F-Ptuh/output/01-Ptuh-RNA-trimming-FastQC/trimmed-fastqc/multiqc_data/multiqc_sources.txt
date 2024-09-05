@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	RNA-POC-48-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-48-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-47-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-47-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-48-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-48-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-50-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-50-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-57-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-57-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-47-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-47-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-57-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-57-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-53-S1-TP2_R1_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-53-S1-TP2_R1_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-50-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-50-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
+FastQC	all_sections	RNA-POC-53-S1-TP2_R2_001	/home/shared/8TB_HDD_02/shedurkin/expression/F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/RNA-POC-53-S1-TP2_R2_001.fastp-trim.20230519_fastqc.zip
