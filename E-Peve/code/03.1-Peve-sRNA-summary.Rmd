@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 Gene expression summary for *Porites evermanni* sRNA-seq data.
 
--   trimmed reads generated in `deep-dive` project, trimming and QC details in `01-Peve-RNA-trimming-FastQC`
+-   trimmed reads generated in `deep-dive` project
 
 -   Reads aligned to *Porites evermanni* transcriptome, details [here](https://github.com/urol-e5/deep-dive/blob/main/E-Peve/code/12-Peve-RNAseq-kallisto.md)
 
@@ -42,6 +42,7 @@ library(tidyverse)
 library(ggplot2)
 library(reshape2)
 library(pheatmap)
+library(RColorBrewer)
 ```
 
 
@@ -229,12 +230,14 @@ ggplot(unique_miRNA_df, aes(x = sample, y = uniques)) +
 ## Heatmap
 
 ```{r miRNA-heatmap}
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+
 pheatmap(Peve_counts_miRNA,
          cluster_rows = TRUE,
          cluster_cols = TRUE,
          show_rownames = TRUE,
          show_colnames = TRUE,
-         color = colorRampPalette(c("blue", "white", "red"))(50),
+         color = heat_colors,
          fontsize_row = 8,
          fontsize_col = 8)
 ```
@@ -247,7 +250,7 @@ pheatmap(Peve_counts_miRNA,
          show_rownames = TRUE,
          show_colnames = TRUE,
          scale = 'row',
-         color = colorRampPalette(c("blue", "white", "red"))(50),
+         color = heat_colors,
          fontsize_row = 8,
          fontsize_col = 8)
 ```
