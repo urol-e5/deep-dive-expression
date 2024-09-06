@@ -1,0 +1,253 @@
+---
+title: "03.1-Peve-sRNA-summary"
+author: "Kathleen Durkin"
+date: "2024-09-05"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Gene expression summary for *Porites evermanni* sRNA-seq data.
+
+-   trimmed reads generated in `deep-dive` project, trimming and QC details in `01-Peve-RNA-trimming-FastQC`
+
+-   Reads aligned to *Porites evermanni* transcriptome, details [here](https://github.com/urol-e5/deep-dive/blob/main/E-Peve/code/12-Peve-RNAseq-kallisto.md)
+
+### Install and load packages
+
+```{r load_libraries, inlcude = TRUE}
+library(tidyverse)
+library(ggplot2)
+library(reshape2)
+library(pheatmap)
+```
+
+
+# sRNA
+
+## Load count data
+
+Load in the sRNA count matrix generated using ShortStack. Keep in mind this data includes counts of all sRNAs, not just miRNAs. Also note, while we have 5 samples from which RNA was sequenced, only 3 of those were sequenced for sRNA in P. evermanni.
+
+```{r load-sRNA-counts}
+# Read in sRNA counts data
+Peve_counts_sRNA_data_OG <- read_delim("../../../deep-dive/E-Peve/output/08.2-Peve-sRNAseq-ShortStack-31bp-fastp-merged/ShortStack_out/Counts.txt", delim="\t") 
+head(Peve_counts_sRNA_data_OG)
+```
+
+## Count data munging
+
+```{r sRNA-count-data-munging}
+Peve_counts_sRNA <- Peve_counts_sRNA_data_OG
+
+# Remove excess portions of sample column names to just "sample###"
+colnames(Peve_counts_sRNA) <- sub("-S1-TP2-fastp-adapters-polyG-31bp-merged", "", colnames(Peve_counts_sRNA))
+colnames(Peve_counts_sRNA) <- sub("POR-", "sample", colnames(Peve_counts_sRNA))
+
+# Keep just the counts and cluster names
+Peve_counts_sRNA <- Peve_counts_sRNA %>% select("sample73", "sample79", "sample82", "Name")
+
+# I'm not going to be doing any removal of low-count sRNAs for now
+
+# Make the cluster names our new row names
+Peve_counts_sRNA <- Peve_counts_sRNA %>% column_to_rownames(var = "Name")
+
+head(Peve_counts_sRNA)
+```
+
+
+## Expression levels
+
+Plot histograms of the expression levels in each sample
+
+```{r expression-level-histograms}
+# Melt the count matrix into long format
+Peve_counts_sRNA_melted <- melt(Peve_counts_sRNA, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Peve_counts_sRNA_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#1E2761", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Transcript counts
+
+First let's check the total number of transcripts in each sample -- keep in mind this expression data has *not* been normalized yet, so there may be different totals for each sample
+```{r transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts <- colSums(Peve_counts_sRNA)
+
+# Create a data frame for plotting
+total_transcripts_df <- data.frame(sample = names(total_transcripts),
+                                   totals = total_transcripts)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+Now let's check the number of unique transcripts in each sample -- that is, how many unique sRNAs are expressed in each sample? This should be pretty much the same across samples, even without normalization.
+
+```{r total-unique-transcripts-plot}
+# Calculate the number of unique transcripts (non-zero counts) for each sample
+unique_transcripts <- colSums(Peve_counts_sRNA > 0)
+
+# Create a data frame for plotting
+unique_transcripts_df <- data.frame(sample = names(unique_transcripts),
+                                    uniques = unique_transcripts)
+
+# Plot the total number of unique transcripts for each sample
+ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of Unique Expressed Transcripts per Sample",
+       x = "Sample",
+       y = "Unique Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+   
+
+# miRNA
+
+## Load miRNA metadata
+
+The ShortStack output Results.txt includes all clusters of sRNA reads, including those not annotated as valid miRNAs. Now that we've looked at all the sRNAs a bit, let's focus in on those classified as miRNAs.
+
+```{r miRNA-count-data-munging}
+
+# Join with full metadata sheet, which only contains valid miRNAs
+Peve_metadata_miRNA <- read_csv("../../../deep-dive/DEF-cross-species/output/10-shortRNA-ShortStack-comparison/Peve_results_mature_named.csv") 
+
+Peve_counts_sRNA <- rownames_to_column(Peve_counts_sRNA, var = "Name")
+
+Peve_counts_miRNA <- left_join(Peve_metadata_miRNA, Peve_counts_sRNA, by = c("Name" = "Name"))
+
+# Keep just the counts and given miRNA names (e.g., based on match to previously described miRNA)
+Peve_counts_miRNA <- Peve_counts_miRNA %>% select("sample73", "sample79", "sample82", "given_miRNA_name")
+
+# We seem to have a duplicate miRNA name, "peve-mir-novel-4", which would prevent us from making the miRNA names our new row names. We need to first make that column unique
+Peve_counts_miRNA$given_miRNA_name <- make.unique(as.character(Peve_counts_miRNA$given_miRNA_name))
+
+# Make the miRNA names our new row names
+Peve_counts_miRNA <- Peve_counts_miRNA %>% column_to_rownames(var = "given_miRNA_name")
+
+head(Peve_counts_miRNA)
+```
+
+## Expression levels
+
+Plot histograms of the miRNA expression levels in each sample
+
+```{r miRNA-expression-level-histograms}
+# Melt the count matrix into long format
+Peve_counts_miRNA_melted <- melt(Peve_counts_miRNA, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Peve_counts_miRNA_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#1E2761", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## miRNA counts
+
+First let's check the total number of miRNAs in each sample -- keep in mind this expression data has *not* been normalized yet, so there may be different totals for each sample
+```{r miRNA-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_miRNA <- colSums(Peve_counts_miRNA)
+
+# Create a data frame for plotting
+total_miRNA_df <- data.frame(sample = names(total_miRNA),
+                                   totals = total_miRNA)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_miRNA_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of miRNAs per Sample",
+       x = "Sample",
+       y = "Total miRNAs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+Now let's check the number of unique miRNAs in each sample -- This should be pretty much the same across samples, even without normalization.
+
+```{r total-unique-miRNA-plot}
+# Calculate the number of unique transcripts (non-zero counts) for each sample
+unique_miRNA <- colSums(Peve_counts_miRNA > 0)
+
+# Create a data frame for plotting
+unique_miRNA_df <- data.frame(sample = names(unique_miRNA),
+                                    uniques = unique_miRNA)
+
+# Plot the total number of unique transcripts for each sample
+ggplot(unique_miRNA_df, aes(x = sample, y = uniques)) +
+  geom_bar(stat = "identity", fill = "#1E2761", color = "black") +
+  labs(title = "Total Number of Unique Expressed miRNAs per Sample",
+       x = "Sample",
+       y = "Unique miRNA") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Heatmap
+
+```{r miRNA-heatmap}
+pheatmap(Peve_counts_miRNA,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         fontsize_row = 8,
+         fontsize_col = 8)
+```
+Well... there's like 3 miRNAs with much higher expression than the others, which is making visualizing relative differences difficult. Let's redo the heatmap, normalizing each row to view relative difference in expression between samples (`scale='row'`)
+
+```{r miRNA-heatmap-rowscale}
+pheatmap(Peve_counts_miRNA,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         scale = 'row',
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         fontsize_row = 8,
+         fontsize_col = 8)
+```
