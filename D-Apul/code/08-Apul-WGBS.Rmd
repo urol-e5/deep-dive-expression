@@ -1,0 +1,37 @@
+---
+title: "08-E5-Deep-Dive-Expression-WGBS"
+author: "Zoe Dellaert"
+date: "2024-10-01"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+## E5 Deep Dive Expression WGBS
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+### simulate WGBS data for *Acropora pulchra* on Andromeda
+
+```{r sherman, engine='bash'}
+git clone https://github.com/FelixKrueger/Sherman.git
+
+interactive 
+
+perl sherman.pl --genome /data/putnamlab/tconn/repeats/apul_softmasked/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.fa.masked --readLength 150 --numberOfReads 1000000 --paired
+```
+
+### Run nfcore-methylseq based on [Danielle's Notebook](https://github.com/daniellembecker/DanielleBecker_Lab_Notebook/blob/master/_posts/2023-03-13-P.meandrina-WGBS-Workflow-Host.md)
