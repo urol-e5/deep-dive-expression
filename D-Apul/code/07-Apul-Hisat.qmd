@@ -1,0 +1,288 @@
+---
+title: "07- A pulcra HiSat2"
+author: Steven Roberts
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+output: 
+  html_document:
+    theme: readable
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+#millipora genome prep
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
+../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
+> ../output/04-Apulcra-hisat/m_exon.tab
+```
+
+```{r, engine='bash'}
+head ../output/04-Apulcra-hisat/m_exon.tab
+
+```
+```{r, engine='bash'}
+#!/bin/bash
+
+# This script will extract splice sites from the gtf file
+
+# This is the command to extract splice sites from the gtf file
+/home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
+
+# This is the gtf file
+../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
+
+# This is the output file
+> ../output/04-Apulcra-hisat/m_splice_sites.tab
+
+```
+
+```
+"${programs_array[hisat2_build]}" \
+"${genome_fasta}" \
+"${genome_index_name}" \
+--exon "${exons}" \
+--ss "${splice_sites}" \
+-p "${threads}" \
+2> hisat2-build_stats.txt
+```
+
+
+```{r, engine='bash'}
+#!/bin/bash
+
+# hisat2-build is a program that builds a hisat2 index for the reference genome
+# ../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna is the reference genome
+# GCF_013753865.1_Amil_v2.1 is the name of the index
+# --exon ../output/04-Apulcra-hisat/m_exon.tab is the exon file
+# --ss ../output/04-Apulcra-hisat/m_splice_sites.tab is the splice site file
+# -p 40 is the number of threads
+# ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf is the gtf file
+# 2> ../output/04-Apulcra-hisat/hisat2-build_stats.txt is the output file
+
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna \
+GCF_013753865.1_Amil_v2.1 \
+--exon ../output/04-Apulcra-hisat/m_exon.tab \
+--ss ../output/04-Apulcra-hisat/m_splice_sites.tab \
+-p 40 \
+../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
+2> ../output/04-Apulcra-hisat/hisat2-build_stats.txt
+
+```
+
+
+
+# Alignment
+
+```
+Hisat2 alignments
+"${programs_array[hisat2]}" \
+-x "${genome_index_name}" \
+-1 "${fastq_list_R1}" \
+-2 "${fastq_list_R2}" \
+-S "${sample_name}".sam \
+2> "${sample_name}"-hisat2_stats.txt
+```
+
+```{r, engine='bash'}
+#!/bin/bash comment with GPT Studio
+
+# run hisat2 to align reads to the reference genome
+/home/shared/hisat2-2.2.1/hisat2 \
+
+# specify the reference genome
+-x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
+
+```
+
+
+### chatgpt comment test - same chunk as above
+this with ChatGPT not inline 
+
+
+
+This R code is actually a command-line script written in Bash which can be run in the terminal or within an R script using the `system()` or `system2()` commands. It runs the program HISAT2 with specific options and parameters on paired-end RNA-seq data for a specific species of organism called *Acanthopleura granulata* (also known as *Acmaea intestinalis*) to align the sequencing reads to its reference genome.
+
+
+---
+
+ChatGPT output:
+
+This code is running the HISAT2 alignment tool, which is used to align RNA sequencing reads to a reference genome. It is specifying the following options:
+
+`-x` specifies the reference genome index to use for the alignment.
+
+`-p` specifies the number of CPU cores to use in the alignment. 
+
+`-1` and `-2` specify the input paired-end fastq read files to align. 
+
+`-S` specifies the output SAM file to save the alignment results.
+
+`2>&1 | tee` specifies that both stdout and stderr are to be written to a file `../output/04-Apulcra-hisat/hisat2_stats.txt`, while also being printed to the console for the user to see.
+
+The code is assuming that the input fastq files are located at `../data/SRR8601366_1.fastq` and `../data/SRR8601366_2.fastq`, and that the reference genome index is located at `/home/shared/hisat2-2.2.1/hisat2`.
+
+The aligned output will be saved to a SAM file located at `../output/04-Apulcra-hisat/SRR8601366_mil.sam`.
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
+```
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
+```
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
+```
+# Align with no splice sites
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna \
+GCF_013753865.1_Amil_v2.1_nosplice \
+-p 48 \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2-build_stats_nosplice.txt
+```
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1_nosplice \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_mil_nosplice.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_nosplice.txt
+```
+
+# A hyacinthus
+
+
+## no splice
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Ahya/ncbi_dataset/data/GCA_020536085.1/GCA_020536085.1_Ahyacinthus.chrsV1_genomic.fna \
+../output/04-Apulcra-hisat/GCA_020536085.1_Ahya_nosplice \
+-p 48 \
+2> ../output/04-Apulcra-hisat/hisat2-build_stats_Ahya_nosplice.txt
+```
+
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCA_020536085.1_Ahya_nosplice \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_hya_nosplice.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_Ahya_nosplice.txt
+```
+
+
+# A digitera
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
+../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
+> ../output/04-Apulcra-hisat/d_exon.tab
+```
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
+../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
+> ../output/04-Apulcra-hisat/d_splice_sites.tab
+```
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Adig/ncbi_dataset/data/GCF_000222465.1/GCF_000222465.1_Adig_1.1_genomic.fna \
+../output/04-Apulcra-hisat/GCF_000222465.1_Adig \
+--exon ../output/04-Apulcra-hisat/d_exon.tab \
+--ss ../output/04-Apulcra-hisat/d_splice_sites.tab \
+-p 48 \
+../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
+2> ../output/04-Apulcra-hisat/hisat2-build_stats_Adig.txt
+```
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_000222465.1_Adig \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_dig.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_dig.txt
+```
+## dig no splice
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Adig/ncbi_dataset/data/GCF_000222465.1/GCF_000222465.1_Adig_1.1_genomic.fna \
+../output/04-Apulcra-hisat/GCF_000222465.1_Adig_nosplice \
+-p 48 \
+2> ../output/04-Apulcra-hisat/hisat2-build_stats_Adig.txt
+```
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/04-Apulcra-hisat/GCF_000222465.1_Adig_nosplice \
+-p 48 \
+-1 ../data/SRR8601366_1.fastq \
+-2 ../data/SRR8601366_2.fastq \
+-S ../output/04-Apulcra-hisat/SRR8601366_dig_nosplice.sam \
+2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_dig_nosplice.txt
+```
