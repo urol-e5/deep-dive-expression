@@ -10,3 +10,146 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Script to analyzed relationships between RNA-sRNA-WGBS using mixOmics.  
+
+# Set up 
+
+Load libraries 
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(mixOmics)
+```
+
+# Read in files 
+
+Read in count matrices.  
+
+```{r}
+mrna<-read.table("D-Apul/output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_RNA_normalized.txt")
+srna<-read.table("D-Apul/output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_sRNA_normalized.txt")
+metadata <- data.frame(
+  sample = c("sample145", "sample140", "sample173", "sample178", "sample150"),
+  species = "Apul"
+)
+```
+
+Transpose the count matrices. 
+```{r}
+mrna<-t(mrna)
+srna<-t(srna)
+```
+
+Follow the mixOmics tutorial for conducting correlations between these two data sets. 
+
+All data sets have dimensions of 5 samples. We can add additional species to this as we go.  
+
+# Conduct mixOmics  
+
+Set matrices. 
+
+```{r}
+dim(mrna)
+dim(srna)
+dim(metadata)
+```
+
+## Conduct preliminary PCA  
+
+```{r}
+pca.mrna <- pca(mrna, ncomp = 4, center = TRUE, scale = TRUE)
+pca.srna <- pca(srna, ncomp = 4, center = TRUE, scale = TRUE)
+
+plot(pca.mrna)
+plot(pca.srna)
+```
+
+Similar variance explained because we are dealing with individual samples within a species. This will change as we add more species.  
+
+```{r}
+plotIndiv(pca.mrna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'mRNA, PCA comp 1 - 2')
+
+plotIndiv(pca.srna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
+```
+
+## PLS model  
+
+Build initial sPLS model. Using 4 components since we have 5 samples and components = n-1.  
+
+Tune for number of components to keep.  
+```{r}
+# set range of test values for number of variables to use from X dataframe
+list.keepX <- c(seq(20, 2000, 20))
+# set range of test values for number of variables to use from Y dataframe
+list.keepY <- c(seq(20, 20000, 100)) 
+
+tune.spls <- tune.spls(mrna, srna, ncomp = 2,
+                              test.keepX = list.keepX,
+                              test.keepY = list.keepY,
+                              nrepeat = 1,  # use 10 folds
+                             validation=c("loo"), progressBar=TRUE) 
+plot(tune.spls)         # use the correlation measure for tuning
+```
+
+Not working with small number of samples. Temporarily set the number of components to keep as a smaller number. 
+
+```{r}
+keep.X<-c("comp1"=50, "comp2"=50)
+keep.Y<-c("comp1"=50, "comp2"=50)
+```
+
+```{r}
+pls <- spls(X = mrna, Y = srna, ncomp = 4, mode = 'regression', keepX=keep.X, keepY=keep.Y)
+```
+
+```{r}
+plotIndiv(pls, ind.names = TRUE, 
+         rep.space = "X-variate", # plot in X-variate subspace
+         group = metadata$sample, # colour by time group
+         pch = as.factor(metadata$species), 
+         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="mRNA")
+
+
+plotIndiv(pls, ind.names = TRUE, 
+         rep.space = "Y-variate", # plot in X-variate subspace
+         group = metadata$sample, # colour by time group
+         pch = as.factor(metadata$species), 
+         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="sRNA")
+
+plotIndiv(spls, ind.names = TRUE, 
+         rep.space = "XY-variate", # plot in X-variate subspace
+         group = metadata$sample, # colour by time group
+         pch = as.factor(metadata$species), 
+         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="sRNA&mRNA")
+```
+
+Plot line plot to show agreement between data sets.  
+
+```{r}
+plotArrow(pls, ind.names = TRUE,
+          group = metadata$sample, # colour by time group
+          legend.title = 'mRNA.sRNA')
+```
+
+High agreement between datasets.  
+
+## Visualizations 
+
+View correlation circle plot. 
+
+```{r}
+plotVar(pls, cex = c(3,4), var.names = c(FALSE, FALSE))
+```
+
+Cim plot. 
+```{r}
+cim(pls, comp = 1:2)
+```
+
+
