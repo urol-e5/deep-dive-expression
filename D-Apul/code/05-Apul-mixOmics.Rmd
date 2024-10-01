@@ -122,7 +122,7 @@ plotIndiv(pls, ind.names = TRUE,
          pch = as.factor(metadata$species), 
          legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="sRNA")
 
-plotIndiv(spls, ind.names = TRUE, 
+plotIndiv(pls, ind.names = TRUE, 
          rep.space = "XY-variate", # plot in X-variate subspace
          group = metadata$sample, # colour by time group
          pch = as.factor(metadata$species), 
@@ -149,7 +149,25 @@ plotVar(pls, cex = c(3,4), var.names = c(FALSE, FALSE))
 
 Cim plot. 
 ```{r}
-cim(pls, comp = 1:2)
+pdf("D-Apul/output/05-Apul-mixOmics/cim-sRNA-mRNA.pdf", width=10, height=10)
+cim(pls, comp = 1:2, xlab="sRNA", ylab="mRNA")
+dev.off()
 ```
+
+Network plot. 
+```{r}
+color.edge <- color.GreenRed(50)  # set the colours of the connecting lines
+
+network(pls, comp = 1:2,
+        cutoff = 0.95, # only show connections with a correlation above threshold
+        shape.node = c("rectangle", "circle"),
+        color.node = c("cyan", "pink"),
+        color.edge = color.edge, 
+        interactive = FALSE,
+        lwd.edge = 2)
+```
+
+Not super helpful. 
+
 
 
