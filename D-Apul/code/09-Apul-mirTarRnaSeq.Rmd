@@ -1,0 +1,22 @@
+---
+title: "mirTarRnaSeq"
+author: "Jill Ashey"
+date: "2024-10-01"
+output: html_document
+---
+
+This script will use the R package [mirTarRnaSeq](https://bioconductor.org/packages/3.13/bioc/html/mirTarRnaSeq.html), which an be used for interactive mRNA miRNA sequencing statistical analysis, to assess coexpression between mRNAs and miRNAs. 
+
+I will be using Part 1 of their workflow (see [vignette](https://bioconductor.org/packages/3.13/bioc/vignettes/mirTarRnaSeq/inst/doc/mirTarRnaSeq.pdf)).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(mirTarRnaSeq)
+```
+
+Using the test data as an initial pass to understand Part 1 of the package. Part 1 
+
+Upload 
+
