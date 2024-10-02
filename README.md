@@ -18,9 +18,6 @@ F)  Pocillopora tuahiniensis
 Top level directories are associated with each sub-effort categorized by species. For instance:
 
 ```         
-A-Pver
-B-Mcap
-C-Pacu
 D-Apul
 E-Peve
 F-Ptua
