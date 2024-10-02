@@ -85,6 +85,8 @@ ${programs_array[sherman]} \
 --number_of_seqs 1000000 \
 --paired_end \
 --output_dir ${sim_data_dir}
+
+gzip ${sim_data_dir}/*.fastq
 ```
 
 ### Run nfcore-methylseq based on [Danielle's Notebook](https://github.com/daniellembecker/DanielleBecker_Lab_Notebook/blob/master/_posts/2023-03-13-P.meandrina-WGBS-Workflow-Host.md)
@@ -95,7 +97,7 @@ Create input csv file containing the simulated data
 source .bashvars
 
 echo "sample,fastq_1,fastq_2" > ${sim_data_dir}/input.csv
-echo "SIM_1,sim_data/simulated_1.fastq,sim_data/simulated_2.fastq" >> ${sim_data_dir}/input.csv
+echo "SIM_1,${sim_data_dir}/simulated_1.fastq.gz,${sim_data_dir}/simulated_2.fastq.gz" >> ${sim_data_dir}/input.csv
 
 # Optional: Display the file content to verify
 cat ${sim_data_dir}/input.csv
@@ -106,7 +108,7 @@ cat ${sim_data_dir}/input.csv
 cat << 'EOF' > methylseq.sh
 #!/usr/bin/env bash
 #SBATCH --export=NONE
-#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --nodes=1 --ntasks-per-node=24
 #SBATCH --signal=2
 #SBATCH --no-requeue
 #SBATCH --mem=500GB
@@ -121,8 +123,8 @@ module load nextflow/24.04.2
 # Source the bashvars file
 source .bashvars
 
-# Navigate to the code directory
-cd ${code_dir}
+# Navigate to the output directory
+cd ${output_dir_top}
 
 # Print variables from bashvars
 echo "Simulated data path: ${sim_data_dir}"
@@ -131,11 +133,10 @@ echo "Simulated data path: ${sim_data_dir}"
 
 nextflow run nf-core/methylseq -profile singularity \
 --aligner bismark \
---fasta ../data/genome/Apulcra-genome.fa \
+--fasta ${genome_dir}/Apulcra-genome.fa \
 --save_reference \
---input '${sim_data_dir}/input.csv' \
+--input ${sim_data_dir}/input.csv \
 --zymo \
---trim_poly_g \
 --cytosine_report \
 --relax_mismatches \
 --unmapped \
