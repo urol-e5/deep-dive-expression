@@ -18,48 +18,144 @@ library(knitr)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = TRUE,        # Evaluate code chunks
-  warning = FALSE,     # Hide warnings
-  message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
+  warning = TRUE,     # Hide warnings
+  message = TRUE,     # Hide messages
+  comment = "" ,        # Prevents appending '##' to beginning of lines in code output
+  quiet = FALSE
 )
 ```
 
-### simulate WGBS data for *Acropora pulchra* on Andromeda
+# Create a Bash variables file
 
-```{bash sherman, engine='bash'}
-cd /data/putnamlab/shared
+This allows usage of Bash variables (e.g. paths to common directories) across R Markdown chunks.
+```{bash bash-vars}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Data directories"
+echo 'export repo_dir=/work/pi_hputnam_uri_edu/deep-dive-expression'
+echo 'export code_dir=${repo_dir}/D-Apul/code'
+echo 'export genome_dir=${repo_dir}/D-Apul/data/genome'
+echo 'export output_dir_top=${repo_dir}/D-Apul/output/08-Apul-WGBS'
+echo 'export sim_data_dir=${repo_dir}/D-Apul/data/08-Apul-WGBS/sim-data'
+echo ""
+
+echo "# Paths to programs"
+echo 'export sherman=/work/pi_hputnam_uri_edu/pgrams/Sherman/Sherman'
+echo ""
+
+echo "# Programs associative array"
+echo "declare -A programs_array"
+echo "programs_array=("
+echo '[sherman]="${sherman}"'
+echo ")"
+} > .bashvars
+
+cat .bashvars
+```
+
+## Genome
+
+```{bash, eval=FALSE}
+cd ../data/genome
+
+wget -O Apulcra-genome.fa "https://osf.io/download/kn96u/"
+```
+
+## simulate WGBS data for *Acropora pulchra* on Unity
+
+#### Install Sherman on unity in shared directory and make executable
+
+```{bash install-sherman, eval=FALSE}
+cd /work/pi_hputnam_uri_edu/pgrams
+
 git clone https://github.com/FelixKrueger/Sherman.git
 
 cd Sherman
 chmod +x Sherman
+```
 
-cd /data/putnamlab/zdellaert/deep-dive-exp-WGBS/sim_data
+```{bash run-sherman, eval=FALSE}
+source .bashvars
 
-interactive 
-
-/data/putnamlab/shared/Sherman/Sherman --genome /data/putnamlab/REFS/Apul/ --length 150 --number_of_seqs 1000000 --paired_end
+${programs_array[sherman]} \
+--genome ${genome_dir} \
+--length 150 \
+--number_of_seqs 1000000 \
+--paired_end \
+--output_dir ${sim_data_dir}
 ```
 
 ### Run nfcore-methylseq based on [Danielle's Notebook](https://github.com/daniellembecker/DanielleBecker_Lab_Notebook/blob/master/_posts/2023-03-13-P.meandrina-WGBS-Workflow-Host.md)
 
+Create input csv file containing the simulated data 
+
 ```{bash}
-cd /data/putnamlab/zdellaert/deep-dive-exp-WGBS
-nano input.csv 
+source .bashvars
+
+echo "sample,fastq_1,fastq_2" > ${sim_data_dir}/input.csv
+echo "SIM_1,sim_data/simulated_1.fastq,sim_data/simulated_2.fastq" >> ${sim_data_dir}/input.csv
+
+# Optional: Display the file content to verify
+cat ${sim_data_dir}/input.csv
 ```
 
-put in the following text:
-
 ```{bash}
-sample,fastq_1,fastq_2
-SIM_1,sim_data/simulated_1.fastq,sim_data/simulated_2.fastq
+# Create the job script
+cat << 'EOF' > methylseq.sh
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=10
+#SBATCH --signal=2
+#SBATCH --no-requeue
+#SBATCH --mem=500GB
+#SBATCH --error="%x_error.%j"
+#SBATCH --output="%x_output.%j"
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+
+# Load modules
+module load nextflow/24.04.2
+
+# Source the bashvars file
+source .bashvars
+
+# Navigate to the code directory
+cd ${code_dir}
+
+# Print variables from bashvars
+echo "Simulated data path: ${sim_data_dir}"
+
+# Run nextflow methylseq
+
+nextflow run nf-core/methylseq -profile singularity \
+--aligner bismark \
+--fasta ../data/genome/Apulcra-genome.fa \
+--save_reference \
+--input '${sim_data_dir}/input.csv' \
+--zymo \
+--trim_poly_g \
+--cytosine_report \
+--relax_mismatches \
+--unmapped \
+--outdir ${output_dir_top}/sim_Apul_methylseq
+EOF
+
+chmod +x methylseq.sh
+
+# Submit the job to the cluster , go to terminal to do this - it gets confusing in Rmd...
+# sbatch methylseq.sh
 ```
 
-```{bash}
+### code for running nf-core/methylseq on Andromeda since it is maybe not installed on unity...
+
+```{bash, eval=FALSE}
 mkdir scripts
 nano scripts/methylseq.sh
 ```
 
-```{bash}
+```{bash, eval=FALSE}
 #!/bin/bash
 #SBATCH -t 120:00:00
 #SBATCH --nodes=1 --ntasks-per-node=1
@@ -86,10 +182,10 @@ nextflow run nf-core/methylseq -profile singularity \
 --cytosine_report \
 --relax_mismatches \
 --unmapped \
---outdir sim_Apul_WGBS \
+--outdir sim_Apul_WGBS
 ```
 
-```{bash}
+```{bash, eval=FALSE}
 sbatch scripts/methylseq.sh
 ```
 
