@@ -37,18 +37,26 @@ Will end up with 5 sorted bam files.
 
 ```{r, engine='bash'}
 
+echo "../data/fastq/*.fq" >> .gitignore
+```
+
+```{r, engine='bash'}
 wget -r \
 --no-directories --no-parent \
 -P ../data/fastq/ \
 -A "*fastq.gz" https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/
 
 ```
+
+
+
+
 ## Genome
 
 ```{r, engine='bash'}
 cd ../data
 
-curl -O http://gannet.fish.washington.edu/seashell/snaps/GCF_013753865.1_Amil_v2.1_genomic.fna
+wget -O Apulcra-genome.fa "https://osf.io/download/kn96u/"
 ```
 
 

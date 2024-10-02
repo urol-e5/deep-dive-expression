@@ -1,1 +1,2 @@
 ../data/fastq/*.fq
+../output/07-Apul-Hisat/*sam
