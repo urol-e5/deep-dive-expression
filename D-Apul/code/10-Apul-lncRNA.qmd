@@ -1,5 +1,5 @@
 ---
-title: "07- A pulcra HiSat2"
+title: "10-Apul lncRNA"
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
