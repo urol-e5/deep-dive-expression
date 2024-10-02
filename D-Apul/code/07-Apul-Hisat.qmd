@@ -27,262 +27,238 @@ knitr::opts_chunk$set(
 )
 ```
 
-#millipora genome prep
+
+
+# Run HiSat on RNA-seq
+
+Will end up with 5 sorted bam files. 
+
+## Grab Trimmed RNA-seq Reads
+
+```{r, engine='bash'}
+
+wget -r \
+--no-directories --no-parent \
+-P ../data/fastq/ \
+-A "*fastq.gz" https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/
+
+```
+## Genome
+
+```{r, engine='bash'}
+cd ../data
+
+curl -O http://gannet.fish.washington.edu/seashell/snaps/GCF_013753865.1_Amil_v2.1_genomic.fna
+```
+
+
+## HiSat
 
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
 ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-> ../output/04-Apulcra-hisat/m_exon.tab
+> ../output/05.32-lncRNA-discovery/m_exon.tab
+```
+
+```{r, engine='bash', eval=TRUE}
+head ../output/05.32-lncRNA-discovery/m_exon.tab
+wc -l ../output/05.32-lncRNA-discovery/m_exon.tab
 ```
 
 ```{r, engine='bash'}
-head ../output/04-Apulcra-hisat/m_exon.tab
 
-```
-```{r, engine='bash'}
-#!/bin/bash
-
-# This script will extract splice sites from the gtf file
-
-# This is the command to extract splice sites from the gtf file
 /home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
-
-# This is the gtf file
 ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-
-# This is the output file
-> ../output/04-Apulcra-hisat/m_splice_sites.tab
+> ../output/05.32-lncRNA-discovery/m_splice_sites.tab
 
 ```
 
-```
-"${programs_array[hisat2_build]}" \
-"${genome_fasta}" \
-"${genome_index_name}" \
---exon "${exons}" \
---ss "${splice_sites}" \
--p "${threads}" \
-2> hisat2-build_stats.txt
-```
 
+```{r, engine='bash', eval=TRUE}
+head ../output/05.32-lncRNA-discovery/m_splice_sites.tab
+```
 
 ```{r, engine='bash'}
-#!/bin/bash
-
-# hisat2-build is a program that builds a hisat2 index for the reference genome
-# ../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna is the reference genome
-# GCF_013753865.1_Amil_v2.1 is the name of the index
-# --exon ../output/04-Apulcra-hisat/m_exon.tab is the exon file
-# --ss ../output/04-Apulcra-hisat/m_splice_sites.tab is the splice site file
-# -p 40 is the number of threads
-# ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf is the gtf file
-# 2> ../output/04-Apulcra-hisat/hisat2-build_stats.txt is the output file
-
 /home/shared/hisat2-2.2.1/hisat2-build \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna \
-GCF_013753865.1_Amil_v2.1 \
---exon ../output/04-Apulcra-hisat/m_exon.tab \
---ss ../output/04-Apulcra-hisat/m_splice_sites.tab \
--p 40 \
+../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
+../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \
+--exon ../output/05.32-lncRNA-discovery/m_exon.tab \
+--ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
+-p 24 \
 ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-2> ../output/04-Apulcra-hisat/hisat2-build_stats.txt
+2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
+```
 
+```{r, engine='bash', eval=TRUE}
+cat ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
 ```
 
 
-
-# Alignment
-
+```{r, engine='bash', eval=TRUE}
+find ../data/fastq/*gz
 ```
-Hisat2 alignments
-"${programs_array[hisat2]}" \
--x "${genome_index_name}" \
--1 "${fastq_list_R1}" \
--2 "${fastq_list_R2}" \
--S "${sample_name}".sam \
-2> "${sample_name}"-hisat2_stats.txt
+
+```{r, engine='bash', eval=TRUE}
+find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
+| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
+echo {}
 ```
 
 ```{r, engine='bash'}
-#!/bin/bash comment with GPT Studio
-
-# run hisat2 to align reads to the reference genome
+find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
+| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
 /home/shared/hisat2-2.2.1/hisat2 \
-
-# specify the reference genome
--x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
+-x ../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \
 -p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
-
+-1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
+-2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
+-S ../output/05.32-lncRNA-discovery/{}.sam \
+2> ../output/05.32-lncRNA-discovery/hisat.out
 ```
 
-
-### chatgpt comment test - same chunk as above
-this with ChatGPT not inline 
-
-
-
-This R code is actually a command-line script written in Bash which can be run in the terminal or within an R script using the `system()` or `system2()` commands. It runs the program HISAT2 with specific options and parameters on paired-end RNA-seq data for a specific species of organism called *Acanthopleura granulata* (also known as *Acmaea intestinalis*) to align the sequencing reads to its reference genome.
-
-
----
-
-ChatGPT output:
-
-This code is running the HISAT2 alignment tool, which is used to align RNA sequencing reads to a reference genome. It is specifying the following options:
-
-`-x` specifies the reference genome index to use for the alignment.
-
-`-p` specifies the number of CPU cores to use in the alignment. 
-
-`-1` and `-2` specify the input paired-end fastq read files to align. 
-
-`-S` specifies the output SAM file to save the alignment results.
-
-`2>&1 | tee` specifies that both stdout and stderr are to be written to a file `../output/04-Apulcra-hisat/hisat2_stats.txt`, while also being printed to the console for the user to see.
-
-The code is assuming that the input fastq files are located at `../data/SRR8601366_1.fastq` and `../data/SRR8601366_2.fastq`, and that the reference genome index is located at `/home/shared/hisat2-2.2.1/hisat2`.
-
-The aligned output will be saved to a SAM file located at `../output/04-Apulcra-hisat/SRR8601366_mil.sam`.
-
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
+```{r, engine='bash', eval=TRUE}
+cat ../output/05.32-lncRNA-discovery/hisat.out
 ```
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
-```
+## convert to bams
 
 ```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1 \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_mil.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats.txt
-```
-# Align with no splice sites
-
-
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/GCF_013753865.1_Amil_v2.1_genomic.fna \
-GCF_013753865.1_Amil_v2.1_nosplice \
--p 48 \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2-build_stats_nosplice.txt
+for samfile in ../output/05.32-lncRNA-discovery/*.sam; do
+  bamfile="${samfile%.sam}.bam"
+  sorted_bamfile="${samfile%.sam}.sorted.bam"
+  
+  # Convert SAM to BAM
+  /home/shared/samtools-1.12/samtools view -bS -@ 20 "$samfile" > "$bamfile"
+  
+  # Sort BAM
+  /home/shared/samtools-1.12/samtools sort -@ 20 "$bamfile" -o "$sorted_bamfile"
+  
+  # Index sorted BAM
+  /home/shared/samtools-1.12/samtools index -@ 20 "$sorted_bamfile"
+done
 ```
 
 
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_013753865.1_Amil_v2.1_nosplice \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_mil_nosplice.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_nosplice.txt
+## Looking at Bams 
+
+![igv](https//gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_2023-11-05_09-57-16.png)
+
+
+```{r, engine='bash', eval=TRUE}
+ls ../output/05.32-lncRNA-discovery/*xml
 ```
 
-# A hyacinthus
+# StringTie
+StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
 
-## no splice
 
 ```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/Ahya/ncbi_dataset/data/GCA_020536085.1/GCA_020536085.1_Ahyacinthus.chrsV1_genomic.fna \
-../output/04-Apulcra-hisat/GCA_020536085.1_Ahya_nosplice \
--p 48 \
-2> ../output/04-Apulcra-hisat/hisat2-build_stats_Ahya_nosplice.txt
+find ../output/05.32-lncRNA-discovery/*sorted.bam \
+| xargs basename -s .sorted.bam | xargs -I{} \
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+-p 16 \
+-G ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
+-o ../output/05.32-lncRNA-discovery/{}.gtf \
+../output/05.32-lncRNA-discovery/{}.sorted.bam
 ```
 
-
-
-
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCA_020536085.1_Ahya_nosplice \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_hya_nosplice.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_Ahya_nosplice.txt
+```{r, engine='bash', eval=TRUE}
+wc -l ../output/05.32-lncRNA-discovery/RNA*.gtf
+ls ../output/05.32-lncRNA-discovery/RNA*.gtf
+#head ../output/05.32-lncRNA-discovery/RNA*.gtf
 ```
 
+![gtf](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_-_Session_Userssr320DesktopApul_lncRNA_igv_session.xml_2023-11-05_10-11-31.png)
 
-# A digitera
 
+![igv2](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_-_Session_Userssr320DesktopApul_lncRNA_igv_session.xml_2023-11-05_12-33-58.png)
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
-../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
-> ../output/04-Apulcra-hisat/d_exon.tab
+```{r, engine='bash', eval=TRUE}
+ls ../output/05.32-lncRNA-discovery/*xml
 ```
 
 
+Merges all individual GTF assemblies into a single merged GTF file.
+
+This is used to create a non-redundant set of transcripts after running StringTie separately on multiple RNA-Seq datasets.
+
 ```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
-../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
-> ../output/04-Apulcra-hisat/d_splice_sites.tab
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+--merge \
+-G ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
+-o ../output/05.32-lncRNA-discovery/stringtie_merged.gtf \
+../output/05.32-lncRNA-discovery/*.gtf
+```
+
+```{bash}
+tail ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
+```
+
+
+```{r, engine='bash', eval=TRUE}
+
+wc -l ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
+head ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
+
+
+echo "what is possible"
+
+grep -v '^#' ../output/05.32-lncRNA-discovery/stringtie_merged.gtf | cut -f3 | sort | uniq
+
+
+```
+
+# GFFcompare
+https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
+
+```{r, engine='bash'}
+/home/shared/gffcompare-0.12.6.Linux_x86_64/gffcompare \
+-r ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
+-o ../output/05.32-lncRNA-discovery/gffcompare_merged \
+../output/05.32-lncRNA-discovery/stringtie_merged.gtf
+```
+
+
+```{r, engine='bash', eval=TRUE}
+ls ../output/05.32-lncRNA-discovery/gffcompare_merged*
 ```
 
 
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/Adig/ncbi_dataset/data/GCF_000222465.1/GCF_000222465.1_Adig_1.1_genomic.fna \
-../output/04-Apulcra-hisat/GCF_000222465.1_Adig \
---exon ../output/04-Apulcra-hisat/d_exon.tab \
---ss ../output/04-Apulcra-hisat/d_splice_sites.tab \
--p 48 \
-../data/Adig/ncbi_dataset/data/GCF_000222465.1/genomic.gtf \
-2> ../output/04-Apulcra-hisat/hisat2-build_stats_Adig.txt
+```{r, engine='bash', eval=TRUE}
+head -10 ../output/05.32-lncRNA-discovery/gffcompare_merged.annotated.gtf
 ```
 
+![gff](http://gannet.fish.washington.edu/seashell/snaps/2023-11-03_09-25-24.png)
+
+
+# Filter
+Filters the combined GTF output from GFFcompare to select only the lines representing "transcripts" and excluding lines starting with "#" (these are lines in the output format from GFFcompare that don't contain transcript information). This step further filters for a class code of "u", and keep only those with lengths greater than 199 bases. The "u' class code from the GFFcompare step is for "unknown" transcripts, that is those that are not previously annotated in our reference GFF as protein coding. The size filter of +200nt is a common filtering step for isolating lncRNAs.
 
 ```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_000222465.1_Adig \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_dig.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_dig.txt
-```
-## dig no splice
-
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/Adig/ncbi_dataset/data/GCF_000222465.1/GCF_000222465.1_Adig_1.1_genomic.fna \
-../output/04-Apulcra-hisat/GCF_000222465.1_Adig_nosplice \
--p 48 \
-2> ../output/04-Apulcra-hisat/hisat2-build_stats_Adig.txt
+awk '$3 == "transcript" && $1 !~ /^#/' \
+../output/05.32-lncRNA-discovery/gffcompare_merged.annotated.gtf | grep 'class_code "u"\|class_code "x"|\class_code "i"\|class_code "y"' | awk '($5 - $4 > 199) || ($4 - $5 > 199)' > ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
 ```
 
+```{r, engine='bash', eval=TRUE}
+wc -l ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
+head ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
+```
+
+# Bedtools
+Extracts the sequence data from the `$FASTA` reference file based on the coordinates from the filtered GTF. The resulting sequences represent potential lncRNA candidates.
 
 ```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../output/04-Apulcra-hisat/GCF_000222465.1_Adig_nosplice \
--p 48 \
--1 ../data/SRR8601366_1.fastq \
--2 ../data/SRR8601366_2.fastq \
--S ../output/04-Apulcra-hisat/SRR8601366_dig_nosplice.sam \
-2>&1 | tee ../output/04-Apulcra-hisat/hisat2_stats_dig_nosplice.txt
+/home/shared/bedtools2/bin/fastaFromBed \
+-fi ../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
+-bed ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf \
+-fo ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta \
+-name -split
+```
+
+```{r, engine='bash'}
+fgrep -c ">" ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta
+head ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta
 ```
