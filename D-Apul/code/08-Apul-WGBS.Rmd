@@ -1,0 +1,95 @@
+---
+title: "08-E5-Deep-Dive-Expression-WGBS"
+author: "Zoe Dellaert"
+date: "2024-10-01"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+## E5 Deep Dive Expression WGBS
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+### simulate WGBS data for *Acropora pulchra* on Andromeda
+
+```{bash sherman, engine='bash'}
+cd /data/putnamlab/shared
+git clone https://github.com/FelixKrueger/Sherman.git
+
+cd Sherman
+chmod +x Sherman
+
+cd /data/putnamlab/zdellaert/deep-dive-exp-WGBS/sim_data
+
+interactive 
+
+/data/putnamlab/shared/Sherman/Sherman --genome /data/putnamlab/REFS/Apul/ --length 150 --number_of_seqs 1000000 --paired_end
+```
+
+### Run nfcore-methylseq based on [Danielle's Notebook](https://github.com/daniellembecker/DanielleBecker_Lab_Notebook/blob/master/_posts/2023-03-13-P.meandrina-WGBS-Workflow-Host.md)
+
+```{bash}
+cd /data/putnamlab/zdellaert/deep-dive-exp-WGBS
+nano input.csv 
+```
+
+put in the following text:
+
+```{bash}
+sample,fastq_1,fastq_2
+SIM_1,sim_data/simulated_1.fastq,sim_data/simulated_2.fastq
+```
+
+```{bash}
+mkdir scripts
+nano scripts/methylseq.sh
+```
+
+```{bash}
+#!/bin/bash
+#SBATCH -t 120:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --cpus-per-task=10
+#SBATCH --export=NONE
+#SBATCH --mem=500GB
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --mail-user=zdellaert@uri.edu #your email to send notifications
+#SBATCH -D /data/putnamlab/zdellaert/deep-dive-exp-WGBS/
+
+# load modules needed
+
+module load Nextflow/22.10.1
+
+# run nextflow methylseq
+
+nextflow run nf-core/methylseq -profile singularity \
+--aligner bismark \
+--fasta /data/putnamlab/REFS/Apul/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.masked.fa \
+--save_reference \
+--input 'input.csv' \
+--zymo \
+--trim_poly_g \
+--cytosine_report \
+--relax_mismatches \
+--unmapped \
+--outdir sim_Apul_WGBS \
+```
+
+```{bash}
+sbatch scripts/methylseq.sh
+```
+

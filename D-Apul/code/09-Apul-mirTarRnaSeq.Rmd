@@ -1,0 +1,70 @@
+---
+title: "mirTarRnaSeq"
+author: "Jill Ashey"
+date: "2024-10-01"
+output: html_document
+---
+
+This script will use the R package [mirTarRnaSeq](https://bioconductor.org/packages/3.13/bioc/html/mirTarRnaSeq.html), which an be used for interactive mRNA miRNA sequencing statistical analysis, to assess coexpression between mRNAs and miRNAs. 
+
+I will be using Part 1 of their workflow (see [vignette](https://bioconductor.org/packages/3.13/bioc/vignettes/mirTarRnaSeq/inst/doc/mirTarRnaSeq.pdf)).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(mirTarRnaSeq)
+```
+
+Using the test data as an initial pass to understand Part 1 of the package. Part 1 
+
+I will use the `miRNA` df as miRNA counts input and `mRNA` df as mRNA counts input; this data is a part of the package. I will also use `miRanda` for interaction data. 
+
+Select only mRNAs that were identified as targets 
+```{r}
+mRNASub <- miRanComp(mRNA, miRanda)
+```
+
+Select specific miRNA. Not sure why this needs to be done...
+```{r}
+miRNA_select<-rownames(miRNA)
+```
+
+Combine miRNA and mRNA files; make list of files to be used in model 
+```{r}
+combine <- combiner(mRNASub, miRNA, miRNA_select)
+gene_var <- geneVari(combine, miRNA_select)
+```
+
+Run Gausian model 
+```{r}
+test <- runModels(combine, geneVariant, miRNA_select, family = glm_gaussian(), scale = 100)
+
+par(oma=c(2,2,2,2))
+par(mfrow=c(2,3),mar=c(4,3,3,2))
+plot(test[["all_models"]][["BHLF1"]])
+plot(modelData(test[["all_models"]][["BHLF1"]]))
+#To test AIC model performance
+G <- do.call(rbind.data.frame, test[["AICvalues"]])
+names(G) <- c("AIC_G")
+#Low values seems like a reasonable model
+plot(density(G$AIC_G))
+```
+
+Run all combos
+```{r}
+vmiRNA <- rownames(miRNA)
+
+all_miRNA_models <- runAllMirnaModels(mirnas = vmiRNA[1:6], DiffExpmRNA = mRNA, DiffExpmiRNA = miRNA, miranda_data = miRanda, prob = 0.75, cutoff = 0.05, fdr_cutoff = 0.1, method = "fdr", family = glm_multi(), scale = 2, mode = "multi")
+
+hasgenes <- lapply(all_miRNA_models, function(x) nrow(x$SigFDRGenes)) > 0
+all_miRNA_models <- all_miRNA_models[hasgenes]
+```
+
+Look at data 
+```{r}
+all_miRNA_models$`ebv-mir-bart1-3p and ebv-mir-bart1-5p`
+```
+
+Need to play with test data more 
+
