@@ -257,51 +257,36 @@ head ../output/07-Apul-Hisat/*matrix.csv
 
 
 
+# Getting FASTA for anno
+
+
+$ bedtools getfasta [OPTIONS] -fi <input FASTA> -bed <BED/GFF/VCF>
 
 
 
+grep -w "mRNA" annotation.gff > mRNA_only.gff
+```{r, engine='bash'}
+grep -w "mRNA" ../data/Apulcra-genome.gff > ../data/Apulcra-genome-mRNA_only.gff
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Merges all individual GTF assemblies into a single merged GTF file.
-
-This is used to create a non-redundant set of transcripts after running StringTie separately on multiple RNA-Seq datasets.
+awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
 
 ```{r, engine='bash'}
-/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
---merge \
--G ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
--o ../output/05.32-lncRNA-discovery/stringtie_merged.gtf \
-../output/05.32-lncRNA-discovery/*.gtf
-```
-
-```{bash}
-tail ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
+awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
 ```
 
 
-```{r, engine='bash', eval=TRUE}
 
-wc -l ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
-head ../output/05.32-lncRNA-discovery/stringtie_merged.gtf
-
-
-echo "what is possible"
-
-grep -v '^#' ../output/05.32-lncRNA-discovery/stringtie_merged.gtf | cut -f3 | sort | uniq
-
-
+```{r, engine='bash'}
+/home/shared/bedtools2/bin/fastaFromBed \
+-fi ../data/Apulcra-genome.fa \
+-bed ../data/Apulcra-genome-mRNA_only.gff \
+-fo ../output/07-Apul-Hisat/genes.fasta \
+-name -split
 ```
 
+
+```{r, engine='bash'}
+head ../output/07-Apul-Hisat/genes.fasta 
+grep -c ">" ../output/07-Apul-Hisat/genes.fasta
+```
