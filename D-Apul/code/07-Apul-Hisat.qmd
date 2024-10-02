@@ -36,8 +36,8 @@ Will end up with 5 sorted bam files.
 ## Grab Trimmed RNA-seq Reads
 
 ```{r, engine='bash'}
-
-echo "../data/fastq/*.fq" >> .gitignore
+cd ../data/fastq/
+echo "*.fq" >> .gitignore
 ```
 
 ```{r, engine='bash'}
@@ -58,6 +58,14 @@ cd ../data
 
 wget -O Apulcra-genome.fa "https://osf.io/download/kn96u/"
 ```
+
+
+```{r, engine='bash'}
+head ../data/Apulcra-genome.fa
+```
+
+
+
 
 
 ## HiSat
@@ -86,6 +94,12 @@ wc -l ../output/05.32-lncRNA-discovery/m_exon.tab
 head ../output/05.32-lncRNA-discovery/m_splice_sites.tab
 ```
 
+
+NO GTF 
+
+
+
+
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2-build \
 ../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
@@ -97,8 +111,25 @@ head ../output/05.32-lncRNA-discovery/m_splice_sites.tab
 2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
 ```
 
+
+RUN THIS CODE 
+
+
+
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Apulcra-genome.fa \
+../output/07-Apul-Hisat/Apulcra-genome.index \
+#--exon ../output/05.32-lncRNA-discovery/m_exon.tab \
+#--ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
+-p 24 \
+#../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
+2> ../output/07-Apul-Hisat/hisat2-build_stats.txt
+```
+
 ```{r, engine='bash', eval=TRUE}
-cat ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
+cat ../output/07-Apul-Hisat/hisat2-build_stats.txt
 ```
 
 
@@ -112,26 +143,33 @@ find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
 echo {}
 ```
 
+
+```{r, engine='bash'}
+cd ../output/07-Apul-Hisat/
+echo "*sam" >> .gitignore
+```
+
+
 ```{r, engine='bash'}
 find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
 | xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
 /home/shared/hisat2-2.2.1/hisat2 \
--x ../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \
+-x ../output/07-Apul-Hisat/Apulcra-genome.index \
 -p 48 \
 -1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
 -2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
--S ../output/05.32-lncRNA-discovery/{}.sam \
-2> ../output/05.32-lncRNA-discovery/hisat.out
+-S ../output/07-Apul-Hisat/{}.sam \
+2> ../output/07-Apul-Hisat/hisat.out
 ```
 
 ```{r, engine='bash', eval=TRUE}
-cat ../output/05.32-lncRNA-discovery/hisat.out
+cat ../output/07-Apul-Hisat/hisat.out
 ```
 
 ## convert to bams
 
 ```{r, engine='bash'}
-for samfile in ../output/05.32-lncRNA-discovery/*.sam; do
+for samfile in ../output/07-Apul-Hisat/*.sam; do
   bamfile="${samfile%.sam}.bam"
   sorted_bamfile="${samfile%.sam}.sorted.bam"
   
@@ -148,14 +186,7 @@ done
 
 
 
-## Looking at Bams 
 
-![igv](https//gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_2023-11-05_09-57-16.png)
-
-
-```{r, engine='bash', eval=TRUE}
-ls ../output/05.32-lncRNA-discovery/*xml
-```
 
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
