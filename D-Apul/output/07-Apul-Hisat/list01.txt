@@ -1,0 +1,4 @@
+RNA-ACR-140 ../output/07-Apul-Hisat/RNA-ACR-140.gtf
+RNA-ACR-145 ../output/07-Apul-Hisat/RNA-ACR-145.gtf
+RNA-ACR-173 ../output/07-Apul-Hisat/RNA-ACR-173.gtf
+RNA-ACR-178 ../output/07-Apul-Hisat/RNA-ACR-178.gtf

@@ -191,32 +191,88 @@ done
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
+Getting gff
+
+```{r, engine='bash'}
+
+cd ../data
+wget -O Apulcra-genome.gff "https://osf.io/download/f9dbr/"
+```
 
 
 ```{r, engine='bash'}
-find ../output/05.32-lncRNA-discovery/*sorted.bam \
+
+head ../data/Apulcra-genome.gff
+
+```
+
+```{r, engine='bash'}
+find ../output/07-Apul-Hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
--p 16 \
--G ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
--o ../output/05.32-lncRNA-discovery/{}.gtf \
-../output/05.32-lncRNA-discovery/{}.sorted.bam
+-p 32 \
+-eB \
+-G ../data/Apulcra-genome.gff \
+-o ../output/07-Apul-Hisat/{}.gtf \
+../output/07-Apul-Hisat/{}.sorted.bam
 ```
+
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/05.32-lncRNA-discovery/RNA*.gtf
-ls ../output/05.32-lncRNA-discovery/RNA*.gtf
-#head ../output/05.32-lncRNA-discovery/RNA*.gtf
+wc -l ../output/07-Apul-Hisat/RNA*.gtf
+ls ../output/07-Apul-Hisat/RNA*.gtf
+#head ../output/07-Apul-Hisat/RNA*.gtf
 ```
 
-![gtf](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_-_Session_Userssr320DesktopApul_lncRNA_igv_session.xml_2023-11-05_10-11-31.png)
 
 
-![igv2](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_IGV_-_Session_Userssr320DesktopApul_lncRNA_igv_session.xml_2023-11-05_12-33-58.png)
+# Count Matrix
 
-```{r, engine='bash', eval=TRUE}
-ls ../output/05.32-lncRNA-discovery/*xml
+list format
+
+RNA-ACR-140 ../output/15-Apul-hisat/RNA-ACR-140.gtf
+RNA-ACR-145 ../output/15-Apul-hisat/RNA-ACR-145.gtf
+RNA-ACR-173 ../output/15-Apul-hisat/RNA-ACR-173.gtf
+RNA-ACR-178 ../output/15-Apul-hisat/RNA-ACR-178.gtf
+
+
+```{r, engine='bash'}
+head ../output/07-Apul-Hisat/list01.txt
 ```
+
+
+
+```{r, engine='bash'}
+python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
+-i ../output/07-Apul-Hisat/list01.txt \
+-g ../output/07-Apul-Hisat/gene_count_matrix.csv \
+-t ../output/07-Apul-Hisat/transcript_count_matrix.csv
+
+head ../output/07-Apul-Hisat/*matrix.csv
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Merges all individual GTF assemblies into a single merged GTF file.
@@ -249,55 +305,3 @@ grep -v '^#' ../output/05.32-lncRNA-discovery/stringtie_merged.gtf | cut -f3 | s
 
 ```
 
-# GFFcompare
-https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
-
-```{r, engine='bash'}
-/home/shared/gffcompare-0.12.6.Linux_x86_64/gffcompare \
--r ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gff \
--o ../output/05.32-lncRNA-discovery/gffcompare_merged \
-../output/05.32-lncRNA-discovery/stringtie_merged.gtf
-```
-
-
-```{r, engine='bash', eval=TRUE}
-ls ../output/05.32-lncRNA-discovery/gffcompare_merged*
-```
-
-
-
-```{r, engine='bash', eval=TRUE}
-head -10 ../output/05.32-lncRNA-discovery/gffcompare_merged.annotated.gtf
-```
-
-![gff](http://gannet.fish.washington.edu/seashell/snaps/2023-11-03_09-25-24.png)
-
-
-# Filter
-Filters the combined GTF output from GFFcompare to select only the lines representing "transcripts" and excluding lines starting with "#" (these are lines in the output format from GFFcompare that don't contain transcript information). This step further filters for a class code of "u", and keep only those with lengths greater than 199 bases. The "u' class code from the GFFcompare step is for "unknown" transcripts, that is those that are not previously annotated in our reference GFF as protein coding. The size filter of +200nt is a common filtering step for isolating lncRNAs.
-
-```{r, engine='bash'}
-awk '$3 == "transcript" && $1 !~ /^#/' \
-../output/05.32-lncRNA-discovery/gffcompare_merged.annotated.gtf | grep 'class_code "u"\|class_code "x"|\class_code "i"\|class_code "y"' | awk '($5 - $4 > 199) || ($4 - $5 > 199)' > ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
-```
-
-```{r, engine='bash', eval=TRUE}
-wc -l ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
-head ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf
-```
-
-# Bedtools
-Extracts the sequence data from the `$FASTA` reference file based on the coordinates from the filtered GTF. The resulting sequences represent potential lncRNA candidates.
-
-```{r, engine='bash'}
-/home/shared/bedtools2/bin/fastaFromBed \
--fi ../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
--bed ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.gtf \
--fo ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta \
--name -split
-```
-
-```{r, engine='bash'}
-fgrep -c ">" ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta
-head ../output/05.32-lncRNA-discovery/Apul_lncRNA_candidates.fasta
-```
