@@ -395,3 +395,32 @@ with open('../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt', 'r') as
 ```{r, engine='bash', eval=TRUE}
 head ../output/10-Apul-lncRNA/Apul_lncRNA.bed
 ```
+
+
+
+
+# Count Matrix
+
+list format
+
+RNA-ACR-140 ../output/10-Apul-lncRNA/RNA-ACR-140.gtf
+RNA-ACR-145 ../output/10-Apul-lncRNA/RNA-ACR-145.gtf
+RNA-ACR-173 ../output/10-Apul-lncRNA/RNA-ACR-173.gtf
+RNA-ACR-178 ../output/10-Apul-lncRNA/RNA-ACR-178.gtf
+
+
+```{r, engine='bash'}
+head ../output/10-Apul-lncRNA/list01.txt
+```
+
+
+
+```{r, engine='bash'}
+python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
+-i ../output/10-Apul-lncRNA/list01.txt \
+-g ../output/10-Apul-lncRNA/lnc-gene_count_matrix.csv \
+-t ../output/10-Apul-lncRNA/lnc-transcript_count_matrix.csv
+
+head ../output/10-Apul-lncRNA/*matrix.csv
+
+```
