@@ -354,7 +354,7 @@ Join blast with GO info
 
 
 ```{r}
-bltabl <- read.csv("./output/07-Apul-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
+bltabl <- read.csv("../output/07-Apul-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
 
 spgo <- read.csv("../output/07-Apul-Hisat/SwissProt-Annot-GO.tsv", sep = '\t', header = TRUE)
 
@@ -376,6 +376,6 @@ write.table(annot_tab,
             row.names = FALSE, 
             quote = FALSE)
 
-system("head ../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv", intern = TRUE )
+system("head ../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv")
 
 ```
