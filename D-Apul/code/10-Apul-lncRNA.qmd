@@ -277,25 +277,23 @@ https://ccb.jhu.edu/software/stringtie/gffcompare.shtml
 
 ```{r, engine='bash'}
 /home/shared/gffcompare-0.12.6.Linux_x86_64/gffcompare \
--r ../data/Pocillopora_meandrina_HIv1.genes.gff3 \
--o ../output/02-lncRNA-discovery/gffcompare_merged \
-../output/02-lncRNA-discovery/stringtie_merged.gtf
+-r ../data/Apulcra-genome.gff \
+-o ../output/10-Apul-lncRNA/gffcompare_merged \
+../output/10-Apul-lncRNA/stringtie_merged.gtf
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-ls ../output/02-lncRNA-discovery/gffcompare_merged*
+ls ../output/10-Apul-lncRNA/gffcompare_merged*
 ```
 
 ```{r, engine='bash', eval=TRUE}
-cat ../output/02-lncRNA-discovery/gffcompare_merged.stats
+cat ../output/10-Apul-lncRNA/gffcompare_merged.stats
 ```
 
 ```{r, engine='bash', eval=TRUE}
-head -10 ../output/02-lncRNA-discovery/gffcompare_merged.annotated.gtf
+head -10 ../output/10-Apul-lncRNA/gffcompare_merged.annotated.gtf
 ```
-
-![gff](http://gannet.fish.washington.edu/seashell/snaps/2023-11-03_09-25-24.png)
 
 
 # Filter
