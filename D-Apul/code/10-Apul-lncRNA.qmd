@@ -206,42 +206,27 @@ head ../data/Apulcra-genome.gff
 
 ```
 
-```{r, engine='bash'}
-find ../output/07-Apul-Hisat/*sorted.bam \
-| xargs basename -s .sorted.bam | xargs -I{} \
-/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
--p 32 \
--eB \
--G ../data/Apulcra-genome.gff \
--o ../output/07-Apul-Hisat/{}.gtf \
-../output/07-Apul-Hisat/{}.sorted.bam
-```
+
+# PICK UP HERE FROM )7
 
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
-
-
 ```{r, engine='bash'}
-find ../output/02-lncRNA-discovery/*sorted.bam \
+find ../output/07-Apul-Hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
--p 12 \
--G ../data/Pocillopora_meandrina_HIv1.genes.gff3 \
--o ../output/02-lncRNA-discovery/{}.gtf \
-../output/02-lncRNA-discovery/{}.sorted.bam
+-p 48 \
+-G ../data/Apulcra-genome.gff \
+-o ../output/10-Apul-lncRNA/{}.gtf \
+../output/07-Apul-Hisat/{}.sorted.bam
 ```
 
-
-# PICKUP UP HERE FROM NOTEBOOK 07
 
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/07-Apul-Hisat/RNA*.gtf
-head ../output/07-Apul-Hisat/RNA*.gtf
-```
-```{bash}
-head ../data/Pocillopora_meandrina_HIv1.genes.gff3
+wc -l ../output/10-Apul-lncRNA/RNA*.gtf
+head ../output/10-Apul-lncRNA/RNA*.gtf
 ```
 
 
@@ -254,7 +239,7 @@ This is used to create a non-redundant set of transcripts after running StringTi
 --merge \
 -G ../data/Apulcra-genome.gff \
 -o ../output/10-Apul-lncRNA/stringtie_merged.gtf \
-../output/07-Apul-Hisat/RNA*.gtf
+../output/10-Apul-lncRNA/RNA*.gtf
 ```
 
 
@@ -295,18 +280,20 @@ cat ../output/10-Apul-lncRNA/gffcompare_merged.stats
 head -10 ../output/10-Apul-lncRNA/gffcompare_merged.annotated.gtf
 ```
 
+![](https://camo.githubusercontent.com/35dc9d9e4be6b49e4393668660be388674f1efa94f543fe44984a1febe19bdf3/687474703a2f2f67616e6e65742e666973682e77617368696e67746f6e2e6564752f7365617368656c6c2f736e6170732f323032332d31312d30335f30392d32352d32342e706e67)
+
 
 # Filter
 Filters the combined GTF output from GFFcompare to select only the lines representing "transcripts" and excluding lines starting with "#" (these are lines in the output format from GFFcompare that don't contain transcript information). This step further filters for a class code of "u", and keep only those with lengths greater than 199 bases. The "u' class code from the GFFcompare step is for "unknown" transcripts, that is those that are not previously annotated in our reference GFF as protein coding. The size filter of +200nt is a common filtering step for isolating lncRNAs.
 
 ```{r, engine='bash'}
 awk '$3 == "transcript" && $1 !~ /^#/' \
-../output/02-lncRNA-discovery/gffcompare_merged.annotated.gtf | grep 'class_code "u"\|class_code "x"|\class_code "i"\|class_code "y"' | awk '($5 - $4 > 199) || ($4 - $5 > 199)' > ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.gtf
+../output/10-Apul-lncRNA/gffcompare_merged.annotated.gtf | grep 'class_code "u"\|class_code "x"|\class_code "i"\|class_code "y"' | awk '($5 - $4 > 199) || ($4 - $5 > 199)' > ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.gtf
 ```
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.gtf
-head ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.gtf
+wc -l ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.gtf
+head ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.gtf
 ```
 
 # Bedtools
