@@ -301,15 +301,15 @@ Extracts the sequence data from the `$FASTA` reference file based on the coordin
 
 ```{r, engine='bash'}
 /home/shared/bedtools2/bin/fastaFromBed \
--fi ../data/Pocillopora_meandrina_HIv1.assembly.fasta \
--bed ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.gtf \
--fo ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta \
+-fi ../data/Apulcra-genome.fa \
+-bed ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.gtf \
+-fo ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta \
 -name -split
 ```
 
 ```{r, engine='bash'}
-fgrep -c ">" ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta
-head ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta
+fgrep -c ">" ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta 
+head ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta 
 ```
 
 
@@ -320,14 +320,14 @@ Initializes a conda environment (Anaconda) and runs CPC2, a software to predict 
 ```{r, engine='bash'}
 eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
 python /home/shared/CPC2_standalone-1.0.1/bin/CPC2.py \
--i ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta \
--o ../output/02-lncRNA-discovery/Pmea_CPC2
+-i ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta \
+-o ../output/10-Apul-lncRNA/Apul_CPC2
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/02-lncRNA-discovery/Pmea_CPC2.txt
-head ../output/02-lncRNA-discovery/Pmea_CPC2.txt
+wc -l ../output/10-Apul-lncRNA/Apul_CPC2.txt
+head ../output/10-Apul-lncRNA/Apul_CPC2.txt
 ```
 
 #Filter
@@ -336,34 +336,34 @@ Filters the CPC2 results to get only noncoding transcripts (using the class "non
 Matches these IDs with the sequences from the previous step to generate a GTF of noncoding transcripts.
 
 ```{r, engine='bash'}
-awk '$8 == "noncoding" {print $1}' ../output/02-lncRNA-discovery/Pmea_CPC2.txt > ../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt
+awk '$8 == "noncoding" {print $1}' ../output/10-Apul-lncRNA/Apul_CPC2.txt > ../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt
 ```
 
 ```{r, engine='bash'}
-wc -l ../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt
-head ../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt
+wc -l ../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt
+head ../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt
 ```
 
 
 ```{r, engine='bash'}
-head ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta
-fgrep -c ">" ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta
+head ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta
+fgrep -c ">" ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta
 ```
 
 # subsetting fasta
 ```{r, engine='bash'}
-/home/shared/samtools-1.12/samtools faidx ../output/02-lncRNA-discovery/Pmea_lncRNA_candidates.fasta \
--r ../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt > ../output/02-lncRNA-discovery/Pmea_lncRNA.fasta
+/home/shared/samtools-1.12/samtools faidx ../output/10-Apul-lncRNA/Apul_lncRNA_candidates.fasta \
+-r ../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt > ../output/10-Apul-lncRNA/Apul_lncRNA.fasta
 
 ```
 
 ddd
 
 ```{r, engine='bash'}
-fgrep -c ">" ../output/02-lncRNA-discovery/Pmea_lncRNA.fasta
-fgrep ">" ../output/02-lncRNA-discovery/Pmea_lncRNA.fasta | head -5
+fgrep -c ">" ../output/10-Apul-lncRNA/Apul_lncRNA.fasta
+fgrep ">" ../output/10-Apul-lncRNA/Apul_lncRNA.fasta | head -5
 
-head ../output/02-lncRNA-discovery/Pmea_lncRNA.fasta
+head ../output/10-Apul-lncRNA/Apul_lncRNA.fasta
 ```
 
 # Getting genome feature track
@@ -371,7 +371,7 @@ head ../output/02-lncRNA-discovery/Pmea_lncRNA.fasta
 ```{r, engine='python'}
 
 # Open the input file and the output file
-with open('../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt', 'r') as infile, open('../output/02-lncRNA-discovery/Pmea_lncRNA.bed', 'w') as outfile:
+with open('../output/10-Apul-lncRNA/Apul_noncoding_transcripts_ids.txt', 'r') as infile, open('../output/10-Apul-lncRNA/Apul_lncRNA.bed', 'w') as outfile:
     # Process each line in the input file
     for line in infile:
         # Remove 'transcript::' and then split the line by ':' to extract the relevant parts
@@ -393,5 +393,5 @@ with open('../output/02-lncRNA-discovery/Pmea_noncoding_transcripts_ids.txt', 'r
 ```
 
 ```{r, engine='bash', eval=TRUE}
-head ../output/02-lncRNA-discovery/Pmea_lncRNA.bed 
+head ../output/10-Apul-lncRNA/Apul_lncRNA.bed
 ```
