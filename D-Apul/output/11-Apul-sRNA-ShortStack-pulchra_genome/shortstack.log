@@ -1,0 +1,239 @@
+# reads processed: 15076001
+# reads with at least one alignment: 12054277 (79.96%)
+# reads that failed to align: 3021724 (20.04%)
+Reported 99489990 alignments
+
+ShortStack version 4.0.3
+
+Beginning run
+Options:
+{   'adapter': None,
+    'align_only': False,
+    'autotrim': False,
+    'autotrim_key': 'TCGGACCAGGCTTCATTCCCC',
+    'bamfile': None,
+    'dicermax': 24,
+    'dicermin': 21,
+    'dn_mirna': True,
+    'genomefile': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/Apulchra-genome.fa',
+    'known_miRNAs': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/data/cnidarian-mirbase-mature-v22.1.fasta',
+    'locifile': None,
+    'locus': None,
+    'mincov': 1,
+    'mmap': 'u',
+    'nohp': False,
+    'outdir': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out',
+    'pad': 200,
+    'readfile': [   '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz'],
+    'show_secondaries': False,
+    'strand_cutoff': 0.8,
+    'threads': 40}
+Required executable RNAfold : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/RNAfold
+Required executable strucVis : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/strucVis
+Required executable bowtie : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/bowtie
+Required executable bowtie-build : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/bowtie-build
+Required executable ShortTracks : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/ShortTracks
+Required executable wigToBigWig : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/wigToBigWig
+Required executable samtools : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/samtools
+
+Beginning alignment phase
+
+Fri 04 Oct 2024 13:21:06 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 16 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 17265123
+# reads with at least one alignment: 13609094 (78.82%)
+# reads that failed to align: 3656029 (21.18%)
+Reported 137924693 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U) reads: 5008387/15076001 (33.2%)
+Multi-mapped reads placed (P) with guidance: 5267908/15076001 (34.9%)
+Multi-mapped reads randomly (R) placed: 1125353/15076001 (7.5%)
+Very highly (H) multi-mapped reads (>=50 hits): 652629/15076001 (4.3%)
+Not mapped (N) reads (no hits): 3021724/15076001 (20.0%)
+
+Fri 04 Oct 2024 13:28:54 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 18 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 18395038
+# reads with at least one alignment: 14312341 (77.81%)
+# reads that failed to align: 4082697 (22.19%)
+Reported 109247103 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U) reads: 4987496/17265123 (28.9%)
+Multi-mapped reads placed (P) with guidance: 6655388/17265123 (38.5%)
+Multi-mapped reads randomly (R) placed: 1152549/17265123 (6.7%)
+Very highly (H) multi-mapped reads (>=50 hits): 813661/17265123 (4.7%)
+Not mapped (N) reads (no hits): 3656029/17265123 (21.2%)
+
+Fri 04 Oct 2024 13:39:04 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 19 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 16332044
+# reads with at least one alignment: 12753165 (78.09%)
+# reads that failed to align: 3578879 (21.91%)
+Reported 115302380 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U) reads: 6448061/18395038 (35.1%)
+Multi-mapped reads placed (P) with guidance: 5954206/18395038 (32.4%)
+Multi-mapped reads randomly (R) placed: 1185559/18395038 (6.4%)
+Very highly (H) multi-mapped reads (>=50 hits): 724515/18395038 (3.9%)
+Not mapped (N) reads (no hits): 4082697/18395038 (22.2%)
+
+Fri 04 Oct 2024 13:47:20 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 17 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 14295261
+# reads with at least one alignment: 11446859 (80.07%)
+# reads that failed to align: 2848402 (19.93%)
+Reported 114427319 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U) reads: 5076151/16332044 (31.1%)
+Multi-mapped reads placed (P) with guidance: 5800394/16332044 (35.5%)
+Multi-mapped reads randomly (R) placed: 1118890/16332044 (6.9%)
+Very highly (H) multi-mapped reads (>=50 hits): 757730/16332044 (4.6%)
+Not mapped (N) reads (no hits): 3578879/16332044 (21.9%)
+
+Fri 04 Oct 2024 13:55:48 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/sRNA-trimmed-reads/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 15 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+ShortTracks version 1.1
+
+Required executable samtools : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/samtools
+Required executable wigToBigWig : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/wigToBigWig
+
+Preparing commands, counting overall reads
+
+Getting raw depths
+samtools view -F 256 -r sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged_depths.txt
+
+samtools view -F 256 -r sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged_depths.txt
+
+samtools view -F 256 -r sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged_depths.txt
+
+samtools view -F 256 -r sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged_depths.txt
+
+samtools view -F 256 -r sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_depths.txt
+
+
+Writing wiggle files
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged.wig
+
+Writing bigwig files
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged.bw
+ShortTracks version 1.1
+
+Required executable samtools : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/samtools
+Required executable wigToBigWig : /home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/wigToBigWig
+
+Preparing commands, counting overall reads
+
+Getting raw depths
+samtools view -F 272 -e "qlen==21" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_p_depths.txt
+
+samtools view -F 256 -f 16 -e "qlen==21" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_m_depths.txt
+
+samtools view -F 272 -e "qlen==22" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_p_depths.txt
+
+samtools view -F 256 -f 16 -e "qlen==22" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_m_depths.txt
+
+samtools view -F 272 -e "qlen==23 || qlen==24" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_p_depths.txt
+
+samtools view -F 256 -f 16 -e "qlen==23 || qlen==24" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_m_depths.txt
+
+samtools view -F 272 -e "qlen < 21 || qlen > 24" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_p_depths.txt
+
+samtools view -F 256 -f 16 -e "qlen < 21 || qlen > 24" -h /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam | samtools depth - > /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_m_depths.txt
+
+
+Writing wiggle files
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_p.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_m.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_p.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_m.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_p.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_m.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_p.wig
+/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_m.wig
+
+Writing bigwig files
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_p.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_p.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_m.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_21_m.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_p.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_p.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_m.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_22_m.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_p.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_p.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_m.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_23-24_m.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_p.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_p.bw
+wigToBigWig /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_m.wig chromSizes.txt /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments_other_m.bw
+
+Converting to sorted bam format
+Uniquely mapped (U) reads: 4555160/14295261 (31.9%)
+Multi-mapped reads placed (P) with guidance: 5288788/14295261 (37.0%)
+Multi-mapped reads randomly (R) placed: 893854/14295261 (6.3%)
+Very highly (H) multi-mapped reads (>=50 hits): 709057/14295261 (5.0%)
+Not mapped (N) reads (no hits): 2848402/14295261 (19.9%)
+
+Fri 04 Oct 2024 14:04:15 -0700 PDT
+Merging and indexing alignments
+
+Creating browser tracks by readgroup using ShortTracks
+
+Creating browser tracks by readlength and strand using ShortTracks
+
+Fri 04 Oct 2024 14:20:36 -0700 PDT
+Defining small RNA clusters de novo
+With 81363467 total reads and mincov of 1 reads per million, the min read depth is 81
+
+Fri 04 Oct 2024 14:21:01 -0700 PDT
+Analyzing cluster properties using 40 threads
+
+Fri 04 Oct 2024 14:21:51 -0700 PDT
+ Completed
+
+Fri 04 Oct 2024 14:21:51 -0700 PDT
+Searching for valid microRNA loci
+Aligning known_miRNAs sequences to genome
+Traceback (most recent call last):
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/ShortStack", line 3628, in <module>
+    mir_qdata = mirna(args, merged_bam, fai, pmir_bedfile, read_count)
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/ShortStack", line 2110, in mirna
+    sane_known_miRNAs = sanitize_known_miRNAs(args)
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/bin/ShortStack", line 2693, in sanitize_known_miRNAs
+    for seq_record in SeqIO.parse(args.known_miRNAs, "fasta"):
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/lib/python3.10/site-packages/Bio/SeqIO/Interfaces.py", line 85, in __next__
+    return next(self.records)
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/lib/python3.10/site-packages/Bio/SeqIO/FastaIO.py", line 207, in iterate
+    Seq(sequence), id=first_word, name=first_word, description=title
+  File "/home/sam/programs/mambaforge/envs/ShortStack-4.0.3_env/lib/python3.10/site-packages/Bio/Seq.py", line 2123, in __init__
+    self._data = bytes(data, encoding="ASCII")
+UnicodeEncodeError: 'ascii' codec can't encode character '\u2026' in position 41252: ordinal not in range(128)
+
+real	60m44.740s
+user	1157m37.361s
+sys	407m9.285s

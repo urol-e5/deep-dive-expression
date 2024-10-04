@@ -78,6 +78,10 @@ conda activate ShortStack4_env
 which conda
 ```
 
+```{bash}
+which python
+```
+
 ------------------------------------------------------------------------
 
 # Set R variables
@@ -140,6 +144,7 @@ E.g.
 use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
 #conda_install("ShortStack-4.0.3_env", "biopython")
 # Check successful env loading
+
 py_config()
 ```
 
