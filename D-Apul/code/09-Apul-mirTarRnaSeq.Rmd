@@ -7,7 +7,7 @@ output: html_document
 
 This script will use the R package [mirTarRnaSeq](https://bioconductor.org/packages/3.13/bioc/html/mirTarRnaSeq.html), which an be used for interactive mRNA miRNA sequencing statistical analysis, to assess coexpression between mRNAs and miRNAs. 
 
-I will be using Part 1 of their workflow (see [vignette](https://bioconductor.org/packages/3.13/bioc/vignettes/mirTarRnaSeq/inst/doc/mirTarRnaSeq.pdf)).
+I will be using Part 1 of their workflow (see [vignette](https://bioconductor.org/packages/3.13/bioc/vignettes/mirTarRnaSeq/inst/doc/mirTarRnaSeq.pdf)). Part 1 looks at the mRNA miRNA associations across sample cohorts using count matrices and miranda output as input. The data is then modeled and the best regression is selected based on the best AIC value. Using a specific regression model, the pvalue, FDR and coefficients are provided for mRNA-miRNA associations, which will answer the question: is there statistical evidence for mRNA-miRNA associations in the dataset? 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,14 +16,46 @@ library(tidyverse)
 library(mirTarRnaSeq)
 ```
 
-Using the test data as an initial pass to understand Part 1 of the package. Part 1 
+Using the test data as an initial pass to understand Part 1 of the package. Part 1 has a lot of different options one can explore. For the deep dive data, I think the univariate model or the synergistic model will be the best for our data. The univariate model can look at the relationshop of all miRNAs in regards to all mRNAs of interest (one to one relationship). 
 
-I will use the `miRNA` df as miRNA counts input and `mRNA` df as mRNA counts input; this data is a part of the package. I will also use `miRanda` for interaction data. 
+I will use the `miRNA` df as miRNA counts input and `mRNA` df as mRNA counts input; this data is a part of the package. I will also use `miRanda` for interaction data. Looking at the manual pages and source [code](https://rdrr.io/github/Mercedeh66/mirTarRnaSeq/man/), prior to combining the files with the function `combiner`, they need to be transformed using `TZtrans`. 
+
+Transform data
+```{r}
+miRNA_transform <- tzTrans(miRNA)
+mRNA_transform <- tzTrans(mRNA)
+```
 
 Select only mRNAs that were identified as targets 
 ```{r}
-mRNASub <- miRanComp(mRNA, miRanda)
+mRNA_transform_sub <- miRanComp(mRNA_transform, miRanda)
 ```
+
+Before combining, the `combiner` function requires an miRNA vector of miRNAs of interest. The manual says: "A vector of character's for miRNAs which the user is interested in investigating if glm is use 1 miRNA should be input. If multivariate several miRNAs should be imported, same goes for interaction determination for miRNAs. Note we do not recommend more than 3-4 miRNAs at a time for the latter cases."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Select specific miRNA. Not sure why this needs to be done...
 ```{r}
