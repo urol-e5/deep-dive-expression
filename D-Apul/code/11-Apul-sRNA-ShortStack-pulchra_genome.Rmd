@@ -1,0 +1,456 @@
+---
+title: "11-Apul-sRNA-ShortStack-pulchra_genome"
+author: "Kathleen Durkin"
+date: "2024-10-02"
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: references.bib
+link-citations: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(reticulate)
+library(ggplot2)
+library(stringr)
+library(ggvenn)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Use [ShortStack](https://github.com/MikeAxtell/ShortStack) [@axtell2013a; @shahid2014; @johnson2016a]to perform alignment of sRNAseq data and annotation of sRNA-producing genes.
+
+This is the same ShortStack analysis as performed in the `deeep-dive` project However, we now have a genome for our actual study species, *A. pulchra*, so we can rerun sRNA discovery with the actual *pulchra* genome for reference, instead of using *A. millipora*. 
+As in `deep-dive`, we will also include a customized miRBase database, utilizing cnidarian miRNAs curated by Jill Ashley, which includes published cnidarian miRNAs:
+
+- [`cnidarian-mirbase-mature-v22.1.fasta`](../../data/cnidarian-mirbase-mature-v22.1.fasta)
+
+------------------------------------------------------------------------
+
+Inputs:
+
+-   Requires trimmed sRNAseq files generated in `deep-dive` [08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd)
+
+    -   Filenames formatted: `*fastp-adapters-polyG-31bp-merged.fq.gz`
+
+-   *A.pulchra* genome FastA. Not currently publicly available (still being annotated by colaborators)
+
+Outputs:
+
+-   See [ShortStack outputs documentation](https://github.com/MikeAxtell/ShortStack#outputs) for full list and detailed descriptions.
+
+Software requirements:
+
+-   Utilizes a [ShortStack](https://github.com/MikeAxtell/ShortStack#installation) Conda/Mamba environment, per the installation instructions.
+
+Replace with name of your ShortStack environment and the path to the corresponding conda installation (find this *after* you've activated the environment).
+
+E.g.
+
+``` bash
+# Activate environment
+conda activate ShortStack4_env
+
+# Find conda path
+which conda
+```
+
+------------------------------------------------------------------------
+
+# Set R variables
+
+```{r R-variables, eval=TRUE}
+shortstack_conda_env_name <- c("ShortStack-4.0.3_env")
+shortstack_cond_path <- c("/home/sam/programs/mambaforge/condabin/conda")
+```
+
+# Create a Bash variables file
+
+This allows usage of Bash variables across R Markdown chunks.
+
+```{r save-bash-variables-to-rvars-file, engine='bash', eval=TRUE}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Trimmed FastQ naming pattern"
+echo "export trimmed_fastqs_pattern='*fastp-adapters-polyG-31bp-merged.fq.gz'"
+
+echo "# Data directories"
+echo 'export expression_dir=/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression'
+echo 'export expression_data_dir="${expression_dir}/data"'
+echo 'export output_dir_top=${expression_dir}/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome'
+echo ""
+
+echo "# Input/Output files"
+echo 'export genome_fasta_dir=${expression_dir}/D-Apul/data'
+echo 'export genome_fasta_name="Apulchra-genome.fa"'
+echo 'export shortstack_genome_fasta_name="Apulchra-genome.fa"'
+echo 'export trimmed_fastqs_dir="${genome_fasta_dir}/sRNA-trimmed-reads"'
+
+echo 'export mirbase_mature_fasta_version=cnidarian-mirbase-mature-v22.1.fasta'
+echo 'export genome_fasta="${genome_fasta_dir}/${shortstack_genome_fasta_name}"'
+echo ""
+
+echo "# Set number of CPUs to use"
+echo 'export threads=40'
+echo ""
+
+echo "# Initialize arrays"
+echo 'export trimmed_fastqs_array=()'
+
+
+} > .bashvars
+
+cat .bashvars
+```
+
+# Load [ShortStack](https://github.com/MikeAxtell/ShortStack) conda environment
+
+If this is successful, the first line of output should show that the Python being used is the one in your [ShortStack](<https://github.com/MikeAxtell/ShortStack> conda environment path.
+
+E.g.
+
+`python:         /home/sam/programs/mambaforge/envs/mirmachine_env/bin/python`
+
+```{r load-shortstack-conda-env, eval=TRUE}
+use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
+#conda_install("ShortStack-4.0.3_env", "biopython")
+# Check successful env loading
+py_config()
+```
+
+# Download reference files
+
+## A.pulchra genome
+
+```{r download-genome, engine='bash', eval=FALSE}
+# Load bash variables into memory
+source .bashvars
+
+wget -O ${genome_fasta_dir}/${shortstack_genome_fasta_name} "https://osf.io/download/kn96u/"
+```
+
+## Cnidarian+miRBase database
+
+Available n `deep-dive` repo, [here](https://github.com/urol-e5/deep-dive/blob/main/data/cnidarian-mirbase-mature-v22.1.fasta)
+
+```{r download-genome, engine='bash', eval=FALSE}
+# Load bash variables into memory
+source .bashvars
+
+wget -O ${expression_data_dir}/"${mirbase_mature_fasta_version}" "https://github.com/urol-e5/deep-dive/blob/main/data/cnidarian-mirbase-mature-v22.1.fasta"
+```
+
+## Trimmed sRNA-seq reads
+
+Trimmed in `deep-dive`, [08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd)
+
+```{r download-genome, engine='bash', eval=FALSE}
+# Load bash variables into memory
+source .bashvars
+
+wget \
+--directory-prefix ${trimmed_fastqs_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 7 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--accept ${trimmed_fastqs_pattern} \
+"https://gannet.fish.washington.edu/Atumefaciens/gitrepos/deep-dive/D-Apul/output/08.2-Apul-sRNAseq-trimming-31bp-fastp-merged/trimmed-reads/"
+```
+
+# Run ShortStack
+
+## Modify genome filename for ShortStack compatability
+
+```{r rename-genome-filename, engine='bash', cache=TRUE, eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# Check for FastA file first
+# Then create rename file if doesn't exist
+if [ -f "${genome_fasta_dir}/${shortstack_genome_fasta_name}" ]; then
+  echo "${genome_fasta_dir}/${shortstack_genome_fasta_name}"
+  echo ""
+  echo "Already exists. Nothing to do."
+  echo ""
+else
+
+  # Copy genome FastA to ShortStack-compatible filename (ending with .fa)
+  cp ${genome_fasta_dir}/${genome_fasta_name} ${genome_fasta_dir}/${shortstack_genome_fasta_name}
+fi
+
+# Confirm
+ls -lh ${genome_fasta_dir}/${shortstack_genome_fasta_name}
+```
+
+## Excecute ShortStack command
+
+Uses the `--dn_mirna` option to identify miRNAs in the genome, without relying on the `--known_miRNAs`.
+
+This part of the code redirects the output of `time` to the end of `shortstack.log` file.
+
+-   `; } \ 2>> ${output_dir_top}/shortstack.log`
+
+
+
+```{r shortstack, engine='bash', cache=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# Make output directory, if it doesn't exist
+mkdir --parents "${output_dir_top}"
+
+# Create array of trimmed FastQs
+trimmed_fastqs_array=(${trimmed_fastqs_dir}/${trimmed_fastqs_pattern})
+
+
+# Pass array contents to new variable as space-delimited list
+trimmed_fastqs_list=$(echo "${trimmed_fastqs_array[*]}")
+
+
+###### Run ShortStack ######
+{ time \
+ShortStack \
+--genomefile "${genome_fasta}" \
+--readfile ${trimmed_fastqs_list} \
+--known_miRNAs ${expression_data_dir}/${mirbase_mature_fasta_version} \
+--dn_mirna \
+--threads ${threads} \
+--outdir ${output_dir_top}/ShortStack_out \
+&> ${output_dir_top}/shortstack.log ; } \
+2>> ${output_dir_top}/shortstack.log
+
+```
+
+## Check runtime
+
+```{r engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+tail -n 3 ${output_dir_top}/shortstack.log \
+| grep "real" \
+| awk '{print "ShortStack runtime:" "\t" $2}'
+
+```
+
+
+# Results
+
+## ShortStack synopsis
+
+```{r shortstack-synopsis, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+tail -n 25 ${output_dir_top}/shortstack.log
+```
+
+ShortStack identified 38 miRNAs.
+
+## Inspect `Results.txt`
+
+```{r results-txt-file, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+head ${output_dir_top}/ShortStack_out/Results.txt
+
+echo ""
+echo "----------------------------------------------------------"
+echo ""
+
+echo "Nummber of potential loci:"
+awk '(NR>1)' ${output_dir_top}/ShortStack_out/Results.txt | wc -l
+```
+
+Column 20 of the `Results.txt` file identifies if a cluster is a miRNA or not (`Y` or `N`).
+
+```{r results-txt-miRNAs, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+echo "Number of loci characterized as miRNA:"
+awk '$20=="Y" {print $0}' ${output_dir_top}/ShortStack_out/Results.txt \
+| wc -l
+echo ""
+
+echo "----------------------------------------------------------"
+
+echo ""
+echo "Number of loci _not_ characterized as miRNA:"
+awk '$20=="N" {print $0}' ${output_dir_top}/ShortStack_out/Results.txt \
+| wc -l
+
+```
+
+Column 21 of the `Results.txt` file identifies if a cluster aligned to a known miRNA (miRBase) or not (`Y` or `NA`).
+
+Since there are no miRNAs, the following code will *not* print any output.
+
+The `echo` command after the `awk` command is simply there to prove that the chunk executed.
+
+```{r results-txt-miRBase-miRNAs, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+echo "Number of loci matching miRBase miRNAs:"
+awk '$21!="NA" {print $0}' ${output_dir_top}/ShortStack_out/Results.txt \
+| wc -l
+echo ""
+
+echo "----------------------------------------------------------"
+
+echo ""
+echo "Number of loci _not_ matching miRBase miRNAs:"
+awk '$21=="NA" {print $0}' ${output_dir_top}/ShortStack_out/Results.txt \
+| wc -l
+
+```
+
+Although there are loci with matches to miRBase miRNAs, ShortStack did *not* annotate these clusters as miRNAs likely [because they do not *also* match secondary structure criteria](https://github.com/MikeAxtell/ShortStack#mirna-annotation).
+
+### Directory tree of all ShortStack outputs
+
+Many of these are large (by GitHub standards) BAM files, so will not be added to the repo.
+
+Additionally, it's unlikely we'll utilize most of the other files (bigwig) generated by ShortStack.
+
+```{r shortstack-directory-tree, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+tree -h ${output_dir_top}/
+
+```
+
+
+## Visualize
+
+We noticed that a) not all of the identified miRNAs have database matches, and b) some reads have a match in the database but are *not* classified as miRNAs. Let's look at this in more depth.
+
+```{r load-results, eval=TRUE}
+Apul_shortstack_results <- read.csv("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/ShortStack_out/Results.txt", sep="\t")
+```
+
+```{r generate-plots, eval=TRUE}
+# Reads identified as miRNAs (but not necessarily known)
+Apul_shortstack_results %>% 
+  filter(MIRNA == "Y") %>%
+  mutate(known_miRNAs = str_sub(known_miRNAs, 1, 40)) %>%
+  mutate(Locus = str_sub(Locus, 20, 40)) %>%
+  ggplot(aes(x = reorder(Locus, Reads), y = Reads, fill = known_miRNAs)) +
+  geom_bar(stat = "identity") +
+   geom_text(aes(label = Reads), vjust = 0.5, hjust = 0, color = "black", size = 2.5, angle = 90) +
+  labs(x = "miRNA", y = "Read count", 
+       title = "Reads identified by ShortStack as miRNAs",
+       fill = "Annotation") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+  
+ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_miRNA_histogram.png", width = 12, height = 7, units = "in")
+
+
+# Reads matched in the reference db (but not necessarily identified as miRNA)
+Apul_shortstack_results %>% 
+  filter(!is.na(known_miRNAs)) %>%
+  mutate(known_miRNAs = str_sub(known_miRNAs, 1, 40)) %>%
+  mutate(Locus = str_sub(Locus, 20, 40)) %>%
+  ggplot(aes(x = reorder(Locus, Reads), y = Reads, fill = MIRNA)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Reads), vjust = 0.5, hjust = 0, color = "black", size = 2.5, angle = 90) +
+  labs(x = "miRNA", y = "Read count", 
+       title = "Reads with miRBase+cnidarian database matches",
+       fill = "Identified as miRNA?") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_dbmatch_histogram.png", width = 12, height = 7, units = "in")
+```
+
+There's two miRNAs with very high read counts, and it's making visualization of the rest difficult. Let's remove them and retry visualizing the rest.
+
+```{r generate-plots-reduced, eval=TRUE}
+# Reads identified as miRNAs (but not necessarily known)
+Apul_shortstack_results %>% 
+  filter(MIRNA == "Y") %>%
+  filter(Reads < 200000) %>%
+  mutate(known_miRNAs = str_sub(known_miRNAs, 1, 40)) %>%
+  mutate(Locus = str_sub(Locus, 20, 40)) %>%
+  ggplot(aes(x = reorder(Locus, Reads), y = Reads, fill = known_miRNAs)) +
+  geom_bar(stat = "identity") +
+   geom_text(aes(label = Reads), vjust = 0.5, hjust = 0, color = "black", size = 2.5, angle = 90) +
+  labs(x = "miRNA", y = "Read count", 
+       title = "Reads identified by ShortStack as miRNAs",
+       fill = "Annotation") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+  
+ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_miRNA_histogram_reduced.png", width = 12, height = 7, units = "in")
+
+
+# Reads matched in the reference db (but not necessarily identified as miRNA)
+Apul_shortstack_results %>% 
+  filter(!is.na(known_miRNAs)) %>%
+  filter(Reads < 200000) %>%
+  mutate(known_miRNAs = str_sub(known_miRNAs, 1, 40)) %>%
+  mutate(Locus = str_sub(Locus, 20, 40)) %>%
+  ggplot(aes(x = reorder(Locus, Reads), y = Reads, fill = MIRNA)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Reads), vjust = 0.5, hjust = 0, color = "black", size = 2.5, angle = 90) +
+  labs(x = "miRNA", y = "Read count", 
+       title = "Reads with miRBase+cnidarian database matches",
+       fill = "Identified as miRNA?") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_dbmatch_histogram_reduced.png", width = 12, height = 7, units = "in")
+```
+
+```{r venn-diagram, eval=TRUE}
+# Make list
+mirnas <- Apul_shortstack_results %>% filter(MIRNA == "Y") %>% pull(Locus)
+matches <- Apul_shortstack_results %>% filter(!is.na(known_miRNAs)) %>% pull(Locus)
+
+Apul_shortstack_vennlist <- list(
+  "Identified as miRNA" = mirnas,
+  "Database match" = matches
+)
+
+# Make venn diagrams
+ggvenn(Apul_shortstack_vennlist)
+
+ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
+```
+
+------------------------------------------------------------------------
+
+# Citations
