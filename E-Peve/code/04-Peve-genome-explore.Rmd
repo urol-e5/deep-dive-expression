@@ -4,6 +4,18 @@ output: html_document
 date: "2024-10-05"
 ---
 
+get genome
+```{bash}
+curl -o ../data/Porites_evermanni_v1.fa https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa
+```
+
+
+
+
+```{bash}
+md5 ../data/Porites_evermanni_v1.fa
+```
+
 ```{r}
 # Install Biostrings if not already installed
 if (!requireNamespace("Biostrings", quietly = TRUE)) {
@@ -40,7 +52,7 @@ genome_stats <- function(fasta_file) {
 }
 
 # Example usage
-fasta_file <- "../data/Apulcra-genome.fa"  # Replace with your file path
+fasta_file <- "../data/Porites_evermanni_v1.fa"  # Replace with your file path
 genome_stats(fasta_file)
 
 ```
