@@ -1,0 +1,47 @@
+---
+title: "4-Peve-genome-explore"
+output: html_document
+date: "2024-10-05"
+---
+
+```{r}
+# Install Biostrings if not already installed
+if (!requireNamespace("Biostrings", quietly = TRUE)) {
+    install.packages("BiocManager")
+    BiocManager::install("Biostrings")
+}
+
+# Load the necessary library
+library(Biostrings)
+
+# Function to calculate basic genome statistics
+genome_stats <- function(fasta_file) {
+    # Read the FASTA file
+    sequences <- readDNAStringSet(fasta_file)
+
+    # Number of sequences
+    num_sequences <- length(sequences)
+
+    # Total base pairs
+    total_length <- sum(width(sequences))
+
+    # GC content calculation
+    gc_count <- sum(letterFrequency(sequences, letters = c("G", "C")))
+    gc_content <- (gc_count / total_length) * 100
+
+    # Average sequence length
+    avg_length <- mean(width(sequences))
+
+    # Print statistics
+    cat("Number of sequences:", num_sequences, "\n")
+    cat("Total base pairs:", total_length, "\n")
+    cat("GC content:", sprintf("%.2f", gc_content), "%\n")
+    cat("Average sequence length:", sprintf("%.2f", avg_length), "bp\n")
+}
+
+# Example usage
+fasta_file <- "../data/Apulcra-genome.fa"  # Replace with your file path
+genome_stats(fasta_file)
+
+```
+
