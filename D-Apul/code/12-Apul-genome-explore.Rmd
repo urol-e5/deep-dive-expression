@@ -27,7 +27,7 @@ library(DT)
 library(Biostrings)
 library(tm)
 knitr::opts_chunk$set(
-  echo = TRUE,         # Display code chunks
+  echo = FALSE,         # Display code chunks
   eval = TRUE,         # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
@@ -39,9 +39,9 @@ knitr::opts_chunk$set(
 ```
 
 
-## Genome Analysis
+# Genome Analysis
 
-```{r, engine='bash', echo=TRUE}
+```{r, engine='bash'}
 # Set the fasta file variable
 fasta_file="../data/Apulcra-genome.fa"
 
@@ -133,10 +133,10 @@ rm seq_lengths.txt seq_lengths_sorted.txt
 ```
 
 
-## GFF Stats 
+# GFF Stats 
 
 
-```{r, engine='bash', echo=TRUE}
+```{r, engine='bash'}
 # Define the path to the GFF file
 gff_file="../data/Apulcra-genome.gff"
 
@@ -165,4 +165,35 @@ cut -f3 $gff_file | grep -v '^#' | sort | uniq -c | sort -nr
 echo "Unique sources and their counts:"
 unique_sources=$(cut -f2 $gff_file | grep -v '^#' | sort | uniq -c | sort -nr)
 echo "$unique_sources"
+```
+
+# Genes
+
+```{r, engine='bash', eval=FALSE}
+curl -o "../data/Apul-genes.fasta" https://gannet.fish.washington.edu/seashell/bu-github/mechanism_to_model/data/Apul-genes.fasta
+```
+
+
+```{r, engine='bash'}
+# Define the path to the FASTA file
+fasta_file="../data/Apul-genes.fasta"
+
+# Check if the file exists
+if [ ! -f "$fasta_file" ]; then
+    echo "File does not exist: $fasta_file"
+    exit 1
+fi
+
+echo "Processing file: $fasta_file"
+
+# Total number of sequences
+total_sequences=$(grep -c '^>' $fasta_file)
+echo "Total sequences: $total_sequences"
+
+# Average, minimum, and maximum sequence length
+awk '/^>/ {if (seqname) {print seqlen; total += seqlen; if (seqlen < min || min == 0) min = seqlen; if (seqlen > max) max = seqlen;} seqname = $0; seqlen = 0; next;} {seqlen += length($0)} END {print seqlen; total += seqlen; if (seqlen < min || min == 0) min = seqlen; if (seqlen > max) max = seqlen; print total/NR, min, max}' $fasta_file | awk 'BEGIN {min = 0; max = 0; total = 0; count = 0} {total += $1; count++; if (NR == 1 || $1 < min) min = $1; if ($1 > max) max = $1} END {print "Average sequence length: " total/count; print "Shortest sequence length: " min; print "Longest sequence length: " max;}'
+
+# Total number of bases
+total_bases=$(awk '/^>/ {next} {total += length($0)} END {print total}' $fasta_file)
+echo "Total bases (nucleotides/amino acids): $total_bases"
 ```
