@@ -1,0 +1,237 @@
+---
+title: "11-genome-explore"
+format: html
+editor: visual
+
+---
+
+
+```{bash}
+./genome-stats.sh ../data/Apulcra-genome.fa
+```
+
+
+
+
+## Genome Analysis
+
+```{bash, echo=TRUE}
+# Set the fasta file variable
+fasta_file="../data/Apulcra-genome.fa"
+
+# Check if input file exists
+if [ ! -f "$fasta_file" ]; then
+    echo "File not found: $fasta_file"
+    exit 1
+fi
+
+# Number of sequences
+num_seqs=$(grep -c '^>' "$fasta_file")
+echo "Number of sequences: $num_seqs"
+
+# Get sequence lengths
+awk '
+    /^>/ { if (seqlen) { print seqlen; seqlen=0 } next }
+    { seqlen += length($0) }
+    END { if (seqlen) print seqlen }
+' "$fasta_file" > seq_lengths.txt
+
+# Total length
+total_length=$(awk '{sum+=$1} END{print sum}' seq_lengths.txt)
+printf "Total length: %'d\n" "$total_length"
+
+# Longest sequence
+longest=$(sort -nr seq_lengths.txt | head -n1)
+printf "Longest sequence length: %'d\n" "$longest"
+
+# Shortest sequence
+shortest=$(sort -n seq_lengths.txt | head -n1)
+printf "Shortest sequence length: %'d\n" "$shortest"
+
+# N50 calculation
+sort -nr seq_lengths.txt > seq_lengths_sorted.txt
+
+n50=$(awk -v total_length="$total_length" '
+BEGIN { half_total = total_length / 2; sum = 0 }
+{
+    sum += $1
+    if (sum >= half_total) {
+        print $1
+        exit
+    }
+}
+' seq_lengths_sorted.txt)
+printf "N50: %'d\n" "$n50"
+
+# L50 calculation
+l50=$(awk -v total_length="$total_length" '
+BEGIN { half_total = total_length / 2; sum = 0; count = 0 }
+{
+    sum += $1
+    count++
+    if (sum >= half_total) {
+        print count
+        exit
+    }
+}
+' seq_lengths_sorted.txt)
+echo "L50: $l50"
+
+# GC content and base counts
+awk '
+    /^>/ { next }
+    {
+        seq = toupper($0)
+        g += gsub(/G/, "", seq)
+        c += gsub(/C/, "", seq)
+        a += gsub(/A/, "", seq)
+        t += gsub(/T/, "", seq)
+        n += gsub(/N/, "", seq)
+    }
+    END {
+        total = a + c + g + t + n
+        gc = g + c
+        printf "Total bases: %'\''d\n", total
+        printf "A: %'\''d\n", a
+        printf "C: %'\''d\n", c
+        printf "G: %'\''d\n", g
+        printf "T: %'\''d\n", t
+        printf "N: %'\''d\n", n
+        printf "GC Content: %.2f%%\n", (gc / total) * 100
+    }
+' "$fasta_file"
+
+# Cleanup temporary files
+rm seq_lengths.txt seq_lengths_sorted.txt
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+# Install Biostrings if not already installed
+if (!requireNamespace("Biostrings", quietly = TRUE)) {
+    install.packages("BiocManager")
+    BiocManager::install("Biostrings")
+}
+
+# Load the necessary library
+library(Biostrings)
+
+# Function to calculate basic genome statistics
+genome_stats <- function(fasta_file) {
+    # Read the FASTA file
+    sequences <- readDNAStringSet(fasta_file)
+    
+    # Number of sequences
+    num_sequences <- length(sequences)
+    
+    # Total base pairs
+    total_length <- sum(width(sequences))
+    
+    # GC content calculation
+    gc_count <- sum(letterFrequency(sequences, letters = c("G", "C")))
+    gc_content <- (gc_count / total_length) * 100
+    
+    # Average sequence length
+    avg_length <- mean(width(sequences))
+    
+    # Print statistics
+    cat("Number of sequences:", num_sequences, "\n")
+    cat("Total base pairs:", total_length, "\n")
+    cat("GC content: ", sprintf("%.2f", gc_content), "%\n", sep = "")
+    cat("Average sequence length: ", sprintf("%.2f", avg_length), " bp\n", sep = "")
+}
+
+# Example usage
+fasta_file <- "../data/Apulcra-genome.fa"  # Replace with your file path
+genome_stats(fasta_file)
+
+```
+
+
+```{r}
+# Install necessary Bioconductor packages if not already installed
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+# Install required packages if not already installed
+if (!requireNamespace("Biostrings", quietly = TRUE)) {
+    BiocManager::install("Biostrings")
+}
+
+if (!requireNamespace("GenomicFeatures", quietly = TRUE)) {
+    BiocManager::install("GenomicFeatures")
+}
+
+# Load libraries
+library(Biostrings)
+library(GenomicFeatures)
+
+# Function to calculate comprehensive genome statistics
+genome_stats <- function(fasta_file, gff_file = NULL) {
+    # Read the genome FASTA file
+    sequences <- readDNAStringSet(fasta_file)
+    
+    # Calculate basic statistics
+    num_sequences <- length(sequences)
+    total_length <- sum(width(sequences))
+    gc_count <- sum(letterFrequency(sequences, letters = c("G", "C")))
+    gc_content <- (gc_count / total_length) * 100
+    avg_length <- mean(width(sequences))
+    
+    # Print basic statistics
+    cat("Number of sequences: ", num_sequences, "\n")
+    cat("Total base pairs: ", total_length, "\n")
+    cat("GC content: ", sprintf("%.2f", gc_content), "%\n", sep = "")
+    cat("Average sequence length: ", sprintf("%.2f", avg_length), " bp\n", sep = "")
+    
+    # Check if a GFF/GTF file is provided for feature statistics
+    if (!is.null(gff_file)) {
+        # Load GFF/GTF file and create a TxDb object
+        txdb <- makeTxDbFromGFF(gff_file, format = ifelse(grepl("gtf$", gff_file), "gtf", "gff"))
+
+        # Get the number of features
+        feature_summary <- list(
+            Genes = length(genes(txdb)),
+            Transcripts = length(transcripts(txdb)),
+            Exons = length(exons(txdb)),
+            CDS = length(cds(txdb))
+        )
+        
+        cat("\nFeature summary:\n")
+        print(feature_summary)
+        
+        # Additional details on features
+        feature_details <- as.data.frame(genes(txdb))
+        cat("\nFirst few gene features:\n")
+        print(head(feature_details))
+    } else {
+        cat("No GFF/GTF file provided, skipping feature statistics.\n")
+    }
+}
+
+# Example usage:
+fasta_file <- "../data/Apulcra-genome.fa"  # Replace with your genome file path
+gff_file <- "../data/Apulcra-genome.gff"  # Replace with your GFF/GTF file path (optional)
+genome_stats(fasta_file, gff_file)
+
+```
+
+
+
+
+
+
+
