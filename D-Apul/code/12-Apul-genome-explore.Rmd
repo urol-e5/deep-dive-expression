@@ -41,6 +41,7 @@ knitr::opts_chunk$set(
 
 # Genome Analysis
 
+
 ```{r, engine='bash'}
 # Set the fasta file variable
 fasta_file="../data/Apulcra-genome.fa"
@@ -66,15 +67,13 @@ awk '
 total_length=$(awk '{sum+=$1} END{print sum}' seq_lengths.txt)
 printf "Total length: %'d\n" "$total_length"
 
-# Longest sequence
-longest=$(sort -nr seq_lengths.txt | head -n1)
-printf "Longest sequence length: %'d\n" "$longest"
+# Longest and shortest sequence using a direct approach with proper handling of zero-length sequences
+read longest shortest < <(awk 'NR==1 {max=$1; min=$1} {if ($1>max) max=$1; if ($1<min && $1>0) min=$1} END {print max, min}' seq_lengths.txt)
 
-# Shortest sequence
-shortest=$(sort -n seq_lengths.txt | head -n1)
+printf "Longest sequence length: %'d\n" "$longest"
 printf "Shortest sequence length: %'d\n" "$shortest"
 
-# N50 calculation
+# N50 and L50 calculations
 sort -nr seq_lengths.txt > seq_lengths_sorted.txt
 
 n50=$(awk -v total_length="$total_length" '
@@ -89,7 +88,6 @@ BEGIN { half_total = total_length / 2; sum = 0 }
 ' seq_lengths_sorted.txt)
 printf "N50: %'d\n" "$n50"
 
-# L50 calculation
 l50=$(awk -v total_length="$total_length" '
 BEGIN { half_total = total_length / 2; sum = 0; count = 0 }
 {
@@ -129,7 +127,6 @@ awk '
 
 # Cleanup temporary files
 rm seq_lengths.txt seq_lengths_sorted.txt
-
 ```
 
 

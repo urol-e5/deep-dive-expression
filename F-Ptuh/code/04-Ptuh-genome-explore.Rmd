@@ -1,5 +1,5 @@
 ---
-title: "04-Peve genome-explore"
+title: "04-Ptuh genome-explore"
 author: "Steven Roberts"
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 # Genome Analysis
 
 ```{r, engine='bash', eval=FALSE}
-curl -o "../data/Porites_evermanni_v1.fa" https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa
+curl -o "..data/Pocillopora_meandrina_HIv1.assembly.fasta" https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta
 ```
 
 
@@ -50,7 +50,7 @@ curl -o "../data/Porites_evermanni_v1.fa" https://gannet.fish.washington.edu/sea
 
 ```{r, engine='bash'}
 # Set the fasta file variable
-fasta_file="../data/Porites_evermanni_v1.fa"
+fasta_file="../data/Pocillopora_meandrina_HIv1.assembly.fasta"
 
 
 # Check if input file exists
@@ -142,12 +142,12 @@ rm seq_lengths.txt seq_lengths_sorted.txt
 
 
 ```{r, engine='bash', eval=FALSE}
-curl -o "../data/Porites_evermanni_v1.annot.gff" https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.gff
+curl -o "../data/Pocillopora_meandrina_HIv1.genes.gff3" https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.genes.gff3
 ```
 
 ```{r, engine='bash'}
 # Define the path to the GFF file
-gff_file="../data/Porites_evermanni_v1.annot.gff"
+gff_file="../data/Pocillopora_meandrina_HIv1.genes.gff3"
 
 
 # Check if the file exists
@@ -180,13 +180,13 @@ echo "$unique_sources"
 
 
 ```{r, engine='bash', eval=FALSE}
-curl -o "../data/Porites_evermanni_CDS.fasta" https://gannet.fish.washington.edu/kdurkin1/deep-dive/E-Peve/data/Porites_evermanni_CDS.fasta
+curl -o "../data/Pocillopora_meandrina_HIv1.genes.cds.fna" https://gannet.fish.washington.edu/acropora/E5-deep-dive/Transcripts/Pocillopora_meandrina_HIv1.genes.cds.fna
 ```
 
 
 ```{r, engine='bash'}
 # Define the path to the FASTA file
-fasta_file="../data/Porites_evermanni_CDS.fasta"
+fasta_file="../data/Pocillopora_meandrina_HIv1.genes.cds.fna"
 
 # Check if the file exists
 if [ ! -f "$fasta_file" ]; then
