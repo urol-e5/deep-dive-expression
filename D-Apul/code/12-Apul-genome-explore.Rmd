@@ -28,7 +28,7 @@ library(Biostrings)
 library(tm)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
-  eval = FALSE,         # Evaluate code chunks
+  eval = TRUE,         # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
   fig.width = 6,       # Set plot width in inches

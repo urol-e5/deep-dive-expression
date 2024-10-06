@@ -99,6 +99,20 @@ awk '
 rm seq_lengths.txt seq_lengths_sorted.txt
 ```
 
+    Number of sequences: 174
+    Total length: 518,313,916
+    Longest sequence length: 45,111,900
+    Shortest sequence length: 6,597
+    N50: 17,861,421
+    L50: 10
+    Total bases: 518,313,916
+    A: 158,272,347
+    C: 101,422,742
+    G: 100,986,991
+    T: 157,631,836
+    N: 0
+    GC Content: 39.05%
+
 ## 0.2 GFF Stats
 
 ``` bash
@@ -131,3 +145,15 @@ echo "Unique sources and their counts:"
 unique_sources=$(cut -f2 $gff_file | grep -v '^#' | sort | uniq -c | sort -nr)
 echo "$unique_sources"
 ```
+
+    Processing file: ../data/Apulcra-genome.gff
+    Total entries: 499892
+    Unique features: 5
+    Entries per feature type:
+     209537 exon
+     201613 CDS
+      44371 gene
+      36447 mRNA
+       7924 tRNA
+    Unique sources and their counts:
+     499892 funannotate
