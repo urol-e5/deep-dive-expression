@@ -10,9 +10,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -20,6 +17,9 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
+  github_document:
+    toc: true
+    number_sections: true
 bibliography: references.bib
 link-citations: true
 ---
@@ -78,16 +78,12 @@ conda activate ShortStack4_env
 which conda
 ```
 
-```{bash}
-which python
-```
-
 ------------------------------------------------------------------------
 
 # Set R variables
 
 ```{r R-variables, eval=TRUE}
-shortstack_conda_env_name <- c("ShortStack-4.0.3_env")
+shortstack_conda_env_name <- c("ShortStack-4.1.0_env")
 shortstack_cond_path <- c("/home/sam/programs/mambaforge/condabin/conda")
 ```
 
@@ -142,12 +138,9 @@ E.g.
 
 ```{r load-shortstack-conda-env, eval=TRUE}
 use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
-#conda_install("ShortStack-4.0.3_env", "biopython")
-# Check successful env loading
-
 py_config()
 ```
-
+Note: I sometimes get an error "failed to initialize requested version of Python," which seems to stem from the `reticulate` package default loading a python environment. I've been able to fix this by manually uninstalling the `reticulate` package, then restarting R and reinstalling `reticulate` before rerunning this code document.
 # Download reference files
 
 ## A.pulchra genome
@@ -163,18 +156,25 @@ wget -O ${genome_fasta_dir}/${shortstack_genome_fasta_name} "https://osf.io/down
 
 Available n `deep-dive` repo, [here](https://github.com/urol-e5/deep-dive/blob/main/data/cnidarian-mirbase-mature-v22.1.fasta)
 
-```{r download-genome, engine='bash', eval=FALSE}
+```{r download-db, engine='bash', eval=FALSE}
 # Load bash variables into memory
 source .bashvars
 
-wget -O ${expression_data_dir}/"${mirbase_mature_fasta_version}" "https://github.com/urol-e5/deep-dive/blob/main/data/cnidarian-mirbase-mature-v22.1.fasta"
+wget -O ${expression_data_dir}/"${mirbase_mature_fasta_version}" "https://raw.githubusercontent.com/urol-e5/deep-dive/refs/heads/main/data/cnidarian-mirbase-mature-v22.1.fasta"
+```
+
+```{r check-db-file, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+head -5 ${expression_data_dir}/"${mirbase_mature_fasta_version}"
 ```
 
 ## Trimmed sRNA-seq reads
 
 Trimmed in `deep-dive`, [08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/08.2-Dapul-sRNAseq-trimming-31bp-fastp-merged.Rmd)
 
-```{r download-genome, engine='bash', eval=FALSE}
+```{r download-trimmed-reads, engine='bash', eval=FALSE}
 # Load bash variables into memory
 source .bashvars
 
@@ -215,6 +215,7 @@ fi
 # Confirm
 ls -lh ${genome_fasta_dir}/${shortstack_genome_fasta_name}
 ```
+
 
 ## Excecute ShortStack command
 
@@ -279,7 +280,7 @@ source .bashvars
 tail -n 25 ${output_dir_top}/shortstack.log
 ```
 
-ShortStack identified 38 miRNAs.
+ShortStack identified 39 miRNAs. (This is in comparison to running ShortStack using the *A. millipora* genome, which yielded 38 miRNAs)
 
 ## Inspect `Results.txt`
 
@@ -363,7 +364,7 @@ tree -h ${output_dir_top}/
 We noticed that a) not all of the identified miRNAs have database matches, and b) some reads have a match in the database but are *not* classified as miRNAs. Let's look at this in more depth.
 
 ```{r load-results, eval=TRUE}
-Apul_shortstack_results <- read.csv("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/ShortStack_out/Results.txt", sep="\t")
+Apul_shortstack_results <- read.csv("../output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/Results.txt", sep="\t")
 ```
 
 ```{r generate-plots, eval=TRUE}
@@ -381,7 +382,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
   
-ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_miRNA_histogram.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram.png", width = 12, height = 7, units = "in")
 
 
 # Reads matched in the reference db (but not necessarily identified as miRNA)
@@ -398,7 +399,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_dbmatch_histogram.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram.png", width = 12, height = 7, units = "in")
 ```
 
 There's two miRNAs with very high read counts, and it's making visualization of the rest difficult. Let's remove them and retry visualizing the rest.
@@ -419,7 +420,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
   
-ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_miRNA_histogram_reduced.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram_reduced.png", width = 12, height = 7, units = "in")
 
 
 # Reads matched in the reference db (but not necessarily identified as miRNA)
@@ -437,7 +438,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_dbmatch_histogram_reduced.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram_reduced.png", width = 12, height = 7, units = "in")
 ```
 
 ```{r venn-diagram, eval=TRUE}
@@ -453,7 +454,7 @@ Apul_shortstack_vennlist <- list(
 # Make venn diagrams
 ggvenn(Apul_shortstack_vennlist)
 
-ggsave("../output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
 ```
 
 ------------------------------------------------------------------------

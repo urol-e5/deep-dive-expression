@@ -1,0 +1,12 @@
+Genome: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/Apulchra-genome.fa
+Alignments: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/merged_alignments.bam
+Location: ptg000023l:37965243-37965338 plus
+PDF file name: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/strucVis/Cluster_14768.ps.pdf
+Locus Name: Cluster_14768
+GGUGCAUGAUCACGUGAUUGUCCAAUUACAGCUGUCCAAUUUGAACUUUUUGUAAUCGGACACCUGUAAUUGGAUACCCACAUGAUUUUCACACCA
+((((...(((((.(((..(((((((((((((.(((((.(((...((.....))))).))))).)))))))))))))..))).)))))....)))). (-39.70)
+....................UCCAAUUACAGCUGUCCAAUU....................................................... len:21 al:1
+.......................................................UCGGACACCUGUAAUUGGAUACu.................. len:23 al:1
+.......................................................UCGGACACCUGUAAUUGGAUA.................... len:21 al:5
+.......................................................UCGGACACCUGUAAUUaGAUA.................... len:21 al:1
+.......................................................UCGGACACCUGUAAUUGGAU..................... len:20 al:3
