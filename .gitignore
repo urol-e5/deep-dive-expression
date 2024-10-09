@@ -25,6 +25,7 @@ D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/*.csi
 
+D-Apul/output/07.2-Apul-Hisat
 
 E-Peve/code/.bashvars
 E-Peve/code/*_cache

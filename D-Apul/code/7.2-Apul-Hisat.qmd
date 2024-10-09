@@ -1,5 +1,5 @@
 ---
-title: "07- A pulcra HiSat2"
+title: "07.2- A pulcra HiSat2 - with splice"
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -65,6 +65,13 @@ head ../data/Apulcra-genome.fa
 ```
 
 
+## Grab GTF 
+
+```{r, engine='bash'}
+cd ../data
+
+wget -O Apulchra-genome.gtf "https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/D-Apul/data/Apulchra-genome.gtf"
+```
 
 
 
@@ -72,75 +79,45 @@ head ../data/Apulcra-genome.fa
 
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-> ../output/05.32-lncRNA-discovery/m_exon.tab
+../data/Apulchra-genome.gtf \
+> ../output/07.2-Apul-Hisat/m_exon.tab
 ```
 
 ```{r, engine='bash', eval=TRUE}
-head ../output/05.32-lncRNA-discovery/m_exon.tab
-wc -l ../output/05.32-lncRNA-discovery/m_exon.tab
+head ../output/07.2-Apul-Hisat/m_exon.tab
+wc -l ../output/07.2-Apul-Hisat/m_exon.tab
 ```
 
 ```{r, engine='bash'}
 
 /home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-> ../output/05.32-lncRNA-discovery/m_splice_sites.tab
+../data/Apulchra-genome.gtf \
+> ../output/07.2-Apul-Hisat/m_splice_sites.tab
 
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-head ../output/05.32-lncRNA-discovery/m_splice_sites.tab
+head ../output/07.2-Apul-Hisat/m_splice_sites.tab
 ```
-
-
-NO GTF 
-
-
-
-
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
-../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \
---exon ../output/05.32-lncRNA-discovery/m_exon.tab \
---ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
--p 24 \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
-```
-
-
-RUN THIS CODE 
-
 
 
 
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2-build \
 ../data/Apulcra-genome.fa \
-../output/07-Apul-Hisat/Apulcra-genome.index \
-#--exon ../output/05.32-lncRNA-discovery/m_exon.tab \
-#--ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
--p 24 \
-#../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-2> ../output/07-Apul-Hisat/hisat2-build_stats.txt
-```
-
-```{r, engine='bash', eval=TRUE}
-cat ../output/07-Apul-Hisat/hisat2-build_stats.txt
+../output/07.2-Apul-Hisat/Apulcra-genome.index \
+--exon ../output/07.2-Apul-Hisat/m_exon.tab \
+--ss ../output/07.2-Apul-Hisat/m_splice_sites.tab \
+-p 48 \
+../data/Apulcra-genome.gtf \
+2> ../output/07.2-Apul-Hisat/hisat2-build_stats.txt
 ```
 
 
-```{r, engine='bash', eval=TRUE}
-find ../data/fastq/*gz
-```
 
 ```{r, engine='bash', eval=TRUE}
-find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
-| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
-echo {}
+tail ../output/07.2-Apul-Hisat/hisat2-build_stats.txt
 ```
 
 
@@ -154,22 +131,22 @@ echo "*sam" >> .gitignore
 find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
 | xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
 /home/shared/hisat2-2.2.1/hisat2 \
--x ../output/07-Apul-Hisat/Apulcra-genome.index \
+-x ../output/07.2-Apul-Hisat/Apulcra-genome.index \
 -p 48 \
 -1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
 -2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
--S ../output/07-Apul-Hisat/{}.sam \
-2> ../output/07-Apul-Hisat/hisat.out
+-S ../output/07.2-Apul-Hisat/{}.sam \
+2> ../output/07.2-Apul-Hisat/hisat.out
 ```
 
 ```{r, engine='bash', eval=TRUE}
-cat ../output/07-Apul-Hisat/hisat.out
+cat ../output/07.2-Apul-Hisat/hisat.out
 ```
 
 ## convert to bams
 
 ```{r, engine='bash'}
-for samfile in ../output/07-Apul-Hisat/*.sam; do
+for samfile in ../output/07.2-Apul-Hisat/*.sam; do
   bamfile="${samfile%.sam}.bam"
   sorted_bamfile="${samfile%.sam}.sorted.bam"
   
