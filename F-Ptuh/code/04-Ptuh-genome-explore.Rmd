@@ -42,7 +42,7 @@ knitr::opts_chunk$set(
 # Genome Analysis
 
 ```{r, engine='bash', eval=FALSE}
-curl -o "..data/Pocillopora_meandrina_HIv1.assembly.fasta" https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta
+curl -o "../data/Pocillopora_meandrina_HIv1.assembly.fasta" https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta
 ```
 
 
