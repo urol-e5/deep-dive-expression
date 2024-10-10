@@ -196,7 +196,7 @@ find ../output/07.2-Apul-Hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 32 \
--B \
+-eB \
 -G ../data/Apulcra-genome.gff \
 -o ../output/07.2-Apul-Hisat/{}.gtf \
 ../output/07.2-Apul-Hisat/{}.sorted.bam
@@ -208,7 +208,7 @@ find ../output/07.2-Apul-Hisat/*sorted.bam \
 ```{r, engine='bash', eval=TRUE}
 wc -l ../output/07.2-Apul-Hisat/RNA*.gtf
 ls ../output/07.2-Apul-Hisat/RNA*.gtf
-head ../output/07.2-Apul-Hisat/RNA*.gtf
+#head ../output/07.2-Apul-Hisat/RNA*.gtf
 ```
 
 
@@ -224,145 +224,21 @@ RNA-ACR-178 ../output/15-Apul-hisat/RNA-ACR-178.gtf
 
 
 ```{r, engine='bash'}
-head ../output/07-Apul-Hisat/list01.txt
+cat ../output/07.2-Apul-Hisat/list01.txt
 ```
 
 
 
 ```{r, engine='bash'}
 python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
--i ../output/07-Apul-Hisat/list01.txt \
--g ../output/07-Apul-Hisat/gene_count_matrix.csv \
--t ../output/07-Apul-Hisat/transcript_count_matrix.csv
+-i ../output/07.2-Apul-Hisat/list01.txt \
+-g ../output/07.2-Apul-Hisat/gene_count_matrix.csv \
+-t ../output/07.2-Apul-Hisat/transcript_count_matrix.csv
 
-head ../output/07-Apul-Hisat/*matrix.csv
-
-```
-
-
-
-
-
-
-# Getting FASTA for anno
-
-
-$ bedtools getfasta [OPTIONS] -fi <input FASTA> -bed <BED/GFF/VCF>
-
-
-
-grep -w "mRNA" annotation.gff > mRNA_only.gff
-```{r, engine='bash'}
-grep -w "mRNA" ../data/Apulcra-genome.gff > ../data/Apulcra-genome-mRNA_only.gff
-```
-
-awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
-
-```{r, engine='bash'}
-awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
-```
-
-
-
-```{r, engine='bash'}
-/home/shared/bedtools2/bin/fastaFromBed \
--fi ../data/Apulcra-genome.fa \
--bed ../data/Apulcra-genome-mRNA_only.gff \
--fo ../output/07-Apul-Hisat/genes.fasta \
--name -split
-```
-
-
-```{r, engine='bash'}
-head ../output/07-Apul-Hisat/genes.fasta 
-grep -c ">" ../output/07-Apul-Hisat/genes.fasta
-```
-
-
-# SP Download
-```{r, engine='bash'}
-
-cd ../data/blast_dbs
-
-curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
-mv uniprot_sprot.fasta.gz uniprot_sprot_r2024_05.fasta.gz
-gunzip -k uniprot_sprot_r2024_05.fasta.gz
-
-head ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta
-echo "Number of Sequences"
-grep -c ">" ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta
-
-/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
--in ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta \
--dbtype prot \
--out ../../data/blast_dbs/uniprot_sprot_r2024_05
-```
-
-
-# Blastp
-```{r, engine='bash'}
-
-fasta="../output/07-Apul-Hisat/genes.fasta"
-
-/home/shared/ncbi-blast-2.15.0+/bin/blastx \
--query $fasta \
--db ../data/blast_dbs/uniprot_sprot_r2024_05 \
--out ../output/07-Apul-Hisat/blastx_out.tab \
--evalue 1E-05 \
--num_threads 48 \
--max_target_seqs 1 \
--max_hsps 1 \
--outfmt 6
-
-wc -l ../output/07-Apul-Hisat/blastx_out.tab
-
-tr '|' '\t' < ../output/07-Apul-Hisat/blastx_out.tab \
-> ../output/07-Apul-Hisat/blastx_out_sep.tab
-
-head -1 ../output/07-Apul-Hisat/blastx_out_sep.tab
-```
-
-
-
-# Download GO info
-
-
-```{bash}
-cd ../output/07-Apul-Hisat
-
-curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo_c%2Cgo%2Cgo_f%2Cgo_id&format=tsv&query=%28*%29+AND+%28reviewed%3Atrue%29" -o SwissProt-Annot-GO.tsv
-
-wc -l ../output/07-Apul-Hisat/SwissProt-Annot-GO.tsv 
-```
-
-
-
-Join blast with GO info
-
-
-```{r}
-bltabl <- read.csv("../output/07-Apul-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
-
-spgo <- read.csv("../output/07-Apul-Hisat/SwissProt-Annot-GO.tsv", sep = '\t', header = TRUE)
-
-annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
-  select(
-    query = V1,
-    blast_hit = V3,
-    evalue = V13,
-    ProteinNames = Protein.names,
-    BiologicalProcess = Gene.Ontology..biological.process.,
-    GeneOntologyIDs = Gene.Ontology.IDs
-  )
-
-head(annot_tab)
-
-write.table(annot_tab, 
-            file = "../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv", 
-            sep = "\t", 
-            row.names = FALSE, 
-            quote = FALSE)
-
-system("head ../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv")
+head ../output/07.2-Apul-Hisat/*matrix.csv
 
 ```
+
+
+
+
