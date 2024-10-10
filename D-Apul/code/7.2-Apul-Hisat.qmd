@@ -163,7 +163,7 @@ done
 
 
 
-
+dd
 
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
@@ -172,8 +172,8 @@ Getting gff
 
 ```{r, engine='bash'}
 
-cd ../data
-wget -O Apulcra-genome.gff "https://osf.io/download/f9dbr/"
+<!-- cd ../data -->
+<!-- wget -O Apulcra-genome.gff "https://osf.io/download/f9dbr/" -->
 ```
 
 
@@ -183,22 +183,32 @@ head ../data/Apulcra-genome.gff
 
 ```
 
-```{r, engine='bash'}
-find ../output/07-Apul-Hisat/*sorted.bam \
-| xargs basename -s .sorted.bam | xargs -I{} \
-/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
--p 32 \
+
+```
 -eB \
--G ../data/Apulcra-genome.gff \
--o ../output/07-Apul-Hisat/{}.gtf \
-../output/07-Apul-Hisat/{}.sorted.bam
+-e: Only estimate expression for transcripts that are present in the reference annotation provided with the -G option.
+-B: Enables the creation of a ballgown output table, useful for downstream analysis with the R ballgown package.
 ```
 
 
+```{r, engine='bash'}
+find ../output/07.2-Apul-Hisat/*sorted.bam \
+| xargs basename -s .sorted.bam | xargs -I{} \
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+-p 32 \
+-B \
+-G ../data/Apulcra-genome.gff \
+-o ../output/07.2-Apul-Hisat/{}.gtf \
+../output/07.2-Apul-Hisat/{}.sorted.bam
+```
+
+
+
+
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/07-Apul-Hisat/RNA*.gtf
-ls ../output/07-Apul-Hisat/RNA*.gtf
-#head ../output/07-Apul-Hisat/RNA*.gtf
+wc -l ../output/07.2-Apul-Hisat/RNA*.gtf
+ls ../output/07.2-Apul-Hisat/RNA*.gtf
+head ../output/07.2-Apul-Hisat/RNA*.gtf
 ```
 
 
