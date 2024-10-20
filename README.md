@@ -35,7 +35,7 @@ Any document in `code` should start with a 2 number prefix (e.g., 01-methylation
 
 Please use **Relative Paths**. Commit and Push often.
 
-Links to other data types (e.g. FastQs, BAMs) can be found in the [project wiki](https://github.com/urol-e5/deep-dive-excpression/wiki).
+Links to other data types (e.g. FastQs, BAMs) can be found in the [project wiki](https://github.com/urol-e5/deep-dive-expression/wiki).
 
 ## More
 ### Genomes of interest
