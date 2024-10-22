@@ -31,8 +31,14 @@ data and annotation of sRNA-producing genes.
 This is the same ShortStack analysis as performed in the `deeep-dive`
 project However, we now have a genome for our actual study species, *A.
 pulchra*, so we can rerun sRNA discovery with the actual *pulchra*
-genome for reference, instead of using *A. millipora*. As in
-`deep-dive`, we will also include a customized miRBase database,
+genome for reference, instead of using *A. millipora*. Additionally,
+ShortStack has an updated version, [ShortStack
+4.1.0](https://github.com/MikeAxtell/ShortStack?tab=readme-ov-file#shortstack-version-4-major-changes),
+which provides much faster analysis times *and* additional functionality
+for visualizing miRNA hairpin structures and generating
+genome-browser-ready quantitative coverage tracks of aligned small RNAs.
+
+As in `deep-dive`, we will also include a customized miRBase database,
 utilizing cnidarian miRNAs curated by Jill Ashley, which includes
 published cnidarian miRNAs:
 
