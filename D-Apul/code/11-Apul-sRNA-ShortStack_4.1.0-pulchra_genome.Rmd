@@ -1,5 +1,5 @@
 ---
-title: "11-Apul-sRNA-ShortStack-pulchra_genome"
+title: "11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome"
 author: "Kathleen Durkin"
 date: "2024-10-02"
 output: 
@@ -102,7 +102,7 @@ echo "export trimmed_fastqs_pattern='*fastp-adapters-polyG-31bp-merged.fq.gz'"
 echo "# Data directories"
 echo 'export expression_dir=/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression'
 echo 'export expression_data_dir="${expression_dir}/data"'
-echo 'export output_dir_top=${expression_dir}/D-Apul/output/11-Apul-sRNA-ShortStack-pulchra_genome'
+echo 'export output_dir_top=${expression_dir}/D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome'
 echo ""
 
 echo "# Input/Output files"
@@ -364,7 +364,7 @@ tree -h ${output_dir_top}/
 We noticed that a) not all of the identified miRNAs have database matches, and b) some reads have a match in the database but are *not* classified as miRNAs. Let's look at this in more depth.
 
 ```{r load-results, eval=TRUE}
-Apul_shortstack_results <- read.csv("../output/11-Apul-sRNA-ShortStack-pulchra_genome/ShortStack_out/Results.txt", sep="\t")
+Apul_shortstack_results <- read.csv("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.txt", sep="\t")
 ```
 
 ```{r generate-plots, eval=TRUE}
@@ -382,7 +382,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
   
-ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram.png", width = 12, height = 7, units = "in")
 
 
 # Reads matched in the reference db (but not necessarily identified as miRNA)
@@ -399,7 +399,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram.png", width = 12, height = 7, units = "in")
 ```
 
 There's two miRNAs with very high read counts, and it's making visualization of the rest difficult. Let's remove them and retry visualizing the rest.
@@ -420,7 +420,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
   
-ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram_reduced.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_miRNA_histogram_reduced.png", width = 12, height = 7, units = "in")
 
 
 # Reads matched in the reference db (but not necessarily identified as miRNA)
@@ -438,7 +438,7 @@ Apul_shortstack_results %>%
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram_reduced.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_dbmatch_histogram_reduced.png", width = 12, height = 7, units = "in")
 ```
 
 ```{r venn-diagram, eval=TRUE}
@@ -454,7 +454,7 @@ Apul_shortstack_vennlist <- list(
 # Make venn diagrams
 ggvenn(Apul_shortstack_vennlist)
 
-ggsave("../output/11-Apul-sRNA-ShortStack-pulchra_genome/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
+ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
 ```
 
 ------------------------------------------------------------------------
