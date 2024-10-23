@@ -1,0 +1,53 @@
+Genome: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/Porites_evermanni_v1.fa
+Alignments: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/merged_alignments.bam
+Location: Porites_evermani_scaffold_866:22803-22895 minus
+PDF file name: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/strucVis/Cluster_8634.ps.pdf
+Locus Name: Cluster_8634
+AAUUUAGCAAUUUGUGGUUUUAUUUCAAACGUCGCGUAACCUUUUUAAGGGUUGCAUGACCUGUGAAAGAAAAAUUACGAAUUCAAUACUCUG
+........(((((((((((((.(((((...((((.((((((((....)))))))).))))...)))))..))))))))))))).......... (-28.00)
+....................UAUUUCAAACGUCGCGUAg...................................................... len:19 al:3
+....................UAUUUCAAACGUCGCGUAAg..................................................... len:20 al:1
+....................UAUUUCAAACGUCGCGUA....................................................... len:18 al:12
+....................UAUUUCAAACGUCGCGUAgCCU................................................... len:22 al:1
+....................aAUUUCAAACGUCGCGUAACCU................................................... len:22 al:3
+....................UAUUUCAAACGUCGCGUAACCUU.................................................. len:23 al:17
+....................UAUUUCAAACGUCGCGUAACCc................................................... len:22 al:21
+....................UAUUUCAAACGUCGCGUAACCUaU................................................. len:24 al:3
+....................UAUUUCAAACGUCGCGUAA...................................................... len:19 al:5
+....................UAUUUCAAACGUCGCGUAACu.................................................... len:21 al:7
+....................UAUUUCAAACGUCGCGUAACCg................................................... len:22 al:8
+....................UAUUUCAAACGUCGCGUAACCUa.................................................. len:23 al:3
+....................UAUUUCgAACGUCGCGUAACCU................................................... len:22 al:1
+....................cAUUUCAAACGUCGCGUAACCUU.................................................. len:23 al:1
+....................UAcUUCAAACGUCGCGUAACCU................................................... len:22 al:1
+....................UAUUUCAAACGUCGCGUAACC.................................................... len:21 al:14
+....................UAUUUCAAACGcCGCGUAACCU................................................... len:22 al:2
+....................UAUUUCAAACGUCGCGUAACCU................................................... len:22 al:199
+....................UAUUUCAAACGUCGCGUAACa.................................................... len:21 al:4
+....................UAUUUCAAACGUCGCGUAAu..................................................... len:20 al:21
+....................UAUUUCAAACaUCGCGUAACCU................................................... len:22 al:1
+....................UAUcUCAAACGUCGCGUAACCU................................................... len:22 al:1
+....................UAUUcCAAACGUCGCGUAACC.................................................... len:21 al:1
+....................UAUUUCAAACGUCGCGUAAC..................................................... len:20 al:9
+....................UAUUUCAAAuGUCGCGUAACCU................................................... len:22 al:1
+....................UAUUUCAAACGUCGCGUAACCa................................................... len:22 al:5
+....................cAUUUCAAACGUCGCGUAACCU................................................... len:22 al:2
+....................UAUUUCAAACGUCGCGUAu...................................................... len:19 al:7
+....................UAUUUCAAACGUCGCGUAACCUc.................................................. len:23 al:1
+....................UAUUUCAAACGUCGuGUAACCU................................................... len:22 al:1
+....................UAUUUCAAACGUCGCGUAAa..................................................... len:20 al:5
+....................UgUUUCAAACGUCGCGUAACCU................................................... len:22 al:1
+....................UAUUUCAAACGUCGCGUAACCUUU................................................. len:24 al:1
+....................UAUUUCAAACGUCGCGUgACCU................................................... len:22 al:1
+......................UUUCAAACGUCGCGUAACCU................................................... len:20 al:1
+......................UUUCAAACGUCGCGcAACC.................................................... len:19 al:3
+..........................AAACGUCGCGUAACCUUUU................................................ len:19 al:4
+..............................................AAGGGUUGCAUGACgUGU............................. len:18 al:3
+..................................................GUUGCAUGACgUGUGAAAGAAAA.................... len:23 al:15
+..................................................GUUGCAUGACgUGUGAAAGAAAAA................... len:24 al:1
+..................................................GUUGCAUGACgUGUGAAAGAAA..................... len:22 al:2
+..................................................GUUGCAUGACgUGUGAAAGAA...................... len:21 al:1
+...................................................UUGCAUGACgUGUGAAAGA....................... len:19 al:5
+....................................................UGCAUGACgUGUGAAAGAAAAAUUACGAAU........... len:30 al:2
+....................................................UGCAUGACgUGUGAAAGAAAAAUUACGAAUU.......... len:31 al:1
+.....................................................GCAUGACgUGUGAAAGAAAAAUUACGAAUU.......... len:30 al:2

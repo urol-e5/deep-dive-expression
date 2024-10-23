@@ -1,0 +1,30 @@
+Genome: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/Porites_evermanni_v1.fa
+Alignments: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/merged_alignments.bam
+Location: Porites_evermani_scaffold_145:5384-5473 plus
+PDF file name: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/strucVis/Cluster_2854.ps.pdf
+Locus Name: Cluster_2854
+CGUUUUCGUAUUUCGCGUUCGAUUGGGAAAUCCGGAUUUAGAUUUUGAUCUAAAUCCGGAUUUCCCAAUCGAACGCAUCCGUGAUCAUGC
+..............(((((((((((((((((((((((((((((....))))))))))))))))))))))))))))).............. (-51.80)
+.................UUCGAUUGGGAAAUCCGGAUc.................................................... len:21 al:2
+.................UUCGAUUGGGAAAUCCGGAUU.................................................... len:21 al:10
+.....................AUUGGGAAAUCCGGAUUUAGAUU.............................................. len:23 al:2
+.....................AUUGGGAAAUCCGGAUUUAGA................................................ len:21 al:2
+.....................AUUGGGAAAUCCGGAUUUAGAU............................................... len:22 al:8
+.....................AUUGGGAgAUCCGGAUUUAGAUU.............................................. len:23 al:1
+.....................AUUGGGAAAUCCGGAUUUAGAUa.............................................. len:23 al:3
+......................UUGGGAAAUCCGGAUUUAGAUU.............................................. len:22 al:107
+......................UUGGGAAAUCCGGAUUU................................................... len:17 al:1
+.......................UGGGAAAUCCGGAUUUAGAU............................................... len:20 al:2
+.......................UGGGAAAUCCGGAUUUAGAUUUUGu.......................................... len:25 al:3
+.......................UGGGAAAUCCGGAUUUAGAUU.............................................. len:21 al:56
+..........................GAAAUCCGGAUUUAGAUUUUGAUCU....................................... len:25 al:3
+..........................GAAAUCCGGAUUUAGAUUUUGAUCc....................................... len:25 al:3
+...........................AAAUCCGGAUUUAGAUUUUGAUCU....................................... len:24 al:9
+...............................................AUCUAAAUCCGGAUUUCCCAAU..................... len:22 al:32
+...............................................AUCUAAAUCCGGAUUUCCCAAc..................... len:22 al:2
+................................................UCUAAAUCCGGAUUUCCCAAUa.................... len:22 al:1
+................................................UCUAAAUCCGGAUUUCCCAAUCu................... len:23 al:1
+................................................UCUAAAUCCGGAUcUCCCAAUCG................... len:23 al:2
+..................................................UAAAUCCGGAUUUCCCAAU..................... len:19 al:53
+..................................................UAAAUCCGGAUUUCCCAAUCGA.................. len:22 al:5
+..................................................UAAAUCCGGAUUUCCCAAUCG................... len:21 al:1

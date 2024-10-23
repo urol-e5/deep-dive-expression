@@ -1,0 +1,183 @@
+# reads processed: 1202898
+# reads with at least one alignment: 863645 (71.80%)
+# reads that failed to align: 339253 (28.20%)
+Reported 2794459 alignments
+
+ShortStack version 4.1.0
+
+Beginning run
+Options:
+{   'adapter': None,
+    'align_only': False,
+    'autotrim': False,
+    'autotrim_key': 'TCGGACCAGGCTTCATTCCCC',
+    'bamfile': None,
+    'dicermax': 24,
+    'dicermin': 21,
+    'dn_mirna': True,
+    'genomefile': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/Porites_evermanni_v1.fa',
+    'known_miRNAs': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/data/cnidarian-mirbase-mature-v22.1.fasta',
+    'locifile': None,
+    'locus': None,
+    'make_bigwigs': False,
+    'mincov': 1,
+    'mmap': 'u',
+    'nohp': False,
+    'outdir': '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out',
+    'pad': 200,
+    'readfile': [   '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/sRNA-trimmed-reads/POR-73-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/sRNA-trimmed-reads/POR-79-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz',
+                    '/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/data/sRNA-trimmed-reads/POR-82-S1-TP2-fastp-adapters-polyG-31bp-merged.fq.gz'],
+    'strand_cutoff': 0.8,
+    'threads': 40}
+Required executable RNAfold : /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/RNAfold
+Required executable strucVis : /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/strucVis
+Required executable bowtie : /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/bowtie
+Required executable bowtie-build : /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/bowtie-build
+Required executable samtools : /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/samtools
+
+Tue 22 Oct 2024 16:22:29 -0700 PDT
+Condensing reads
+
+Tue 22 Oct 2024 16:24:38 -0700 PDT
+Required bowtie indices not found. Building them ...
+
+
+    Completed
+
+Beginning alignment phase
+
+Tue 22 Oct 2024 16:30:07 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/POR-73-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.fa
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 2 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 1869273
+# reads with at least one alignment: 1381003 (73.88%)
+# reads that failed to align: 488270 (26.12%)
+Reported 4216740 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U):
+	sequences: 451987/1202898 (37.6%)
+	reads: 3761839/12238972 (30.7%)
+Multi-mapped placed with guidance (P):
+	sequences: 184481/1202898 (15.3%)
+	reads: 2074293/12238972 (16.9%)
+Multi-mapped randomly placed (R):
+	sequences: 192611/1202898 (16.0%)
+	reads: 2689976/12238972 (22.0%)
+Very highly multi-mapped (>=20 hits)(H):
+	sequences: 34566/1202898 (2.9%)
+	reads: 482294/12238972 (3.9%)
+Not mapped (no hits)(N):
+	sequences: 339253/1202898 (28.2%)
+	reads: 3230570/12238972 (26.4%)
+
+Tue 22 Oct 2024 16:30:45 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/POR-79-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.fa
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 2 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+# reads processed: 2234705
+# reads with at least one alignment: 1687284 (75.50%)
+# reads that failed to align: 547421 (24.50%)
+Reported 4969563 alignments
+
+Converting to sorted bam format
+Uniquely mapped (U):
+	sequences: 763426/1869273 (40.8%)
+	reads: 4937927/12259629 (40.3%)
+Multi-mapped placed with guidance (P):
+	sequences: 292089/1869273 (15.6%)
+	reads: 2432976/12259629 (19.8%)
+Multi-mapped randomly placed (R):
+	sequences: 274227/1869273 (14.7%)
+	reads: 1166543/12259629 (9.5%)
+Very highly multi-mapped (>=20 hits)(H):
+	sequences: 51261/1869273 (2.7%)
+	reads: 1187771/12259629 (9.7%)
+Not mapped (no hits)(N):
+	sequences: 488270/1869273 (26.1%)
+	reads: 2534412/12259629 (20.7%)
+
+Tue 22 Oct 2024 16:31:30 -0700 PDT
+Aligning /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/POR-82-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.fa
+First pass alignment with bowtie using 40 threads
+Second pass - placing multimappers using 40 threads to process 3 chunks
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+
+Converting to sorted bam format
+Uniquely mapped (U):
+	sequences: 946952/2234705 (42.4%)
+	reads: 6089177/13933829 (43.7%)
+Multi-mapped placed with guidance (P):
+	sequences: 351850/2234705 (15.7%)
+	reads: 2574861/13933829 (18.5%)
+Multi-mapped randomly placed (R):
+	sequences: 332333/2234705 (14.9%)
+	reads: 1455536/13933829 (10.4%)
+Very highly multi-mapped (>=20 hits)(H):
+	sequences: 56149/2234705 (2.5%)
+	reads: 1219587/13933829 (8.8%)
+Not mapped (no hits)(N):
+	sequences: 547421/2234705 (24.5%)
+	reads: 2594668/13933829 (18.6%)
+
+Tue 22 Oct 2024 16:32:23 -0700 PDT
+Merging and indexing alignments
+
+Tue 22 Oct 2024 16:32:44 -0700 PDT
+Defining small RNA clusters de novo
+With 38432430 total reads and mincov of 1 reads per million, the min read depth is 38
+
+Tue 22 Oct 2024 16:32:58 -0700 PDT
+Analyzing cluster properties using 40 threads
+# reads processed: 49415
+# reads with at least one alignment: 133 (0.27%)
+# reads that failed to align: 49282 (99.73%)
+Reported 2562 alignments
+[bam_sort_core] merging from 0 files and 40 in-memory blocks...
+
+Tue 22 Oct 2024 16:33:16 -0700 PDT
+ Completed
+
+Tue 22 Oct 2024 16:33:16 -0700 PDT
+Searching for valid microRNA loci
+Aligning known_miRNAs sequences to genome
+
+Screening of possible microRNAs from user provided known_miRNAs
+
+Screening of possible de novo microRNAs
+
+Tue 22 Oct 2024 16:33:28 -0700 PDT
+Analyzing cluster properties using 40 threads
+
+Tue 22 Oct 2024 16:33:28 -0700 PDT
+ Completed
+
+Writing final files
+
+Found a total of 45 MIRNA loci
+
+
+Non-MIRNA loci by DicerCall:
+N 16673
+22 60
+23 53
+21 36
+24 26
+
+Creating visualizations of microRNA loci with strucVis
+<<< WARNING >>>
+Do not rely on these results alone to annotate new MIRNA loci!
+The false positive rate for de novo MIRNA identification is low, but NOT ZERO
+Insepct each mirna locus, especially the strucVis output, and see
+https://doi.org/10.1105/tpc.17.00851 , https://doi.org/10.1093/nar/gky1141
+
+Tue 22 Oct 2024 16:33:44 -0700 PDT
+Run Completed!
+
+real	11m17.143s
+user	241m43.184s
+sys	18m24.229s
