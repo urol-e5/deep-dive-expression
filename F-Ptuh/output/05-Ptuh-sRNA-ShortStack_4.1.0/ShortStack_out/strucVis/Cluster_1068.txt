@@ -1,0 +1,35 @@
+Genome: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fa
+Alignments: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/merged_alignments.bam
+Location: Pocillopora_meandrina_HIv1___Sc0000002:15749261-15749351 plus
+PDF file name: /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/strucVis/Cluster_1068.ps.pdf
+Locus Name: Cluster_1068
+AGGAAAUUUUUGUCACCUUUACGGCAUCACUUGUUAGCAUUAUUUACUAACGCUAGGAAGGGAUGCCGGGAAGGCGAUAGAACAUUUGACG
+...(((((((((((.((((..(((((((.(((.(((((.(((.....))).))))).))).)))))))..)))).))))))).)))).... (-36.20)
+....................ACGGCAUCACUUGUUAGCAg................................................... len:20 al:1
+....................ACGGCAUCACUUGUUAGCAUUA................................................. len:22 al:4
+....................ACGGCAUCACUUGUUAGCAUUAUa............................................... len:24 al:2
+..........................................UUUACUAACGCUAGGAAGGGAUGCCGGGA.................... len:29 al:1
+.................................................ACGCUAGGAAGGGAUGCCG....................... len:19 al:3
+.................................................ACGCUAGGAAGGGAUGCCa....................... len:19 al:2
+.................................................ACGCUAGGAAGGGAUGCCGGaA.................... len:22 al:2
+.................................................ACGCUgGGAAGGGAUGCCGGGA.................... len:22 al:1
+.................................................ACaCUAGGAAGGGAUGCCGGGA.................... len:22 al:1
+.................................................ACGCUAGGAAGGGAUGCCGGGAg................... len:23 al:1
+.................................................ACGCUAGGAAGGGAUGCC........................ len:18 al:1
+.................................................ACGCUAGGAAGGGAUGCCGGGAu................... len:23 al:13
+.................................................ACGCUAGGAAGGGAUGCCGGG..................... len:21 al:21
+.................................................ACGCUAGGAAGGGAUGuCGGG..................... len:21 al:1
+.................................................ACGCUAGGAAGGGAUGCCGGa..................... len:21 al:3
+.................................................ACGCUAGGAAGGGAUGCCGGu..................... len:21 al:3
+.................................................ACGCUAGGAAGGGAUGCCGGGg.................... len:22 al:8
+.................................................ACGCUAGGAAGGGAUGCCGGGc.................... len:22 al:3
+.................................................ACGCUAGGAAGGGgUGCCGGGA.................... len:22 al:2
+.................................................ACGCUAGGAAGGGAUGCCGG...................... len:20 al:1
+.................................................ACGCUAGGAAGGGAUGCaG....................... len:19 al:1
+.................................................ACGCUAGGAAaGGAUGCCGGGA.................... len:22 al:1
+.................................................ACGCUAGGAAGGGAUGCCGGGu.................... len:22 al:15
+.................................................ACGCUAGGAAGGGAUGCCGGGAA................... len:23 al:5
+.................................................cCGCUAGGAAGGGAUGCCGGGA.................... len:22 al:1
+.................................................AuGCUAGGAAGGGAUGCCGGG..................... len:21 al:1
+.................................................gCGCUAGGAAGGGAUGCCGGGA.................... len:22 al:1
+.................................................ACGCUAGGAAGGGAUGCCGGGA.................... len:22 al:162
