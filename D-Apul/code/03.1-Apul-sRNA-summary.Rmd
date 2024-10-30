@@ -31,9 +31,9 @@ knitr::opts_chunk$set(
 
 Gene expression summary for *Acropora pulchra* sRNA-seq data.
 
--   trimmed reads generated in `deep-dive` project, trimming and QC details in `01-Apul-RNA-trimming-FastQC`
+-   trimmed reads generated in `deep-dive` project
 
--   Reads aligned to *Acropora millipora* transcriptome downloaded from [NCBI](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_013753865.1/), stored [here](https://gannet.fish.washington.edu/acropora/E5-deep-dive/Transcripts/Apul_GCF_013753865.1_rna.fna) as a part of [deep-dive genomic resources](https://github.com/urol-e5/deep-dive/wiki/Species-Characteristics-and-Genomic-Resources#genomic-resources).
+-   Reads aligned to *Acropora meandrina* genome 
 
 ### Install and load packages
 
@@ -42,6 +42,8 @@ library(tidyverse)
 library(ggplot2)
 library(reshape2)
 library(pheatmap)
+library(RColorBrewer)
+library(DESeq2)
 ```
 
 
@@ -49,7 +51,7 @@ library(pheatmap)
 
 ## Load count data
 
-Load in the sRNA count matrix generated using ShortStack. Keep in mind this data includes counts of all sRNAs, not just miRNAs
+Load in the sRNA count matrix generated using ShortStack 4.1.0. Keep in mind this data includes counts of all sRNAs, not just miRNAs
 
 ```{r load-sRNA-counts}
 # Read in sRNA counts data
@@ -73,6 +75,8 @@ Apul_counts_sRNA <- Apul_counts_sRNA %>% select("sample140", "sample145", "sampl
 
 # Make the cluster names our new row names
 Apul_counts_sRNA <- Apul_counts_sRNA %>% column_to_rownames(var = "Name")
+
+write.table(Apul_counts_sRNA, file = "../output/03.1-Apul-sRNA-summary/Apul_sRNA_ShortStack_counts_formatted.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 head(Apul_counts_sRNA)
 ```
@@ -249,3 +253,301 @@ pheatmap(Apul_counts_miRNA,
          fontsize_col = 8)
 ```
 
+
+
+# Normalized sRNA counts
+
+## Normalize counts with DESeq2
+
+### Plot unnormalized sRNA data
+
+```{r plot-unnormalized-sRNA}
+
+Apul_counts_sRNA %>% 
+  select(-Name) %>%
+  pivot_longer( cols = everything(), names_to = "sample", values_to = "count") %>%
+  ggplot(., aes(x = sample, y = count)) +
+  geom_violin() + 
+  geom_point(alpha = 0.2) +
+  theme_minimal() +
+  labs(title = "Unnormalized sRNA counts",
+       x = "Sample",
+       y = "count")
+```
+
+### Metadata
+
+DESeq2 requires a metadata data frame as input. I don't have sample metadata though so, since we're just doing DESeq2 for normalization purposes (not analysis purposes), I'm just going to create a dummy sheet
+
+```{r make-sRNA-metadata-dataframe}
+Apul_sample_names <- Apul_counts_sRNA %>%
+  select(-Name) %>%
+  colnames()
+
+Apul_metadata_sRNA <- data.frame(Sample = Apul_sample_names,
+                            Species = rep("A.pulchra", 5))
+rownames(Apul_metadata_sRNA) <- Apul_sample_names
+
+head(Apul_metadata_sRNA)
+```
+
+### DESeq object
+
+```{r make-sRNA-deseq-object, cache=TRUE}
+# Calculate DESeq object
+Apul_counts_sRNA_rowNames <- Apul_counts_sRNA %>% column_to_rownames(var = "Name")
+
+dds_Apul_sRNA <- DESeqDataSetFromMatrix(countData = Apul_counts_sRNA_rowNames,
+                              colData = Apul_metadata_sRNA,
+                              design = ~ 1) 
+
+# Run differential expression analysis 
+# (Note that this DESeq() function runs all necessary steps, including data normalization, 
+# estimating size factors, estimating dispersions, gene-wise dispersion estimates, mean-dispersion 
+# relationship, final dispersion estimates, fitting model, and testing)
+# Using design = ~1 because we don't have treatment groups
+
+dds_Apul_sRNA <- DESeq(dds_Apul_sRNA)
+```
+
+It's worth noting here that I'm actually going to be doing two different types of transformation on the counts data, which serve different purposes. 
+
+- First is **normalizing** the transcript counts, which adjusts for differences in library size or sequencing depth, but retains count-like properties. Normalized counts are most useful for things like visualizing expression levels and differential expression analysis.
+
+- Second is **variance stabilizing** the counts data, which aims to make the variance of the transformed data approximately independent of the mean, reducing heteroscedasticity (the relationship between variance and mean) and "smoothing" out the variance at low counts. Notably, the transformed data is *no longer on the original count scale*. The transformation makes the variance roughly constant across the range of counts, which makes it easier to interpret patterns in the data visually. Variance stabilized data is most useful for exploratory data analysis, like PCA, clustering, and heatmaps, and is also the transformation we'll want to use before WGCNA.
+
+```{r get-normalized-sRNA-counts, cache=TRUE}
+# extract normalized counts
+# (normalization is automatically performed by deseq2)
+Apul_counts_sRNA_norm <- counts(dds_Apul_sRNA, normalized=TRUE) %>% data.frame()
+
+write.table(Apul_counts_sRNA_norm, file = "../output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+
+# variance stabilized data
+vsd_Apul_sRNA <- varianceStabilizingTransformation(dds_Apul_sRNA, blind=TRUE)
+wpn_vsd_Apul_sRNA <- getVarianceStabilizedData(dds_Apul_sRNA)
+rv_wpn_Apul_sRNA <- rowVars(wpn_vsd_Apul_sRNA, useNames=TRUE)
+
+Apul_counts_sRNA_vsd <- data.frame(wpn_vsd_Apul_sRNA)
+write.table(Apul_counts_sRNA_vsd, file = "../output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_variancestabilized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+q75_wpn_Apul_sRNA <- quantile(rowVars(wpn_vsd_Apul_sRNA, useNames=TRUE), .75)  # 75th quantile variability
+Apul_counts_sRNA_vsd_q75 <- wpn_vsd_Apul_sRNA[ rv_wpn_Apul_sRNA > q75_wpn_Apul_sRNA, ] %>% data.frame # filter to retain only the most variable genes
+write.table(Apul_counts_sRNA_vsd_q75, file = "../output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_variancestabilized_q75.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+q95_wpn_Apul_sRNA <- quantile(rowVars(wpn_vsd_Apul_sRNA, useNames=TRUE), .95)  # 95th quantile variability
+Apul_counts_sRNA_vsd_q95 <- wpn_vsd_Apul_sRNA[ rv_wpn_Apul_sRNA > q95_wpn_Apul_sRNA, ] %>% data.frame # filter to retain only the most variable genes
+write.table(Apul_counts_sRNA_vsd_q95, file = "../output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_variancestabilized_q95.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+```
+
+## Plot normalized data
+
+```{r plot-normalized-sRNA}
+Apul_counts_sRNA_norm_long <- Apul_counts_sRNA_norm %>%
+  mutate(
+    Gene_id = row.names(Apul_counts_sRNA_norm)
+  ) %>%
+  pivot_longer(-Gene_id)
+
+Apul_counts_sRNA_norm_long %>%
+  ggplot(., aes(x = name, y = value)) +
+  geom_violin() +
+  geom_point() +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text( angle = 90)
+  ) +
+  ylim(0, NA) +
+  labs(
+    title = "Normalized Expression",
+    x = "Sample",
+    y = "Normalized counts"
+  )
+```
+
+
+## Plot variance stabilized data
+
+```{r plot-vsd-sRNA}
+Apul_counts_sRNA_vsd_long <- Apul_counts_sRNA_vsd %>%
+  mutate(
+    Gene_id = row.names(Apul_counts_sRNA_vsd)
+  ) %>%
+  pivot_longer(-Gene_id)
+
+Apul_counts_sRNA_vsd_long %>%
+  ggplot(., aes(x = name, y = value)) +
+  geom_violin() +
+  geom_point() +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text( angle = 90)
+  ) +
+  ylim(0, NA) +
+  labs(
+    title = "Variance Stabilized Expression",
+    x = "Sample",
+    y = "Variance stabilized data"
+  )
+```
+
+## Normalized expression levels
+
+Plot histograms of the normalized expression levels in each sample
+
+```{r norm-expression-level-histograms}
+# Melt the count matrix into long format
+Apul_counts_norm_melted <- melt(Apul_counts_sRNA_norm, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Apul_counts_norm_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#408EC6", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Normalized transcript counts
+
+Check the total number of transcripts in each sample -- now that we've normalized the data these totals should be similar
+```{r norm-transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts_norm <- colSums(Apul_counts_sRNA_norm)
+
+# Create a data frame for plotting
+total_transcripts_norm_df <- data.frame(sample = names(total_transcripts_norm),
+                                   totals = total_transcripts_norm)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#408EC6", color = "black") +
+  labs(title = "Total Number of Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## PCA of variance stabilized data
+
+```{r PCA}
+plotPCA(vsd_Apul_sRNA, intgroup="Sample")
+```
+
+## Sample clustering
+
+```{r sample-clustering}
+sample_dists <- dist(t(assay(vsd_Apul_sRNA)))
+pheatmap(as.matrix(sample_dists), clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", main="Sample Clustering")
+```
+
+## Heatmaps
+
+Of most variable variance stabilized sRNA transcripts
+
+```{r heatmpas}
+# 75th quantile
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+pheatmap(Apul_counts_sRNA_vsd_q75, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+
+# 95th quantile
+pheatmap(Apul_counts_sRNA_vsd_q95, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+```
+
+# Normalized miRNA counts
+
+## Isolate normalized/vsd miRNA
+```{r miRNA-normalized-miRNA}
+Apul_counts_sRNA_norm$Name <- rownames(Apul_counts_sRNA_norm)
+Apul_counts_miRNA_norm <- left_join(Apul_metadata_miRNA, Apul_counts_sRNA_norm, by = c("Name" = "Name")) %>%
+  column_to_rownames(var="given_miRNA_name") %>%
+  select(starts_with("sample"))
+
+Apul_counts_sRNA_vsd$Name <- rownames(Apul_counts_sRNA_vsd)
+Apul_counts_miRNA_vsd <- left_join(Apul_metadata_miRNA, Apul_counts_sRNA_vsd, by = c("Name" = "Name")) %>%
+  column_to_rownames(var="given_miRNA_name") %>%
+  select(starts_with("sample"))
+
+Apul_counts_sRNA_vsd_q75$Name <- rownames(Apul_counts_sRNA_vsd_q75)
+Apul_counts_miRNA_vsd_q75 <- left_join(Apul_metadata_miRNA, Apul_counts_sRNA_vsd_q75, by = c("Name" = "Name")) %>%
+  column_to_rownames(var="given_miRNA_name") %>%
+  select(starts_with("sample"))
+
+Apul_counts_sRNA_vsd_q95$Name <- rownames(Apul_counts_sRNA_vsd_q95)
+Apul_counts_miRNA_vsd_q95 <- left_join(Apul_metadata_miRNA, Apul_counts_sRNA_vsd_q95, by = c("Name" = "Name")) %>%
+  column_to_rownames(var="given_miRNA_name") %>%
+  select(starts_with("sample"))
+```
+
+## Normalized expression levels
+
+Plot histograms of the normalized expression levels in each sample
+
+```{r miRNA-norm-expression-level-histograms}
+# Melt the count matrix into long format
+Apul_counts_miRNA_norm_melted <- melt(Apul_counts_miRNA_norm, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Apul_counts_miRNA_norm_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#408EC6", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Normalized transcript counts
+
+Check the total number of transcripts in each sample -- now that we've normalized the data these totals should be similar
+```{r miRNA-norm-transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts_miRNA_norm <- colSums(Apul_counts_miRNA_norm)
+
+# Create a data frame for plotting
+total_transcripts_miRNA_norm_df <- data.frame(sample = names(total_transcripts_miRNA_norm),
+                                   totals = total_transcripts_miRNA_norm)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_miRNA_norm_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#408EC6", color = "black") +
+  labs(title = "Total Number of miRNA Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Heatmap
+
+Of all miRNAs
+
+```{r miRNA-heatmpas}
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+pheatmap(Apul_counts_miRNA_vsd, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+
+```
