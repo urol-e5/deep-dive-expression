@@ -1,6 +1,6 @@
 # deep-dive-expression
 
-Analyzing gene expression and gene/ncRNA coexpression in three species of stony coral. This work builds on a completed summary of the ncRNA landscape of these species ([deep-dive](https://github.com/urol-e5/deep-dive)).
+Analyzing gene expression, gene/ncRNA coexpression, and interactions with DNA methylation in three species of stony coral. This work builds on a completed summary of the ncRNA landscape of these species ([deep-dive](https://github.com/urol-e5/deep-dive)).
 
 ## Specific sub-efforts
 
