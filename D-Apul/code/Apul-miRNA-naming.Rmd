@@ -1,0 +1,39 @@
+---
+title: "Naming miRNAs"
+author: "Jill Ashey"
+date: "2024-11-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in updated miRNAs 
+```{r}
+updated_mi <- read.delim("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.txt", header = T) 
+```
+
+Select only miRNAs 
+```{r}
+updated_mi <- updated_mi %>%
+  filter(MIRNA == "Y")
+```
+
+39 miRNAs identified. 
+
+Read in old miRNAs
+```{r}
+old_mi <- read_csv("~/Desktop/PutnamLab/Repositories/deep-dive/DEF-cross-species/output/10-shortRNA-ShortStack-comparison/Apul_results_mature_named.csv")
+
+```
+
+Merge 
+```{r}
+test <- updated_mi %>%
+  left_join(old_mi, by = "MajorRNA")
+```
+
+
+
+

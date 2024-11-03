@@ -16,6 +16,19 @@ library(tidyverse)
 library(mirTarRnaSeq)
 ```
 
+Read in gene expression data 
+```{r}
+gene_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
+```
+
+Read in miRNA expression data 
+
+
+
+
+
+
+
 Using the test data as an initial pass to understand Part 1 of the package. Part 1 has a lot of different options one can explore. For the deep dive data, I think the univariate model or the synergistic model will be the best for our data. The univariate model can look at the relationshop of all miRNAs in regards to all mRNAs of interest (one to one relationship). 
 
 I will use the `miRNA` df as miRNA counts input and `mRNA` df as mRNA counts input; this data is a part of the package. I will also use `miRanda` for interaction data. Looking at the manual pages and source [code](https://rdrr.io/github/Mercedeh66/mirTarRnaSeq/man/), prior to combining the files with the function `combiner`, they need to be transformed using `TZtrans`. 
