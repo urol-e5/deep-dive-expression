@@ -12,7 +12,7 @@ I will be using Part 1 of their workflow (see [vignette](https://bioconductor.or
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-BiocManager::install("SPONGE")
+#BiocManager::install("SPONGE")
 
 library(tidyverse)
 library(mirTarRnaSeq)
@@ -23,9 +23,87 @@ library(SPONGE)
 Read in gene expression data 
 ```{r}
 gene_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
+gene_counts <- as.data.frame(gene_counts)
+rownames(gene_counts) <- gene_counts[,1] #set first column that contains gene names as rownames
+gene_counts <- gene_counts[,-1] # remove column w/ gene names 
 ```
 
 Read in miRNA expression data 
+```{r}
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+```
+
+Read in miranda info 
+```{r}
+miranda_apul <- read.delim("~/Desktop/PutnamLab/Repositories/deep-dive/D-Apul/output/21-Apul-miRNA-target-prediction/miranda_strict_all_1kb_parsed_apul.txt", header = F)
+
+colnames(miranda_apul) <- c("miRNA", "gene_coord", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
+
+# Format miranda df
+miranda_apul$miRNA <- sub(">", "", miranda_apul$miRNA)
+
+# Separate gene_coord into 'gene' and the rest of the original column
+miranda_apul <- miranda_apul %>%
+  separate(gene_coord, into = c("gene", "gene_coord"), sep = "::")
+  
+# Select specific cols
+miranda_apul <- miranda_apul %>%
+  select(miRNA, gene, score, energy)
+```
+
+The gene and miRNA counts do not have the same number of samples - gene counts has only 4 (ACR-140, ACR-145, ACR-173, ACR-179) and miRNA counts has 5 (sample140, sample 145, sample 150, sample173, and sample178). Remove sample150 from the miRNA counts data and rename columns so they are the same in each df 
+```{r}
+# Remove sample150 column from mirna counts
+miRNA_counts <- miRNA_counts %>%
+  select(-sample150)
+
+# Rename gene count cols
+colnames(gene_counts) <- c("sample140", "sample145", "sample173", "sample178")
+```
+
+Select only genes that are present in interaction data 
+```{r}
+filtered_gene_counts <- gene_counts[rownames(gene_counts) %in% miranda_apul$gene, ]
+```
+
+
+
+
+
+
+
+
+Get correlation 
+```{r}
+corr_test <- corMirnaRna(filtered_gene_counts, miRNA_counts)
+```
+
+
+
+
+
+
+
+
+```{r}
+corr_test <- corMirnaRna(gene_counts, miRNA_counts)
+newcorr <- corMirnaRnaMiranda(DiffExpmRNASub, miRNAExp, -0.1, miRanda)
+mirRnaHeatmap(newcorr)
+```
+
+Select only genes in 
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
@@ -121,6 +199,11 @@ Need to play with test data more
 
 
 
+Playing w data November 3-4 24
+
+# Part1 - miRNA mRNA regressions across sample cohorts
+The users can utilize TPM/RPKM or count data for this section of analysis as long as if the data is normalized (TPM/RPKM) is used for the mRNA expression files the miRNA expression files are also normalized (TPM). The format of the files for miRNA and mRNA needs to be odd the class dataframe with the sample names as colnames and mRNA names as rownames. Note, for this section of analysis we have only included all differentially expressed mRNAs for the analysis but the user can included all mRNAs. However, the user should realize if they choose to use all mRNAs expressed the analysis will take a longer time.
+
 Load data 
 ```{r}
 # Helper function to access test files in extdata
@@ -136,11 +219,27 @@ DiffExp<-read.table(get_test_file("EBV_mRNA.txt.gz"), as.is=TRUE, header=TRUE, r
 miRNAExp<-read.table(get_test_file("EBV_miRNA.txt.gz"), as.is=TRUE, header=TRUE, row.names=1)
 ```
 
-Load miranda 
+`DiffExp` represents mRNA expression. Each row represents a gene and each column represents a sample. I'm not sure if these counts are already normalized. 
+`miRNAExp` represents miRNA expression. Each row repsents a miRNA and each column represents a sample. Not sure if these are normalized but they are higher than the mRNA expression. The two dfs also do not have the same number of columns. 
+
+Ensure both dfs have same number of samples and that sample columns are in the same order. 
+```{r}
+# Reorder columns in miRNAExp to match the column order in DiffExp
+miRNAExp <- miRNAExp[, colnames(DiffExp)]
+
+# Check if columns are now ordered the same
+all(colnames(miRNAExp) == colnames(DiffExp)) # should be true 
+```
+
+Load miranda. Note, for other organisms (not provided by the pacakged) the appropriate format for miRanda input file is V1 column: name of the miRNA, V2 column: name of the predicted gene, V3: column score/rank of the miranda interaction (or any other score for interaction if TargetScan ( for TargetScan prediction user can provide context++ score and threshold accordingly) is used, note these three columns are required), V4 column: folding energy of miRNA-mRNA interaction. V5 column: target Identity value and V6 column: miRNA idnetity value. (Note, all these values are available after miRanda analysis but V1-V3 must be provided not matter the prediction method)
 ```{r}
 miRanda <- getInputSpecies("Epstein_Barr", threshold = 140)
+
+# Select only 
 DiffExpmRNASub <- miRanComp(DiffExp, miRanda)
 ```
+
+`miRanComp` only keeps the mRNAs that are present in the expression file. 
 
 Select miRNA
 ```{r}
@@ -149,22 +248,48 @@ miRNA_select<-c("ebv-mir-BART9-5p")
 
 Combine miRNA and mRNA file and define boundaries
 ```{r}
+# Make intersection df for mRNA and miRNA(s) of interest to be tested 
 Combine <- combiner(DiffExp, miRNAExp, miRNA_select)
+# The rows are the sample, and the columns are the mRNAs of interest and the miRNA(s) of interest
+
+# Define boundaries of mRNAs vs miRNAs - essentially, just looking at the mRNAs targeted by the miRNA of interest
 geneVariant <- geneVari(Combine, miRNA_select)
 ```
 
+Running various univariate models(1 to 1 miRNA-mRNA relationships) with various miRNA-mRNA distribution assumptions for either 1 miRNA and 1 mRNA relationship chosen/selected by the user or across all miRNAs and mRNAs in the expression dataframes. Note,the users can choose to run any of the available distribution model assumptions (glm_poisson, glm_gaussian, glm_nb (negative binomial), glm_zeroinfl (zero inflated model or zero inflated negative binomial)).
+
+First, run a one to one miRNA/mRNA gaussian regression model (univariate model for 1 miRNA and 1 mRNA). BALF2 is EBV mRNA, the ebv-mir-BART9-5p is the miRNA and we are running a glm poisson model.
+
 Run one to one gaussian regression model 
 ```{r}
-j <- runModel(`LMP-1` ~ `ebv-mir-BART9-5p`,
+j <- runModel(`BALF2` ~ `ebv-mir-BART9-5p`,
               Combine, model = glm_poisson(),
               scale = 100)
-# Print P value of poisson model of association between between LMP_1 and
-# ebv-mir-BART9-5p
-print(modelTermPvalues(j))
+
+# Obtain pvalues for terms in model formula
+print(modelTermPvalues(j)) 
+modelModelName(j)
+```
+
+So what does this mean? There is a correlation between BALF2 and ebv-mir-BART9-5p because there is a significant pvalue? 
+
+I think I am interested in running the multi mode, where the best fit model for every miRNA-mRNA relationship is selected through AIC comparisons for model selection. After determining the appropriate model, statistical predictions can be made and significant miRNA-mRNA relationships/correlations can be identified. 
+
+```{r}
+corr_test <- corMirnaRna(DiffExpmRNASub, miRNAExp)
+newcorr <- corMirnaRnaMiranda(DiffExpmRNASub, miRNAExp, -0.1, miRanda)
+mirRnaHeatmap(newcorr)
 ```
 
 
-Run gaussian model over all interactions 
+
+
+
+
+
+
+
+Run gaussian model over all potential interactions with miRNA of interest 
 ```{r}
 blaGaus <- runModels(Combine,
                      geneVariant, miRNA_select,
@@ -174,8 +299,8 @@ blaGaus <- runModels(Combine,
 # Plot the regression relationship for the mRNA and miRNAs (BHLF1 is the EBV mRNA). Note, these are standard quality check plot outputs from plot regression.
 par(oma=c(2,2,2,2))
 par(mfrow=c(2,3),mar=c(4,3,3,2))
-plot(blaGaus[["all_models"]][["BHLF1"]])
-plot(modelData(blaGaus[["all_models"]][["BHLF1"]]))
+plot(blaGaus[["all_models"]][["BALF2"]])
+plot(modelData(blaGaus[["all_models"]][["BALF2"]]))
 
 # To comprehend the performance of all models we look at Akaike information criterion (AIC) across all miRNA-mRNA model performances and then look at the density plots. Note, the models with lower comparitive AICs have better performace.
 G <- do.call(rbind.data.frame, blaGaus[["AICvalues"]])
@@ -253,6 +378,8 @@ p2 <- ggplot(data = bindM, aes(x = value, group = variable,
   ylab("Density")+ xlab ("AIC Value")
 p2
 ```
+
+The user can decide to use runModels() with glm_multi() (with multi and inter mode options). When using glm_multi(), where all available models will be run, the AICs will be compared and the best model will be chosen based on the miRNA-mRNA model AIC score. In the example bellow we are using the mode= "multi" option for combination of 2 miRNAs (multivariate model) for interaction model the user can choose the mode= "inter" option. Note all_coeff parameters defaults TRUE all interactions (only negative miRNA-mRNA relationships) are reported. More comments on the mode is provided in the next section of the vignette. If all miRNA-mRNA relationships are wanted this parameter can be set to false.
 
 Run multiple models at once 
 ```{r}
