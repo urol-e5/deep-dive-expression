@@ -36,7 +36,6 @@ library(tidyverse)
 library(ggplot2)
 library(WGCNA)
 library(magrittr)
-library(DESeq2)
 library(genefilter)
 ```
 
@@ -44,284 +43,35 @@ Used Jennifer Chang's Bioinformatic Workflow [post on WGCNA analysis](https://bi
 
 **NOTE: WGCNA is recommended for use with at *least* 15 samples to draw meaningful conclusions. We only have 5 samples from each species in our deep-dive dataset, so this code is primarily intended to be a trial run, developing an RNA-sRNA WGCNA coexpression pipeline in preparation for our *time series data*.**
 
-# Prep RNA data
+## Load variance stabilized count data
 
-## Load count data
-
-Load in the count matrix we generated after kallisto pseudoalignment using the Trinity abundance_estimates_to_matrix.pl script. We also need to slightly reformat the count matrix, as required for DESeq2.
+Load in count matrices. The transformed RNA counts were generated using kallisto. The sRNA counts were generated using ShortStack. These counts were then normalized and variance stabilized using the DESeq2 package. For miRNAs, miRNAs were variance stabilized together with all sRNAs, then isolated based on ShortStack's miRNA annotation. See details on these transformations in `03-Apul-RN-summary` and `03.1-Apul-sRNA-summary`. 
 
 ```{r load-RNA-counts}
-# Read in counts data. This is a gene-level counts matrix generated from kallisto transcript abundances using Trinity
-Apul_counts_RNA_data_OG <- read_delim("../../../deep-dive/D-Apul/output/14-Apul-RNAseq-kallisto/kallisto/kallisto.isoform.counts.matrix") 
-head(Apul_counts_RNA_data_OG)
-```
+# RNA variance stabilized counts data
+Apul_counts_RNA_vsd <- read.table("../output/03-Apul-RNA-summary/Apul_counts_RNA_variancestabilized.txt") 
+Apul_counts_RNA_vsd_q75 <- read.table("../output/03-Apul-RNA-summary/Apul_counts_RNA_variancestabilized_q75.txt") 
+Apul_counts_RNA_vsd_q95 <- read.table("../output/03-Apul-RNA-summary/Apul_counts_RNA_variancestabilized_q95.txt") 
 
-## Count data munging
-
-```{r RNA-count-data-munging}
-# We need to modify this data frame so that the row names are actually row names, instead of comprising the first column
-Apul_counts_RNA <- Apul_counts_RNA_data_OG %>%
-  column_to_rownames(var = "...1")
-
-# Additional formatting
-# Round all estimated counts to integers
-Apul_counts_RNA <- round(Apul_counts_RNA, digits = 0)
-
-# Remove all transcripts with 5 or fewer counts in all samples
-Apul_counts_RNA <- Apul_counts_RNA[!apply(Apul_counts_RNA, 1, function(row) all(row < 6)), ]
-
-# Remove the "kallisto_quant_" portion of the column names, to leave just the sample names
-colnames(Apul_counts_RNA) <- sub("kallisto_quant_", "", colnames(Apul_counts_RNA))
-
-Apul_sample_names <- names(Apul_counts_RNA)
-
-head(Apul_counts_RNA)
-Apul_sample_names
-```
-
-## Normalize counts with DESeq2
-
-### Plot unnormalized data
-
-```{r plot-unnormalized-RNA}
-
-Apul_counts_RNA %>%
-  pivot_longer( cols = everything(), names_to = "sample", values_to = "count") %>%
-  ggplot(., aes(x = sample, y = count)) +
-  geom_violin() + 
-  geom_point(alpha = 0.2) +
-  theme_minimal() +
-  labs(title = "Unnormalized transcript counts",
-       x = "Sample",
-       y = "count")
-```
-
-We definitely need to normalize this data!
-
-### Metadata
-
-DESeq2 requires a metadata data frame as input. I don't have sample metadata though so, since we're just doing DESeq2 for normalization purposes (not analysis purposes), I'm just going to create a dummy sheet
-
-```{r make-RNA-metadata-dataframe}
-Apul_metadata_RNA <- data.frame(Sample = Apul_sample_names,
-                            Species = rep("A.pulchra", 5))
-rownames(Apul_metadata_RNA) <- Apul_sample_names
-
-head(Apul_metadata_RNA)
-```
-
-### DESeq object
-
-```{r make-RNA-deseq-object, cache=TRUE}
-# Calculate DESeq object
-dds_Apul_RNA <- DESeqDataSetFromMatrix(countData = Apul_counts_RNA,
-                              colData = Apul_metadata_RNA,
-                              design = ~ 1) 
-
-# Run differential expression analysis 
-# (Note that this DESeq() function runs all necessary steps, including data normalization, 
-# estimating size factors, estimating dispersions, gene-wise dispersion estimates, mean-dispersion 
-# relationship, final dispersion estimates, fitting model, and testing)
-# Using design = ~1 because we don't have treatment groups
-
-dds_Apul_RNA <- DESeq(dds_Apul_RNA)
-```
-
-```{r get-normalized-RNA-counts, cache=TRUE}
-vsd_Apul_RNA <- varianceStabilizingTransformation(dds_Apul_RNA, blind=TRUE)
-wpn_vsd_Apul_RNA <- getVarianceStabilizedData(dds_Apul_RNA)
-rv_wpn_Apul_RNA <- rowVars(wpn_vsd_Apul_RNA)
-
-q75_wpn_Apul_RNA <- quantile( rowVars(wpn_vsd_Apul_RNA), .75)  # <= original
-q95_wpn_Apul_RNA <- quantile( rowVars(wpn_vsd_Apul_RNA), .95)  # <= changed to 95 quantile to reduce dataset
-Apul_counts_RNA_norm <- wpn_vsd_Apul_RNA[ rv_wpn_Apul_RNA > q95_wpn_Apul_RNA, ] # filter to retain only the most variable genes
-
-Apul_counts_RNA_norm <- data.frame(Apul_counts_RNA_norm) 
-
-write.table(Apul_counts_RNA_norm, file = "../output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_RNA_normalized_q95.txt", sep = "\t", row.names = TRUE, quote = FALSE)
-```
-
-## Plot normalized data
-
-```{r plot-normalized-RNA}
-Apul_counts_RNA_norm_long <- Apul_counts_RNA_norm %>%
-  mutate(
-    Gene_id = row.names(Apul_counts_RNA_norm)
-  ) %>%
-  pivot_longer(-Gene_id)
-
-Apul_counts_RNA_norm_long %>%
-  ggplot(., aes(x = name, y = value)) +
-  geom_violin() +
-  geom_point() +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text( angle = 90)
-  ) +
-  ylim(0, NA) +
-  labs(
-    title = "Normalized and 95 quantile Expression",
-    x = "Sample",
-    y = "Normalized counts"
-  )
+# miRNA variance stabilized counts data
+Apul_counts_miRNA_vsd <- read.table("../output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_variancestabilized.txt") 
 ```
 
 
-# Prep miRNA data
 
-## Load count data
+# Merge RNA and miRNA variance stabilized counts
 
-Load in the miRNA count matrix generated by ShortStack during miRNA identification
+Let's combine them into one dataset to feed into WGCNA.
 
-```{r load-sRNA-counts}
-# Read in sRNA counts data
-Apul_counts_sRNA_data_OG <- read_delim("../../../deep-dive/D-Apul/output/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/ShortStack_out/Counts.txt", delim="\t") 
-head(Apul_counts_sRNA_data_OG)
-```
-
-## Count data munging
-
-```{r sRNA-count-data-munging}
-Apul_counts_sRNA <- Apul_counts_sRNA_data_OG
-
-# Remove excess portions of sample column names to just "sample###"
-colnames(Apul_counts_sRNA) <- sub("-S1-TP2-fastp-adapters-polyG-31bp-merged", "", colnames(Apul_counts_sRNA))
-colnames(Apul_counts_sRNA) <- sub("sRNA-ACR-", "sample", colnames(Apul_counts_sRNA))
-
-# Keep just the counts and cluster names
-Apul_counts_sRNA <- Apul_counts_sRNA %>% select("sample140", "sample145", "sample150", "sample173", "sample178", "Name")
-
-# Make the cluster names our new row names
-Apul_counts_sRNA <- Apul_counts_sRNA %>% column_to_rownames(var = "Name")
-
-head(Apul_counts_sRNA)
-```
-
-## Normalize counts with DESeq2
-
-### Plot unnormalized data
-
-```{r plot-unnormalized-sRNA}
-
-Apul_counts_sRNA %>%
-  pivot_longer( cols = everything(), names_to = "sample", values_to = "count") %>%
-  ggplot(., aes(x = sample, y = count)) +
-  geom_violin() + 
-  geom_point(alpha = 0.2) +
-  theme_minimal() +
-  labs(title = "Unnormalized transcript counts",
-       x = "Sample",
-       y = "count")
-```
-
-We definitely need to normalize this data!
-
-### Metadata
-
-DESeq2 requires a metadata data frame as input. I don't have sample metadata though so, since we're just doing DESeq2 for normalization purposes (not analysis purposes), I'm just going to create a dummy sheet
-
-```{r make-sRNA-metadata-dataframe}
-Apul_metadata_RNA <- data.frame(Sample = Apul_sample_names,
-                            Species = rep("A.pulchra", 5))
-rownames(Apul_metadata_RNA) <- Apul_sample_names
-
-head(Apul_metadata_RNA)
-```
-
-### DESeq object
-
-```{r make-sRNA-deseq-object, cache=TRUE}
-# Calculate DESeq object
-dds_Apul_sRNA <- DESeqDataSetFromMatrix(countData = Apul_counts_sRNA,
-                              colData = Apul_metadata_RNA,
-                              design = ~ 1) 
-
-# Run differential expression analysis 
-# (Note that this DESeq() function runs all necessary steps, including data normalization, 
-# estimating size factors, estimating dispersions, gene-wise dispersion estimates, mean-dispersion 
-# relationship, final dispersion estimates, fitting model, and testing)
-# Using design = ~1 because we don't have treatment groups
-
-dds_Apul_sRNA <- DESeq(dds_Apul_sRNA)
-```
-
-```{r get-normalized-sRNA-counts, cache=TRUE}
-vsd_Apul_sRNA <- varianceStabilizingTransformation(dds_Apul_sRNA, blind=TRUE)
-wpn_vsd_Apul_sRNA <- getVarianceStabilizedData(dds_Apul_sRNA)
-rv_wpn_Apul_sRNA <- rowVars(wpn_vsd_Apul_sRNA)
-
-# For now let's retain all sRNAs, regardless of expression level
-# q75_wpn_Apul_sRNA <- quantile( rowVars(wpn_vsd_Apul_sRNA), .75)  
-# q90_wpn_Apul_sRNA <- quantile( rowVars(wpn_vsd_Apul_sRNA), .9)  
-# Apul_counts_sRNA_norm <- wpn_vsd_Apul_RNA[ rv_wpn_Apul_sRNA > q50_wpn_Apul_sRNA, ] # filter to retain only the more variable genes
-Apul_counts_sRNA_norm <- wpn_vsd_Apul_sRNA
-
-Apul_counts_sRNA_norm <- data.frame(Apul_counts_sRNA_norm)
-
-write.table(Apul_counts_sRNA_norm, file = "../output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_sRNA_normalized.txt", sep = "\t", row.names = TRUE, quote = FALSE)
-```
-
-## Plot normalized data
-
-```{r plot-normalized-sRNA}
-Apul_counts_sRNA_norm_df_long <- Apul_counts_sRNA_norm %>%
-  mutate(
-    Gene_id = row.names(Apul_counts_sRNA_norm)
-  ) %>%
-  pivot_longer(-Gene_id)
-
-Apul_counts_sRNA_norm_df_long %>%
-  ggplot(., aes(x = name, y = value)) +
-  geom_violin() +
-  geom_point() +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text( angle = 90)
-  ) +
-  ylim(0, NA) +
-  labs(
-    title = "Normalized and 95 quantile Expression",
-    x = "Sample",
-    y = "Normalized counts"
-  )
-```
-
-## Normalized count data munging
-
-```{r miRNA-count-data-munging}
-
-# The ShortStack output Results.txt includes all clusters of sRNA reads, including those not annotated as valid miRNAs. Now that we've normalized the counts,we need to filter out all the clusters that are not miRNAs.
-
-# Join with full metadata sheet, which only contains valid miRNAs
-Apul_metadata_miRNA <- read_csv("../../../deep-dive/DEF-cross-species/output/10-shortRNA-ShortStack-comparison/Apul_results_mature_named.csv") 
-
-Apul_counts_sRNA_norm <- rownames_to_column(Apul_counts_sRNA_norm, var = "Name")
-
-Apul_counts_miRNA_norm <- left_join(Apul_metadata_miRNA, Apul_counts_sRNA_norm, by = c("Name" = "Name"))
-
-# Keep just the counts and given miRNA names (e.g., based on match to previously described miRNA)
-Apul_counts_miRNA_norm <- Apul_counts_miRNA_norm %>% select("sample140", "sample145", "sample150", "sample173", "sample178", "given_miRNA_name")
-
-# Make the miRNA names our new row names
-Apul_counts_miRNA_norm <- Apul_counts_miRNA_norm %>% column_to_rownames(var = "given_miRNA_name")
-
-head(Apul_counts_miRNA_norm)
-```
-
-
-# Merge RNA and miRNA normalized counts
-
-Now that we have normalized counts of RNA and miRNA for all of our samples, let's combine them into one dataset to feed into WGCNA
-
-```{r}
+```{r combine-counts-sets}
 # Merge
-Apul_counts_WGCNA <- bind_rows(Apul_counts_miRNA_norm, Apul_counts_RNA_norm)
+Apul_counts_WGCNA_RNAq75 <- bind_rows(Apul_counts_miRNA_vsd_q75, Apul_counts_RNA_vsd)
 
 # Convert from data frame to matrix
-Apul_counts_WGCNA <- as.matrix(Apul_counts_WGCNA)
+Apul_counts_WGCNA_RNAq75 <- as.matrix(Apul_counts_WGCNA_RNAq75)
 
 # Transpose the normalized count data to meet WGCNA required input format
-Apul_counts_WGCNA = t(Apul_counts_WGCNA)
+Apul_counts_WGCNA_RNAq75 = t(Apul_counts_WGCNA_RNAq75)
 ```
 
 
@@ -329,14 +79,14 @@ Apul_counts_WGCNA = t(Apul_counts_WGCNA)
 
 Now we're ready to run WGCNA!
 
-```{r}
+```{r WGCNA, cache=TRUE}
 allowWGCNAThreads()          # allow multi-threading (optional)
 # Choose a set of soft-thresholding powers
 powers = c(c(1:10), seq(from = 12, to = 20, by = 2))
 
 # Call the network topology analysis function
 sft_Apul = pickSoftThreshold(
-  Apul_counts_WGCNA,             # <= Input data
+  Apul_counts_WGCNA_RNAq75,             # <= Input data
   #blockSize = 30,
   powerVector = powers,
   verbose = 5
@@ -369,13 +119,13 @@ text(sft_Apul$fitIndices[, 1],
      cex = cex1, col = "red")
 ```
 
-I'm a little weirded out by the double curve in the Scale Independence plot, but this is a prelim test so I'm not going to worry about it right now. We want to pick a soft threshold power near the curve of the plot, so maybe 6, 7, 8, or 9? Let's pick 9 for now, but maybe experiment with other powers later.
+I'm a little weirded out by the double curve in the Scale Independence plot, but this is a prelim test so I'm not going to worry about it right now. We want to pick a soft threshold power near the curve of the plot, so maybe 6, 7, 8, or 9? Let's pick 7 for now, but maybe experiment with other powers later.
 
 ```{r, cache=TRUE}
-picked_power = 9
+picked_power = 7
 temp_cor <- cor       
 cor <- WGCNA::cor         # Force it to use WGCNA cor function (fix a namespace conflict issue)
-netwk_Apul <- blockwiseModules(Apul_counts_WGCNA,                # <= input here
+netwk_Apul <- blockwiseModules(Apul_counts_WGCNA_RNAq75,                # <= input here
 
                           # == Adjacency Function ==
                           power = picked_power,                # <= power here
@@ -441,7 +191,7 @@ module_df_Apul[1:5,]
 
 ```{r}
 # Get Module Eigengenes per cluster
-MEs0_Apul <- moduleEigengenes(Apul_counts_WGCNA, mergedColors)$eigengenes
+MEs0_Apul <- moduleEigengenes(Apul_counts_WGCNA_RNAq75, mergedColors)$eigengenes
 
 # # Reorder modules so similar modules are next to each other
 # MEs0_Apul <- orderMEs(MEs0_Apul)
@@ -486,9 +236,9 @@ module_df_Apul %>%
 
 ```{r}
 # pick out a few modules of interest. Let's do some of the modules that contain previously described miRNAs, since we have the best idea of their function
-modules_of_interest = c("green", "pink", "red")
+modules_of_interest = c("grey", "lightyellow")
 # Define the colors corresponding to the modules of interest
-module_colors <- c("green" = "green", "pink" = "pink", "red" = "red")
+module_colors <- c("grey" = "black", "lightyellow" = "yellow")
 
 # Pull out list of genes in that module
 submod_Apul = module_df_Apul %>%
@@ -496,7 +246,7 @@ submod_Apul = module_df_Apul %>%
 
 row.names(module_df_Apul) = module_df_Apul$gene_id
 
-subexpr_Apul = t(Apul_counts_WGCNA)[submod_Apul$gene_id,]
+subexpr_Apul = t(Apul_counts_WGCNA_RNAq75)[submod_Apul$gene_id,]
 
 submod_df_Apul = data.frame(subexpr_Apul) %>%
   mutate(
