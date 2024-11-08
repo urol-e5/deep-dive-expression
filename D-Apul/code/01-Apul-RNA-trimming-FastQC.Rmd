@@ -60,7 +60,7 @@ echo "#### Assign Variables ####"
 echo ""
 
 echo "# Data directories"
-echo 'export expression_dir=/home/shared/8TB_HDD_02/shedurkin/expression'
+echo 'export expression_dir=/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression'
 echo 'export output_dir_top=${expression_dir}/D-Apul/output/01-Apul-RNA-trimming-FastQC'
 echo 'export raw_fastqc_dir=${output_dir_top}/raw-fastqc'
 echo 'export raw_reads_dir=${expression_dir}/D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads'
@@ -137,6 +137,8 @@ wget \
 --no-parent \
 --quiet \
 --accept ${fastq_pattern} ${raw_reads_url}
+
+source .bashvars
 ```
 
 ```{r check-raw-reads, engine='bash', eval=TRUE}
