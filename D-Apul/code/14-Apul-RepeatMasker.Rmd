@@ -1,0 +1,176 @@
+---
+title: "14-Apul-RepeatMasker"
+author: "Kathleen Durkin"
+date: "2024-11-08"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+One of the probable ways sncRNAs influence gene expression and interact with DNA methylation is through suppression of transposable elements. RepeatMasker will ID repeated elements in the genome likely to be TEs. 
+
+We'll be using the (currently unpublished) A.pulchra genome assembled by collaborators, Apulchra-genome.fa, which was also used for sncRNA discovery in `11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome`
+
+This is a modified version of [Sam White's existing Mox script](https://robertslab.github.io/sams-notebook/posts/2023/2023-05-26-Repeats-Identification---P.meandrina-Using-RepeatMasker-on-Mox/index.html) for running RepeatMasker.
+
+```{r, engine='bash'}
+
+## Assign Variables
+
+# Set number of CPUs to use
+threads=28
+
+# Species to use for RepeatMasker
+species="cnidaria"
+
+# Paths to programs
+repeatmasker="/home/shared/RepeatMasker-4.1.7-p1/RepeatMasker"
+
+# Input files/directories
+genome_index_dir="../data/"
+genome_fasta="${genome_index_dir}/Apulchra-genome.fa"
+
+# Programs associative array
+declare -A programs_array
+programs_array=(
+[repeatmasker]="${repeatmasker}"
+)
+
+###################################################################################################
+
+# Exit script if any command fails
+set -e
+
+# Load Python Mox module for Python3 module availability
+#module load intel-python3_2017
+
+# SegFault fix?
+export THREADS_DAEMON_MODEL=1
+
+# #### Run RepeatMasker with _all_ species setting and following options:
+# 
+# -species "all" : Sets species to all
+# 
+# -par ${cpus} : Use n CPU threads
+# 
+# -gff : Create GFF output file (in addition to default files)
+# 
+# -excln : Adjusts output table calculations to exclude sequence runs of >=25 Ns. Useful for draft genome assemblies.
+
+"${programs_array[repeatmasker]}" \
+${genome_fasta} \
+-species ${species} \
+-par ${threads} \
+-gff \
+-excln \
+-dir .
+
+# Generate checksums
+echo ""
+echo "Generating checksum for input FastA"
+echo "${genome_fasta}..."
+
+md5sum "${genome_fasta}" | tee --append checksums.md5
+
+echo ""
+
+for file in *
+do
+  echo ""
+  echo "Generating checksum for ${file}..."
+  echo ""
+
+  md5sum "${file}" | tee --append checksums.md5
+
+  echo ""
+  echo "Checksum generated."
+done
+
+
+#######################################################################################################
+
+# Capture program options
+if [[ "${#programs_array[@]}" -gt 0 ]]; then
+  echo "Logging program options..."
+  for program in "${!programs_array[@]}"
+  do
+    {
+    echo "Program options for ${program}: "
+    echo ""
+    # Handle samtools help menus
+    if [[ "${program}" == "samtools_index" ]] \
+    || [[ "${program}" == "samtools_sort" ]] \
+    || [[ "${program}" == "samtools_view" ]]
+    then
+      ${programs_array[$program]}
+
+    # Handle DIAMOND BLAST menu
+    elif [[ "${program}" == "diamond" ]]; then
+      ${programs_array[$program]} help
+
+    # Handle NCBI BLASTx/repeatmasker menu
+    elif [[ "${program}" == "blastx" ]] \
+    || [[ "${program}" == "repeatmasker" ]]; then
+      ${programs_array[$program]} -help
+    fi
+    ${programs_array[$program]} -h
+    echo ""
+    echo ""
+    echo "----------------------------------------------"
+    echo ""
+    echo ""
+  } &>> program_options.log || true
+
+    # If MultiQC is in programs_array, copy the config file to this directory.
+    if [[ "${program}" == "multiqc" ]]; then
+      cp --preserve ~/.multiqc_config.yaml multiqc_config.yaml
+    fi
+  done
+  echo "Finished logging programs options."
+  echo ""
+fi
+
+
+# Document programs in PATH (primarily for program version ID)
+echo "Logging system PATH..."
+
+{
+date
+echo ""
+echo "System PATH for $SLURM_JOB_ID"
+echo ""
+printf "%0.s-" {1..10}
+echo "${PATH}" | tr : \\n
+} >> system_path.log
+
+echo "Finished logging system $PATH."
+echo ""
+
+echo "Script complete!"
+
+```
+
+
+
