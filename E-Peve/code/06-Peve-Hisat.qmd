@@ -1,5 +1,5 @@
 ---
-title: "07- A pulcra HiSat2"
+title: "07- Peve HiSat2"
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -44,7 +44,7 @@ echo "*.fq" >> .gitignore
 wget -r \
 --no-directories --no-parent \
 -P ../data/fastq/ \
--A "*fastq.gz" https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/
+-A "*fastq.gz" https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_evermanni/trimmed/
 
 ```
 
@@ -56,12 +56,12 @@ wget -r \
 ```{r, engine='bash'}
 cd ../data
 
-wget -O Apulcra-genome.fa "https://osf.io/download/kn96u/"
+wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa 2> error_log.txt
 ```
 
 
 ```{r, engine='bash'}
-head ../data/Apulcra-genome.fa
+head ../data/Porites_evermanni_v1.fa
 ```
 
 
@@ -70,75 +70,15 @@ head ../data/Apulcra-genome.fa
 
 ## HiSat
 
-<!-- ```{r, engine='bash'} -->
-<!-- /home/shared/hisat2-2.2.1/hisat2_extract_exons.py \ -->
-<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
-<!-- > ../output/05.32-lncRNA-discovery/m_exon.tab -->
-<!-- ``` -->
-
-<!-- ```{r, engine='bash', eval=TRUE} -->
-<!-- head ../output/05.32-lncRNA-discovery/m_exon.tab -->
-<!-- wc -l ../output/05.32-lncRNA-discovery/m_exon.tab -->
-<!-- ``` -->
-
-<!-- ```{r, engine='bash'} -->
-
-<!-- /home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \ -->
-<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
-<!-- > ../output/05.32-lncRNA-discovery/m_splice_sites.tab -->
-
-<!-- ``` -->
-
-
-<!-- ```{r, engine='bash', eval=TRUE} -->
-<!-- head ../output/05.32-lncRNA-discovery/m_splice_sites.tab -->
-<!-- ``` -->
-
-
-<!-- NO GTF  -->
-
-
-
-
-<!-- ```{r, engine='bash'} -->
-<!-- /home/shared/hisat2-2.2.1/hisat2-build \ -->
-<!-- ../data/GCF_013753865.1_Amil_v2.1_genomic.fna \ -->
-<!-- ../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \ -->
-<!-- --exon ../output/05.32-lncRNA-discovery/m_exon.tab \ -->
-<!-- --ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \ -->
-<!-- -p 24 \ -->
-<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
-<!-- 2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt -->
-<!-- ``` -->
-
-
-
 ```{r, engine='bash'}
 /home/shared/hisat2-2.2.1/hisat2-build \
-../data/Apulcra-genome.fa \
-../output/07-Apul-Hisat/Apulcra-genome.index \
--p 24 \
-2> ../output/07-Apul-Hisat/hisat2-build_stats.txt
+../data/Porites_evermanni_v1.fa \
+../output/06-Peve-Hisat/Peve-genome.index \
+-p 24 &> ../output/06-Peve-Hisat/hisat2_build.log
 ```
-
-```{r, engine='bash', eval=TRUE}
-cat ../output/07-Apul-Hisat/hisat2-build_stats.txt
-```
-
-
-```{r, engine='bash', eval=TRUE}
-find ../data/fastq/*gz
-```
-
-```{r, engine='bash', eval=TRUE}
-find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
-| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
-echo {}
-```
-
 
 ```{r, engine='bash'}
-cd ../output/07-Apul-Hisat/
+cd ../output/06-Peve-Hisat/
 echo "*sam" >> .gitignore
 ```
 
@@ -147,22 +87,22 @@ echo "*sam" >> .gitignore
 find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
 | xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
 /home/shared/hisat2-2.2.1/hisat2 \
--x ../output/07-Apul-Hisat/Apulcra-genome.index \
--p 48 \
+-x ../output/06-Peve-Hisat/Peve-genome.index \
+-p 42 \
 -1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
 -2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
--S ../output/07-Apul-Hisat/{}.sam \
-2> ../output/07-Apul-Hisat/hisat.out
+-S ../output/06-Peve-Hisat/{}.sam \
+&> ../output/06-Peve-Hisat/hisat2.log
 ```
 
 ```{r, engine='bash', eval=TRUE}
-cat ../output/07-Apul-Hisat/hisat.out
+cat ../output/06-Peve-Hisat/hisat.out
 ```
 
 ## convert to bams
 
 ```{r, engine='bash'}
-for samfile in ../output/07-Apul-Hisat/*.sam; do
+for samfile in ../output/06-Peve-Hisat/*.sam; do
   bamfile="${samfile%.sam}.bam"
   sorted_bamfile="${samfile%.sam}.sorted.bam"
   
@@ -200,21 +140,21 @@ head ../data/Apulcra-genome.gff
 ```
 
 ```{r, engine='bash'}
-find ../output/07-Apul-Hisat/*sorted.bam \
+find ../output/06-Peve-Hisat/*sorted.bam \
 | xargs basename -s .sorted.bam | xargs -I{} \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 32 \
 -eB \
 -G ../data/Apulcra-genome.gff \
--o ../output/07-Apul-Hisat/{}.gtf \
-../output/07-Apul-Hisat/{}.sorted.bam
+-o ../output/06-Peve-Hisat/{}.gtf \
+../output/06-Peve-Hisat/{}.sorted.bam
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/07-Apul-Hisat/RNA*.gtf
-ls ../output/07-Apul-Hisat/RNA*.gtf
-#head ../output/07-Apul-Hisat/RNA*.gtf
+wc -l ../output/06-Peve-Hisat/RNA*.gtf
+ls ../output/06-Peve-Hisat/RNA*.gtf
+#head ../output/06-Peve-Hisat/RNA*.gtf
 ```
 
 
@@ -230,25 +170,25 @@ RNA-ACR-178 ../output/15-Apul-hisat/RNA-ACR-178.gtf
 
 
 ```{r, engine='bash'}
-head ../output/07-Apul-Hisat/list01.txt
+head ../output/06-Peve-Hisat/list01.txt
 ```
 
 
 
 ```{r, engine='bash'}
 python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
--i ../output/07-Apul-Hisat/list01.txt \
--g ../output/07-Apul-Hisat/gene_count_matrix.csv \
--t ../output/07-Apul-Hisat/transcript_count_matrix.csv
+-i ../output/06-Peve-Hisat/list01.txt \
+-g ../output/06-Peve-Hisat/gene_count_matrix.csv \
+-t ../output/06-Peve-Hisat/transcript_count_matrix.csv
 
-head ../output/07-Apul-Hisat/*matrix.csv
+head ../output/06-Peve-Hisat/*matrix.csv
 
 ```
 
 
 
 ```{bash}
-cp ../output/07-Apul-Hisat/gene_count_matrix.csv ../output/07-Apul-Hisat/Apul-gene_count_matrix.csv
+cp ../output/06-Peve-Hisat/gene_count_matrix.csv ../output/06-Peve-Hisat/Apul-gene_count_matrix.csv
 ```
 
 
@@ -284,14 +224,14 @@ awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print
 /home/shared/bedtools2/bin/fastaFromBed \
 -fi ../data/Apulcra-genome.fa \
 -bed ../data/Apulcra-genome-mRNA_only.gff \
--fo ../output/07-Apul-Hisat/genes.fasta \
+-fo ../output/06-Peve-Hisat/genes.fasta \
 -name -split
 ```
 
 
 ```{r, engine='bash'}
-head ../output/07-Apul-Hisat/genes.fasta 
-grep -c ">" ../output/07-Apul-Hisat/genes.fasta
+head ../output/06-Peve-Hisat/genes.fasta 
+grep -c ">" ../output/06-Peve-Hisat/genes.fasta
 ```
 
 
@@ -318,24 +258,24 @@ grep -c ">" ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta
 # Blastp
 ```{r, engine='bash'}
 
-fasta="../output/07-Apul-Hisat/genes.fasta"
+fasta="../output/06-Peve-Hisat/genes.fasta"
 
 /home/shared/ncbi-blast-2.15.0+/bin/blastx \
 -query $fasta \
 -db ../data/blast_dbs/uniprot_sprot_r2024_05 \
--out ../output/07-Apul-Hisat/blastx_out.tab \
+-out ../output/06-Peve-Hisat/blastx_out.tab \
 -evalue 1E-05 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6
 
-wc -l ../output/07-Apul-Hisat/blastx_out.tab
+wc -l ../output/06-Peve-Hisat/blastx_out.tab
 
-tr '|' '\t' < ../output/07-Apul-Hisat/blastx_out.tab \
-> ../output/07-Apul-Hisat/blastx_out_sep.tab
+tr '|' '\t' < ../output/06-Peve-Hisat/blastx_out.tab \
+> ../output/06-Peve-Hisat/blastx_out_sep.tab
 
-head -1 ../output/07-Apul-Hisat/blastx_out_sep.tab
+head -1 ../output/06-Peve-Hisat/blastx_out_sep.tab
 ```
 
 
@@ -344,11 +284,11 @@ head -1 ../output/07-Apul-Hisat/blastx_out_sep.tab
 
 
 ```{bash}
-cd ../output/07-Apul-Hisat
+cd ../output/06-Peve-Hisat
 
 curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo_c%2Cgo%2Cgo_f%2Cgo_id&format=tsv&query=%28*%29+AND+%28reviewed%3Atrue%29" -o SwissProt-Annot-GO.tsv
 
-wc -l ../output/07-Apul-Hisat/SwissProt-Annot-GO.tsv 
+wc -l ../output/06-Peve-Hisat/SwissProt-Annot-GO.tsv 
 ```
 
 
@@ -357,9 +297,9 @@ Join blast with GO info
 
 
 ```{r}
-bltabl <- read.csv("../output/07-Apul-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
+bltabl <- read.csv("../output/06-Peve-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
 
-spgo <- read.csv("../output/07-Apul-Hisat/SwissProt-Annot-GO.tsv", sep = '\t', header = TRUE)
+spgo <- read.csv("../output/06-Peve-Hisat/SwissProt-Annot-GO.tsv", sep = '\t', header = TRUE)
 
 annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
   select(
@@ -374,11 +314,11 @@ annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
 head(annot_tab)
 
 write.table(annot_tab, 
-            file = "../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv", 
+            file = "../output/06-Peve-Hisat/Apul-gene-annot-GO.tsv", 
             sep = "\t", 
             row.names = FALSE, 
             quote = FALSE)
 
-system("head ../output/07-Apul-Hisat/Apul-gene-annot-GO.tsv")
+system("head ../output/06-Peve-Hisat/Apul-gene-annot-GO.tsv")
 
 ```
