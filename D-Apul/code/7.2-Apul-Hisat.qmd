@@ -240,5 +240,8 @@ head ../output/07.2-Apul-Hisat/*matrix.csv
 ```
 
 
+```{bash}
+head ../output/07.2-Apul-Hisat/*matrix.csv
+```
 
 
