@@ -194,11 +194,41 @@ head ../output/06-Ptuh-Hisat/*matrix.csv
 
 ```{bash}
 cp ../output/06-Ptuh-Hisat/gene_count_matrix.csv ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
+```h
+
+```{bash}
+head ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
 ```
 
 
 
 
+```{r}
+library(tidyverse)
+
+# Load the data
+file_path <- "../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv"
+df <- read_csv(file_path)
+
+# Convert all columns to character to avoid type mismatch
+df <- df %>% mutate(across(everything(), as.character))
+
+# Transpose the data frame
+transposed_df <- df %>%
+  pivot_longer(cols = everything(), names_to = "original_column", values_to = "value") %>%
+  mutate(row = row_number()) %>%
+  pivot_wider(names_from = row, values_from = value)
+
+# Save the transposed data frame
+output_path <- "../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix_transposed.csv"
+write_csv(transposed_df, output_path)
+
+print(paste("Transposed CSV saved to", output_path))
+```
+
+```{bash}
+head ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix_transposed.csv
+```
 
 
 
