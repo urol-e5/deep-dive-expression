@@ -85,19 +85,16 @@ echo "*sam" >> .gitignore
 
 ```{r, engine='bash'}
 find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
-| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
-/home/shared/hisat2-2.2.1/hisat2 \
+| xargs -I{} basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz {} \
+| xargs -I{} sh -c '/home/shared/hisat2-2.2.1/hisat2 \
 -x ../output/06-Peve-Hisat/Peve-genome.index \
 -p 42 \
 -1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
 -2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
 -S ../output/06-Peve-Hisat/{}.sam \
-&> ../output/06-Peve-Hisat/hisat2.log
+> ../output/06-Peve-Hisat/{}_hisat.stdout 2> ../output/06-Peve-Hisat/{}_hisat.stderr'
 ```
 
-```{r, engine='bash', eval=TRUE}
-cat ../output/06-Peve-Hisat/hisat.out
-```
 
 ## convert to bams
 
@@ -107,18 +104,22 @@ for samfile in ../output/06-Peve-Hisat/*.sam; do
   sorted_bamfile="${samfile%.sam}.sorted.bam"
   
   # Convert SAM to BAM
-  /home/shared/samtools-1.12/samtools view -bS -@ 20 "$samfile" > "$bamfile"
+  /home/shared/samtools-1.12/samtools view -bS -@ 40 "$samfile" > "$bamfile"
   
   # Sort BAM
-  /home/shared/samtools-1.12/samtools sort -@ 20 "$bamfile" -o "$sorted_bamfile"
+  /home/shared/samtools-1.12/samtools sort -@ 40 "$bamfile" -o "$sorted_bamfile"
   
   # Index sorted BAM
-  /home/shared/samtools-1.12/samtools index -@ 20 "$sorted_bamfile"
+  /home/shared/samtools-1.12/samtools index -@ 40 "$sorted_bamfile"
 done
 ```
 
 
+## remove sams
 
+```{r, engine='bash'}
+rm ../output/06-Peve-Hisat/*sam
+```
 
 
 # StringTie
@@ -129,13 +130,13 @@ Getting gff
 ```{r, engine='bash'}
 
 cd ../data
-wget -O Apulcra-genome.gff "https://osf.io/download/f9dbr/"
+wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.gff
 ```
 
 
 ```{r, engine='bash'}
 
-head ../data/Apulcra-genome.gff
+head ../data/Porites_evermanni_v1.annot.gff
 
 ```
 
@@ -145,7 +146,7 @@ find ../output/06-Peve-Hisat/*sorted.bam \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 32 \
 -eB \
--G ../data/Apulcra-genome.gff \
+-G ../data/Porites_evermanni_v1.annot.gff \
 -o ../output/06-Peve-Hisat/{}.gtf \
 ../output/06-Peve-Hisat/{}.sorted.bam
 ```
@@ -161,12 +162,16 @@ ls ../output/06-Peve-Hisat/RNA*.gtf
 
 # Count Matrix
 
-list format
 
-RNA-ACR-140 ../output/15-Apul-hisat/RNA-ACR-140.gtf
-RNA-ACR-145 ../output/15-Apul-hisat/RNA-ACR-145.gtf
-RNA-ACR-173 ../output/15-Apul-hisat/RNA-ACR-173.gtf
-RNA-ACR-178 ../output/15-Apul-hisat/RNA-ACR-178.gtf
+
+```{bash}
+for file in $(ls ../output/06-Peve-Hisat/*.gtf); do
+  sample=$(basename "$file" .gtf)  # Extract sample name from filename
+  echo "$sample $file"
+done > ../output/06-Peve-Hisat/list01.txt
+```
+
+
 
 
 ```{r, engine='bash'}
@@ -188,7 +193,7 @@ head ../output/06-Peve-Hisat/*matrix.csv
 
 
 ```{bash}
-cp ../output/06-Peve-Hisat/gene_count_matrix.csv ../output/06-Peve-Hisat/Apul-gene_count_matrix.csv
+cp ../output/06-Peve-Hisat/gene_count_matrix.csv ../output/06-Peve-Hisat/Peve-gene_count_matrix.csv
 ```
 
 
