@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 # Run HiSat on RNA-seq
 
-Will end up with 5 sorted bam files. 
+Will end up with 5 sorted bam files, without building index with splice site.
 
 ## Grab Trimmed RNA-seq Reads
 
@@ -70,50 +70,46 @@ head ../data/Apulcra-genome.fa
 
 ## HiSat
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2_extract_exons.py \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-> ../output/05.32-lncRNA-discovery/m_exon.tab
-```
+<!-- ```{r, engine='bash'} -->
+<!-- /home/shared/hisat2-2.2.1/hisat2_extract_exons.py \ -->
+<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
+<!-- > ../output/05.32-lncRNA-discovery/m_exon.tab -->
+<!-- ``` -->
 
-```{r, engine='bash', eval=TRUE}
-head ../output/05.32-lncRNA-discovery/m_exon.tab
-wc -l ../output/05.32-lncRNA-discovery/m_exon.tab
-```
+<!-- ```{r, engine='bash', eval=TRUE} -->
+<!-- head ../output/05.32-lncRNA-discovery/m_exon.tab -->
+<!-- wc -l ../output/05.32-lncRNA-discovery/m_exon.tab -->
+<!-- ``` -->
 
-```{r, engine='bash'}
+<!-- ```{r, engine='bash'} -->
 
-/home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-> ../output/05.32-lncRNA-discovery/m_splice_sites.tab
+<!-- /home/shared/hisat2-2.2.1/hisat2_extract_splice_sites.py \ -->
+<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
+<!-- > ../output/05.32-lncRNA-discovery/m_splice_sites.tab -->
 
-```
-
-
-```{r, engine='bash', eval=TRUE}
-head ../output/05.32-lncRNA-discovery/m_splice_sites.tab
-```
+<!-- ``` -->
 
 
-NO GTF 
+<!-- ```{r, engine='bash', eval=TRUE} -->
+<!-- head ../output/05.32-lncRNA-discovery/m_splice_sites.tab -->
+<!-- ``` -->
+
+
+<!-- NO GTF  -->
 
 
 
 
-```{r, engine='bash'}
-/home/shared/hisat2-2.2.1/hisat2-build \
-../data/GCF_013753865.1_Amil_v2.1_genomic.fna \
-../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \
---exon ../output/05.32-lncRNA-discovery/m_exon.tab \
---ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
--p 24 \
-../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
-2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt
-```
-
-
-RUN THIS CODE 
-
+<!-- ```{r, engine='bash'} -->
+<!-- /home/shared/hisat2-2.2.1/hisat2-build \ -->
+<!-- ../data/GCF_013753865.1_Amil_v2.1_genomic.fna \ -->
+<!-- ../output/05.32-lncRNA-discovery/GCF_013753865.1_Amil_v2.1.index \ -->
+<!-- --exon ../output/05.32-lncRNA-discovery/m_exon.tab \ -->
+<!-- --ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \ -->
+<!-- -p 24 \ -->
+<!-- ../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \ -->
+<!-- 2> ../output/05.32-lncRNA-discovery/hisat2-build_stats.txt -->
+<!-- ``` -->
 
 
 
@@ -121,10 +117,7 @@ RUN THIS CODE
 /home/shared/hisat2-2.2.1/hisat2-build \
 ../data/Apulcra-genome.fa \
 ../output/07-Apul-Hisat/Apulcra-genome.index \
-#--exon ../output/05.32-lncRNA-discovery/m_exon.tab \
-#--ss ../output/05.32-lncRNA-discovery/m_splice_sites.tab \
 -p 24 \
-#../data/Amil/ncbi_dataset/data/GCF_013753865.1/genomic.gtf \
 2> ../output/07-Apul-Hisat/hisat2-build_stats.txt
 ```
 
@@ -251,6 +244,16 @@ python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
 head ../output/07-Apul-Hisat/*matrix.csv
 
 ```
+
+
+
+```{bash}
+cp ../output/07-Apul-Hisat/gene_count_matrix.csv ../output/07-Apul-Hisat/Apul-gene_count_matrix.csv
+```
+
+
+
+
 
 
 

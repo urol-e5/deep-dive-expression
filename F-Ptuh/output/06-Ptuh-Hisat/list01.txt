@@ -1,0 +1,5 @@
+RNA-POC-47 ../output/06-Ptuh-Hisat/RNA-POC-47.gtf
+RNA-POC-48 ../output/06-Ptuh-Hisat/RNA-POC-48.gtf
+RNA-POC-50 ../output/06-Ptuh-Hisat/RNA-POC-50.gtf
+RNA-POC-53 ../output/06-Ptuh-Hisat/RNA-POC-53.gtf
+RNA-POC-57 ../output/06-Ptuh-Hisat/RNA-POC-57.gtf

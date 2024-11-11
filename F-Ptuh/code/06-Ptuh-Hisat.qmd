@@ -1,0 +1,359 @@
+---
+title: "07- Ptuh HiSat2"
+author: Steven Roberts
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+output: 
+  html_document:
+    theme: readable
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+
+
+# Run HiSat on RNA-seq
+
+Will end up with 5 sorted bam files, without building index with splice site.
+
+## Grab Trimmed RNA-seq Reads
+
+```{r, engine='bash'}
+cd ../data/fastq/
+echo "*.fq" >> .gitignore
+```
+
+```{r, engine='bash'}
+wget -r \
+--no-directories --no-parent \
+-P ../data/fastq/ \
+-A "*fastq.gz" https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/
+
+```
+
+
+
+
+## Genome
+
+```{r, engine='bash'}
+cd ../data
+
+wget https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta 2> error_log.txt
+```
+
+
+```{r, engine='bash'}
+head ../data/Pocillopora_meandrina_HIv1.assembly.fasta
+```
+
+
+
+
+
+## HiSat
+
+```{r, engine='bash'}
+/home/shared/hisat2-2.2.1/hisat2-build \
+../data/Pocillopora_meandrina_HIv1.assembly.fasta \
+../output/06-Ptuh-Hisat/Ptuh-genome.index \
+-p 24 &> ../output/06-Ptuh-Hisat/hisat2_build.log
+```
+
+```{r, engine='bash'}
+cd ../output/06-Ptuh-Hisat/
+echo "*sam" >> .gitignore
+```
+
+
+```{r, engine='bash'}
+find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
+| xargs -I{} basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz {} \
+| xargs -I{} sh -c '/home/shared/hisat2-2.2.1/hisat2 \
+-x ../output/06-Ptuh-Hisat/Ptuh-genome.index \
+-p 38 \
+-1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
+-2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
+-S ../output/06-Ptuh-Hisat/{}.sam \
+> ../output/06-Ptuh-Hisat/{}_hisat.stdout 2> ../output/06-Ptuh-Hisat/{}_hisat.stderr'
+```
+
+
+## convert to bams
+
+```{r, engine='bash'}
+for samfile in ../output/06-Ptuh-Hisat/*.sam; do
+  bamfile="${samfile%.sam}.bam"
+  sorted_bamfile="${samfile%.sam}.sorted.bam"
+  
+  # Convert SAM to BAM
+  /home/shared/samtools-1.12/samtools view -bS -@ 40 "$samfile" > "$bamfile"
+  
+  # Sort BAM
+  /home/shared/samtools-1.12/samtools sort -@ 40 "$bamfile" -o "$sorted_bamfile"
+  
+  # Index sorted BAM
+  /home/shared/samtools-1.12/samtools index -@ 40 "$sorted_bamfile"
+done
+```
+
+
+## remove sams
+
+```{r, engine='bash'}
+rm ../output/06-Ptuh-Hisat/*sam
+```
+
+
+# StringTie
+StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
+
+Getting gff
+
+```{r, engine='bash'}
+
+cd ../data
+wget https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.genes.gff3
+```
+
+
+```{r, engine='bash'}
+
+head ../data/Pocillopora_meandrina_HIv1.genes.gff3
+
+```
+
+```{r, engine='bash'}
+find ../output/06-Ptuh-Hisat/*sorted.bam \
+| xargs basename -s .sorted.bam | xargs -I{} \
+/home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
+-p 32 \
+-eB \
+-G ../data/Pocillopora_meandrina_HIv1.genes.gff3 \
+-o ../output/06-Ptuh-Hisat/{}.gtf \
+../output/06-Ptuh-Hisat/{}.sorted.bam
+```
+
+
+```{r, engine='bash', eval=TRUE}
+wc -l ../output/06-Ptuh-Hisat/RNA*.gtf
+ls ../output/06-Ptuh-Hisat/RNA*.gtf
+#head ../output/06-Ptuh-Hisat/RNA*.gtf
+```
+
+
+
+# Count Matrix
+
+
+
+```{bash}
+for file in $(ls ../output/06-Ptuh-Hisat/*.gtf); do
+  sample=$(basename "$file" .gtf)  # Extract sample name from filename
+  echo "$sample $file"
+done > ../output/06-Ptuh-Hisat/list01.txt
+```
+
+
+
+
+```{r, engine='bash'}
+head ../output/06-Ptuh-Hisat/list01.txt
+```
+
+
+
+```{r, engine='bash'}
+python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
+-i ../output/06-Ptuh-Hisat/list01.txt \
+-g ../output/06-Ptuh-Hisat/gene_count_matrix.csv \
+-t ../output/06-Ptuh-Hisat/transcript_count_matrix.csv
+
+head ../output/06-Ptuh-Hisat/*matrix.csv
+
+```
+
+
+
+```{bash}
+cp ../output/06-Ptuh-Hisat/gene_count_matrix.csv ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
+```h
+
+```{bash}
+head ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
+```
+
+
+
+
+```{r}
+library(tidyverse)
+
+# Load the data
+file_path <- "../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv"
+df <- read_csv(file_path)
+
+# Convert all columns to character to avoid type mismatch
+df <- df %>% mutate(across(everything(), as.character))
+
+# Transpose the data frame
+transposed_df <- df %>%
+  pivot_longer(cols = everything(), names_to = "original_column", values_to = "value") %>%
+  mutate(row = row_number()) %>%
+  pivot_wider(names_from = row, values_from = value)
+
+# Save the transposed data frame
+output_path <- "../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix_transposed.csv"
+write_csv(transposed_df, output_path)
+
+print(paste("Transposed CSV saved to", output_path))
+```
+
+```{bash}
+head ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix_transposed.csv
+```
+
+
+
+
+
+
+# Getting FASTA for anno
+
+
+$ bedtools getfasta [OPTIONS] -fi <input FASTA> -bed <BED/GFF/VCF>
+
+
+
+grep -w "mRNA" annotation.gff > mRNA_only.gff
+```{r, engine='bash'}
+grep -w "mRNA" ../data/Apulcra-genome.gff > ../data/Apulcra-genome-mRNA_only.gff
+```
+
+awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
+
+```{r, engine='bash'}
+awk '{if ($0 !~ /^#/ && $3 != "") {feature[$3]++}} END {for (f in feature) print f, feature[f]}' ../data/Apulcra-genome.gff
+```
+
+
+
+```{r, engine='bash'}
+/home/shared/bedtools2/bin/fastaFromBed \
+-fi ../data/Apulcra-genome.fa \
+-bed ../data/Apulcra-genome-mRNA_only.gff \
+-fo ../output/06-Ptuh-Hisat/genes.fasta \
+-name -split
+```
+
+
+```{r, engine='bash'}
+head ../output/06-Ptuh-Hisat/genes.fasta 
+grep -c ">" ../output/06-Ptuh-Hisat/genes.fasta
+```
+
+
+# SP Download
+```{r, engine='bash'}
+
+cd ../data/blast_dbs
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2024_05.fasta.gz
+gunzip -k uniprot_sprot_r2024_05.fasta.gz
+
+head ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta
+echo "Number of Sequences"
+grep -c ">" ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../../data/blast_dbs/uniprot_sprot_r2024_05.fasta \
+-dbtype prot \
+-out ../../data/blast_dbs/uniprot_sprot_r2024_05
+```
+
+
+# Blastp
+```{r, engine='bash'}
+
+fasta="../output/06-Ptuh-Hisat/genes.fasta"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query $fasta \
+-db ../data/blast_dbs/uniprot_sprot_r2024_05 \
+-out ../output/06-Ptuh-Hisat/blastx_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/06-Ptuh-Hisat/blastx_out.tab
+
+tr '|' '\t' < ../output/06-Ptuh-Hisat/blastx_out.tab \
+> ../output/06-Ptuh-Hisat/blastx_out_sep.tab
+
+head -1 ../output/06-Ptuh-Hisat/blastx_out_sep.tab
+```
+
+
+
+# Download GO info
+
+
+```{bash}
+cd ../output/06-Ptuh-Hisat
+
+curl -H "Accept: text/plain; format=tsv" "https://rest.uniprot.org/uniprotkb/stream?fields=accession%2Creviewed%2Cid%2Cprotein_name%2Cgene_names%2Corganism_name%2Clength%2Cgo_p%2Cgo_c%2Cgo%2Cgo_f%2Cgo_id&format=tsv&query=%28*%29+AND+%28reviewed%3Atrue%29" -o SwissProt-Annot-GO.tsv
+
+wc -l ../output/06-Ptuh-Hisat/SwissProt-Annot-GO.tsv 
+```
+
+
+
+Join blast with GO info
+
+
+```{r}
+bltabl <- read.csv("../output/06-Ptuh-Hisat/blastx_out_sep.tab", sep = '\t', header = FALSE)
+
+spgo <- read.csv("../output/06-Ptuh-Hisat/SwissProt-Annot-GO.tsv", sep = '\t', header = TRUE)
+
+annot_tab <- left_join(bltabl, spgo, by = c("V3" = "Entry")) %>%
+  select(
+    query = V1,
+    blast_hit = V3,
+    evalue = V13,
+    ProteinNames = Protein.names,
+    BiologicalProcess = Gene.Ontology..biological.process.,
+    GeneOntologyIDs = Gene.Ontology.IDs
+  )
+
+head(annot_tab)
+
+write.table(annot_tab, 
+            file = "../output/06-Ptuh-Hisat/Apul-gene-annot-GO.tsv", 
+            sep = "\t", 
+            row.names = FALSE, 
+            quote = FALSE)
+
+system("head ../output/06-Ptuh-Hisat/Apul-gene-annot-GO.tsv")
+
+```

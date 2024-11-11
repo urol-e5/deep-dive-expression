@@ -1,0 +1,78 @@
+Settings:
+  Output files: "../output/07-Apul-Hisat/Apulcra-genome.index.*.ht2"
+  Line rate: 6 (line is 64 bytes)
+  Lines per side: 1 (side is 64 bytes)
+  Offset rate: 4 (one in 16)
+  FTable chars: 10
+  Strings: unpacked
+  Local offset rate: 3 (one in 8)
+  Local fTable chars: 6
+  Local sequence length: 57344
+  Local sequence overlap between two consecutive indexes: 1024
+  Endianness: little
+  Actual local endianness: little
+  Sanity checking: disabled
+  Assertions: disabled
+  Random seed: 0
+  Sizeofs: void*:8, int:4, long:8, size_t:8
+Input files DNA, FASTA:
+  ../data/Apulcra-genome.fa
+Reading reference sizes
+  Time reading reference sizes: 00:00:02
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+  Time to join reference sequences: 00:00:03
+  Time to read SNPs and splice sites: 00:00:00
+Using parameters --bmax 4049328 --dcv 1024
+  Doing ahead-of-time memory usage test
+  Passed!  Constructing with these parameters: --bmax 4049328 --dcv 1024
+Constructing suffix-array element generator
+Converting suffix-array elements to index image
+Allocating ftab, absorbFtab
+Entering GFM loop
+Exited GFM loop
+fchr[A]: 0
+fchr[C]: 158272347
+fchr[G]: 259695089
+fchr[T]: 360682080
+fchr[$]: 518313916
+Exiting GFM::buildToDisk()
+Returning from initFromVector
+Wrote 176970479 bytes to primary GFM file: ../output/07-Apul-Hisat/Apulcra-genome.index.1.ht2
+Wrote 129578484 bytes to secondary GFM file: ../output/07-Apul-Hisat/Apulcra-genome.index.2.ht2
+Re-opening _in1 and _in2 as input streams
+Returning from GFM constructor
+Returning from initFromVector
+Wrote 228100381 bytes to primary GFM file: ../output/07-Apul-Hisat/Apulcra-genome.index.5.ht2
+Wrote 131929574 bytes to secondary GFM file: ../output/07-Apul-Hisat/Apulcra-genome.index.6.ht2
+Re-opening _in5 and _in5 as input streams
+Returning from HGFM constructor
+Headers:
+    len: 518313916
+    gbwtLen: 518313917
+    nodes: 518313917
+    sz: 129578479
+    gbwtSz: 129578480
+    lineRate: 6
+    offRate: 4
+    offMask: 0xfffffff0
+    ftabChars: 10
+    eftabLen: 0
+    eftabSz: 0
+    ftabLen: 1048577
+    ftabSz: 4194308
+    offsLen: 32394620
+    offsSz: 129578480
+    lineSz: 64
+    sideSz: 64
+    sideGbwtSz: 48
+    sideGbwtLen: 192
+    numSides: 2699552
+    numLines: 2699552
+    gbwtTotLen: 172771328
+    gbwtTotSz: 172771328
+    reverse: 0
+    linearFM: Yes
+Total time for call to driver() for forward index: 00:02:59
