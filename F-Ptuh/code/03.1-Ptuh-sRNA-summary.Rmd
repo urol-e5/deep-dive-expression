@@ -44,6 +44,7 @@ library(ggplot2)
 library(reshape2)
 library(pheatmap)
 library(RColorBrewer)
+library(DESeq2)
 ```
 
 
@@ -51,11 +52,11 @@ library(RColorBrewer)
 
 ## Load count data
 
-Load in the sRNA count matrix generated using ShortStack. Keep in mind this data includes counts of all sRNAs, not just miRNAs. Also note, while we have 5 samples from which RNA was sequenced, only 3 of those were sequenced for sRNA in P. evermanni.
+Load in the sRNA count matrix generated using ShortStack 4.1.0. Keep in mind this data includes counts of all sRNAs, not just miRNAs. 
 
 ```{r load-sRNA-counts}
 # Read in sRNA counts data
-Ptuh_counts_sRNA_data_OG <- read_delim("../../../deep-dive/F-Pmea/output/13.2.1-Pmea-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase/ShortStack_out/Counts.txt", delim="\t") 
+Ptuh_counts_sRNA_data_OG <- read_delim("../output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Counts.txt", delim="\t") 
 head(Ptuh_counts_sRNA_data_OG)
 ```
 
@@ -65,16 +66,18 @@ head(Ptuh_counts_sRNA_data_OG)
 Ptuh_counts_sRNA <- Ptuh_counts_sRNA_data_OG
 
 # Remove excess portions of sample column names to just "sample###"
-colnames(Ptuh_counts_sRNA) <- sub("-S1-TP2-fastp-adapters-polyG-31bp-merged", "", colnames(Ptuh_counts_sRNA))
+colnames(Ptuh_counts_sRNA) <- sub("-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed", "", colnames(Ptuh_counts_sRNA))
 colnames(Ptuh_counts_sRNA) <- sub("sRNA-POC-", "sample", colnames(Ptuh_counts_sRNA))
 
 # Keep just the counts and cluster names
-Ptuh_counts_sRNA <- Ptuh_counts_sRNA %>% select("sample47", "sample48", "sample50", "sample53", "sample57","Name")
+Ptuh_counts_sRNA <- Ptuh_counts_sRNA %>% select("sample47", "sample48", "sample50", "sample53", "sample57", "Name")
 
 # I'm not going to be doing any removal of low-count sRNAs for now
 
 # Make the cluster names our new row names
 Ptuh_counts_sRNA <- Ptuh_counts_sRNA %>% column_to_rownames(var = "Name")
+
+write.table(Ptuh_counts_sRNA, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_sRNA_ShortStack_counts_formatted.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 head(Ptuh_counts_sRNA)
 ```
@@ -113,6 +116,7 @@ total_transcripts_df <- data.frame(sample = names(total_transcripts),
 # Plot the total number of transcripts for each sample
 ggplot(total_transcripts_df, aes(x = sample, y = totals)) +
   geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) + 
   labs(title = "Total Number of Transcripts per Sample",
        x = "Sample",
        y = "Total Transcripts") +
@@ -133,6 +137,7 @@ unique_transcripts_df <- data.frame(sample = names(unique_transcripts),
 # Plot the total number of unique transcripts for each sample
 ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
   geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = uniques), vjust = -0.3, size = 3.5) + 
   labs(title = "Total Number of Unique Expressed Transcripts per Sample",
        x = "Sample",
        y = "Unique Transcripts") +
@@ -148,26 +153,47 @@ ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
 The ShortStack output Results.txt includes all clusters of sRNA reads, including those not annotated as valid miRNAs. Now that we've looked at all the sRNAs a bit, let's focus in on those classified as miRNAs.
 
 ```{r miRNA-count-data-munging}
+## This code needs miRNA names first ##
+# # Join with full metadata sheet, which only contains valid miRNAs
+# Ptuh_metadata_miRNA <- read_csv("../../../deep-dive/DEF-cross-species/output/10-shortRNA-ShortStack-comparison/Ptuh_results_mature_named.csv") 
+# 
+# Ptuh_counts_sRNA <- rownames_to_column(Ptuh_counts_sRNA, var = "Name")
+# 
+# Ptuh_counts_miRNA <- left_join(Ptuh_metadata_miRNA, Ptuh_counts_sRNA, by = c("Name" = "Name"))
+# 
+# # Keep just the counts and given miRNA names (e.g., based on match to previously described miRNA)
+# Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% select("sample47", "sample48", "sample50", "sample53", "sample57", "given_miRNA_name")
+# 
+# # Make the miRNA names our new row names
+# Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% column_to_rownames(var = "given_miRNA_name")
+# 
+# head(Ptuh_counts_miRNA)
 
-# Join with full metadata sheet, which only contains valid miRNAs
-Ptuh_metadata_miRNA <- read_csv("../../../deep-dive/DEF-cross-species/output/10-shortRNA-ShortStack-comparison/Ptuh_results_mature_named.csv") 
+## This code can be used until we have miRNA names ##
+Ptuh_counts_miRNA <- Ptuh_counts_sRNA_data_OG
 
-Ptuh_counts_sRNA <- rownames_to_column(Ptuh_counts_sRNA, var = "Name")
+# Remove excess portions of sample column names to just "sample###"
+colnames(Ptuh_counts_miRNA) <- sub("-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed", "", colnames(Ptuh_counts_miRNA))
+colnames(Ptuh_counts_miRNA) <- sub("sRNA-POC-", "sample", colnames(Ptuh_counts_miRNA))
 
-Ptuh_counts_miRNA <- left_join(Ptuh_metadata_miRNA, Ptuh_counts_sRNA, by = c("Name" = "Name"))
+# Keep only the sRNAs ID'd as valid miRNAs
+Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% filter(MIRNA == "Y")
 
-# Keep just the counts and given miRNA names (e.g., based on match to previously described miRNA)
-Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% select("sample47", "sample48", "sample50", "sample53", "sample57","given_miRNA_name")
+# Keep just the counts and cluster names
+Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% select("sample47", "sample48", "sample50", "sample53", "sample57", "Name")
 
-# Make the miRNA names our new row names
-Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% column_to_rownames(var = "given_miRNA_name")
+# Make the cluster names our new row names
+Ptuh_counts_miRNA <- Ptuh_counts_miRNA %>% column_to_rownames(var = "Name")
+
+write.table(Ptuh_counts_miRNA, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_miRNA_ShortStack_counts_formatted.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 head(Ptuh_counts_miRNA)
+
 ```
 
 ## Expression levels
 
-Plot histograms of the miRNA expression levels in each sample
+Plot histograms of the expression levels in each sample
 
 ```{r miRNA-expression-level-histograms}
 # Melt the count matrix into long format
@@ -198,14 +224,13 @@ total_miRNA_df <- data.frame(sample = names(total_miRNA),
 # Plot the total number of transcripts for each sample
 ggplot(total_miRNA_df, aes(x = sample, y = totals)) +
   geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) + 
   labs(title = "Total Number of miRNAs per Sample",
        x = "Sample",
        y = "Total miRNAs") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
 ```
-Huh, it's interesting that samples 47, 48, and 50 had lower total sRNA transcript counts but higher total miRNA counts.
-
 
 Now let's check the number of unique miRNAs in each sample -- This should be pretty much the same across samples, even without normalization.
 
@@ -220,6 +245,7 @@ unique_miRNA_df <- data.frame(sample = names(unique_miRNA),
 # Plot the total number of unique transcripts for each sample
 ggplot(unique_miRNA_df, aes(x = sample, y = uniques)) +
   geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = uniques), vjust = -0.3, size = 3.5) + 
   labs(title = "Total Number of Unique Expressed miRNAs per Sample",
        x = "Sample",
        y = "Unique miRNA") +
@@ -230,14 +256,12 @@ ggplot(unique_miRNA_df, aes(x = sample, y = uniques)) +
 ## Heatmap
 
 ```{r miRNA-heatmap}
-heat_colors <- rev(brewer.pal(12, "RdYlBu"))
-
 pheatmap(Ptuh_counts_miRNA,
          cluster_rows = TRUE,
          cluster_cols = TRUE,
          show_rownames = TRUE,
          show_colnames = TRUE,
-         color = heat_colors,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
          fontsize_row = 8,
          fontsize_col = 8)
 ```
@@ -250,7 +274,520 @@ pheatmap(Ptuh_counts_miRNA,
          show_rownames = TRUE,
          show_colnames = TRUE,
          scale = 'row',
-         color = heat_colors,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
          fontsize_row = 8,
          fontsize_col = 8)
 ```
+
+# siRNA
+
+ShortStack's primary purpose is to identify miRNAs from sRNA-seq data, but it also automatically annotates siRNA loci! Since siRNA potentially play an important role in transposon silencing in invertebrates, we should generate count matrices for siRNAs as well. 
+
+We can see clusters annotated as siRNAs in the `Results.gff3` output file of ShortStack (sRNA ID shown in the 3rd column)
+
+```{r siRNA-count-data-munging}
+Ptuh_Resultsgff <- read.table("../output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Results.gff3")
+# Separate last column info into multiple columns for filtering
+Ptuh_Resultsgff <- Ptuh_Resultsgff %>%
+  separate(V9, into = c("Name", "DicerCall", "MIRNA"), sep = ";") %>%
+  mutate(Name = sub("ID=", "", Name),
+         DicerCall = sub("DicerCall=", "", DicerCall),
+         MIRNA = sub("MIRNA=", "", MIRNA))
+head(Ptuh_Resultsgff)
+
+# keep just the sRNA category column (V3), and the cluster names (Name)
+# filter to only keep clusters ID'd as siRNAs
+Ptuh_siRNA_clusters <- Ptuh_Resultsgff %>%
+  select(V3, Name) %>%
+  filter(str_detect(V3, regex("siRNA")))
+head(Ptuh_siRNA_clusters)
+
+# Now use this list of clusters ID'd as siRNAs to filter our sRNA count matrix
+# keep only the sample counts and cluster names
+Ptuh_counts_sRNA <- rownames_to_column(Ptuh_counts_sRNA, var = "Name")
+Ptuh_counts_siRNA <- left_join(Ptuh_siRNA_clusters, Ptuh_counts_sRNA, by = c("Name" = "Name")) %>%
+  select(-V3)
+
+# convert the column of cluster names into the df row names
+Ptuh_counts_sRNA <- Ptuh_counts_sRNA %>% column_to_rownames(var="Name")
+Ptuh_counts_siRNA <- Ptuh_counts_siRNA %>% column_to_rownames(var="Name")
+
+head(Ptuh_counts_siRNA)
+
+write.table(Ptuh_counts_siRNA, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_siRNA_ShortStack_counts_formatted.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+```
+
+## Expression levels
+
+Plot histograms of the expression levels in each sample
+
+```{r siRNA-expression-level-histograms}
+# Melt the count matrix into long format
+Ptuh_counts_siRNA_melted <- melt(Ptuh_counts_siRNA, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Ptuh_counts_siRNA_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#7A2048", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "siRNA Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## siRNA counts
+
+First let's check the total number of siRNAs in each sample -- keep in mind this expression data has *not* been normalized yet, so there may be different totals for each sample
+```{r siRNA-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_siRNA <- colSums(Ptuh_counts_siRNA)
+
+# Create a data frame for plotting
+total_siRNA_df <- data.frame(sample = names(total_siRNA),
+                                   totals = total_siRNA)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_siRNA_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) + 
+  labs(title = "Total Number of siRNAs per Sample",
+       x = "Sample",
+       y = "Total siRNAs") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+Now let's check the number of unique siRNAs in each sample -- This should be pretty much the same across samples, even without normalization.
+
+```{r total-unique-siRNA-plot}
+# Calculate the number of unique transcripts (non-zero counts) for each sample
+unique_siRNA <- colSums(Ptuh_counts_siRNA > 0)
+
+# Create a data frame for plotting
+unique_siRNA_df <- data.frame(sample = names(unique_siRNA),
+                                    uniques = unique_siRNA)
+
+# Plot the total number of unique transcripts for each sample
+ggplot(unique_siRNA_df, aes(x = sample, y = uniques)) +
+  geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = uniques), vjust = -0.3, size = 3.5) + 
+  labs(title = "Total Number of Unique Expressed siRNAs per Sample",
+       x = "Sample",
+       y = "Unique siRNA") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Heatmap
+
+```{r siRNA-heatmap}
+pheatmap(Ptuh_counts_siRNA,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         fontsize_row = 8,
+         fontsize_col = 8)
+```
+
+```{r siRNA-heatmap-rowscale}
+pheatmap(Ptuh_counts_siRNA,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         scale = 'row',
+         color = colorRampPalette(c("blue", "white", "red"))(50),
+         fontsize_row = 8,
+         fontsize_col = 8)
+```
+
+
+# ...........
+
+# Normalized sRNA counts
+
+## Normalize counts with DESeq2
+
+### Plot unnormalized sRNA data
+
+```{r plot-unnormalized-sRNA}
+
+Ptuh_counts_sRNA %>% 
+#  select(-Name) %>%
+  pivot_longer( cols = everything(), names_to = "sample", values_to = "count") %>%
+  ggplot(., aes(x = sample, y = count)) +
+  geom_violin() + 
+  geom_point(alpha = 0.2) +
+  theme_minimal() +
+  labs(title = "Unnormalized sRNA counts",
+       x = "Sample",
+       y = "count")
+```
+
+### Metadata
+
+DESeq2 requires a metadata data frame as input. I don't have sample metadata though so, since we're just doing DESeq2 for normalization purposes (not analysis purposes), I'm just going to create a dummy sheet
+
+```{r make-sRNA-metadata-dataframe}
+Ptuh_sample_names <- Ptuh_counts_sRNA %>%
+#  select(-Name) %>%
+  colnames()
+
+Ptuh_metadata_sRNA <- data.frame(Sample = Ptuh_sample_names,
+                            Species = rep("P.tuahiniensis", 5))
+rownames(Ptuh_metadata_sRNA) <- Ptuh_sample_names
+
+head(Ptuh_metadata_sRNA)
+```
+
+### DESeq object
+
+```{r make-sRNA-deseq-object, cache=TRUE}
+# Calculate DESeq object
+Ptuh_counts_sRNA_rowNames <- Ptuh_counts_sRNA 
+#%>% column_to_rownames(var = "Name")
+
+dds_Ptuh_sRNA <- DESeqDataSetFromMatrix(countData = Ptuh_counts_sRNA_rowNames,
+                              colData = Ptuh_metadata_sRNA,
+                              design = ~ 1) 
+
+# Run differential expression analysis 
+# (Note that this DESeq() function runs all necessary steps, including data normalization, 
+# estimating size factors, estimating dispersions, gene-wise dispersion estimates, mean-dispersion 
+# relationship, final dispersion estimates, fitting model, and testing)
+# Using design = ~1 because we don't have treatment groups
+
+dds_Ptuh_sRNA <- DESeq(dds_Ptuh_sRNA)
+```
+
+It's worth noting here that I'm actually going to be doing two different types of transformation on the counts data, which serve different purposes. 
+
+- First is **normalizing** the transcript counts, which adjusts for differences in library size or sequencing depth, but retains count-like properties. Normalized counts are most useful for things like visualizing expression levels and differential expression analysis.
+
+- Second is **variance stabilizing** the counts data, which aims to make the variance of the transformed data approximately independent of the mean, reducing heteroscedasticity (the relationship between variance and mean) and "smoothing" out the variance at low counts. Notably, the transformed data is *no longer on the original count scale*. The transformation makes the variance roughly constant across the range of counts, which makes it easier to interpret patterns in the data visually. Variance stabilized data is most useful for exploratory data analysis, like PCA, clustering, and heatmaps, and is also the transformation we'll want to use before WGCNA.
+
+```{r get-normalized-sRNA-counts, cache=TRUE}
+# extract normalized counts
+# (normalization is automatically performed by deseq2)
+Ptuh_counts_sRNA_norm <- counts(dds_Ptuh_sRNA, normalized=TRUE) %>% data.frame()
+
+write.table(Ptuh_counts_sRNA_norm, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_normalized.txt", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+
+# variance stabilized data
+vsd_Ptuh_sRNA <- varianceStabilizingTransformation(dds_Ptuh_sRNA, blind=TRUE)
+wpn_vsd_Ptuh_sRNA <- getVarianceStabilizedData(dds_Ptuh_sRNA)
+rv_wpn_Ptuh_sRNA <- rowVars(wpn_vsd_Ptuh_sRNA, useNames=TRUE)
+
+Ptuh_counts_sRNA_vsd <- data.frame(wpn_vsd_Ptuh_sRNA)
+write.table(Ptuh_counts_sRNA_vsd, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_variancestabilized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+q75_wpn_Ptuh_sRNA <- quantile(rowVars(wpn_vsd_Ptuh_sRNA, useNames=TRUE), .75)  # 75th quantile variability
+Ptuh_counts_sRNA_vsd_q75 <- wpn_vsd_Ptuh_sRNA[ rv_wpn_Ptuh_sRNA > q75_wpn_Ptuh_sRNA, ] %>% data.frame # filter to retain only the most variable genes
+write.table(Ptuh_counts_sRNA_vsd_q75, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_variancestabilized_q75.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+q95_wpn_Ptuh_sRNA <- quantile(rowVars(wpn_vsd_Ptuh_sRNA, useNames=TRUE), .95)  # 95th quantile variability
+Ptuh_counts_sRNA_vsd_q95 <- wpn_vsd_Ptuh_sRNA[ rv_wpn_Ptuh_sRNA > q95_wpn_Ptuh_sRNA, ] %>% data.frame # filter to retain only the most variable genes
+write.table(Ptuh_counts_sRNA_vsd_q95, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_variancestabilized_q95.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+```
+
+## Plot normalized data
+
+```{r plot-normalized-sRNA}
+Ptuh_counts_sRNA_norm_long <- Ptuh_counts_sRNA_norm %>%
+  mutate(
+    Gene_id = row.names(Ptuh_counts_sRNA_norm)
+  ) %>%
+  pivot_longer(-Gene_id)
+
+Ptuh_counts_sRNA_norm_long %>%
+  ggplot(., aes(x = name, y = value)) +
+  geom_violin() +
+  geom_point() +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text( angle = 90)
+  ) +
+  ylim(0, NA) +
+  labs(
+    title = "Normalized Expression",
+    x = "Sample",
+    y = "Normalized counts"
+  )
+```
+
+
+## Plot variance stabilized data
+
+```{r plot-vsd-sRNA}
+Ptuh_counts_sRNA_vsd_long <- Ptuh_counts_sRNA_vsd %>%
+  mutate(
+    Gene_id = row.names(Ptuh_counts_sRNA_vsd)
+  ) %>%
+  pivot_longer(-Gene_id)
+
+Ptuh_counts_sRNA_vsd_long %>%
+  ggplot(., aes(x = name, y = value)) +
+  geom_violin() +
+  geom_point() +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text( angle = 90)
+  ) +
+  ylim(0, NA) +
+  labs(
+    title = "Variance Stabilized Expression",
+    x = "Sample",
+    y = "Variance stabilized data"
+  )
+```
+
+## Normalized expression levels
+
+Plot histograms of the normalized expression levels in each sample
+
+```{r norm-expression-level-histograms}
+# Melt the count matrix into long format
+Ptuh_counts_norm_melted <- melt(Ptuh_counts_sRNA_norm, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Ptuh_counts_norm_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#7A2048", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Normalized transcript counts
+
+Check the total number of transcripts in each sample -- now that we've normalized the data these totals should be similar
+```{r norm-transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts_norm <- colSums(Ptuh_counts_sRNA_norm)
+
+# Create a data frame for plotting
+total_transcripts_norm_df <- data.frame(sample = names(total_transcripts_norm),
+                                   totals = total_transcripts_norm)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) +
+  labs(title = "Total Number of Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## PCA of variance stabilized data
+
+```{r PCA}
+plotPCA(vsd_Ptuh_sRNA, intgroup="Sample")
+```
+
+## Sample clustering
+
+```{r sample-clustering}
+sample_dists <- dist(t(assay(vsd_Ptuh_sRNA)))
+pheatmap(as.matrix(sample_dists), clustering_distance_rows = "euclidean", 
+         clustering_distance_cols = "euclidean", main="Sample Clustering")
+```
+
+## Heatmaps
+
+Of most variable variance stabilized sRNA transcripts
+
+```{r heatmpas}
+# 75th quantile
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+pheatmap(Ptuh_counts_sRNA_vsd_q75, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+
+# 95th quantile
+pheatmap(Ptuh_counts_sRNA_vsd_q95, 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+```
+
+# Normalized miRNA counts
+
+## Isolate normalized/vsd miRNA
+```{r miRNA-normalized-miRNA}
+## Also written to use given miRNA names ##
+# Ptuh_counts_sRNA_norm$Name <- rownames(Ptuh_counts_sRNA_norm)
+# Ptuh_counts_miRNA_norm <- left_join(Ptuh_metadata_miRNA, Ptuh_counts_sRNA_norm, by = c("Name" = "Name")) %>%
+#   column_to_rownames(var="given_miRNA_name") %>%
+#   select(starts_with("sample"))
+# write.table(Ptuh_counts_miRNA_norm, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+# 
+# Ptuh_counts_sRNA_vsd$Name <- rownames(Ptuh_counts_sRNA_vsd)
+# Ptuh_counts_miRNA_vsd <- left_join(Ptuh_metadata_miRNA, Ptuh_counts_sRNA_vsd, by = c("Name" = "Name")) %>%
+#   column_to_rownames(var="given_miRNA_name") %>%
+#   select(starts_with("sample"))
+# write.table(Ptuh_counts_miRNA_vsd, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_variancestabilized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+## Use below until you have miRNA names ##
+Ptuh_counts_sRNA_norm$Name <- rownames(Ptuh_counts_sRNA_norm)
+Ptuh_counts_sRNA_vsd$Name <- rownames(Ptuh_counts_sRNA_vsd)
+
+Ptuh_counts_miRNA_namesdf <- data.frame(Name = rownames(Ptuh_counts_miRNA)) 
+
+Ptuh_counts_miRNA_norm <- left_join(Ptuh_counts_miRNA_namesdf, Ptuh_counts_sRNA_norm, by = c("Name" = "Name")) %>%
+  column_to_rownames(var = "Name")
+write.table(Ptuh_counts_miRNA_norm, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+Ptuh_counts_miRNA_vsd <- left_join(Ptuh_counts_miRNA_namesdf, Ptuh_counts_sRNA_vsd, by = c("Name" = "Name")) %>%
+  column_to_rownames(var = "Name")
+write.table(Ptuh_counts_miRNA_vsd, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_variancestabilized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+```
+
+## Normalized expression levels
+
+Plot histograms of the normalized expression levels in each sample
+
+```{r miRNA-norm-expression-level-histograms}
+# Melt the count matrix into long format
+Ptuh_counts_miRNA_norm_melted <- melt(Ptuh_counts_miRNA_norm, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Ptuh_counts_miRNA_norm_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#7A2048", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Normalized transcript counts
+
+Check the total number of transcripts in each sample -- now that we've normalized the data these totals should be similar
+```{r miRNA-norm-transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts_miRNA_norm <- colSums(Ptuh_counts_miRNA_norm)
+
+# Create a data frame for plotting
+total_transcripts_miRNA_norm_df <- data.frame(sample = names(total_transcripts_miRNA_norm),
+                                   totals = total_transcripts_miRNA_norm)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_miRNA_norm_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) +
+  labs(title = "Total Number of miRNA Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Heatmap
+
+Of all miRNAs
+
+```{r miRNA-heatmaps-vsd}
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+pheatmap(as.matrix(Ptuh_counts_miRNA_vsd[apply(Ptuh_counts_miRNA_vsd, 1, var) > 0, ]), 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+
+```
+
+
+# Normalized siRNA counts
+
+## Isolate normalized/vsd siRNA
+```{r siRNA-normalized-siRNA}
+
+Ptuh_counts_sRNA_norm$Name <- rownames(Ptuh_counts_sRNA_norm)
+Ptuh_counts_sRNA_vsd$Name <- rownames(Ptuh_counts_sRNA_vsd)
+
+Ptuh_counts_siRNA_namesdf <- data.frame(Name = rownames(Ptuh_counts_siRNA)) 
+
+Ptuh_counts_siRNA_norm <- left_join(Ptuh_counts_siRNA_namesdf, Ptuh_counts_sRNA_norm, by = c("Name" = "Name")) %>%
+  column_to_rownames(var = "Name")
+write.table(Ptuh_counts_siRNA_norm, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_siRNA_normalized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+
+Ptuh_counts_siRNA_vsd <- left_join(Ptuh_counts_siRNA_namesdf, Ptuh_counts_sRNA_vsd, by = c("Name" = "Name")) %>%
+  column_to_rownames(var = "Name")
+write.table(Ptuh_counts_siRNA_vsd, file = "../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_siRNA_variancestabilized.txt", sep = "\t", row.names = TRUE, col.names = TRUE,quote = FALSE)
+```
+
+## Normalized expression levels
+
+Plot histograms of the normalized expression levels in each sample
+
+```{r siRNA-norm-expression-level-histograms}
+# Melt the count matrix into long format
+Ptuh_counts_siRNA_norm_melted <- melt(Ptuh_counts_siRNA_norm, variable.name = "sample", value.name = "counts")
+
+# Plot the expression level histograms for each sample
+ggplot(Ptuh_counts_siRNA_norm_melted, aes(x = counts)) +
+  geom_histogram(binwidth = 1, fill = "#7A2048", color = "black") +
+  scale_x_log10() +  # Optional: Log-transform the x-axis for better visualization
+  facet_wrap(~sample, scales = "free_y") +
+  labs(title = "Gene Expression Level Histogram for Each Sample",
+       x = "Expression Level (Counts)",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+## Normalized transcript counts
+
+Check the total number of transcripts in each sample -- now that we've normalized the data these totals should be similar
+```{r siRNA-norm-transcript-counts-plot}
+# Calculate the total number of transcripts for each sample
+total_transcripts_siRNA_norm <- colSums(Ptuh_counts_siRNA_norm)
+
+# Create a data frame for plotting
+total_transcripts_siRNA_norm_df <- data.frame(sample = names(total_transcripts_siRNA_norm),
+                                   totals = total_transcripts_siRNA_norm)
+
+# Plot the total number of transcripts for each sample
+ggplot(total_transcripts_siRNA_norm_df, aes(x = sample, y = totals)) +
+  geom_bar(stat = "identity", fill = "#7A2048", color = "black") +
+  geom_text(aes(label = totals), vjust = -0.3, size = 3.5) +
+  labs(title = "Total Number of siRNA Transcripts per Sample",
+       x = "Sample",
+       y = "Total Transcripts") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Heatmap
+
+Of all siRNAs
+
+```{r siRNA-heatmaps-vsd}
+heat_colors <- rev(brewer.pal(12, "RdYlBu"))
+pheatmap(as.matrix(Ptuh_counts_siRNA_vsd[apply(Ptuh_counts_siRNA_vsd, 1, var) > 0, ]), 
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         show_rownames = TRUE,
+         show_colnames = TRUE,
+         color = heat_colors,
+         scale="row")
+
+```
+
