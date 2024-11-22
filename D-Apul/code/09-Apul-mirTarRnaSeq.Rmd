@@ -28,7 +28,128 @@ library(mirTarRnaSeq)
 library(reshape2)
 library(SPONGE)
 library(pheatmap)
+library(DESeq2)
 ```
+
+I am having trouble getting my data to work with Part 1 of mirtarrnaseq. I am going to look at their test data and format my data exactly like theirs. From the source code for Part 1: "The users can utilize TPM/RPKM or count data for this section of analysis as long as if the data is normalized (TPM/RPKM) is used for the mRNA expression files the miRNA expression files are also normalized (TPM). The format of the files for miRNA and mRNA needs to be odd the class dataframe with the sample names as colnames and mRNA names as rownames. Note, for this section of analysis we have only included all differentially expressed mRNAs for the analysis but the user can included all mRNAs. However, the user should realize if they choose to use all mRNAs expressed the analysis will take a longer time." 
+
+Load data 
+```{r}
+# Helper function to access test files in extdata
+get_test_file <- function(file_name) {
+  if (missing(file_name)) {
+    return(system.file("extdata", "test", package="mirTarRnaSeq"))
+  }
+  return(system.file("extdata", "test", file_name, package="mirTarRnaSeq"))
+}
+
+# Read EXAMPLE input files
+DiffExp<-read.table(get_test_file("EBV_mRNA.txt.gz"), as.is=TRUE, header=TRUE, row.names=1)
+head(DiffExp)
+miRNAExp<-read.table(get_test_file("EBV_miRNA.txt.gz"), as.is=TRUE, header=TRUE, row.names=1)
+head(miRNAExp)
+
+# Read in my data files 
+## mRNA
+gene_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
+gene_counts <- as.data.frame(gene_counts)
+rownames(gene_counts) <- gene_counts[,1] #set first column that contains gene names as rownames
+gene_counts <- gene_counts[,-1] # remove column w/ gene names 
+head(gene_counts)
+# Remove any genes with 0 counts across samples 
+gene_counts<-gene_counts %>%
+     mutate(Total = rowSums(.[, 1:4]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+## miRNA
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+head(miRNA_counts)
+
+# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+miRNA_counts <- miRNA_counts %>%
+  select(-sample150) %>%
+     mutate(Total = rowSums(.[, 1:4]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+# Rename gene count cols
+colnames(gene_counts) <- c("sample140.gene", "sample145.gene", "sample173.gene", "sample178.gene")
+```
+
+Get miranda files. From Part 1 source code: "for other organisms (not provided by the pacakged) the appropriate format for miRanda input file is V1 column: name of the miRNA, V2 column: name of the predicted gene, V3: column score/rank of the miranda interaction (or any other score for interaction if TargetScan ( for TargetScan prediction user can provide context++ score and threshold accordingly) is used, note these three columns are required), V4 column: folding energy of miRNA-mRNA interaction. V5 column: target Identity value and V6 column: miRNA idnetity value. (Note, all these values are available after miRanda analysis but V1-V3 must be provided not matter the prediction method)"
+```{r eval=TRUE, echo=TRUE}
+# EXAMPLE data 
+miRanda <- getInputSpecies("Epstein_Barr", threshold = 140)
+head(miRanda)
+str(miRanda)
+DiffExpmRNASub <- miRanComp(DiffExp, miRanda)
+
+# MY DATA 
+miranda_apul <- read.delim("../../D-Apul/data/17-Apul-miranda/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
+
+colnames(miranda_apul) <- c("miRNA", "gene", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
+
+# Format miranda df 
+miranda_apul$miRNA <- sub("^>", "", miranda_apul$miRNA)  # Remove leading ">"
+miranda_apul$miRNA <- sub("\\..*", "", miranda_apul$miRNA)  # Remove everything from the first period onwards
+miranda_apul$gene <- sub("::.*", "", miranda_apul$gene)  # Remove everything from "::" onwards
+
+# Select specific cols
+miranda_apul <- miranda_apul %>%
+  select(miRNA, gene, score, energy, query_similar, subject_similar)
+
+# Rename cols 
+colnames(miranda_apul) <- c("V1", "V2", "V3", "V4", "V5", "V6")
+
+# Convert V5 and V6 from character to numeric
+miranda_apul$V5 <- as.numeric(sub("%", "", miranda_apul$V5)) / 100
+miranda_apul$V6 <- as.numeric(sub("%", "", miranda_apul$V6)) / 100
+
+str(miranda_apul)
+
+DiffExpmRNASub_ja <- miRanComp(gene_counts, miranda_apul)
+```
+
+Select miRNA of interest 
+```{r}
+# EXAMPLE data 
+miRNA_select<-c("ebv-mir-BART9-5p")
+
+# MY DATA
+miRNA_select_ja<-rownames(miRNA_counts)
+```
+
+Combine the mRNA and miRNA file and define boundaries ans specify which mRNA and miRNA files in the combined file.
+```{r eval=TRUE, echo=TRUE}
+# EXAMPLE data
+str(DiffExp)
+str(miRNAExp)
+Combine <- combiner(DiffExp, miRNAExp, miRNA_select)
+geneVariant <- geneVari(Combine, miRNA_select)
+
+# MY DATA
+Combine_ja <- combiner(gene_counts, miRNA_counts, miRNA_select_ja)
+geneVariant <- geneVari(Combine_ja, miRNA_select)
+
+
+# try to run all the things 
+sub_mirna <- rownames(miRNA_counts)
+All_miRNAs_run<-runAllMirnaModels(mirnas =sub_mirna,
+DiffExpmRNA = DiffExpmRNASub_ja,
+DiffExpmiRNA = miRNA_counts,
+miranda_data = miranda_apul,prob=0.75,
+cutoff=1,fdr_cutoff = 1, method = "fdr",
+family = glm_multi(), scale = 2, mode="multi")
+```
+
+I need to look at the source code...
+
+Trying the correlation code that I used 
+
+
+
+
 
 Read in gene expression data 
 ```{r}
