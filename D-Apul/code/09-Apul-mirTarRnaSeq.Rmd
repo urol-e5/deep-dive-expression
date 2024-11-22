@@ -22,17 +22,19 @@ library(parallel)
 library(ggraph)
 library(tidygraph)
 library(igraph)
+library(genefilter)
+library(gridExtra)
 ```
 
 Read in mRNA data 
 ```{r}
-gene_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
-gene_counts <- as.data.frame(gene_counts)
-rownames(gene_counts) <- gene_counts[,1] #set first column that contains gene names as rownames
-gene_counts <- gene_counts[,-1] # remove column w/ gene names 
+mRNA_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
+mRNA_counts <- as.data.frame(mRNA_counts)
+rownames(mRNA_counts) <- mRNA_counts[,1] #set first column that contains gene names as rownames
+mRNA_counts <- mRNA_counts[,-1] # remove column w/ gene names 
 
 # Remove any genes with 0 counts across samples 
-gene_counts<-gene_counts %>%
+mRNA_counts<-mRNA_counts %>%
      mutate(Total = rowSums(.[, 1:4]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
@@ -51,15 +53,34 @@ miRNA_counts <- miRNA_counts %>%
     dplyr::select(!Total)
 
 # Rename gene count cols to match miRNA count cols
-colnames(gene_counts) <- c("sample140.gene", "sample145.gene", "sample173.gene", "sample178.gene")
+colnames(mRNA_counts) <- c("sample140.gene", "sample145.gene", "sample173.gene", "sample178.gene")
+```
+
+Filter reads by proportion in sample 
+```{r}
+ffun<-filterfun(pOverA(0.5,5))  #set up filtering parameters--LOOK INTO FILTERING PARAMETERS
+
+# miRNA
+filt_outrm_poa <- genefilter((miRNA_counts), ffun) #apply filter
+sum(filt_outrm_poa) #count number of genes left
+miRNA_counts_filt <- miRNA_counts[filt_outrm_poa,] #keep only rows that passed filter
+
+# mRNA
+filt_outrm_poa <- genefilter((mRNA_counts), ffun) #apply filter
+sum(filt_outrm_poa) #count number of genes left
+mRNA_counts_filt <- mRNA_counts[filt_outrm_poa,] #keep only rows that passed filter
 ```
 
 Read in miranda data 
 ```{r}
-miranda_apul <- read.delim("../../D-Apul/data/17-Apul-miranda/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
+miranda_apul <- read.delim("../../D-Apul/data/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
 colnames(miranda_apul) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
-```
 
+# Format miranda df 
+miranda_apul$miRNA <- sub("^>", "", miranda_apul$miRNA)  # Remove leading ">"
+miranda_apul$miRNA <- sub("\\..*", "", miranda_apul$miRNA)  # Remove everything from the first period onwards
+miranda_apul$mRNA <- sub("::.*", "", miranda_apul$mRNA)  # Remove everything from "::" onwards
+```
 
 Normalize counts
 ```{r}
@@ -70,8 +91,11 @@ normalize_counts <- function(counts) {
 }
 
 # Normalize miRNA and mRNA counts
-miRNA_norm <- normalize_counts(miRNA_counts)
-mRNA_norm <- normalize_counts(gene_counts)
+#miRNA_norm <- normalize_counts(miRNA_counts_filt)
+miRNA_norm <- as.matrix(miRNA_counts_filt)
+
+#mRNA_norm <- normalize_counts(mRNA_counts_filt)
+mRNA_norm <- as.matrix(mRNA_counts_filt)
 ```
 
 Run distance correlation using the [energy package in R](https://cran.r-project.org/web/packages/energy/index.html) with rows as features (ie mRNA or miRNA) and columns as samples. 
@@ -302,6 +326,8 @@ length(unique(pairs_of_interest_pcc$miRNA))
 length(unique(pairs_of_interest_pcc$mRNA))
 ```
 
+I noticed that the significant pvalues correspond to high correlation values, whereas low correlation values are typically not significant (if using the p<0.05). 
+
 Plot using igraph 
 ```{r}
 # Create the graph
@@ -323,26 +349,75 @@ p <- ggraph(g_tbl, layout = "fr") +
   geom_node_point(aes(color = type), size = 5) +
   geom_node_text(aes(label = name), repel = TRUE, size = 3) +
   scale_edge_width(range = c(0.5, 3)) +
-  scale_color_manual(values = c("miRNA" = "lightblue", "mRNA" = "lightgreen", "blue" = "blue", "red" = "red")) +
+  scale_color_manual(values = c("miRNA" = "lightblue", "mRNA" = "lightgreen", "Positive correlation" = "blue", "Negative correlation" = "red")) +
   theme_graph() +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
 
 ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/prelim_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
-ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/prelim_miRNA_mRNA_network.pdf", p, width = 12, height = 10)
 ```
 
+Super cool! 
 
+```{r}
+# Function to create a scatter plot for a miRNA-mRNA pair
+plot_correlation <- function(miRNA, mRNA, miRNA_data, mRNA_data, cor_value, p_value) {
+  # Extract data for the specific miRNA and mRNA
+  miRNA_counts <- as.numeric(miRNA_data[miRNA,])
+  mRNA_counts <- as.numeric(mRNA_data[mRNA,])
+  
+  # Combine into a data frame
+  plot_data <- data.frame(
+    miRNA_counts = miRNA_counts,
+    mRNA_counts = mRNA_counts,
+    sample = colnames(miRNA_data)
+  )
+  
+  # Create the plot
+  p <- ggplot(plot_data, aes(x = miRNA_counts, y = mRNA_counts)) +
+    geom_point(aes(color = sample), size = 3) +
+    geom_smooth(method = "lm", se = TRUE, color = "red") +
+    scale_x_log10() +
+    scale_y_log10() +
+    labs(title = paste(miRNA, "vs", mRNA),
+         subtitle = paste("Correlation:", round(cor_value, 3), 
+                          "| p-value:", format.pval(p_value, digits = 3)),
+         x = paste(miRNA, "counts"),
+         y = paste(mRNA, "counts")) +
+    theme_minimal()
+  
+  return(p)
+}
 
+# Create plots for pairs in pairs_of_interest_pcc
+plots <- lapply(1:nrow(pairs_of_interest_pcc), function(i) {
+  miRNA <- pairs_of_interest_pcc$miRNA[i]
+  mRNA <- pairs_of_interest_pcc$mRNA[i]
+  cor_value <- pairs_of_interest_pcc$PCC.cor[i]
+  p_value <- pairs_of_interest_pcc$p_value[i]
+  plot_correlation(miRNA, mRNA, miRNA_norm, mRNA_norm, cor_value, p_value)
+})
 
+# Arrange and display the plots
+# If you have many plots, you might want to adjust the layout
+n_plots <- length(plots)
+n_cols <- min(3, n_plots)  # Adjust the number of columns as needed
+n_rows <- ceiling(n_plots / n_cols)
 
+#grid.arrange(grobs = plots, ncol = n_cols, nrow = n_rows)
 
+# Save plots to a PDF
+pdf("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/correlation_plots.pdf", width = 5 * n_cols, height = 5 * n_rows)
+grid.arrange(grobs = plots, ncol = n_cols, nrow = n_rows)
+dev.off()
+```
 
+Need to discuss outliers with group, as there are some correlations that are being driven by outliers. Sample 140 looks like it is very different from the others though in the correlation plots. 
 
+Next steps: 
 
-
-
-
+- Think more about counts normalization
+- Distance vs pearson's correlation 
 
 
 
