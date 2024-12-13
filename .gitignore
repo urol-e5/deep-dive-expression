@@ -7,9 +7,7 @@
 data/*.fna
 data/*.fasta
 data/*.fasta.gz
-
-
-blastdb
+data/blastdb
 
 
 D-Apul/code/.bashvars
@@ -20,6 +18,7 @@ D-Apul/data/*.ebwt
 D-Apul/data/sRNA-trimmed-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
+D-Apul/data/02-Apul-reference-annotation/*.fa
 D-Apul/output/07.2-Apul-Hisat
 D-Apul/data/08-Apul-WGBS/sim-data/*.fastq
 D-Apul/data/16-Apul-RNAhybrid/*.fa
