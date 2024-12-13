@@ -324,6 +324,9 @@ cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(pairs_of_interest_pcc)
 # How many unique miRNAs and mRNAs have a PCC correlation > |0.5| and a p-value < 0.05?
 length(unique(pairs_of_interest_pcc$miRNA))
 length(unique(pairs_of_interest_pcc$mRNA))
+
+# Save pairs of interest df as csv 
+write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/PCC_miRNA_mRNA.csv")
 ```
 
 I noticed that the significant pvalues correspond to high correlation values, whereas low correlation values are typically not significant (if using the p<0.05). 
