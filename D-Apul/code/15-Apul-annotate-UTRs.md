@@ -72,12 +72,10 @@ This is also convenient because RNAhybrid accepts sequences of maximum
 
 So we want to 1) isolate mRNA regions in `Apulcra-genome.gff` 2)
 determine sense of the annotated region (to inform which end is 5’ and
-which is 3’) 3) make a new line in gff that covers the 1000bp
-immediately preceding the mRNA, annotated appropriately as 5’/3’ UTR 4)
-make new line that covers the 1000bp immediately following the mRNA,
-annotated appropriately as 5’/3’ UTR 5) ensure none of the newly
-annotated UTR regions overlap with an existing mRNA region – remove
-overlapping region from UTR annotation if necessary
+which is 3’) 3) make new lines in gff that covers the 1000bp immediately
+preceding/following the mRNA, annotated appropriately as 5’/3’ UTR 4)
+ensure none of the newly annotated UTR regions overlap with an existing
+mRNA region – remove overlapping region from UTR annotation if necessary
 
 Note: while the majority of miRNA functional binding occurs in the
 3’UTR, it is possible for functional binding to occur in other regions,
@@ -190,17 +188,17 @@ bedtools getfasta -fi ../../data/Apulchra-genome.fa -bed Apul.GFFannotation.5UTR
 echo "Sequence extraction complete!" $(date)
 ```
 
-    ## Sorting gffs by chromosome Wed Nov 20 17:37:39 PST 2024
-    ## Sorting complete! Wed Nov 20 17:37:39 PST 2024
-    ## Extracting 1kb 3' UTRs Wed Nov 20 17:37:39 PST 2024
-    ## Subtract portions of UTRs that overlap nearby genes Wed Nov 20 17:37:39 PST 2024
-    ## 3' UTRs identified! Wed Nov 20 17:37:40 PST 2024
-    ## Extracting 3' UTR sequences Wed Nov 20 17:37:40 PST 2024
-    ## Extracting 1kb 5' UTRs Wed Nov 20 17:37:40 PST 2024
-    ## Subtract portions of 5' UTRs that overlap nearby genes Wed Nov 20 17:37:40 PST 2024
-    ## 5' UTRs identified! Wed Nov 20 17:37:40 PST 2024
-    ## Extracting 5' UTR sequences Wed Nov 20 17:37:40 PST 2024
-    ## Sequence extraction complete! Wed Nov 20 17:37:41 PST 2024
+    ## Sorting gffs by chromosome Mon Dec 16 09:20:01 PST 2024
+    ## Sorting complete! Mon Dec 16 09:20:01 PST 2024
+    ## Extracting 1kb 3' UTRs Mon Dec 16 09:20:01 PST 2024
+    ## Subtract portions of UTRs that overlap nearby genes Mon Dec 16 09:20:01 PST 2024
+    ## 3' UTRs identified! Mon Dec 16 09:20:02 PST 2024
+    ## Extracting 3' UTR sequences Mon Dec 16 09:20:02 PST 2024
+    ## Extracting 1kb 5' UTRs Mon Dec 16 09:20:02 PST 2024
+    ## Subtract portions of 5' UTRs that overlap nearby genes Mon Dec 16 09:20:02 PST 2024
+    ## 5' UTRs identified! Mon Dec 16 09:20:02 PST 2024
+    ## Extracting 5' UTR sequences Mon Dec 16 09:20:02 PST 2024
+    ## Sequence extraction complete! Mon Dec 16 09:20:03 PST 2024
 
 Check We expect, for an mRNA in + sense (forward strand), the 3’UTR
 region to be the 1000bp immediately following the mRNA, and the 5’UTR to
@@ -236,3 +234,47 @@ head -3 Apul.GFFannotation.5UTR_1kb_corrected.gff | tail -1
     ## ntLink_7 funannotate five_prime_UTR  17480   18479   .   +   .   ID=FUN_002305-T1;Parent=FUN_002305;product=hypothetical
 
 We’re good!
+
+Finally, we may want to use the simpler mRNA-associated FUN ids to
+denote 3UTR/5UTR regions, rather than the genomic location. Let’s create
+helper files for making those associations
+
+``` bash
+
+FUNid_helper() {
+    local input_gff="$1"
+    local output_file="$2"
+
+    # Check if the input file exists
+    if [[ ! -f "$input_gff" ]]; then
+        echo "Error: File $input_gff not found!"
+        return 1
+    fi
+
+    # Process the GFF file
+    awk 'BEGIN {OFS="\t"} {
+        # Combine location
+        location = $1 ":" $4-1 "-" $5;
+
+        # Extract type
+        type = $3;
+
+        # Extract and format the attributes (last column)
+        attributes = $9;
+        gsub(";", "\t", attributes); # Replace semicolons with tabs
+
+        # Print the desired output
+        print location, type, attributes;
+    }' "$input_gff" > "$output_file"
+
+    echo "Processed $input_gff -> $output_file"
+}
+
+FUNid_helper "../output/15-Apul-annotate-UTRs/Apulcra-genome-mRNA_only.gff" "../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt"
+FUNid_helper "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff" "../output/15-Apul-annotate-UTRs/Apul-3UTR-FUNids.txt"
+FUNid_helper "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff" "../output/15-Apul-annotate-UTRs/Apul-5UTR-FUNids.txt"
+```
+
+    ## Processed ../output/15-Apul-annotate-UTRs/Apulcra-genome-mRNA_only.gff -> ../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt
+    ## Processed ../output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff -> ../output/15-Apul-annotate-UTRs/Apul-3UTR-FUNids.txt
+    ## Processed ../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff -> ../output/15-Apul-annotate-UTRs/Apul-5UTR-FUNids.txt
