@@ -300,9 +300,6 @@ rm ../output/02-Apul-reference-annotation/GOlegend.png
 ```
 
 
-
-
-
 # Transcriptome
 ## Retrieve transcriptome fasta file
 
