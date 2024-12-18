@@ -492,7 +492,7 @@ visualization
 Save outputs as tab-delimited files
 
 ``` r
-write.table(RNAhybrid_mRNA, file="../output/16-Apul-RNAhybrid/Apul-RNAhybrid-mRNA-compact_3utr_worm-formatted.txt", sep="\t", row.names = FALSE, quote = FALSE)
+write.table(RNAhybrid_mRNA, file="../output/16-Apul-RNAhybrid/Apul-RNAhybrid-mRNA-compact_3utr_worm-formatted.txt", sep="\t", row.names = FALSE, col.names=TRUE, quote = FALSE)
 write.table(RNAhybrid_5UTR, file="../output/16-Apul-RNAhybrid/Apul-RNAhybrid-5UTR-compact_3utr_worm-formatted.txt", sep="\t", row.names = FALSE, quote = FALSE)
 write.table(RNAhybrid_3UTR, file="../output/16-Apul-RNAhybrid/Apul-RNAhybrid-3UTR-compact_3utr_worm-formatted.txt", sep="\t", row.names = FALSE, quote = FALSE)
 ```
