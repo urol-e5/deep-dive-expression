@@ -1,0 +1,176 @@
+---
+title: "18-Apul-interactions-functional-annotation"
+author: "Kathleen Durkin"
+date: "2024-12-11"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+bibliography: ../../references.bib
+link-citations: true
+---
+
+```{r load packages}
+library(dplyr)
+library(tidyr)
+```
+
+Perform functional annotation for miRNA-mRNA, lncRNA-mRNA, lncRNA-miRNA, etc. putative interactions.
+
+The reference genome was annotated using Uniprot/Swissprot in `deep-dive-expression/D-Apul/code/02-Apul-reference-annotation`.
+
+Load in reference annotations mapping
+```{r load-IDmapping}
+genome_IDmapping <- read.table("../output/02-Apul-reference-annotation/Apulcra-genome-mRNA-IDmapping-2024_12_12.tab", header=TRUE)
+
+```
+
+# miRNA-mRNA interactions
+
+## RNAhybrid output
+
+```{r}
+# Read in RNAhybrid results for miRNAs that bind in the 3'UTR region of an mRNA
+RNAhybrid_3UTR <- read.table("../output/16-Apul-RNAhybrid/Apul-RNAhybrid-mRNA-compact_3utr_worm-formatted.txt", sep="\t", header=TRUE)
+
+# Filter to only retain highly likely hybridizations
+RNAhybrid_3UTR_p0.01 <- RNAhybrid_3UTR %>%
+  filter(pval < 0.01)
+
+# join with ID mapping to annotate
+RNAhybrid_3UTR_p0.01_FA <- left_join(RNAhybrid_3UTR_p0.01, genome_IDmapping, by = c("target_name" = "V3"))
+
+```
+
+## Jill's interaction plot stuff
+
+```{r}
+# read in data
+miRanda_pcor <-  read.csv("../output/09-Apul-mRNA-miRNA-interactions/PCC_miRNA_mRNA.csv")
+
+# read in FUN id - mRNA association table
+mRNA_FUN_table <- read.table("../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt")
+# Remove "Parent=" prefix of the FUN IDs
+mRNA_FUN_table$V4 <- gsub("Parent=", "", mRNA_FUN_table$V4)
+
+# read in functional annotation mapping table and ensure unique rows
+annot_tab <- read.table("../output/02-Apul-reference-annotation/Apulcra-genome-mRNA-IDmapping-2024_12_12.tab", header=TRUE) %>% 
+  distinct(V1, .keep_all = TRUE)
+```
+
+```{r}
+# Use FUN ids to annotate with associated mRNA coordinates
+miRanda_pcor_annot <- left_join(miRanda_pcor, mRNA_FUN_table, by = c("mRNA" = "V4")) %>%
+  select(-V2, -V3, -V5)
+
+# Use these mRNA coordinates to map to functional annotations
+miRanda_pcor_annot <- left_join(miRanda_pcor_annot, annot_tab, by = c("V1" = "V1"))
+
+```
+
+# How do miRanda and RNAhybrid compare for miRNA-mRNA target prediction?
+
+```{r}
+# Read in the data
+miRanda_miRNA_mRNA <- read.table("../data/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt")
+colnames(miRanda_miRNA_mRNA) <- c("mirna", "target",  "score", "energy", "miRNA_start", "miRNA_end", "target_start", "target_end", "aln_length", "subject_identity", "Qquery_identity")
+
+# Separate the miRNA cluster names and locations
+miRanda_miRNA_mRNA <- miRanda_miRNA_mRNA %>% separate(mirna, into = c("miRNA_cluster", "miRNA_location"), sep = "::")
+miRanda_miRNA_mRNA$miRNA_cluster <- gsub("^>", "", miRanda_miRNA_mRNA$miRNA_cluster)  # Remove leading >
+miRanda_miRNA_mRNA$miRNA_cluster <- gsub("\\.mature$", "", miRanda_miRNA_mRNA$miRNA_cluster)  # Remove trailing .mature
+
+# Separate the mRNA FUN ids and locations
+miRanda_miRNA_mRNA <- miRanda_miRNA_mRNA %>% separate(target, into = c("mRNA_FUNid", "mRNA_location"), sep = "::")
+
+# Check
+head(miRanda_miRNA_mRNA)
+
+write.table(miRanda_miRNA_mRNA, "../output/18-Apul-interactions-functional-annotation/miRanda_miRNA_mRNA.txt", col.names = TRUE, row.names = FALSE,sep = "\t")
+```
+
+
+```{r}
+# Read in the data
+RNAhybrid_miRNA_mRNA <- read.table("../output/16-Apul-RNAhybrid/Apul-RNAhybrid-3UTR-compact_3utr_worm-formatted.txt", sep="\t", header=TRUE)
+
+# Separate the miRNA cluster names and locations
+RNAhybrid_miRNA_mRNA <- RNAhybrid_miRNA_mRNA %>% separate(query_name, into = c("miRNA_cluster", "miRNA_location"), sep = "::")
+RNAhybrid_miRNA_mRNA$miRNA_cluster <- gsub("\\.mature$", "", RNAhybrid_miRNA_mRNA$miRNA_cluster)  # Remove trailing .mature
+
+write.table(RNAhybrid_miRNA_mRNA, "../output/18-Apul-interactions-functional-annotation/RNAhybrid_miRNA_mRNA.txt", col.names = TRUE, row.names = FALSE,sep = "\t")
+```
+
+Both miRanda and RNAhybrid were run using 3'UTR regions as the target. Since there may be some formattign differences in identifying the 3UTr regions, I don't think a left_join will work, because the target regions won't match exactly.
+
+Instead, maybe I can use bedtools intersect? Intersect will identify regions where both the miRanda *and* RNAhybrid outputs show a target-miRNA hybridization
+
+Actually first, let's try to look at the two in IGV
+
+Make IGV inputs (super basic gff)
+
+```{r, engine='bash', eval=FALSE}
+# Format miRanda for IGV as a gff
+#!/bin/bash
+
+# Input and output file paths
+INPUT_FILE="../output/18-Apul-interactions-functional-annotation/miRanda_miRNA_mRNA.txt"  # Replace with the path to your input file
+OUTPUT_FILE="../output/18-Apul-interactions-functional-annotation/miranda_strict_all_1kb_parsed_apul_updated.gff"
+
+# Write GFF3 header to the output file
+echo "##gff-version 3" > "$OUTPUT_FILE"
+
+# Process the input file, skipping the header line
+tail -n +2 "$INPUT_FILE" | while IFS=$'\t' read -r miRNA_cluster	miRNA_location	mRNA_FUNid	mRNA_location	score	energy	miRNA_start	miRNA_end	target_start	target_end	aln_length	subject_identity	Qquery_identity
+do
+  # Extract locus name and coordinates from target_name
+  locus=$(echo "$mRNA_location" | cut -d'"' -f2 | cut -d':' -f1)
+  start_coord=$(echo "$mRNA_location" | cut -d':' -f2 | cut -d'-' -f1)
+  start_gff=$((start_coord + target_start))
+  end_gff=$((start_gff + aln_length))
+
+  # Extract strandedness from query_name
+  strand=$(echo "$miRNA_location" | grep -o '(-\|+)' | tr -d '()')
+
+  # Write the GFF3 line
+  echo -e "$locus\tRNAhybrid\tmiRNA_binding\t$start_gff\t$end_gff\t.\t$strand\t.\tID=$miRNA_cluster;energy=$energy;score=$score" >> "$OUTPUT_FILE"
+done
+
+```
+
+
+```{r, engine='bash'}
+/home/shared/bedtools2/bin/bedtools intersect \
+-a ../output/18-Apul-interactions-functional-annotation/miranda_strict_all_1kb_parsed_apul_updated.gff \
+-b ../output/16-Apul-RNAhybrid/Apul-RNAhybrid-3UTR-compact_3utr_worm.gff \
+-wa
+
+
+/home/shared/bedtools2/bin/bedtools intersect \
+-a ../output/16-Apul-RNAhybrid/Apul-RNAhybrid-3UTR-compact_3utr_worm.gff \
+-b ../output/18-Apul-interactions-functional-annotation/miranda_strict_all_1kb_parsed_apul_updated.gff \
+-wa
+```
+
+
+
+
+
+```{r}
+miRanda_RNAhybrid_miRNA_mRNA <- left_join(miRanda_miRNA_mRNA, RNAhybrid_miRNA_mRNA, by = c("miRNA_cluster" = "target_name"))
+```
+
+
+
+
+
