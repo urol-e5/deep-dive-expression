@@ -37,9 +37,9 @@ head /home/shared/8TB_HDD_01/sr320/github/deep-dive/F-Pmea/output/02-lncRNA-disc
 
 ```{bash}
 awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' /home/shared/8TB_HDD_01/sr320/github/deep-dive/F-Pmea/output/02-lncRNA-discovery/Pmea_lncRNA.bed \
-| sed 's/-1/1/g' \
-| sed 's/0/1/g' \
 | awk 'BEGIN { FS="\t"; OFS="\t" } /^#/ { print; next } $4 <= $5 { print }' \
+| sed 's/-1/1/g' \
+| awk '$4 != "0" {print}' \
 > ../output/08-Ptuh-lncRNA-matrix/Peve-lncRNAs.gtf
 ```
 
