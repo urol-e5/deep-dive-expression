@@ -29,29 +29,27 @@ Read in count matrices.
 
 mrna is missing sample 150, removing from all for now, will revisit and add this in after analysis is re done (SR to do) 
 ```{r}
-mrna<-read.csv("D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%rename("sample140"=RNA.ACR.140, "sample145"=RNA.ACR.145, "sample173"=RNA.ACR.173, "sample178"=RNA.ACR.178, "sample150"=RNA.ACR.150)
+mrna<-read.csv("E-Peve/output/06-Peve-Hisat/Peve-gene_count_matrix.csv")%>%rename("sample71"=RNA.POR.71, "sample73"=RNA.POR.73, "sample76"=RNA.POR.76, "sample79"=RNA.POR.79, "sample82"=RNA.POR.82)
 
 rownames(mrna)<-mrna$gene_id
 
 mrna<-mrna%>%dplyr::select(!gene_id)
 
-srna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt")
+srna<-read.table("E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_sRNA_normalized.txt")
 
-lncrna<-read.table("D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=T)%>%rename("sample140"=`...output.07.Apul.Hisat.RNA.ACR.140.sorted.bam`, "sample150"=`...output.07.Apul.Hisat.RNA.ACR.150.sorted.bam`, "sample145"=`...output.07.Apul.Hisat.RNA.ACR.145.sorted.bam`, "sample173"=`...output.07.Apul.Hisat.RNA.ACR.173.sorted.bam`, "sample178"=`...output.07.Apul.Hisat.RNA.ACR.178.sorted.bam` )%>%dplyr::select(Geneid, sample140, sample145, sample150, sample173, sample178)
+lncrna<-read.table("E-Peve/output/07-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", header=T)%>%rename("sample71"=`...output.06.Peve.Hisat.RNA.POR.71.sorted.bam`, "sample73"=`...output.06.Peve.Hisat.RNA.POR.73.sorted.bam`, "sample76"=`...output.06.Peve.Hisat.RNA.POR.76.sorted.bam`, "sample79"=`...output.06.Peve.Hisat.RNA.POR.79.sorted.bam`, "sample82"=`...output.06.Peve.Hisat.RNA.POR.82.sorted.bam` )%>%dplyr::select(Geneid, sample71, sample73, sample76, sample79, sample82)
 
 rownames(lncrna)<-lncrna$Geneid
 
 lncrna<-lncrna%>%dplyr::select(!Geneid)
 
 metadata <- data.frame(
-  sample = c("sample145", "sample140", "sample173", "sample178", "sample150"),
-  species = "Apul"
+  sample = c("sample71", "sample73", "sample76", "sample79", "sample82"),
+  species = "Peve"
 )
 ```
 
-Follow the mixOmics tutorial for conducting correlations between these two data sets. 
-
-All data sets have dimensions of 4 samples. We can add additional species to this as we go.  
+Follow the mixOmics tutorial for conducting correlations between these data sets. 
 
 # Conduct mixOmics  
 
@@ -67,6 +65,7 @@ dim(srna)
 dim(lncrna)
 dim(metadata)
 ```
+Dont use srna, only 3 samples available.  
 
 Remove columns with 0's in each matrix or with 0 variance (all values identical) 
 
@@ -113,10 +112,10 @@ plotIndiv(pca.mrna, comp = c(1, 2),
           ind.names = metadata$sample, 
           legend = TRUE, title = 'mRNA, PCA comp 1 - 2')
 
-plotIndiv(pca.srna, comp = c(1, 2), 
-          group = metadata$species, 
-          ind.names = metadata$sample, 
-          legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
+#plotIndiv(pca.srna, comp = c(1, 2), 
+#          group = metadata$species, 
+#          ind.names = metadata$sample, 
+#          legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
 
 plotIndiv(pca.lncrna, comp = c(1, 2), 
           group = metadata$species, 
@@ -128,9 +127,9 @@ plotIndiv(pca.lncrna, comp = c(1, 2),
 
 ```{r}
 X1 <- mrna
-X2 <- srna 
+#X2 <- srna 
 X3 <- lncrna
-X <- list(mrna = X1, srna = X2, lncrna = X3)
+X <- list(mrna = X1, lncrna = X3)
 
 Y <-metadata$sample
 ```
@@ -143,7 +142,7 @@ plotVar(result.diablo) # plot the variables
 
 sparse 
 ```{r}
-list.keepX = list(mrna = c(20, 2), srna = c(20,2), lncrna = c(20, 2)) 
+list.keepX = list(mrna = c(20, 2), lncrna = c(20, 2)) 
 
 # run the method
 result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 

@@ -29,23 +29,23 @@ Read in count matrices.
 
 mrna is missing sample 150, removing from all for now, will revisit and add this in after analysis is re done (SR to do) 
 ```{r}
-mrna<-read.csv("D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%rename("sample140"=RNA.ACR.140, "sample145"=RNA.ACR.145, "sample173"=RNA.ACR.173, "sample178"=RNA.ACR.178, "sample150"=RNA.ACR.150)
+mrna<-read.csv("F-Ptuh/output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")%>%rename("sample47"=RNA.POC.47, "sample48"=RNA.POC.48, "sample50"=RNA.POC.50, "sample53"=RNA.POC.53, "sample57"=RNA.POC.57)
 
 rownames(mrna)<-mrna$gene_id
 
 mrna<-mrna%>%dplyr::select(!gene_id)
 
-srna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt")
+srna<-read.table("F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_normalized.txt")
 
-lncrna<-read.table("D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=T)%>%rename("sample140"=`...output.07.Apul.Hisat.RNA.ACR.140.sorted.bam`, "sample150"=`...output.07.Apul.Hisat.RNA.ACR.150.sorted.bam`, "sample145"=`...output.07.Apul.Hisat.RNA.ACR.145.sorted.bam`, "sample173"=`...output.07.Apul.Hisat.RNA.ACR.173.sorted.bam`, "sample178"=`...output.07.Apul.Hisat.RNA.ACR.178.sorted.bam` )%>%dplyr::select(Geneid, sample140, sample145, sample150, sample173, sample178)
+lncrna<-read.table("F-Ptuh/output/08-Ptuh-lncRNA-matrix/Peve-lncRNA-counts.txt", header=T)%>%rename("sample47"=`...output.06.Ptuh.Hisat.RNA.POC.47.sorted.bam`, "sample48"=`...output.06.Ptuh.Hisat.RNA.POC.48.sorted.bam`, "sample50"=`...output.06.Ptuh.Hisat.RNA.POC.50.sorted.bam`, "sample53"=`...output.06.Ptuh.Hisat.RNA.POC.53.sorted.bam`, "sample57"=`...output.06.Ptuh.Hisat.RNA.POC.57.sorted.bam` )%>%dplyr::select(Geneid, sample47, sample48, sample50, sample53, sample57)
 
 rownames(lncrna)<-lncrna$Geneid
 
 lncrna<-lncrna%>%dplyr::select(!Geneid)
 
 metadata <- data.frame(
-  sample = c("sample145", "sample140", "sample173", "sample178", "sample150"),
-  species = "Apul"
+  sample = c("sample48", "sample50", "sample53", "sample57", "sample47"),
+  species = "Ptuh"
 )
 ```
 
@@ -92,17 +92,18 @@ lncrna <- lncrna[, sapply(lncrna, function(x) length(unique(x)) > 1)]
 dim(lncrna)
 ```
 
+No lncRNAs in Ptuh
 
 ## Conduct preliminary PCA  
 
 ```{r}
 pca.mrna <- pca(mrna, ncomp = 2, center = TRUE, scale = TRUE)
 pca.srna <- pca(srna, ncomp = 2, center = TRUE, scale = TRUE)
-pca.lncrna <- pca(lncrna, ncomp = 2, center = TRUE, scale = TRUE)
+#pca.lncrna <- pca(lncrna, ncomp = 2, center = TRUE, scale = TRUE)
 
 plot(pca.mrna)
 plot(pca.srna)
-plot(pca.lncrna)
+#plot(pca.lncrna)
 ```
 
 Similar variance explained because we are dealing with individual samples within a species. 
@@ -118,10 +119,10 @@ plotIndiv(pca.srna, comp = c(1, 2),
           ind.names = metadata$sample, 
           legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
 
-plotIndiv(pca.lncrna, comp = c(1, 2), 
-          group = metadata$species, 
-          ind.names = metadata$sample, 
-          legend = TRUE, title = 'lncRNA, PCA comp 1 - 2')
+#plotIndiv(pca.lncrna, comp = c(1, 2), 
+#          group = metadata$species, 
+#          ind.names = metadata$sample, 
+#          legend = TRUE, title = 'lncRNA, PCA comp 1 - 2')
 ```
 
 # Multi block PLS with DIABLO 
@@ -129,8 +130,8 @@ plotIndiv(pca.lncrna, comp = c(1, 2),
 ```{r}
 X1 <- mrna
 X2 <- srna 
-X3 <- lncrna
-X <- list(mrna = X1, srna = X2, lncrna = X3)
+#X3 <- lncrna
+X <- list(mrna = X1, srna = X2)
 
 Y <-metadata$sample
 ```
@@ -143,7 +144,7 @@ plotVar(result.diablo) # plot the variables
 
 sparse 
 ```{r}
-list.keepX = list(mrna = c(20, 2), srna = c(20,2), lncrna = c(20, 2)) 
+list.keepX = list(mrna = c(20, 2), srna = c(20,2)) 
 
 # run the method
 result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 
