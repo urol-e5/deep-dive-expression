@@ -28,20 +28,51 @@ knitr::opts_chunk$set(
 For orthofinder, we need a protein fasta for each genome. I found each of these on our wiki, https://github.com/urol-e5/deep-dive-expression/wiki/00%E2%80%90Genomic-Resources.
 
 - `Apulchra-genome.pep.faa` - https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
-
 - `Porites_evermanni_v1.annot.pep.fa`: https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.pep.fa 
 - `Pocillopora_meandrina_HIv1.genes.pep.faa` - https://gannet.fish.washington.edu/seashell/snaps/Pocillopora_meandrina_HIv1.genes.pep.faa
 
 ```{bash, eval = FALSE}
 cd ../data
-mkdir 20-Apul-Orthofinder
-cd 20-Apul-Orthofinder
-
-mkdir proteins
-cd proteins
+mkdir -p 20-Apul-Orthofinder/proteins
+cd 20-Apul-Orthofinder/proteins
 
 wget https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
 wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.pep.fa
 wget https://gannet.fish.washington.edu/seashell/snaps/Pocillopora_meandrina_HIv1.genes.pep.faa
 ```
 
+Install Orthofinder on unity
+
+```{bash, eval = FALSE}
+cd /work/pi_hputnam_uri_edu/pgrams
+
+wget https://github.com/davidemms/OrthoFinder/releases/latest/download/OrthoFinder.tar.gz
+
+tar xzvf OrthoFinder.tar.gz
+cd OrthoFinder/
+
+#print help 
+./orthofinder -h
+```
+
+
+```{bash, eval = FALSE}
+mkdir scripts
+nano scripts/orthofinder.sh
+```
+
+```{bash, eval = FALSE}
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --signal=2
+#SBATCH --no-requeue
+#SBATCH --mem=200GB
+#SBATCH --error=scripts/"%x_error.%j"
+#SBATCH --output=scripts/"%x_output.%j"
+#SBATCH -t 48:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL
+
+# run orthofinder with 20 threads
+/work/pi_hputnam_uri_edu/pgrams/OrthoFinder/orthofinder -f ../data/20-Apul-Orthofinder/proteins/ -t 20 -o ../output/20-Apul-Orthofinder/
+```
