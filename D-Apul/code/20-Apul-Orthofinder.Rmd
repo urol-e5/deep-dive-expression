@@ -1,0 +1,47 @@
+---
+title: "20-Apul-Orthofinder"
+author: "Zoe Dellaert"
+date: "2024-12-20"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+---
+
+## E5 Deep Dive Expression Orthofinder for all 3 genomes
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,        # Evaluate code chunks
+  warning = TRUE,     # Hide warnings
+  message = TRUE,     # Hide messages
+  comment = "" ,        # Prevents appending '##' to beginning of lines in code output
+  quiet = FALSE
+)
+```
+
+For orthofinder, we need a protein fasta for each genome. I found each of these on our wiki, https://github.com/urol-e5/deep-dive-expression/wiki/00%E2%80%90Genomic-Resources.
+
+- `Apulchra-genome.pep.faa` - https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
+
+- `Porites_evermanni_v1.annot.pep.fa`: https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.pep.fa 
+- `Pocillopora_meandrina_HIv1.genes.pep.faa` - https://gannet.fish.washington.edu/seashell/snaps/Pocillopora_meandrina_HIv1.genes.pep.faa
+
+```{bash, eval = FALSE}
+cd ../data
+mkdir 20-Apul-Orthofinder
+cd 20-Apul-Orthofinder
+
+mkdir proteins
+cd proteins
+
+wget https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
+wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.pep.fa
+wget https://gannet.fish.washington.edu/seashell/snaps/Pocillopora_meandrina_HIv1.genes.pep.faa
+```
+
