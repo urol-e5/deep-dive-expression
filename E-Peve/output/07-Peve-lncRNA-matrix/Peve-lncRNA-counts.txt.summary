@@ -1,5 +1,5 @@
 Status	../output/06-Peve-Hisat/RNA-POR-71.sorted.bam	../output/06-Peve-Hisat/RNA-POR-73.sorted.bam	../output/06-Peve-Hisat/RNA-POR-76.sorted.bam	../output/06-Peve-Hisat/RNA-POR-79.sorted.bam	../output/06-Peve-Hisat/RNA-POR-82.sorted.bam
-Assigned	2389317	2049567	2417127	2641266	2458298
+Assigned	2798808	2230136	2733025	2812394	2776134
 Unassigned_Unmapped	13826806	13254943	13987382	10928938	15478698
 Unassigned_Read_Type	0	0	0	0	0
 Unassigned_Singleton	0	0	0	0	0
@@ -10,6 +10,6 @@ Unassigned_Duplicate	0	0	0	0	0
 Unassigned_MultiMapping	42400181	51342514	43111507	53705864	38472880
 Unassigned_Secondary	0	0	0	0	0
 Unassigned_NonSplit	0	0	0	0	0
-Unassigned_NoFeatures	65318296	63125435	62892084	60711193	61666935
+Unassigned_NoFeatures	64832165	62845226	62464134	60480765	61237915
 Unassigned_Overlapping_Length	0	0	0	0	0
-Unassigned_Ambiguity	446528	228040	364652	237849	625930
+Unassigned_Ambiguity	523168	327680	476704	297149	737114
