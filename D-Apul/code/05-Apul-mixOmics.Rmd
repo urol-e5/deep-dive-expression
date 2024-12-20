@@ -25,46 +25,72 @@ library(mixOmics)
 
 Read in count matrices.  
 
+mrna is missing sample 150, removing from all 
 ```{r}
-mrna<-read.table("D-Apul/output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_RNA_normalized.txt")
-srna<-read.table("D-Apul/output/04-Apul-RNA-sRNA-WGCNA/Apul_counts_sRNA_normalized.txt")
+mrna<-read.csv("D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%rename("sample140"=RNA.ACR.140, "sample145"=RNA.ACR.145, "sample173"=RNA.ACR.173, "sample178"=RNA.ACR.178)
+
+rownames(mrna)<-mrna$gene_id
+
+mrna<-mrna%>%dplyr::select(!gene_id)
+
+srna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt")%>%dplyr::select(!sample150)
+sirna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_siRNA_normalized.txt")%>%dplyr::select(!sample150)
+
 metadata <- data.frame(
-  sample = c("sample145", "sample140", "sample173", "sample178", "sample150"),
+  sample = c("sample145", "sample140", "sample173", "sample178"),
   species = "Apul"
 )
 ```
 
-Transpose the count matrices. 
-```{r}
-mrna<-t(mrna)
-srna<-t(srna)
-```
-
 Follow the mixOmics tutorial for conducting correlations between these two data sets. 
 
-All data sets have dimensions of 5 samples. We can add additional species to this as we go.  
+All data sets have dimensions of 4 samples. We can add additional species to this as we go.  
 
 # Conduct mixOmics  
 
 Set matrices. 
 
 ```{r}
+mrna<-t(mrna)
+srna<-t(srna)
+sirna<-t(sirna)
+
 dim(mrna)
 dim(srna)
+dim(sirna)
 dim(metadata)
 ```
+
+Remove columns with 0's in each matrix or with 0 variance (all values identical) 
+
+```{r}
+mrna <- mrna[, colSums(mrna) != 0]
+
+mrna<-as.data.frame(mrna)
+mrna <- mrna[, sapply(mrna, function(x) length(unique(x)) > 1)]
+dim(mrna)
+
+srna <- srna[, colSums(srna) != 0]
+dim(srna)
+
+sirna <- sirna[, colSums(sirna) != 0]
+dim(sirna)
+```
+
 
 ## Conduct preliminary PCA  
 
 ```{r}
-pca.mrna <- pca(mrna, ncomp = 4, center = TRUE, scale = TRUE)
-pca.srna <- pca(srna, ncomp = 4, center = TRUE, scale = TRUE)
+pca.mrna <- pca(mrna, ncomp = 3, center = TRUE, scale = TRUE)
+pca.srna <- pca(srna, ncomp = 3, center = TRUE, scale = TRUE)
+pca.sirna <- pca(sirna, ncomp = 3, center = TRUE, scale = TRUE)
 
 plot(pca.mrna)
 plot(pca.srna)
+plot(pca.sirna)
 ```
 
-Similar variance explained because we are dealing with individual samples within a species. This will change as we add more species.  
+Similar variance explained because we are dealing with individual samples within a species. 
 
 ```{r}
 plotIndiv(pca.mrna, comp = c(1, 2), 
@@ -76,90 +102,48 @@ plotIndiv(pca.srna, comp = c(1, 2),
           group = metadata$species, 
           ind.names = metadata$sample, 
           legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
+
+plotIndiv(pca.sirna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'siRNA, PCA comp 1 - 2')
 ```
 
-## PLS model  
-
-Build initial sPLS model. Using 4 components since we have 5 samples and components = n-1.  
-
-Tune for number of components to keep.  
-```{r}
-# set range of test values for number of variables to use from X dataframe
-list.keepX <- c(seq(20, 2000, 20))
-# set range of test values for number of variables to use from Y dataframe
-list.keepY <- c(seq(20, 20000, 100)) 
-
-tune.spls <- tune.spls(mrna, srna, ncomp = 2,
-                              test.keepX = list.keepX,
-                              test.keepY = list.keepY,
-                              nrepeat = 1,  # use 10 folds
-                             validation=c("loo"), progressBar=TRUE) 
-plot(tune.spls)         # use the correlation measure for tuning
-```
-
-Not working with small number of samples. Temporarily set the number of components to keep as a smaller number. 
+# Multi block PLS with DIABLO 
 
 ```{r}
-keep.X<-c("comp1"=50, "comp2"=50)
-keep.Y<-c("comp1"=50, "comp2"=50)
+X1 <- mrna
+X2 <- srna 
+X3 <- sirna
+X <- list(mrna = X1, srna = X2, sirna = X3)
+
+Y <-metadata$sample
 ```
 
 ```{r}
-pls <- spls(X = mrna, Y = srna, ncomp = 4, mode = 'regression', keepX=keep.X, keepY=keep.Y)
+result.diablo <- block.plsda(X, Y) # run the method
+plotIndiv(result.diablo) # plot the samples
+plotVar(result.diablo) # plot the variables
 ```
 
+sparse 
 ```{r}
-plotIndiv(pls, ind.names = TRUE, 
-         rep.space = "X-variate", # plot in X-variate subspace
-         group = metadata$sample, # colour by time group
-         pch = as.factor(metadata$species), 
-         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="mRNA")
+list.keepX = list(mrna = c(50, 4), srna = c(50,4), sirna = c(50, 4)) 
 
+# run the method
+result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 
 
-plotIndiv(pls, ind.names = TRUE, 
-         rep.space = "Y-variate", # plot in X-variate subspace
-         group = metadata$sample, # colour by time group
-         pch = as.factor(metadata$species), 
-         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="sRNA")
-
-plotIndiv(pls, ind.names = TRUE, 
-         rep.space = "XY-variate", # plot in X-variate subspace
-         group = metadata$sample, # colour by time group
-         pch = as.factor(metadata$species), 
-         legend = TRUE, legend.title = 'Sample', legend.title.pch = 'Sample', title="sRNA&mRNA")
+# plot the contributions of each feature to each dimension
+plotLoadings(result.sparse.diablo, ncomp = 1) 
+plotIndiv(result.sparse.diablo) # plot the samples
+plotVar(result.sparse.diablo) # plot the variables
 ```
 
-Plot line plot to show agreement between data sets.  
-
-```{r}
-plotArrow(pls, ind.names = TRUE,
-          group = metadata$sample, # colour by time group
-          legend.title = 'mRNA.sRNA')
-```
-
-High agreement between datasets.  
-
-## Visualizations 
-
-View correlation circle plot. 
-
-```{r}
-plotVar(pls, cex = c(3,4), var.names = c(FALSE, FALSE))
-```
-
-Cim plot. 
-```{r}
-pdf("D-Apul/output/05-Apul-mixOmics/cim-sRNA-mRNA.pdf", width=10, height=10)
-cim(pls, comp = 1:2, xlab="sRNA", ylab="mRNA")
-dev.off()
-```
-
-Network plot. 
 ```{r}
 color.edge <- color.GreenRed(50)  # set the colours of the connecting lines
 
-network(pls, comp = 1:2,
-        cutoff = 0.95, # only show connections with a correlation above threshold
+network(result.sparse.diablo, 
+        cutoff = 0.99, # only show connections with a correlation above threshold
         shape.node = c("rectangle", "circle"),
         color.node = c("cyan", "pink"),
         color.edge = color.edge, 
@@ -167,9 +151,6 @@ network(pls, comp = 1:2,
         lwd.edge = 2)
 ```
 
-Not super helpful. 
-
-
-
-
-
+```{r}
+circosPlot(result.sparse.diablo, cutoff=0.90)
+```

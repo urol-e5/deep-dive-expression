@@ -1,0 +1,977 @@
+target_name	target_length	query_name	query_length	mfe	pval	position	noncomp_target_seq	comp_target_seq	comp_query_seq	noncomp_query_seq
+ntLink_8:28657258-28658258	999	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-33.3	0.001912	225	  C                   A	   AAGGAAGUGCUAUGAUCAU 	   UUCUUUCACGAUACUAGUA 	UGU                    
+ntLink_3:84074-84461	387	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-26.7	0.014807	51	    C               U 	     GAGAGUGCUGUGGUU  	     CUUUCACGAUACUAG  	UGUUU               UA
+ptg000001l:9127215-9128215	999	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-27.4	0.045273	497	 G                G   	  GGGGGGAGUGCUAUGA    	  UUUCUUUCACGAUACU    	UG                AGUA
+ptg000001l:14529049-14529340	291	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.043134	128	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000001l:14529049-14529340	291	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.043134	128	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000002l:5112565-5113565	999	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-27.5	0.042944	585	   U                U 	    GGAAAGUGCUGUGGUU  	    UCUUUCACGAUACUAG  	UGUU                UA
+ptg000008l:30134847-30135847	999	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-27.3	0.047724	419	  C                 C 	   AGGAGGGUGUUGUGAUC  	   UUCUUUCACGAUACUAG  	UGU                 UA
+ptg000012l:11150845-11151115	270	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.038051	116	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000012l:11150845-11151115	270	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.038051	116	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000015l:2829981-2830269	288	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042398	125	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000015l:2829981-2830269	288	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042398	125	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000017l:9907372-9907660	288	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042398	125	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000017l:9907372-9907660	288	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042398	125	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000017l:12684116-12684403	287	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042154	124	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000017l:12684116-12684403	287	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042154	124	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000018l:3518061-3518200	139	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-26.5	0.002233	96	 A                G   	  GAAGGAAGUGUUGUGA    	  UUUCUUUCACGAUACU    	UG                AGUA
+ptg000018l:3518061-3518200	139	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-26.5	0.002233	96	 A                G   	  GAAGGAAGUGUUGUGA    	  UUUCUUUCACGAUACU    	UG                AGUA
+ptg000020l:8906736-8906776	40	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-20.3	0.011714	15	 A           A        	  AAAGGAAGUGC         	  UUUCUUUCACG         	UG           AUACUAGUA
+ptg000024l:11673197-11673486	289	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042643	126	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000024l:11673197-11673486	289	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24.1	0.042643	126	C              G      	 CGAAGAGGGUGCUG       	 GUUUCUUUCACGAU       	U              ACUAGUA
+ptg000031l:7250529-7250712	183	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-24	0.020313	58	U               G      	 GCAAAGGAAGUGUUG       	 UGUUUCUUUCACGAU       	                ACUAGUA
+ptg000047l:5238293-5239293	999	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-29.3	0.016464	918	C                 C    	 ACGAAGAAAGUGCUGUG     	 UGUUUCUUUCACGAUAC     	                  UAGUA
+ptg000112l:20153-20915	762	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-26.7	0.044248	426	    C               U 	     GAGAGUGCUGUGGUU  	     CUUUCACGAUACUAG  	UGUUU               UA
+ptg000128l:31644-32406	762	Cluster_1826.mature::ntLink_6:4847465-4847486(-)	22	-26.7	0.044248	426	    C               U 	     GAGAGUGCUGUGGUU  	     CUUUCACGAUACUAG  	UGUUU               UA
+ntLink_8:9590558-9591558	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-30.2	0.012666	246	 A                A  	  GGAACAAGUCGAAACG   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ntLink_8:14321846-14321867	21	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-21.2	0.001201	6	   U           C     	    GGCAGGCCGAA      	    UUGUUCGGCUU      	GCCC           UGUAAA
+ntLink_8:18885778-18886093	315	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-30	0.001751	9	 U                A  	  GGGACAAGCUGAAACG   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ntLink_8:23248061-23248132	71	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-21	0.029394	15	 C          A        	  GGAACAAGUC         	  CCUUGUUCGG         	GC          CUUUGUAAA
+ntLink_6:1474213-1474364	151	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.4	0.00186	128	   C              G  	    GACGAGCCGAAACA   	    UUGUUCGGCUUUGU   	GCCC              AAA
+ntLink_6:1474213-1474364	151	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.4	0.00186	128	   C              G  	    GACGAGCCGAAACA   	    UUGUUCGGCUUUGU   	GCCC              AAA
+ntLink_6:14656646-14657646	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.3	0.03436	645	U               G    	 GGGAAUAGGUCGAAA     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000001l:10934026-10935026	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.7	0.046948	723	G               A    	 GGGGACGAGUUGAAA     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000001l:20523766-20524332	566	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.6	0.020658	363	G             U      	 GGGAACAAGUCGG       	 CCCUUGUUCGGCU       	G             UUGUAAA
+ptg000002l:5458813-5459813	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.7	0.027877	776	   A                 C	    AGCAAGCCGGAACAUUU 	    UUGUUCGGCUUUGUAAA 	GCCC                  
+ptg000002l:9896927-9897927	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.1	0.038136	47	 A              A    	  GGGACGAGCCGAAG     	  CCUUGUUCGGCUUU     	GC              GUAAA
+ptg000004l:9381829-9382829	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.8	0.044574	625	  U                  A	   GGACGAGCUGAGAUAUUU 	   CUUGUUCGGCUUUGUAAA 	GCC                   
+ptg000005l:870455-871455	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.6	0.049444	792	G           A        	 GGGAACAAGCC         	 CCCUUGUUCGG         	G           CUUUGUAAA
+ptg000008l:6336251-6336605	354	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-25.4	0.033366	189	  A              U   	   GAGCAGGUCGAGAC    	   CUUGUUCGGCUUUG    	GCC              UAAA
+ptg000008l:8114354-8115354	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.9	0.042318	349	G               A    	 GGGAACGAGUUGAAG     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000008l:8134625-8135625	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.9	0.042318	908	G               A    	 GGGAACGAGUUGAAG     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000008l:26510749-26510977	228	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-25.4	0.015407	62	  A               A  	   GGAUAGGCUGAAACA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000008l:28923769-28923997	228	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-24.7	0.02374	62	  A               A  	   GGAUAGGCUGAAACG   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000008l:30830321-30831321	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.8	0.044574	4	A           A        	 GGGAGCAAGCC         	 CCCUUGUUCGG         	G           CUUUGUAAA
+ptg000008l:34588541-34589541	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.3	0.020348	613	  A               G  	   GGACAAGCCGGAGCA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000011l:8121474-8122474	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.1	0.022602	794	 U              A    	  GGAACAAGCCGAGA     	  CCUUGUUCGGCUUU     	GC              GUAAA
+ptg000012l:787517-787669	152	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.3	0.000544	113	 A                G  	  GGAACGAGCUGAGAUA   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ptg000012l:12259318-12260318	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.1	0.038136	254	C            U        	 CGGGAGCAAGCC         	 GCCCUUGUUCGG         	             CUUUGUAAA
+ptg000016l:11204972-11205972	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.6	0.017377	214	  A               A  	   GAACAGGCCGAGGCA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000017l:9620032-9621032	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.1	0.038136	269	 A             U     	  GGAACAAGCCGAA      	  CCUUGUUCGGCUU      	GC             UGUAAA
+ptg000018l:7319235-7320235	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.1	0.022602	819	 U              A    	  GGAACAAGCCGAGA     	  CCUUGUUCGGCUUU     	GC              GUAAA
+ptg000020l:2244969-2245809	840	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.4	0.025057	764	A               G    	 GGGAGCGAGUUGAAA     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000020l:3894500-3895500	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.7	0.046948	927	A                A    	 UGGGAAUGAGCUGGAA     	 GCCCUUGUUCGGCUUU     	                 GUAAA
+ptg000020l:11531183-11532121	938	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.1	0.034738	320	  U                G 	   GAACGAGUCGAAACAU  	   CUUGUUCGGCUUUGUA  	GCC                AA
+ptg000022l:4552034-4553034	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.4	0.032612	335	A            C       	 GGGAACAGGCCG        	 CCCUUGUUCGGC        	G            UUUGUAAA
+ptg000022l:9242144-9243144	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-31.8	0.005435	77	U                G   	 GGGAGCAAGUCGAAAU    	 CCCUUGUUCGGCUUUG    	G                UAAA
+ptg000023l:1948868-1949868	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-36	0.000585	38	A                    G	 CGGGAACAAGUUGAAACAUU 	 GCCCUUGUUCGGCUUUGUAA 	                     A
+ptg000023l:27458085-27458185	100	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-21.3	0.046739	29	 U            C      	  GGAACAAGUUGG       	  CCUUGUUCGGCU       	GC            UUGUAAA
+ptg000023l:27458085-27458185	100	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-21.3	0.046739	29	 U            C      	  GGAACAAGUUGG       	  CCUUGUUCGGCU       	GC            UUGUAAA
+ptg000023l:35559010-35560010	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.3	0.03436	586	G               A    	 GGGAAUGAGCUGAGA     	 CCCUUGUUCGGCUUU     	G               GUAAA
+ptg000025l:18563909-18564909	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.8	0.044574	950	  U                  A	   GGACGAGCUGAGAUAUUU 	   CUUGUUCGGCUUUGUAAA 	GCC                   
+ptg000026l:11450298-11450480	182	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-26.6	0.004658	47	  A                C 	   GAACAAGCUGAAAUAU  	   CUUGUUCGGCUUUGUA  	GCC                AA
+ptg000027l:1658549-1658853	304	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-25.2	0.02904	243	  C               A  	   GAGCAAGUUGGAGCA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000027l:1658549-1658853	304	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-25.2	0.02904	243	  C               A  	   GAGCAAGUUGGAGCA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000027l:13166846-13166917	71	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-21.5	0.020566	60	U                     	 CGGGAGCGGGU          	 GCCCUUGUUCG          	            GCUUUGUAAA
+ptg000027l:14119626-14120626	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.8	0.026454	173	 U                A  	  GGAACAAGUCGAAAUA   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ptg000027l:14119675-14120675	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-28.8	0.026454	124	 U                A  	  GGAACAAGUCGAAAUA   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ptg000030l:804189-805189	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.9	0.042318	79	  C               C  	   GGACAGGCCGGGGCA   	   CUUGUUCGGCUUUGU   	GCC               AAA
+ptg000031l:5755326-5756326	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.6	0.049444	714	 U             U     	  GGAGCAGGCCGAA      	  CCUUGUUCGGCUU      	GC             UGUAAA
+ptg000031l:5755957-5756957	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.6	0.049444	83	 U             U     	  GGAGCAGGCCGAA      	  CCUUGUUCGGCUU      	GC             UGUAAA
+ptg000031l:7346815-7346932	117	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-24.1	0.009621	60	U            U        	 CGGGAGCGGGUC         	 GCCCUUGUUCGG         	             CUUUGUAAA
+ptg000031l:12814083-12815083	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-27.6	0.049444	808	G           A        	 GGGAGCAAGCC         	 CCCUUGUUCGG         	G           CUUUGUAAA
+ptg000036l:4850980-4851980	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.5	0.018316	465	 C                A  	  GGGACAGGCUGGAGCG   	  CCUUGUUCGGCUUUGU   	GC                AAA
+ptg000047l:2774500-2775500	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.8	0.01564	444	 C               G   	  GGAACGAGCCGGAAU    	  CCUUGUUCGGCUUUG    	GC               UAAA
+ptg000047l:2774500-2775500	999	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	21	-29.5	0.018316	362	 C                 A 	  GGAAUGAGCCGGAAUAU  	  CCUUGUUCGGCUUUGUA  	GC                 AA
+ntLink_8:6559468-6559541	73	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-21.8	0.029294	32	   C              C     	    UCUUCCUUCUUGGU      	    GGAGGGAAGGAUUA      	UUGU              AACUUU
+ntLink_8:12529684-12530005	321	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-25.5	0.04177	7	  U                A    	   GCUUUCCUUCUUAGUU     	   UGGAGGGAAGGAUUAA     	UUG                ACUUU
+ntLink_8:17645246-17646246	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.7	0.04251	363	 U                A     	  CGCUUCCUUUCCUAAU      	  GUGGAGGGAAGGAUUA      	UU                AACUUU
+ntLink_6:14999793-14999881	88	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-22.5	0.026419	46	  G             U       	   GCUUCCCUUUUUG        	   UGGAGGGAAGGAU        	UUG             UAAACUUU
+ntLink_6:18983157-18983815	658	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-29.4	0.015639	523	 C             U        	  UACCUCCCUUCCU         	  GUGGAGGGAAGGA         	UU             UUAAACUUU
+ptg000001l:6704033-6704374	341	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.6	0.007869	57	C               U        	 AAUACCUCCUUUCCU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000001l:6704033-6704374	341	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.6	0.007869	57	C               U        	 AAUACCUCCUUUCCU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000002l:2506526-2506572	46	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-20	0.040703	17	       G          A     	        CCUUCCUGAU      	        GGAAGGAUUA      	UUGUGGAG          AACUUU
+ptg000002l:2506526-2506572	46	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-20	0.040703	17	       G          A     	        CCUUCCUGAU      	        GGAAGGAUUA      	UUGUGGAG          AACUUU
+ptg000002l:10032565-10032826	261	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.8	0.044536	25	  G           C         	   GCCUCCCUUUC          	   UGGAGGGAAGG          	UUG           AUUAAACUUU
+ptg000002l:10032565-10032826	261	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.8	0.044536	25	  G           C         	   GCCUCCCUUUC          	   UGGAGGGAAGG          	UUG           AUUAAACUUU
+ptg000002l:13813313-13814313	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.8	0.040421	904	  A              G      	   ACCUCUCUUCCUGA       	   UGGAGGGAAGGAUU       	UUG              AAACUUU
+ptg000004l:11645548-11646548	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-29.8	0.024361	929	C                 A      	 AGCACCUUUCUUCCUGG       	 UUGUGGAGGGAAGGAUU       	                  AAACUUU
+ptg000008l:9697125-9698125	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.9	0.038433	697	U              C         	 GGCACCUCCUUUCC          	 UUGUGGAGGGAAGG          	               AUUAAACUUU
+ptg000008l:10574943-10575943	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.4	0.049429	694	U               C       	 ACACUUUCCUUCCUA        	 UGUGGAGGGAAGGAU        	U               UAAACUUU
+ptg000008l:10707584-10707627	43	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-20.7	0.021091	1	                U       	  CACUUUCUUUUCUG        	  GUGGAGGGAAGGAU        	UU              UAAACUUU
+ptg000008l:11845477-11846477	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30.7	0.0154	600	U                 G     	 ACACCUCCUUUUCUAAU      	 UGUGGAGGGAAGGAUUA      	U                 AACUUU
+ptg000008l:28114485-28114511	26	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-21.2	0.004237	5	     A         C        	      UCCCUUCCU         	      AGGGAAGGA         	UUGUGG         UUAAACUUU
+ptg000008l:29328624-29328741	117	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.6	0.01166	32	C           C            	 AACACCUCCCU             	 UUGUGGAGGGA             	            AGGAUUAAACUUU
+ptg000011l:9615211-9615419	208	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.9	0.028536	183	U           C            	 GACACCUCCCU             	 UUGUGGAGGGA             	            AGGAUUAAACUUU
+ptg000011l:9615211-9615419	208	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.9	0.028536	183	U           C            	 GACACCUCCCU             	 UUGUGGAGGGA             	            AGGAUUAAACUUU
+ptg000012l:12477180-12477485	305	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-25.6	0.036296	253	  G           A         	   ACUUCCCUUCC          	   UGGAGGGAAGG          	UUG           AUUAAACUUU
+ptg000015l:1787315-1787503	188	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-24.4	0.032307	61	A               C        	 GGCGCCUUCUUUCUU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000015l:10326565-10327565	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.7	0.04251	584	A              C         	 AACGCCUCCUUUCC          	 UUGUGGAGGGAAGG          	               AUUAAACUUU
+ptg000016l:6638272-6638412	140	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-26.4	0.005282	28	   C           C        	    CCUCCCUUCCU         	    GGAGGGAAGGA         	UUGU           UUAAACUUU
+ptg000016l:6638272-6638412	140	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-26.4	0.005282	28	   C           C        	    CCUCCCUUCCU         	    GGAGGGAAGGA         	UUGU           UUAAACUUU
+ptg000018l:11521975-11522053	78	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-23.2	0.012866	22	 U              C       	  UAUCUCCCUUUUUA        	  GUGGAGGGAAGGAU        	UU              UAAACUUU
+ptg000019l:2393800-2394800	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.9	0.038433	31	C                A      	 ACGCUUCCUUUCCUGG       	 UGUGGAGGGAAGGAUU       	U                AAACUUU
+ptg000020l:7559975-7560975	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30.2	0.019874	765	C               C        	 AACACCUCUCUUCCU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000020l:9813661-9814661	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30.4	0.017947	768	 U                  U   	  CACUUCCUUUCCUGAUUU    	  GUGGAGGGAAGGAUUAAA    	UU                  CUUU
+ptg000022l:7559411-7560411	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.4	0.049429	791	   C             C      	    CCUCCCUUCCUGG       	    GGAGGGAAGGAUU       	UUGU             AAACUUU
+ptg000023l:16127564-16127624	60	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-20.5	0.048743	7	A         A              	 AACACCUCC               	 UUGUGGAGG               	          GAAGGAUUAAACUUU
+ptg000023l:16127564-16127624	60	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-20.5	0.048743	7	A         A              	 AACACCUCC               	 UUGUGGAGG               	          GAAGGAUUAAACUUU
+ptg000023l:27063512-27064512	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.8	0.040421	29	  G              A      	   ACCUCUCUUCCUAA       	   UGGAGGGAAGGAUU       	UUG              AAACUUU
+ptg000023l:31549568-31550568	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-29.3	0.031396	371	G             A          	 AACACCUCCCUUC           	 UUGUGGAGGGAAG           	              GAUUAAACUUU
+ptg000023l:40379793-40380793	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-29.2	0.033027	196	U             A         	 GCACCUCCCUUUC          	 UGUGGAGGGAAGG          	U             AUUAAACUUU
+ptg000025l:12857964-12858964	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-31.4	0.010766	721	C                  C    	 ACACCUCCUUUCUUGAUU     	 UGUGGAGGGAAGGAUUAA     	U                  ACUUU
+ptg000026l:13578663-13579130	467	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-26.9	0.03485	121	C                 C      	 AAUGCUUCCUUUCCUGG       	 UUGUGGAGGGAAGGAUU       	                  AAACUUU
+ptg000027l:5214011-5214721	710	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-27.9	0.038865	299	U               C        	 GACACCUUCCUUCUU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000027l:11972815-11973815	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30	0.022004	422	G               C        	 AGCGCCUUCCUUCCU         	 UUGUGGAGGGAAGGA         	                UUAAACUUU
+ptg000030l:506450-507450	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-29.8	0.024361	757	 C              U       	  CACCUCCCUUCUUA        	  GUGGAGGGAAGGAU        	UU              UAAACUUU
+ptg000031l:10811539-10812539	999	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.9	0.038433	151	  G                 U   	   GCCUCUUUUCCUGAUUU    	   UGGAGGGAAGGAUUAAA    	UUG                 CUUU
+ptg000035l:4575148-4576132	984	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.4	0.048382	31	  U           A         	   GCCUCCCUUCC          	   UGGAGGGAAGG          	UUG           AUUAAACUUU
+ptg000035l:4575148-4576132	984	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-28.4	0.048382	31	  U           A         	   GCCUCCCUUCC          	   UGGAGGGAAGG          	UUG           AUUAAACUUU
+ptg000035l:9439035-9439347	312	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30	0.002965	19	C              A         	 GACGCUUCCCUUCC          	 UUGUGGAGGGAAGG          	               AUUAAACUUU
+ptg000035l:9439035-9439347	312	Cluster_1862.mature::ntLink_6:7263537-7263560(-)	24	-30	0.002965	19	C              A         	 GACGCUUCCCUUCC          	 UUGUGGAGGGAAGG          	               AUUAAACUUU
+ntLink_8:21289153-21289455	302	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-24.1	0.048685	219	    G             C   	     GAGCAGCCGAUGU    	     UUCGUUGGCUGUA    	UCGAA             AAAU
+ntLink_8:21289153-21289455	302	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-24.1	0.048685	219	    G             C   	     GAGCAGCCGAUGU    	     UUCGUUGGCUGUA    	UCGAA             AAAU
+ptg000001l:19290073-19291024	951	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.5	0.024967	698	A               A      	 AGUUUGAGCAACCGA       	 UCGAAUUCGUUGGCU       	                GUAAAAU
+ptg000002l:15255886-15256886	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-27.6	0.043278	892	    C              A  	     AAGCAGCCGACGUU   	     UUCGUUGGCUGUAA   	UCGAA              AAU
+ptg000004l:7997828-7998828	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28	0.035055	595	     C                C	      AGCGGCCGACAUUUUG 	      UCGUUGGCUGUAAAAU 	UCGAAU                 
+ptg000007l:4499052-4499247	195	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-25.2	0.01134	24	      U            A  	       GCAGCCGACAUU   	       CGUUGGCUGUAA   	UCGAAUU            AAU
+ptg000008l:8058914-8059914	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-27.4	0.04807	247	    A              G  	     AGGCGACCGACAUU   	     UUCGUUGGCUGUAA   	UCGAA              AAU
+ptg000008l:26127566-26128566	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.8	0.022946	680	 U                  G 	  CUUAAGUAACCGAUAUUU  	  GAAUUCGUUGGCUGUAAA  	UC                  AU
+ptg000009l:1618987-1619987	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.5	0.026906	296	U                G    	 GUUUAGGCAACUGGCA     	 CGAAUUCGUUGGCUGU     	U                AAAAU
+ptg000009l:5727240-5727479	239	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-24.4	0.027288	187	     C              A 	      AGUAACCGGCGUUU  	      UCGUUGGCUGUAAA  	UCGAAU              AU
+ptg000009l:5727240-5727479	239	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-24.4	0.027288	187	     C              A 	      AGUAACCGGCGUUU  	      UCGUUGGCUGUAAA  	UCGAAU              AU
+ptg000009l:9050650-9051650	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.5	0.026906	131	U                G    	 GUUUGAGCGACUGACG     	 CGAAUUCGUUGGCUGU     	U                AAAAU
+ptg000012l:16351421-16351516	95	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-21.7	0.028694	5	    C          A      	     AAGCAGCCGA       	     UUCGUUGGCU       	UCGAA          GUAAAAU
+ptg000016l:9152923-9153923	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-37.9	0.000174	122	G                     U	 AGCUUAAGCAACCGACGUUUU 	 UCGAAUUCGUUGGCUGUAAAA 	                      U
+ptg000017l:6477550-6477630	80	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-22.6	0.010676	1	                U     	  UUUAGGCGAUCGGC      	  GAAUUCGUUGGCUG      	UC              UAAAAU
+ptg000017l:6477550-6477630	80	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-22.6	0.010676	1	                U     	  UUUAGGCGAUCGGC      	  GAAUUCGUUGGCUG      	UC              UAAAAU
+ptg000019l:4418157-4419157	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.4	0.028371	719	   A               A  	    UAAGCAACCGGCGUU   	    AUUCGUUGGCUGUAA   	UCGA               AAU
+ptg000020l:16745972-16746169	197	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-25	0.013138	126	    A              G  	     GGGUAACCGGCAUU   	     UUCGUUGGCUGUAA   	UCGAA              AAU
+ptg000021l:15238855-15239057	202	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-23	0.048649	19	    C           G     	     AAGCAGCCGAU      	     UUCGUUGGCUG      	UCGAA           UAAAAU
+ptg000021l:15247569-15247771	202	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-23	0.048649	19	    C           G     	     AAGCAGCCGAU      	     UUCGUUGGCUG      	UCGAA           UAAAAU
+ptg000023l:1696050-1697050	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28	0.035055	421	G              C       	 AGCUUAAGCAACCG        	 UCGAAUUCGUUGGC        	               UGUAAAAU
+ptg000023l:37412075-37412225	150	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-22.7	0.03482	103	     C              C 	      GGCAACUGAUAUUU  	      UCGUUGGCUGUAAA  	UCGAAU              AU
+ptg000025l:12798082-12798847	765	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-27.1	0.038077	456	G             A        	 AGCUUAAGCAACC         	 UCGAAUUCGUUGG         	              CUGUAAAAU
+ptg000025l:15572969-15573228	259	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-23.9	0.042584	37	    A            A    	     GAGCAAUCGACA     	     UUCGUUGGCUGU     	UCGAA            AAAAU
+ptg000026l:6852368-6853368	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-27.8	0.038955	411	U              C       	 AGCUUAAGCAACCG        	 UCGAAUUCGUUGGC        	               UGUAAAAU
+ptg000029c:1089947-1089990	43	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-21.7	0.004974	10	      U           C   	       GUAACCGACAU    	       CGUUGGCUGUA    	UCGAAUU           AAAU
+ptg000035l:8380620-8380754	134	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-25.7	0.003802	112	U               A      	 AGCUUGAGUAACUGG       	 UCGAAUUCGUUGGCU       	                GUAAAAU
+ptg000035l:8380620-8380754	134	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-25.7	0.003802	112	U               A      	 AGCUUGAGUAACUGG       	 UCGAAUUCGUUGGCU       	                GUAAAAU
+ptg000047l:5238293-5239293	999	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-29.6	0.014987	842	   C                C 	    UGAGCAGCCGACAUUU  	    AUUCGUUGGCUGUAAA  	UCGA                AU
+ptg000049l:503358-503628	270	Cluster_1951.mature::ntLink_6:13351801-13351822(-)	22	-28.2	0.003266	145	     U                U	      GGCAGCCGGCAUUUUG 	      UCGUUGGCUGUAAAAU 	UCGAAU                 
+ptg000007l:2958596-2959596	999	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-33.4	0.001976	441	  G                   C	   UAACUGCUGUGGUCUGAGG 	   AUUGAUGACAUUAGACUCU 	UGA                    
+ptg000016l:3740453-3740852	399	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-27.9	0.008309	233	G                 G    	 GCUUAACUACUGUAGUU     	 UGAAUUGAUGACAUUAG     	                  ACUCU
+ptg000016l:4620071-4621071	999	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-27.8	0.039252	705	     U                U	      CUAUUGUAAUCUGAGA 	      GAUGACAUUAGACUCU 	UGAAUU                 
+ptg000020l:16340811-16341233	422	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-27.9	0.00919	233	G                 G    	 GCUUAACUACUGUAGUU     	 UGAAUUGAUGACAUUAG     	                  ACUCU
+ptg000021l:10831483-10832483	999	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-27.9	0.037238	611	U                G    	 CUUGACUGCUGUGAUC     	 GAAUUGAUGACAUUAG     	U                ACUCU
+ptg000035l:6146817-6147039	222	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-24.3	0.025678	39	       G              A	        ACUGUGGUUUGAGA 	        UGACAUUAGACUCU 	UGAAUUGA               
+ptg000047l:1888805-1889805	999	Cluster_2463.mature::ptg000001l:5548893-5548914(-)	22	-27.8	0.039252	561	     U                U	      CUAUUGUAAUCUGAGA 	      GAUGACAUUAGACUCU 	UGAAUU                 
+ptg000036l:4522914-4523037	123	Cluster_2859.mature::ptg000001l:20063094-20063116(+)	23	-26.4	0.003604	85	  G             A      	   CAGCUAUUUUGGG       	   GUCGAUAAAACCC       	GGA             ACAAGAA
+ntLink_8:2949525-2950525	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-28.2	0.044287	435	G              A       	 AGAGUGGUCUUCAC        	 UCUUACCAGGAGUG        	               ACAAUACU
+ntLink_8:6559468-6559541	73	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-20.8	0.044918	42	   U            C     	    UGGUCUUUAUUG      	    ACCAGGAGUGAC      	UCUU            AAUACU
+ptg000008l:43948-44322	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000008l:2604852-2604919	67	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-21.1	0.030693	45	   U            A     	    UGGUUUUUACUG      	    ACCAGGAGUGAC      	UCUU            AAUACU
+ptg000015l:1811254-1812254	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-29.5	0.022693	680	C             G       	 GAGUGGUCCUCGC        	 CUUACCAGGAGUG        	U             ACAAUACU
+ptg000015l:7845643-7846643	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-29.4	0.023897	13	      A               G	       UCCUCACUGUUGUGG 	       AGGAGUGACAAUACU 	UCUUACC                
+ptg000016l:3780836-3781836	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-30.3	0.014994	650	  C              C    	   GUGGUCCUCGCUGU     	   UACCAGGAGUGACA     	UCU              AUACU
+ptg000016l:5153335-5153397	62	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-20.2	0.049582	42	     A          A     	      GUUCUCGCUG      	      CAGGAGUGAC      	UCUUAC          AAUACU
+ptg000016l:6453400-6453466	66	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-20.6	0.042344	49	       G          U   	        CCUCGCUGUU    	        GGAGUGACAA    	UCUUACCA          UACU
+ptg000016l:6453400-6453466	66	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-20.6	0.042344	49	       G          U   	        CCUCGCUGUU    	        GGAGUGACAA    	UCUUACCA          UACU
+ptg000018l:5586082-5587082	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-28.3	0.042079	209	   U            A     	    UGGUCCUCGCUG      	    ACCAGGAGUGAC      	UCUU            AAUACU
+ptg000023l:34506860-34507371	511	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-26.1	0.049655	73	   C            G     	    UGGUCUUCACUG      	    ACCAGGAGUGAC      	UCUU            AAUACU
+ptg000023l:34506860-34507371	511	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-26.1	0.049655	73	   C            G     	    UGGUCUUCACUG      	    ACCAGGAGUGAC      	UCUU            AAUACU
+ptg000023l:35417223-35418223	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-28.2	0.044287	560	     U                U	      GUCCUUGCUGUUGUGG 	      CAGGAGUGACAAUACU 	UCUUAC                 
+ptg000025l:2196599-2196876	277	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.8	0.021579	48	U            A        	 GAGUGGUCCUCG         	 CUUACCAGGAGU         	U            GACAAUACU
+ptg000025l:2196599-2196876	277	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.8	0.021579	48	U            A        	 GAGUGGUCCUCG         	 CUUACCAGGAGU         	U            GACAAUACU
+ptg000027l:8454579-8455579	999	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-29.7	0.020463	336	A               A      	 GGAGUGGUCCUCAUU       	 UCUUACCAGGAGUGA       	                CAAUACU
+ptg000047l:165221-165595	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000056l:8735-9109	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000057l:12654-13028	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000065l:45187-45561	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000099l:44295-44669	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000116l:32922-33296	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000117l:6695-7069	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000121l:37801-38175	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ptg000159l:18049-18423	374	Cluster_3250.mature::ptg000002l:7337560-7337581(+)	22	-25.3	0.047637	22	     A            U   	      GUCCUCACUGUU    	      CAGGAGUGACAA    	UCUUAC            UACU
+ntLink_8:8613188-8613233	45	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-20.2	0.02716	13	           C            A	            CGUGUUGCCAGA 	            GUAUGACGGUCU 	AACCUUUUUAUU             
+ntLink_8:20869782-20869849	67	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-21.5	0.024451	16	              C         A	               ACUGCCAGA 	               UGACGGUCU 	AACCUUUUUAUUGUA          
+ntLink_8:30064486-30064703	217	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-26.9	0.007283	38	         G             C	          GACAUGCUGCCAG 	          UUGUAUGACGGUC 	AACCUUUUUA             U
+ntLink_6:14369610-14370610	999	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-28.9	0.031146	52	    C                 A 	     AGAAUAGCGUACUGCCA  	     UUUUAUUGUAUGACGGU  	AACCU                 CU
+ptg000001l:19333945-19334945	999	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-28.9	0.031146	328	        U               A	         UAACGUACUGCCAGG 	         AUUGUAUGACGGUCU 	AACCUUUUU                
+ptg000020l:6332817-6333817	999	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-28	0.049418	132	 A                 A    	  GGGGAAAUAACAUGCUG     	  CCUUUUUAUUGUAUGAC     	AA                 GGUCU
+ptg000023l:9978341-9978395	54	Cluster_3366.mature::ptg000002l:14046285-14046308(+)	24	-21.3	0.017897	11	         C              A	          AAUAUAUUGUCAGG 	          UUGUAUGACGGUCU 	AACCUUUUUA               
+ntLink_8:8613188-8613233	45	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-20.2	0.032616	13	           C            A	            CGUGUUGCCAGA 	            GUAUGACGGUCU 	ACCCUUUUUAUU             
+ntLink_8:20869782-20869849	67	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-21.5	0.029415	16	              C         A	               ACUGCCAGA 	               UGACGGUCU 	ACCCUUUUUAUUGUA          
+ntLink_8:30064486-30064703	217	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-26.9	0.008933	38	         G             C	          GACAUGCUGCCAG 	          UUGUAUGACGGUC 	ACCCUUUUUA             U
+ntLink_6:14369610-14370610	999	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-28.9	0.037314	52	    C                 A 	     AGAAUAGCGUACUGCCA  	     UUUUAUUGUAUGACGGU  	ACCCU                 CU
+ptg000001l:19333945-19334945	999	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-28.9	0.037314	328	        U               A	         UAACGUACUGCCAGG 	         AUUGUAUGACGGUCU 	ACCCUUUUU                
+ptg000023l:9978341-9978395	54	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-21.3	0.021643	11	         C              A	          AAUAUAUUGUCAGG 	          UUGUAUGACGGUCU 	ACCCUUUUUA               
+ptg000026l:8350785-8351785	999	Cluster_3367.mature::ptg000002l:14046591-14046614(+)	24	-28.4	0.048026	339	C                A      	 GGGAAAAAUGACGUGC       	 CCCUUUUUAUUGUAUG       	A                ACGGUCU
+ptg000002l:14206455-14206676	221	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	23	-23.8	0.03932	99	C              U        	 AGAUCUCUUGCAAU         	 UCUAGAGAAUGUUA         	               CAAUACGAU
+ptg000002l:14206455-14206676	221	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	23	-23.8	0.03932	99	C              U        	 AGAUCUCUUGCAAU         	 UCUAGAGAAUGUUA         	               CAAUACGAU
+ptg000021l:3792426-3792482	56	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	23	-21.8	0.010178	12	        G            C 	         GCAGUGUUGUGC  	         UGUUACAAUACG  	UCUAGAGAA            AU
+ptg000024l:11302674-11303674	999	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	23	-27.6	0.048616	614	 C                     G	  AUUUUUUGCGGUGUUAUGUUG 	  UAGAGAAUGUUACAAUACGAU 	UC                      
+ptg000035l:5481679-5482253	574	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	23	-26.7	0.034467	147	  U                 A  	   UUUCUUGCAGUGUUGUG   	   AGAGAAUGUUACAAUAC   	UCU                 GAU
+ntLink_8:12337385-12338385	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	926	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ntLink_8:14815866-14816066	200	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-24.4	0.035074	171	U            G         	 UCGGGGUCUUCU          	 GGUCCCAGAGGA          	             AAGAAGGAAA
+ntLink_8:14815866-14816066	200	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-24.4	0.035074	171	U            G         	 UCGGGGUCUUCU          	 GGUCCCAGAGGA          	             AAGAAGGAAA
+ntLink_6:23128484-23128617	133	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.8	0.006732	62	C           A          	 CCAGGGUCUUC           	 GGUCCCAGAGG           	            AAAGAAGGAAA
+ntLink_6:23226531-23226664	133	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.8	0.006732	62	C           A          	 CCAGGGUCUUC           	 GGUCCCAGAGG           	            AAAGAAGGAAA
+ptg000004l:6641162-6642162	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.7	0.015395	379	   U               A  	    GGUCUCUUUUCUUCC   	    CCAGAGGAAAGAAGG   	GGUC               AAA
+ptg000004l:9805336-9806336	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.9	0.013902	606	   A               G  	    GGUCUCUUUUCUUCC   	    CCAGAGGAAAGAAGG   	GGUC               AAA
+ptg000007l:991055-992055	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.2	0.032979	426	    A                C	     GUUUCCUUUCUUCCUU 	     CAGAGGAAAGAAGGAA 	GGUCC                A
+ptg000007l:2627306-2628306	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.3	0.031354	923	    C                C	     GUUUCCUUUCUUCCUU 	     CAGAGGAAAGAAGGAA 	GGUCC                A
+ptg000007l:11807348-11807509	161	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.8	0.00991	90	C           A          	 CCAGGGUCUUC           	 GGUCCCAGAGG           	            AAAGAAGGAAA
+ptg000008l:3415403-3415636	233	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.7	0.021113	161	     U             A  	      UCUCCUUUCUUCU   	      AGAGGAAAGAAGG   	GGUCCC             AAA
+ptg000008l:3415403-3415636	233	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.7	0.021113	161	     U             A  	      UCUCCUUUCUUCU   	      AGAGGAAAGAAGG   	GGUCCC             AAA
+ptg000008l:6824739-6825562	823	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.6	0.011898	386	U             G        	 CCAGGGUCUCCUU         	 GGUCCCAGAGGAA         	              AGAAGGAAA
+ptg000008l:6824739-6825562	823	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.6	0.011898	386	U             G        	 CCAGGGUCUCCUU         	 GGUCCCAGAGGAA         	              AGAAGGAAA
+ptg000009l:3495115-3495238	123	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-22.5	0.047794	53	     U             A  	      UCUCUUUUUUUCC   	      AGAGGAAAGAAGG   	GGUCCC             AAA
+ptg000012l:12316828-12316952	124	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-26.3	0.004205	9	    U              C  	     GUCUCCUUUCUUUC   	     CAGAGGAAAGAAGG   	GGUCC              AAA
+ptg000015l:135976-136025	49	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-20.5	0.030553	3	 A        A           	  AGGGUCUC            	  UCCCAGAG            	GG        GAAAGAAGGAAA
+ptg000017l:4993468-4994114	646	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-27.8	0.035262	137	C           C          	 CCAGGGUCUCC           	 GGUCCCAGAGG           	            AAAGAAGGAAA
+ptg000017l:4993468-4994114	646	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-27.8	0.035262	137	C           C          	 CCAGGGUCUCC           	 GGUCCCAGAGG           	            AAAGAAGGAAA
+ptg000021l:596303-597303	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-28.9	0.03837	102	  U                   G	   GGGUUUUCUUUCUUUUUUU 	   CCCAGAGGAAAGAAGGAAA 	GGU                    
+ptg000021l:8074349-8074608	259	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.4	0.001579	191	U                   A 	 UAGGGUCUUUUUUCUUUUU  	 GUCCCAGAGGAAAGAAGGA  	G                   AA
+ptg000021l:15822777-15823283	506	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-26.8	0.041245	414	     C             C  	      UCUCCUUUCUUCC   	      AGAGGAAAGAAGG   	GGUCCC             AAA
+ptg000022l:7399117-7400117	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.5	0.028335	961	   A                G 	    GGUUUCUUUUCUUCCU  	    CCAGAGGAAAGAAGGA  	GGUC                AA
+ptg000023l:32246957-32247005	48	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-21	0.020309	26	A         G           	 CGGGGUCUU            	 GUCCCAGAG            	G         GAAAGAAGGAAA
+ptg000024l:4683322-4684322	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.2	0.032979	123	A                 G    	 UCGGGGUUUUCUUUCUU     	 GGUCCCAGAGGAAAGAA     	                  GGAAA
+ptg000024l:4683338-4684338	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.2	0.032979	107	A                 G    	 UCGGGGUUUUCUUUCUU     	 GGUCCCAGAGGAAAGAA     	                  GGAAA
+ptg000025l:10719782-10720782	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.1	0.034688	833	G            A         	 CCGGGGUCUCCU          	 GGUCCCAGAGGA          	             AAGAAGGAAA
+ptg000027l:6527033-6528033	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-30.1	0.020896	936	A            G         	 CCAGGGUCUCCU          	 GGUCCCAGAGGA          	             AAGAAGGAAA
+ptg000027l:13169803-13169904	101	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-25.1	0.005935	32	      G            C  	       CUCCUUUCUUCC   	       GAGGAAAGAAGG   	GGUCCCA            AAA
+ptg000030l:1564659-1564775	116	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-24.7	0.010339	101	      C             G 	       CUCCUUUUUUCCU  	       GAGGAAAGAAGGA  	GGUCCCA             AA
+ptg000030l:1564659-1564775	116	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-24.7	0.010339	101	      C             G 	       CUCCUUUUUUCCU  	       GAGGAAAGAAGGA  	GGUCCCA             AA
+ptg000030l:1567232-1567340	108	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-24.7	0.008917	86	      C             G 	       CUCCUUUUUUCCU  	       GAGGAAAGAAGGA  	GGUCCCA             AA
+ptg000047l:3622134-3623134	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.7	0.025603	414	C               C      	 CCAGGGUCUCUUUUU       	 GGUCCCAGAGGAAAG       	                AAGGAAA
+ptg000072c:220735-221735	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	220	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ptg000073l:4414-5414	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	651	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ptg000073l:17951-18951	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	703	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ptg000073l:69838-70838	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	286	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ptg000073l:135599-136599	999	Cluster_4220.mature::ptg000007l:915927-915948(-)	22	-29.4	0.029807	644	A              C      	 CAGGGUCUUCUUUC       	 GUCCCAGAGGAAAG       	G              AAGGAAA
+ntLink_8:18170398-18171398	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	980	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ntLink_8:18873487-18874487	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-31.6	0.005623	88	A                A    	 AACCAGAUCAUAGCAA     	 UUGGUCUAGUGUCGUU     	A                AGUUU
+ntLink_8:21777516-21778516	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.9	0.02357	558	     U                A	      GGUCACAGCAGUCAGG 	      CUAGUGUCGUUAGUUU 	AUUGGU                 
+ntLink_8:22411712-22412712	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-30.3	0.011228	673	 U                 U  	  GCCAGAUUGCAGCGAUU   	  UGGUCUAGUGUCGUUAG   	AU                 UUU
+ntLink_8:22411961-22412961	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-30.3	0.011228	424	 U                 U  	  GCCAGAUUGCAGCGAUU   	  UGGUCUAGUGUCGUUAG   	AU                 UUU
+ntLink_6:2918874-2919874	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	36	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ntLink_6:5772677-5773088	411	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-26.2	0.025451	38	      U               C	       AUCGCAGCAAUCAAA 	       UAGUGUCGUUAGUUU 	AUUGGUC                
+ntLink_6:14247103-14248103	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.8	0.042016	384	  C              G    	   CCAGAUUACAGCGA     	   GGUCUAGUGUCGUU     	AUU              AGUUU
+ptg000001l:17519828-17520828	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.2	0.034072	571	     U               C	      GAUCACGGCAAUCAG 	      CUAGUGUCGUUAGUU 	AUUGGU               U
+ptg000001l:18005263-18006263	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.9	0.039875	596	   G              A   	    CAGAUCACAGCGGU    	    GUCUAGUGUCGUUA    	AUUG              GUUU
+ptg000001l:20110343-20111343	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.5	0.049136	974	    G                 A	     AGGUUAUAGCAAUCAAA 	     UCUAGUGUCGUUAGUUU 	AUUGG                  
+ptg000002l:5749173-5750173	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.5	0.049136	150	     C              U 	      GAUCGCAGCGGUCA  	      CUAGUGUCGUUAGU  	AUUGGU              UU
+ptg000002l:10515125-10516125	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.9	0.039875	891	   A             A    	    CAGAUCACAGCAA     	    GUCUAGUGUCGUU     	AUUG             AGUUU
+ptg000002l:13798160-13799160	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.6	0.046641	66	   A             C    	    CAGAUCACAGCAA     	    GUCUAGUGUCGUU     	AUUG             AGUUU
+ptg000004l:345274-345787	513	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-26.2	0.036452	492	  G              A    	   UCAGAUUACAGCAA     	   GGUCUAGUGUCGUU     	AUU              AGUUU
+ptg000005l:522086-522119	33	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-20.7	0.006202	15	     C            G   	      GGUUGCAGCAAU    	      CUAGUGUCGUUA    	AUUGGU            GUUU
+ptg000008l:10122958-10123958	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.5	0.049136	180	C               U     	 AAUCAGAUUACAGCA      	 UUGGUCUAGUGUCGU      	A               UAGUUU
+ptg000008l:25845608-25846608	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.4	0.030674	210	  U                G  	   CCGGAUUGCAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000009l:1634451-1635451	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.7	0.044269	986	  U            G      	   CCAGAUCACAGC       	   GGUCUAGUGUCG       	AUU            UUAGUUU
+ptg000009l:13020813-13021813	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-31.9	0.004792	881	   A                  U	    CAGGUCACAGUAAUCAAG 	    GUCUAGUGUCGUUAGUUU 	AUUG                   
+ptg000010l:928582-929582	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.4	0.030674	73	U               U      	 UGACCAGGUCGCAGU       	 AUUGGUCUAGUGUCG       	                UUAGUUU
+ptg000011l:10886073-10886141	68	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-20.3	0.042859	17	       U          G   	        UCACAGCAGU    	        AGUGUCGUUA    	AUUGGUCU          GUUU
+ptg000015l:11068144-11069144	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.1	0.035908	606	  C                  U	   CUAGAUUAUAGUAAUCAA 	   GGUCUAGUGUCGUUAGUU 	AUU                  U
+ptg000016l:1665429-1665521	92	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-21.1	0.044033	32	  U          C        	   CCAGAUCACA         	   GGUCUAGUGU         	AUU          CGUUAGUUU
+ptg000016l:3189659-3190659	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28	0.03784	591	     C              U 	      GAUCGCAGCGAUCA  	      CUAGUGUCGUUAGU  	AUUGGU              UU
+ptg000016l:9800031-9800183	152	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-24	0.01655	101	        A             G	         CACAGCAAUCAGG 	         GUGUCGUUAGUUU 	AUUGGUCUA              
+ptg000016l:9800031-9800183	152	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-24	0.01655	101	        A             G	         CACAGCAAUCAGG 	         GUGUCGUUAGUUU 	AUUGGUCUA              
+ptg000018l:664310-665310	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.3	0.019079	358	 U                  C 	  ACUGGAUCACAGUAAUUA  	  UGGUCUAGUGUCGUUAGU  	AU                  UU
+ptg000018l:11054998-11055998	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-32.2	0.004084	958	 U               A    	  GCCAGAUCACAGCAA     	  UGGUCUAGUGUCGUU     	AU               AGUUU
+ptg000018l:11693965-11694965	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.7	0.044269	490	 C             C      	  ACCAGGUCGCAGC       	  UGGUCUAGUGUCG       	AU             UUAGUUU
+ptg000019l:5787758-5788758	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	504	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000020l:5525733-5526733	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.7	0.026192	757	A                G    	 AGCCAGAUCGCGGUGG     	 UUGGUCUAGUGUCGUU     	A                AGUUU
+ptg000020l:15746838-15747838	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.8	0.024847	667	    A               C 	     GGAUCGCAGCGAUCG  	     UCUAGUGUCGUUAGU  	AUUGG               UU
+ptg000021l:3830055-3831055	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	588	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000021l:6036435-6037435	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.7	0.044269	258	C             A       	 GACCAGAUCACAG        	 UUGGUCUAGUGUC        	A             GUUAGUUU
+ptg000021l:6372997-6373997	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.7	0.044269	58	C             A       	 GACCAGAUCACAG        	 UUGGUCUAGUGUC        	A             GUUAGUUU
+ptg000021l:10847115-10848115	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-30.2	0.01184	373	     C                A	      GAUCACAGCAGUCAAG 	      CUAGUGUCGUUAGUUU 	AUUGGU                 
+ptg000023l:4957575-4958575	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-30.6	0.009573	392	G                U     	 UGGCCAGAUCGCGGCG      	 AUUGGUCUAGUGUCGU      	                 UAGUUU
+ptg000023l:9172030-9173030	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	777	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000023l:16385625-16385791	166	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-25.3	0.008447	55	 U             C      	  AUCAGAUCACGGC       	  UGGUCUAGUGUCG       	AU             UUAGUUU
+ptg000023l:25094607-25095607	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.2	0.020115	172	A                 A   	 AACCAGAUUAUGGCAGU    	 UUGGUCUAGUGUCGUUA    	A                 GUUU
+ptg000023l:29527115-29528115	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	215	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000023l:31733107-31734107	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.8	0.042016	384	  U              A    	   UCAGGUCACAGCAA     	   GGUCUAGUGUCGUU     	AUU              AGUUU
+ptg000023l:37848786-37848954	168	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-22.6	0.049019	105	C           C         	 AGCCAGAUCAC          	 UUGGUCUAGUG          	A           UCGUUAGUUU
+ptg000024l:2747477-2748477	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.8	0.042016	861	  U              A    	   UCAGGUCACAGCAA     	   GGUCUAGUGUCGUU     	AUU              AGUUU
+ptg000025l:7383841-7384841	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-27.8	0.042016	936	  U                   U	   CUGGAUUACAGUGGUCAAA 	   GGUCUAGUGUCGUUAGUUU 	AUU                    
+ptg000025l:8586307-8587307	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.4	0.018096	283	  U                U  	   UCAGGUCACAGCAAUU   	   GGUCUAGUGUCGUUAG   	AUU                UUU
+ptg000027l:497888-497988	100	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-21.8	0.032002	14	C             U        	 UGGCCAGGUUACA         	 AUUGGUCUAGUGU         	              CGUUAGUUU
+ptg000027l:497888-497988	100	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-21.8	0.032002	14	C             U        	 UGGCCAGGUUACA         	 AUUGGUCUAGUGU         	              CGUUAGUUU
+ptg000031l:11297384-11298384	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28.9	0.02357	744	    A               U 	     GGAUCGCAGCGAUCG  	     UCUAGUGUCGUUAGU  	AUUGG               UU
+ptg000035l:9439035-9439347	312	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-25.1	0.030568	2	C             A       	 GAUCAGAUCACAG        	 UUGGUCUAGUGUC        	A             GUUAGUUU
+ptg000035l:9439035-9439347	312	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-25.1	0.030568	2	C             A       	 GAUCAGAUCACAG        	 UUGGUCUAGUGUC        	A             GUUAGUUU
+ptg000036l:267296-268296	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29	0.022357	431	   A                  C	    CAGAUCAUGGCAGUUAAG 	    GUCUAGUGUCGUUAGUUU 	AUUG                   
+ptg000036l:2935306-2936306	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-28	0.03784	440	    A               C 	     AGAUCAUAGCGAUCA  	     UCUAGUGUCGUUAGU  	AUUGG               UU
+ptg000060c:76935-77935	999	Cluster_4254.mature::ptg000007l:3377335-3377356(+)	22	-29.6	0.016277	561	     C                U	      GAUCGCAGCGAUCAAA 	      CUAGUGUCGUUAGUUU 	AUUGGU                 
+ntLink_6:5454153-5455153	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-27.7	0.044253	349	U               C     	 UCCUGCCAUUUGUGC      	 GGGAUGGUGAACAUG      	                AAGAAA
+ptg000001l:7585812-7585887	75	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21.6	0.020155	51	   G            C    	    AUCACUUGUACU     	    UGGUGAACAUGA     	GGGA            AGAAA
+ptg000001l:13302580-13302679	99	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-22.9	0.014424	6	U            C        	 CUCUGCCACUUG         	 GGGAUGGUGAAC         	             AUGAAGAAA
+ptg000001l:19190124-19190602	478	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-27.2	0.018334	302	   C              G  	    GCCACUUGUGCUUU   	    UGGUGAACAUGAAG   	GGGA              AAA
+ptg000001l:19190124-19190602	478	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-27.2	0.018334	302	   C              G  	    GCCACUUGUGCUUU   	    UGGUGAACAUGAAG   	GGGA              AAA
+ptg000002l:15315260-15315311	51	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21.5	0.009241	33	C            A        	 CUCUACUACUUG         	 GGGAUGGUGAAC         	             AUGAAGAAA
+ptg000008l:17451315-17451370	55	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21	0.015992	21	C              G      	 CCUUAUUGCUUGUG       	 GGGAUGGUGAACAU       	               GAAGAAA
+ptg000008l:17576699-17576754	55	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21	0.015992	21	C              G      	 CCUUAUUGCUUGUG       	 GGGAUGGUGAACAU       	               GAAGAAA
+ptg000008l:17696595-17696650	55	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21	0.015992	21	C              G      	 CCUUAUUGCUUGUG       	 GGGAUGGUGAACAU       	               GAAGAAA
+ptg000011l:8612079-8613079	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-34.6	0.001138	383	 A                  C	  CUACCACUUGUACUUCUU 	  GAUGGUGAACAUGAAGAA 	GG                  A
+ptg000015l:5773615-5774615	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-27.6	0.046621	656	    U              G 	     CCACUUGUGCUUCU  	     GGUGAACAUGAAGA  	GGGAU              AA
+ptg000015l:9817871-9818871	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-32.6	0.003306	640	A                   C	 CUUAUCACUUGUGCUUCUU 	 GGAUGGUGAACAUGAAGAA 	G                   A
+ptg000017l:6327102-6328102	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-27.6	0.046621	373	U                   A	 UCUGCCGUUUGUACUUUUU 	 GGAUGGUGAACAUGAAGAA 	G                   A
+ptg000018l:13949900-13950072	172	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-23.1	0.036646	18	   C           A     	    ACCGCUUGUAC      	    UGGUGAACAUG      	GGGA           AAGAAA
+ptg000018l:13949900-13950072	172	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-23.1	0.036646	18	   C           A     	    ACCGCUUGUAC      	    UGGUGAACAUG      	GGGA           AAGAAA
+ptg000020l:1921014-1921256	242	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-23.6	0.048577	186	    U               A	     CCAUUUGUACUUUUU 	     GGUGAACAUGAAGAA 	GGGAU               A
+ptg000020l:1921014-1921256	242	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-23.6	0.048577	186	    U               A	     CCAUUUGUACUUUUU 	     GGUGAACAUGAAGAA 	GGGAU               A
+ptg000021l:16249313-16250313	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-28.5	0.029101	384	A                G    	 CUCUGCCGCUUGUAUU     	 GGGAUGGUGAACAUGA     	                 AGAAA
+ptg000023l:12089149-12090149	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-33.8	0.001744	418	U                 A  	 UCUACCACUUGUACUUC   	 GGAUGGUGAACAUGAAG   	G                 AAA
+ptg000030l:3057224-3058224	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-28.3	0.032326	959	   A              C  	    GCCACUUGUACUUC   	    UGGUGAACAUGAAG   	GGGA              AAA
+ptg000031l:4670915-4671915	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-30.5	0.010105	680	A                 A   	 UCUUACCACUUGUACUU    	 GGGAUGGUGAACAUGAA    	                  GAAA
+ptg000034l:946879-947879	999	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-33.1	0.002533	634	G                 G   	 UCCUACCACUUGUACUU    	 GGGAUGGUGAACAUGAA    	                  GAAA
+ptg000034l:3126430-3126515	85	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	21	-21.6	0.026073	26	C         A           	 CCCUACCGC            	 GGGAUGGUG            	          AACAUGAAGAAA
+ntLink_8:26127545-26128545	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.1	0.038445	262	 C               U    	  UGGCGCUCGUUUGGU     	  AUCGCGAGUAGAUCA     	CA               CUUUA
+ntLink_8:32992316-32992402	86	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-23.1	0.010292	47	A           A         	 UUAGCGCUCAU          	 AAUCGCGAGUA          	C           GAUCACUUUA
+ntLink_8:32992316-32992402	86	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-23.1	0.010292	47	A           A         	 UUAGCGCUCAU          	 AAUCGCGAGUA          	C           GAUCACUUUA
+ptg000008l:35902090-35903090	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.2	0.036493	277	C              C       	 GUUGGCGCUCAUCU        	 CAAUCGCGAGUAGA        	               UCACUUUA
+ptg000009l:2820856-2821856	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.7	0.028102	152	 A              A     	  UAGCGCUUAUCUAG      	  AUCGCGAGUAGAUC      	CA              ACUUUA
+ptg000012l:13269889-13270889	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.6	0.029612	48	   C             C    	    GCGCUCAUCUGGU     	    CGCGAGUAGAUCA     	CAAU             CUUUA
+ptg000015l:3973053-3974053	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-27.8	0.044936	113	    U                 U	     UGCUUAUCUGGUGGAGU 	     GCGAGUAGAUCACUUUA 	CAAUC                  
+ptg000015l:8911989-8912989	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-30	0.014187	214	  G               U   	   GGCGCUCGUUUAGUG    	   UCGCGAGUAGAUCAC    	CAA               UUUA
+ptg000017l:2678188-2679188	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.3	0.034638	942	 A              G     	  UGGCGCUUAUCUGG      	  AUCGCGAGUAGAUC      	CA              ACUUUA
+ptg000020l:8090253-8090958	705	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-27.5	0.03131	613	   C            A     	    GCGCUCGUCUAG      	    CGCGAGUAGAUC      	CAAU            ACUUUA
+ptg000020l:8090253-8090958	705	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-27.5	0.03131	613	   C            A     	    GCGCUCGUCUAG      	    CGCGAGUAGAUC      	CAAU            ACUUUA
+ptg000023l:17129755-17130755	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28.1	0.038445	548	U               A     	 UUGGCGCUCGUUUAG      	 AAUCGCGAGUAGAUC      	C               ACUUUA
+ptg000023l:24490884-24490987	103	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-21.8	0.036284	52	  G          C        	   AGCGCUCAUU         	   UCGCGAGUAG         	CAA          AUCACUUUA
+ptg000024l:4434690-4434759	69	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-22.3	0.011268	37	   C         A        	    GCGCUCGUC         	    CGCGAGUAG         	CAAU         AUCACUUUA
+ptg000025l:9883379-9884379	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-28	0.0405	43	 G               C    	  UGGCGCUUGUCUGGU     	  AUCGCGAGUAGAUCA     	CA               CUUUA
+ptg000031l:403359-403748	389	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-25.1	0.046973	359	  C              U    	   GGCGUUCGUUUAGU     	   UCGCGAGUAGAUCA     	CAA              CUUUA
+ptg000031l:403359-403748	389	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-25.1	0.046973	359	  C              U    	   GGCGUUCGUUUAGU     	   UCGCGAGUAGAUCA     	CAA              CUUUA
+ptg000031l:8049002-8049215	213	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-23.4	0.047857	136	 G            C       	  UGGCGUUCAUCU        	  AUCGCGAGUAGA        	CA            UCACUUUA
+ptg000034l:523081-524081	999	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-27.8	0.044936	338	C                 C    	 GUUGGCGCUUGUUUGGU     	 CAAUCGCGAGUAGAUCA     	                  CUUUA
+ptg000038l:370058-370295	237	Cluster_5899.mature::ptg000009l:616336-616357(-)	22	-23.8	0.044923	107	U              A      	 UUAGUGCUCAUUUG       	 AAUCGCGAGUAGAU       	C              CACUUUA
+ntLink_8:3406503-3407503	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-27.8	0.049083	659	U                U    	 CAGUUUCACCGGUAAC     	 GUUAAAGUGGCUAUUG     	U                CGUCU
+ptg000001l:17975102-17975834	732	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-27.9	0.029332	55	     A               U	      UCACUGAUAACGUAG 	      AGUGGCUAUUGCGUC 	UGUUAA               U
+ptg000002l:12806852-12807852	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-28.1	0.042054	215	     G                A	      UUACUGAUAGCGUAGA 	      AGUGGCUAUUGCGUCU 	UGUUAA                 
+ptg000005l:743463-744463	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-30.1	0.014853	452	C                  C  	 CGGUUUUACCGGUAACGC   	 GUUAAAGUGGCUAUUGCG   	U                  UCU
+ptg000007l:2106729-2107142	413	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-27.6	0.013554	171	  C                 A 	   GUUUCAUUGGUGACGCA  	   UAAAGUGGCUAUUGCGU  	UGU                 CU
+ptg000012l:1607728-1608728	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-30.7	0.010847	23	      A               A	       UACCGAUGGCGCAGA 	       GUGGCUAUUGCGUCU 	UGUUAAA                
+ptg000021l:9354283-9354604	321	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-25.3	0.033476	207	C                A     	 GCAAUUUCACUGAUAG      	 UGUUAAAGUGGCUAUU      	                 GCGUCU
+ptg000021l:9361393-9361705	312	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-25.3	0.031918	207	C                A     	 GCAAUUUCACUGAUAG      	 UGUUAAAGUGGCUAUU      	                 GCGUCU
+ptg000023l:16447638-16447893	255	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-24.5	0.036473	138	    G               U 	     UUUACUGAUGACGUA  	     AAGUGGCUAUUGCGU  	UGUUA               CU
+ptg000026l:8093803-8094803	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-29.3	0.02256	856	      A               A	       CGCUGAUGACGCAGG 	       GUGGCUAUUGCGUCU 	UGUUAAA                
+ptg000027l:2239591-2239880	289	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-29.2	0.002713	166	      A               A	       CACUGAUGGCGCAGG 	       GUGGCUAUUGCGUCU 	UGUUAAA                
+ptg000027l:2239591-2239880	289	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-29.2	0.002713	166	      A               A	       CACUGAUGGCGCAGG 	       GUGGCUAUUGCGUCU 	UGUUAAA                
+ptg000035l:6432014-6432257	243	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-25.7	0.016214	156	      G              C	       CACUGAUAAUGCAG 	       GUGGCUAUUGCGUC 	UGUUAAA              U
+ptg000035l:6432014-6432257	243	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-25.7	0.016214	156	      G              C	       CACUGAUAAUGCAG 	       GUGGCUAUUGCGUC 	UGUUAAA              U
+ptg000047l:2785751-2786751	999	Cluster_5900.mature::ptg000009l:616601-616622(-)	22	-27.9	0.046621	154	       G              A	        ACUGAUAGCGCAGA 	        UGGCUAUUGCGUCU 	UGUUAAAG               
+ntLink_8:4480338-4480634	296	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-25.7	0.03498	197	       U             A 	        GCCUUCUCUUACU  	        UGGAAGAGAGUGA  	GGUGUGAU             AC
+ntLink_8:4480338-4480634	296	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-25.7	0.03498	197	       U             A 	        GCCUUCUCUUACU  	        UGGAAGAGAGUGA  	GGUGUGAU             AC
+ntLink_6:8803903-8804506	603	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-27.1	0.049831	207	      A             C  	       AACCUUCUCUCAC   	       UUGGAAGAGAGUG   	GGUGUGA             AAC
+ntLink_6:9185407-9185627	220	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-24.3	0.047966	204	  C             A      	   CACUGACCUUUUC       	   GUGAUUGGAAGAG       	GGU             AGUGAAC
+ntLink_6:9185407-9185627	220	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-24.3	0.047966	204	  C             A      	   CACUGACCUUUUC       	   GUGAUUGGAAGAG       	GGU             AGUGAAC
+ptg000001l:16534448-16535448	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-35	0.001876	940	G                    G  	 CUACAUUGACCUUCUUUCGC   	 GGUGUGAUUGGAAGAGAGUG   	                     AAC
+ptg000002l:5788870-5789870	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-28.8	0.043648	142	   G              U    	    ACUGACCUUCUCUC     	    UGAUUGGAAGAGAG     	GGUG              UGAAC
+ptg000002l:5805828-5806828	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-30.3	0.020523	26	 A                U    	  GCGCUGACCUUCUUUC     	  UGUGAUUGGAAGAGAG     	GG                UGAAC
+ptg000004l:6936475-6937475	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-29.3	0.033976	466	   A                A  	    ACUGACUUUCUCUCAU   	    UGAUUGGAAGAGAGUG   	GGUG                AAC
+ptg000004l:13031611-13031653	42	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-20.2	0.030513	22	        U           G  	         CUUUCUCUCAU   	         GGAAGAGAGUG   	GGUGUGAUU           AAC
+ptg000004l:13302549-13303549	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-28.6	0.04823	625	   A                  A	    AUUAACCUUUUCUUACUU 	    UGAUUGGAAGAGAGUGAA 	GGUG                  C
+ptg000011l:5470629-5471629	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-28.8	0.043648	137	  U                U   	   CACUAACCUUUUCUCG    	   GUGAUUGGAAGAGAGU    	GGU                GAAC
+ptg000011l:6127607-6128607	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-35.3	0.00161	238	G                   G  	 CGCAUUGACCUUCUUUCAC   	 GUGUGAUUGGAAGAGAGUG   	G                   AAC
+ptg000017l:3918011-3919011	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-29.5	0.030726	902	  U                 A  	   CACUAACUUUCUCUUGC   	   GUGAUUGGAAGAGAGUG   	GGU                 AAC
+ptg000017l:4996790-4997384	594	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-27.1	0.048724	423	A             A        	 CGCACUAGCCUUC         	 GUGUGAUUGGAAG         	G             AGAGUGAAC
+ptg000023l:26587288-26588288	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-32.2	0.007823	893	C                  C    	 UCACGCUAGCCUUCUUUC     	 GGUGUGAUUGGAAGAGAG     	                   UGAAC
+ptg000023l:41463910-41464001	91	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-22.1	0.039005	63	        C           A  	         CUUUCUCUCAC   	         GGAAGAGAGUG   	GGUGUGAUU           AAC
+ptg000025l:10682087-10683087	999	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-31.3	0.012362	735	   U                A  	    GCUGACCUUUUCUCAC   	    UGAUUGGAAGAGAGUG   	GGUG                AAC
+ptg000026l:9777495-9777689	194	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-25.8	0.015678	44	        U            G 	         CCUUCUCUCACU  	         GGAAGAGAGUGA  	GGUGUGAUU            AC
+ptg000026l:9777495-9777689	194	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-25.8	0.015678	44	        U            G 	         CCUUCUCUCACU  	         GGAAGAGAGUGA  	GGUGUGAUU            AC
+ptg000031l:1905089-1905205	116	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-23.6	0.023391	6	    U               G  	     UUGGCUUUCUUUCGC   	     GAUUGGAAGAGAGUG   	GGUGU               AAC
+ptg000035l:6770807-6771396	589	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-28.8	0.019517	298	U                   G   	 CCGUACUAAUCUUUUCUCA    	 GGUGUGAUUGGAAGAGAGU    	                    GAAC
+ptg000047l:4737575-4738310	735	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-27.9	0.044098	354	     G               A 	      UGACUUUCUCUCACU  	      AUUGGAAGAGAGUGA  	GGUGUG               AC
+ptg000047l:4737575-4738310	735	Cluster_5981.mature::ptg000009l:4940537-4940559(-)	23	-27.9	0.044098	354	     G               A 	      UGACUUUCUCUCACU  	      AUUGGAAGAGAGUGA  	GGUGUG               AC
+ptg000004l:4887948-4888043	95	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-21.4	0.034502	73	         A           U	          GGAUGAUACCU 	          UCUACUGUGGG 	UUUUGUAUUA           U
+ptg000007l:8321446-8322446	999	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-27.6	0.042309	317	  C                G  	   GCGUGGUAGGUGACAC   	   UGUAUUAUCUACUGUG   	UUU                GGU
+ptg000008l:10716708-10717708	999	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-28.1	0.032487	171	      C              U	       AAUAGAUGGCACCC 	       UUAUCUACUGUGGG 	UUUUGUA              U
+ptg000009l:2100175-2100472	297	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-25.6	0.018739	43	       U             G	        AUAGAUGACACCU 	        UAUCUACUGUGGG 	UUUUGUAU             U
+ptg000009l:2100175-2100472	297	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-25.6	0.018739	43	       U             G	        AUAGAUGACACCU 	        UAUCUACUGUGGG 	UUUUGUAU             U
+ptg000011l:5050166-5051166	999	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-27.6	0.042309	350	        U             C	         UGGAUGACACCCA 	         AUCUACUGUGGGU 	UUUUGUAUU              
+ptg000017l:12686923-12687541	618	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-26.6	0.035315	218	         G            A	          GGAUGGCACCCA 	          UCUACUGUGGGU 	UUUUGUAUUA             
+ptg000019l:3905815-3906057	242	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-25.5	0.013755	184	          C           A	           GAUGACACCCA 	           CUACUGUGGGU 	UUUUGUAUUAU            
+ptg000027l:10786425-10786566	141	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-25.1	0.00616	97	         A            C	          AGAUGGCGCCCG 	          UCUACUGUGGGU 	UUUUGUAUUA             
+ptg000027l:10786425-10786566	141	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-25.1	0.00616	97	         A            C	          AGAUGGCGCCCG 	          UCUACUGUGGGU 	UUUUGUAUUA             
+ptg000030l:2985344-2986344	999	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-27.3	0.04954	165	      G               A	       AGUGGAUGGCACCUA 	       UUAUCUACUGUGGGU 	UUUUGUA                
+ptg000031l:9523149-9524149	999	Cluster_10051.mature::ptg000016l:7795530-7795551(+)	22	-28	0.034253	950	    G                 U	     AUGAUGGAUGAUAUCCA 	     UAUUAUCUACUGUGGGU 	UUUUG                  
+ptg000002l:11080870-11081079	209	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.3	0.01758	59	       A           U  	        UCAUGGCUGCC   	        AGUAUCGACGG   	UCACUACA           UAC
+ptg000002l:11080870-11081079	209	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.3	0.01758	59	       A           U  	        UCAUGGCUGCC   	        AGUAUCGACGG   	UCACUACA           UAC
+ptg000004l:14225734-14225839	105	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-22.5	0.028706	15	      A             C 	       UUCAUGGUUGUCA  	       AAGUAUCGACGGU  	UCACUAC             AC
+ptg000007l:1573814-1574814	999	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-28.6	0.036082	747	        A             A	         CAUGGCUGCCAUG 	         GUAUCGACGGUAC 	UCACUACAA              
+ptg000012l:16938234-16938417	183	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-27.6	0.003236	99	      C             G 	       UUCGUAGCUGCCA  	       AAGUAUCGACGGU  	UCACUAC             AC
+ptg000017l:2591251-2591498	247	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-24.7	0.034045	138	     C               A	      GUUCGUGGUUGUUAU 	      CAAGUAUCGACGGUA 	UCACUA               C
+ptg000017l:2591251-2591498	247	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-24.7	0.034045	138	     C               A	      GUUCGUGGUUGUUAU 	      CAAGUAUCGACGGUA 	UCACUA               C
+ptg000021l:11023299-11024299	999	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-29.4	0.023897	701	       A              C	        UCAUGGCUGCCGUG 	        AGUAUCGACGGUAC 	UCACUACA               
+ptg000023l:7955419-7955522	103	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-21.9	0.041217	32	            U         A	             GCUGCCAUG 	             CGACGGUAC 	UCACUACAAGUAU          
+ptg000023l:24873988-24874516	528	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-27.7	0.021694	371	    U             G   	     UGUUCAUAGCUGC    	     ACAAGUAUCGACG    	UCACU             GUAC
+ptg000023l:24873988-24874516	528	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-27.7	0.021694	371	    U             G   	     UGUUCAUAGCUGC    	     ACAAGUAUCGACG    	UCACU             GUAC
+ptg000025l:1016621-1016976	355	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.4	0.041396	166	        A           G 	         CAUGGCUGCCA  	         GUAUCGACGGU  	UCACUACAA           AC
+ptg000025l:1016621-1016976	355	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.4	0.041396	166	        A           G 	         CAUGGCUGCCA  	         GUAUCGACGGU  	UCACUACAA           AC
+ptg000025l:10035364-10035475	111	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.8	0.003549	73	      U              C	       UUCAUGGUUGCCAU 	       AAGUAUCGACGGUA 	UCACUAC              C
+ptg000025l:10035364-10035475	111	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-25.8	0.003549	73	      U              C	       UUCAUGGUUGCCAU 	       AAGUAUCGACGGUA 	UCACUAC              C
+ptg000025l:12031488-12032236	748	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-27.5	0.041659	51	        A             C	         CAUGGCUGCCGUG 	         GUAUCGACGGUAC 	UCACUACAA              
+ptg000025l:18219854-18220854	999	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-28.7	0.034276	886	     A               U	      GUUUGUAGCUGCCAU 	      CAAGUAUCGACGGUA 	UCACUA               C
+ptg000031l:7599675-7599816	141	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-23	0.036057	116	         A          A 	          AUAGCUGCCA  	          UAUCGACGGU  	UCACUACAAG          AC
+ptg000031l:8765118-8766118	999	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-28.1	0.046608	211	      U               A	       UUCGUAGUUGCCGUG 	       AAGUAUCGACGGUAC 	UCACUAC                
+ptg000047l:7518793-7519793	999	Cluster_10057.mature::ptg000016l:8599884-8599905(-)	22	-28.1	0.046608	973	     C              G 	      GUUUGUGGCUGCCA  	      CAAGUAUCGACGGU  	UCACUA              AC
+ntLink_6:5443794-5443925	131	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-22.7	0.034915	68	U              C       	 UUCGUUCUGAGAAA        	 AAGUAGGACUCUUU        	               UCACGUGA
+ntLink_6:5443794-5443925	131	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-22.7	0.034915	68	U              C       	 UUCGUUCUGAGAAA        	 AAGUAGGACUCUUU        	               UCACGUGA
+ntLink_6:14500886-14501886	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28.2	0.040537	416	     G              A 	      CUGAGAAAAGUGCA  	      GACUCUUUUCACGU  	AAGUAG              GA
+ptg000005l:244441-245441	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28	0.044937	910	 G                 G  	  CAUUUUGAGGAGAGUGU   	  GUAGGACUCUUUUCACG   	AA                 UGA
+ptg000009l:1271782-1272048	266	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-24.3	0.044779	119	A                U    	 UCGUUUUGAGGAAGGU     	 AGUAGGACUCUUUUCA     	A                CGUGA
+ptg000009l:5278700-5279700	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28.3	0.038498	853	 A               U    	  CAUCCUGAGAAGGGU     	  GUAGGACUCUUUUCA     	AA               CGUGA
+ptg000012l:7414709-7415709	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-30.4	0.012905	849	C                 G   	 UCGUUCUGAGAGAGGUG    	 AGUAGGACUCUUUUCAC    	A                 GUGA
+ptg000015l:2401135-2402135	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-29.2	0.024142	452	 A                 C  	  UAUUCUGGGAGGAGUGC   	  GUAGGACUCUUUUCACG   	AA                 UGA
+ptg000019l:4093248-4093569	321	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25.9	0.023918	79	       C             A	        GAGAAAAGUGCAU 	        CUCUUUUCACGUG 	AAGUAGGA             A
+ptg000019l:4093248-4093569	321	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25.9	0.023918	79	       C             A	        GAGAAAAGUGCAU 	        CUCUUUUCACGUG 	AAGUAGGA             A
+ptg000020l:16579246-16579419	173	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25	0.013477	149	      G             A 	       UGAGAGAAGUGCG  	       ACUCUUUUCACGU  	AAGUAGG             GA
+ptg000020l:16579246-16579419	173	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25	0.013477	149	      G             A 	       UGAGAGAAGUGCG  	       ACUCUUUUCACGU  	AAGUAGG             GA
+ptg000022l:4521269-4521796	527	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-26.2	0.045157	312	     G              A 	      CUGAGAAAAGUGUA  	      GACUCUUUUCACGU  	AAGUAG              GA
+ptg000023l:21903931-21904247	316	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-27.1	0.011466	276	G              A      	 UCAUCCUGAGAGAA       	 AGUAGGACUCUUUU       	A              CACGUGA
+ptg000023l:22362770-22363770	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28	0.044937	253	A                 G   	 UCGUUUUGAGAAAGGUG    	 AGUAGGACUCUUUUCAC    	A                 GUGA
+ptg000023l:40586359-40586505	146	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-23.9	0.01968	100	       A            A 	        GAGGAAAGUGCA  	        CUCUUUUCACGU  	AAGUAGGA            GA
+ptg000023l:40586359-40586505	146	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-23.9	0.01968	100	       A            A 	        GAGGAAAGUGCA  	        CUCUUUUCACGU  	AAGUAGGA            GA
+ptg000025l:18856050-18857050	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28.2	0.040537	635	    G              G  	     CCUGAGAAAAGUGU   	     GGACUCUUUUCACG   	AAGUA              UGA
+ptg000027l:1682039-1682154	115	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-21.8	0.049439	42	  G            A      	   AUCCUGGGAAGA       	   UAGGACUCUUUU       	AAG            CACGUGA
+ptg000027l:1682039-1682154	115	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-21.8	0.049439	42	  G            A      	   AUCCUGGGAAGA       	   UAGGACUCUUUU       	AAG            CACGUGA
+ptg000027l:4179999-4180999	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-29	0.026787	142	 A                A   	  CAUCUUGAGAAAGGUG    	  GUAGGACUCUUUUCAC    	AA                GUGA
+ptg000028l:414279-414539	260	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25	0.028368	199	 G               U    	  CAUUCUGGGAGAAGU     	  GUAGGACUCUUUUCA     	AA               CGUGA
+ptg000028l:414279-414539	260	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25	0.028368	199	 G               U    	  CAUUCUGGGAGAAGU     	  GUAGGACUCUUUUCA     	AA               CGUGA
+ptg000033l:252216-253216	999	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-28.2	0.040537	635	    G              G  	     CCUGAGAAAAGUGU   	     GGACUCUUUUCACG   	AAGUA              UGA
+ptg000035l:6735033-6735105	72	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-25.7	0.00123	12	       G             A	        GGGAAGGGUGCAC 	        CUCUUUUCACGUG 	AAGUAGGA             A
+ptg000047l:4304701-4304860	159	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-23.1	0.038443	114	       G             C	        GAGGGGAGUGUAC 	        CUCUUUUCACGUG 	AAGUAGGA             A
+ptg000047l:4304701-4304860	159	Cluster_10093.mature::ptg000016l:11751407-11751428(-)	22	-23.1	0.038443	114	       G             C	        GAGGGGAGUGUAC 	        CUCUUUUCACGUG 	AAGUAGGA             A
+ntLink_6:1231255-1231335	80	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-21.6	0.025918	43	      A           G  	       UGGGAGUGCGC   	       GCCUUUAUGCG   	CCUGUUA           GAU
+ntLink_6:6832833-6833833	999	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-27.9	0.044566	487	A               G     	 GGACAAUCGGAAAUA      	 CCUGUUAGCCUUUAU      	                GCGGAU
+ptg000006l:1856632-1856753	121	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-28.9	0.000439	21	   U               G 	    GGUCGGAAAUAUGCC  	    UUAGCCUUUAUGCGG  	CCUG               AU
+ptg000009l:574302-574646	344	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-27.9	0.007733	165	  C                 U	   CGGUUGGAGAUACGCUU 	   GUUAGCCUUUAUGCGGA 	CCU                 U
+ptg000009l:574302-574646	344	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-27.9	0.007733	165	  C                 U	   CGGUUGGAGAUACGCUU 	   GUUAGCCUUUAUGCGGA 	CCU                 U
+ptg000009l:1194769-1195136	367	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-25.4	0.037332	209	U               C    	 GACAAUUGGAAGUGC     	 CUGUUAGCCUUUAUG     	C               CGGAU
+ptg000011l:11626711-11626856	145	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-22.6	0.041498	39	       A             A	        GGAGAUGUGCCUA 	        CCUUUAUGCGGAU 	CCUGUUAG              
+ptg000011l:11626716-11626856	140	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-22.6	0.038933	34	       A             A	        GGAGAUGUGCCUA 	        CCUUUAUGCGGAU 	CCUGUUAG              
+ptg000023l:18667954-18668954	999	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-29.7	0.017444	803	 A                G  	  ACAGUCGGAGAUGCGU   	  UGUUAGCCUUUAUGCG   	CC                GAU
+ptg000034l:3045051-3045329	278	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-24.3	0.044931	19	       G           A 	        GGGAAUGCGCC  	        CCUUUAUGCGG  	CCUGUUAG           AU
+ptg000047l:7877536-7878536	999	Cluster_10207.mature::ptg000017l:6375014-6375034(-)	21	-36.7	0.000434	836	 A                   U	  GCAAUCGGAAAUGCGCCUG 	  UGUUAGCCUUUAUGCGGAU 	CC                    
+ntLink_8:5952537-5953537	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.3	0.047204	180	C              C        	 ACGGGGCAAAGGCA         	 UGCCCUGUUUUCGU         	               UGAUCGUUU
+ntLink_8:9182617-9182687	70	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.4	0.03137	52	G             U         	 AUGGGAUGAGAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ntLink_8:24278718-24279718	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-30.6	0.01457	394	 A                A    	  GGGACAAAAGUAACUG     	  CCCUGUUUUCGUUGAU     	UG                CGUUU
+ntLink_8:26538209-26539209	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-32.2	0.006383	395	C                  A    	 AUGGGGCGAGGGCAACUG     	 UGCCCUGUUUUCGUUGAU     	                   CGUUU
+ntLink_6:5323584-5324142	558	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.7	0.015603	470	 A                A    	  GGGAUAAAAGCAAUUA     	  CCCUGUUUUCGUUGAU     	UG                CGUUU
+ntLink_6:22674677-22674772	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ntLink_6:22890758-22890853	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ntLink_6:23029654-23029749	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ntLink_6:23132447-23132542	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ntLink_6:23230494-23230589	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ptg000001l:18682489-18683489	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.4	0.044874	591	A               A       	 AUGGGACGAGAGCAA        	 UGCCCUGUUUUCGUU        	                GAUCGUUU
+ptg000002l:15255886-15256886	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.4	0.02697	55	    U                 U	     GCGAGAGCAGCUGGCGG 	     UGUUUUCGUUGAUCGUU 	UGCCC                 U
+ptg000005l:1328239-1329239	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.2	0.029872	455	 G              A      	  GGGACGGGAGCAGC       	  CCCUGUUUUCGUUG       	UG              AUCGUUU
+ptg000007l:12015535-12015630	95	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.9	0.040521	11	         U             A	          AGUAACUAGCGGA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ptg000008l:18835627-18836627	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-31.4	0.009648	22	C                  U    	 AUGGGACAGAAGCAAUUG     	 UGCCCUGUUUUCGUUGAU     	                   CGUUU
+ptg000008l:27482957-27483957	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.3	0.047204	515	    U                 U	     AUAGAGGCAACUAGCGA 	     UGUUUUCGUUGAUCGUU 	UGCCC                 U
+ptg000012l:8817655-8818655	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.5	0.042656	768	C              G       	 CGGGACAAAAGCGA        	 GCCCUGUUUUCGUU        	U              GAUCGUUU
+ptg000012l:18144190-18144259	69	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-21.4	0.030474	51	G             U         	 AUGGGAUGAGAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ptg000015l:5177343-5178343	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.6	0.040546	624	  C               U    	   GGACAAAAGCAACUA     	   CCUGUUUUCGUUGAU     	UGC               CGUUU
+ptg000016l:7277436-7277853	417	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-25.8	0.048207	113	C              G       	 UGGGACAAGGGCGG        	 GCCCUGUUUUCGUU        	U              GAUCGUUU
+ptg000016l:12506144-12506800	656	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.1	0.027976	380	    A                C 	     ACGGAAGCAACUGGCG  	     UGUUUUCGUUGAUCGU  	UGCCC                UU
+ptg000019l:2688212-2689212	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.4	0.02697	982	  C                A   	   GGAUAAAAGCAACUAG    	   CCUGUUUUCGUUGAUC    	UGC                GUUU
+ptg000020l:15625982-15626982	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-30.4	0.016149	397	C               G      	 UGGGACGAAAGCAAC       	 GCCCUGUUUUCGUUG       	U               AUCGUUU
+ptg000021l:3894956-3895059	103	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-22.2	0.038708	16	   A            A      	    GACAAAAGCGGC       	    CUGUUUUCGUUG       	UGCC            AUCGUUU
+ptg000021l:5149144-5150144	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-30.1	0.01884	962	U               G       	 ACGGGACGAGAGCAA        	 UGCCCUGUUUUCGUU        	                GAUCGUUU
+ptg000021l:12184457-12185457	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29	0.03308	219	 A              G      	  GGGACAAGGGCGGC       	  CCCUGUUUUCGUUG       	UG              AUCGUUU
+ptg000021l:12200896-12201896	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29	0.03308	324	 A              G      	  GGGACAAGGGCGGC       	  CCCUGUUUUCGUUG       	UG              AUCGUUU
+ptg000022l:6500625-6501625	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-30.7	0.013839	142	C               G      	 UGGGACAAAAGCAAC       	 GCCCUGUUUUCGUUG       	U               AUCGUUU
+ptg000023l:18193132-18194132	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.2	0.029872	760	 G              A      	  GGGACGGGAGCAGC       	  CCCUGUUUUCGUUG       	UG              AUCGUUU
+ptg000023l:39848080-39849080	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-31.4	0.009648	802	   A                 U 	    GGCAAAGGCGACUGGCA  	    CUGUUUUCGUUGAUCGU  	UGCC                 UU
+ptg000023l:40351650-40352650	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.5	0.025625	394	   A                  U	    GACGAAAGCAACUGGUGG 	    CUGUUUUCGUUGAUCGUU 	UGCC                  U
+ptg000024l:1326362-1326695	333	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-25.8	0.033603	318	U             C         	 ACGGGACAGAAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ptg000024l:1326362-1326695	333	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-25.8	0.033603	318	U             C         	 ACGGGACAGAAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ptg000024l:6779056-6779276	220	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-24.2	0.042803	166	         C             U	          AGCAACUGGCAAA 	          UCGUUGAUCGUUU 	UGCCCUGUUU              
+ptg000025l:552029-552335	306	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-26.1	0.024524	104	  C             G      	   GGACGAAAGCAAC       	   CCUGUUUUCGUUG       	UGC             AUCGUUU
+ptg000025l:552029-552335	306	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-26.1	0.024524	104	  C             G      	   GGACGAAAGCAAC       	   CCUGUUUUCGUUG       	UGC             AUCGUUU
+ptg000025l:5988802-5989802	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.6	0.040546	645	C              A       	 CGGGACAAGAGCAG        	 GCCCUGUUUUCGUU        	U              GAUCGUUU
+ptg000025l:7866005-7867005	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.2	0.029872	836	 A               U     	  GGGAUAGAAGCAGCU      	  CCCUGUUUUCGUUGA      	UG               UCGUUU
+ptg000025l:11235672-11235712	40	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-22.8	0.003174	18	 A           G         	  GGGACGAAGGU          	  CCCUGUUUUCG          	UG           UUGAUCGUUU
+ptg000026l:11147464-11148464	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.3	0.047204	459	A              U        	 ACGGGACGAGGGCA         	 UGCCCUGUUUUCGU         	               UGAUCGUUU
+ptg000027l:305006-305319	313	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.2	0.007512	180	     C               C 	      CAGAAGCAACUAGCA  	      GUUUUCGUUGAUCGU  	UGCCCU               UU
+ptg000031l:30911-31911	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.1	0.031436	677	 A              G      	  GGGACGGGAGCGAC       	  CCCUGUUUUCGUUG       	UG              AUCGUUU
+ptg000031l:7606660-7607660	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-28.2	0.049653	918	U               A       	 AUGGGACAGGAGCAA        	 UGCCCUGUUUUCGUU        	                GAUCGUUU
+ptg000031l:12698331-12699331	999	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-29.4	0.02697	912	C               G      	 CGGGGCAGAGGCAAU       	 GCCCUGUUUUCGUUG       	U               AUCGUUU
+ptg000037l:134564-134619	55	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-22.3	0.00989	37	G             U         	 AUGGGAUAAGAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ptg000038l:170362-170421	59	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-22.3	0.011575	41	G             U         	 AUGGGAUAAGAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ptg000040l:158898-158957	59	Cluster_10228.mature::ptg000017l:7471168-7471190(+)	23	-22.3	0.011575	41	G             U         	 AUGGGAUAAGAGU          	 UGCCCUGUUUUCG          	              UUGAUCGUUU
+ntLink_6:19236786-19237786	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-28.1	0.040518	254	      C               C	       GAACGGUGCAGAGGA 	       CUUGUCACGUUUCUU 	UCCCAAA                
+ptg000008l:8068755-8069755	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-31.7	0.006142	644	U                 U   	 GGGUUUGGACAGUGUGA    	 CCCAAACUUGUCACGUU    	U                 UCUU
+ptg000009l:12378369-12378421	52	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-21	0.016573	16	          G           G	           AGUGCAAAGAA 	           UCACGUUUCUU 	UCCCAAACUUG            
+ptg000017l:5322851-5323851	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-28	0.042672	816	  C                U  	   GUUUGGACAGUGCGGA   	   CAAACUUGUCACGUUU   	UCC                CUU
+ptg000018l:5335183-5336183	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-28.6	0.031251	724	     G                G	      UGAACAGUGUAAAGAA 	      ACUUGUCACGUUUCUU 	UCCCAA                 
+ptg000020l:15363530-15363589	59	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-22.9	0.005417	8	       A              A	        GGCAGUGUAAAGGA 	        UUGUCACGUUUCUU 	UCCCAAAC               
+ptg000021l:20519574-20520574	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-28.5	0.032921	363	     A                C	      UGAAUAGUGCAAAGAA 	      ACUUGUCACGUUUCUU 	UCCCAA                 
+ptg000023l:43102952-43103154	202	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-27.7	0.003139	105	      A              U	       GGACAGUGCAAGGA 	       CUUGUCACGUUUCU 	UCCCAAA              U
+ptg000025l:11926283-11926523	240	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-23.9	0.045489	157	    A            U    	     UUGGACAGUGCA     	     AACUUGUCACGU     	UCCCA            UUCUU
+ptg000025l:11926283-11926523	240	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-23.9	0.045489	157	    A            U    	     UUGGACAGUGCA     	     AACUUGUCACGU     	UCCCA            UUCUU
+ptg000030l:3374762-3375762	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-28.5	0.032921	52	      G               A	       GAACGGUGCAAAGAA 	       CUUGUCACGUUUCUU 	UCCCAAA                
+ptg000031l:7050933-7051933	999	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-30.9	0.009362	250	   A                  A	    UUUGAACGGUGCGAGGAA 	    AAACUUGUCACGUUUCUU 	UCCC                   
+ptg000047l:3805338-3805473	135	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-22.8	0.032804	45	C            C         	 AGGGUUUGGACA          	 UCCCAAACUUGU          	             CACGUUUCUU
+ptg000049l:252280-252696	416	Cluster_10419.mature::ptg000018l:2286829-2286850(+)	22	-27.7	0.012435	105	      A              U	       GGACAGUGCAAGGA 	       CUUGUCACGUUUCU 	UCCCAAA              U
+ntLink_8:6000407-6000519	112	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-23	0.020428	58	         C           U	          GCAGGAGACGA 	          UGUUCUCUGCU 	GGUCCUUUUA           U
+ntLink_8:17705737-17706737	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-28.9	0.027146	505	A                C    	 CAGGAGAAUGCGAGAG     	 GUCCUUUUAUGUUCUC     	G                UGCUU
+ptg000008l:1447492-1448492	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-29	0.025767	703	A                  A   	 CUAGGGGAAUACAAGGGG    	 GGUCCUUUUAUGUUCUCU    	                   GCUU
+ptg000009l:5003870-5004870	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-30	0.015274	900	   C                  G	    GAAGAUGCAGGAGACGGG 	    CUUUUAUGUUCUCUGCUU 	GGUC                   
+ptg000011l:9825537-9826537	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-33.1	0.002988	102	A                     A	 UAGGGGGGUACGGGAGGCGGG 	 GUCCUUUUAUGUUCUCUGCUU 	G                      
+ptg000011l:11565730-11565805	75	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-21.8	0.020703	2	         A           U	          ACAGGAGACGG 	          UGUUCUCUGCU 	GGUCCUUUUA           U
+ptg000012l:10003010-10004010	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-29.4	0.020911	100	   U                 G	    GAAGAUGCAGGAGACGG 	    CUUUUAUGUUCUCUGCU 	GGUC                 U
+ptg000017l:4294014-4294473	459	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-26	0.039193	93	    A                U	     GGAGUGCAAGAGGCGG 	     UUUUAUGUUCUCUGCU 	GGUCC                U
+ptg000017l:4294014-4294473	459	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-26	0.039193	93	    A                U	     GGAGUGCAAGAGGCGG 	     UUUUAUGUUCUCUGCU 	GGUCC                U
+ptg000020l:8386767-8387767	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-29.7	0.017873	780	   U                  G	    GAAGAUGCAGGAGACGGG 	    CUUUUAUGUUCUCUGCUU 	GGUC                   
+ptg000023l:18549580-18550580	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-29.7	0.017873	307	   U                  G	    GAAGAUGCAGGAGACGGG 	    CUUUUAUGUUCUCUGCUU 	GGUC                   
+ptg000024l:4280652-4281652	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-29.7	0.017873	532	   U                  G	    GAAGAUACAGGAGACGGG 	    CUUUUAUGUUCUCUGCUU 	GGUC                   
+ptg000025l:6909916-6910154	238	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-27.3	0.005705	72	 G                 A  	  AGGGAAAUAUAAGGGAU   	  UCCUUUUAUGUUCUCUG   	GG                 CUU
+ptg000031l:4320711-4321711	999	Cluster_14402.mature::ptg000023l:18708925-18708946(+)	22	-28.7	0.030125	310	   C                  G	    GGAAAUGCAAGAGAUGGA 	    CUUUUAUGUUCUCUGCUU 	GGUC                   
+ntLink_6:7126907-7127907	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-28.6	0.030524	619	     C               G	      GUUACAGGUGUUCGA 	      UAAUGUCCACAGGCU 	AUAGGU                
+ntLink_6:12544177-12545177	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-29.2	0.02231	360	     U               G	      GUUACAGGUGUCUGA 	      UAAUGUCCACAGGCU 	AUAGGU                
+ntLink_6:17350085-17351085	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-41.4	0.000035	676	C                    U	 GUCCGAUUACAGGUGUCCGA 	 UAGGUUAAUGUCCACAGGCU 	A                     
+ptg000007l:581139-582139	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-27.9	0.043914	157	    A               U	     GGUUGCAGGUGUCUG 	     UUAAUGUCCACAGGC 	AUAGG               U
+ptg000009l:2299214-2300214	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-31.3	0.007394	543	 U                   A	  UCCAGUUAUGGGUGUUUGG 	  AGGUUAAUGUCCACAGGCU 	AU                    
+ptg000011l:2678612-2679612	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-33.6	0.002193	715	   A                 U	    UAAUUACAGGUGUCCGA 	    GUUAAUGUCCACAGGCU 	AUAG                  
+ptg000018l:14391492-14391613	121	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-24.5	0.008232	53	        C          A 	         GCGGGUGUCC  	         UGUCCACAGG  	AUAGGUUAA          CU
+ptg000021l:16212789-16213175	386	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-27.9	0.009385	167	    A                A	     AAUUAUAGGUGUUCGA 	     UUAAUGUCCACAGGCU 	AUAGG                 
+ptg000023l:3538823-3539823	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-28.8	0.027499	649	A                A   	 GUUCAGUUGCAGGUGU    	 UAGGUUAAUGUCCACA    	A                GGCU
+ptg000023l:11807655-11808655	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-32.9	0.003176	583	   G                 U	    CAAUUACAGGUGUCUGA 	    GUUAAUGUCCACAGGCU 	AUAG                  
+ptg000023l:40586359-40586505	146	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-22.4	0.047067	121	  G           G      	   CCAGUUACAGG       	   GGUUAAUGUCC       	AUA           ACAGGCU
+ptg000023l:40586359-40586505	146	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-22.4	0.047067	121	  G           G      	   CCAGUUACAGG       	   GGUUAAUGUCC       	AUA           ACAGGCU
+ptg000024l:10366477-10367477	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-29.9	0.015454	837	       A             A	        UACAGGUGUCCGA 	        AUGUCCACAGGCU 	AUAGGUUA              
+ptg000025l:5191937-5192937	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-29.8	0.016288	781	    A                A	     AAUUACAGGUGUUCGA 	     UUAAUGUCCACAGGCU 	AUAGG                 
+ptg000030l:2911342-2911505	163	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-26.3	0.004698	6	        C            A	         ACAGGUGUCUGA 	         UGUCCACAGGCU 	AUAGGUUAA             
+ptg000034l:35328-36328	999	Cluster_14768.mature::ptg000023l:37965298-37965318(+)	21	-32.9	0.003176	899	   G                 U	    CAAUUACAGGUGUCUGA 	    GUUAAUGUCCACAGGCU 	AUAG                  
+ntLink_8:2878927-2879927	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.2	0.044612	93	     C             C  	      UCUGCGGGCUAAG   	      AGGCGCCCGAUUU   	CGUUGA             UUA
+ntLink_8:16791202-16791275	73	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-20.7	0.048484	31	      C        G      	       CUGUGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ntLink_8:23388069-23388241	172	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.3	0.023001	153	        A           U 	         GCGGGCUGGAA  	         CGCCCGAUUUU  	CGUUGAAGG           UA
+ntLink_8:23388069-23388241	172	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.3	0.023001	153	        A           U 	         GCGGGCUGGAA  	         CGCCCGAUUUU  	CGUUGAAGG           UA
+ntLink_8:29401793-29401945	152	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.6	0.004177	80	A               U     	 UAAUUUUCGCGGGUU      	 GUUGAAGGCGCCCGA      	C               UUUUUA
+ntLink_8:29401793-29401945	152	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.6	0.004177	80	A               U     	 UAAUUUUCGCGGGUU      	 GUUGAAGGCGCCCGA      	C               UUUUUA
+ntLink_6:6576281-6577281	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29	0.029598	198	  C             C     	   ACUUUCGCGGGCU      	   UGAAGGCGCCCGA      	CGU             UUUUUA
+ntLink_6:12049254-12050254	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.6	0.012937	264	 G              C     	  AACUUUCGCGGGCU      	  UUGAAGGCGCCCGA      	CG              UUUUUA
+ntLink_6:17572940-17573097	157	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.5	0.017076	60	C           C          	 GCAACUUCCGC           	 CGUUGAAGGCG           	            CCCGAUUUUUA
+ntLink_6:17572940-17573097	157	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.5	0.017076	60	C           C          	 GCAACUUCCGC           	 CGUUGAAGGCG           	            CCCGAUUUUUA
+ptg000001l:19723431-19723639	208	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.3	0.009489	150	  U            C      	   GCUUUCGCGGGU       	   UGAAGGCGCCCG       	CGU            AUUUUUA
+ptg000002l:2115409-2116409	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-31.2	0.009472	584	  U                U  	   ACUUCCGUGGGUUGAA   	   UGAAGGCGCCCGAUUU   	CGU                UUA
+ptg000002l:7407625-7408625	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.6	0.036352	163	  C                C  	   GCUUUUGUGGGCUAAG   	   UGAAGGCGCCCGAUUU   	CGU                UUA
+ptg000002l:9896927-9897927	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.9	0.01107	365	      A              C	       CCGCGGGCUAAAAA 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000002l:10561068-10562068	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.5	0.022871	979	   U               U  	    CUUCUGUGGGCUAAA   	    GAAGGCGCCCGAUUU   	CGUU               UUA
+ptg000007l:3585611-3586611	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.8	0.011661	597	  C              U    	   GCUUUCGCGGGCUG     	   UGAAGGCGCCCGAU     	CGU              UUUUA
+ptg000008l:6761075-6761209	134	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-22.6	0.042758	54	      C        G      	       CUGCGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000008l:9697125-9698125	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.3	0.04239	808	   C            U     	    CUUCCGUGGGCU      	    GAAGGCGCCCGA      	CGUU            UUUUUA
+ptg000009l:7629482-7630482	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-31	0.01051	251	      C              A	       CCGCGGGCUAAAAA 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000009l:15213609-15214609	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.2	0.044612	189	A             A        	 GCAACUUCUGCGG         	 CGUUGAAGGCGCC         	              CGAUUUUUA
+ptg000010l:1085582-1086582	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.4	0.040275	289	      G              A	       CUGCGGGCUAAAAG 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000011l:3626302-3627302	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-32	0.006246	575	     A              U 	      UCCGCGGGCUGAAA  	      AGGCGCCCGAUUUU  	CGUUGA              UA
+ptg000011l:4251664-4252664	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.5	0.038265	180	      C              G	       UCGCGGGCUAAGAG 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000011l:10192800-10193705	905	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.4	0.034827	392	A              A       	 GCAAUUUUCGCGGG        	 CGUUGAAGGCGCCC        	               GAUUUUUA
+ptg000011l:10192800-10193705	905	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.4	0.034827	392	A              A       	 GCAAUUUUCGCGGG        	 CGUUGAAGGCGCCC        	               GAUUUUUA
+ptg000012l:1858768-1859768	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.9	0.018597	671	      C             U 	       CCGCGGGCUGAAA  	       GGCGCCCGAUUUU  	CGUUGAA             UA
+ptg000012l:6335631-6335896	265	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.8	0.036436	21	      C        A      	       CCGCGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000012l:13256151-13256195	44	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-20.7	0.016755	29	 G         A          	  AGCUUCCGC           	  UUGAAGGCG           	CG         CCCGAUUUUUA
+ptg000016l:9213122-9214122	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.5	0.013626	489	A                U     	 GCAAUUUUCGCGGGUU      	 CGUUGAAGGCGCCCGA      	                 UUUUUA
+ptg000016l:10798390-10798475	85	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-21.6	0.035162	35	  C          C        	   ACUUCCGUGG         	   UGAAGGCGCC         	CGU          CGAUUUUUA
+ptg000016l:10798390-10798475	85	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-21.6	0.035162	35	  C          C        	   ACUUCCGUGG         	   UGAAGGCGCC         	CGU          CGAUUUUUA
+ptg000017l:2776871-2777871	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.1	0.046948	376	   U           A      	    UUUCCGCGGGC       	    GAAGGCGCCCG       	CGUU           AUUUUUA
+ptg000017l:6060530-6061530	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.1	0.046948	761	 A             A      	  AACUUUCGUGGGC       	  UUGAAGGCGCCCG       	CG             AUUUUUA
+ptg000017l:10074348-10074880	532	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.4	0.045167	349	 A            A       	  GACUUUCGCGGG        	  UUGAAGGCGCCC        	CG            GAUUUUUA
+ptg000017l:10074348-10074880	532	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.4	0.045167	349	 A            A       	  GACUUUCGCGGG        	  UUGAAGGCGCCC        	CG            GAUUUUUA
+ptg000018l:3771970-3772970	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.8	0.032805	464	      C              A	       CUGCGGGCUAAAAA 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000018l:3831882-3832882	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.1	0.046948	299	 G             C      	  GACUUUCGCGGGU       	  UUGAAGGCGCCCG       	CG             AUUUUUA
+ptg000018l:3861152-3862152	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.7	0.012282	549	      C              A	       CCGCGGGCUAAAAG 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000018l:4376353-4377353	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.6	0.036352	724	      C              A	       CCGCGGGUUAAAAA 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000018l:4871165-4872165	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.6	0.036352	724	      C              A	       CCGCGGGUUAAAAA 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000018l:11019737-11020737	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-33.1	0.00352	188	 U                   G	  GAUUUCUGUGGGCUGAAAA 	  UUGAAGGCGCCCGAUUUUU 	CG                   A
+ptg000018l:14391492-14391613	121	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23	0.027311	51	      C        G      	       CCGCGGGU       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000020l:4097798-4098798	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-32.8	0.004116	590	     A               A	      UCCGCGGGCUAAAAG 	      AGGCGCCCGAUUUUU 	CGUUGA               A
+ptg000020l:13229418-13229667	249	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.4	0.041577	171	     G          C     	      UUCGCGGGCU      	      AGGCGCCCGA      	CGUUGA          UUUUUA
+ptg000020l:13229418-13229667	249	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.4	0.041577	171	     G          C     	      UUCGCGGGCU      	      AGGCGCCCGA      	CGUUGA          UUUUUA
+ptg000021l:4853409-4853618	209	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25	0.021301	147	      A        A      	       CCGCGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000021l:16679430-16679619	189	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25.8	0.010757	101	     C            U   	      UCUGUGGGCUAA    	      AGGCGCCCGAUU    	CGUUGA            UUUA
+ptg000021l:16679430-16679619	189	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25.8	0.010757	101	     C            U   	      UCUGUGGGCUAA    	      AGGCGCCCGAUU    	CGUUGA            UUUA
+ptg000022l:6271782-6272782	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-30.1	0.016767	226	   C              U   	    CUUUCGCGGGCUGA    	    GAAGGCGCCCGAUU    	CGUU              UUUA
+ptg000023l:8033670-8034670	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.6	0.036352	424	      G              A	       UCGCGGGCUAAGAG 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000023l:8033779-8034779	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.6	0.036352	315	      G              A	       UCGCGGGCUAAGAG 	       GGCGCCCGAUUUUU 	CGUUGAA              A
+ptg000023l:23583524-23583721	197	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23.7	0.042502	21	    A          A      	     UUCUGUGGGC       	     AAGGCGCCCG       	CGUUG          AUUUUUA
+ptg000023l:25436927-25437927	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-32	0.006246	826	     A              U 	      UCCGCGGGCUGAAA  	      AGGCGCCCGAUUUU  	CGUUGA              UA
+ptg000023l:26924593-26924668	75	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23	0.010302	61	      C         C     	       UCGCGGGCU      	       GGCGCCCGA      	CGUUGAA         UUUUUA
+ptg000023l:26924593-26924668	75	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23	0.010302	61	      C         C     	       UCGCGGGCU      	       GGCGCCCGA      	CGUUGAA         UUUUUA
+ptg000023l:29688207-29689207	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-33	0.003708	747	 A                  U 	  AACUUUUGCGGGCUAAAA  	  UUGAAGGCGCCCGAUUUU  	CG                  UA
+ptg000023l:30696919-30697919	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.2	0.044612	66	    A            U    	     UUCCGUGGGCUA     	     AAGGCGCCCGAU     	CGUUG            UUUUA
+ptg000023l:33066520-33067520	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.4	0.024083	691	  U            G      	   GCUUCUGCGGGC       	   UGAAGGCGCCCG       	CGU            AUUUUUA
+ptg000024l:6965528-6966528	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.2	0.0267	298	    A                G	     UUUUGCGGGCUGAAAA 	     AAGGCGCCCGAUUUUU 	CGUUG                A
+ptg000025l:3121465-3121591	126	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.1	0.014393	79	      A        C      	       CCGCGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000025l:3121465-3121591	126	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.1	0.014393	79	      A        C      	       CCGCGGGC       	       GGCGCCCG       	CGUUGAA        AUUUUUA
+ptg000025l:4424931-4425574	643	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.9	0.015656	554	      C            U  	       CCGCGGGCUAAA   	       GGCGCCCGAUUU   	CGUUGAA            UUA
+ptg000025l:14244403-14245403	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.9	0.031161	850	     C                A	      UUCGUGGGCUAAGAAU 	      AGGCGCCCGAUUUUUA 	CGUUGA                 
+ptg000025l:19257209-19257454	245	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.7	0.033826	30	     A         G      	      UCUGCGGGC       	      AGGCGCCCG       	CGUUGA         AUUUUUA
+ptg000025l:19257209-19257454	245	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.7	0.033826	30	     A         G      	      UCUGCGGGC       	      AGGCGCCCG       	CGUUGA         AUUUUUA
+ptg000026l:4995213-4996213	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28	0.049404	871	 U             A      	  GAUUUUCGCGGGC       	  UUGAAGGCGCCCG       	CG             AUUUUUA
+ptg000026l:9145881-9146881	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.3	0.04239	826	      A           U   	       CCGCGGGCUGA    	       GGCGCCCGAUU    	CGUUGAA           UUUA
+ptg000027l:2517245-2518245	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-32.9	0.003907	873	     A               A	      UCCGCGGGCUAAGAG 	      AGGCGCCCGAUUUUU 	CGUUGA               A
+ptg000027l:8496588-8496736	148	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23.2	0.034939	89	      A         C     	       UCGCGGGCU      	       GGCGCCCGA      	CGUUGAA         UUUUUA
+ptg000027l:8496588-8496736	148	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-23.2	0.034939	89	      A         C     	       UCGCGGGCU      	       GGCGCCCGA      	CGUUGAA         UUUUUA
+ptg000027l:11541494-11541666	172	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25	0.014817	26	U             A       	 CGAUUUUCGCGGG        	 GUUGAAGGCGCCC        	C             GAUUUUUA
+ptg000027l:11541494-11541666	172	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25	0.014817	26	U             A       	 CGAUUUUCGCGGG        	 GUUGAAGGCGCCC        	C             GAUUUUUA
+ptg000027l:12532800-12533800	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.9	0.031161	293	 A              C     	  AAUUUCUGCGGGCU      	  UUGAAGGCGCCCGA      	CG              UUUUUA
+ptg000027l:12577714-12578714	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.7	0.020625	923	A               C     	 UAAUUUCUGCGGGCU      	 GUUGAAGGCGCCCGA      	C               UUUUUA
+ptg000027l:13101102-13102102	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-33.9	0.002319	690	     G                A	      UCCGCGGGCUGAGAAU 	      AGGCGCCCGAUUUUUA 	CGUUGA                 
+ptg000031l:4522322-4523322	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-28.3	0.04239	947	U                C     	 GCAAUUUUUGCGGGUU      	 CGUUGAAGGCGCCCGA      	                 UUUUUA
+ptg000031l:8518034-8519034	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29	0.029598	663	     C              U 	      UCCGCGGGUUGGAA  	      AGGCGCCCGAUUUU  	CGUUGA              UA
+ptg000031l:13488729-13488832	103	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-22.8	0.02281	42	    A          C      	     UUCUGUGGGC       	     AAGGCGCCCG       	CGUUG          AUUUUUA
+ptg000031l:13488729-13488832	103	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-22.8	0.02281	42	    A          C      	     UUCUGUGGGC       	     AAGGCGCCCG       	CGUUG          AUUUUUA
+ptg000033l:622515-622760	245	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.7	0.033826	30	     A         G      	      UCUGCGGGC       	      AGGCGCCCG       	CGUUGA         AUUUUUA
+ptg000033l:622515-622760	245	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-24.7	0.033826	30	     A         G      	      UCUGCGGGC       	      AGGCGCCCG       	CGUUGA         AUUUUUA
+ptg000034l:664124-664179	55	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-20.6	0.02938	5	         A            U	          UGGGCUGAGAGU 	          GCCCGAUUUUUA 	CGUUGAAGGC             
+ptg000035l:333327-334327	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-32	0.006246	87	  C               U   	   GCUUCUGCGGGCUGG    	   UGAAGGCGCCCGAUU    	CGU               UUUA
+ptg000035l:1852478-1852643	165	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-25.1	0.012841	151	     A         G      	      UCCGCGGGU       	      AGGCGCCCG       	CGUUGA         AUUUUUA
+ptg000035l:2590665-2591665	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.1	0.028112	215	  C                 C 	   ACUUUUGCGGGUUAAGA  	   UGAAGGCGCCCGAUUUU  	CGU                 UA
+ptg000039l:382737-383737	999	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-29.7	0.020625	289	A               C     	 UAAUUUCUGCGGGCU      	 GUUGAAGGCGCCCGA      	C               UUUUUA
+ptg000047l:3805338-3805473	135	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	22	-26.2	0.004207	82	   G           A      	    UUUCCGUGGGC       	    GAAGGCGCCCG       	CGUU           AUUUUUA
+ntLink_8:533536-534536	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.6	0.018216	176	C                U     	 CGCAUGCAGCUGCUGU      	 GCGUGUGUCGACGGUA      	                 CCUUAC
+ntLink_8:2500226-2501226	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29	0.04068	745	   U             U    	    CACGGCUGCCAUG     	    GUGUCGACGGUAC     	GCGU             CUUAC
+ntLink_8:8042532-8042641	109	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-22.7	0.03752	56	    U         C       	     GCAGCUGCC        	     UGUCGACGG        	GCGUG         UACCUUAC
+ntLink_8:15284357-15285357	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-34.8	0.002162	315	 A                  A 	  UAUACGGUUGCCAUGGAA  	  GUGUGUCGACGGUACCUU  	GC                  AC
+ntLink_8:22595750-22596332	582	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31	0.006066	303	U               G      	 CGUACAUGGCUGCCA       	 GCGUGUGUCGACGGU       	                ACCUUAC
+ntLink_8:25728605-25729605	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31.9	0.009436	763	G              G      	 GCGCACGGUUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ntLink_8:30747663-30748663	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-34.1	0.003087	139	A               U     	 GCAUACAGCUGCCAU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ntLink_8:34314568-34315568	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-32.4	0.007322	811	G              A      	 GUGCACAGCUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ntLink_8:35035995-35036129	134	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.027462	80	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ntLink_4:215334-216334	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.9	0.015655	478	U                U    	 GUAUAUGGCUGCCGUG     	 CGUGUGUCGACGGUAC     	G                CUUAC
+ntLink_4:237625-238625	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.9	0.015655	478	U                U    	 GUAUAUGGCUGCCGUG     	 CGUGUGUCGACGGUAC     	G                CUUAC
+ntLink_6:2229414-2230414	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.0387	408	U            A        	 GCACACAGCUGU         	 CGUGUGUCGACG         	G            GUACCUUAC
+ntLink_6:2690007-2691007	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.5	0.019159	869	U               U     	 GUACACAGCUGCUGU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ntLink_6:2720868-2721868	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.5	0.019159	748	U               U     	 GUACACAGCUGCUGU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ntLink_6:4363003-4364003	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	509	A              C       	 CGCGCACAGUUGCU        	 GCGUGUGUCGACGG        	               UACCUUAC
+ntLink_6:4363317-4364317	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	195	A              C       	 CGCGCACAGUUGCU        	 GCGUGUGUCGACGG        	               UACCUUAC
+ntLink_6:9185407-9185627	220	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-24.7	0.038605	110	       C            G 	        GUUGCCGUGGGG  	        CGACGGUACCUU  	GCGUGUGU            AC
+ntLink_6:9185407-9185627	220	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-24.7	0.038605	110	       C            G 	        GUUGCCGUGGGG  	        CGACGGUACCUU  	GCGUGUGU            AC
+ntLink_6:13718705-13719705	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.036814	824	 U             A      	  UACACGGCUGCCA       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ntLink_6:18036399-18037399	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-34.1	0.003087	791	  G                 A 	   AUACGGUUGCCAUGGAA  	   UGUGUCGACGGUACCUU  	GCG                 AC
+ptg000001l:12455140-12455448	308	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.3	0.027142	206	C              U       	 CGCAUGCGGUUGCU        	 GCGUGUGUCGACGG        	               UACCUUAC
+ptg000001l:12455140-12455448	308	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.3	0.027142	206	C              U       	 CGCAUGCGGUUGCU        	 GCGUGUGUCGACGG        	               UACCUUAC
+ptg000002l:7401144-7401475	331	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.6	0.025865	151	  A            G      	   AUACGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000002l:7428759-7429759	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.036814	441	  A            A      	   ACACAGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000002l:7981084-7982084	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.3	0.035018	941	   U              U   	    CGCGGUUGCCAUGG    	    GUGUCGACGGUACC    	GCGU              UUAC
+ptg000002l:9374580-9375344	764	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.4	0.002759	175	   U                A 	    CACGGUUGCCAUGGAA  	    GUGUCGACGGUACCUU  	GCGU                AC
+ptg000004l:7824840-7825840	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	809	A              C      	 GCAUGCAGCUGUCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000007l:543467-543521	54	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-20.5	0.041743	32	    A         U       	     ACAGUUGCC        	     UGUCGACGG        	GCGUG         UACCUUAC
+ptg000007l:632483-633483	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	177	 A             G      	  CGCGCGGCUGCCA       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ptg000007l:1573814-1574814	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.5	0.031681	746	  A              A    	   ACAUGGCUGCCAUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000008l:2159938-2160938	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	168	 A             G      	  CACAUAGCUGCCG       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ptg000008l:6983698-6984698	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.0387	123	  A              U    	   ACACAGCUGUCGUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000008l:9737282-9737935	653	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.9	0.037949	224	  G            C      	   ACGCGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000008l:9737282-9737935	653	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.9	0.037949	224	  G            C      	   ACGCGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000008l:11042708-11043708	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.0387	949	 A             C      	  CACGCGGCUGCCG       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ptg000009l:4025711-4026068	357	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.5	0.017716	92	A              U       	 UGCACAUGGCUGUC        	 GCGUGUGUCGACGG        	               UACCUUAC
+ptg000009l:4025711-4026068	357	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.5	0.017716	92	A              U       	 UGCACAUGGCUGUC        	 GCGUGUGUCGACGG        	               UACCUUAC
+ptg000009l:5272621-5272828	207	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-24.1	0.049562	27	        A           G 	         CUGCCGUGGAG  	         GACGGUACCUU  	GCGUGUGUC           AC
+ptg000009l:6123223-6124223	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.0387	3	A             A        	 UGCACACAGCUGU         	 GCGUGUGUCGACG         	              GUACCUUAC
+ptg000009l:7128766-7129766	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29	0.04068	935	 A              A     	  CACAUGGCUGCCAU      	  GUGUGUCGACGGUA      	GC              CCUUAC
+ptg000009l:10555197-10555280	83	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.2	0.015767	26	U         A           	 GCACACAGC            	 CGUGUGUCG            	G         ACGGUACCUUAC
+ptg000009l:10555197-10555280	83	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.2	0.015767	26	U         A           	 GCACACAGC            	 CGUGUGUCG            	G         ACGGUACCUUAC
+ptg000011l:13167817-13168817	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-35.3	0.001676	651	U                  U   	 CGUAUACGGUUGCCAUGG    	 GCGUGUGUCGACGGUACC    	                   UUAC
+ptg000012l:1524975-1525975	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.2	0.004878	81	A              A      	 GCACACAGUUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000012l:1705300-1706134	834	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.02813	665	 A            U       	  CACACAGCUGCC        	  GUGUGUCGACGG        	GC            UACCUUAC
+ptg000012l:1705300-1706134	834	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.02813	665	 A            U       	  CACACAGCUGCC        	  GUGUGUCGACGG        	GC            UACCUUAC
+ptg000012l:8658841-8659841	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.5	0.031681	946	G              A      	 GCACAUGGCUGUCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000012l:8757331-8757668	337	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.2	0.033392	90	C             G        	 CGCGCGCGGUUGU         	 GCGUGUGUCGACG         	              GUACCUUAC
+ptg000012l:8901796-8902796	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.9	0.003417	732	G              A      	 GCGCGCGGCUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000012l:17975318-17975412	94	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.013671	7	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:18144080-18144259	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.046235	125	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:18144190-18144259	69	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.007018	15	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:18145014-18145190	176	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.044901	107	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:18145014-18145190	176	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.044901	107	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:18147640-18147819	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.046235	125	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000012l:19906214-19907214	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.9	0.015655	306	U                U    	 GUAUAUGGCUGCCGUG     	 CGUGUGUCGACGGUAC     	G                CUUAC
+ptg000015l:3130017-3131017	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.2	0.022286	708	G              A      	 GCAUGCAGCUGCUA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000015l:3665328-3666328	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31	0.014883	355	U              G      	 GUGCACGGCUGCCG       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000015l:4854935-4855935	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	849	  G            C      	   GCACGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000015l:4986132-4987132	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.8	0.044944	962	       C            A 	        GCUGCCAUGGAA  	        CGACGGUACCUU  	GCGUGUGU            AC
+ptg000015l:5531064-5532064	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	848	  G            C      	   GCACGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000015l:8088221-8089221	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	899	  G            C      	   GCACGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000016l:5560191-5561191	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.7	0.017319	911	A               A     	 GCACAUGGCUGUCAU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ptg000016l:10778075-10779075	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.8	0.003596	95	U               C     	 GUACACAGCUGCCAU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ptg000017l:3148411-3149411	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.9	0.025917	59	  A                C  	   AUAUGGCUGUCAUGGA   	   UGUGUCGACGGUACCU   	GCG                UAC
+ptg000017l:5387976-5388976	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.1	0.023437	257	   C              C   	    CGCAGCUGCUAUGG    	    GUGUCGACGGUACC    	GCGU              UUAC
+ptg000017l:6087854-6088133	279	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.5	0.020401	121	 A            C       	  CGCAUAGCUGCC        	  GUGUGUCGACGG        	GC            UACCUUAC
+ptg000017l:6087854-6088133	279	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.5	0.020401	121	 A            C       	  CGCAUAGCUGCC        	  GUGUGUCGACGG        	GC            UACCUUAC
+ptg000017l:8967169-8967525	356	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.4	0.010612	141	A              U       	 UGCGCACAGCUGUU        	 GCGUGUGUCGACGG        	               UACCUUAC
+ptg000018l:1093657-1094657	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.8	0.044944	262	 A            U       	  CACGCAGCUGCC        	  GUGUGUCGACGG        	GC            UACCUUAC
+ptg000018l:5887393-5888393	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.9	0.04276	979	  G            A      	   ACGCAGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000018l:11972074-11973074	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-37.4	0.000576	114	A                    A 	 CGCGCGCAGUUGUUGUGGAA  	 GCGUGUGUCGACGGUACCUU  	                     AC
+ptg000019l:532117-533117	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.8	0.027253	109	     U              A 	      CAGUUGCCAUGGAA  	      GUCGACGGUACCUU  	GCGUGU              AC
+ptg000020l:8082895-8083778	883	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.9	0.035703	442	       U             C	        GCUGCCAUGGAGU 	        CGACGGUACCUUA 	GCGUGUGU             C
+ptg000020l:11810290-11811290	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29	0.04068	908	 A              U     	  CAUACGGCUGCCAU      	  GUGUGUCGACGGUA      	GC              CCUUAC
+ptg000021l:3339313-3339385	72	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-21.9	0.028402	28	 C           A        	  CGCACAGUUGU         	  GUGUGUCGACG         	GC           GUACCUUAC
+ptg000021l:6807863-6808021	158	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.7	0.039473	131	       U           U  	        GCUGUCAUGGG   	        CGACGGUACCU   	GCGUGUGU           UAC
+ptg000021l:8074349-8074608	259	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.2	0.0213	9	     G              G 	      UAGUUGCUAUGGAG  	      GUCGACGGUACCUU  	GCGUGU              AC
+ptg000021l:10306248-10307248	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-32.4	0.007322	431	U               U     	 GCACGCGGCUGCUAU      	 CGUGUGUCGACGGUA      	G               CCUUAC
+ptg000021l:12337429-12338429	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.5	0.019159	785	A             C       	 GCACACAGCUGUC        	 CGUGUGUCGACGG        	G             UACCUUAC
+ptg000021l:12426731-12427731	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.5	0.019159	783	A             C       	 GCACACAGCUGUC        	 CGUGUGUCGACGG        	G             UACCUUAC
+ptg000021l:14397465-14398465	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-32.2	0.008105	899	    G               G 	     ACAGCUGCUAUGGAG  	     UGUCGACGGUACCUU  	GCGUG               AC
+ptg000021l:16278144-16279144	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	399	    A             C   	     ACGGCUGCCGUGG    	     UGUCGACGGUACC    	GCGUG             UUAC
+ptg000022l:5940977-5941315	338	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.7	0.014383	246	      A             A 	       GGCUGUCAUGGAA  	       UCGACGGUACCUU  	GCGUGUG             AC
+ptg000022l:5940977-5941315	338	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27.7	0.014383	246	      A             A 	       GGCUGUCAUGGAA  	       UCGACGGUACCUU  	GCGUGUG             AC
+ptg000022l:7624996-7625996	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.3	0.004636	516	      U               G	       GGCUGCCGUGGAAUG 	       UCGACGGUACCUUAC 	GCGUGUG                
+ptg000022l:8308035-8309035	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.7	0.047236	424	G            G        	 GCACGCAGCUGU         	 CGUGUGUCGACG         	G            GUACCUUAC
+ptg000023l:962969-963969	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.8	0.044944	321	A            A        	 GUACACAGCUGC         	 CGUGUGUCGACG         	G            GUACCUUAC
+ptg000023l:4002930-4003930	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.4	0.02015	631	G                A    	 GUGCGCAGUUGUCAUG     	 CGUGUGUCGACGGUAC     	G                CUUAC
+ptg000023l:7783806-7784806	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.7	0.028657	613	      U               U	       GGCUGCUGUGGAGUG 	       UCGACGGUACCUUAC 	GCGUGUG                
+ptg000023l:7955419-7955522	103	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-22.2	0.046567	32	       U         A    	        GCUGCCAUG     	        CGACGGUAC     	GCGUGUGU         CUUAC
+ptg000023l:12183242-12184242	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31.3	0.012788	297	   U                A 	    CGCAGCUGUUAUGGAA  	    GUGUCGACGGUACCUU  	GCGU                AC
+ptg000023l:28839329-28840239	910	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.033742	681	     U              A 	      CGGUUGCCAUGGAA  	      GUCGACGGUACCUU  	GCGUGU              AC
+ptg000023l:29675904-29675953	49	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-20.2	0.042302	37	   C           C      	    UACAGUUGUCA       	    GUGUCGACGGU       	GCGU           ACCUUAC
+ptg000023l:32494814-32495814	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	759	U              G      	 GUACACAGCUGUUA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000023l:35088740-35089549	809	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.4	0.024232	470	G              A      	 GCGUACGGCUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000023l:35088740-35089549	809	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.4	0.024232	470	G              A      	 GCGUACGGCUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000023l:43951655-43952655	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30	0.024646	456	    G             U   	     ACGGCUGCCGUGG    	     UGUCGACGGUACC    	GCGUG             UUAC
+ptg000024l:699385-699907	522	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27	0.043304	24	 A             G      	  CGCGCGGCUGUCA       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ptg000024l:699385-699907	522	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-27	0.043304	24	 A             G      	  CGCGCGGCUGUCA       	  GUGUGUCGACGGU       	GC             ACCUUAC
+ptg000024l:8095037-8096037	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-35.9	0.001235	385	    G                 G	     ACAGCUGCUAUGGAAUG 	     UGUCGACGGUACCUUAC 	GCGUG                  
+ptg000024l:8567456-8568456	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.9	0.04276	970	    U             U   	     GCAGCUGCUAUGG    	     UGUCGACGGUACC    	GCGUG             UUAC
+ptg000024l:8622857-8623564	707	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.021777	426	G              A      	 GUACAUAGCUGCUA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000024l:8622857-8623564	707	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.2	0.021777	426	G              A      	 GUACAUAGCUGCUA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000024l:10521663-10522053	390	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.4	0.037902	21	       C            G 	        GUUGCCAUGGAA  	        CGACGGUACCUU  	GCGUGUGU            AC
+ptg000024l:10521663-10522053	390	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.4	0.037902	21	       C            G 	        GUUGCCAUGGAA  	        CGACGGUACCUU  	GCGUGUGU            AC
+ptg000025l:1016621-1016976	355	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26	0.040655	165	  A            G      	   ACAUGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000025l:1016621-1016976	355	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26	0.040655	165	  A            G      	   ACAUGGCUGCCA       	   UGUGUCGACGGU       	GCG            ACCUUAC
+ptg000025l:1976117-1976296	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.7	0.00792	71	   U           A      	    CACAGCUGCCA       	    GUGUCGACGGU       	GCGU           ACCUUAC
+ptg000025l:1976117-1976296	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-24.6	0.028524	166	  U          A        	   GCACAGCUGC         	   UGUGUCGACG         	GCG          GUACCUUAC
+ptg000025l:1976117-1976296	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.7	0.00792	71	   U           A      	    CACAGCUGCCA       	    GUGUCGACGGU       	GCGU           ACCUUAC
+ptg000025l:1976117-1976296	179	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-24.6	0.028524	166	  U          A        	   GCACAGCUGC         	   UGUGUCGACG         	GCG          GUACCUUAC
+ptg000025l:5027977-5028977	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-36	0.001174	768	 A                C   	  CACGCGGCUGCCAUGG    	  GUGUGUCGACGGUACC    	GC                UUAC
+ptg000025l:5064206-5065206	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.6	0.00398	744	 A                C   	  CACGCGGUUGCCAUGG    	  GUGUGUCGACGGUACC    	GC                UUAC
+ptg000025l:8495905-8496905	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.7	0.017319	920	    G              C  	     GCAGCUGUCGUGGA   	     UGUCGACGGUACCU   	GCGUG              UAC
+ptg000025l:12031488-12032236	748	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.4	0.035969	50	  A              C    	   ACAUGGCUGCCGUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000025l:17806044-17807044	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-35.4	0.001593	587	G              A      	 GCACACAGCUGCCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000026l:6022120-6023120	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.5	0.031681	365	     U              A 	      CAGUUGCCAUGGAG  	      GUCGACGGUACCUU  	GCGUGU              AC
+ptg000026l:8590677-8591677	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31.4	0.012157	182	 A               A    	  CACACAGCUGCUGUG     	  GUGUGUCGACGGUAC     	GC               CUUAC
+ptg000026l:11439775-11440361	586	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.5	0.023362	317	G              G      	 GCAUAUAGUUGCCG       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000026l:14260117-14261117	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.7	0.017319	929	  A               U   	   ACAUAGCUGUCAUGG    	   UGUGUCGACGGUACC    	GCG               UUAC
+ptg000027l:8276268-8277268	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.7	0.047236	124	U            A        	 GCACAUAGCUGC         	 CGUGUGUCGACG         	G            GUACCUUAC
+ptg000027l:9938148-9938279	131	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-22.8	0.049286	61	        U           A 	         UUGCCAUGGAG  	         GACGGUACCUU  	GCGUGUGUC           AC
+ptg000027l:14951353-14952353	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.3	0.021191	640	  A              A    	   ACACAGUUGCCAUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000027l:15245116-15246116	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.3	0.021191	631	  A              A    	   ACACAGUUGCCAUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000028l:529350-530350	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.7	0.047236	668	A              G      	 GCACGCGGUUGUCG       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000031l:42797-42906	109	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-22.4	0.04547	8	         A          A 	          UGCCAUGGGA  	          ACGGUACCUU  	GCGUGUGUCG          AC
+ptg000031l:42797-42906	109	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-22.4	0.04547	8	         A          A 	          UGCCAUGGGA  	          ACGGUACCUU  	GCGUGUGUCG          AC
+ptg000031l:1180374-1181374	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31.4	0.012157	777	A              A      	 GCGCGCGGCUGUCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000031l:6240081-6241081	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.6	0.049642	530	A              G      	 GCAUACAGUUGUCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000031l:7599675-7599816	141	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23	0.049608	116	    A          A      	     AUAGCUGCCA       	     UGUCGACGGU       	GCGUG          ACCUUAC
+ptg000034l:663338-663393	55	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.004143	1	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000034l:663338-663393	55	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.004143	1	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000035l:6666912-6667254	342	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.006633	126	    A               A 	     AUGGUUGCCAUGGAA  	     UGUCGACGGUACCUU  	GCGUG               AC
+ptg000035l:6666912-6667254	342	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-29.1	0.006633	126	    A               A 	     AUGGUUGCCAUGGAA  	     UGUCGACGGUACCUU  	GCGUG               AC
+ptg000035l:9227145-9228145	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-32.6	0.006616	733	    A               G 	     GCAGUUGCCAUGGAA  	     UGUCGACGGUACCUU  	GCGUG               AC
+ptg000035l:9331438-9331640	202	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.6	0.010644	68	  A              U    	   GCGCAGUUGUCGUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000035l:9331438-9331640	202	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-26.6	0.010644	68	  A              U    	   GCGCAGUUGUCGUG     	   UGUGUCGACGGUAC     	GCG              CUUAC
+ptg000036l:575749-575847	98	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.2	0.022092	41	U         A           	 GCACACAGC            	 CGUGUGUCG            	G         ACGGUACCUUAC
+ptg000036l:575749-575847	98	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.2	0.022092	41	U         A           	 GCACACAGC            	 CGUGUGUCG            	G         ACGGUACCUUAC
+ptg000037l:134564-134619	55	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.004143	1	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000038l:170362-170421	59	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.004895	5	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000040l:158898-158957	59	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.004895	5	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000047l:1486082-1487082	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-33.2	0.004878	637	G              G      	 GCGCGCGGCUGCCG       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000047l:5112877-5113877	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-31.1	0.014149	898	A              C      	 GCGCGCGGCUGUCA       	 CGUGUGUCGACGGU       	G              ACCUUAC
+ptg000047l:6772488-6773488	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.2	0.022286	946	   C                A 	    UAUAGCUGCUGUGGAA  	    GUGUCGACGGUACCUU  	GCGU                AC
+ptg000047l:9468675-9469675	999	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-30.9	0.015655	252	A             U       	 GCACACAGCUGUC        	 CGUGUGUCGACGG        	G             UACCUUAC
+ptg000051l:168016-168144	128	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-23.8	0.02519	107	          A           A	           GCCAUGGGGUG 	           CGGUACCUUAC 	GCGUGUGUCGA            
+ptg000099l:2136-2503	367	Cluster_15340.mature::ptg000024l:5256476-5256497(-)	22	-28.9	0.008454	295	    A             U   	     GCAGUUGCCAUGG    	     UGUCGACGGUACC    	GCGUG             UUAC
+ptg000004l:9381829-9382829	999	Cluster_15671.mature::ptg000025l:1981742-1981763(+)	22	-28.3	0.025529	724	  A                U  	   CUAUCAAGUACUAGUC   	   GAUAGUUCAUGAUUAG   	ACA                UUA
+ptg000023l:8222424-8223424	999	Cluster_15671.mature::ptg000025l:1981742-1981763(+)	22	-27.2	0.045967	412	    A                 G	     GUCGAGUGCUGGUCGAU 	     UAGUUCAUGAUUAGUUA 	ACAGA                  
+ntLink_8:34963545-34964545	999	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-28.2	0.042282	326	A               A       	 UCUGCAUUCAUCUUG        	 GGACGUGAGUAGAAC        	                AAAAACAU
+ptg000004l:1415989-1416141	152	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-25.1	0.010448	104	G            A          	 CCUGCAUUCAUC           	 GGACGUGAGUAG           	             AACAAAAACAU
+ptg000004l:1415989-1416141	152	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-25.1	0.010448	104	G            A          	 CCUGCAUUCAUC           	 GGACGUGAGUAG           	             AACAAAAACAU
+ptg000006l:1828632-1829632	999	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-28.7	0.032677	856	C             G         	 CCUGCACUCAUCU          	 GGACGUGAGUAGA          	              ACAAAAACAU
+ptg000007l:3848251-3848293	42	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-23.2	0.002164	24	U              U        	 CCUGUGCUCAUUUU         	 GGACGUGAGUAGAA         	               CAAAAACAU
+ptg000012l:12286183-12287183	999	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-28.9	0.029466	765	G              U        	 CCUGCACUCAUCUU         	 GGACGUGAGUAGAA         	               CAAAAACAU
+ptg000021l:19826645-19826994	349	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-25.8	0.030743	212	  C            C       	   GCACUCAUCUUG        	   CGUGAGUAGAAC        	GGA            AAAAACAU
+ptg000021l:19826645-19826994	349	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-25.8	0.030743	212	  C            C       	   GCACUCAUCUUG        	   CGUGAGUAGAAC        	GGA            AAAAACAU
+ptg000022l:9424342-9424370	28	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-21.6	0.002613	7	  A         A          	   GCACUCAUC           	   CGUGAGUAG           	GGA         AACAAAAACAU
+ptg000023l:19815288-19815424	136	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-23.4	0.025253	96	G            G         	 CUGCACUUGUCU          	 GACGUGAGUAGA          	G            ACAAAAACAU
+ptg000024l:4434690-4434759	69	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-20.9	0.036614	37	  C         A          	   GCGCUCGUC           	   CGUGAGUAG           	GGA         AACAAAAACAU
+ptg000025l:7485038-7486038	999	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-28.9	0.029466	88	A               G      	 CUGCACUUGUCUUGU       	 GACGUGAGUAGAACA       	G               AAAACAU
+ptg000025l:8684581-8684805	224	Cluster_15775.mature::ptg000025l:7472581-7472603(-)	23	-28.1	0.003437	114	  C             G      	   GCACUCAUCUUGU       	   CGUGAGUAGAACA       	GGA             AAAACAU
+ptg000007l:3848251-3848293	42	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-20	0.018956	26	        C          U  	         UGUGCUCAUU   	         ACACGAGUAG   	UGGAAAACA          UUA
+ptg000009l:1689358-1689535	177	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-22.9	0.043755	13	G              G      	 UCUUUUGUUGUGUU       	 GGAAAACAACACGA       	U              GUAGUUA
+ptg000018l:13091367-13091419	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13093410-13093462	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13095326-13095503	177	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.019115	138	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13095326-13095503	177	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.019115	138	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13114951-13115003	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13115971-13116023	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13115971-13116023	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13126264-13126316	52	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001267	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13128310-13128359	49	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.001084	10	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13129264-13129381	117	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.008421	78	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13129264-13129381	117	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.008421	78	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13176338-13176432	94	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.005259	13	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000018l:13200457-13200561	104	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-24.2	0.006559	76	      C            C  	       GUUGUGCUCAUU   	       CAACACGAGUAG   	UGGAAAA            UUA
+ptg000020l:14114067-14115067	999	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-27.6	0.045952	898	     C               G	      UGUUGUGCUUAUCGA 	      ACAACACGAGUAGUU 	UGGAAA               A
+ptg000021l:19114628-19114846	218	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-23.3	0.048799	71	C              A       	 GCUUUUUGUUGUGU        	 UGGAAAACAACACG        	               AGUAGUUA
+ptg000023l:16446893-16447221	328	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-25.3	0.029081	239	   C                C 	    UUUGUUGUGUUUAUCG  	    AAACAACACGAGUAGU  	UGGA                UA
+ptg000023l:23823669-23824669	999	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-30	0.012948	687	 A                  U 	  CUUUUGUUGUGUUCAUUA  	  GAAAACAACACGAGUAGU  	UG                  UA
+ptg000024l:1456853-1457853	999	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-28.3	0.031834	677	     A              C 	      UGUUGUGCUCAUCG  	      ACAACACGAGUAGU  	UGGAAA              UA
+ptg000026l:9883252-9884252	999	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-28.4	0.030201	528	     C                G	      UGUUGUGUUCAUCAAU 	      ACAACACGAGUAGUUA 	UGGAAA                 
+ptg000035l:10102858-10102990	132	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-25.4	0.004841	44	      C             C 	       GUUGUGUUCAUCA  	       CAACACGAGUAGU  	UGGAAAA             UA
+ptg000035l:10102858-10102990	132	Cluster_15851.mature::ptg000025l:10501052-10501073(+)	22	-25.4	0.004841	44	      C             C 	       GUUGUGUUCAUCA  	       CAACACGAGUAGU  	UGGAAAA             UA
+ntLink_8:9346110-9347110	999	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-28.3	0.032213	825	  A                    C	   GUUUCUUCAUAGGGGUUUUG 	   CAAAGAAGUGUUUUCGAAAU 	GCA                     
+ptg000018l:1938972-1939426	454	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-25.5	0.044747	146	    G                  A	     UUCUUCAUAGAGGUUUUG 	     AAGAAGUGUUUUCGAAAU 	GCACA                   
+ptg000018l:1938972-1939426	454	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-25.5	0.044747	146	    G                  A	     UUCUUCAUAGAGGUUUUG 	     AAGAAGUGUUUUCGAAAU 	GCACA                   
+ptg000018l:10286923-10287120	197	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-24.8	0.016355	139	A                C     	 GUGUUUUUUCGCAGAA      	 CACAAAGAAGUGUUUU      	G                CGAAAU
+ptg000023l:27879511-27879738	227	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-24	0.034775	97	   U               A   	    UUUUUUCACAGAGGC    	    AAAGAAGUGUUUUCG    	GCAC               AAAU
+ptg000023l:37789441-37790441	999	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-28.2	0.033952	520	C                 C     	 CGUGUUUCUUCGCAGAA      	 GCACAAAGAAGUGUUUU      	                  CGAAAU
+ptg000025l:3565870-3566023	153	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-22.7	0.039412	102	      C              G 	       UUUCACGGAAGCUU  	       GAAGUGUUUUCGAA  	GCACAAA              AU
+ptg000026l:1141854-1142854	999	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-30.2	0.011784	308	U                   A   	 CGUGUUUCUUUGCAAGAGU    	 GCACAAAGAAGUGUUUUCG    	                    AAAU
+ptg000047l:5928088-5928314	226	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-24.1	0.032446	194	   C                C  	    UUUUUUCGCGAGAGCU   	    AAAGAAGUGUUUUCGA   	GCAC                AAU
+ptg000047l:5928088-5928314	226	Cluster_15854.mature::ptg000025l:10668923-10668945(-)	23	-24.1	0.032446	194	   C                C  	    UUUUUUCGCGAGAGCU   	    AAAGAAGUGUUUUCGA   	GCAC                AAU
+ptg000012l:781889-782889	999	Cluster_15928.mature::ptg000025l:15156437-15156458(+)	22	-28.2	0.037898	369	  U               U   	   UCUAUCCUGGGUGUG    	   AGAUAGGACUUACAC    	UAC               CAUU
+ptg000018l:10626826-10627826	999	Cluster_15928.mature::ptg000025l:15156437-15156458(+)	22	-31.9	0.00543	412	C                  U   	 GUGUUUAUCCUGAGUGUG    	 UACAGAUAGGACUUACAC    	                   CAUU
+ptg000027l:920387-921387	999	Cluster_15928.mature::ptg000025l:15156437-15156458(+)	22	-27.8	0.046628	336	 A                A   	  GUUUGUCUUGAGUGUG    	  CAGAUAGGACUUACAC    	UA                CAUU
+ptg000027l:9803202-9803353	151	Cluster_15928.mature::ptg000025l:15156437-15156458(+)	22	-23.4	0.02697	16	   A            C     	    CUGUCCUGAAUG      	    GAUAGGACUUAC      	UACA            ACCAUU
+ptg000027l:9803202-9803353	151	Cluster_15928.mature::ptg000025l:15156437-15156458(+)	22	-23.4	0.02697	16	   A            C     	    CUGUCCUGAAUG      	    GAUAGGACUUAC      	UACA            ACCAUU
+ntLink_8:19331930-19332071	141	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-24.1	0.014301	78	  C              C    	   GUAAAAGUCUCCAA     	   UAUUUUCAGAGGUU     	UGC              AGUGU
+ptg000008l:18764161-18764211	50	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-20.1	0.027951	39	       C          G   	        AGUCUCCAGU    	        UCAGAGGUUA    	UGCUAUUU          GUGU
+ptg000012l:8031339-8031393	54	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-20.7	0.021103	40	       U             U	        GGUCUUCAGUUGC 	        UCAGAGGUUAGUG 	UGCUAUUU             U
+ptg000012l:11592837-11593837	999	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-27.6	0.049481	8	U                   U  	 AUGAUGAAAGUCUCUGAUU   	 UGCUAUUUUCAGAGGUUAG   	                    UGU
+ptg000022l:5714377-5714429	52	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-27.2	0.000145	8	    A                U	     AGGAGUCUCUAAUCGC 	     UUUUCAGAGGUUAGUG 	UGCUA                U
+ptg000023l:36360307-36361307	999	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-27.9	0.042344	918	    A                 A	     AAAAGUCUUCAAUCGCG 	     UUUUCAGAGGUUAGUGU 	UGCUA                  
+ptg000024l:4925397-4926397	999	Cluster_16409.mature::ptg000026l:8745562-8745583(-)	22	-28.6	0.029384	191	       C              G	        GGUCUCCAAUCACA 	        UCAGAGGUUAGUGU 	UGCUAUUU               
+ntLink_8:3046004-3046165	161	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.4	0.001937	112	A               A     	 CUUGGCAUUUCUUCC      	 GGGCCGUAGGGAAGG      	A               AUCGCA
+ntLink_8:11861415-11861489	74	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-21.7	0.049975	5	      A         A     	       AUCCCUUCC      	       UAGGGAAGG      	AGGGCCG         AUCGCA
+ntLink_8:14955465-14956465	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.5	0.028454	235	   A            C     	    GGCAUCCCUUCC      	    CCGUAGGGAAGG      	AGGG            AUCGCA
+ntLink_8:23160019-23161019	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.1	0.034562	90	 G                A   	  UUGGUAUCCCUUCUUA    	  GGCCGUAGGGAAGGAU    	AG                CGCA
+ntLink_6:7306349-7307349	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.5	0.01746	806	 A              G     	  CUGGCGUUCCUUCC      	  GGCCGUAGGGAAGG      	AG              AUCGCA
+ntLink_6:19520436-19521436	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.5	0.046206	104	G               A      	 UCCUGGUGUUCCUUC       	 AGGGCCGUAGGGAAG       	                GAUCGCA
+ptg000001l:6080493-6081493	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-32.1	0.013011	748	    A              A  	     GCAUCCCUUCCUAG   	     CGUAGGGAAGGAUC   	AGGGC              GCA
+ptg000002l:3280202-3280422	220	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-25.6	0.033481	96	G           C         	 CCCGGCAUCUU          	 GGGCCGUAGGG          	A           AAGGAUCGCA
+ptg000002l:3280202-3280422	220	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-25.6	0.033481	96	G           C         	 CCCGGCAUCUU          	 GGGCCGUAGGG          	A           AAGGAUCGCA
+ptg000002l:8969789-8970108	319	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.2	0.008511	40	   G            A     	    GGUAUCCCUUCC      	    CCGUAGGGAAGG      	AGGG            AUCGCA
+ptg000002l:15315260-15315311	51	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-21.5	0.027002	20	      A             C 	       GUUCUUUCUUGGC  	       UAGGGAAGGAUCG  	AGGGCCG             CA
+ptg000004l:4528663-4529049	386	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.8	0.005017	198	  A              U    	   CGGCGUCUCUUCCU     	   GCCGUAGGGAAGGA     	AGG              UCGCA
+ptg000004l:9381829-9382829	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.4	0.048488	411	C            A         	 UCCCGGCAUUCC          	 AGGGCCGUAGGG          	             AAGGAUCGCA
+ptg000007l:8982500-8982917	417	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-26.8	0.049284	397	    A           G     	     GCGUCCCUUCC      	     CGUAGGGAAGG      	AGGGC           AUCGCA
+ptg000007l:8982500-8982917	417	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-26.8	0.049284	397	    A           G     	     GCGUCCCUUCC      	     CGUAGGGAAGG      	AGGGC           AUCGCA
+ptg000008l:339150-340150	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.029873	412	U                A     	 UCUUGGCAUUUCUUCC      	 AGGGCCGUAGGGAAGG      	                 AUCGCA
+ptg000008l:7098120-7098770	650	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.01533	243	G             A       	 CCCGGCAUUCCUU        	 GGGCCGUAGGGAA        	A             GGAUCGCA
+ptg000008l:7098120-7098770	650	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.01533	243	G             A       	 CCCGGCAUUCCUU        	 GGGCCGUAGGGAA        	A             GGAUCGCA
+ptg000008l:13348731-13349731	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.7	0.041952	365	       U              G	        UCCUUUCCUGGCGU 	        AGGGAAGGAUCGCA 	AGGGCCGU               
+ptg000008l:21725183-21726183	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.9	0.014352	344	 A               U    	  CCGGCAUUCUUUCCU     	  GGCCGUAGGGAAGGA     	AG               UCGCA
+ptg000008l:28114485-28114511	26	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-22.2	0.003187	4	      A          C    	       AUCCCUUCCU     	       UAGGGAAGGA     	AGGGCCG          UCGCA
+ptg000008l:30113826-30113992	166	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-27.1	0.008241	132	  A             C     	   CGGUGUCCUUUCC      	   GCCGUAGGGAAGG      	AGG             AUCGCA
+ptg000008l:30113826-30113992	166	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-27.1	0.008241	132	  A             C     	   CGGUGUCCUUUCC      	   GCCGUAGGGAAGG      	AGG             AUCGCA
+ptg000008l:33446257-33447257	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.1	0.034562	823	  G             A     	   CGGCGUUCCUUCC      	   GCCGUAGGGAAGG      	AGG             AUCGCA
+ptg000009l:10397817-10397986	169	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-26.6	0.011512	29	   A            A     	    GGCAUCCCUUUU      	    CCGUAGGGAAGG      	AGGG            AUCGCA
+ptg000012l:2000557-2001557	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.029873	962	G                G     	 UCUCGGUAUUUCUUCC      	 AGGGCCGUAGGGAAGG      	                 AUCGCA
+ptg000012l:10949745-10950745	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.029873	637	   A              A   	    GGCGUCCUUUCCUG    	    CCGUAGGGAAGGAU    	AGGG              CGCA
+ptg000015l:1787315-1787503	188	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-25.9	0.021286	148	 A           C        	  CCGGCAUCUCU         	  GGCCGUAGGGA         	AG           AGGAUCGCA
+ptg000015l:2525300-2525436	136	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-24.4	0.028744	97	    U             A   	     GUAUCCCUUCUUG    	     CGUAGGGAAGGAU    	AGGGC             CGCA
+ptg000015l:4839271-4840271	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.8	0.039971	91	    U               U 	     GCAUCCUUUCUUGGC  	     CGUAGGGAAGGAUCG  	AGGGC               CA
+ptg000015l:5512084-5513084	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.8	0.039971	223	    U               U 	     GCAUCCUUUCUUGGC  	     CGUAGGGAAGGAUCG  	AGGGC               CA
+ptg000015l:10702302-10703302	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.7	0.041952	304	    U               C 	     GCAUCCUUUCUUAGC  	     CGUAGGGAAGGAUCG  	AGGGC               CA
+ptg000016l:8824913-8825913	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.2	0.032924	2	 A              C     	  CCGGCAUCUCUUUC      	  GGCCGUAGGGAAGG      	AG              AUCGCA
+ptg000016l:11425880-11426880	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.7	0.015831	850	   G             C    	    GGCAUCCCUUCCU     	    CCGUAGGGAAGGA     	AGGG             UCGCA
+ptg000018l:4420663-4421663	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-33.9	0.005368	47	 A                 G  	  CUGGCGUCCUUUUCUAG   	  GGCCGUAGGGAAGGAUC   	AG                 GCA
+ptg000018l:4915475-4916475	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-33.9	0.005368	47	 A                 G  	  CUGGCGUCCUUUUCUAG   	  GGCCGUAGGGAAGGAUC   	AG                 GCA
+ptg000018l:8935570-8936570	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-33.5	0.006537	610	A                   A 	 UUUGGCAUUCUUUUCUAGC  	 GGGCCGUAGGGAAGGAUCG  	A                   CA
+ptg000020l:3984939-3985939	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.6	0.044029	50	C            C         	 UCCCGGCAUCCU          	 AGGGCCGUAGGG          	             AAGGAUCGCA
+ptg000020l:7393491-7394129	638	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.2	0.027485	214	G            G        	 CCCGGCGUCCUU         	 GGGCCGUAGGGA         	A            AGGAUCGCA
+ptg000021l:5149144-5150144	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-34.4	0.004196	252	C               A     	 UUCGGCGUCCCUUCC      	 GGGCCGUAGGGAAGG      	A               AUCGCA
+ptg000021l:10336572-10337572	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.7	0.015831	160	C               A     	 UUCGGCGUCCUUUCC      	 GGGCCGUAGGGAAGG      	A               AUCGCA
+ptg000021l:16782858-16783858	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.9	0.038081	792	U                G     	 UCCUGGCGUUUCUUUC      	 AGGGCCGUAGGGAAGG      	                 AUCGCA
+ptg000022l:7559411-7560411	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31	0.022297	793	       C             A	        UCCCUUCCUGGCG 	        AGGGAAGGAUCGC 	AGGGCCGU             A
+ptg000023l:8911061-8912061	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.7	0.015831	850	  A             A     	   CGGUAUCCCUUCC      	   GCCGUAGGGAAGG      	AGG             AUCGCA
+ptg000023l:24324749-24325749	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.6	0.044029	614	C               G     	 UCUGGCAUUCCUUUC      	 GGGCCGUAGGGAAGG      	A               AUCGCA
+ptg000023l:34944929-34945929	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.5	0.028454	663	A                G     	 UUCUGGCAUUCUUUCC      	 AGGGCCGUAGGGAAGG      	                 AUCGCA
+ptg000023l:39805534-39805636	102	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-23.4	0.031061	5	        C           C 	         CUCUUCCUGGC  	         GGGAAGGAUCG  	AGGGCCGUA           CA
+ptg000023l:41699635-41700635	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.5	0.028454	206	A              A      	 CUCGGCGUCCUUUC       	 GGGCCGUAGGGAAG       	A              GAUCGCA
+ptg000025l:18316811-18317811	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.5	0.046206	937	    C              A  	     GCAUCCUUUCCUAG   	     CGUAGGGAAGGAUC   	AGGGC              GCA
+ptg000025l:18563909-18564909	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-29.4	0.048488	736	C            A         	 UCCCGGCAUUCC          	 AGGGCCGUAGGG          	             AAGGAUCGCA
+ptg000027l:7587665-7588004	339	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-26.5	0.041712	276	C            G         	 UUCCGGCAUUCC          	 AGGGCCGUAGGG          	             AAGGAUCGCA
+ptg000027l:15740444-15740955	511	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-28.8	0.023759	284	G               G      	 UUUCGGCGUCCUUUC       	 AGGGCCGUAGGGAAG       	                GAUCGCA
+ptg000031l:10896140-10896233	93	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-24.2	0.015551	67	  A            A      	   CGGUGUCUCUUC       	   GCCGUAGGGAAG       	AGG            GAUCGCA
+ptg000035l:3818945-3819945	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-31.9	0.014352	568	A                U    	 CUCGGCAUUUCUUCCU     	 GGGCCGUAGGGAAGGA     	A                UCGCA
+ptg000047l:11275176-11276176	999	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	22	-30.4	0.029873	178	G                G     	 UUCCGGUAUUCCUUUC      	 AGGGCCGUAGGGAAGG      	                 AUCGCA
+ptg000021l:15539915-15540000	85	Cluster_17791.mature::ptg000031l:6751957-6751979(-)	23	-24.9	0.002604	25	A               C      	 UCUUCGUUUAUCUGC       	 AGAAGUAAAUAGAUG       	G               AGCAAUU
+ptg000026l:9521420-9522294	874	Cluster_17791.mature::ptg000031l:6751957-6751979(-)	23	-27.3	0.044195	587	G                  C   	 UCUUCAUUUAUUUACUUG    	 AGAAGUAAAUAGAUGAGC    	G                  AAUU
+ptg000033l:812172-813172	999	Cluster_17791.mature::ptg000031l:6751957-6751979(-)	23	-28.5	0.028542	888	 A                     A	  UUUCAUUUAUUUAUUCGUUAA 	  GAAGUAAAUAGAUGAGCAAUU 	GA                      
+ptg000001l:4485310-4486310	999	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-27.7	0.040751	769	      G              A	       CAUGGGCAAUACCC 	       GUAUCUGUUAUGGG 	AAAACUA              A
+ptg000004l:4802153-4803153	999	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-27.7	0.040751	575	    A               G 	     AUCAUAGACAAUGCC  	     UAGUAUCUGUUAUGG  	AAAAC               GA
+ptg000021l:17662287-17663287	999	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-28	0.034786	161	   A                 A	    GGUCGUGGGCGAUACUU 	    CUAGUAUCUGUUAUGGG 	AAAA                 A
+ptg000024l:4160893-4161357	464	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-27.3	0.01512	380	      G              C	       CGUAGACAGUACCC 	       GUAUCUGUUAUGGG 	AAAACUA              A
+ptg000024l:4160893-4161357	464	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-27.3	0.01512	380	      G              C	       CGUAGACAGUACCC 	       GUAUCUGUUAUGGG 	AAAACUA              A
+ptg000025l:648077-648145	68	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-21.3	0.019101	11	          U          G	           GGCAAUACCC 	           CUGUUAUGGG 	AAAACUAGUAU          A
+ptg000033l:453412-453737	325	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-26.5	0.012985	134	   C               A  	    GGUCGUGGGCAAUGC   	    CUAGUAUCUGUUAUG   	AAAA               GGA
+ptg000033l:453412-453737	325	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-26.5	0.012985	134	   C               A  	    GGUCGUGGGCAAUGC   	    CUAGUAUCUGUUAUG   	AAAA               GGA
+ptg000034l:763943-764050	107	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-22.1	0.027283	16	       A            A 	        GUGGGCAGUGCC  	        UAUCUGUUAUGG  	AAAACUAG            GA
+ptg000034l:763955-764050	95	Cluster_18711.mature::ptg000035l:4339600-4339621(-)	22	-22.1	0.021564	4	       A            A 	        GUGGGCAGUGCC  	        UAUCUGUUAUGG  	AAAACUAG            GA
+ntLink_8:26868103-26868166	63	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-20.6	0.032938	30	  C            A      	   GGCUCUUUUAGG       	   CUGAGAAAAUUC       	UCA            GUCACUC
+ntLink_6:594628-595628	999	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-27.9	0.044277	732	    C                 U	     CUCUUUUAGGUGGUGAG 	     GAGAAAAUUCGUCACUC 	UCACU                  
+ptg000015l:2525300-2525436	136	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-25.8	0.004566	114	 A              U     	  UGACUCUUUUGAGC      	  ACUGAGAAAAUUCG      	UC              UCACUC
+ptg000016l:3845019-3846019	999	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-28.2	0.037898	522	 U                   U	  UGAUUUUUUUAAGUAGUGG 	  ACUGAGAAAAUUCGUCACU 	UC                   C
+ptg000021l:15126544-15127544	999	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-28.4	0.034155	248	 A                 U  	  UGACUUUUUUAGGCAGU   	  ACUGAGAAAAUUCGUCA   	UC                 CUC
+ptg000027l:1608150-1608267	117	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-22.7	0.026329	84	  G             U     	   GACUCUUUUAAGU      	   CUGAGAAAAUUCG      	UCA             UCACUC
+ptg000031l:8789077-8789121	44	Cluster_18723.mature::ptg000035l:4808391-4808412(+)	22	-22.9	0.00259	8	         C            G	          UUAAGCAGUGGG 	          AAUUCGUCACUC 	UCACUGAGAA             
+ptg000008l:5667636-5668636	999	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	22	-29.5	0.03384	732	       C              U	        UUGGAUCUACGGGG 	        AGCCUAGAUGCCCU 	GGUGUUCA               
+ptg000008l:5667958-5668958	999	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	22	-29.5	0.03384	410	       C              U	        UUGGAUCUACGGGG 	        AGCCUAGAUGCCCU 	GGUGUUCA               
+ptg000020l:5764456-5764812	356	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	22	-26.4	0.034898	140	      C             A 	       UUCGGAUCUAUGG  	       AAGCCUAGAUGCC  	GGUGUUC             CU
+ptg000035l:1235065-1236065	999	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	22	-28.9	0.045585	34	        A             A	         UGGGUCUGCGGGA 	         GCCUAGAUGCCCU 	GGUGUUCAA              
+ntLink_8:9182617-9182687	70	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.017408	23	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ntLink_8:9278806-9278822	16	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-20.2	0.002038	2	  G          C         	   GAUGAGAGUU          	   CUACUCUCAG          	GUG          CAUGUUAUAU
+ntLink_8:32134770-32135770	999	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-29.8	0.021299	108	A               C       	 CACGGUGGGAGUCGU        	 GUGCUACUCUCAGCA        	                UGUUAUAU
+ntLink_8:35263405-35263468	63	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.013896	34	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000009l:5936616-5936689	73	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-21.4	0.033106	55	      A            A   	       AGAGUUGUGCAG    	       UCUCAGCAUGUU    	GUGCUAC            AUAU
+ptg000009l:5936616-5936689	73	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-21.4	0.033106	55	      A            A   	       AGAGUUGUGCAG    	       UCUCAGCAUGUU    	GUGCUAC            AUAU
+ptg000009l:12040657-12040764	107	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.7	0.029061	84	    C            U     	     UGAGGGUUGUAC      	     ACUCUCAGCAUG      	GUGCU            UUAUAU
+ptg000009l:12040657-12040764	107	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.7	0.029061	84	    C            U     	     UGAGGGUUGUAC      	     ACUCUCAGCAUG      	GUGCU            UUAUAU
+ptg000012l:17975318-17975412	94	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.031563	14	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000012l:18144190-18144259	69	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.016887	22	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000012l:18145602-18145697	95	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.032215	48	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000015l:2510723-2510874	151	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-25	0.012763	116	A            A         	 AUGAUGAGAGUC          	 UGCUACUCUCAG          	G            CAUGUUAUAU
+ptg000022l:7496110-7496405	295	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-28.5	0.005445	9	G             G        	 GCGAUGGGAGUCG         	 UGCUACUCUCAGC         	G             AUGUUAUAU
+ptg000027l:14166353-14166463	110	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.042478	48	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000027l:14177520-14177913	393	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-26.3	0.032206	329	U             A        	 GCGGUGAGAGUUG         	 UGCUACUCUCAGC         	G             AUGUUAUAU
+ptg000027l:14178501-14178520	19	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.000607	5	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000027l:14179472-14179501	29	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.002093	15	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000034l:663338-663393	55	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.010287	8	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000034l:663338-663393	55	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.010287	8	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000037l:134564-134619	55	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.010287	8	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000038l:170362-170421	59	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.012035	12	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000040l:158898-158957	59	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.012035	12	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ptg000170l:25055-25173	118	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	23	-22.2	0.048291	5	  G           A        	   GGUGAGAGUUG         	   CUACUCUCAGC         	GUG           AUGUUAUAU
+ntLink_8:15191209-15191230	21	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-21.8	0.001033	1	                    A 	        GUGCUUCUUCUU  	        UACGAAGGAGGA  	AUGCAUAG            AC
+ntLink_8:28602197-28602264	67	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-22.6	0.011033	3	   U            A     	    UGUUAUGCUUCC      	    AUAGUACGAAGG      	AUGC            AGGAAC
+ntLink_8:28602197-28602264	67	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-22.6	0.011033	3	   U            A     	    UGUUAUGCUUCC      	    AUAGUACGAAGG      	AUGC            AGGAAC
+ntLink_8:29275897-29276897	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.7	0.035582	182	      A            G  	       CAUGCUUCCUCC   	       GUACGAAGGAGG   	AUGCAUA            AAC
+ntLink_6:10128902-10129493	591	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-27.2	0.03545	355	       A              U	        GUGCUUCCUUCUUG 	        UACGAAGGAGGAAC 	AUGCAUAG               
+ntLink_6:10128902-10129493	591	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-27.2	0.03545	355	       A              U	        GUGCUUCCUUCUUG 	        UACGAAGGAGGAAC 	AUGCAUAG               
+ptg000002l:12814470-12815446	976	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.7	0.034382	515	     C              A 	      UCAUGCUUCUUCCU  	      AGUACGAAGGAGGA  	AUGCAU              AC
+ptg000002l:12982461-12983461	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	701	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000004l:2143117-2144117	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.6	0.03745	485	    A              C  	     GUCAUGUUUCCUCC   	     UAGUACGAAGGAGG   	AUGCA              AAC
+ptg000007l:1080576-1080715	139	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-22.6	0.04702	66	        U          G  	         UGCUUCCUCU   	         ACGAAGGAGG   	AUGCAUAGU          AAC
+ptg000007l:1080576-1080715	139	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-22.6	0.04702	66	        U          G  	         UGCUUCCUCU   	         ACGAAGGAGG   	AUGCAUAGU          AAC
+ptg000007l:10803842-10804842	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-29	0.03051	20	     U               C	      UCGUGUUUCCUCCUU 	      AGUACGAAGGAGGAA 	AUGCAU               C
+ptg000008l:2627168-2628168	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-29.5	0.023593	606	    A                 C	     AUCGUGUUUUCUCCUUG 	     UAGUACGAAGGAGGAAC 	AUGCA                  
+ptg000008l:5866923-5867055	132	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-23.8	0.019789	72	         C         G  	          GCUUCCUCC   	          CGAAGGAGG   	AUGCAUAGUA         AAC
+ptg000008l:5866923-5867055	132	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-23.8	0.019789	72	         C         G  	          GCUUCCUCC   	          CGAAGGAGG   	AUGCAUAGUA         AAC
+ptg000008l:29781860-29782860	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	406	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000009l:1434905-1435052	147	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.5	0.008181	14	    C               A 	     AUUAUGUUUCCUCUU  	     UAGUACGAAGGAGGA  	AUGCA               AC
+ptg000009l:1434905-1435052	147	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.5	0.008181	14	    C               A 	     AUUAUGUUUCCUCUU  	     UAGUACGAAGGAGGA  	AUGCA               AC
+ptg000009l:6613579-6614579	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-29.2	0.027531	176	 C              G     	  CGUGUCGUGCUUCC      	  GCAUAGUACGAAGG      	AU              AGGAAC
+ptg000009l:15789393-15790393	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	750	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000012l:247479-247679	200	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.9	0.011647	143	        U           G 	         UGCUUCCUCCU  	         ACGAAGGAGGA  	AUGCAUAGU           AC
+ptg000012l:247479-247679	200	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.9	0.011647	143	        U           G 	         UGCUUCCUCCU  	         ACGAAGGAGGA  	AUGCAUAGU           AC
+ptg000015l:3940652-3941032	380	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.4	0.047876	270	      A            A  	       CGUGCUUCCUUC   	       GUACGAAGGAGG   	AUGCAUA            AAC
+ptg000016l:1430085-1431085	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	310	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000016l:1627877-1628877	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	885	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000017l:1711272-1712272	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	858	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000017l:1773268-1774268	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.4	0.041479	120	   A                G 	    UAUCGUGUUUCUUCCU  	    AUAGUACGAAGGAGGA  	AUGC                AC
+ptg000020l:14243199-14243491	292	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.6	0.027654	77	      A               U	       UAUGUUUCCUUCUUG 	       GUACGAAGGAGGAAC 	AUGCAUA                
+ptg000020l:14243199-14243491	292	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.6	0.027654	77	      A               U	       UAUGUUUCCUUCUUG 	       GUACGAAGGAGGAAC 	AUGCAUA                
+ptg000020l:15471949-15472250	301	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.9	0.02444	39	      G            A  	       CGUGCUUCCUCU   	       GUACGAAGGAGG   	AUGCAUA            AAC
+ptg000020l:15471949-15472250	301	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-25.9	0.02444	39	      G            A  	       CGUGCUUCCUCU   	       GUACGAAGGAGG   	AUGCAUA            AAC
+ptg000021l:6809884-6810884	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-29.2	0.027531	558	 C              G     	  CGUGUCGUGCUUCC      	  GCAUAGUACGAAGG      	AU              AGGAAC
+ptg000022l:4528057-4529057	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-31.7	0.007555	178	 U                 G  	  UGUAUUAUGUUUCCUCC   	  GCAUAGUACGAAGGAGG   	AU                 AAC
+ptg000023l:28773223-28774223	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-32.4	0.005251	39	 U                A   	  UGUGUCGUGCUUCCUC    	  GCAUAGUACGAAGGAG    	AU                GAAC
+ptg000023l:38684146-38685146	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.6	0.03745	471	      A              U	       UAUGCUUCCUCCUU 	       GUACGAAGGAGGAA 	AUGCAUA              C
+ptg000026l:11218835-11219835	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.2	0.045931	845	 U                A   	  UGUAUUAUGUUUCCUC    	  GCAUAGUACGAAGGAG    	AU                GAAC
+ptg000028l:246957-247014	57	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-23.5	0.003979	46	      A               	       CAUGCUUCCUC    	       GUACGAAGGAG    	AUGCAUA           GAAC
+ptg000030l:1640232-1640313	81	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-22.2	0.021828	1	         A          A 	          GCUUCCUCUU  	          CGAAGGAGGA  	AUGCAUAGUA          AC
+ptg000035l:9642811-9643811	999	Cluster_19193.mature::ptg000039l:35786-35807(-)	22	-28.4	0.041479	332	    A             A   	     GUCAUGCUUCCUC    	     UAGUACGAAGGAG    	AUGCA             GAAC
