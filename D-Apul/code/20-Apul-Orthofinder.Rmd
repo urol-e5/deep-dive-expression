@@ -25,6 +25,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Gather genomic resources
+
 For orthofinder, we need a protein fasta for each genome. I found each of these on our wiki, https://github.com/urol-e5/deep-dive-expression/wiki/00%E2%80%90Genomic-Resources.
 
 - `Apulchra-genome.pep.faa` - https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
@@ -41,7 +43,7 @@ wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.anno
 wget https://gannet.fish.washington.edu/seashell/snaps/Pocillopora_meandrina_HIv1.genes.pep.faa
 ```
 
-Install Orthofinder on unity
+## Install Orthofinder on unity
 
 ```{bash, eval = FALSE}
 cd /work/pi_hputnam_uri_edu/pgrams
@@ -55,6 +57,7 @@ cd OrthoFinder/
 ./orthofinder -h
 ```
 
+## Run orthofinder
 
 ```{bash, eval = FALSE}
 mkdir scripts
@@ -77,7 +80,7 @@ nano scripts/orthofinder.sh
 /work/pi_hputnam_uri_edu/pgrams/OrthoFinder/orthofinder -f ../data/20-Apul-Orthofinder/proteins/ -t 20 -o ../output/20-Apul-Orthofinder/
 ```
 
-View output summary:
+## View output summary:
 
 ```{bash, eval=FALSE}
 cd ../output/20-Apul-Orthofinder/Results_Dec20
@@ -147,4 +150,154 @@ cat Species_Tree/SpeciesTree_rooted.txt
 Put this info^^ into the [ETE Toolkit tree viewer](http://etetoolkit.org/treeview/) in web browser
 
 ![OrthofinderTree](../output/20-Apul-Orthofinder/Results_Dec20/Orthofinder-tree.png)
-Analyze data:
+
+### Note: this is pretty odd because Porites and Acropora are in the same clade (complex corals) - worth looking into reasons why the genomes are grouping like this.
+
+## Analyze data:
+
+This is based off of Jill Ashey's script here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd
+
+```{r}
+#install.packages("ComplexUpset")
+require(ComplexUpset)
+require(tidyverse)
+```
+
+### *Step 1*: Load Orthogroup data 
+```{r}
+# Read in orthofinder data 
+ortho <- read.table(file = "../output/20-Apul-Orthofinder/Results_Dec20/Phylogenetic_Hierarchical_Orthogroups/N0.tsv", sep = '\t', header = TRUE, na.strings=c(""," ","NA")) %>% select(-c(HOG, Gene.Tree.Parent.Clade)) %>% rename(Orthogroup = OG)
+
+genus_list <- c("Acropora", "Pocillopora", "Porites")
+
+species_list_abbrv <- c("apul", "pmea", "peve")
+
+colnames(ortho) <- c("Orthogroup", genus_list)
+length(unique(ortho$Orthogroup)) # 23124 total orthogroups
+```
+
+### *Step 2*: Expand table to show each gene as a row and the gene ID and orthogroup ID as the 2 columns
+
+```{r}
+# Split by species
+for (i in 1:length(genus_list)) {
+  assign(paste0(species_list_abbrv[i], "_ortho"), select(ortho, c("Orthogroup", genus_list[i])))
+}
+```
+
+```{r}
+# Now split strings of gene names into cols w/ corresponding orthogroup
+
+for (i in 1:length(genus_list)) {
+  df_name <- paste0(species_list_abbrv[i], "_ortho")
+  
+  # Extract the species column and perform operations
+  assign(df_name, get(df_name) %>%
+           mutate(!!genus_list[i] := strsplit(as.character(!!as.symbol(genus_list[i])), ",")) %>%
+           unnest(!!as.symbol(genus_list[i])) %>%
+           na.omit() %>%
+           mutate(!!as.symbol(genus_list[i]) := gsub(" ", "", !!as.symbol(genus_list[i])))
+  )
+}
+```
+
+### *Step 3*: Merge all orthogroups tables for all 3 species into one table that will be used to generate the Upset Plot
+
+```{r}
+apul_ortho_collapsed <- unique(apul_ortho %>% select(Orthogroup))
+
+#add in column to show that all these orthogroups are in Apul because they come from Apul
+apul_ortho_collapsed$Acropora <-1
+
+peve_ortho_collapsed <- unique(peve_ortho %>% select(Orthogroup))
+
+#add in column to show that all these orthogroups are in Apul because they come from Apul
+peve_ortho_collapsed$Porites <-1
+
+pmea_ortho_collapsed <- unique(pmea_ortho %>% select(Orthogroup))
+
+#add in column to show that all these orthogroups are in Apul because they come from Apul
+pmea_ortho_collapsed$Pocillopora <-1
+```
+
+#### Join using full joins to capture orthogroups that aren't shared. This is more accurate.
+```{r}
+full1 <- full_join(apul_ortho_collapsed, peve_ortho_collapsed, by = "Orthogroup")
+full <- full_join(full1, pmea_ortho_collapsed, by = "Orthogroup")
+
+full <- full %>% replace(is.na(.), 0)
+```
+
+### Make upset plot 
+
+Trying the code from this stackover flow post: https://stackoverflow.com/questions/67094573/upsetr-sets-bar-interacting-different-color-and-its-sets-intersections
+
+Vignette for ComplexUpset [here](https://krassowski.github.io/complex-upset/articles/Examples_R.html)
+PDF: https://cran.r-project.org/web/packages/ComplexUpset/ComplexUpset.pdf
+
+```{r}
+# plot
+upset_ortho <- upset(
+  full,
+  genus_list,
+  queries=list(
+    upset_query(set='Acropora', fill='gray'),
+    upset_query(set='Pocillopora', fill='gray'),
+    upset_query(set='Porites', fill='gray')
+  ),
+  base_annotations=list(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
+        intersection_size(
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
+      ) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.05))) + # add some space on the top of the bars
+      theme(
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 20, colour = "black"), 
+          axis.text.y = element_text(size = 20, colour = "black")
+      )
+    )
+  ),
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=30),  
+    colors=c("lightgreen", "lightblue", "lightpink") 
+  ),
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
+      geom=geom_point(
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.6
+      ), 
+      segment=geom_segment(size=2)
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=.25, colour = "black")) +
+    theme(
+      axis.line.x=element_line(colour='black', size = 1),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 15, colour = "black"),
+      axis.title.x = element_text(size = 20, colour = "black"),
+    )
+  ),
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 30, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
+       )),
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
+)
+
+ggsave("../output/20-Apul-Orthofinder/Results_Dec20/upset_ortho.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("../output/20-Apul-Orthofinder/Results_Dec20/upset_ortho.png", upset_ortho, width = 40, height = 20, units = c("in"))
+```
+
+![OrthofinderUpset](../output/20-Apul-Orthofinder/Results_Dec20/upset_ortho.png)
+
+
