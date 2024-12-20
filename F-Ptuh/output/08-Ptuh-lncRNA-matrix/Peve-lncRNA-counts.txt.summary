@@ -1,5 +1,5 @@
 Status	../output/06-Ptuh-Hisat/RNA-POC-47.sorted.bam	../output/06-Ptuh-Hisat/RNA-POC-48.sorted.bam	../output/06-Ptuh-Hisat/RNA-POC-50.sorted.bam	../output/06-Ptuh-Hisat/RNA-POC-53.sorted.bam	../output/06-Ptuh-Hisat/RNA-POC-57.sorted.bam
-Assigned	0	0	0	0	0
+Assigned	8462252	8124761	4577741	3746118	2263276
 Unassigned_Unmapped	38879515	40335517	41981622	42068498	42015544
 Unassigned_Read_Type	0	0	0	0	0
 Unassigned_Singleton	0	0	0	0	0
@@ -10,6 +10,6 @@ Unassigned_Duplicate	0	0	0	0	0
 Unassigned_MultiMapping	28695393	28309746	16491142	13528839	7301887
 Unassigned_Secondary	0	0	0	0	0
 Unassigned_NonSplit	0	0	0	0	0
-Unassigned_NoFeatures	59288770	52628209	62656659	59826950	40429252
+Unassigned_NoFeatures	50301605	44045277	57449595	55491300	37662450
 Unassigned_Overlapping_Length	0	0	0	0	0
-Unassigned_Ambiguity	0	0	0	0	0
+Unassigned_Ambiguity	524913	458171	629323	589532	503526
