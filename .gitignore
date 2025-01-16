@@ -12,7 +12,7 @@ data/blastdb
 
 D-Apul/code/.bashvars
 D-Apul/code/*_cache
-D-Apul/code/methylseq.sh
+D-Apul/code/scripts
 D-Apul/data/*.fa
 D-Apul/data/*.ebwt
 D-Apul/data/sRNA-trimmed-reads
@@ -20,17 +20,20 @@ D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
 D-Apul/data/02-Apul-reference-annotation/*.fa
 D-Apul/output/07.2-Apul-Hisat
-D-Apul/data/08-Apul-WGBS/sim-data/*.fastq
+D-Apul/data/08-Apul-WGBS/sim-data/*.gz
 D-Apul/data/16-Apul-RNAhybrid/*.fa
 D-Apul/data/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/*.fa
+D-Apul/data/20-Apul-Orthofinder/proteins/*.fa*
+D-Apul/output/08-Apul-WGBS/
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
 D-Apul/output/16-Apul-RNAhybrid/*.fa
 D-Apul/output/16-Apul-RNAhybrid/Apul-RNAhybrid-mRNA-compact.txt
 D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/*_large.txt
-
-
+D-Apul/output/20-Apul-Orthofinder/Results_Dec20/WorkingDirectory
+D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Gene_Trees
+D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Sequences
 
 E-Peve/code/.bashvars
 E-Peve/code/*_cache
@@ -54,3 +57,4 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
+.DS_Store

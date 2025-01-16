@@ -6,11 +6,13 @@ editor_options:
   chunk_output_type: console
 ---
 
+Things are very highly correlated - mixOmics is not a good framework for us to use within species. This will maybe be more helpful for between species analyses.  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Script to analyzed relationships between RNA-sRNA-WGBS using mixOmics.  
+Script to analyzed relationships between RNA-sRNA-lncRNA using mixOmics.  
 
 # Set up 
 
@@ -25,19 +27,24 @@ library(mixOmics)
 
 Read in count matrices.  
 
-mrna is missing sample 150, removing from all 
+mrna is missing sample 150, removing from all for now, will revisit and add this in after analysis is re done (SR to do) 
 ```{r}
-mrna<-read.csv("D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%rename("sample140"=RNA.ACR.140, "sample145"=RNA.ACR.145, "sample173"=RNA.ACR.173, "sample178"=RNA.ACR.178)
+mrna<-read.csv("D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%rename("sample140"=RNA.ACR.140, "sample145"=RNA.ACR.145, "sample173"=RNA.ACR.173, "sample178"=RNA.ACR.178, "sample150"=RNA.ACR.150)
 
 rownames(mrna)<-mrna$gene_id
 
 mrna<-mrna%>%dplyr::select(!gene_id)
 
-srna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt")%>%dplyr::select(!sample150)
-sirna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_siRNA_normalized.txt")%>%dplyr::select(!sample150)
+srna<-read.table("D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_sRNA_normalized.txt")
+
+lncrna<-read.table("D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=T)%>%rename("sample140"=`...output.07.Apul.Hisat.RNA.ACR.140.sorted.bam`, "sample150"=`...output.07.Apul.Hisat.RNA.ACR.150.sorted.bam`, "sample145"=`...output.07.Apul.Hisat.RNA.ACR.145.sorted.bam`, "sample173"=`...output.07.Apul.Hisat.RNA.ACR.173.sorted.bam`, "sample178"=`...output.07.Apul.Hisat.RNA.ACR.178.sorted.bam` )%>%dplyr::select(Geneid, sample140, sample145, sample150, sample173, sample178)
+
+rownames(lncrna)<-lncrna$Geneid
+
+lncrna<-lncrna%>%dplyr::select(!Geneid)
 
 metadata <- data.frame(
-  sample = c("sample145", "sample140", "sample173", "sample178"),
+  sample = c("sample145", "sample140", "sample173", "sample178", "sample150"),
   species = "Apul"
 )
 ```
@@ -53,11 +60,11 @@ Set matrices.
 ```{r}
 mrna<-t(mrna)
 srna<-t(srna)
-sirna<-t(sirna)
+lncrna<-t(lncrna)
 
 dim(mrna)
 dim(srna)
-dim(sirna)
+dim(lncrna)
 dim(metadata)
 ```
 
@@ -73,21 +80,29 @@ dim(mrna)
 srna <- srna[, colSums(srna) != 0]
 dim(srna)
 
-sirna <- sirna[, colSums(sirna) != 0]
-dim(sirna)
+srna<-as.data.frame(srna)
+srna <- srna[, sapply(srna, function(x) length(unique(x)) > 1)]
+dim(srna)
+
+lncrna <- lncrna[, colSums(lncrna) != 0]
+dim(lncrna)
+
+lncrna<-as.data.frame(lncrna)
+lncrna <- lncrna[, sapply(lncrna, function(x) length(unique(x)) > 1)]
+dim(lncrna)
 ```
 
 
 ## Conduct preliminary PCA  
 
 ```{r}
-pca.mrna <- pca(mrna, ncomp = 3, center = TRUE, scale = TRUE)
-pca.srna <- pca(srna, ncomp = 3, center = TRUE, scale = TRUE)
-pca.sirna <- pca(sirna, ncomp = 3, center = TRUE, scale = TRUE)
+pca.mrna <- pca(mrna, ncomp = 2, center = TRUE, scale = TRUE)
+pca.srna <- pca(srna, ncomp = 2, center = TRUE, scale = TRUE)
+pca.lncrna <- pca(lncrna, ncomp = 2, center = TRUE, scale = TRUE)
 
 plot(pca.mrna)
 plot(pca.srna)
-plot(pca.sirna)
+plot(pca.lncrna)
 ```
 
 Similar variance explained because we are dealing with individual samples within a species. 
@@ -103,10 +118,10 @@ plotIndiv(pca.srna, comp = c(1, 2),
           ind.names = metadata$sample, 
           legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
 
-plotIndiv(pca.sirna, comp = c(1, 2), 
+plotIndiv(pca.lncrna, comp = c(1, 2), 
           group = metadata$species, 
           ind.names = metadata$sample, 
-          legend = TRUE, title = 'siRNA, PCA comp 1 - 2')
+          legend = TRUE, title = 'lncRNA, PCA comp 1 - 2')
 ```
 
 # Multi block PLS with DIABLO 
@@ -114,8 +129,8 @@ plotIndiv(pca.sirna, comp = c(1, 2),
 ```{r}
 X1 <- mrna
 X2 <- srna 
-X3 <- sirna
-X <- list(mrna = X1, srna = X2, sirna = X3)
+X3 <- lncrna
+X <- list(mrna = X1, srna = X2, lncrna = X3)
 
 Y <-metadata$sample
 ```
@@ -128,7 +143,7 @@ plotVar(result.diablo) # plot the variables
 
 sparse 
 ```{r}
-list.keepX = list(mrna = c(50, 4), srna = c(50,4), sirna = c(50, 4)) 
+list.keepX = list(mrna = c(20, 2), srna = c(20,2), lncrna = c(20, 2)) 
 
 # run the method
 result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 
@@ -152,5 +167,5 @@ network(result.sparse.diablo,
 ```
 
 ```{r}
-circosPlot(result.sparse.diablo, cutoff=0.90)
+circosPlot(result.sparse.diablo, cutoff=0.99, comp=1:2)
 ```

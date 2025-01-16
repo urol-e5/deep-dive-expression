@@ -1,0 +1,170 @@
+---
+title: "Apul MixOmics"
+output: html_document
+date: "2024-10-01"
+editor_options: 
+  chunk_output_type: console
+---
+
+Things are very highly correlated - mixOmics is not a good framework for us to use within species. This will maybe be more helpful for between species analyses.  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Script to analyzed relationships between RNA-sRNA-lncRNA using mixOmics.  
+
+# Set up 
+
+Load libraries 
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(mixOmics)
+```
+
+# Read in files 
+
+Read in count matrices.  
+
+mrna is missing sample 150, removing from all for now, will revisit and add this in after analysis is re done (SR to do) 
+```{r}
+mrna<-read.csv("E-Peve/output/06-Peve-Hisat/Peve-gene_count_matrix.csv")%>%rename("sample71"=RNA.POR.71, "sample73"=RNA.POR.73, "sample76"=RNA.POR.76, "sample79"=RNA.POR.79, "sample82"=RNA.POR.82)
+
+rownames(mrna)<-mrna$gene_id
+
+mrna<-mrna%>%dplyr::select(!gene_id)
+
+srna<-read.table("E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_sRNA_normalized.txt")
+
+lncrna<-read.table("E-Peve/output/07-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", header=T)%>%rename("sample71"=`...output.06.Peve.Hisat.RNA.POR.71.sorted.bam`, "sample73"=`...output.06.Peve.Hisat.RNA.POR.73.sorted.bam`, "sample76"=`...output.06.Peve.Hisat.RNA.POR.76.sorted.bam`, "sample79"=`...output.06.Peve.Hisat.RNA.POR.79.sorted.bam`, "sample82"=`...output.06.Peve.Hisat.RNA.POR.82.sorted.bam` )%>%dplyr::select(Geneid, sample71, sample73, sample76, sample79, sample82)
+
+rownames(lncrna)<-lncrna$Geneid
+
+lncrna<-lncrna%>%dplyr::select(!Geneid)
+
+metadata <- data.frame(
+  sample = c("sample71", "sample73", "sample76", "sample79", "sample82"),
+  species = "Peve"
+)
+```
+
+Follow the mixOmics tutorial for conducting correlations between these data sets. 
+
+# Conduct mixOmics  
+
+Set matrices. 
+
+```{r}
+mrna<-t(mrna)
+srna<-t(srna)
+lncrna<-t(lncrna)
+
+dim(mrna)
+dim(srna)
+dim(lncrna)
+dim(metadata)
+```
+Dont use srna, only 3 samples available.  
+
+Remove columns with 0's in each matrix or with 0 variance (all values identical) 
+
+```{r}
+mrna <- mrna[, colSums(mrna) != 0]
+
+mrna<-as.data.frame(mrna)
+mrna <- mrna[, sapply(mrna, function(x) length(unique(x)) > 1)]
+dim(mrna)
+
+srna <- srna[, colSums(srna) != 0]
+dim(srna)
+
+srna<-as.data.frame(srna)
+srna <- srna[, sapply(srna, function(x) length(unique(x)) > 1)]
+dim(srna)
+
+lncrna <- lncrna[, colSums(lncrna) != 0]
+dim(lncrna)
+
+lncrna<-as.data.frame(lncrna)
+lncrna <- lncrna[, sapply(lncrna, function(x) length(unique(x)) > 1)]
+dim(lncrna)
+```
+
+
+## Conduct preliminary PCA  
+
+```{r}
+pca.mrna <- pca(mrna, ncomp = 2, center = TRUE, scale = TRUE)
+pca.srna <- pca(srna, ncomp = 2, center = TRUE, scale = TRUE)
+pca.lncrna <- pca(lncrna, ncomp = 2, center = TRUE, scale = TRUE)
+
+plot(pca.mrna)
+plot(pca.srna)
+plot(pca.lncrna)
+```
+
+Similar variance explained because we are dealing with individual samples within a species. 
+
+```{r}
+plotIndiv(pca.mrna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'mRNA, PCA comp 1 - 2')
+
+#plotIndiv(pca.srna, comp = c(1, 2), 
+#          group = metadata$species, 
+#          ind.names = metadata$sample, 
+#          legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
+
+plotIndiv(pca.lncrna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'lncRNA, PCA comp 1 - 2')
+```
+
+# Multi block PLS with DIABLO 
+
+```{r}
+X1 <- mrna
+#X2 <- srna 
+X3 <- lncrna
+X <- list(mrna = X1, lncrna = X3)
+
+Y <-metadata$sample
+```
+
+```{r}
+result.diablo <- block.plsda(X, Y) # run the method
+plotIndiv(result.diablo) # plot the samples
+plotVar(result.diablo) # plot the variables
+```
+
+sparse 
+```{r}
+list.keepX = list(mrna = c(20, 2), lncrna = c(20, 2)) 
+
+# run the method
+result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 
+
+# plot the contributions of each feature to each dimension
+plotLoadings(result.sparse.diablo, ncomp = 1) 
+plotIndiv(result.sparse.diablo) # plot the samples
+plotVar(result.sparse.diablo) # plot the variables
+```
+
+```{r}
+color.edge <- color.GreenRed(50)  # set the colours of the connecting lines
+
+network(result.sparse.diablo, 
+        cutoff = 0.99, # only show connections with a correlation above threshold
+        shape.node = c("rectangle", "circle"),
+        color.node = c("cyan", "pink"),
+        color.edge = color.edge, 
+        interactive = FALSE,
+        lwd.edge = 2)
+```
+
+```{r}
+circosPlot(result.sparse.diablo, cutoff=0.99, comp=1:2)
+```

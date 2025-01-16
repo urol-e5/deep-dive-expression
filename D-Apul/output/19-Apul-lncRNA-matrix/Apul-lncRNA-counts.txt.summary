@@ -1,0 +1,15 @@
+Status	../output/07-Apul-Hisat/RNA-ACR-140.sorted.bam	../output/07-Apul-Hisat/RNA-ACR-145.sorted.bam	../output/07-Apul-Hisat/RNA-ACR-150.sorted.bam	../output/07-Apul-Hisat/RNA-ACR-173.sorted.bam	../output/07-Apul-Hisat/RNA-ACR-178.sorted.bam
+Assigned	3248912	3174178	2632246	2858377	3552909
+Unassigned_Unmapped	29254519	24239654	39972221	30989899	24670623
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	12161791	18434250	20226452	15039542	20450350
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	58215612	52301815	38804111	55865749	50556728
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	1083950	1123492	873483	1062036	1089673

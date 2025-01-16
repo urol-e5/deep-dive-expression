@@ -1,0 +1,30 @@
+# gffcompare v0.12.6 | Command line was:
+#/home/shared/gffcompare-0.12.6.Linux_x86_64/gffcompare -r ../data/Apulcra-genome.gff -o ../output/10.1-Apul-lncRNA/gffcompare_merged ../output/10.1-Apul-lncRNA/stringtie_merged.gtf
+#
+
+#= Summary for dataset: ../output/10.1-Apul-lncRNA/stringtie_merged.gtf 
+#     Query mRNAs :  110429 in   74221 loci  (73502 multi-exon transcripts)
+#            (13968 multi-transcript loci, ~1.5 transcripts per locus)
+# Reference mRNAs :   44371 in   44370 loci  (32355 multi-exon)
+# Super-loci w/ reference transcripts:    40887
+#-----------------| Sensitivity | Precision  |
+        Base level:   100.0     |    47.4    |
+        Exon level:    95.1     |    61.5    |
+      Intron level:   100.0     |    73.9    |
+Intron chain level:   100.0     |    44.0    |
+  Transcript level:    98.7     |    39.7    |
+       Locus level:    98.7     |    54.7    |
+
+     Matching intron chains:   32355
+       Matching transcripts:   43808
+              Matching loci:   43808
+
+          Missed exons:       0/209537	(  0.0%)
+           Novel exons:   84471/326801	( 25.8%)
+        Missed introns:       0/165166	(  0.0%)
+         Novel introns:   37527/223565	( 16.8%)
+           Missed loci:       0/44370	(  0.0%)
+            Novel loci:   33334/74221	( 44.9%)
+
+ Total union super-loci across all input datasets: 74221 
+110429 out of 110429 consensus transcripts written in ../output/10.1-Apul-lncRNA/gffcompare_merged.annotated.gtf (0 discarded as redundant)

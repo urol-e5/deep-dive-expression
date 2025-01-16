@@ -103,6 +103,19 @@ echo "SIM_1,${sim_data_dir}/simulated_1.fastq.gz,${sim_data_dir}/simulated_2.fas
 cat ${sim_data_dir}/input.csv
 ```
 
+To run on unity, I also needed to set up a sigularity cache directory
+
+```{bash, eval=FALSE}
+cd /work/pi_hputnam_uri_edu/
+mkdir .apptainer
+mkdir .apptainer/cache
+singularity --version
+
+nano ~/.bash_profile
+# add the following text (without the #) to the bottom of the file
+# export NXF_SINGULARITY_CACHEDIR=/work/pi_hputnam_uri_edu/.apptainer/cache
+```
+
 ```{bash}
 # Create the job script
 cat << 'EOF' > methylseq.sh
@@ -129,6 +142,8 @@ cd ${output_dir_top}
 # Print variables from bashvars
 echo "Simulated data path: ${sim_data_dir}"
 
+export NXF_SINGULARITY_CACHEDIR=/work/pi_hputnam_uri_edu/.apptainer/cache
+
 # Run nextflow methylseq
 
 nextflow run nf-core/methylseq -profile singularity \
@@ -141,6 +156,9 @@ nextflow run nf-core/methylseq -profile singularity \
 --relax_mismatches \
 --unmapped \
 --outdir ${output_dir_top}/sim_Apul_methylseq
+#--igenomes_ignore \
+#-resume
+
 EOF
 
 chmod +x methylseq.sh
@@ -149,44 +167,30 @@ chmod +x methylseq.sh
 # sbatch methylseq.sh
 ```
 
-### code for running nf-core/methylseq on Andromeda since it is maybe not installed on unity...
+This is running as of 10/2/24.
 
 ```{bash, eval=FALSE}
-mkdir scripts
-nano scripts/methylseq.sh
+source .bashvars
+
+tail ${output_dir_top}/.nextflow.log
 ```
 
-```{bash, eval=FALSE}
-#!/bin/bash
-#SBATCH -t 120:00:00
-#SBATCH --nodes=1 --ntasks-per-node=1
-#SBATCH --cpus-per-task=10
-#SBATCH --export=NONE
-#SBATCH --mem=500GB
-#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
-#SBATCH --mail-user=zdellaert@uri.edu #your email to send notifications
-#SBATCH -D /data/putnamlab/zdellaert/deep-dive-exp-WGBS/
-
-# load modules needed
-
-module load Nextflow/22.10.1
-
-# run nextflow methylseq
-
-nextflow run nf-core/methylseq -profile singularity \
---aligner bismark \
---fasta /data/putnamlab/REFS/Apul/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.masked.fa \
---save_reference \
---input 'input.csv' \
---zymo \
---trim_poly_g \
---cytosine_report \
---relax_mismatches \
---unmapped \
---outdir sim_Apul_WGBS
+```
+Oct-02 03:29:18.466 [TaskFinalizer-1] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=72; workQueue=LinkedBlockingQueue[10000]; allowCoreThreadTimeout=false
+Oct-02 03:29:21.720 [Actor Thread 25] DEBUG nextflow.container.SingularityCache - Singularity pull complete image=https://depot.galaxyproject.org/singularity/trim-galore:0.6.7--hdfd78af_0 path=/work/pi_hputnam_uri_edu/deep-dive-expression/D-Apul/output/08-Apul-WGBS/work/singularity/depot.galaxyproject.org-singularity-trim-galore-0.6.7--hdfd78af_0.img
+Oct-02 03:29:21.770 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-02 03:29:21.770 [Task submitter] INFO  nextflow.Session - [da/848bb6] Submitted process > NFCORE_METHYLSEQ:METHYLSEQ:TRIMGALORE (SIM)
+Oct-02 03:29:50.952 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: NFCORE_METHYLSEQ:METHYLSEQ:TRIMGALORE (SIM); status: COMPLETED; exit: 0; error: -; workDir: /work/pi_hputnam_uri_edu/deep-dive-expression/D-Apul/output/08-Apul-WGBS/work/da/848bb60dd00624def2ad6805af7d38]
+Oct-02 03:29:51.047 [TaskFinalizer-2] DEBUG nextflow.processor.TaskProcessor - Process NFCORE_METHYLSEQ:METHYLSEQ:TRIMGALORE > Skipping output binding because one or more optional files are missing: fileoutparam<2:1>
+Oct-02 03:33:47.947 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 1; name: NFCORE_METHYLSEQ:METHYLSEQ:PREPARE_GENOME:BISMARK_GENOMEPREPARATION (BismarkIndex/Apulcra-genome.fa); status: RUNNING; exit: -; error: -; workDir: /work/pi_hputnam_uri_edu/deep-dive-expression/D-Apul/output/08-Apul-WGBS/work/a7/e052ad239af94503a7a29185f3481e]
+Oct-02 03:38:47.981 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
+~> TaskHandler[id: 1; name: NFCORE_METHYLSEQ:METHYLSEQ:PREPARE_GENOME:BISMARK_GENOMEPREPARATION (BismarkIndex/Apulcra-genome.fa); status: RUNNING; exit: -; error: -; workDir: /work/pi_hputnam_uri_edu/deep-dive-expression/D-Apul/output/08-Apul-WGBS/work/a7/e052ad239af94503a7a29185f3481e]
 ```
 
-```{bash, eval=FALSE}
-sbatch scripts/methylseq.sh
-```
+I had issues with some conflicts when BISMARK tried to index the genome, it wasnt finding the genome file even though it found it to align the data...
 
+So, I looked at [Emma's code](https://github.com/emmastrand/EmmaStrand_Notebook/blob/master/_posts/2021-10-21-KBay-Bleaching-Pairs-WGBS-Analysis-Pipeline.md#Test) and we could potentially add the flag --igenomes_ignore to the nfcore script and attemped to rerun the pipeline.
+
+
+But first I reran all of it with a specified apptainer cache ( /work/pi_hputnam_uri_edu/.apptainer/cache)

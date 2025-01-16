@@ -1,0 +1,1 @@
+(Porites_evermanni_v1.annot.pep:0.5,(Apulchra-genome.pep:1,Pocillopora_meandrina_HIv1.genes.pep:1)N1:0.5)N0;

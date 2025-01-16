@@ -1,0 +1,172 @@
+---
+title: "Apul MixOmics"
+output: html_document
+date: "2024-10-01"
+editor_options: 
+  chunk_output_type: console
+---
+
+Things are very highly correlated - mixOmics is not a good framework for us to use within species. This will maybe be more helpful for between species analyses.  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Script to analyzed relationships between RNA-sRNA-lncRNA using mixOmics.  
+
+# Set up 
+
+Load libraries 
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(mixOmics)
+```
+
+# Read in files 
+
+Read in count matrices.  
+
+mrna is missing sample 150, removing from all for now, will revisit and add this in after analysis is re done (SR to do) 
+```{r}
+mrna<-read.csv("F-Ptuh/output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")%>%rename("sample47"=RNA.POC.47, "sample48"=RNA.POC.48, "sample50"=RNA.POC.50, "sample53"=RNA.POC.53, "sample57"=RNA.POC.57)
+
+rownames(mrna)<-mrna$gene_id
+
+mrna<-mrna%>%dplyr::select(!gene_id)
+
+srna<-read.table("F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_counts_sRNA_normalized.txt")
+
+lncrna<-read.table("F-Ptuh/output/08-Ptuh-lncRNA-matrix/Peve-lncRNA-counts.txt", header=T)%>%rename("sample47"=`...output.06.Ptuh.Hisat.RNA.POC.47.sorted.bam`, "sample48"=`...output.06.Ptuh.Hisat.RNA.POC.48.sorted.bam`, "sample50"=`...output.06.Ptuh.Hisat.RNA.POC.50.sorted.bam`, "sample53"=`...output.06.Ptuh.Hisat.RNA.POC.53.sorted.bam`, "sample57"=`...output.06.Ptuh.Hisat.RNA.POC.57.sorted.bam` )%>%dplyr::select(Geneid, sample47, sample48, sample50, sample53, sample57)
+
+rownames(lncrna)<-lncrna$Geneid
+
+lncrna<-lncrna%>%dplyr::select(!Geneid)
+
+metadata <- data.frame(
+  sample = c("sample48", "sample50", "sample53", "sample57", "sample47"),
+  species = "Ptuh"
+)
+```
+
+Follow the mixOmics tutorial for conducting correlations between these two data sets. 
+
+All data sets have dimensions of 4 samples. We can add additional species to this as we go.  
+
+# Conduct mixOmics  
+
+Set matrices. 
+
+```{r}
+mrna<-t(mrna)
+srna<-t(srna)
+lncrna<-t(lncrna)
+
+dim(mrna)
+dim(srna)
+dim(lncrna)
+dim(metadata)
+```
+
+Remove columns with 0's in each matrix or with 0 variance (all values identical) 
+
+```{r}
+mrna <- mrna[, colSums(mrna) != 0]
+
+mrna<-as.data.frame(mrna)
+mrna <- mrna[, sapply(mrna, function(x) length(unique(x)) > 1)]
+dim(mrna)
+
+srna <- srna[, colSums(srna) != 0]
+dim(srna)
+
+srna<-as.data.frame(srna)
+srna <- srna[, sapply(srna, function(x) length(unique(x)) > 1)]
+dim(srna)
+
+lncrna <- lncrna[, colSums(lncrna) != 0]
+dim(lncrna)
+
+lncrna<-as.data.frame(lncrna)
+lncrna <- lncrna[, sapply(lncrna, function(x) length(unique(x)) > 1)]
+dim(lncrna)
+```
+
+No lncRNAs in Ptuh
+
+## Conduct preliminary PCA  
+
+```{r}
+pca.mrna <- pca(mrna, ncomp = 2, center = TRUE, scale = TRUE)
+pca.srna <- pca(srna, ncomp = 2, center = TRUE, scale = TRUE)
+#pca.lncrna <- pca(lncrna, ncomp = 2, center = TRUE, scale = TRUE)
+
+plot(pca.mrna)
+plot(pca.srna)
+#plot(pca.lncrna)
+```
+
+Similar variance explained because we are dealing with individual samples within a species. 
+
+```{r}
+plotIndiv(pca.mrna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'mRNA, PCA comp 1 - 2')
+
+plotIndiv(pca.srna, comp = c(1, 2), 
+          group = metadata$species, 
+          ind.names = metadata$sample, 
+          legend = TRUE, title = 'sRNA, PCA comp 1 - 2')
+
+#plotIndiv(pca.lncrna, comp = c(1, 2), 
+#          group = metadata$species, 
+#          ind.names = metadata$sample, 
+#          legend = TRUE, title = 'lncRNA, PCA comp 1 - 2')
+```
+
+# Multi block PLS with DIABLO 
+
+```{r}
+X1 <- mrna
+X2 <- srna 
+#X3 <- lncrna
+X <- list(mrna = X1, srna = X2)
+
+Y <-metadata$sample
+```
+
+```{r}
+result.diablo <- block.plsda(X, Y) # run the method
+plotIndiv(result.diablo) # plot the samples
+plotVar(result.diablo) # plot the variables
+```
+
+sparse 
+```{r}
+list.keepX = list(mrna = c(20, 2), srna = c(20,2)) 
+
+# run the method
+result.sparse.diablo <-  block.splsda(X, Y, keepX = list.keepX) 
+
+# plot the contributions of each feature to each dimension
+plotLoadings(result.sparse.diablo, ncomp = 1) 
+plotIndiv(result.sparse.diablo) # plot the samples
+plotVar(result.sparse.diablo) # plot the variables
+```
+
+```{r}
+color.edge <- color.GreenRed(50)  # set the colours of the connecting lines
+
+network(result.sparse.diablo, 
+        cutoff = 0.99, # only show connections with a correlation above threshold
+        shape.node = c("rectangle", "circle"),
+        color.node = c("cyan", "pink"),
+        color.edge = color.edge, 
+        interactive = FALSE,
+        lwd.edge = 2)
+```
+
+```{r}
+circosPlot(result.sparse.diablo, cutoff=0.99, comp=1:2)
+```
