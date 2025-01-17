@@ -1,0 +1,256 @@
+---
+title: "P.evermanni GFF reformatting"
+author: "Sam White"
+date: "2025-01-17"
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+# INTRO
+
+This notebook reformats the original _P.evermanni_ GFF ([Porites_evermanni_v1.annot.gff](../data/Porites_evermanni_v1.annot.gff)), which is not compliant with [the GFF standard](https://github.com/the-sequence-ontology/specifications/blob/master/gff3.md) (GitHub page). Additionally, the GFF is lacking the `gene` feature, which may (or may not) be needed/useful for downstream processing. This notebook adds a `gene` feature.
+
+Finally, despite the naming convention, there aren't any actual annotations in that GFF, beyond the feature designations (i.e. no gene ontology, no SwissProt IDs, gene names, etc.). This notebook does _not_ address those shortcomings.
+
+::: {.callout-note}
+Unlike other scripts, this will output to [E-Peve/data](../data), instead of an output directory in `../output`.
+:::
+
+## Software requirements
+
+Requires [genometools](https://github.com/genometools/genometools) (GitHub repo) to be installed and in the system `$PATH`.
+
+## Inputs
+
+- [Porites_evermanni_v1.annot.gff](../data/Porites_evermanni_v1.annot.gff)
+
+## Outputs
+
+- [Porites_evermanni_validated.gff](../data/Porites_evermanni_validated.gff)
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+
+# Create a Bash variables file
+
+This allows usage of Bash variables across R Markdown chunks.
+
+```{r save-bash-variables-to-rvars-file, engine='bash', eval=TRUE}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Data directories"
+echo 'export repo_dir=~/gitrepos/urol-e5/deep-dive-expression/'
+echo 'export data_dir=${repo_dir}/E-Peve/data'
+echo ""
+
+echo "# Input files"
+echo 'export original_gff="Porites_evermanni_v1.annot.gff"'
+echo 'export intermediate_gff="intermediate.gff"'
+echo 'export validated_gff="Porites_evermanni_validated.gff"'
+echo ""
+
+echo "# Print formatting"
+echo 'export line="--------------------------------------------------------"'
+echo ""
+} > .bashvars
+
+cat .bashvars
+```
+
+
+# Peak at original GFF
+```{r view-original-GFF, engine='bash', eval=TRUE}
+source .bashvars
+
+head "${data_dir}/${original_gff}"
+```
+
+## Check features
+```{r features-original-GFF, engine='bash', eval=TRUE}
+source .bashvars
+
+awk '{print $3}' "${data_dir}/${original_gff}" | sort --unique
+```
+
+# Fix GFF
+
+
+```{r fix-gff, engine='bash', eval=TRUE}
+source .bashvars
+
+awk '
+BEGIN { OFS="\t"; mrna_count = 0; utr_count = 0; gene_count = 0; cds_count = 0 }
+{
+    if ($3 == "mRNA") {
+        split($9, attributes, ";")
+        for (i in attributes) {
+            if (attributes[i] ~ /^ID=/) {
+                original_id = substr(attributes[i], 4)
+                gene_id = "ID=gene-" original_id
+                parent_id = "Parent=gene-" original_id
+                break
+            }
+        }
+        
+        # Increment the global mRNA counter
+        mrna_count++
+        
+        new_mrna_id = "ID=mrna-" sprintf("%05d", mrna_count)
+        
+        # Store the mapping of original mRNA ID to new mRNA ID
+        mrna_map[original_id] = "mrna-" sprintf("%05d", mrna_count)
+        
+        # Replace the old ID with the new mRNA ID
+        for (i in attributes) {
+            if (attributes[i] ~ /^ID=/) {
+                attributes[i] = new_mrna_id
+                break
+            }
+        }
+        $9 = attributes[1]
+        for (i = 2; i <= length(attributes); i++) {
+            $9 = $9 ";" attributes[i]
+        }
+        $9 = $9 ";" parent_id
+        print $1, $2, "gene", $4, $5, ".", $7, $8, gene_id
+        
+        # Increment the gene counter and reset the CDS counter for each new gene
+        gene_count++
+        
+        cds_count = gene_count
+    } else if ($3 == "UTR") {
+        utr_count++
+        new_utr_id = "ID=utr-" sprintf("%06d", utr_count)
+        split($9, attributes, ";")
+        for (i in attributes) {
+            if (attributes[i] ~ /^Parent=/) {
+                original_parent_id = substr(attributes[i], 8)
+                if (original_parent_id in mrna_map) {
+                    attributes[i] = "Parent=" mrna_map[original_parent_id]
+                }
+                break
+            }
+        }
+        $9 = new_utr_id
+        for (i = 1; i <= length(attributes); i++) {
+            $9 = $9 ";" attributes[i]
+        }
+    } else if ($3 == "CDS") {
+        new_cds_id = "ID=cds-" sprintf("%06d", cds_count)
+        split($9, attributes, ";")
+        for (i in attributes) {
+            if (attributes[i] ~ /^Parent=/) {
+                original_parent_id = substr(attributes[i], 8)
+                if (original_parent_id in mrna_map) {
+                    attributes[i] = "Parent=" mrna_map[original_parent_id]
+                }
+                break
+            }
+        }
+        $9 = new_cds_id
+        for (i = 1; i <= length(attributes); i++) {
+            $9 = $9 ";" attributes[i]
+        }
+    } else {
+        split($9, attributes, ";")
+        for (i in attributes) {
+            if (attributes[i] ~ /^Parent=/) {
+                original_parent_id = substr(attributes[i], 8)
+                if (original_parent_id in mrna_map) {
+                    attributes[i] = "Parent=" mrna_map[original_parent_id]
+                }
+                break
+            }
+        }
+        $9 = attributes[1]
+        for (i = 2; i <= length(attributes); i++) {
+            $9 = $9 ";" attributes[i]
+        }
+    }
+    print $0
+}' "${data_dir}"/"${original_gff}" > "${data_dir}"/"${intermediate_gff}"
+```
+
+## Inspect intermediate GFF
+```{r intermediate-gff, engine='bash', eval=TRUE}
+source .bashvars
+
+head "${data_dir}"/"${intermediate_gff}"
+```
+
+# Validate GFF
+
+Validate GFF using genometools `gff3`.
+
+- `-tidy`: Attempts to clean/fix any potential issues.
+
+- `-checkids`: Checks IDs.
+
+- `-retainids`: Retains IDs from input GFF instead of assigning new ones.
+
+```{r validate-gff, engine='bash', eval=FALSE}
+source .bashvars
+
+gt gff3 \
+-tidy \
+-checkids \
+-retainids \
+"${data_dir}"/"${intermediate_gff}" \
+> "${data_dir}"/"${validated_gff}" \
+2> "${data_dir}"/gt_gff3_validation_errors.log
+```
+
+## Check for error(s) in validation
+
+Process would stop if error occurred, so only need to check end of file.
+
+::: {.callout-note}
+Warnings are expected, since file was not formatted correctly. They indicate changes being made to bring format into compliance.
+:::
+
+```{r validate-gff-error-check, engine='bash', eval=TRUE}
+source .bashvars
+
+tail "${data_dir}"/gt_gff3_validation_errors.log
+```
+
+## Inspect Validated GFF
+```{r validated-gff, engine='bash', eval=TRUE}
+source .bashvars
+
+head "${data_dir}"/"${validated_gff}"
+```
+
+# Remove intermediate GFF
+```{r rm-intermediate-gff, engine='bash', eval=FALSE}
+source .bashvars
+
+rm "${data_dir}"/"${intermediate_gff}"
+```
