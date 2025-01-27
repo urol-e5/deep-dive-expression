@@ -1599,9 +1599,9 @@ border-radius: 0px;
 </div>
 
 
-<div id="intro" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> INTRO</h1>
-<p>This notebook reformats the original <em>P.evermanni</em> GFF (<a href="../data/Porites_evermanni_v1.annot.gff">Porites_evermanni_v1.annot.gff</a>), which is not compliant with <a href="https://github.com/the-sequence-ontology/specifications/blob/master/gff3.md">the GFF standard</a> (GitHub page). Additionally, the GFF is lacking the <code>gene</code> feature, which may (or may not) be needed/useful for downstream processing. This notebook adds a <code>gene</code> feature.</p>
+<div id="background" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Background</h1>
+<p>This notebook reformats the original <em>P.evermanni</em> GFF (<a href="../data/Porites_evermanni_v1.annot.gff">Porites_evermanni_v1.annot.gff</a>), which is not compliant with <a href="https://github.com/the-sequence-ontology/specifications/blob/master/gff3.md">the GFF standard</a> (GitHub page). The GFF is lacking the <code>gene</code> feature, which may (or may not) be needed/useful for downstream processing. This notebook adds a <code>gene</code> feature. Additionally, it is lacking the <code>exon</code> feature. We’ve decided to insert <code>exon</code> features which cover <code>UTR</code> and <code>CDS</code> features.</p>
 <p>Finally, despite the naming convention, there aren’t any actual annotations in that GFF, beyond the feature designations (i.e. no gene ontology, no SwissProt IDs, gene names, etc.). This notebook does <em>not</em> address those shortcomings.</p>
 <div class="callout-note">
 <p>Unlike other scripts, this will output to <a href="../data">E-Peve/data</a>, instead of an output directory in <code>../output</code>.</p>
@@ -1609,6 +1609,8 @@ border-radius: 0px;
 <div id="software-requirements" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Software requirements</h2>
 <p>Requires <a href="https://github.com/genometools/genometools">genometools</a> (GitHub repo) to be installed and in the system <code>$PATH</code>.</p>
+<p>Requires <a href="https://github.com/NBISweden/AGAT">AGAT</a> to be installed via conda/mamba for
+conversion to GTF.</p>
 </div>
 <div id="inputs" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Inputs</h2>
@@ -1619,7 +1621,7 @@ border-radius: 0px;
 <div id="outputs" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> Outputs</h2>
 <ul>
-<li><a href="../data/Porites_evermanni_validated.gff">Porites_evermanni_validated.gff</a></li>
+<li><a href="../data/Porites_evermanni_validated.gff3">Porites_evermanni_validated.gff3</a></li>
 </ul>
 </div>
 </div>
@@ -1631,14 +1633,23 @@ echo &quot;#### Assign Variables ####&quot;
 echo &quot;&quot;
 
 echo &quot;# Data directories&quot;
-echo &#39;export repo_dir=~/gitrepos/urol-e5/deep-dive-expression/&#39;
+echo &#39;export repo_dir=~/gitrepos/urol-e5/deep-dive-expression&#39;
 echo &#39;export data_dir=${repo_dir}/E-Peve/data&#39;
 echo &quot;&quot;
 
 echo &quot;# Input files&quot;
 echo &#39;export original_gff=&quot;Porites_evermanni_v1.annot.gff&quot;&#39;
 echo &#39;export intermediate_gff=&quot;intermediate.gff&quot;&#39;
-echo &#39;export validated_gff=&quot;Porites_evermanni_validated.gff&quot;&#39;
+echo &#39;export validated_gff=&quot;Porites_evermanni_validated.gff3&quot;&#39;
+echo &quot;&quot;
+
+echo &quot;# Output files&quot;
+echo &#39;export gtf=&quot;Porites_evermanni_validated.gtf&quot;&#39;
+echo &quot;&quot;
+
+echo &quot;# Programs&quot;
+echo &#39;export conda_path=&quot;/home/sam/programs/miniforge3-24.7.1-0/bin/mamba&quot;&#39;
+echo &#39;export conda_env_name=&quot;agat_env&quot;&#39;
 echo &quot;&quot;
 
 echo &quot;# Print formatting&quot;
@@ -1650,13 +1661,20 @@ cat .bashvars</code></pre>
 <pre><code>#### Assign Variables ####
 
 # Data directories
-export repo_dir=~/gitrepos/urol-e5/deep-dive-expression/
+export repo_dir=~/gitrepos/urol-e5/deep-dive-expression
 export data_dir=${repo_dir}/E-Peve/data
 
 # Input files
 export original_gff=&quot;Porites_evermanni_v1.annot.gff&quot;
 export intermediate_gff=&quot;intermediate.gff&quot;
-export validated_gff=&quot;Porites_evermanni_validated.gff&quot;
+export validated_gff=&quot;Porites_evermanni_validated.gff3&quot;
+
+# Output files
+export gtf=&quot;Porites_evermanni_validated.gtf&quot;
+
+# Programs
+export conda_path=&quot;/home/sam/programs/miniforge3-24.7.1-0/bin/mamba&quot;
+export conda_env_name=&quot;agat_env&quot;
 
 # Print formatting
 export line=&quot;--------------------------------------------------------&quot;</code></pre>
@@ -1691,7 +1709,7 @@ UTR</code></pre>
 <pre class="bash"><code>source .bashvars
 
 awk &#39;
-BEGIN { OFS=&quot;\t&quot;; mrna_count = 0; utr_count = 0; gene_count = 0; cds_count = 0 }
+BEGIN { OFS=&quot;\t&quot;; mrna_count = 0; utr_count = 0; gene_count = 0; cds_count = 0; exon_count = 0 }
 {
     if ($3 == &quot;mRNA&quot;) {
         split($9, attributes, &quot;;&quot;)
@@ -1725,62 +1743,64 @@ BEGIN { OFS=&quot;\t&quot;; mrna_count = 0; utr_count = 0; gene_count = 0; cds_c
         }
         $9 = $9 &quot;;&quot; parent_id
         print $1, $2, &quot;gene&quot;, $4, $5, &quot;.&quot;, $7, $8, gene_id
+        print $0  # Print the original mRNA feature
         
         # Increment the gene counter and reset the CDS counter for each new gene
         gene_count++
-        
-        cds_count = gene_count
-    } else if ($3 == &quot;UTR&quot;) {
-        utr_count++
-        new_utr_id = &quot;ID=utr-&quot; sprintf(&quot;%06d&quot;, utr_count)
+    } else if ($3 == &quot;UTR&quot; || $3 == &quot;CDS&quot;) {
         split($9, attributes, &quot;;&quot;)
+        id_set = 0
+        parent_set = 0
         for (i in attributes) {
+            if (attributes[i] ~ /^ID=/) {
+                id_set = 1
+                if ($3 == &quot;UTR&quot;) {
+                    attributes[i] = &quot;ID=utr-&quot; sprintf(&quot;%05d&quot;, ++utr_count)
+                } else if ($3 == &quot;CDS&quot;) {
+                    attributes[i] = &quot;ID=cds-&quot; sprintf(&quot;%05d&quot;, ++cds_count)
+                }
+            }
             if (attributes[i] ~ /^Parent=/) {
+                parent_set = 1
                 original_parent_id = substr(attributes[i], 8)
                 if (original_parent_id in mrna_map) {
                     attributes[i] = &quot;Parent=&quot; mrna_map[original_parent_id]
                 }
-                break
             }
         }
-        $9 = new_utr_id
-        for (i = 1; i &lt;= length(attributes); i++) {
-            $9 = $9 &quot;;&quot; attributes[i]
-        }
-    } else if ($3 == &quot;CDS&quot;) {
-        new_cds_id = &quot;ID=cds-&quot; sprintf(&quot;%06d&quot;, cds_count)
-        split($9, attributes, &quot;;&quot;)
-        for (i in attributes) {
-            if (attributes[i] ~ /^Parent=/) {
-                original_parent_id = substr(attributes[i], 8)
-                if (original_parent_id in mrna_map) {
-                    attributes[i] = &quot;Parent=&quot; mrna_map[original_parent_id]
-                }
-                break
+        if (id_set == 0) {
+            if ($3 == &quot;UTR&quot;) {
+                attributes[1] = &quot;ID=utr-&quot; sprintf(&quot;%05d&quot;, ++utr_count) &quot;;&quot; attributes[1]
+            } else if ($3 == &quot;CDS&quot;) {
+                attributes[1] = &quot;ID=cds-&quot; sprintf(&quot;%05d&quot;, ++cds_count) &quot;;&quot; attributes[1]
             }
         }
-        $9 = new_cds_id
-        for (i = 1; i &lt;= length(attributes); i++) {
-            $9 = $9 &quot;;&quot; attributes[i]
-        }
-    } else {
-        split($9, attributes, &quot;;&quot;)
-        for (i in attributes) {
-            if (attributes[i] ~ /^Parent=/) {
-                original_parent_id = substr(attributes[i], 8)
-                if (original_parent_id in mrna_map) {
-                    attributes[i] = &quot;Parent=&quot; mrna_map[original_parent_id]
-                }
-                break
-            }
+        if (parent_set == 0) {
+            attributes[length(attributes) + 1] = &quot;Parent=&quot; mrna_map[original_id]
         }
         $9 = attributes[1]
         for (i = 2; i &lt;= length(attributes); i++) {
             $9 = $9 &quot;;&quot; attributes[i]
         }
+        print $1, $2, $3, $4, $5, $6, $7, $8, $9  # Print the original UTR or CDS feature
+        
+        # Add exon feature
+        exon_count++
+        new_exon_id = &quot;ID=exon-&quot; sprintf(&quot;%06d&quot;, exon_count)
+        exon_attributes = new_exon_id
+        for (i = 1; i &lt;= length(attributes); i++) {
+            if (attributes[i] !~ /^ID=/) {
+                exon_attributes = exon_attributes &quot;;&quot; attributes[i]
+            }
+        }
+        # Ensure Parent attribute is included in exon attributes
+        if (parent_set == 1) {
+            exon_attributes = exon_attributes &quot;;Parent=&quot; mrna_map[original_parent_id]
+        }
+        print $1, $2, &quot;exon&quot;, $4, $5, $6, $7, $8, exon_attributes
     }
-    print $0
-}&#39; &quot;${data_dir}&quot;/&quot;${original_gff}&quot; &gt; &quot;${data_dir}&quot;/&quot;${intermediate_gff}&quot;</code></pre>
+}
+&#39; &quot;${data_dir}/${original_gff}&quot; &gt; &quot;${data_dir}/${intermediate_gff}&quot;</code></pre>
 <div id="inspect-intermediate-gff" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Inspect intermediate GFF</h2>
 <pre class="bash"><code>source .bashvars
@@ -1788,14 +1808,14 @@ BEGIN { OFS=&quot;\t&quot;; mrna_count = 0; utr_count = 0; gene_count = 0; cds_c
 head &quot;${data_dir}&quot;/&quot;${intermediate_gff}&quot;</code></pre>
 <pre><code>Porites_evermani_scaffold_1 Gmove   gene    3107    4488    .   -   .   ID=gene-Peve_00000001
 Porites_evermani_scaffold_1 Gmove   mRNA    3107    4488    543 -   .   ID=mrna-00001;Name=Peve_00000001;start=0;stop=1;cds_size=543;Parent=gene-Peve_00000001
-Porites_evermani_scaffold_1 Gmove   CDS 3107    3444    .   -   .   ID=cds-000001;Parent=mrna-00001
-Porites_evermani_scaffold_1 Gmove   CDS 4284    4488    .   -   .   ID=cds-000001;Parent=mrna-00001
+Porites_evermani_scaffold_1 Gmove   CDS 3107    3444    .   -   .   ID=cds-00001;Parent=mrna-00001
+Porites_evermani_scaffold_1 Gmove   exon    3107    3444    .   -   .   ID=exon-000001;Parent=mrna-00001
+Porites_evermani_scaffold_1 Gmove   CDS 4284    4488    .   -   .   ID=cds-00002;Parent=mrna-00001
+Porites_evermani_scaffold_1 Gmove   exon    4284    4488    .   -   .   ID=exon-000002;Parent=mrna-00001
 Porites_evermani_scaffold_1 Gmove   gene    424479  429034  .   -   .   ID=gene-Peve_00000002
 Porites_evermani_scaffold_1 Gmove   mRNA    424479  429034  2439.63 -   .   ID=mrna-00002;Name=Peve_00000002;start=1;stop=1;cds_size=2019;Parent=gene-Peve_00000002
-Porites_evermani_scaffold_1 Gmove   CDS 424479  425361  .   -   .   ID=cds-000002;Parent=mrna-00002
-Porites_evermani_scaffold_1 Gmove   CDS 426181  426735  .   -   .   ID=cds-000002;Parent=mrna-00002
-Porites_evermani_scaffold_1 Gmove   CDS 427013  427140  .   -   .   ID=cds-000002;Parent=mrna-00002
-Porites_evermani_scaffold_1 Gmove   CDS 427665  427724  .   -   .   ID=cds-000002;Parent=mrna-00002</code></pre>
+Porites_evermani_scaffold_1 Gmove   CDS 424479  425361  .   -   .   ID=cds-00003;Parent=mrna-00002
+Porites_evermani_scaffold_1 Gmove   exon    424479  425361  .   -   .   ID=exon-000003;Parent=mrna-00002</code></pre>
 </div>
 </div>
 <div id="validate-gff" class="section level1" number="5">
@@ -1812,6 +1832,7 @@ gt gff3 \
 -tidy \
 -checkids \
 -retainids \
+-sort \
 &quot;${data_dir}&quot;/&quot;${intermediate_gff}&quot; \
 &gt; &quot;${data_dir}&quot;/&quot;${validated_gff}&quot; \
 2&gt; &quot;${data_dir}&quot;/gt_gff3_validation_errors.log</code></pre>
@@ -1819,21 +1840,21 @@ gt gff3 \
 <h2><span class="header-section-number">5.1</span> Check for error(s) in validation</h2>
 <p>Process would stop if error occurred, so only need to check end of file.</p>
 <div class="callout-note">
-<p>Warnings are expected, since file was not formatted correctly. They indicate changes being made to bring format into compliance.</p>
+<p>Warnings are expected, as they generally indicated modifications to the GFF to bring it into compliance.</p>
 </div>
 <pre class="bash"><code>source .bashvars
 
 tail &quot;${data_dir}&quot;/gt_gff3_validation_errors.log</code></pre>
-<pre><code>warning: CDS feature on line 46160 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46161 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
-warning: CDS feature on line 46162 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
-warning: CDS feature on line 46165 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46166 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46169 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46170 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46171 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
-warning: CDS feature on line 46172 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
-warning: CDS feature on line 46173 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression//E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0</code></pre>
+<pre><code>warning: CDS feature on line 81189 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81191 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
+warning: CDS feature on line 81193 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
+warning: CDS feature on line 81197 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81199 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81203 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81205 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81207 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 2
+warning: CDS feature on line 81209 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0
+warning: CDS feature on line 81211 in file &quot;/home/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/intermediate.gff&quot; has the wrong phase . -&gt; correcting it to 0</code></pre>
 </div>
 <div id="inspect-validated-gff" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Inspect Validated GFF</h2>
@@ -1841,15 +1862,15 @@ warning: CDS feature on line 46173 in file &quot;/home/sam/gitrepos/urol-e5/deep
 
 head &quot;${data_dir}&quot;/&quot;${validated_gff}&quot;</code></pre>
 <pre><code>##gff-version 3
-##sequence-region   Porites_evermani_scaffold_3486 10898 12049
-Porites_evermani_scaffold_3486  Gmove   gene    10898   12049   .   +   .   ID=gene-Peve_00025828
-Porites_evermani_scaffold_3486  Gmove   mRNA    10898   12049   115 +   .   ID=mrna-22907;Parent=gene-Peve_00025828;Name=Peve_00025828;start=1;stop=0;cds_size=1152
-Porites_evermani_scaffold_3486  Gmove   CDS 10898   12049   .   +   0   ID=cds-022907;Parent=mrna-22907
-###
-##sequence-region   Porites_evermani_scaffold_3485 5941 42299
-Porites_evermani_scaffold_3485  Gmove   gene    41994   42299   .   -   .   ID=gene-Peve_00025824
-Porites_evermani_scaffold_3485  Gmove   mRNA    41994   42299   30.6    -   .   ID=mrna-22903;Parent=gene-Peve_00025824;Name=Peve_00025824;start=1;stop=1;cds_size=306
-Porites_evermani_scaffold_3485  Gmove   CDS 41994   42299   .   -   0   ID=cds-022903;Parent=mrna-22903</code></pre>
+##sequence-region   Porites_evermani_scaffold_1 3107 1802489
+##sequence-region   Porites_evermani_scaffold_10 16486 1155879
+##sequence-region   Porites_evermani_scaffold_100 2448 527357
+##sequence-region   Porites_evermani_scaffold_1000 5675 163688
+##sequence-region   Porites_evermani_scaffold_1001 5840 151448
+##sequence-region   Porites_evermani_scaffold_1002 3372 125467
+##sequence-region   Porites_evermani_scaffold_1003 139 162450
+##sequence-region   Porites_evermani_scaffold_1004 10061 159112
+##sequence-region   Porites_evermani_scaffold_1005 28090 152503</code></pre>
 </div>
 </div>
 <div id="remove-intermediate-gff" class="section level1" number="6">
@@ -1858,8 +1879,139 @@ Porites_evermani_scaffold_3485  Gmove   CDS 41994   42299   .   -   0   ID=cds-0
 
 rm &quot;${data_dir}&quot;/&quot;${intermediate_gff}&quot;</code></pre>
 </div>
+<div id="convert-to-gtf" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Convert to GTF</h1>
+<pre class="bash"><code>source .bashvars
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUC5ldmVybWFubmkgR0ZGIHJlZm9ybWF0dGluZyIKYXV0aG9yOiAiU2FtIFdoaXRlIgpkYXRlOiAiMjAyNS0wMS0xNyIKb3V0cHV0OiAKICBib29rZG93bjo6aHRtbF9kb2N1bWVudDI6CiAgICB0aGVtZTogY29zbW8KICAgIHRvYzogdHJ1ZQogICAgdG9jX2Zsb2F0OiB0cnVlCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUKICAgIGNvZGVfZm9sZGluZzogc2hvdwogICAgY29kZV9kb3dubG9hZDogdHJ1ZQogIGdpdGh1Yl9kb2N1bWVudDoKICAgIHRvYzogdHJ1ZQogICAgbnVtYmVyX3NlY3Rpb25zOiB0cnVlCiAgaHRtbF9kb2N1bWVudDoKICAgIHRoZW1lOiBjb3NtbwogICAgdG9jOiB0cnVlCiAgICB0b2NfZmxvYXQ6IHRydWUKICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQogICAgY29kZV9mb2xkaW5nOiBzaG93CiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlCi0tLQoKIyBJTlRSTwoKVGhpcyBub3RlYm9vayByZWZvcm1hdHMgdGhlIG9yaWdpbmFsIF9QLmV2ZXJtYW5uaV8gR0ZGIChbUG9yaXRlc19ldmVybWFubmlfdjEuYW5ub3QuZ2ZmXSguLi9kYXRhL1Bvcml0ZXNfZXZlcm1hbm5pX3YxLmFubm90LmdmZikpLCB3aGljaCBpcyBub3QgY29tcGxpYW50IHdpdGggW3RoZSBHRkYgc3RhbmRhcmRdKGh0dHBzOi8vZ2l0aHViLmNvbS90aGUtc2VxdWVuY2Utb250b2xvZ3kvc3BlY2lmaWNhdGlvbnMvYmxvYi9tYXN0ZXIvZ2ZmMy5tZCkgKEdpdEh1YiBwYWdlKS4gQWRkaXRpb25hbGx5LCB0aGUgR0ZGIGlzIGxhY2tpbmcgdGhlIGBnZW5lYCBmZWF0dXJlLCB3aGljaCBtYXkgKG9yIG1heSBub3QpIGJlIG5lZWRlZC91c2VmdWwgZm9yIGRvd25zdHJlYW0gcHJvY2Vzc2luZy4gVGhpcyBub3RlYm9vayBhZGRzIGEgYGdlbmVgIGZlYXR1cmUuCgpGaW5hbGx5LCBkZXNwaXRlIHRoZSBuYW1pbmcgY29udmVudGlvbiwgdGhlcmUgYXJlbid0IGFueSBhY3R1YWwgYW5ub3RhdGlvbnMgaW4gdGhhdCBHRkYsIGJleW9uZCB0aGUgZmVhdHVyZSBkZXNpZ25hdGlvbnMgKGkuZS4gbm8gZ2VuZSBvbnRvbG9neSwgbm8gU3dpc3NQcm90IElEcywgZ2VuZSBuYW1lcywgZXRjLikuIFRoaXMgbm90ZWJvb2sgZG9lcyBfbm90XyBhZGRyZXNzIHRob3NlIHNob3J0Y29taW5ncy4KCjo6OiB7LmNhbGxvdXQtbm90ZX0KVW5saWtlIG90aGVyIHNjcmlwdHMsIHRoaXMgd2lsbCBvdXRwdXQgdG8gW0UtUGV2ZS9kYXRhXSguLi9kYXRhKSwgaW5zdGVhZCBvZiBhbiBvdXRwdXQgZGlyZWN0b3J5IGluIGAuLi9vdXRwdXRgLgo6OjoKCiMjIFNvZnR3YXJlIHJlcXVpcmVtZW50cwoKUmVxdWlyZXMgW2dlbm9tZXRvb2xzXShodHRwczovL2dpdGh1Yi5jb20vZ2Vub21ldG9vbHMvZ2Vub21ldG9vbHMpIChHaXRIdWIgcmVwbykgdG8gYmUgaW5zdGFsbGVkIGFuZCBpbiB0aGUgc3lzdGVtIGAkUEFUSGAuCgojIyBJbnB1dHMKCi0gW1Bvcml0ZXNfZXZlcm1hbm5pX3YxLmFubm90LmdmZl0oLi4vZGF0YS9Qb3JpdGVzX2V2ZXJtYW5uaV92MS5hbm5vdC5nZmYpCgojIyBPdXRwdXRzCgotIFtQb3JpdGVzX2V2ZXJtYW5uaV92YWxpZGF0ZWQuZ2ZmXSguLi9kYXRhL1Bvcml0ZXNfZXZlcm1hbm5pX3ZhbGlkYXRlZC5nZmYpCgpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0KbGlicmFyeShrbml0cikKa25pdHI6Om9wdHNfY2h1bmskc2V0KAogIGVjaG8gPSBUUlVFLCAgICAgICAgICMgRGlzcGxheSBjb2RlIGNodW5rcwogIGV2YWwgPSBGQUxTRSwgICAgICAgICMgRXZhbHVhdGUgY29kZSBjaHVua3MKICB3YXJuaW5nID0gRkFMU0UsICAgICAjIEhpZGUgd2FybmluZ3MKICBtZXNzYWdlID0gRkFMU0UsICAgICAjIEhpZGUgbWVzc2FnZXMKICBjb21tZW50ID0gIiIgICAgICAgICAjIFByZXZlbnRzIGFwcGVuZGluZyAnIyMnIHRvIGJlZ2lubmluZyBvZiBsaW5lcyBpbiBjb2RlIG91dHB1dAopCmBgYAoKCiMgQ3JlYXRlIGEgQmFzaCB2YXJpYWJsZXMgZmlsZQoKVGhpcyBhbGxvd3MgdXNhZ2Ugb2YgQmFzaCB2YXJpYWJsZXMgYWNyb3NzIFIgTWFya2Rvd24gY2h1bmtzLgoKYGBge3Igc2F2ZS1iYXNoLXZhcmlhYmxlcy10by1ydmFycy1maWxlLCBlbmdpbmU9J2Jhc2gnLCBldmFsPVRSVUV9CnsKZWNobyAiIyMjIyBBc3NpZ24gVmFyaWFibGVzICMjIyMiCmVjaG8gIiIKCmVjaG8gIiMgRGF0YSBkaXJlY3RvcmllcyIKZWNobyAnZXhwb3J0IHJlcG9fZGlyPX4vZ2l0cmVwb3MvdXJvbC1lNS9kZWVwLWRpdmUtZXhwcmVzc2lvbi8nCmVjaG8gJ2V4cG9ydCBkYXRhX2Rpcj0ke3JlcG9fZGlyfS9FLVBldmUvZGF0YScKZWNobyAiIgoKZWNobyAiIyBJbnB1dCBmaWxlcyIKZWNobyAnZXhwb3J0IG9yaWdpbmFsX2dmZj0iUG9yaXRlc19ldmVybWFubmlfdjEuYW5ub3QuZ2ZmIicKZWNobyAnZXhwb3J0IGludGVybWVkaWF0ZV9nZmY9ImludGVybWVkaWF0ZS5nZmYiJwplY2hvICdleHBvcnQgdmFsaWRhdGVkX2dmZj0iUG9yaXRlc19ldmVybWFubmlfdmFsaWRhdGVkLmdmZiInCmVjaG8gIiIKCmVjaG8gIiMgUHJpbnQgZm9ybWF0dGluZyIKZWNobyAnZXhwb3J0IGxpbmU9Ii0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIicKZWNobyAiIgp9ID4gLmJhc2h2YXJzCgpjYXQgLmJhc2h2YXJzCmBgYAoKCiMgUGVhayBhdCBvcmlnaW5hbCBHRkYKYGBge3Igdmlldy1vcmlnaW5hbC1HRkYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKaGVhZCAiJHtkYXRhX2Rpcn0vJHtvcmlnaW5hbF9nZmZ9IgpgYGAKCiMjIENoZWNrIGZlYXR1cmVzCmBgYHtyIGZlYXR1cmVzLW9yaWdpbmFsLUdGRiwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgphd2sgJ3twcmludCAkM30nICIke2RhdGFfZGlyfS8ke29yaWdpbmFsX2dmZn0iIHwgc29ydCAtLXVuaXF1ZQpgYGAKCiMgRml4IEdGRgoKCmBgYHtyIGZpeC1nZmYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKYXdrICcKQkVHSU4geyBPRlM9Ilx0IjsgbXJuYV9jb3VudCA9IDA7IHV0cl9jb3VudCA9IDA7IGdlbmVfY291bnQgPSAwOyBjZHNfY291bnQgPSAwIH0KewogICAgaWYgKCQzID09ICJtUk5BIikgewogICAgICAgIHNwbGl0KCQ5LCBhdHRyaWJ1dGVzLCAiOyIpCiAgICAgICAgZm9yIChpIGluIGF0dHJpYnV0ZXMpIHsKICAgICAgICAgICAgaWYgKGF0dHJpYnV0ZXNbaV0gfiAvXklEPS8pIHsKICAgICAgICAgICAgICAgIG9yaWdpbmFsX2lkID0gc3Vic3RyKGF0dHJpYnV0ZXNbaV0sIDQpCiAgICAgICAgICAgICAgICBnZW5lX2lkID0gIklEPWdlbmUtIiBvcmlnaW5hbF9pZAogICAgICAgICAgICAgICAgcGFyZW50X2lkID0gIlBhcmVudD1nZW5lLSIgb3JpZ2luYWxfaWQKICAgICAgICAgICAgICAgIGJyZWFrCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgCiAgICAgICAgIyBJbmNyZW1lbnQgdGhlIGdsb2JhbCBtUk5BIGNvdW50ZXIKICAgICAgICBtcm5hX2NvdW50KysKICAgICAgICAKICAgICAgICBuZXdfbXJuYV9pZCA9ICJJRD1tcm5hLSIgc3ByaW50ZigiJTA1ZCIsIG1ybmFfY291bnQpCiAgICAgICAgCiAgICAgICAgIyBTdG9yZSB0aGUgbWFwcGluZyBvZiBvcmlnaW5hbCBtUk5BIElEIHRvIG5ldyBtUk5BIElECiAgICAgICAgbXJuYV9tYXBbb3JpZ2luYWxfaWRdID0gIm1ybmEtIiBzcHJpbnRmKCIlMDVkIiwgbXJuYV9jb3VudCkKICAgICAgICAKICAgICAgICAjIFJlcGxhY2UgdGhlIG9sZCBJRCB3aXRoIHRoZSBuZXcgbVJOQSBJRAogICAgICAgIGZvciAoaSBpbiBhdHRyaWJ1dGVzKSB7CiAgICAgICAgICAgIGlmIChhdHRyaWJ1dGVzW2ldIH4gL15JRD0vKSB7CiAgICAgICAgICAgICAgICBhdHRyaWJ1dGVzW2ldID0gbmV3X21ybmFfaWQKICAgICAgICAgICAgICAgIGJyZWFrCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgJDkgPSBhdHRyaWJ1dGVzWzFdCiAgICAgICAgZm9yIChpID0gMjsgaSA8PSBsZW5ndGgoYXR0cmlidXRlcyk7IGkrKykgewogICAgICAgICAgICAkOSA9ICQ5ICI7IiBhdHRyaWJ1dGVzW2ldCiAgICAgICAgfQogICAgICAgICQ5ID0gJDkgIjsiIHBhcmVudF9pZAogICAgICAgIHByaW50ICQxLCAkMiwgImdlbmUiLCAkNCwgJDUsICIuIiwgJDcsICQ4LCBnZW5lX2lkCiAgICAgICAgCiAgICAgICAgIyBJbmNyZW1lbnQgdGhlIGdlbmUgY291bnRlciBhbmQgcmVzZXQgdGhlIENEUyBjb3VudGVyIGZvciBlYWNoIG5ldyBnZW5lCiAgICAgICAgZ2VuZV9jb3VudCsrCiAgICAgICAgCiAgICAgICAgY2RzX2NvdW50ID0gZ2VuZV9jb3VudAogICAgfSBlbHNlIGlmICgkMyA9PSAiVVRSIikgewogICAgICAgIHV0cl9jb3VudCsrCiAgICAgICAgbmV3X3V0cl9pZCA9ICJJRD11dHItIiBzcHJpbnRmKCIlMDZkIiwgdXRyX2NvdW50KQogICAgICAgIHNwbGl0KCQ5LCBhdHRyaWJ1dGVzLCAiOyIpCiAgICAgICAgZm9yIChpIGluIGF0dHJpYnV0ZXMpIHsKICAgICAgICAgICAgaWYgKGF0dHJpYnV0ZXNbaV0gfiAvXlBhcmVudD0vKSB7CiAgICAgICAgICAgICAgICBvcmlnaW5hbF9wYXJlbnRfaWQgPSBzdWJzdHIoYXR0cmlidXRlc1tpXSwgOCkKICAgICAgICAgICAgICAgIGlmIChvcmlnaW5hbF9wYXJlbnRfaWQgaW4gbXJuYV9tYXApIHsKICAgICAgICAgICAgICAgICAgICBhdHRyaWJ1dGVzW2ldID0gIlBhcmVudD0iIG1ybmFfbWFwW29yaWdpbmFsX3BhcmVudF9pZF0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGJyZWFrCiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgJDkgPSBuZXdfdXRyX2lkCiAgICAgICAgZm9yIChpID0gMTsgaSA8PSBsZW5ndGgoYXR0cmlidXRlcyk7IGkrKykgewogICAgICAgICAgICAkOSA9ICQ5ICI7IiBhdHRyaWJ1dGVzW2ldCiAgICAgICAgfQogICAgfSBlbHNlIGlmICgkMyA9PSAiQ0RTIikgewogICAgICAgIG5ld19jZHNfaWQgPSAiSUQ9Y2RzLSIgc3ByaW50ZigiJTA2ZCIsIGNkc19jb3VudCkKICAgICAgICBzcGxpdCgkOSwgYXR0cmlidXRlcywgIjsiKQogICAgICAgIGZvciAoaSBpbiBhdHRyaWJ1dGVzKSB7CiAgICAgICAgICAgIGlmIChhdHRyaWJ1dGVzW2ldIH4gL15QYXJlbnQ9LykgewogICAgICAgICAgICAgICAgb3JpZ2luYWxfcGFyZW50X2lkID0gc3Vic3RyKGF0dHJpYnV0ZXNbaV0sIDgpCiAgICAgICAgICAgICAgICBpZiAob3JpZ2luYWxfcGFyZW50X2lkIGluIG1ybmFfbWFwKSB7CiAgICAgICAgICAgICAgICAgICAgYXR0cmlidXRlc1tpXSA9ICJQYXJlbnQ9IiBtcm5hX21hcFtvcmlnaW5hbF9wYXJlbnRfaWRdCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBicmVhawogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgICQ5ID0gbmV3X2Nkc19pZAogICAgICAgIGZvciAoaSA9IDE7IGkgPD0gbGVuZ3RoKGF0dHJpYnV0ZXMpOyBpKyspIHsKICAgICAgICAgICAgJDkgPSAkOSAiOyIgYXR0cmlidXRlc1tpXQogICAgICAgIH0KICAgIH0gZWxzZSB7CiAgICAgICAgc3BsaXQoJDksIGF0dHJpYnV0ZXMsICI7IikKICAgICAgICBmb3IgKGkgaW4gYXR0cmlidXRlcykgewogICAgICAgICAgICBpZiAoYXR0cmlidXRlc1tpXSB+IC9eUGFyZW50PS8pIHsKICAgICAgICAgICAgICAgIG9yaWdpbmFsX3BhcmVudF9pZCA9IHN1YnN0cihhdHRyaWJ1dGVzW2ldLCA4KQogICAgICAgICAgICAgICAgaWYgKG9yaWdpbmFsX3BhcmVudF9pZCBpbiBtcm5hX21hcCkgewogICAgICAgICAgICAgICAgICAgIGF0dHJpYnV0ZXNbaV0gPSAiUGFyZW50PSIgbXJuYV9tYXBbb3JpZ2luYWxfcGFyZW50X2lkXQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYnJlYWsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICAkOSA9IGF0dHJpYnV0ZXNbMV0KICAgICAgICBmb3IgKGkgPSAyOyBpIDw9IGxlbmd0aChhdHRyaWJ1dGVzKTsgaSsrKSB7CiAgICAgICAgICAgICQ5ID0gJDkgIjsiIGF0dHJpYnV0ZXNbaV0KICAgICAgICB9CiAgICB9CiAgICBwcmludCAkMAp9JyAiJHtkYXRhX2Rpcn0iLyIke29yaWdpbmFsX2dmZn0iID4gIiR7ZGF0YV9kaXJ9Ii8iJHtpbnRlcm1lZGlhdGVfZ2ZmfSIKYGBgCgojIyBJbnNwZWN0IGludGVybWVkaWF0ZSBHRkYKYGBge3IgaW50ZXJtZWRpYXRlLWdmZiwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgpoZWFkICIke2RhdGFfZGlyfSIvIiR7aW50ZXJtZWRpYXRlX2dmZn0iCmBgYAoKIyBWYWxpZGF0ZSBHRkYKClZhbGlkYXRlIEdGRiB1c2luZyBnZW5vbWV0b29scyBgZ2ZmM2AuCgotIGAtdGlkeWA6IEF0dGVtcHRzIHRvIGNsZWFuL2ZpeCBhbnkgcG90ZW50aWFsIGlzc3Vlcy4KCi0gYC1jaGVja2lkc2A6IENoZWNrcyBJRHMuCgotIGAtcmV0YWluaWRzYDogUmV0YWlucyBJRHMgZnJvbSBpbnB1dCBHRkYgaW5zdGVhZCBvZiBhc3NpZ25pbmcgbmV3IG9uZXMuCgpgYGB7ciB2YWxpZGF0ZS1nZmYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9RkFMU0V9CnNvdXJjZSAuYmFzaHZhcnMKCmd0IGdmZjMgXAotdGlkeSBcCi1jaGVja2lkcyBcCi1yZXRhaW5pZHMgXAoiJHtkYXRhX2Rpcn0iLyIke2ludGVybWVkaWF0ZV9nZmZ9IiBcCj4gIiR7ZGF0YV9kaXJ9Ii8iJHt2YWxpZGF0ZWRfZ2ZmfSIgXAoyPiAiJHtkYXRhX2Rpcn0iL2d0X2dmZjNfdmFsaWRhdGlvbl9lcnJvcnMubG9nCmBgYAoKIyMgQ2hlY2sgZm9yIGVycm9yKHMpIGluIHZhbGlkYXRpb24KClByb2Nlc3Mgd291bGQgc3RvcCBpZiBlcnJvciBvY2N1cnJlZCwgc28gb25seSBuZWVkIHRvIGNoZWNrIGVuZCBvZiBmaWxlLgoKOjo6IHsuY2FsbG91dC1ub3RlfQpXYXJuaW5ncyBhcmUgZXhwZWN0ZWQsIHNpbmNlIGZpbGUgd2FzIG5vdCBmb3JtYXR0ZWQgY29ycmVjdGx5LiBUaGV5IGluZGljYXRlIGNoYW5nZXMgYmVpbmcgbWFkZSB0byBicmluZyBmb3JtYXQgaW50byBjb21wbGlhbmNlLgo6OjoKCmBgYHtyIHZhbGlkYXRlLWdmZi1lcnJvci1jaGVjaywgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgp0YWlsICIke2RhdGFfZGlyfSIvZ3RfZ2ZmM192YWxpZGF0aW9uX2Vycm9ycy5sb2cKYGBgCgojIyBJbnNwZWN0IFZhbGlkYXRlZCBHRkYKYGBge3IgdmFsaWRhdGVkLWdmZiwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgpoZWFkICIke2RhdGFfZGlyfSIvIiR7dmFsaWRhdGVkX2dmZn0iCmBgYAoKIyBSZW1vdmUgaW50ZXJtZWRpYXRlIEdGRgpgYGB7ciBybS1pbnRlcm1lZGlhdGUtZ2ZmLCBlbmdpbmU9J2Jhc2gnLCBldmFsPUZBTFNFfQpzb3VyY2UgLmJhc2h2YXJzCgpybSAiJHtkYXRhX2Rpcn0iLyIke2ludGVybWVkaWF0ZV9nZmZ9IgpgYGA=</div>
+# Sends progress to /dev/null to avoid crashing Rmd notebook
+&quot;${conda_path}&quot; run -n ${conda_env_name} \
+agat_convert_sp_gff2gtf.pl \
+--gff &quot;${data_dir}&quot;/&quot;${validated_gff}&quot; \
+--output &quot;${data_dir}&quot;/${gtf} \
+1&gt; &quot;${data_dir}&quot;/agat.log \
+2&gt; /dev/null</code></pre>
+<div id="check-agat-gtf-log" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Check AGAT GTF Log</h2>
+<pre class="bash"><code>source .bashvars
+
+cat &quot;${data_dir}&quot;/agat.log</code></pre>
+<pre><code>converting to GTF3
+********************************************************************************
+*                              - Start parsing -                               *
+********************************************************************************
+-------------------------- parse options and metadata --------------------------
+=&gt; Accessing the feature level json files
+    Using standard /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/features_level1.json file
+    Using standard /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/features_level2.json file
+    Using standard /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/features_level3.json file
+    Using standard /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/features_spread.json file
+=&gt; Attribute used to group features when no Parent/ID relationship exists:
+    * locus_tag
+    * gene_id
+=&gt; merge_loci option deactivated
+=&gt; Accessing Ontology
+    No ontology accessible from the gff file header!
+    We use the SOFA ontology distributed with AGAT:
+        /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/so.obo
+    Read ontology /home/sam/programs/miniforge3-24.7.1-0/envs/agat_env/lib/site_perl/5.26.2/auto/share/dist/AGAT/so.obo:
+        4 root terms, and 2472 total terms, and 1436 leaf terms
+    Filtering ontology:
+        We found 1757 terms that are sequence_feature or is_a child of it.
+-------------------------------- parse features --------------------------------
+=&gt; GFF parser version used: 3
+
+********************************************************************************
+*                               - End parsing -                                *
+*                             done in 105 seconds                              *
+********************************************************************************
+
+********************************************************************************
+*                               - Start checks -                               *
+********************************************************************************
+---------------------------- Check1: feature types -----------------------------
+----------------------------------- ontology -----------------------------------
+All feature types in agreement with the Ontology.
+------------------------------------- agat -------------------------------------
+AGAT can deal with all the encountered feature types (3rd column)
+------------------------------ done in 0 seconds -------------------------------
+
+------------------------------ Check2: duplicates ------------------------------
+None found
+------------------------------ done in 0 seconds -------------------------------
+
+-------------------------- Check3: sequential bucket ---------------------------
+Nothing to check as sequential bucket!
+------------------------------ done in 0 seconds -------------------------------
+
+--------------------------- Check4: l2 linked to l3 ----------------------------
+No problem found
+------------------------------ done in 0 seconds -------------------------------
+
+--------------------------- Check5: l1 linked to l2 ----------------------------
+No problem found
+------------------------------ done in 0 seconds -------------------------------
+
+--------------------------- Check6: remove orphan l1 ---------------------------
+We remove only those not supposed to be orphan
+None found
+------------------------------ done in 0 seconds -------------------------------
+
+------------------------------ Check7: check cds -------------------------------
+No problem found
+------------------------------ done in 0 seconds -------------------------------
+
+----------------------------- Check8: check exons ------------------------------
+No exons created
+No exons locations modified
+10475 exons removed that were supernumerary
+No level2 locations modified
+------------------------------ done in 11 seconds ------------------------------
+
+------------------------------ Check9: check utrs ------------------------------
+No UTRs created
+No UTRs locations modified
+No supernumerary UTRs removed
+------------------------------ done in 6 seconds -------------------------------
+
+------------------------ Check10: all level2 locations -------------------------
+No problem found
+------------------------------ done in 5 seconds -------------------------------
+
+------------------------ Check11: all level1 locations -------------------------
+No problem found
+------------------------------ done in 0 seconds -------------------------------
+
+---------------------- Check12: remove identical isoforms ----------------------
+None found
+------------------------------ done in 1 seconds -------------------------------
+********************************************************************************
+*                                - End checks -                                *
+*                              done in 23 seconds                              *
+********************************************************************************
+
+=&gt; OmniscientI total time: 128 seconds
+Bye Bye</code></pre>
+</div>
+<div id="inspect-gtf" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Inspect GTF</h2>
+<pre class="bash"><code>source .bashvars
+
+head &quot;${data_dir}&quot;/&quot;${gtf}&quot;
+</code></pre>
+<pre><code>##gtf-version 3
+##sequence-region   Porites_evermani_scaffold_1 3107 1802489
+##sequence-region   Porites_evermani_scaffold_10 16486 1155879
+##sequence-region   Porites_evermani_scaffold_100 2448 527357
+##sequence-region   Porites_evermani_scaffold_1000 5675 163688
+##sequence-region   Porites_evermani_scaffold_1001 5840 151448
+##sequence-region   Porites_evermani_scaffold_1002 3372 125467
+##sequence-region   Porites_evermani_scaffold_1003 139 162450
+##sequence-region   Porites_evermani_scaffold_1004 10061 159112
+##sequence-region   Porites_evermani_scaffold_1005 28090 152503</code></pre>
+</div>
+</div>
+
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUC5ldmVybWFubmkgR0ZGIHJlZm9ybWF0dGluZyIKYXV0aG9yOiAiU2FtIFdoaXRlIgpkYXRlOiAiMjAyNS0wMS0xNyIKb3V0cHV0OiAKICBib29rZG93bjo6aHRtbF9kb2N1bWVudDI6CiAgICB0aGVtZTogY29zbW8KICAgIHRvYzogdHJ1ZQogICAgdG9jX2Zsb2F0OiB0cnVlCiAgICBudW1iZXJfc2VjdGlvbnM6IHRydWUKICAgIGNvZGVfZm9sZGluZzogc2hvdwogICAgY29kZV9kb3dubG9hZDogdHJ1ZQogIGdpdGh1Yl9kb2N1bWVudDoKICAgIHRvYzogdHJ1ZQogICAgbnVtYmVyX3NlY3Rpb25zOiB0cnVlCiAgaHRtbF9kb2N1bWVudDoKICAgIHRoZW1lOiBjb3NtbwogICAgdG9jOiB0cnVlCiAgICB0b2NfZmxvYXQ6IHRydWUKICAgIG51bWJlcl9zZWN0aW9uczogdHJ1ZQogICAgY29kZV9mb2xkaW5nOiBzaG93CiAgICBjb2RlX2Rvd25sb2FkOiB0cnVlCi0tLQoKIyBCYWNrZ3JvdW5kCgpUaGlzIG5vdGVib29rIHJlZm9ybWF0cyB0aGUgb3JpZ2luYWwgX1AuZXZlcm1hbm5pXyBHRkYgKFtQb3JpdGVzX2V2ZXJtYW5uaV92MS5hbm5vdC5nZmZdKC4uL2RhdGEvUG9yaXRlc19ldmVybWFubmlfdjEuYW5ub3QuZ2ZmKSksIHdoaWNoIGlzIG5vdCBjb21wbGlhbnQgd2l0aCBbdGhlIEdGRiBzdGFuZGFyZF0oaHR0cHM6Ly9naXRodWIuY29tL3RoZS1zZXF1ZW5jZS1vbnRvbG9neS9zcGVjaWZpY2F0aW9ucy9ibG9iL21hc3Rlci9nZmYzLm1kKSAoR2l0SHViIHBhZ2UpLiBUaGUgR0ZGIGlzIGxhY2tpbmcgdGhlIGBnZW5lYCBmZWF0dXJlLCB3aGljaCBtYXkgKG9yIG1heSBub3QpIGJlIG5lZWRlZC91c2VmdWwgZm9yIGRvd25zdHJlYW0gcHJvY2Vzc2luZy4gVGhpcyBub3RlYm9vayBhZGRzIGEgYGdlbmVgIGZlYXR1cmUuIEFkZGl0aW9uYWxseSwgaXQgaXMgbGFja2luZyB0aGUgYGV4b25gIGZlYXR1cmUuIFdlJ3ZlIGRlY2lkZWQgdG8gaW5zZXJ0IGBleG9uYCBmZWF0dXJlcyB3aGljaCBjb3ZlciBgVVRSYCBhbmQgYENEU2AgZmVhdHVyZXMuCgpGaW5hbGx5LCBkZXNwaXRlIHRoZSBuYW1pbmcgY29udmVudGlvbiwgdGhlcmUgYXJlbid0IGFueSBhY3R1YWwgYW5ub3RhdGlvbnMgaW4gdGhhdCBHRkYsIGJleW9uZCB0aGUgZmVhdHVyZSBkZXNpZ25hdGlvbnMgKGkuZS4gbm8gZ2VuZSBvbnRvbG9neSwgbm8gU3dpc3NQcm90IElEcywgZ2VuZSBuYW1lcywgZXRjLikuIFRoaXMgbm90ZWJvb2sgZG9lcyBfbm90XyBhZGRyZXNzIHRob3NlIHNob3J0Y29taW5ncy4KCjo6OiB7LmNhbGxvdXQtbm90ZX0KVW5saWtlIG90aGVyIHNjcmlwdHMsIHRoaXMgd2lsbCBvdXRwdXQgdG8gW0UtUGV2ZS9kYXRhXSguLi9kYXRhKSwgaW5zdGVhZCBvZiBhbiBvdXRwdXQgZGlyZWN0b3J5IGluIGAuLi9vdXRwdXRgLgo6OjoKCiMjIFNvZnR3YXJlIHJlcXVpcmVtZW50cwoKUmVxdWlyZXMgW2dlbm9tZXRvb2xzXShodHRwczovL2dpdGh1Yi5jb20vZ2Vub21ldG9vbHMvZ2Vub21ldG9vbHMpIChHaXRIdWIgcmVwbykgdG8gYmUgaW5zdGFsbGVkIGFuZCBpbiB0aGUgc3lzdGVtIGAkUEFUSGAuCgpSZXF1aXJlcyBbQUdBVF0oaHR0cHM6Ly9naXRodWIuY29tL05CSVN3ZWRlbi9BR0FUKSB0byBiZSBpbnN0YWxsZWQgdmlhIGNvbmRhL21hbWJhIGZvcgpjb252ZXJzaW9uIHRvIEdURi4KCiMjIElucHV0cwoKLSBbUG9yaXRlc19ldmVybWFubmlfdjEuYW5ub3QuZ2ZmXSguLi9kYXRhL1Bvcml0ZXNfZXZlcm1hbm5pX3YxLmFubm90LmdmZikKCiMjIE91dHB1dHMKCi0gW1Bvcml0ZXNfZXZlcm1hbm5pX3ZhbGlkYXRlZC5nZmYzXSguLi9kYXRhL1Bvcml0ZXNfZXZlcm1hbm5pX3ZhbGlkYXRlZC5nZmYzKQoKYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9CmxpYnJhcnkoa25pdHIpCmtuaXRyOjpvcHRzX2NodW5rJHNldCgKICBlY2hvID0gVFJVRSwgICAgICAgICAjIERpc3BsYXkgY29kZSBjaHVua3MKICBldmFsID0gRkFMU0UsICAgICAgICAjIEV2YWx1YXRlIGNvZGUgY2h1bmtzCiAgd2FybmluZyA9IEZBTFNFLCAgICAgIyBIaWRlIHdhcm5pbmdzCiAgbWVzc2FnZSA9IEZBTFNFLCAgICAgIyBIaWRlIG1lc3NhZ2VzCiAgY29tbWVudCA9ICIiICAgICAgICAgIyBQcmV2ZW50cyBhcHBlbmRpbmcgJyMjJyB0byBiZWdpbm5pbmcgb2YgbGluZXMgaW4gY29kZSBvdXRwdXQKKQpgYGAKCgojIENyZWF0ZSBhIEJhc2ggdmFyaWFibGVzIGZpbGUKClRoaXMgYWxsb3dzIHVzYWdlIG9mIEJhc2ggdmFyaWFibGVzIGFjcm9zcyBSIE1hcmtkb3duIGNodW5rcy4KCmBgYHtyIHNhdmUtYmFzaC12YXJpYWJsZXMtdG8tcnZhcnMtZmlsZSwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQp7CmVjaG8gIiMjIyMgQXNzaWduIFZhcmlhYmxlcyAjIyMjIgplY2hvICIiCgplY2hvICIjIERhdGEgZGlyZWN0b3JpZXMiCmVjaG8gJ2V4cG9ydCByZXBvX2Rpcj1+L2dpdHJlcG9zL3Vyb2wtZTUvZGVlcC1kaXZlLWV4cHJlc3Npb24nCmVjaG8gJ2V4cG9ydCBkYXRhX2Rpcj0ke3JlcG9fZGlyfS9FLVBldmUvZGF0YScKZWNobyAiIgoKZWNobyAiIyBJbnB1dCBmaWxlcyIKZWNobyAnZXhwb3J0IG9yaWdpbmFsX2dmZj0iUG9yaXRlc19ldmVybWFubmlfdjEuYW5ub3QuZ2ZmIicKZWNobyAnZXhwb3J0IGludGVybWVkaWF0ZV9nZmY9ImludGVybWVkaWF0ZS5nZmYiJwplY2hvICdleHBvcnQgdmFsaWRhdGVkX2dmZj0iUG9yaXRlc19ldmVybWFubmlfdmFsaWRhdGVkLmdmZjMiJwplY2hvICIiCgplY2hvICIjIE91dHB1dCBmaWxlcyIKZWNobyAnZXhwb3J0IGd0Zj0iUG9yaXRlc19ldmVybWFubmlfdmFsaWRhdGVkLmd0ZiInCmVjaG8gIiIKCmVjaG8gIiMgUHJvZ3JhbXMiCmVjaG8gJ2V4cG9ydCBjb25kYV9wYXRoPSIvaG9tZS9zYW0vcHJvZ3JhbXMvbWluaWZvcmdlMy0yNC43LjEtMC9iaW4vbWFtYmEiJwplY2hvICdleHBvcnQgY29uZGFfZW52X25hbWU9ImFnYXRfZW52IicKZWNobyAiIgoKZWNobyAiIyBQcmludCBmb3JtYXR0aW5nIgplY2hvICdleHBvcnQgbGluZT0iLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0iJwplY2hvICIiCn0gPiAuYmFzaHZhcnMKCmNhdCAuYmFzaHZhcnMKYGBgCgoKIyBQZWFrIGF0IG9yaWdpbmFsIEdGRgpgYGB7ciB2aWV3LW9yaWdpbmFsLUdGRiwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgpoZWFkICIke2RhdGFfZGlyfS8ke29yaWdpbmFsX2dmZn0iCmBgYAojIyBDaGVjayBmZWF0dXJlcwpgYGB7ciBmZWF0dXJlcy1vcmlnaW5hbC1HRkYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKYXdrICd7cHJpbnQgJDN9JyAiJHtkYXRhX2Rpcn0vJHtvcmlnaW5hbF9nZmZ9IiB8IHNvcnQgLS11bmlxdWUKYGBgCgojIEZpeCBHRkYKCgpgYGB7ciBmaXgtZ2ZmLCBlbmdpbmU9J2Jhc2gnLCBldmFsPVRSVUV9CnNvdXJjZSAuYmFzaHZhcnMKCmF3ayAnCkJFR0lOIHsgT0ZTPSJcdCI7IG1ybmFfY291bnQgPSAwOyB1dHJfY291bnQgPSAwOyBnZW5lX2NvdW50ID0gMDsgY2RzX2NvdW50ID0gMDsgZXhvbl9jb3VudCA9IDAgfQp7CiAgICBpZiAoJDMgPT0gIm1STkEiKSB7CiAgICAgICAgc3BsaXQoJDksIGF0dHJpYnV0ZXMsICI7IikKICAgICAgICBmb3IgKGkgaW4gYXR0cmlidXRlcykgewogICAgICAgICAgICBpZiAoYXR0cmlidXRlc1tpXSB+IC9eSUQ9LykgewogICAgICAgICAgICAgICAgb3JpZ2luYWxfaWQgPSBzdWJzdHIoYXR0cmlidXRlc1tpXSwgNCkKICAgICAgICAgICAgICAgIGdlbmVfaWQgPSAiSUQ9Z2VuZS0iIG9yaWdpbmFsX2lkCiAgICAgICAgICAgICAgICBwYXJlbnRfaWQgPSAiUGFyZW50PWdlbmUtIiBvcmlnaW5hbF9pZAogICAgICAgICAgICAgICAgYnJlYWsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICAKICAgICAgICAjIEluY3JlbWVudCB0aGUgZ2xvYmFsIG1STkEgY291bnRlcgogICAgICAgIG1ybmFfY291bnQrKwogICAgICAgIAogICAgICAgIG5ld19tcm5hX2lkID0gIklEPW1ybmEtIiBzcHJpbnRmKCIlMDVkIiwgbXJuYV9jb3VudCkKICAgICAgICAKICAgICAgICAjIFN0b3JlIHRoZSBtYXBwaW5nIG9mIG9yaWdpbmFsIG1STkEgSUQgdG8gbmV3IG1STkEgSUQKICAgICAgICBtcm5hX21hcFtvcmlnaW5hbF9pZF0gPSAibXJuYS0iIHNwcmludGYoIiUwNWQiLCBtcm5hX2NvdW50KQogICAgICAgIAogICAgICAgICMgUmVwbGFjZSB0aGUgb2xkIElEIHdpdGggdGhlIG5ldyBtUk5BIElECiAgICAgICAgZm9yIChpIGluIGF0dHJpYnV0ZXMpIHsKICAgICAgICAgICAgaWYgKGF0dHJpYnV0ZXNbaV0gfiAvXklEPS8pIHsKICAgICAgICAgICAgICAgIGF0dHJpYnV0ZXNbaV0gPSBuZXdfbXJuYV9pZAogICAgICAgICAgICAgICAgYnJlYWsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICAkOSA9IGF0dHJpYnV0ZXNbMV0KICAgICAgICBmb3IgKGkgPSAyOyBpIDw9IGxlbmd0aChhdHRyaWJ1dGVzKTsgaSsrKSB7CiAgICAgICAgICAgICQ5ID0gJDkgIjsiIGF0dHJpYnV0ZXNbaV0KICAgICAgICB9CiAgICAgICAgJDkgPSAkOSAiOyIgcGFyZW50X2lkCiAgICAgICAgcHJpbnQgJDEsICQyLCAiZ2VuZSIsICQ0LCAkNSwgIi4iLCAkNywgJDgsIGdlbmVfaWQKICAgICAgICBwcmludCAkMCAgIyBQcmludCB0aGUgb3JpZ2luYWwgbVJOQSBmZWF0dXJlCiAgICAgICAgCiAgICAgICAgIyBJbmNyZW1lbnQgdGhlIGdlbmUgY291bnRlciBhbmQgcmVzZXQgdGhlIENEUyBjb3VudGVyIGZvciBlYWNoIG5ldyBnZW5lCiAgICAgICAgZ2VuZV9jb3VudCsrCiAgICB9IGVsc2UgaWYgKCQzID09ICJVVFIiIHx8ICQzID09ICJDRFMiKSB7CiAgICAgICAgc3BsaXQoJDksIGF0dHJpYnV0ZXMsICI7IikKICAgICAgICBpZF9zZXQgPSAwCiAgICAgICAgcGFyZW50X3NldCA9IDAKICAgICAgICBmb3IgKGkgaW4gYXR0cmlidXRlcykgewogICAgICAgICAgICBpZiAoYXR0cmlidXRlc1tpXSB+IC9eSUQ9LykgewogICAgICAgICAgICAgICAgaWRfc2V0ID0gMQogICAgICAgICAgICAgICAgaWYgKCQzID09ICJVVFIiKSB7CiAgICAgICAgICAgICAgICAgICAgYXR0cmlidXRlc1tpXSA9ICJJRD11dHItIiBzcHJpbnRmKCIlMDVkIiwgKyt1dHJfY291bnQpCiAgICAgICAgICAgICAgICB9IGVsc2UgaWYgKCQzID09ICJDRFMiKSB7CiAgICAgICAgICAgICAgICAgICAgYXR0cmlidXRlc1tpXSA9ICJJRD1jZHMtIiBzcHJpbnRmKCIlMDVkIiwgKytjZHNfY291bnQpCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgaWYgKGF0dHJpYnV0ZXNbaV0gfiAvXlBhcmVudD0vKSB7CiAgICAgICAgICAgICAgICBwYXJlbnRfc2V0ID0gMQogICAgICAgICAgICAgICAgb3JpZ2luYWxfcGFyZW50X2lkID0gc3Vic3RyKGF0dHJpYnV0ZXNbaV0sIDgpCiAgICAgICAgICAgICAgICBpZiAob3JpZ2luYWxfcGFyZW50X2lkIGluIG1ybmFfbWFwKSB7CiAgICAgICAgICAgICAgICAgICAgYXR0cmlidXRlc1tpXSA9ICJQYXJlbnQ9IiBtcm5hX21hcFtvcmlnaW5hbF9wYXJlbnRfaWRdCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgaWYgKGlkX3NldCA9PSAwKSB7CiAgICAgICAgICAgIGlmICgkMyA9PSAiVVRSIikgewogICAgICAgICAgICAgICAgYXR0cmlidXRlc1sxXSA9ICJJRD11dHItIiBzcHJpbnRmKCIlMDVkIiwgKyt1dHJfY291bnQpICI7IiBhdHRyaWJ1dGVzWzFdCiAgICAgICAgICAgIH0gZWxzZSBpZiAoJDMgPT0gIkNEUyIpIHsKICAgICAgICAgICAgICAgIGF0dHJpYnV0ZXNbMV0gPSAiSUQ9Y2RzLSIgc3ByaW50ZigiJTA1ZCIsICsrY2RzX2NvdW50KSAiOyIgYXR0cmlidXRlc1sxXQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIGlmIChwYXJlbnRfc2V0ID09IDApIHsKICAgICAgICAgICAgYXR0cmlidXRlc1tsZW5ndGgoYXR0cmlidXRlcykgKyAxXSA9ICJQYXJlbnQ9IiBtcm5hX21hcFtvcmlnaW5hbF9pZF0KICAgICAgICB9CiAgICAgICAgJDkgPSBhdHRyaWJ1dGVzWzFdCiAgICAgICAgZm9yIChpID0gMjsgaSA8PSBsZW5ndGgoYXR0cmlidXRlcyk7IGkrKykgewogICAgICAgICAgICAkOSA9ICQ5ICI7IiBhdHRyaWJ1dGVzW2ldCiAgICAgICAgfQogICAgICAgIHByaW50ICQxLCAkMiwgJDMsICQ0LCAkNSwgJDYsICQ3LCAkOCwgJDkgICMgUHJpbnQgdGhlIG9yaWdpbmFsIFVUUiBvciBDRFMgZmVhdHVyZQogICAgICAgIAogICAgICAgICMgQWRkIGV4b24gZmVhdHVyZQogICAgICAgIGV4b25fY291bnQrKwogICAgICAgIG5ld19leG9uX2lkID0gIklEPWV4b24tIiBzcHJpbnRmKCIlMDZkIiwgZXhvbl9jb3VudCkKICAgICAgICBleG9uX2F0dHJpYnV0ZXMgPSBuZXdfZXhvbl9pZAogICAgICAgIGZvciAoaSA9IDE7IGkgPD0gbGVuZ3RoKGF0dHJpYnV0ZXMpOyBpKyspIHsKICAgICAgICAgICAgaWYgKGF0dHJpYnV0ZXNbaV0gIX4gL15JRD0vKSB7CiAgICAgICAgICAgICAgICBleG9uX2F0dHJpYnV0ZXMgPSBleG9uX2F0dHJpYnV0ZXMgIjsiIGF0dHJpYnV0ZXNbaV0KICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICAjIEVuc3VyZSBQYXJlbnQgYXR0cmlidXRlIGlzIGluY2x1ZGVkIGluIGV4b24gYXR0cmlidXRlcwogICAgICAgIGlmIChwYXJlbnRfc2V0ID09IDEpIHsKICAgICAgICAgICAgZXhvbl9hdHRyaWJ1dGVzID0gZXhvbl9hdHRyaWJ1dGVzICI7UGFyZW50PSIgbXJuYV9tYXBbb3JpZ2luYWxfcGFyZW50X2lkXQogICAgICAgIH0KICAgICAgICBwcmludCAkMSwgJDIsICJleG9uIiwgJDQsICQ1LCAkNiwgJDcsICQ4LCBleG9uX2F0dHJpYnV0ZXMKICAgIH0KfQonICIke2RhdGFfZGlyfS8ke29yaWdpbmFsX2dmZn0iID4gIiR7ZGF0YV9kaXJ9LyR7aW50ZXJtZWRpYXRlX2dmZn0iCmBgYAoKIyMgSW5zcGVjdCBpbnRlcm1lZGlhdGUgR0ZGCmBgYHtyIGludGVybWVkaWF0ZS1nZmYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKaGVhZCAiJHtkYXRhX2Rpcn0iLyIke2ludGVybWVkaWF0ZV9nZmZ9IgpgYGAKCiMgVmFsaWRhdGUgR0ZGCgpWYWxpZGF0ZSBHRkYgdXNpbmcgZ2Vub21ldG9vbHMgYGdmZjNgLgoKLSBgLXRpZHlgOiBBdHRlbXB0cyB0byBjbGVhbi9maXggYW55IHBvdGVudGlhbCBpc3N1ZXMuCgotIGAtY2hlY2tpZHNgOiBDaGVja3MgSURzLgoKLSBgLXJldGFpbmlkc2A6IFJldGFpbnMgSURzIGZyb20gaW5wdXQgR0ZGIGluc3RlYWQgb2YgYXNzaWduaW5nIG5ldyBvbmVzLgoKYGBge3IgdmFsaWRhdGUtZ2ZmLCBlbmdpbmU9J2Jhc2gnLCBldmFsPUZBTFNFfQpzb3VyY2UgLmJhc2h2YXJzCgpndCBnZmYzIFwKLXRpZHkgXAotY2hlY2tpZHMgXAotcmV0YWluaWRzIFwKLXNvcnQgXAoiJHtkYXRhX2Rpcn0iLyIke2ludGVybWVkaWF0ZV9nZmZ9IiBcCj4gIiR7ZGF0YV9kaXJ9Ii8iJHt2YWxpZGF0ZWRfZ2ZmfSIgXAoyPiAiJHtkYXRhX2Rpcn0iL2d0X2dmZjNfdmFsaWRhdGlvbl9lcnJvcnMubG9nCmBgYAoKIyMgQ2hlY2sgZm9yIGVycm9yKHMpIGluIHZhbGlkYXRpb24KClByb2Nlc3Mgd291bGQgc3RvcCBpZiBlcnJvciBvY2N1cnJlZCwgc28gb25seSBuZWVkIHRvIGNoZWNrIGVuZCBvZiBmaWxlLgoKOjo6IHsuY2FsbG91dC1ub3RlfQpXYXJuaW5ncyBhcmUgZXhwZWN0ZWQsIGFzIHRoZXkgZ2VuZXJhbGx5IGluZGljYXRlZCBtb2RpZmljYXRpb25zIHRvIHRoZSBHRkYgdG8gYnJpbmcgaXQgaW50byBjb21wbGlhbmNlLgo6OjoKCmBgYHtyIHZhbGlkYXRlLWdmZi1lcnJvci1jaGVjaywgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgp0YWlsICIke2RhdGFfZGlyfSIvZ3RfZ2ZmM192YWxpZGF0aW9uX2Vycm9ycy5sb2cKYGBgCgojIyBJbnNwZWN0IFZhbGlkYXRlZCBHRkYKYGBge3IgdmFsaWRhdGVkLWdmZiwgZW5naW5lPSdiYXNoJywgZXZhbD1UUlVFfQpzb3VyY2UgLmJhc2h2YXJzCgpoZWFkICIke2RhdGFfZGlyfSIvIiR7dmFsaWRhdGVkX2dmZn0iCmBgYAoKIyBSZW1vdmUgaW50ZXJtZWRpYXRlIEdGRgpgYGB7ciBybS1pbnRlcm1lZGlhdGUtZ2ZmLCBlbmdpbmU9J2Jhc2gnLCBldmFsPVRSVUV9CnNvdXJjZSAuYmFzaHZhcnMKCnJtICIke2RhdGFfZGlyfSIvIiR7aW50ZXJtZWRpYXRlX2dmZn0iCmBgYAoKIyBDb252ZXJ0IHRvIEdURiAKCmBgYHtyIGNyZWF0ZS1HVEYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKIyBTZW5kcyBwcm9ncmVzcyB0byAvZGV2L251bGwgdG8gYXZvaWQgY3Jhc2hpbmcgUm1kIG5vdGVib29rCiIke2NvbmRhX3BhdGh9IiBydW4gLW4gJHtjb25kYV9lbnZfbmFtZX0gXAphZ2F0X2NvbnZlcnRfc3BfZ2ZmMmd0Zi5wbCBcCi0tZ2ZmICIke2RhdGFfZGlyfSIvIiR7dmFsaWRhdGVkX2dmZn0iIFwKLS1vdXRwdXQgIiR7ZGF0YV9kaXJ9Ii8ke2d0Zn0gXAoxPiAiJHtkYXRhX2Rpcn0iL2FnYXQubG9nIFwKMj4gL2Rldi9udWxsCmBgYAoKIyMgQ2hlY2sgQUdBVCBHVEYgTG9nCmBgYHtyIGluc3BlY3QtQUdBVC1sb2csIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKY2F0ICIke2RhdGFfZGlyfSIvYWdhdC5sb2cKYGBgCgojIyBJbnNwZWN0IEdURgoKYGBge3IgaW5zcGVjdC1HVEYsIGVuZ2luZT0nYmFzaCcsIGV2YWw9VFJVRX0Kc291cmNlIC5iYXNodmFycwoKaGVhZCAiJHtkYXRhX2Rpcn0iLyIke2d0Zn0iCgpgYGA=</div>
 
 
 </div>
