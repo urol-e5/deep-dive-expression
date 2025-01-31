@@ -1,0 +1,2 @@
+File	Total Reads	Aligned Reads	Unaligned Reads	Ambiguously Aligned Reads	No Genomic Sequence	Duplicate Reads (removed)	Unique Reads (remaining)	Total Cs	Methylated CpGs	Unmethylated CpGs	Methylated chgs	Unmethylated chgs	Methylated CHHs	Unmethylated CHHs
+SIM_1_val_1_bismark_bt2_pe.bam	1000000	811421	7	188572	0	1	811420	31755422	0	4983003	0	5391988	2607	21377824
