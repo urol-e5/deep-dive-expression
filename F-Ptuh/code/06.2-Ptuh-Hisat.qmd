@@ -122,21 +122,19 @@ rm ../output/06-Ptuh-Hisat/*sam
 ```
 
 
+
+#REVISION STARTS HERE
+
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
 Getting gff
 
-```{r, engine='bash'}
-
-cd ../data
-wget https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.genes.gff3
-```
 
 
 ```{r, engine='bash'}
 
-head ../data/Pocillopora_meandrina_HIv1.genes.gff3
+head ../data/Pocillopora_meandrina_HIv1.genes-validated.gff3
 
 ```
 
@@ -146,15 +144,15 @@ find ../output/06-Ptuh-Hisat/*sorted.bam \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 32 \
 -eB \
--G ../data/Pocillopora_meandrina_HIv1.genes.gff3 \
--o ../output/06-Ptuh-Hisat/{}.gtf \
+-G ../data/Pocillopora_meandrina_HIv1.genes-validated.gff3 \
+-o ../output/06.2-Ptuh-Hisat/{}.gtf \
 ../output/06-Ptuh-Hisat/{}.sorted.bam
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/06-Ptuh-Hisat/RNA*.gtf
-ls ../output/06-Ptuh-Hisat/RNA*.gtf
+wc -l ../output/06.2-Ptuh-Hisat/RNA*.gtf
+ls ../output/06.2-Ptuh-Hisat/RNA*.gtf
 #head ../output/06-Ptuh-Hisat/RNA*.gtf
 ```
 
@@ -165,39 +163,39 @@ ls ../output/06-Ptuh-Hisat/RNA*.gtf
 
 
 ```{bash}
-for file in $(ls ../output/06-Ptuh-Hisat/*.gtf); do
+for file in $(ls ../output/06.2-Ptuh-Hisat/*.gtf); do
   sample=$(basename "$file" .gtf)  # Extract sample name from filename
   echo "$sample $file"
-done > ../output/06-Ptuh-Hisat/list01.txt
+done > ../output/06.2-Ptuh-Hisat/list01.txt
 ```
 
 
 
 
 ```{r, engine='bash'}
-head ../output/06-Ptuh-Hisat/list01.txt
+head ../output/06.2-Ptuh-Hisat/list01.txt
 ```
 
 
 
 ```{r, engine='bash'}
 python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
--i ../output/06-Ptuh-Hisat/list01.txt \
--g ../output/06-Ptuh-Hisat/gene_count_matrix.csv \
--t ../output/06-Ptuh-Hisat/transcript_count_matrix.csv
+-i ../output/06.2-Ptuh-Hisat/list01.txt \
+-g ../output/06.2-Ptuh-Hisat/gene_count_matrix.csv \
+-t ../output/06.2-Ptuh-Hisat/transcript_count_matrix.csv
 
-head ../output/06-Ptuh-Hisat/*matrix.csv
+head ../output/06.2-Ptuh-Hisat/*matrix.csv
 
 ```
 
 
 
 ```{bash}
-cp ../output/06-Ptuh-Hisat/gene_count_matrix.csv ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
+cp ../output/06.2-Ptuh-Hisat/gene_count_matrix.csv ../output/06,2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
 ```h
 
 ```{bash}
-head ../output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
+head ../output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv
 ```
 
 
