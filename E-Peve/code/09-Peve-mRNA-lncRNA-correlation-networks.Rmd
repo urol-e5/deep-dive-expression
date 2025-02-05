@@ -1,5 +1,5 @@
 ---
-title: "Apul Gene expression lncRNA correlations"
+title: "Peve Gene expression lncRNA correlations"
 output: html_document
 date: "2025-02-04"
 editor_options: 
@@ -30,68 +30,68 @@ library(ggcorrplot)
 library(corrplot)
 ```
 
-# Acropora pulchra 
+# Porites evermanni 
 
 ## Load and format data 
 
 ```{r}
-apul_mrna<-read_csv(file="D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")%>%
-  rename("mrna_id"=gene_id, "sample140"=`RNA-ACR-140`, "sample145"=`RNA-ACR-145`, "sample173"=`RNA-ACR-173`, "sample178"=`RNA-ACR-178`, "sample150"=`RNA-ACR-150`)
+peve_mrna<-read_csv(file="E-Peve/output/06-Peve-Hisat/Peve-gene_count_matrix.csv")%>%
+  rename("mrna_id"=gene_id, "sample71"=`RNA-POR-71`, "sample73"=`RNA-POR-73`, "sample76"=`RNA-POR-76`, "sample79"=`RNA-POR-79`, "sample82"=`RNA-POR-82`)
 
-apul_lncrna<-read_table(file="D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1)%>%
+peve_lncrna<-read_table(file="E-Peve/output/07-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", skip=1)%>%
   select(!c("Chr", "Start", "End", "Strand", "Length"))%>%
   rename("lncrna_id"=Geneid, 
-         "sample140"=`../output/07-Apul-Hisat/RNA-ACR-140.sorted.bam`, 
-         "sample145"=`../output/07-Apul-Hisat/RNA-ACR-145.sorted.bam`, 
-         "sample150"=`../output/07-Apul-Hisat/RNA-ACR-150.sorted.bam`, 
-         "sample173"=`../output/07-Apul-Hisat/RNA-ACR-173.sorted.bam`, 
-         "sample178"=`../output/07-Apul-Hisat/RNA-ACR-178.sorted.bam`)
+         "sample71"=`../output/06-Peve-Hisat/RNA-POR-71.sorted.bam`, 
+         "sample73"=`../output/06-Peve-Hisat/RNA-POR-73.sorted.bam`, 
+         "sample76"=`../output/06-Peve-Hisat/RNA-POR-76.sorted.bam`, 
+         "sample79"=`../output/06-Peve-Hisat/RNA-POR-79.sorted.bam`, 
+         "sample82"=`../output/06-Peve-Hisat/RNA-POR-82.sorted.bam`)
 
-apul_mrna<-as.data.frame(apul_mrna)
-apul_lncrna<-as.data.frame(apul_lncrna)
+peve_mrna<-as.data.frame(peve_mrna)
+peve_lncrna<-as.data.frame(peve_lncrna)
 
-str(apul_mrna)
-str(apul_lncrna)
+str(peve_mrna)
+str(peve_lncrna)
 ```
 
 Remove mRNA and lncRNA with 0 in all samples. 
 
 ```{r}
 # Remove any genes with 0 counts across samples 
-apul_mrna<-apul_mrna %>%
+peve_mrna<-peve_mrna %>%
      mutate(Total = rowSums(.[, 2:6]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 
-apul_lncrna<-apul_lncrna %>%
+peve_lncrna<-peve_lncrna %>%
      mutate(Total = rowSums(.[, 2:6]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 ```
 
-We now have 20690 lncRNAs and 33624 mRNAs.  
+We now have 6372 lncRNAs and 31501 mRNAs.  
 
 Set row names. 
 
 ```{r}
-rownames(apul_mrna)<-apul_mrna$mrna_id
-apul_mrna<-apul_mrna%>%select(!mrna_id)
+rownames(peve_mrna)<-peve_mrna$mrna_id
+peve_mrna<-peve_mrna%>%select(!mrna_id)
 ```
 
 ```{r}
-rownames(apul_lncrna)<-apul_lncrna$lncrna_id
-apul_lncrna<-apul_lncrna%>%select(!lncrna_id)
+rownames(peve_lncrna)<-peve_lncrna$lncrna_id
+peve_lncrna<-peve_lncrna%>%select(!lncrna_id)
 ```
 
 Make sample metadata. 
 
 ```{r}
-apul_sample_info <- data.frame(
-  species = c("Acropora pulchra"),
-  sample = colnames(apul_mrna)
+peve_sample_info <- data.frame(
+  species = c("Porites evermanni"),
+  sample = colnames(peve_mrna)
 )
 
-rownames(apul_sample_info)<-apul_sample_info$sample
+rownames(peve_sample_info)<-peve_sample_info$sample
 ```
 
 ## Filter data 
@@ -100,36 +100,36 @@ Filter data to only keep those expressed in all samples.
 ```{r}
 
 
-dge_mRNA <- DGEList(counts = apul_mrna)
-dge_lncRNA <- DGEList(counts = apul_lncrna)
+dge_mRNA <- DGEList(counts = peve_mrna)
+dge_lncRNA <- DGEList(counts = peve_lncrna)
 
 # Calculate CPM
 cpm_mRNA <- cpm(dge_mRNA)
 cpm_lncRNA <- cpm(dge_lncRNA)
 
 # Filtering criteria: CPM > 1 in all samples (100%)
-min_samples <- ncol(apul_mrna) * 1
+min_samples <- ncol(peve_mrna) * 1
 
 # Apply the filter
 keep_mRNA <- rowSums(cpm_mRNA > 1) >= min_samples
 keep_lncRNA <- rowSums(cpm_lncRNA > 1) >= min_samples
 
 # Filtered count matrices
-filtered_mRNA_counts <- apul_mrna[keep_mRNA, ]
-filtered_lncRNA_counts <- apul_lncrna[keep_lncRNA, ]
+filtered_mRNA_counts <- peve_mrna[keep_mRNA, ]
+filtered_lncRNA_counts <- peve_lncrna[keep_lncRNA, ]
 
 # Check the number of features retained
 cat("mRNAs retained:", sum(keep_mRNA), "\n")
 cat("lncRNAs retained:", sum(keep_lncRNA), "\n")
 ```
 
-This reduced mRNAs to 15,280 and lncRNAs to 4,218
+This reduced mRNAs to 11923 and lncRNAs to 2486
 
 ## Normalize data 
 
 ```{r}
 dds_mrna <- DESeqDataSetFromMatrix(countData = filtered_mRNA_counts, 
-                              colData = apul_sample_info, 
+                              colData = peve_sample_info, 
                               design = ~ 1)
 
 # Variance Stabilizing Transformation
@@ -138,7 +138,7 @@ vsd_mrna <- assay(vst(dds_mrna, blind = TRUE))
 
 ```{r}
 dds_lncrna <- DESeqDataSetFromMatrix(countData = filtered_lncRNA_counts, 
-                              colData = apul_sample_info, 
+                              colData = peve_sample_info, 
                               design = ~ 1)
 
 # Variance Stabilizing Transformation
@@ -150,7 +150,6 @@ vsd_lncrna <- assay(vst(dds_lncrna, blind = TRUE))
 Set soft threshold.  
 
 ```{r}
-
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads()  # Enable multi-threading
 allowWGCNAThreads(nThreads = 2)
@@ -166,10 +165,12 @@ datExpr <- datExpr[complete.cases(datExpr), ]
 datExpr <- datExpr[, colSums(is.na(datExpr)) == 0]
 
 # # Choose a set of soft-thresholding powers
-powers <- c(seq(from = 1, to=19, by=2), c(21:30)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
+powers <- c(seq(from = 1, to=19, by=2), c(21:50)) #Create a string of numbers from 1 through 10, and even numbers from 10 through 20
 # 
 # # Call the network topology analysis function
 sft <-pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
+
+sft$powerEstimate
 ```
 
 Plot the results.  
@@ -192,12 +193,12 @@ plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
  text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
 ```
 
-Selected power will be 15 (the first value to cross 0.9 threshold).  
+Selected power will be 30 - no value crossed threshold, selecting limit of tested values.   
 
 ### Generate network 
 
 ```{r}
-selected_power<-15 
+selected_power<-30
 
 # Network construction (adjust power based on sft output)
 net = blockwiseModules(datExpr, power = selected_power,
@@ -218,7 +219,7 @@ MEs<-net$MEs
 moduleLabels<-net$colors
 ```
 
-There are 19 modules after merging similar modules from original 261 modules. 
+There are 23 modules after merging similar modules from original 251 modules. 
 
 Determine whether mRNA and or lncRNA are present in each module. 
 
@@ -238,11 +239,13 @@ gene_module_info$Module <- paste0("ME", gene_module_info$Module)
 ```
 
 Classify modules based on the proportion of the module comprised by mRNAs.   
+
+For now I am using any Peve or STRG mRNA id (we will revisit the stringtie calls later).  
 ```{r}
 # Function to calculate the proportion of mRNAs (genes with "FUN" in ID)
 calculate_mRNA_proportion <- function(genes) {
   total_genes <- length(genes)
-  mRNA_count <- sum(grepl("FUN", genes))
+  mRNA_count <- sum(grepl("Peve|STRG", genes))
   
   # Proportion of mRNAs
   proportion_mRNA <- mRNA_count / total_genes
@@ -256,6 +259,9 @@ module_mRNA_proportion <- tapply(gene_module_info$Gene,
 
 # View the proportions
 module_mRNA_proportion
+
+#Add ME to all the names
+names(module_mRNA_proportion) <- paste0("ME", names(module_mRNA_proportion))
 ```
 
 ### Run correlation between modules. 
@@ -267,11 +273,11 @@ cor_matrix = cor(moduleEigengenes)
 Compute correlations with Spearman correlation and BH p-value adjustment.   
 ```{r}
 # Compute Spearman correlation between mRNA and lncRNA
-apul_cor_results <- corr.test(moduleEigengenes, method = "spearman", adjust = "BH")
+peve_cor_results <- corr.test(moduleEigengenes, method = "spearman", adjust = "BH")
 
 # Extract correlation values and p-values
-apul_cor_matrix <- apul_cor_results$r  # Correlation coefficients
-apul_p_matrix <- apul_cor_results$p  # Adjusted p-values
+peve_cor_matrix <- peve_cor_results$r  # Correlation coefficients
+peve_p_matrix <- peve_cor_results$p  # Adjusted p-values
 ```
 
 Construct network. 
@@ -281,20 +287,20 @@ cor_threshold <- 0.6  # Adjust based on desired stringency
 p_threshold <- 0.05
 
 # Convert correlation matrix into an edge list
-apul_significant_edges <- which(abs(apul_cor_matrix) > cor_threshold & apul_p_matrix < p_threshold, arr.ind = TRUE)
+peve_significant_edges <- which(abs(peve_cor_matrix) > cor_threshold & peve_p_matrix < p_threshold, arr.ind = TRUE)
 
-apul_edge_list <- data.frame(
-  mRNA = rownames(apul_cor_matrix)[apul_significant_edges[,1]],
-  lncRNA = colnames(apul_cor_matrix)[apul_significant_edges[,2]],
-  correlation = apul_cor_matrix[apul_significant_edges]
+peve_edge_list <- data.frame(
+  mRNA = rownames(peve_cor_matrix)[peve_significant_edges[,1]],
+  lncRNA = colnames(peve_cor_matrix)[peve_significant_edges[,2]],
+  correlation = peve_cor_matrix[peve_significant_edges]
 )
 
 # Construct network graph
-apul_network <- graph_from_data_frame(apul_edge_list, directed = FALSE)
+peve_network <- graph_from_data_frame(peve_edge_list, directed = FALSE)
 
 module_mRNA_proportion<-as.data.frame(module_mRNA_proportion)
 
-V(apul_network)$prop_mrna <- module_mRNA_proportion$module_mRNA_proportion[match(V(apul_network)$name, rownames(module_mRNA_proportion))]
+V(peve_network)$prop_mrna <- module_mRNA_proportion$module_mRNA_proportion[match(V(peve_network)$name, rownames(module_mRNA_proportion))]
 ```
 
 Plot network. 
@@ -306,7 +312,7 @@ ggraph(apul_network, layout = "fr") +  # Force-directed layout
   scale_colour_gradient(name="Prop. mRNA", low = "purple", high = "cyan3")+
   geom_node_text(aes(label = name), repel = TRUE, size = 4) +
   theme_void() +
-  labs(title = "A. pulchra mRNA-lncRNA Network")
+  labs(title = "P. evermanni mRNA-lncRNA Network")
 ```
 
 Lines = coexpression between modules  
@@ -354,7 +360,7 @@ ggplot(stack_long, aes(x = module, y = Count, fill = RNA_Type)) +
                                "lncRNAs" = "salmon"), 
                     labels = c("mRNA", "lncRNA"))+
   theme_classic() +
-  labs(title = "A. pulchra module mRNA and lncRNA components",
+  labs(title = "P. evermanni module mRNA and lncRNA components",
        x = "Module",
        y = "Counts",
        fill = "RNA Type") +
@@ -385,8 +391,8 @@ expression_plots<-plot_MEs%>%
   facet_wrap(~ Module)+
     geom_hline(yintercept = 0, linetype="dashed", color = "grey")+
   geom_point()+
+  ggtitle("Porites evermanni mRNA-lncRNA modules")+
   geom_line(aes(group=1))+
-  ggtitle("Acropora pulchra mRNA-lncRNA modules")+
   theme_classic()+ 
   theme(axis.text.x=element_text(angle = 90, hjust=1)); expression_plots
 ```
@@ -397,92 +403,147 @@ Which modules were significantly correlated? Show correlation matrix.
 
 ```{r}
 # Compute Spearman correlation between mRNA and lncRNA
-apul_cor_results 
+peve_cor_results 
 
 # Extract correlation values and p-values
-apul_cor_matrix  # Correlation coefficients
-apul_p_matrix  # Adjusted p-values
+peve_cor_matrix  # Correlation coefficients
+peve_p_matrix  # Adjusted p-values
 ```
 
 ```{r}
-ggcorrplot(apul_cor_results$r, 
+ggcorrplot(peve_cor_results$r, 
            type = "lower", # Only plot lower triangle
-           p.mat = apul_p_matrix, 
+           p.mat = peve_p_matrix, 
            sig.level = 0.05,  # Show significant correlations
            insig = "blank",  # Remove insignificant correlations
            lab = TRUE,  # Show correlation coefficients
            lab_size = 4,  # Label size
            colors = c("blue", "white", "red"),  # Color gradient
-           title = "A. pulchra Module Correlation Matrix")
+           title = "P. evermanni Module Correlation Matrix")
 ```
 
 There is a significant positive correlation between modules 
-- 14 and 8 (r=0.9)
+- 8 and 9
 
 There is a significant negative correlation between modules 
-- 19 and 9 (r=-0.9)
-- 17 and 15 (r=-0.9)
-- 16 and 8 (r=-0.9)
-- 15 and 7 (r=-0.9)
-- 13 and 10 (r=-1)
+- 16 and 23
+- 21 and 9
+- 19 and 13
+- 17 and 1
+- 16 and 7
+- 13 and 11
+- 9 and 3
+- 8 and 3
+- 6 and 1
+- 2 and 1
 
 Plot specific modules of interest.  
 
-Modules 14 and 8 
+Modules 8 and 9
 ```{r}
 moduleEigengenes%>%
   
-  ggplot(aes(x=ME8, y=ME14))+
+  ggplot(aes(x=ME8, y=ME9))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
 ```
 
-Modules 19 and 9 
+Modules 16 and 23 
 ```{r}
 moduleEigengenes%>%
   
-  ggplot(aes(x=ME9, y=ME19))+
+  ggplot(aes(x=ME16, y=ME23))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
 ```
 
-Modules 17 and 15 
+Modules 21 and 9
 ```{r}
 moduleEigengenes%>%
   
-  ggplot(aes(x=ME15, y=ME17))+
+  ggplot(aes(x=ME21, y=ME9))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
 ```
 
-Modules 8 and 16 
+Modules 19 and 13
 ```{r}
 moduleEigengenes%>%
   
-  ggplot(aes(x=ME8, y=ME16))+
+  ggplot(aes(x=ME19, y=ME13))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
 ```
 
-Modules 7 and 15 
+Modules 17 and 1 
 ```{r}
 moduleEigengenes%>%
-  
-  ggplot(aes(x=ME7, y=ME15))+
+
+  ggplot(aes(x=ME17, y=ME1))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
 ```
 
-Modules 13 and 10 
+Modules 16 and 7
 ```{r}
 moduleEigengenes%>%
   
-  ggplot(aes(x=ME10, y=ME13))+
+  ggplot(aes(x=ME16, y=ME7))+
+  geom_point()+
+  geom_smooth(method="lm", se=TRUE)+
+  theme_classic()
+```
+
+Modules 13 and 11
+```{r}
+moduleEigengenes%>%
+  
+  ggplot(aes(x=ME13, y=ME11))+
+  geom_point()+
+  geom_smooth(method="lm", se=TRUE)+
+  theme_classic()
+```
+
+Modules 9 and 3
+```{r}
+moduleEigengenes%>%
+  
+  ggplot(aes(x=ME9, y=ME3))+
+  geom_point()+
+  geom_smooth(method="lm", se=TRUE)+
+  theme_classic()
+```
+
+Modules 8 and 3
+```{r}
+moduleEigengenes%>%
+  
+  ggplot(aes(x=ME8, y=ME3))+
+  geom_point()+
+  geom_smooth(method="lm", se=TRUE)+
+  theme_classic()
+```
+
+Modules 6 and 1
+```{r}
+moduleEigengenes%>%
+  
+  ggplot(aes(x=ME6, y=ME1))+
+  geom_point()+
+  geom_smooth(method="lm", se=TRUE)+
+  theme_classic()
+```
+
+Modules 2 and 1
+```{r}
+moduleEigengenes%>%
+  
+  ggplot(aes(x=ME2, y=ME1))+
   geom_point()+
   geom_smooth(method="lm", se=TRUE)+
   theme_classic()
@@ -491,10 +552,10 @@ moduleEigengenes%>%
 ## Next steps
 
 Examine lncRNAs and mRNAs in co regulated networks 
-MEs 14, 8, and 16 
-MEs 19, 9
-MEs 17, 15, 7
-MEs 10, 13
+MEs 7, 16, 23
+MEs 21, 9, 8, 3
+MEs 19, 13, 11
+MEs 17, 1, 2, 6
 
 We could also do functional enrichment on each individual module to look at these different groups of coexpression.  
 
