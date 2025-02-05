@@ -1,5 +1,5 @@
 ---
-title: "19-Apul lncRNA"
+title: "22-Apul methylation"
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -27,34 +27,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-We have a bed file.
 
-```{bash}
-head ../output/10.1-Apul-lncRNA/*lncRNA.*
-```
+Methylation files at https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/
 
+![](http://gannet.fish.washington.edu/seashell/snaps/2025-02-05_07-56-52.png)
 
-
-```{bash}
-awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' ../output/10.1-Apul-lncRNA/Apul_lncRNA.bed \
-| sed 's/-1/1/g' \
-> ../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf
-```
 
 
 ```{bash}
-head ../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf
+wget -r \
+--no-directories --no-parent \
+-P ../data \
+-A "423*.gz,427*.gz,439*.gz,467*.gz,413*.gz" \
+https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/
 ```
 
 
-```{r, engine='bash'}
-/home/shared/subread-2.0.5-Linux-x86_64/bin/featureCounts \
--T 42 \
--a ../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf \
--o ../output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt \
--t lncRNA \
--g gene_id \
--p \
-../output/07-Apul-Hisat/*sorted.bam
-```
 
