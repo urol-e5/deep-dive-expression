@@ -1,6 +1,7 @@
 ---
 title: "Peve Gene expression lncRNA correlations"
-output: html_document
+output: 
+  github_document: null
 date: "2025-02-04"
 editor_options: 
   chunk_output_type: console
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Load libraries 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(DESeq2)
@@ -260,8 +261,6 @@ module_mRNA_proportion <- tapply(gene_module_info$Gene,
 # View the proportions
 module_mRNA_proportion
 
-#Add ME to all the names
-names(module_mRNA_proportion) <- paste0("ME", names(module_mRNA_proportion))
 ```
 
 ### Run correlation between modules. 
@@ -306,7 +305,7 @@ V(peve_network)$prop_mrna <- module_mRNA_proportion$module_mRNA_proportion[match
 Plot network. 
 ```{r}
 # Visualize network
-ggraph(apul_network, layout = "fr") +  # Force-directed layout
+ggraph(peve_network, layout = "fr") +  # Force-directed layout
   geom_edge_link(aes(edge_alpha = correlation), show.legend = TRUE, width=3) +
   geom_node_point(aes(colour=prop_mrna), size = 5) +
   scale_colour_gradient(name="Prop. mRNA", low = "purple", high = "cyan3")+
@@ -314,9 +313,6 @@ ggraph(apul_network, layout = "fr") +  # Force-directed layout
   theme_void() +
   labs(title = "P. evermanni mRNA-lncRNA Network")
 ```
-
-Lines = coexpression between modules  
-Darker lines = stronger correlation, lighter line  weaker correlation
 
 ### Plot eigengene patterns and proportions of mRNA and lncRNAs
 

@@ -1,6 +1,7 @@
 ---
 title: "Apul Gene expression lncRNA correlations"
-output: html_document
+output: 
+  github_document: null
 date: "2025-02-04"
 editor_options: 
   chunk_output_type: console
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Load libraries 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(DESeq2)

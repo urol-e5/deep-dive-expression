@@ -1,6 +1,7 @@
 ---
 title: "Ptuh Gene expression lncRNA correlations"
-output: html_document
+output: 
+  github_document: null
 date: "2025-02-04"
 editor_options: 
   chunk_output_type: console
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Load libraries 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
 library(DESeq2)
@@ -304,7 +305,7 @@ V(ptuh_network)$prop_mrna <- module_mRNA_proportion$module_mRNA_proportion[match
 Plot network. 
 ```{r}
 # Visualize network
-ggraph(apul_network, layout = "fr") +  # Force-directed layout
+ggraph(ptuh_network, layout = "fr") +  # Force-directed layout
   geom_edge_link(aes(edge_alpha = correlation), show.legend = TRUE, width=3) +
   geom_node_point(aes(colour=prop_mrna), size = 5) +
   scale_colour_gradient(name="Prop. mRNA", low = "purple", high = "cyan3")+
