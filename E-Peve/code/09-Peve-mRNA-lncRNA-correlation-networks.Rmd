@@ -36,7 +36,7 @@ library(corrplot)
 ## Load and format data 
 
 ```{r}
-peve_mrna<-read_csv(file="E-Peve/output/06-Peve-Hisat/Peve-gene_count_matrix.csv")%>%
+peve_mrna<-read_csv(file="E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")%>%
   rename("mrna_id"=gene_id, "sample71"=`RNA-POR-71`, "sample73"=`RNA-POR-73`, "sample76"=`RNA-POR-76`, "sample79"=`RNA-POR-79`, "sample82"=`RNA-POR-82`)
 
 peve_lncrna<-read_table(file="E-Peve/output/07-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", skip=1)%>%
@@ -241,12 +241,11 @@ gene_module_info$Module <- paste0("ME", gene_module_info$Module)
 
 Classify modules based on the proportion of the module comprised by mRNAs.   
 
-For now I am using any Peve or STRG mRNA id (we will revisit the stringtie calls later).  
 ```{r}
 # Function to calculate the proportion of mRNAs (genes with "FUN" in ID)
 calculate_mRNA_proportion <- function(genes) {
   total_genes <- length(genes)
-  mRNA_count <- sum(grepl("Peve|STRG", genes))
+  mRNA_count <- sum(grepl("Peve", genes))
   
   # Proportion of mRNAs
   proportion_mRNA <- mRNA_count / total_genes
