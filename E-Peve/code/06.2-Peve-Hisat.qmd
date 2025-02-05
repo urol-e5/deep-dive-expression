@@ -1,5 +1,5 @@
 ---
-title: "07- Peve HiSat2"
+title: "06.2- Peve HiSat2"
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -122,21 +122,20 @@ rm ../output/06-Peve-Hisat/*sam
 ```
 
 
+
+## REVISION STARTS HERE
+
 # StringTie
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples--an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
 Getting gff
 
-```{r, engine='bash'}
 
-cd ../data
-wget https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.annot.gff
-```
 
 
 ```{r, engine='bash'}
 
-head ../data/Porites_evermanni_v1.annot.gff
+tail ../data/Porites_evermanni_validated.gff3
 
 ```
 
@@ -146,16 +145,16 @@ find ../output/06-Peve-Hisat/*sorted.bam \
 /home/shared/stringtie-2.2.1.Linux_x86_64/stringtie \
 -p 32 \
 -eB \
--G ../data/Porites_evermanni_v1.annot.gff \
--o ../output/06-Peve-Hisat/{}.gtf \
+-G ../data/Porites_evermanni_validated.gff3 \
+-o ../output/06.2-Peve-Hisat/{}.gtf \
 ../output/06-Peve-Hisat/{}.sorted.bam
 ```
 
 
 ```{r, engine='bash', eval=TRUE}
-wc -l ../output/06-Peve-Hisat/RNA*.gtf
-ls ../output/06-Peve-Hisat/RNA*.gtf
-#head ../output/06-Peve-Hisat/RNA*.gtf
+wc -l ../output/06.2-Peve-Hisat/RNA*.gtf
+ls ../output/06.2-Peve-Hisat/RNA*.gtf
+
 ```
 
 
@@ -165,35 +164,33 @@ ls ../output/06-Peve-Hisat/RNA*.gtf
 
 
 ```{bash}
-for file in $(ls ../output/06-Peve-Hisat/*.gtf); do
+for file in $(ls ../output/06.2-Peve-Hisat/*.gtf); do
   sample=$(basename "$file" .gtf)  # Extract sample name from filename
   echo "$sample $file"
-done > ../output/06-Peve-Hisat/list01.txt
+done > ../output/06.2-Peve-Hisat/list01.txt
 ```
 
 
 
 
 ```{r, engine='bash'}
-head ../output/06-Peve-Hisat/list01.txt
+head ../output/06.2-Peve-Hisat/list01.txt
 ```
 
 
 
-```{r, engine='bash'}
+```{bash}
 python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
--i ../output/06-Peve-Hisat/list01.txt \
--g ../output/06-Peve-Hisat/gene_count_matrix.csv \
--t ../output/06-Peve-Hisat/transcript_count_matrix.csv
-
-head ../output/06-Peve-Hisat/*matrix.csv
+-i ../output/06.2-Peve-Hisat/list01.txt \
+-g ../output/06.2-Peve-Hisat/gene_count_matrix.csv \
+-t ../output/06.2-Peve-Hisat/transcript_count_matrix.csv
 
 ```
 
 
 
 ```{bash}
-cp ../output/06-Peve-Hisat/gene_count_matrix.csv ../output/06-Peve-Hisat/Peve-gene_count_matrix.csv
+cp ../output/06.2-Peve-Hisat/gene_count_matrix.csv ../output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv
 ```
 
 

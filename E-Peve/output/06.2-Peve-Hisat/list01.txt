@@ -1,0 +1,5 @@
+RNA-POR-71 ../output/06.2-Peve-Hisat/RNA-POR-71.gtf
+RNA-POR-73 ../output/06.2-Peve-Hisat/RNA-POR-73.gtf
+RNA-POR-76 ../output/06.2-Peve-Hisat/RNA-POR-76.gtf
+RNA-POR-79 ../output/06.2-Peve-Hisat/RNA-POR-79.gtf
+RNA-POR-82 ../output/06.2-Peve-Hisat/RNA-POR-82.gtf
