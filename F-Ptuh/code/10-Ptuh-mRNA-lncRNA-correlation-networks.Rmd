@@ -36,7 +36,7 @@ library(corrplot)
 ## Load and format data 
 
 ```{r}
-ptuh_mrna<-read_csv(file="F-Ptuh/output/06-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")%>%
+ptuh_mrna<-read_csv(file="F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")%>%
   rename("mrna_id"=gene_id, "sample47"=`RNA-POC-47`, "sample48"=`RNA-POC-48`, "sample50"=`RNA-POC-50`, "sample53"=`RNA-POC-53`, "sample57"=`RNA-POC-57`)
 
 ptuh_lncrna<-read_table(file="F-Ptuh/output/08-Ptuh-lncRNA-matrix/Peve-lncRNA-counts.txt", skip=1)%>%
@@ -238,13 +238,12 @@ gene_module_info$Module <- paste0("ME", gene_module_info$Module)
 ```
 
 Classify modules based on the proportion of the module comprised by mRNAs.   
-
-For now I am using any Peve or STRG mRNA id (we will revisit the stringtie calls later).  
+ 
 ```{r}
 # Function to calculate the proportion of mRNAs (genes with "FUN" in ID)
 calculate_mRNA_proportion <- function(genes) {
   total_genes <- length(genes)
-  mRNA_count <- sum(grepl("Peve|STRG", genes))
+  mRNA_count <- sum(grepl("gene", genes))
   
   # Proportion of mRNAs
   proportion_mRNA <- mRNA_count / total_genes
@@ -313,9 +312,6 @@ ggraph(ptuh_network, layout = "fr") +  # Force-directed layout
   theme_void() +
   labs(title = "P. tuahiniensis mRNA-lncRNA Network")
 ```
-
-Lines = coexpression between modules  
-Darker lines = stronger correlation, lighter line  weaker correlation
 
 ### Plot eigengene patterns and proportions of mRNA and lncRNAs
 
@@ -421,174 +417,11 @@ ggcorrplot(ptuh_cor_results$r,
            title = "P. tuahiniensis Module Correlation Matrix")
 ```
 
-There is a significant positive correlation between modules 
-- 15 and 5
-- 18 and 4
-- 17 and 11
-- 21 and 9
-
-There is a significant negative correlation between modules 
-- 1 and 3
-- 10 and 8 
-- 13 and 5 
-- 15 and 4
-- 14 and 11
-- 15 and 4 
-- 17 and 14 
-- 18 and 9 
-- 19 and 9 
-- 22 and 7 
-
-Plot specific modules of interest.  
-
-Modules 15 and 5
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME15, y=ME5))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 18 and 4
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME18, y=ME4))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 17 and 11
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME17, y=ME11))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 21 and 9
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME21, y=ME9))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 3 and 1 
-```{r}
-moduleEigengenes%>%
-
-  ggplot(aes(x=ME3, y=ME1))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 10 and 8
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME10, y=ME8))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 13 and 5
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME13, y=ME5))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 15 and 4
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME15, y=ME4))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 14 and 11
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME14, y=ME11))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 15 and 4
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME15, y=ME4))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 17 and 14
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME17, y=ME14))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 18 and 9
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME18, y=ME9))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 19 and 9
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME19, y=ME9))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-Modules 22 and 7
-```{r}
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME22, y=ME7))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
 
 ## Next steps
 
 Examine lncRNAs and mRNAs in co regulated networks 
-MEs 1, 3
-MEs 22, 7
-MEs 13, 5, 15, 4, 18, 9, 20, 21
-MEs 8, 10
-MEs 14, 11, 17
+MEs 
 
 We could also do functional enrichment on each individual module to look at these different groups of coexpression.  
 
