@@ -156,6 +156,9 @@ wc -l ../output/06.2-Peve-Hisat/RNA*.gtf
 ls ../output/06.2-Peve-Hisat/RNA*.gtf
 
 ```
+```{bash}
+head -3 ../output/06.2-Peve-Hisat/RNA*.gtf
+```
 
 
 
@@ -186,6 +189,7 @@ python /home/shared/stringtie-2.2.1.Linux_x86_64/prepDE.py \
 -t ../output/06.2-Peve-Hisat/transcript_count_matrix.csv
 
 ```
+
 
 
 
