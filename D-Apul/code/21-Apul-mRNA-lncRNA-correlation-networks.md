@@ -530,9 +530,6 @@ ggraph(apul_network, layout = "fr") +  # Force-directed layout
 
 ![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
-Lines = coexpression between modules  
-Darker lines = stronger correlation, lighter line weaker correlation
-
 ### Plot eigengene patterns and proportions of mRNA and lncRNAs
 
 ``` r
@@ -886,109 +883,9 @@ ggcorrplot(apul_cor_results$r,
 
 ![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
-There is a significant positive correlation between modules - 14 and 8
-(r=0.9)
-
-There is a significant negative correlation between modules - 19 and 9
-(r=-0.9) - 17 and 15 (r=-0.9) - 16 and 8 (r=-0.9) - 15 and 7 (r=-0.9) -
-13 and 10 (r=-1)
-
-Plot specific modules of interest.
-
-Modules 14 and 8
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME8, y=ME14))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
-
-Modules 19 and 9
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME9, y=ME19))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
-
-Modules 17 and 15
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME15, y=ME17))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
-
-Modules 8 and 16
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME8, y=ME16))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
-
-Modules 7 and 15
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME7, y=ME15))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
-
-Modules 13 and 10
-
-``` r
-moduleEigengenes%>%
-  
-  ggplot(aes(x=ME10, y=ME13))+
-  geom_point()+
-  geom_smooth(method="lm", se=TRUE)+
-  theme_classic()
-```
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-![](21-Apul-mRNA-lncRNA-correlation-networks_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
-
 ## Next steps
 
-Examine lncRNAs and mRNAs in co regulated networks MEs 14, 8, and 16 MEs
-19, 9 MEs 17, 15, 7 MEs 10, 13
+Examine lncRNAs and mRNAs in co regulated networks
 
 We could also do functional enrichment on each individual module to look
 at these different groups of coexpression.
