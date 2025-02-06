@@ -3,6 +3,14 @@
 .RData
 .Ruserdata
 
+*.fq
+*.fastq
+*.fq.gz
+*.fastq.gz
+Apulchra-genome.fa
+*.ht2
+*.bashvars
+*.bam
 
 data/*.fna
 data/*.fasta
