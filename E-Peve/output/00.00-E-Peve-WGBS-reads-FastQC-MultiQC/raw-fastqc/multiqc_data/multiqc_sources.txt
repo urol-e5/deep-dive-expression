@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	487_S9_R1_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/487_S9_R1_001_fastqc.zip
+FastQC	all_sections	491_S7_R2_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/491_S7_R2_001_fastqc.zip
+FastQC	all_sections	487_S9_R2_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/487_S9_R2_001_fastqc.zip
+FastQC	all_sections	471_S6_R1_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/471_S6_R1_001_fastqc.zip
+FastQC	all_sections	421_S8_R2_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/421_S8_R2_001_fastqc.zip
+FastQC	all_sections	489_S10_R2_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/489_S10_R2_001_fastqc.zip
+FastQC	all_sections	471_S6_R2_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/471_S6_R2_001_fastqc.zip
+FastQC	all_sections	491_S7_R1_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/491_S7_R1_001_fastqc.zip
+FastQC	all_sections	421_S8_R1_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/421_S8_R1_001_fastqc.zip
+FastQC	all_sections	489_S10_R1_001	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/00.00-E-Peve-WGBS-reads-FastQC-MultiQC/raw-fastqc/489_S10_R1_001_fastqc.zip

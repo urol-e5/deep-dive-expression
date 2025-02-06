@@ -1,0 +1,248 @@
+---
+title: "00.00-D-Apul-WGBS-reads-FastQC-MultiQC"
+author: "Sam White"
+date: "2025-02-06"
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: references.bib
+---
+
+# Background
+
+This Rmd file will download raw WGBS-seq FastQs for *A.pulchra* and evaluate them using [FastQC](https://github.com/s-andrews/FastQC) and [MultiQC](https://multiqc.info/) [@ewels2016].
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+# Create a Bash variables file
+
+This allows usage of Bash variables across R Markdown chunks.
+
+```{r save-bash-variables-to-rvars-file, engine='bash', eval=TRUE}
+{
+echo "#### Assign Variables ####"
+echo ""
+
+echo "# Data directories"
+echo 'export deep_dive_expression_dir=/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression'
+echo 'export output_dir_top=${deep_dive_expression_dir}/D-Apul/output/00.00-D-Apul-WGBS-reads-FastQC-MultiQC'
+echo 'export raw_fastqc_dir=${output_dir_top}/raw-fastqc'
+echo 'export raw_reads_dir=${deep_dive_expression_dir}/D-Apul/data/raw-fastqs'
+echo 'export raw_reads_url="https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/"'
+echo ""
+
+echo "# Paths to programs"
+echo 'export fastqc=/home/shared/FastQC-0.12.1/fastqc'
+echo 'export multiqc=/home/sam/programs/mambaforge/bin/multiqc'
+echo ""
+
+echo "# Set FastQ filename patterns"
+echo "export fastq_pattern='*.fastq.gz'"
+echo "export R1_fastq_pattern='*_R1_*.fastq.gz'"
+echo "export R2_fastq_pattern='*_R2_*.fastq.gz'"
+echo ""
+
+echo "# Set number of CPUs to use"
+echo 'export threads=40'
+echo ""
+
+
+echo "## Inititalize arrays"
+echo 'export fastq_array_R1=()'
+echo 'export fastq_array_R2=()'
+echo 'export raw_fastqs_array=()'
+echo 'export R1_names_array=()'
+echo 'export R2_names_array=()'
+echo ""
+
+echo "# Programs associative array"
+echo "declare -A programs_array"
+echo "programs_array=("
+echo '[fastqc]="${fastqc}" \'
+echo '[multiqc]="${multiqc}" \'
+echo ")"
+echo ""
+
+echo "# Print formatting"
+echo 'export line="--------------------------------------------------------"'
+echo ""
+} > .bashvars
+
+cat .bashvars
+```
+
+# Download *A.pulchra* RNA-seq FastQs
+
+Reads are downloaded from <https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/>
+
+Since sequencing included multiple species, the code will also parse only those that are *A.pulchra*.
+
+The `--cut-dirs 3` command cuts the preceding directory structure (i.e. `nightingales/E5-coral-deep-dive-expression/genohub2216545/`) so that we just end up with the reads.
+
+## Inspect metadata file
+
+```{r, inspect-metadta, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+head ${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv |
+column -t -s","
+```
+
+## Download raw reads
+
+```{bash download-raw-reads, engine='bash'}
+# Load bash variables into memory
+source .bashvars
+
+# Make output directory if it doesn't exist
+mkdir --parents ${raw_reads_dir}
+
+# Create list of only A.pulchra sample names
+sample_list=$(awk -F "," '$6 ~ /^ACR/ {print $1}' ${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv)
+
+echo ""
+echo "${line}"
+echo ""
+echo "Sample list:"
+echo ""
+echo "${sample_list}"
+echo ""
+echo "${line}"
+echo ""
+
+
+# Use printf to format each item for use in wget
+formatted_list=$(printf "*%s_*," ${sample_list})
+
+# Remove the trailing comma
+formatted_list=${formatted_list%,}
+
+# Output the final wget command
+echo ""
+echo "${line}"
+echo ""
+echo "Formatted wget accept list:"
+echo ""
+echo "wget --accept=\"$formatted_list\""
+echo ""
+echo "${line}"
+echo ""
+
+# Run wget to retrieve FastQs and MD5 files
+# Note: the --no-clobber command will skip re-downloading any files that are already present in the output directory
+wget \
+--directory-prefix ${raw_reads_dir} \
+--recursive \
+--no-check-certificate \
+--continue \
+--cut-dirs 3 \
+--no-host-directories \
+--no-parent \
+--quiet \
+--no-clobber \
+--accept=${formatted_list} ${raw_reads_url}
+
+ls -lh "${raw_reads_dir}"
+```
+
+## Verify raw read checksums
+
+```{bash verify-raw-read-checksums, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+cd "${raw_reads_dir}"
+
+# Checksums file contains other files, so this just looks for the RNAseq files.
+for file in *.md5
+do
+  md5sum --check "${file}"
+done
+```
+
+# FastQC/MultiQC on raw reads
+
+```{bash raw-fastqc-multiqc, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# Make output directory if it doesn't exist
+mkdir --parents "${raw_fastqc_dir}"
+
+############ RUN FASTQC ############
+
+
+# Create array of trimmed FastQs
+raw_fastqs_array=(${raw_reads_dir}/${fastq_pattern})
+
+# Pass array contents to new variable as space-delimited list
+raw_fastqc_list=$(echo "${raw_fastqs_array[*]}")
+
+echo "Beginning FastQC on raw reads..."
+echo ""
+
+# Run FastQC
+### NOTE: Do NOT quote raw_fastqc_list
+${programs_array[fastqc]} \
+--threads ${threads} \
+--outdir ${raw_fastqc_dir} \
+--quiet \
+${raw_fastqc_list}
+
+echo "FastQC on raw reads complete!"
+echo ""
+
+############ END FASTQC ############
+
+############ RUN MULTIQC ############
+echo "Beginning MultiQC on raw FastQC..."
+echo ""
+
+${programs_array[multiqc]} ${raw_fastqc_dir} -o ${raw_fastqc_dir}
+
+echo ""
+echo "MultiQC on raw FastQs complete."
+echo ""
+
+############ END MULTIQC ############
+
+echo "Removing FastQC zip files."
+echo ""
+rm ${raw_fastqc_dir}/*.zip
+echo "FastQC zip files removed."
+echo ""
+```
+
+```{bash, eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+# View directory contents
+ls -lh ${raw_fastqc_dir}
+
+```
