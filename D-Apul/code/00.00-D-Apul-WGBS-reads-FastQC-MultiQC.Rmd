@@ -25,7 +25,7 @@ bibliography: references.bib
 
 # Background
 
-This Rmd file will download raw WGBS-seq FastQs for *A.pulchra* and evaluate them using [FastQC](https://github.com/s-andrews/FastQC) and [MultiQC](https://multiqc.info/)[@ewels2016].
+This Rmd file will download raw WGBS-seq FastQs for *A.pulchra* and evaluate them using [FastQC](https://github.com/s-andrews/FastQC) and [MultiQC](https://multiqc.info/) [@ewels2016].
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -37,8 +37,6 @@ knitr::opts_chunk$set(
   comment = ""         # Prevents appending '##' to beginning of lines in code output
 )
 ```
-
-
 
 # Create a Bash variables file
 
@@ -107,7 +105,6 @@ The `--cut-dirs 3` command cuts the preceding directory structure (i.e. `nightin
 
 ## Inspect metadata file
 
-
 ```{r, inspect-metadta, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
@@ -117,6 +114,7 @@ column -t -s","
 ```
 
 ## Download raw reads
+
 ```{bash download-raw-reads, engine='bash'}
 # Load bash variables into memory
 source .bashvars
@@ -248,5 +246,3 @@ source .bashvars
 ls -lh ${raw_fastqc_dir}
 
 ```
-
-
