@@ -56,21 +56,9 @@ miRNA_counts <- miRNA_counts %>%
 colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
 ```
 
-Filter reads by proportion in sample 
-```{r}
-ffun<-filterfun(pOverA(0.5,5))  #set up filtering parameters--LOOK INTO FILTERING PARAMETERS
-
-# mRNA
-filt_outrm_poa <- genefilter((mRNA_counts), ffun) #apply filter
-sum(filt_outrm_poa) #count number of genes left
-mRNA_counts_filt <- mRNA_counts[filt_outrm_poa,] #keep only rows that passed filter
-head(mRNA_counts_filt)
-str(mRNA_counts_filt)
-```
-
 Read in miranda data 
 ```{r}
-miranda_apul <- read.delim("../../D-Apul/data/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
+miranda_apul <- read.delim("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
 colnames(miranda_apul) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
 
 # Format miranda df 
@@ -96,6 +84,8 @@ ggplot(sum_mirna %>% arrange(desc(mRNA_count)),
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "miRNA", y = "mRNA Count", title = "miRNA Regulation of mRNAs") #+
   #coord_flip()  # Optional: horizontal bar plot for better readability
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 
 # mRNA
 sum_mrna <- miranda_apul %>%
@@ -115,7 +105,7 @@ normalize_counts <- function(counts) {
 miRNA_norm <- normalize_counts(miRNA_counts)
 #miRNA_norm <- as.matrix(miRNA_counts_filt)
 
-mRNA_norm <- normalize_counts(mRNA_counts_filt)
+mRNA_norm <- normalize_counts(mRNA_counts)
 #mRNA_norm <- as.matrix(mRNA_counts_filt)
 ```
 
@@ -320,7 +310,7 @@ pcc_results <- pcc_results %>%
   mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
 
 # Save as csv
-write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/PCC_miRNA_mRNA.csv")
+write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
 ```
 
 Merge with miranda data 
@@ -371,6 +361,8 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Positive and Negative PCC Correlations per miRNA")
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
 Investigate data 
@@ -397,14 +389,14 @@ length(unique(pairs_of_interest_pcc$miRNA))
 length(unique(pairs_of_interest_pcc$mRNA))
 
 # Save pairs of interest df as csv 
-write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_sig_miRNA_mRNA.csv")
+write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 I noticed that the significant pvalues correspond to high correlation values, whereas low correlation values are typically not significant (if using the p<0.05). 
 
 Read data back in so PCC does not have to be run again
 ```{r}
-pairs_of_interest_pcc <- read.csv("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_sig_miRNA_mRNA.csv")
+pairs_of_interest_pcc <- read.csv("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 Plot number of SIGNIFICANT positive and negative interactions for each miRNA
@@ -443,6 +435,8 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Significant Positive and Negative PCC Correlations per miRNA")
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
 Plot using igraph 
@@ -471,7 +465,7 @@ p <- ggraph(g_tbl, layout = "fr") +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
 
-#ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/prelim_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
+ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
 ```
 
 
@@ -528,7 +522,7 @@ n_rows <- ceiling(n_plots / n_cols)
 #grid.arrange(grobs = plots, ncol = n_cols, nrow = n_rows)
 
 # Save plots to a PDF
-pdf("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/correlation_plots.pdf", width = 5 * n_cols, height = 5 * n_rows)
+pdf("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-correlation_plots.pdf", width = 5 * n_cols, height = 5 * n_rows)
 grid.arrange(grobs = plots, ncol = n_cols, nrow = n_rows)
 dev.off()
 ```
