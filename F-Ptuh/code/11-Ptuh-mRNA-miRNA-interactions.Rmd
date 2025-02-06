@@ -1,0 +1,80 @@
+---
+title: "Ptuh mRNA-miRNA interactions"
+author: "Jill Ashey"
+date: "2025-02-06"
+output: html_document
+---
+
+This script will investigate mRNA-miRNA interactions using miranda predictions for Ptuh. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#BiocManager::install("SPONGE")
+
+library(tidyverse)
+#library(mirTarRnaSeq)
+library(reshape2)
+#library(SPONGE)
+library(pheatmap)
+library(energy)
+library(parallel)
+library(ggraph)
+library(tidygraph)
+library(igraph)
+library(genefilter)
+library(gridExtra)
+```
+
+Read in mRNA data 
+```{r}
+mRNA_counts <- read_csv("../output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+mRNA_counts <- as.data.frame(mRNA_counts)
+rownames(mRNA_counts) <- mRNA_counts[,1] #set first column that contains gene names as rownames
+mRNA_counts <- mRNA_counts[,-1] # remove column w/ gene names 
+
+# Remove any genes with 0 counts across samples 
+mRNA_counts<-mRNA_counts %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+```
+
+Read in miRNA data
+```{r}
+miRNA_counts <- read.delim("../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt")
+head(miRNA_counts)
+
+# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+miRNA_counts <- miRNA_counts %>%
+  #select(-sample150) %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+# Rename gene count cols to match miRNA count cols
+#colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
+```
+
+Only 3 miRNA samples successfully sequenced for this species. Remove the samples that did not work from the mRNA df and rename columns to match miRNA df
+```{r}
+mRNA_counts <- mRNA_counts %>%
+  dplyr::rename("sample47" = "RNA-POC-47", "sample48" = "RNA-POC-48", "sample50" = "RNA-POC-50", "sample53" = "RNA-POC-53", "sample57" = "RNA-POC-57")
+```
+
+Read in miranda data 
+```{r}
+getwd()
+miranda_ptuh <- read.delim("output/11-Ptuh-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_ptuh_updated.txt", header = F)
+colnames(miranda_ptuh) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
+
+# Format miranda df 
+miranda_peve$miRNA <- sub("^>", "", miranda_peve$miRNA)  # Remove leading ">"
+miranda_peve$miRNA <- sub("\\..*", "", miranda_peve$miRNA)  # Remove everything from the first period onwards
+miranda_peve$mRNA <- sub(";.*", "", miranda_peve$mRNA)  # Remove everything from ";" onwards
+miranda_peve$mRNA <- sub("ID=", "", miranda_peve$mRNA)  # Remove ID=
+
+length(unique(miranda_peve$miRNA))
+length(unique(miranda_peve$mRNA))
+dim(miranda_peve)
+```
