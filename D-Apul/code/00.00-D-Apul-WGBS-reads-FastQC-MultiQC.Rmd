@@ -50,10 +50,10 @@ echo "#### Assign Variables ####"
 echo ""
 
 echo "# Data directories"
-echo 'export deep-dive-expression_dir=/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression'
-echo 'export output_dir_top=${deep-dive-expression_dir}/D-Apul/output/00.00-D-Apul-WGBS-reads-FastQC-MultiQC'
+echo 'export deep_dive_expression_dir=/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression'
+echo 'export output_dir_top=${deep_dive_expression_dir}/D-Apul/output/00.00-D-Apul-WGBS-reads-FastQC-MultiQC'
 echo 'export raw_fastqc_dir=${output_dir_top}/raw-fastqc'
-echo 'export raw_reads_dir=${deep-dive-expression_dir}/D-Apul/data/raw-fastqs'
+echo 'export raw_reads_dir=${deep_dive_expression_dir}/D-Apul/data/raw-fastqs'
 echo 'export raw_reads_url="https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/"'
 echo ""
 
@@ -99,14 +99,24 @@ cat .bashvars
 
 # Download *A.pulchra* RNA-seq FastQs
 
-## Download raw RNA-seq reads
-
 Reads are downloaded from <https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/>
 
 Since sequencing included multiple species, the code will also parse only those that are *A.pulchra*.
 
 The `--cut-dirs 3` command cuts the preceding directory structure (i.e. `nightingales/E5-coral-deep-dive-expression/genohub2216545/`) so that we just end up with the reads.
 
+## Inspect metadata file
+
+
+```{r, inspect-metadta, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+head ${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv |
+column -t -s","
+```
+
+## Download raw reads
 ```{bash download-raw-reads, engine='bash'}
 # Load bash variables into memory
 source .bashvars
@@ -115,7 +125,7 @@ source .bashvars
 mkdir --parents ${raw_reads_dir}
 
 # Create list of only A.pulchra sample names
-sample_list=$(awk -F "," '$6 ~ /^ACR/ {print $5}' ${deep-dive-expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv)
+sample_list=$(awk -F "," '$6 ~ /^ACR/ {print $1}' ${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv)
 
 echo ""
 echo "${line}"
