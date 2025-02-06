@@ -35,7 +35,7 @@ mRNA_counts <- mRNA_counts[,-1] # remove column w/ gene names
 
 # Remove any genes with 0 counts across samples 
 mRNA_counts<-mRNA_counts %>%
-     mutate(Total = rowSums(.[, 1:4]))%>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 ```
@@ -47,28 +47,25 @@ head(miRNA_counts)
 
 # Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
 miRNA_counts <- miRNA_counts %>%
-  select(-sample150) %>%
-     mutate(Total = rowSums(.[, 1:4]))%>%
+  #select(-sample150) %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 
 # Rename gene count cols to match miRNA count cols
-colnames(mRNA_counts) <- c("sample140.gene", "sample145.gene", "sample173.gene", "sample178.gene")
+colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
 ```
 
 Filter reads by proportion in sample 
 ```{r}
 ffun<-filterfun(pOverA(0.5,5))  #set up filtering parameters--LOOK INTO FILTERING PARAMETERS
 
-# miRNA
-filt_outrm_poa <- genefilter((miRNA_counts), ffun) #apply filter
-sum(filt_outrm_poa) #count number of genes left
-miRNA_counts_filt <- miRNA_counts[filt_outrm_poa,] #keep only rows that passed filter
-
 # mRNA
 filt_outrm_poa <- genefilter((mRNA_counts), ffun) #apply filter
 sum(filt_outrm_poa) #count number of genes left
 mRNA_counts_filt <- mRNA_counts[filt_outrm_poa,] #keep only rows that passed filter
+head(mRNA_counts_filt)
+str(mRNA_counts_filt)
 ```
 
 Read in miranda data 
@@ -80,6 +77,30 @@ colnames(miranda_apul) <- c("miRNA", "mRNA", "score", "energy", "query_start_end
 miranda_apul$miRNA <- sub("^>", "", miranda_apul$miRNA)  # Remove leading ">"
 miranda_apul$miRNA <- sub("\\..*", "", miranda_apul$miRNA)  # Remove everything from the first period onwards
 miranda_apul$mRNA <- sub("::.*", "", miranda_apul$mRNA)  # Remove everything from "::" onwards
+
+length(unique(miranda_apul$miRNA))
+length(unique(miranda_apul$mRNA))
+dim(miranda_apul)
+```
+
+Summarize how many mRNAs each miRNA are predicted to interact with. Summarize how many miRNAs each mRNA are predicted to interact with. 
+```{r}
+sum_mirna <- miranda_apul %>%
+  group_by(miRNA) %>%
+  summarise(mRNA_count = n_distinct(mRNA)) %>% 
+  arrange(desc(mRNA_count))
+
+ggplot(sum_mirna %>% arrange(desc(mRNA_count)), 
+       aes(x = forcats::fct_reorder(miRNA, mRNA_count), y = mRNA_count)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "miRNA", y = "mRNA Count", title = "miRNA Regulation of mRNAs") #+
+  #coord_flip()  # Optional: horizontal bar plot for better readability
+
+# mRNA
+sum_mrna <- miranda_apul %>%
+  group_by(mRNA) %>%
+  summarise(miRNA_count = n_distinct(miRNA))
 ```
 
 Normalize counts
@@ -91,11 +112,11 @@ normalize_counts <- function(counts) {
 }
 
 # Normalize miRNA and mRNA counts
-#miRNA_norm <- normalize_counts(miRNA_counts_filt)
-miRNA_norm <- as.matrix(miRNA_counts_filt)
+miRNA_norm <- normalize_counts(miRNA_counts)
+#miRNA_norm <- as.matrix(miRNA_counts_filt)
 
-#mRNA_norm <- normalize_counts(mRNA_counts_filt)
-mRNA_norm <- as.matrix(mRNA_counts_filt)
+mRNA_norm <- normalize_counts(mRNA_counts_filt)
+#mRNA_norm <- as.matrix(mRNA_counts_filt)
 ```
 
 Run distance correlation using the [energy package in R](https://cran.r-project.org/web/packages/energy/index.html) with rows as features (ie mRNA or miRNA) and columns as samples. 
@@ -293,6 +314,13 @@ pcc_results <- pairs %>%
     pcc_stats = list(calc_pcc(miRNA_norm[miRNA,], mRNA_norm[mRNA,]))
   ) %>%
   unnest_wider(pcc_stats)
+
+# Adjust p-values for FDR
+pcc_results <- pcc_results %>%
+  mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
+
+# Save as csv
+write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/PCC_miRNA_mRNA.csv")
 ```
 
 Merge with miranda data 
@@ -300,6 +328,49 @@ Merge with miranda data
 combined_data_pcc <- pcc_results %>%
   inner_join(miranda_apul, by = c("miRNA", "mRNA"))
 head(combined_data_pcc)
+length(unique(combined_data_pcc$miRNA))
+length(unique(combined_data_pcc$mRNA))
+
+# Save as csv
+write.csv(combined_data_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv")
+```
+
+Plot number of positive and negative interactions for each miRNA
+```{r}
+# Summarize the data
+summary_data <- combined_data_pcc %>%
+  group_by(miRNA) %>%
+  summarise(
+    positive_count = sum(PCC.cor > 0),
+    negative_count = sum(PCC.cor < 0)
+  ) %>%
+  mutate(total_count = positive_count + negative_count) %>%
+  arrange(desc(total_count))
+sum(summary_data$positive_count)
+sum(summary_data$negative_count)
+
+# Assess how many miRNAs have more positive correlations vs more negative ones 
+positive_dominant <- sum(summary_data$positive_count > summary_data$negative_count)
+negative_dominant <- sum(summary_data$negative_count > summary_data$positive_count)
+equal <- sum(summary_data$positive_count == summary_data$negative_count)
+
+cat("miRNAs with more positive correlations:", positive_dominant, "\n")
+cat("miRNAs with more negative correlations:", negative_dominant, "\n")
+cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+
+# Reshape the data for plotting
+plot_data <- summary_data %>%
+  tidyr::pivot_longer(cols = c(positive_count, negative_count),
+                      names_to = "correlation_type",
+                      values_to = "count")
+
+# Create the stacked bar plot
+ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correlation_type)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  labs(x = "miRNA", y = "Count", fill = "Correlation Type",
+       title = "Positive and Negative PCC Correlations per miRNA")
 ```
 
 Investigate data 
@@ -326,10 +397,53 @@ length(unique(pairs_of_interest_pcc$miRNA))
 length(unique(pairs_of_interest_pcc$mRNA))
 
 # Save pairs of interest df as csv 
-write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/PCC_miRNA_mRNA.csv")
+write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 I noticed that the significant pvalues correspond to high correlation values, whereas low correlation values are typically not significant (if using the p<0.05). 
+
+Read data back in so PCC does not have to be run again
+```{r}
+pairs_of_interest_pcc <- read.csv("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_sig_miRNA_mRNA.csv")
+```
+
+Plot number of SIGNIFICANT positive and negative interactions for each miRNA
+```{r}
+# Summarize the data
+summary_data <- pairs_of_interest_pcc %>%
+  group_by(miRNA) %>%
+  summarise(
+    positive_count = sum(PCC.cor > 0),
+    negative_count = sum(PCC.cor < 0)
+  ) %>%
+  mutate(total_count = positive_count + negative_count) %>%
+  arrange(desc(total_count))
+sum(summary_data$positive_count)
+sum(summary_data$negative_count)
+
+# Assess how many miRNAs have more positive correlations vs more negative ones 
+positive_dominant <- sum(summary_data$positive_count > summary_data$negative_count)
+negative_dominant <- sum(summary_data$negative_count > summary_data$positive_count)
+equal <- sum(summary_data$positive_count == summary_data$negative_count)
+
+cat("miRNAs with more positive correlations:", positive_dominant, "\n")
+cat("miRNAs with more negative correlations:", negative_dominant, "\n")
+cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+
+# Reshape the data for plotting
+plot_data <- summary_data %>%
+  tidyr::pivot_longer(cols = c(positive_count, negative_count),
+                      names_to = "correlation_type",
+                      values_to = "count")
+
+# Create the stacked bar plot
+ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correlation_type)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  labs(x = "miRNA", y = "Count", fill = "Correlation Type",
+       title = "Positive and Negative PCC Correlations per miRNA")
+```
 
 Plot using igraph 
 ```{r}
@@ -357,8 +471,12 @@ p <- ggraph(g_tbl, layout = "fr") +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
 
-ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/prelim_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
+#ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/prelim_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
 ```
+
+
+
+
 
 Super cool! 
 
