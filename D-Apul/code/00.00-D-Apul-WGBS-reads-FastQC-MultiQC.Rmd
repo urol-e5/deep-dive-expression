@@ -174,7 +174,7 @@ ls -lh "${raw_reads_dir}"
 
 ## Verify raw read checksums
 
-```{bash verify-raw-read-checksums, engine='bash'}
+```{bash verify-raw-read-checksums, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -189,7 +189,7 @@ done
 
 # FastQC/MultiQC on raw reads
 
-```{bash raw-fastqc-multiqc, engine='bash'}
+```{bash raw-fastqc-multiqc, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -240,7 +240,7 @@ echo "FastQC zip files removed."
 echo ""
 ```
 
-```{bash}
+```{bash, eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
