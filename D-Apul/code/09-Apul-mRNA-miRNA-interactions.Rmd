@@ -442,7 +442,7 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
-       title = "Positive and Negative PCC Correlations per miRNA")
+       title = "Significant Positive and Negative PCC Correlations per miRNA")
 ```
 
 Plot using igraph 
