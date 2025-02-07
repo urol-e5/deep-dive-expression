@@ -219,7 +219,7 @@ knitr::include_graphics("../output/03.01-Apul-RNA-summary-Hisat/GOlegend.png")
 ```
 
 ```{r remove-legend-file, engine='bash', eval=TRUE}
-rm ../output/03.01-Apul-RNA-summary-Hisat/GOlegend.png
+# rm ../output/03.01-Apul-RNA-summary-Hisat/GOlegend.png
 ```
 
 
