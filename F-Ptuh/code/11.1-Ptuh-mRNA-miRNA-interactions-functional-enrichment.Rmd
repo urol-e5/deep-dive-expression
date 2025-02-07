@@ -54,7 +54,7 @@ The following code will perform GO enrichment using the weighted Fisher's exact 
 
 Read in gene-to-go-mappings
 ```{r}
-gene2go_topgo <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+gene2go_topgo <- readMappings("../../M-multi-species/data/Pmea_gene2go.tab", IDsep = ";", sep = "\t")
 ```
 
 Set function to select genes of interest (ie those that have pvalue < 0.05)
@@ -273,7 +273,7 @@ The following code will perform GO enrichment using the weighted Fisher's exact 
 
 Read in gene-to-go-mappings
 ```{r}
-ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+gene2go_topgo <- readMappings("../../M-multi-species/data/Pmea_gene2go.tab", IDsep = ";", sep = "\t")
 ```
 
 Set function to select genes of interest (ie those that have pvalue < 0.05)
@@ -313,7 +313,7 @@ ptuh_gene2go <- ptuh_gene2go %>%
   separate_rows(GO.ID, sep = ";")
 
 # Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
-peve_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
 GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
 
 # Join the datasets based on GO term
@@ -365,7 +365,7 @@ ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
 GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
 
 # Join the datasets based on GO term
-GO_MF_En_sig_gene <- peve_gene2go %>%
+GO_MF_En_sig_gene <- ptuh_gene2go %>%
   left_join(GO_MF_En_sig, by = "GO.ID") %>%
   na.omit()
 
@@ -493,7 +493,7 @@ The following code will perform GO enrichment using the weighted Fisher's exact 
 
 Read in gene-to-go-mappings
 ```{r}
-ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+gene2go_topgo <- readMappings("../../M-multi-species/data/Pmea_gene2go.tab", IDsep = ";", sep = "\t")
 ```
 
 Set function to select genes of interest (ie those that have pvalue < 0.05)
@@ -529,15 +529,15 @@ GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
 Merge `GO_BP_En_sig` with GO and gene info. 
 ```{r}
 # Separate GO terms 
-peve_gene2go <- peve_gene2go %>%
+ptuh_gene2go <- ptuh_gene2go %>%
   separate_rows(GO.ID, sep = ";")
 
 # Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
-peve_gene2go$GO.ID <- trimws(peve_gene2go$GO.ID)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
 GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
 
 # Join the datasets based on GO term
-GO_BP_En_sig_gene <- peve_gene2go %>%
+GO_BP_En_sig_gene <- ptuh_gene2go %>%
   left_join(GO_BP_En_sig, by = "GO.ID") %>%
   na.omit()
 
@@ -713,7 +713,7 @@ The following code will perform GO enrichment using the weighted Fisher's exact 
 
 Read in gene-to-go-mappings
 ```{r}
-ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+gene2go_topgo <- readMappings("../../M-multi-species/data/Pmea_gene2go.tab", IDsep = ";", sep = "\t")
 ```
 
 Set function to select genes of interest (ie those that have pvalue < 0.05)
