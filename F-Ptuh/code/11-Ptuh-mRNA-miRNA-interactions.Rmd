@@ -230,6 +230,12 @@ length(unique(pairs_of_interest_pcc$mRNA))
 write.csv(pairs_of_interest_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
+Read in data so that PCC does not have to be run again, as it is computationally intensive
+```{r}
+pairs_of_interest_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
+```
+
+
 Plot number of SIGNIFICANT positive and negative interactions for each miRNA
 ```{r}
 # Summarize the data
@@ -267,8 +273,8 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Significant Positive and Negative PCC Correlations per miRNA")
 
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
+#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
+#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
 Plot using igraph 
@@ -296,5 +302,6 @@ p <- ggraph(g_tbl, layout = "fr") +
   theme_graph() +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
+#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
 ```
+
