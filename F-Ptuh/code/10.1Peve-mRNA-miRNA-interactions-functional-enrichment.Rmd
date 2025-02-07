@@ -1,0 +1,902 @@
+---
+title: "mRNA-miRNA interactions functional enrichment"
+author: "Jill Ashey"
+date: "2025-02-07"
+output: html_document
+---
+
+This script will use topGO to analyze functional enrichment of miRNA targets for Ptuh 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(topGO)
+library(tidyverse)
+```
+
+
+## Functional enrichment of all targets, as predicted by miranda
+
+TO DO
+
+## Functional enrichment of targets negatively correlated with miRNAs (regardless of correlation significance)
+
+Read in PCC miranda data
+```{r}
+data <- read.csv("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+head(data)
+
+# Filter so that only negative correlations remain 
+neg_corr_data <- data %>%
+  filter(PCC.cor < 0)
+```
+
+Read in gene2go information 
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+colnames(ptuh_gene2go) <- c("mRNA", "GO.ID")
+```
+
+Make list of genes for input to topGO
+```{r}
+# Genes of interest - ie those targeted by miRNAs
+target_genes <- as.character(unique(neg_corr_data$mRNA))
+
+# All genes 
+all_genes <- as.character(ptuh_gene2go$mRNA)
+
+# Apply 1 or 0 if gene is gene of interest 
+GeneList <- factor(as.integer(all_genes %in% target_genes))
+names(GeneList) <- all_genes
+```
+
+The following code will perform GO enrichment using the weighted Fisher's exact test to assess whether specific GO terms are overrepresented in the genes targeted by miRNAs, regardless of correlation significance. 
+
+Read in gene-to-go-mappings
+```{r}
+gene2go_topgo <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+```
+
+Set function to select genes of interest (ie those that have pvalue < 0.05)
+```{r}
+topDiffGenes <- function(allScore) {
+return(allScore < 0.05)}
+```
+
+### Biological Processes
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_BP <-new("topGOdata", ontology="BP", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_BP_FE <- runTest(GO_BP, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_BP_En <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_BP_En$Fisher<-as.numeric(GO_BP_En$Fisher)
+GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
+```
+
+Merge `GO_BP_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_BP_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_BP_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_BP_En_sig_gene$ontology <- "Biological Processes"
+
+# Keep only unique rows 
+GO_BP_En_sig_gene <- unique(GO_BP_En_sig_gene)
+```
+
+### Cellular Components
+
+### Molecular Functions
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_MF <-new("topGOdata", ontology="MF", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_MF_FE <- runTest(GO_MF, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_MF_En <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_MF_En$Fisher<-as.numeric(GO_MF_En$Fisher)
+GO_MF_En_sig<-GO_MF_En[GO_MF_En$Fisher<0.05,]
+```
+
+Merge `GO_MF_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_MF_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_MF_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_MF_En_sig_gene$ontology <- "Molecular Functions"
+
+# Keep only unique rows 
+GO_MF_En_sig_gene <- unique(GO_MF_En_sig_gene)
+```
+
+### Join ontologies 
+
+Bind so there is a df that has significantly enriched GO terms for all ontologies 
+```{r}
+GO_neg_corr_df <- rbind(GO_BP_En_sig_gene, GO_MF_En_sig_gene)
+```
+
+Merge with `GO_neg_corr_df`
+```{r}
+test <- GO_neg_corr_df %>%
+  inner_join(neg_corr_data, by = "mRNA") #%>%
+  #mutate(direction = ifelse(PCC.cor > 0, "Positive", "Negative")) #%>%
+  #filter(ontology != "Cellular Components") #%>%
+  #filter(p_value < 0.1)
+
+# Save as csv 
+write.csv(test, "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_neg_corr_target_enrichment.csv")
+```
+
+Plot!
+```{r}
+plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(shape = 21, size = 5) + 
+  #scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 24) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+```
+
+Examine the top 10 most significant GO terms for BP and MF
+```{r}
+# Function to get top 5 unique terms
+get_top_10_unique <- function(data, ontology_type) {
+  data %>%
+    filter(ontology == ontology_type) %>%
+    arrange(Fisher) %>%
+    distinct(Term, .keep_all = TRUE) %>%
+    slice_head(n = 10)
+}
+
+# Get top 5 unique Biological Processes
+top_10_BP <- get_top_10_unique(test, "Biological Processes")
+
+# Get top 5 unique Molecular Functions
+top_10_MF <- get_top_10_unique(test, "Molecular Functions")
+
+# Combine results
+top_10_combined <- bind_rows(top_10_BP, top_10_MF)
+unique(top_10_combined$Term)
+
+# Plot 
+top_10_combined <- top_10_combined %>%
+  arrange(desc(Fisher)) %>%
+  mutate(Term = factor(Term, levels = unique(Term)))
+
+plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(size = 10, color = "black") + 
+  scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 35) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+```
+
+## Functional enrichment of targets positively correlated with miRNAs (regardless of correlation significance)
+
+Read in PCC miranda data
+```{r}
+data <- read.csv("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+head(data)
+
+# Filter so that only negative correlations remain 
+pos_corr_data <- data %>%
+  filter(PCC.cor > 0)
+```
+
+Read in gene2go information 
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+colnames(ptuh_gene2go) <- c("mRNA", "GO.ID")
+```
+
+Make list of genes for input to topGO
+```{r}
+# Genes of interest - ie those targeted by miRNAs
+target_genes <- as.character(unique(pos_corr_data$mRNA))
+
+# All genes 
+all_genes <- as.character(ptuh_gene2go$mRNA)
+
+# Apply 1 or 0 if gene is gene of interest 
+GeneList <- factor(as.integer(all_genes %in% target_genes))
+names(GeneList) <- all_genes
+```
+
+The following code will perform GO enrichment using the weighted Fisher's exact test to assess whether specific GO terms are overrepresented in the genes targeted by miRNAs, regardless of correlation significance. 
+
+Read in gene-to-go-mappings
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+```
+
+Set function to select genes of interest (ie those that have pvalue < 0.05)
+```{r}
+topDiffGenes <- function(allScore) {
+return(allScore < 0.05)}
+```
+
+### Biological Processes
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_BP <-new("topGOdata", ontology="BP", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_BP_FE <- runTest(GO_BP, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_BP_En <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_BP_En$Fisher<-as.numeric(GO_BP_En$Fisher)
+GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
+```
+
+Merge `GO_BP_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+peve_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_BP_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_BP_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_BP_En_sig_gene$ontology <- "Biological Processes"
+
+# Keep only unique rows 
+GO_BP_En_sig_gene <- unique(GO_BP_En_sig_gene)
+```
+
+### Cellular Components
+
+### Molecular Functions
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_MF <-new("topGOdata", ontology="MF", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_MF_FE <- runTest(GO_MF, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_MF_En <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_MF_En$Fisher<-as.numeric(GO_MF_En$Fisher)
+GO_MF_En_sig<-GO_MF_En[GO_MF_En$Fisher<0.05,]
+```
+
+Merge `GO_MF_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_MF_En_sig_gene <- peve_gene2go %>%
+  left_join(GO_MF_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_MF_En_sig_gene$ontology <- "Molecular Functions"
+
+# Keep only unique rows 
+GO_MF_En_sig_gene <- unique(GO_MF_En_sig_gene)
+```
+
+### Join ontologies 
+
+Bind so there is a df that has significantly enriched GO terms for all ontologies 
+```{r}
+GO_pos_corr_df <- rbind(GO_BP_En_sig_gene, GO_MF_En_sig_gene)
+```
+
+Merge with `GO_pos_corr_df`
+```{r}
+test <- GO_pos_corr_df %>%
+  inner_join(pos_corr_data, by = "mRNA") #%>%
+  #mutate(direction = ifelse(PCC.cor > 0, "Positive", "Negative")) #%>%
+  #filter(ontology != "Cellular Components") #%>%
+  #filter(p_value < 0.1)
+
+# Save as csv 
+write.csv(test, "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_pos_corr_target_enrichment.csv")
+```
+
+Plot!
+```{r}
+plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(shape = 21, size = 5) + 
+  #scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 24) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+```
+
+Examine the top 10 most significant GO terms for BP and MF
+```{r}
+# Function to get top 5 unique terms
+get_top_10_unique <- function(data, ontology_type) {
+  data %>%
+    filter(ontology == ontology_type) %>%
+    arrange(Fisher) %>%
+    distinct(Term, .keep_all = TRUE) %>%
+    slice_head(n = 10)
+}
+
+# Get top 5 unique Biological Processes
+top_10_BP <- get_top_10_unique(test, "Biological Processes")
+
+# Get top 5 unique Molecular Functions
+top_10_MF <- get_top_10_unique(test, "Molecular Functions")
+
+# Combine results
+top_10_combined <- bind_rows(top_10_BP, top_10_MF)
+unique(top_10_combined$Term)
+
+# Plot 
+top_10_combined <- top_10_combined %>%
+  arrange(desc(Fisher)) %>%
+  mutate(Term = factor(Term, levels = unique(Term)))
+
+plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(size = 10, color = "black") + 
+  scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 35) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_pos_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+```
+
+## Functional enrichment of targets significantly negatively correlated with miRNAs (regardless of correlation significance)
+
+Read in PCC miranda data
+```{r}
+data <- read.csv("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+head(data)
+
+# Filter so that only negative correlations remain 
+sig_neg_corr_data <- data %>%
+  filter(PCC.cor < 0) %>%
+  filter(p_value < 0.05)
+```
+
+Read in gene2go information 
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+colnames(ptuh_gene2go) <- c("mRNA", "GO.ID")
+```
+
+Make list of genes for input to topGO
+```{r}
+# Genes of interest - ie those targeted by miRNAs
+target_genes <- as.character(unique(sig_neg_corr_data$mRNA))
+
+# All genes 
+all_genes <- as.character(ptuh_gene2go$mRNA)
+
+# Apply 1 or 0 if gene is gene of interest 
+GeneList <- factor(as.integer(all_genes %in% target_genes))
+names(GeneList) <- all_genes
+```
+
+The following code will perform GO enrichment using the weighted Fisher's exact test to assess whether specific GO terms are overrepresented in the genes targeted by miRNAs, regardless of correlation significance. 
+
+Read in gene-to-go-mappings
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+```
+
+Set function to select genes of interest (ie those that have pvalue < 0.05)
+```{r}
+topDiffGenes <- function(allScore) {
+return(allScore < 0.05)}
+```
+
+### Biological Processes
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_BP <-new("topGOdata", ontology="BP", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_BP_FE <- runTest(GO_BP, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_BP_En <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_BP_En$Fisher<-as.numeric(GO_BP_En$Fisher)
+GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
+```
+
+Merge `GO_BP_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+peve_gene2go <- peve_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+peve_gene2go$GO.ID <- trimws(peve_gene2go$GO.ID)
+GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_BP_En_sig_gene <- peve_gene2go %>%
+  left_join(GO_BP_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_BP_En_sig_gene$ontology <- "Biological Processes"
+
+# Keep only unique rows 
+GO_BP_En_sig_gene <- unique(GO_BP_En_sig_gene)
+```
+
+### Cellular Components
+
+### Molecular Functions
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_MF <-new("topGOdata", ontology="MF", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_MF_FE <- runTest(GO_MF, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_MF_En <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_MF_En$Fisher<-as.numeric(GO_MF_En$Fisher)
+GO_MF_En_sig<-GO_MF_En[GO_MF_En$Fisher<0.05,]
+```
+
+Merge `GO_MF_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_MF_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_MF_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_MF_En_sig_gene$ontology <- "Molecular Functions"
+
+# Keep only unique rows 
+GO_MF_En_sig_gene <- unique(GO_MF_En_sig_gene)
+```
+
+### Join ontologies 
+
+Bind so there is a df that has significantly enriched GO terms for all ontologies 
+```{r}
+GO_sig_neg_corr_df <- rbind(GO_BP_En_sig_gene, GO_MF_En_sig_gene)
+```
+
+Merge with `GO_sig_neg_corr_df`
+```{r}
+test <- GO_sig_neg_corr_df %>%
+  inner_join(sig_neg_corr_data, by = "mRNA") #%>%
+  #mutate(direction = ifelse(PCC.cor > 0, "Positive", "Negative")) #%>%
+  #filter(ontology != "Cellular Components") #%>%
+  #filter(p_value < 0.1)
+
+# Save as csv 
+write.csv(test, "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_neg_corr_target_enrichment.csv")
+```
+
+Plot!
+```{r}
+plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(shape = 21, size = 5) + 
+  #scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 24) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_neg_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+```
+
+Examine the top 10 most significant GO terms for BP and MF
+```{r}
+# Function to get top 5 unique terms
+get_top_10_unique <- function(data, ontology_type) {
+  data %>%
+    filter(ontology == ontology_type) %>%
+    arrange(Fisher) %>%
+    distinct(Term, .keep_all = TRUE) %>%
+    slice_head(n = 10)
+}
+
+# Get top 5 unique Biological Processes
+top_10_BP <- get_top_10_unique(test, "Biological Processes")
+
+# Get top 5 unique Molecular Functions
+top_10_MF <- get_top_10_unique(test, "Molecular Functions")
+
+# Combine results
+top_10_combined <- bind_rows(top_10_BP, top_10_MF)
+unique(top_10_combined$Term)
+
+# Plot 
+top_10_combined <- top_10_combined %>%
+  arrange(desc(Fisher)) %>%
+  mutate(Term = factor(Term, levels = unique(Term)))
+
+plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(size = 10, color = "black") + 
+  scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 35) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_sig_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+```
+
+## Functional enrichment of targets positively correlated with miRNAs (regardless of correlation significance)
+
+Read in PCC miranda data
+```{r}
+data <- read.csv("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+head(data)
+
+# Filter so that only negative correlations remain 
+sig_pos_corr_data <- data %>%
+  filter(PCC.cor > 0) %>%
+  filter(p_value < 0.05)
+```
+
+Read in gene2go information 
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+colnames(ptuh_gene2go) <- c("mRNA", "GO.ID")
+```
+
+Make list of genes for input to topGO
+```{r}
+# Genes of interest - ie those targeted by miRNAs
+target_genes <- as.character(unique(sig_pos_corr_data$mRNA))
+
+# All genes 
+all_genes <- as.character(ptuh_gene2go$mRNA)
+
+# Apply 1 or 0 if gene is gene of interest 
+GeneList <- factor(as.integer(all_genes %in% target_genes))
+names(GeneList) <- all_genes
+```
+
+The following code will perform GO enrichment using the weighted Fisher's exact test to assess whether specific GO terms are overrepresented in the genes targeted by miRNAs, regardless of correlation significance. 
+
+Read in gene-to-go-mappings
+```{r}
+ptuh_gene2go <- read.delim("../../M-multi-species/data/Pmea_gene2go.tab", sep = "\t")
+```
+
+Set function to select genes of interest (ie those that have pvalue < 0.05)
+```{r}
+topDiffGenes <- function(allScore) {
+return(allScore < 0.05)}
+```
+
+### Biological Processes
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_BP <-new("topGOdata", ontology="BP", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_BP_FE <- runTest(GO_BP, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_BP_En <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_BP_En$Fisher<-as.numeric(GO_BP_En$Fisher)
+GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
+```
+
+Merge `GO_BP_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_BP_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_BP_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_BP_En_sig_gene$ontology <- "Biological Processes"
+
+# Keep only unique rows 
+GO_BP_En_sig_gene <- unique(GO_BP_En_sig_gene)
+```
+
+### Cellular Components
+
+### Molecular Functions
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_MF <-new("topGOdata", ontology="MF", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_MF_FE <- runTest(GO_MF, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_MF_En <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+```
+Only taking the top 100 GO terms 
+
+Filter by significant results
+```{r}
+GO_MF_En$Fisher<-as.numeric(GO_MF_En$Fisher)
+GO_MF_En_sig<-GO_MF_En[GO_MF_En$Fisher<0.05,]
+```
+
+Merge `GO_MF_En_sig` with GO and gene info. 
+```{r}
+# Separate GO terms 
+ptuh_gene2go <- ptuh_gene2go %>%
+  separate_rows(GO.ID, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+ptuh_gene2go$GO.ID <- trimws(ptuh_gene2go$GO.ID)
+GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_MF_En_sig_gene <- ptuh_gene2go %>%
+  left_join(GO_MF_En_sig, by = "GO.ID") %>%
+  na.omit()
+
+# Add ontology column 
+GO_MF_En_sig_gene$ontology <- "Molecular Functions"
+
+# Keep only unique rows 
+GO_MF_En_sig_gene <- unique(GO_MF_En_sig_gene)
+```
+
+### Join ontologies 
+
+Bind so there is a df that has significantly enriched GO terms for all ontologies 
+```{r}
+GO_sig_pos_corr_df <- rbind(GO_BP_En_sig_gene, GO_MF_En_sig_gene)
+```
+
+Merge with `GO_pos_corr_df`
+```{r}
+test <- GO_sig_pos_corr_df %>%
+  inner_join(sig_pos_corr_data, by = "mRNA") #%>%
+  #mutate(direction = ifelse(PCC.cor > 0, "Positive", "Negative")) #%>%
+  #filter(ontology != "Cellular Components") #%>%
+  #filter(p_value < 0.1)
+
+# Save as csv 
+write.csv(test, "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_pos_corr_target_enrichment.csv")
+```
+
+Plot!
+```{r}
+plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(shape = 21, size = 5) + 
+  #scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 24) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-topGO_sig_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+```
+
+Examine the top 10 most significant GO terms for BP and MF
+```{r}
+# Function to get top 5 unique terms
+get_top_10_unique <- function(data, ontology_type) {
+  data %>%
+    filter(ontology == ontology_type) %>%
+    arrange(Fisher) %>%
+    distinct(Term, .keep_all = TRUE) %>%
+    slice_head(n = 10)
+}
+
+# Get top 5 unique Biological Processes
+top_10_BP <- get_top_10_unique(test, "Biological Processes")
+
+# Get top 5 unique Molecular Functions
+top_10_MF <- get_top_10_unique(test, "Molecular Functions")
+
+# Combine results
+top_10_combined <- bind_rows(top_10_BP, top_10_MF)
+unique(top_10_combined$Term)
+
+# Plot 
+top_10_combined <- top_10_combined %>%
+  arrange(desc(Fisher)) %>%
+  mutate(Term = factor(Term, levels = unique(Term)))
+
+plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
+  #ylim(0, 1) +
+  #geom_hline(yintercept = 0.05, linetype = "solid", color = "black", linewidth = 1)+
+  #geom_hline(yintercept = 0.05, color = "black", linetype = "solid", linewidth = 0.5) +  # Add line at 0.05 
+  geom_point(size = 10, color = "black") + 
+  scale_size(range = c(2, 20)) + 
+  xlab('') + 
+  ylab("Fisher p-value") +
+  theme_bw(base_size = 35) +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") +
+  coord_flip(); plot
+
+# Save plot 
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_sig_pos_corr_target_enrichment.pdf", last_plot(), width = 20, height = 25, dpi = 300)
+ggsave("../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-top10GO_sig_pos_corr_target_enrichment.png", last_plot(), width = 20, height = 25, dpi = 300)
+```
+
+
+
+
