@@ -3,6 +3,9 @@ title: "00.00-D-Apul-WGBS-reads-FastQC-MultiQC"
 author: "Sam White"
 date: "2025-02-06"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -115,7 +115,7 @@ column -t -s","
 
 ## Download raw reads
 
-```{bash download-raw-reads, engine='bash'}
+```{bash download-raw-reads, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -178,7 +178,7 @@ source .bashvars
 
 cd "${raw_reads_dir}"
 
-# Checksums file contains other files, so this just looks for the RNAseq files.
+# Verify checksums
 for file in *.md5
 do
   md5sum --check "${file}"

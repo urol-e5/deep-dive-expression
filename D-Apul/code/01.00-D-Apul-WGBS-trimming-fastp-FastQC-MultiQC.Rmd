@@ -1,5 +1,5 @@
 ---
-title: "01.00-D-Apul-trimming-fastp-FastQC-MultiQC"
+title: "01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC"
 author: "Sam White"
 date: "2025-02-07"
 output: 
