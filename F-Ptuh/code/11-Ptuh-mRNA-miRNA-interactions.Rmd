@@ -163,6 +163,11 @@ length(unique(combined_data_pcc$mRNA))
 write.csv(combined_data_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
 ```
 
+Read in data so that PCC does not have to be run again, as it is computationally intensive
+```{r}
+combined_data_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+```
+
 Plot number of positive and negative interactions for each miRNA
 ```{r}
 # Summarize the data
@@ -234,7 +239,6 @@ Read in data so that PCC does not have to be run again, as it is computationally
 ```{r}
 pairs_of_interest_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
-
 
 Plot number of SIGNIFICANT positive and negative interactions for each miRNA
 ```{r}
