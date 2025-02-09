@@ -14,6 +14,21 @@ library(topGO)
 library(tidyverse)
 ```
 
+Set up gene2go file 
+```{r}
+# Read in Apul annotations
+annot <- read.delim("../../F-Ptuh/output/02-Ptuh-reference-annotation/Pocillopora_meandrina_HIv1-IDmapping-2024_09_04.tab")
+
+# Format data
+annot_go <- annot %>%
+  select(V1, Gene.Ontology.IDs) %>%
+  separate_rows(Gene.Ontology.IDs, sep = "; ") %>%
+  group_by(V1) %>%
+  summarize(GO_terms = paste(Gene.Ontology.IDs, collapse = "; "))
+
+# Save as gene2go file name 
+write_tsv(annot_go, "../../M-multi-species/data/Pmea_gene2go.tab")
+```
 
 ## Functional enrichment of all targets, as predicted by miranda
 

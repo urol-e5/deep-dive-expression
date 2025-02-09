@@ -1,0 +1,32 @@
+---
+title: "mRNA-miRNA interactions functional enrichment"
+author: "Jill Ashey"
+date: "2025-02-09"
+output: html_document
+---
+
+This script will use topGO to analyze functional enrichment of miRNA targets for Apul 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(topGO)
+library(tidyverse)
+```
+
+Set up gene2go file 
+```{r}
+# Read in Apul annotations
+annot <- read.delim("../../D-Apul/output/02-Apul-reference-annotation/Apulcra-genome-mRNA-IDmapping-2024_12_12.tab")
+
+
+```
+
+
+## Functional enrichment of all targets, as predicted by miranda
+
+TO DO
+
+## Functional enrichment of targets negatively correlated with miRNAs (regardless of correlation significance)
+
+Read in PCC miranda data
