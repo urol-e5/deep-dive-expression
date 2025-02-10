@@ -1,0 +1,50 @@
+---
+title: "Ptuh miRNA renaming"
+author: "Jill Ashey"
+date: "2025-02-10"
+output: html_document
+---
+
+The following script will compare the miRNAs identified using the old and new short stack versions. It will also rename the miRNAs from the new version in accordance with the old version.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in old miRNAs generated during deep dive manuscript (see github repo for that project [here](https://github.com/urol-e5/deep-dive)). This data was generated using this [code](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/code/13.2.1-Pmea-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase.Rmd)) and using the 
+Pmeandrina genome. 
+```{r}
+ptuh_old <- read.csv("../../M-multi-species/data/Ptuh_results_mature_named_old_ShortStack_version.csv")
+dim(ptuh_old)
+
+# Add _old to colnames
+colnames(ptuh_old) <- paste0(colnames(ptuh_old), "_old")
+```
+
+37 miRNAs were identified using the old version of shortstack. 
+
+Read in new miRNAs generated for this manuscript (see github repo for the current project [here](https://github.com/urol-e5/deep-dive-expression/tree/main)). This data was generated using this [code](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/05-Ptuh-sRNA-ShortStack_4.1.0.Rmd) and using the Pmeandrina genome. 
+```{r}
+ptuh_new <- read.delim("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt")
+
+# Filter to only retain miRNAs
+ptuh_new <- ptuh_new %>%
+  filter(MIRNA == "Y")
+dim(ptuh_new)
+
+# Add _new to colnames
+colnames(ptuh_new) <- paste0(colnames(ptuh_new), "_new")
+```
+
+37 miRNAs were identified using the new version of shortstack. 
+
+Merge dfs together by MajorRNA
+```{r}
+ptuh_merge <- ptuh_new %>%
+  full_join(ptuh_old, by = c("MajorRNA_new" = "MajorRNA_old"))
+```
+
+Not sure how to interpret this...
+
