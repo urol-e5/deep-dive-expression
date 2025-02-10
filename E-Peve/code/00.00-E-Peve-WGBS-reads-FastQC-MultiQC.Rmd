@@ -3,6 +3,9 @@ title: "00.00-E-Peve-WGBS-reads-FastQC-MultiQC"
 author: "Sam White"
 date: "2025-02-06"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -54,6 +54,9 @@ echo 'export raw_fastqc_dir=${output_dir_top}/raw-fastqc'
 echo 'export raw_reads_dir=${deep_dive_expression_dir}/E-Peve/data/raw-fastqs'
 echo 'export raw_reads_url="https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/"'
 echo ""
+
+echo "# Input files"
+echo 'export metadata_file="${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv"'
 
 echo "# Paths to programs"
 echo 'export fastqc=/home/shared/FastQC-0.12.1/fastqc'
@@ -115,7 +118,7 @@ column -t -s","
 
 ## Download raw reads
 
-```{bash download-raw-reads, engine='bash'}
+```{bash download-raw-reads, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -184,6 +187,70 @@ do
   md5sum --check "${file}"
 done
 ```
+
+# Rename FastQs for Project Consistency
+
+New naming format will be `<colony_id>-<timepoint>`.
+
+Use of a temp file, instead of working directory from the metadata file, was needed
+to handle a strange parsing issue with mapping `489` to `POR-79`.
+
+```{bash rename-fastqs, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+cd "${raw_reads_dir}"
+
+# Create an associative array to store the mapping
+declare -A number_to_colony_timepoint
+
+# Create a temporary file to store the mapping
+temp_mapping_file=$(mktemp)
+
+# Read the metadata file and populate the temporary file using awk
+awk -F, 'NR > 1 { print $1, $6 "-" $3 }' "$metadata_file" > "$temp_mapping_file"
+
+# Read the temporary file and populate the associative array
+while read -r Number colony_timepoint; do
+    echo ""
+    echo "Read from temp file: Number=$Number, colony_timepoint=$colony_timepoint"  # Debugging output
+    echo ""
+    number_to_colony_timepoint["$Number"]="$colony_timepoint"
+done < "$temp_mapping_file"
+
+# Remove the temporary file
+rm "$temp_mapping_file"
+
+# Print the associative array for debugging
+echo "Number to colony_id-Timepoint mapping:"
+for key in "${!number_to_colony_timepoint[@]}"; do
+    echo ""
+    echo "$key -> ${number_to_colony_timepoint[$key]}"
+    echo ""
+done
+
+# Iterate over the FastQ files in the current directory
+for fastq_file in *.fastq.gz; do
+    # Extract the sample number from the filename
+    sample_number=$(echo "$fastq_file" | cut -d'_' -f1)
+    
+    # Check if the sample number exists in the associative array
+    if [[ -n "${number_to_colony_timepoint[$sample_number]}" ]]; then
+        new_sample_name="${number_to_colony_timepoint[$sample_number]}"
+        new_filename=$(echo "$fastq_file" | sed "s/^$sample_number/$new_sample_name/")
+        mv "$fastq_file" "$new_filename"
+        echo "Renamed $fastq_file to $new_filename"
+    else
+        echo "Sample number '$sample_number' not found in metadata."
+        # Debugging: Print all keys in the associative array with quotes
+        echo "Available keys in the associative array:"
+        for key in "${!number_to_colony_timepoint[@]}"; do
+            echo "'$key'"
+        done
+    fi
+done
+```
+
 
 # FastQC/MultiQC on raw reads
 
