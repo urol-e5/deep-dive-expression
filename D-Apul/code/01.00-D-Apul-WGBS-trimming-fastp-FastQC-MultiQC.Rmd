@@ -3,6 +3,9 @@ title: "01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC"
 author: "Sam White"
 date: "2025-02-07"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -46,14 +46,14 @@ If you need to download the raw sequencing reads, please see [00.00-D-Apul-WGBS-
 
 ## Inputs
 
-FastQs: Expects FastQs formatted like so: `<number>_S<number>_R1_001.fastq.gz`
+FastQs: Expects FastQs formatted like so: `<colony_ID>-<timepoint>_S<number>_R1_001.fastq.gz`
 
 ## Outputs
 
 Due to size, trimmed FastQs cannot be uploaded to GitHub.
 All trimmed FastQs produced by this script are here:
 
-[01.00-D-Apul-trimming-fastp-FastQC-MultiQC/]()
+[01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/)
 
 # Create a Bash variables file
 
@@ -66,7 +66,7 @@ echo ""
 
 echo "# Data directories"
 echo 'export repo_dir="/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression"'
-echo 'export output_dir_top="${repo_dir}/D-Apul/output/01.00-D-Apul-trimming-fastp-FastQC-MultiQC"'
+echo 'export output_dir_top="${repo_dir}/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC"'
 echo 'export raw_reads_dir="${repo_dir}/D-Apul/data/raw-fastqs"'
 echo 'export trimmed_fastqs_dir=${output_dir_top}/trimmed-fastqs'
 echo 'export trimmed_fastqc_dir=${output_dir_top}/trimmed-fastqc'
@@ -180,7 +180,7 @@ done
 
 # Quality Check with FastQC and MultiQC
 
-```{bash trimmed-fastqc-multiqc, engine='bash', eval=FALSE}
+```{bash trimmed-fastqc-multiqc, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -199,7 +199,7 @@ echo ""
 
 # Run FastQC
 ### NOTE: Do NOT quote raw_fastqc_list
-#{fastqc} \
+${fastqc} \
 --threads ${threads} \
 --outdir ${trimmed_fastqs_dir} \
 --quiet \
