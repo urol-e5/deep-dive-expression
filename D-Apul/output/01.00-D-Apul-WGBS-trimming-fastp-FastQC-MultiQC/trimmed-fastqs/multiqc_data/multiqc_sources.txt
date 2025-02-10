@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	ACR-150-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-145-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-178-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-150-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-173-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-173-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-140-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-145-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-140-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	ACR-178-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2_R1.fastp-trim_fastqc.zip

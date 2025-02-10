@@ -1,0 +1,250 @@
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+WARNING: fastp uses up to 16 threads although you specified 40
+Read1 before filtering:
+total reads: 254550683
+total bases: 38437153133
+Q20 bases: 36585488867(95.1826%)
+Q30 bases: 34246127076(89.0964%)
+
+Read2 before filtering:
+total reads: 254550683
+total bases: 38437153133
+Q20 bases: 36585488867(95.1826%)
+Q30 bases: 34246127076(89.0964%)
+
+Read1 after filtering:
+total reads: 253164476
+total bases: 27981406345
+Q20 bases: 27383149791(97.8619%)
+Q30 bases: 26259653635(93.8468%)
+
+Read2 after filtering:
+total reads: 253164476
+total bases: 27981406345
+Q20 bases: 27383149791(97.8619%)
+Q30 bases: 26259653635(93.8468%)
+
+Filtering result:
+reads passed filter: 506328952
+reads failed due to low quality: 1484570
+reads failed due to too many N: 8422
+reads failed due to too short: 1279422
+reads with adapter trimmed: 297580796
+bases trimmed due to adapters: 14054002880
+
+Duplication rate: 19.6685%
+
+Insert size peak (evaluated by paired-end reads): 51
+
+JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2.fastp-trim.report.json
+HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2.fastp-trim.report.html
+
+/home/shared/fastp --in1 ACR-140-TP2_S5_R1_001.fastq.gz --in2 ACR-140-TP2_S5_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-140-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 871 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+WARNING: fastp uses up to 16 threads although you specified 40
+Read1 before filtering:
+total reads: 245467276
+total bases: 37065558676
+Q20 bases: 35468044542(95.69%)
+Q30 bases: 33258726342(89.7295%)
+
+Read2 before filtering:
+total reads: 245467276
+total bases: 37065558676
+Q20 bases: 35468044542(95.69%)
+Q30 bases: 33258726342(89.7295%)
+
+Read1 after filtering:
+total reads: 243394673
+total bases: 27160042827
+Q20 bases: 26567613222(97.8187%)
+Q30 bases: 25443663344(93.6805%)
+
+Read2 after filtering:
+total reads: 243394673
+total bases: 27160042827
+Q20 bases: 26567613222(97.8187%)
+Q30 bases: 25443663344(93.6805%)
+
+Filtering result:
+reads passed filter: 486789346
+reads failed due to low quality: 1426624
+reads failed due to too many N: 28240
+reads failed due to too short: 2690342
+reads with adapter trimmed: 283903286
+bases trimmed due to adapters: 13259164698
+
+Duplication rate: 26.8465%
+
+Insert size peak (evaluated by paired-end reads): 51
+
+JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2.fastp-trim.report.json
+HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2.fastp-trim.report.html
+
+/home/shared/fastp --in1 ACR-145-TP2_S3_R1_001.fastq.gz --in2 ACR-145-TP2_S3_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-145-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 815 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+WARNING: fastp uses up to 16 threads although you specified 40
+Read1 before filtering:
+total reads: 234962589
+total bases: 35479350939
+Q20 bases: 33715822835(95.0294%)
+Q30 bases: 31500865479(88.7865%)
+
+Read2 before filtering:
+total reads: 234962589
+total bases: 35479350939
+Q20 bases: 33715822835(95.0294%)
+Q30 bases: 31500865479(88.7865%)
+
+Read1 after filtering:
+total reads: 233529125
+total bases: 25249813964
+Q20 bases: 24723542183(97.9157%)
+Q30 bases: 23728876697(93.9764%)
+
+Read2 after filtering:
+total reads: 233529125
+total bases: 25249813964
+Q20 bases: 24723542183(97.9157%)
+Q30 bases: 23728876697(93.9764%)
+
+Filtering result:
+reads passed filter: 467058250
+reads failed due to low quality: 1459292
+reads failed due to too many N: 26564
+reads failed due to too short: 1381072
+reads with adapter trimmed: 292097812
+bases trimmed due to adapters: 14100730036
+
+Duplication rate: 20.6433%
+
+Insert size peak (evaluated by paired-end reads): 51
+
+JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2.fastp-trim.report.json
+HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2.fastp-trim.report.html
+
+/home/shared/fastp --in1 ACR-150-TP2_S2_R1_001.fastq.gz --in2 ACR-150-TP2_S2_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-150-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 791 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+WARNING: fastp uses up to 16 threads although you specified 40
+Read1 before filtering:
+total reads: 214249351
+total bases: 32351652001
+Q20 bases: 30730280623(94.9883%)
+Q30 bases: 28732753516(88.8139%)
+
+Read2 before filtering:
+total reads: 214249351
+total bases: 32351652001
+Q20 bases: 30730280623(94.9883%)
+Q30 bases: 28732753516(88.8139%)
+
+Read1 after filtering:
+total reads: 213089337
+total bases: 23321864234
+Q20 bases: 22818686997(97.8425%)
+Q30 bases: 21877984047(93.8089%)
+
+Read2 after filtering:
+total reads: 213089337
+total bases: 23321864234
+Q20 bases: 22818686997(97.8425%)
+Q30 bases: 21877984047(93.8089%)
+
+Filtering result:
+reads passed filter: 426178674
+reads failed due to low quality: 1354654
+reads failed due to too many N: 24288
+reads failed due to too short: 941086
+reads with adapter trimmed: 257665326
+bases trimmed due to adapters: 12410972292
+
+Duplication rate: 16.2785%
+
+Insert size peak (evaluated by paired-end reads): 51
+
+JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2.fastp-trim.report.json
+HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2.fastp-trim.report.html
+
+/home/shared/fastp --in1 ACR-173-TP2_S4_R1_001.fastq.gz --in2 ACR-173-TP2_S4_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-173-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 747 seconds
+Detecting adapter sequence for read1...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+Detecting adapter sequence for read2...
+>Illumina TruSeq Adapter Read 1
+AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+
+WARNING: fastp uses up to 16 threads although you specified 40
+Read1 before filtering:
+total reads: 183487334
+total bases: 27706587434
+Q20 bases: 26238351845(94.7008%)
+Q30 bases: 24477719393(88.3462%)
+
+Read2 before filtering:
+total reads: 183487334
+total bases: 27706587434
+Q20 bases: 26238351845(94.7008%)
+Q30 bases: 24477719393(88.3462%)
+
+Read1 after filtering:
+total reads: 182080986
+total bases: 19480577124
+Q20 bases: 19067422370(97.8791%)
+Q30 bases: 18289503098(93.8858%)
+
+Read2 after filtering:
+total reads: 182080986
+total bases: 19480577124
+Q20 bases: 19067422370(97.8791%)
+Q30 bases: 18289503098(93.8858%)
+
+Filtering result:
+reads passed filter: 364161972
+reads failed due to low quality: 1156294
+reads failed due to too many N: 20456
+reads failed due to too short: 1635946
+reads with adapter trimmed: 233920144
+bases trimmed due to adapters: 11405154102
+
+Duplication rate: 15.5699%
+
+Insert size peak (evaluated by paired-end reads): 51
+
+JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2.fastp-trim.report.json
+HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2.fastp-trim.report.html
+
+/home/shared/fastp --in1 ACR-178-TP2_S1_R1_001.fastq.gz --in2 ACR-178-TP2_S1_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/ACR-178-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 624 seconds

@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	POR-76-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-76-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-79-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-71-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-73-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-82-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-79-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-71-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-73-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POR-82-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R1.fastp-trim_fastqc.zip
