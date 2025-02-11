@@ -254,7 +254,7 @@ The first two are two different lncRNAs that both contain the same pre-miRNA. No
 The remaining five lncRNAs are all located within the same reference scaffold (ptg0000351) and have the same end nucleotide (5347816), so these lncRNAs match overlapping portions of the reference genome. This suggests to me they are different isoforms of the same gene. Moreover, if you find the reference starting location of the alignment for each of these five pairs (add qstart to the reference starting location of the qseqid, e.g. 5335161 + 10871), all reference starting locations for the alignments are the same. That means there aren't multiple instances of the same pre-miRNA occuring inside these lncRNA isoforms. 
 
 So there are 3 instances of a unique lncRNA containing a full pre-miRNA sequence (and one of those instances occurs in 5 lncRNA isoforms)
-That means there are 3 instances of a lncRNA that may be processed down into a pre-miRNA, which may then be processed into a mature miRNA
+That means there are **3 instances of a lncRNA that may be processed down into a pre-miRNA**, which may then be processed into a mature miRNA
 
 
 
@@ -285,7 +285,7 @@ write.table(precursor_lncRNAs, "../output/17apul-miRNA-lncRNA-BLASTs-RNAhybrid/l
 
 I'm not sure whether to expect lncRNAs to bind miRNAs in the same way cnidarian miRNA-mRNA binding occurs (nearly perfect complementarity of mature sequence), or whether the mechanism could differ (e.g., requires only a complementary seed region, as in vertebrate miRNA-mRNA binding). that means I don't know what alignment parameters to require for our BLAST results. 
 
-For now let's say the aligned region maust be at least 8 nucleotides (the expected length of an miRNA seed region), and let's require a low evalue of 1e-3, to generally restrict results to those with high complementarity.
+For now let's say the aligned region must be at least 8 nucleotides (the expected length of an miRNA seed region), and let's require a low evalue of 1e-3, to generally restrict results to those with high complementarity.
 
 ```{r, eval=TRUE}
 mature_lncRNA_BLASTn %>%
@@ -297,9 +297,87 @@ mature_lncRNA_BLASTn %>%
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
+
+
+# miRanda
+
+miRanda is a target prediction software, used to identify likely miRNA-mRNA interactions.
+
+Inputs:
+
+  - FASTA of A.pulchra lncRNAs
+  
+  - FASTA of A.pulchra mature miRNAs
+
+## Run miRanda
+```{r, engine='bash', eval=FALSE}
+
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
+../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+```
+
+
+# Summarize results
+
+Let's look at the output
+
+```{r, engine='bash'}
+
+echo "miranda run finished!"
+echo "Counting number of interacting miRNA-lncRNA pairs"
+
+zgrep -c "Performing Scan" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab | sort | grep '>' > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt
+
+echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+
+```
+
+This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | head -5
+```
+
+The header for this output is formatted as:
+
+mirna Target  Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+
+We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+This is a dramatically smaller number -- only 19 interactions are at least 21 nucleotides with <=3 mismatches
+
+
+
+
+
 # RNAhybrid
 
-RNAhybrid is a miRNA-mRNA target prediction tool, which bases its predictions primarily on thermodynamic binding stability. While the tool is normally used to predict miRNA-mRNA binding, it should also work for miRNA-lncRNA binding
+RNAhybrid is another miRNA-mRNA target prediction tool, which bases its predictions primarily on thermodynamic binding stability (unlike miRanda, which considers sequence features expected of miRNA targets). While the tool is normally used to predict miRNA-mRNA binding, it should also work for miRNA-lncRNA binding
 
 First we need to format our lncRNA and mature miRNA data. RNAhybrid requires a query fasta file of mature miRNAs, and a target fasta file (in this case, of lncRNAs). The problem is that RNAhybrid can only handle fastas that contain sequences of 1000 nucleotides or fewer. Some of our lncRNAs are thousands of nucleotides long, so we'll need to reformat this file. 
 
@@ -616,6 +694,23 @@ cat("Number of putative lncRNA precursors: ", length(filter(filter(precursor_lnc
 Note: So there are 3 instances of a *unique* lncRNA containing a full pre-miRNA sequence (and one of those instances occurs in 5 lncRNA isoforms)
 
 LncRNA as miRNA sponges:
+
+```{r, engine='bash'}
+
+echo "miRanda Results:"
+echo ""
+echo "Number of putative interactions:"
+wc -l  ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+echo ""
+echo "Number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | wc -l
+echo ""
+echo "Number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+
+```
+```
+
 
 ```{r, eval=TRUE}
 cat("RNAhybrid Results: ", "\n", "\n",
