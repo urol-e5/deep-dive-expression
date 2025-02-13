@@ -28,9 +28,9 @@ Let's see what happens when we adjust those parameters
 
 Inputs:
 
-  - FASTA of A.pulchra mRNA coding sequences
-  
-  - FASTA of A.pulchra mature miRNAs
+-   FASTA of A.pulchra mRNA coding sequences
+
+-   FASTA of A.pulchra mature miRNAs
 
 ## Get mRNA fasta
 
@@ -42,8 +42,8 @@ Inputs:
 
 ```
 
-
 ## Run miRanda
+
 ```{r, engine='bash', eval=FALSE}
 
 # Same settings we've been using: 
@@ -91,7 +91,7 @@ awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-m
 
 The header for this output is formatted as:
 
-mirna Target  Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
 
 We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
 
@@ -105,7 +105,6 @@ awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-m
 
 So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 19133057 to 143.
 
-
 # miRNA and mRNA 3'UTRs
 
 Now let's see how filtering changes the outputs of miRanda run with only the 3'UTR mRNA region (the input we have been using up till now)
@@ -116,8 +115,7 @@ Unfiltered:
 wc -l ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt
 ```
 
-
-Filter for alignment >=21 nucleotides:
+Filter for alignment \>=21 nucleotides:
 
 ```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides"
@@ -127,8 +125,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | head -5
 ```
 
-
-Filter again for <=3 mismatches:
+Filter again for \<=3 mismatches:
 
 ```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
@@ -140,15 +137,19 @@ awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_a
 
 When only mRNA 3'UTR regions are used as input, filtering for full/near-full complementarity reduces the number of putative interactions from 6109 to 13.
 
+# Summary
+
+| Input     | unfiltered | filtered for complementarity | \% retained |
+|-----------|------------|------------------------------|-------------|
+| 3'UTR     | 6109       | 13                           | 0.213 %     |
+| full mRNA | 19133057   | 143                          | 0.000747 %  |
 
 Next steps:
 
-- discuss w team -- should we look for both miRNAs that function through target cleavage (full complementary, full coding sequence) *and* miRNAs that function through "canonical" translational silencing (seed complementarity, 3'UTR)?
+-   discuss w team -- should we look for both miRNAs that function through target cleavage (full complementary, full coding sequence) *and* miRNAs that function through "canonical" translational silencing (seed complementarity, 3'UTR)?
 
-- examine coexpression patterns of full-complementarity interactions -- does the expression data support functional target cleavage?
+-   examine coexpression patterns of full-complementarity interactions -- does the expression data support functional target cleavage?
 
-- Run same comparison using BLAST and/or RNAhybrid as the tool. I'm still not 100% clear on what sequence features miRanda takes into consideration, and any that *are* included will have been based on mammalian miRNAs. It may be more appropriate to use a different tool 
+-   Run same comparison using BLAST and/or RNAhybrid as the tool. I'm still not 100% clear on what sequence features miRanda takes into consideration, and any that *are* included will have been based on mammalian miRNAs. It may be more appropriate to use a different tool
 
-- if we decide to shift target prediction requirements, need to rerun all target prediction done thus far :(
-
-)
+-   if we decide to shift target prediction requirements, need to rerun all target prediction done thus far :(

@@ -13,6 +13,7 @@ Kathleen Durkin
     Summarize results</a>
 - <a href="#2-mirna-and-mrna-3utrs" id="toc-2-mirna-and-mrna-3utrs">2
   miRNA and mRNA 3’UTRs</a>
+- <a href="#3-summary" id="toc-3-summary">3 Summary</a>
 
 Up to this point, our miRNA target prediction has been primarily
 performed using the tool miRanda, which requires only seed binding, with
@@ -202,6 +203,13 @@ When only mRNA 3’UTR regions are used as input, filtering for
 full/near-full complementarity reduces the number of putative
 interactions from 6109 to 13.
 
+# 3 Summary
+
+| Input     | unfiltered | filtered for complementarity | % retained |
+|:----------|:-----------|:-----------------------------|:-----------|
+| 3’UTR     | 6109       | 13                           | 0.213 %    |
+| full mRNA | 19133057   | 143                          | 0.000747 % |
+
 Next steps:
 
 - discuss w team – should we look for both miRNAs that function through
@@ -219,5 +227,3 @@ Next steps:
 
 - if we decide to shift target prediction requirements, need to rerun
   all target prediction done thus far :(
-
-)
