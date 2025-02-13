@@ -1,0 +1,154 @@
+---
+title: "24-Apul-miRanda-input-comparisons"
+author: "Kathleen Durkin"
+date: "2024-02-12"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+Up to this point, our miRNA target prediction has been primarily performed using the tool miRanda, which requires only seed binding, with 3'UTR regions as input. However, there is growing evidence that cnidarian miRNA binding functions similarly to plants, requiring near-full complementarity and to act primarily through target cleavage, which can occur at any location in the mRNA sequence (not just the 3'UTR). This would mean our current miRanda target predictions are both a) not sufficiently restricted to fll complementarity, and b) incorrectly limited to the 3'UTR.
+
+Let's see what happens when we adjust those parameters
+
+# miRNA and full mRNA coding sequences
+
+Inputs:
+
+  - FASTA of A.pulchra mRNA coding sequences
+  
+  - FASTA of A.pulchra mature miRNAs
+
+## Get mRNA fasta
+
+```{r, engine='bash', eval=FALSE}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi "../data/Apulchra-genome.fa" \
+-bed "../data/Apulcra-genome-mRNA_only.gff" \
+-fo "../data/24-Apul-miRanda-input-comparisons/Apul_mRNA_full.fa"
+
+```
+
+
+## Run miRanda
+```{r, engine='bash', eval=FALSE}
+
+# Same settings we've been using: 
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
+../data/24-Apul-miRanda-input-comparisons/Apul_mRNA_full.fa \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab
+```
+
+## Summarize results
+
+Let's look at the output
+
+```{r, engine='bash'}
+
+echo "miranda run finished!"
+echo "Counting number of interacting miRNA-lncRNA pairs"
+
+zgrep -c "Performing Scan" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab | sort | grep '>' > ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt
+
+echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab
+
+```
+
+This is a lot of putative interactions! Note though, that miRanda only requires complementarity of a 8bp seed region of the miRNA. We instead want to look for binding with full or near-full complementarity. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt | head -5
+```
+
+The header for this output is formatted as:
+
+mirna Target  Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+
+We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 19133057 to 143.
+
+
+# miRNA and mRNA 3'UTRs
+
+Now let's see how filtering changes the outputs of miRanda run with only the 3'UTR mRNA region (the input we have been using up till now)
+
+Unfiltered:
+
+```{r, engine='bash'}
+wc -l ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt
+```
+
+
+Filter for alignment >=21 nucleotides:
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | head -5
+```
+
+
+Filter again for <=3 mismatches:
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+When only mRNA 3'UTR regions are used as input, filtering for full/near-full complementarity reduces the number of putative interactions from 6109 to 13.
+
+
+Next steps:
+
+- discuss w team -- should we look for both miRNAs that function through target cleavage (full complementary, full coding sequence) *and* miRNAs that function through "canonical" translational silencing (seed complementarity, 3'UTR)?
+
+- examine coexpression patterns of full-complementarity interactions -- does the expression data support functional target cleavage?
+
+- Run same comparison using BLAST and/or RNAhybrid as the tool. I'm still not 100% clear on what sequence features miRanda takes into consideration, and any that *are* included will have been based on mammalian miRNAs. It may be more appropriate to use a different tool 
+
+- if we decide to shift target prediction requirements, need to rerun all target prediction done thus far :(
+
+)
