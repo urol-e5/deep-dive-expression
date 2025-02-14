@@ -13,7 +13,13 @@ Kathleen Durkin
     Summarize results</a>
 - <a href="#2-mirna-and-mrna-3utrs" id="toc-2-mirna-and-mrna-3utrs">2
   miRNA and mRNA 3’UTRs</a>
-- <a href="#3-summary" id="toc-3-summary">3 Summary</a>
+- <a href="#3-examine-coexpression" id="toc-3-examine-coexpression">3
+  Examine coexpression</a>
+  - <a href="#31-full-mrna" id="toc-31-full-mrna">3.1 full mRNA</a>
+  - <a href="#32-3utr" id="toc-32-3utr">3.2 3’UTR</a>
+- <a href="#4-mirna-and-mrna" id="toc-4-mirna-and-mrna">4 miRNA and
+  mRNA</a>
+- <a href="#5-summary" id="toc-5-summary">5 Summary</a>
 
 Up to this point, our miRNA target prediction has been primarily
 performed using the tool miRanda, which requires only seed binding, with
@@ -115,7 +121,7 @@ awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-m
 The header for this output is formatted as:
 
 mirna Target Score Energy-Kcal/Mol Query-Aln(start-end)
-Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+Subject-Al(Start-End) Al-Len Subject-Identity Query-Identity
 
 We can see from the percent identities (last 2 entries) that this number
 includes alignments with multiple mismatches. Let’s filter again to
@@ -203,12 +209,242 @@ When only mRNA 3’UTR regions are used as input, filtering for
 full/near-full complementarity reduces the number of putative
 interactions from 6109 to 13.
 
-# 3 Summary
+# 3 Examine coexpression
+
+Now that we’ve found putative interactions with high complementarity, we
+need to validate miRNA function by examining patterns of coexpression.
+We’d expect a putatively-interacting miRNA-mRNA pair to be highly
+coexpressed, and we’d expect a negative relationship to indicate target
+cleavage.
+
+## 3.1 full mRNA
+
+``` r
+library(readr)
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
+# Read in data
+
+# miRNA-mRNA Pearsons correlation coefficients
+miRNA_mRNA_PCC <- read.csv("../output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
+
+# miRNA-mRNA_full miRanda output
+miRNA_mRNA_miRanda <- read_delim("../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt", col_names=FALSE)
+```
+
+    ## Rows: 617982 Columns: 9
+
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: "\t"
+    ## chr (6): X1, X2, X5, X6, X8, X9
+    ## dbl (3): X3, X4, X7
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+colnames(miRNA_mRNA_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
+
+# format miRNA and mRNA names
+geneIDs <- read_delim("../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt", col_names=FALSE)
+```
+
+    ## Rows: 36447 Columns: 5
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: "\t"
+    ## chr (5): X1, X2, X3, X4, X5
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+geneIDs$X4 <- gsub("Parent=", "", geneIDs$X4)
+
+miRNA_mRNA_miRanda$mirna <- gsub(">", "", miRNA_mRNA_miRanda$mirna)
+miRNA_mRNA_miRanda$mirna <- gsub("\\..*", "", miRNA_mRNA_miRanda$mirna)
+
+miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, geneIDs, by=c("Target" = "X1"))
+miRNA_mRNA_miRanda <- select(miRNA_mRNA_miRanda, -X2,-X3,-X5)
+
+# Finally, create a column that conatins both the miRNA and interacting mRNA
+miRNA_mRNA_PCC$interaction <- paste(miRNA_mRNA_PCC$miRNA, "_", miRNA_mRNA_PCC$mRNA)
+miRNA_mRNA_miRanda$interaction <- paste(miRNA_mRNA_miRanda$mirna, "_", miRNA_mRNA_miRanda$X4)
+
+# Annotate w PCC info 
+miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, miRNA_mRNA_PCC, by="interaction")
+```
+
+``` r
+# Filter to high complementarity putative targets
+target_21bp <- miRNA_mRNA_miRanda[miRNA_mRNA_miRanda$Al_Len > 20,]
+target_21bp_3mis <- target_21bp[target_21bp$Subject_Identity>85,]
+
+# How many w significant correlation?
+nrow(target_21bp %>% filter(p_value < 0.05))
+```
+
+    ## [1] 3787
+
+``` r
+nrow(target_21bp %>% filter(p_value < 0.05))/nrow(target_21bp)
+```
+
+    ## [1] 0.03722087
+
+``` r
+nrow(target_21bp_3mis %>% filter(p_value < 0.05))
+```
+
+    ## [1] 6
+
+``` r
+nrow(target_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_21bp_3mis)
+```
+
+    ## [1] 0.04195804
+
+``` r
+# Plot correlation values
+hist(target_21bp$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+hist(target_21bp[target_21bp$p_value < 0.05,]$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+
+``` r
+hist(target_21bp_3mis$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
+
+``` r
+hist(target_21bp_3mis[target_21bp_3mis$p_value < 0.05,]$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-10-4.png)<!-- -->
+
+## 3.2 3’UTR
+
+``` r
+# Read in data
+
+# miRNA-mRNA_full miRanda output
+miRNA_3UTR_miRanda <- read_delim("../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", col_names=FALSE)
+```
+
+    ## Rows: 6109 Columns: 9
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: "\t"
+    ## chr (6): X1, X2, X5, X6, X8, X9
+    ## dbl (3): X3, X4, X7
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+colnames(miRNA_3UTR_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
+
+miRNA_3UTR_miRanda$mirna <- gsub(">", "", miRNA_3UTR_miRanda$mirna)
+miRNA_3UTR_miRanda$mirna <- gsub("\\..*", "", miRNA_3UTR_miRanda$mirna)
+miRNA_3UTR_miRanda$Target <- gsub("::.*", "", miRNA_3UTR_miRanda$Target)
+
+# Finally, create a column that conatins both the miRNA and interacting mRNA
+miRNA_3UTR_miRanda$interaction <- paste(miRNA_3UTR_miRanda$mirna, "_", miRNA_3UTR_miRanda$Target)
+
+# Annotate w PCC info 
+miRNA_3UTR_miRanda <- left_join(miRNA_3UTR_miRanda, miRNA_mRNA_PCC, by="interaction")
+```
+
+``` r
+# Filter to high complementarity putative targets
+target_3UTR_21bp <- miRNA_3UTR_miRanda[miRNA_3UTR_miRanda$Al_Len > 20,]
+target_3UTR_21bp_3mis <- target_3UTR_21bp[target_3UTR_21bp$Subject_Identity>85,]
+
+# How many w significant correlation?
+nrow(target_3UTR_21bp %>% filter(p_value < 0.05))
+```
+
+    ## [1] 58
+
+``` r
+nrow(target_3UTR_21bp %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp)
+```
+
+    ## [1] 0.03413773
+
+``` r
+nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))
+```
+
+    ## [1] 0
+
+``` r
+nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp_3mis)
+```
+
+    ## [1] 0
+
+``` r
+# Plot correlation values
+hist(target_3UTR_21bp$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+hist(target_3UTR_21bp[target_3UTR_21bp$p_value < 0.05,]$PCC.cor)
+```
+
+![](24-Apul-miRanda-input-comparisons_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+# hist(target_3UTR_21bp_3mis$PCC.cor)
+# hist(target_3UTR_21bp_3mis[target_3UTR_21bp_3mis$p_value < 0.05,]$PCC.cor)
+```
+
+# 4 miRNA and mRNA
+
+# 5 Summary
+
+How does different input and/or complementarity filtering affect \#
+putative interactions:
 
 | Input     | unfiltered | filtered for complementarity | % retained |
 |:----------|:-----------|:-----------------------------|:-----------|
 | 3’UTR     | 6109       | 13                           | 0.213 %    |
 | full mRNA | 19133057   | 143                          | 0.000747 % |
+
+For different filters, how many putative interactions *also show
+significant coexpression*?
+
+| Input     | 21bp                    | 21bp, \>=3 mismatch          |
+|:----------|:------------------------|:-----------------------------|
+| 3’UTR     | 58 (3.4% of all 21bp)   | 0                            |
+| full mRNA | 3767 (3.7% of all 21bp) | 6 (4.2% of all 21bp,\>=3mis) |
+
+Note that, in general, only \~1/3 of significant coexpressions have a
+*negative* relationship (which would support functional target cleavage)
+
+Note also that some putative interactions examined above weren’t
+included in the PCC table
 
 Next steps:
 
@@ -216,9 +452,6 @@ Next steps:
   target cleavage (full complementary, full coding sequence) *and*
   miRNAs that function through “canonical” translational silencing (seed
   complementarity, 3’UTR)?
-
-- examine coexpression patterns of full-complementarity interactions –
-  does the expression data support functional target cleavage?
 
 - Run same comparison using BLAST and/or RNAhybrid as the tool. I’m
   still not 100% clear on what sequence features miRanda takes into

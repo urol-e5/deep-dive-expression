@@ -91,7 +91,7 @@ awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-m
 
 The header for this output is formatted as:
 
-mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subject-Al(Start-End) Al-Len Subject-Identity Query-Identity
 
 We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
 
@@ -137,18 +137,127 @@ awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_a
 
 When only mRNA 3'UTR regions are used as input, filtering for full/near-full complementarity reduces the number of putative interactions from 6109 to 13.
 
+# Examine coexpression
+
+Now that we've found putative interactions with high complementarity, we need to validate miRNA function by examining patterns of coexpression. We'd expect a putatively-interacting miRNA-mRNA pair to be highly coexpressed, and we'd expect a negative relationship to indicate target cleavage.
+
+## full mRNA
+
+```{r}
+
+library(readr)
+library(dplyr)
+
+# Read in data
+
+# miRNA-mRNA Pearsons correlation coefficients
+miRNA_mRNA_PCC <- read.csv("../output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
+
+# miRNA-mRNA_full miRanda output
+miRNA_mRNA_miRanda <- read_delim("../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt", col_names=FALSE)
+colnames(miRNA_mRNA_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
+
+# format miRNA and mRNA names
+geneIDs <- read_delim("../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt", col_names=FALSE)
+geneIDs$X4 <- gsub("Parent=", "", geneIDs$X4)
+
+miRNA_mRNA_miRanda$mirna <- gsub(">", "", miRNA_mRNA_miRanda$mirna)
+miRNA_mRNA_miRanda$mirna <- gsub("\\..*", "", miRNA_mRNA_miRanda$mirna)
+
+miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, geneIDs, by=c("Target" = "X1"))
+miRNA_mRNA_miRanda <- select(miRNA_mRNA_miRanda, -X2,-X3,-X5)
+
+# Finally, create a column that conatins both the miRNA and interacting mRNA
+miRNA_mRNA_PCC$interaction <- paste(miRNA_mRNA_PCC$miRNA, "_", miRNA_mRNA_PCC$mRNA)
+miRNA_mRNA_miRanda$interaction <- paste(miRNA_mRNA_miRanda$mirna, "_", miRNA_mRNA_miRanda$X4)
+
+# Annotate w PCC info 
+miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, miRNA_mRNA_PCC, by="interaction")
+```
+
+```{r}
+# Filter to high complementarity putative targets
+target_21bp <- miRNA_mRNA_miRanda[miRNA_mRNA_miRanda$Al_Len > 20,]
+target_21bp_3mis <- target_21bp[target_21bp$Subject_Identity>85,]
+
+# How many w significant correlation?
+nrow(target_21bp %>% filter(p_value < 0.05))
+nrow(target_21bp %>% filter(p_value < 0.05))/nrow(target_21bp)
+nrow(target_21bp_3mis %>% filter(p_value < 0.05))
+nrow(target_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_21bp_3mis)
+
+# Plot correlation values
+hist(target_21bp$PCC.cor)
+hist(target_21bp[target_21bp$p_value < 0.05,]$PCC.cor)
+
+hist(target_21bp_3mis$PCC.cor)
+hist(target_21bp_3mis[target_21bp_3mis$p_value < 0.05,]$PCC.cor)
+```
+
+## 3'UTR
+
+```{r}
+# Read in data
+
+# miRNA-mRNA_full miRanda output
+miRNA_3UTR_miRanda <- read_delim("../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", col_names=FALSE)
+colnames(miRNA_3UTR_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
+
+miRNA_3UTR_miRanda$mirna <- gsub(">", "", miRNA_3UTR_miRanda$mirna)
+miRNA_3UTR_miRanda$mirna <- gsub("\\..*", "", miRNA_3UTR_miRanda$mirna)
+miRNA_3UTR_miRanda$Target <- gsub("::.*", "", miRNA_3UTR_miRanda$Target)
+
+# Finally, create a column that conatins both the miRNA and interacting mRNA
+miRNA_3UTR_miRanda$interaction <- paste(miRNA_3UTR_miRanda$mirna, "_", miRNA_3UTR_miRanda$Target)
+
+# Annotate w PCC info 
+miRNA_3UTR_miRanda <- left_join(miRNA_3UTR_miRanda, miRNA_mRNA_PCC, by="interaction")
+```
+
+```{r}
+# Filter to high complementarity putative targets
+target_3UTR_21bp <- miRNA_3UTR_miRanda[miRNA_3UTR_miRanda$Al_Len > 20,]
+target_3UTR_21bp_3mis <- target_3UTR_21bp[target_3UTR_21bp$Subject_Identity>85,]
+
+# How many w significant correlation?
+nrow(target_3UTR_21bp %>% filter(p_value < 0.05))
+nrow(target_3UTR_21bp %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp)
+nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))
+nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp_3mis)
+
+# Plot correlation values
+hist(target_3UTR_21bp$PCC.cor)
+hist(target_3UTR_21bp[target_3UTR_21bp$p_value < 0.05,]$PCC.cor)
+
+# hist(target_3UTR_21bp_3mis$PCC.cor)
+# hist(target_3UTR_21bp_3mis[target_3UTR_21bp_3mis$p_value < 0.05,]$PCC.cor)
+```
+
+# miRNA and mRNA
+
 # Summary
+
+How does different input and/or complementarity filtering affect \# putative interactions:
 
 | Input     | unfiltered | filtered for complementarity | \% retained |
 |-----------|------------|------------------------------|-------------|
 | 3'UTR     | 6109       | 13                           | 0.213 %     |
 | full mRNA | 19133057   | 143                          | 0.000747 %  |
 
+For different filters, how many putative interactions *also show significant coexpression*?
+
+| Input     | 21bp                    | 21bp, \>=3 mismatch          |
+|-----------|-------------------------|------------------------------|
+| 3'UTR     | 58 (3.4% of all 21bp)   | 0                            |
+| full mRNA | 3767 (3.7% of all 21bp) | 6 (4.2% of all 21bp,\>=3mis) |
+
+Note that, in general, only \~1/3 of significant coexpressions have a *negative* relationship (which would support functional target cleavage)
+
+Note also that some putative interactions examined above weren't included in the PCC table
+
 Next steps:
 
 -   discuss w team -- should we look for both miRNAs that function through target cleavage (full complementary, full coding sequence) *and* miRNAs that function through "canonical" translational silencing (seed complementarity, 3'UTR)?
-
--   examine coexpression patterns of full-complementarity interactions -- does the expression data support functional target cleavage?
 
 -   Run same comparison using BLAST and/or RNAhybrid as the tool. I'm still not 100% clear on what sequence features miRanda takes into consideration, and any that *are* included will have been based on mammalian miRNAs. It may be more appropriate to use a different tool
 
