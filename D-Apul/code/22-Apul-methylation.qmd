@@ -37,9 +37,21 @@ Methylation files at https://owl.fish.washington.edu/nightingales/E5-coral-deep-
 ```{bash}
 wget -r \
 --no-directories --no-parent \
--P ../data \
--A "423*.gz,427*.gz,439*.gz,467*.gz,413*.gz" \
-https://owl.fish.washington.edu/nightingales/E5-coral-deep-dive-expression/genohub2216545/
+-P ../data/22-Apul-meth \
+-A "*.gz" \
+https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/
+```
+```{bash}
+# Directories and programs
+bismark_dir="/home/shared/Bismark-0.24.0/"
+bowtie2_dir="/home/shared/bowtie2-2.4.4-linux-x86_64/"
+genome_folder="../data/"
+
+${bismark_dir}/bismark_genome_preparation \
+--verbose \
+--parallel 28 \
+--path_to_aligner ${bowtie2_dir} \
+${genome_folder}
 ```
 
 
