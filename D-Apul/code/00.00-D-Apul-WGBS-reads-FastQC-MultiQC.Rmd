@@ -3,6 +3,9 @@ title: "00.00-D-Apul-WGBS-reads-FastQC-MultiQC"
 author: "Sam White"
 date: "2025-02-06"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -115,7 +115,7 @@ column -t -s","
 
 ## Download raw reads
 
-```{bash download-raw-reads, engine='bash'}
+```{bash download-raw-reads, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
@@ -178,10 +178,47 @@ source .bashvars
 
 cd "${raw_reads_dir}"
 
-# Checksums file contains other files, so this just looks for the RNAseq files.
+# Verify checksums
 for file in *.md5
 do
   md5sum --check "${file}"
+done
+```
+
+# Rename FastQs for Project Consistency
+
+New naming format will be `<colony_id>-<timepoint>`.
+
+```{bash rename-fastqs, engine='bash', eval=TRUE}
+# Load bash variables into memory
+source .bashvars
+
+cd "${raw_reads_dir}"
+
+# Create an associative array to store the mapping
+declare -A number_to_colony_timepoint
+
+# Read the metadata file and populate the associative array
+while IFS=, read -r Number Species Timepoint CollectionDate Site colony_id ExtractionDate; do
+    if [[ "$Number" != "Number" ]]; then
+        number_to_colony_timepoint["$Number"]="${colony_id}-${Timepoint}"
+    fi
+done < "${deep_dive_expression_dir}/M-multi-species/data/e5_deep_dive_WGBS_metadata.csv"
+
+# Iterate over the FastQ files in the current directory
+for fastq_file in *.fastq.gz; do
+    # Extract the sample number from the filename
+    sample_number=$(echo "$fastq_file" | cut -d'_' -f1)
+    
+    # Check if the sample number exists in the associative array
+    if [[ -n "${number_to_colony_timepoint[$sample_number]}" ]]; then
+        new_sample_name="${number_to_colony_timepoint[$sample_number]}"
+        new_filename=$(echo "$fastq_file" | sed "s/^$sample_number/$new_sample_name/")
+        mv "$fastq_file" "$new_filename"
+        echo "Renamed $fastq_file to $new_filename"
+    else
+        echo "Sample number $sample_number not found in metadata."
+    fi
 done
 ```
 

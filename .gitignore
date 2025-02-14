@@ -31,6 +31,7 @@ D-Apul/output/07.2-Apul-Hisat
 D-Apul/data/16-Apul-RNAhybrid/*.fa
 D-Apul/data/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/*.fa
 D-Apul/data/20-Apul-Orthofinder/proteins/*.fa*
+D-Apul/data/24-Apul-miRanda-input-comparisons/*.fa
 D-Apul/output/08-Apul-WGBS/work/
 D-Apul/output/08-Apul-WGBS/.nextflow*
 D-Apul/output/08-Apul-WGBS/*/*gz
@@ -41,9 +42,11 @@ D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
 D-Apul/output/16-Apul-RNAhybrid/*.fa
 D-Apul/output/16-Apul-RNAhybrid/Apul-RNAhybrid-mRNA-compact.txt
 D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/*_large.txt
+D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/WorkingDirectory
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Gene_Trees
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Sequences
+D-Apul/output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab
 
 E-Peve/code/.bashvars
 E-Peve/code/*_cache

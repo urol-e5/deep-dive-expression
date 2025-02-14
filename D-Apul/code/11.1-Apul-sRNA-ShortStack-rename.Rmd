@@ -1,0 +1,51 @@
+---
+title: "Apul miRNA renaming"
+author: "Jill Ashey"
+date: "2025-02-10"
+output: html_document
+---
+
+The following script will compare the miRNAs identified using the old and new short stack versions. It will also rename the miRNAs from the new version in accordance with the old version.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in old miRNAs generated during deep dive manuscript (see github repo for that project [here](https://github.com/urol-e5/deep-dive)). This data was generated using this [code](https://github.com/urol-e5/deep-dive/blob/main/D-Apul/code/13.2.1-Apul-sRNAseq-ShortStack-31bp-fastp-merged-cnidarian_miRBase.Rmd) and using the 
+Amillepora genome. 
+```{r}
+apul_old <- read.csv("../../M-multi-species/data/Apul_results_mature_named_old_ShortStack_version.csv")
+head(apul_old)
+dim(apul_old)
+
+# Add _old to colnames
+colnames(apul_old) <- paste0(colnames(apul_old), "_old")
+```
+
+38 miRNAs were identified using the old version of shortstack. 
+
+Read in new miRNAs generated for this manuscript (see github repo for the current project [here](https://github.com/urol-e5/deep-dive-expression/tree/main)). This data was generated using this [code](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome.Rmd) and using the new Apulchra genome. 
+```{r}
+apul_new <- read.delim("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.txt")
+
+# Filter to only retain miRNAs
+apul_new <- apul_new %>%
+  filter(MIRNA == "Y")
+dim(apul_new)
+
+# Add _new to colnames
+colnames(apul_new) <- paste0(colnames(apul_new), "_new")
+```
+
+39 miRNAs were identified using the new version of shortstack. 
+
+Merge dfs together by MajorRNA
+```{r}
+apul_merge <- apul_new %>%
+  full_join(apul_old, by = c("MajorRNA_new" = "MajorRNA_old"))
+```
+
+Not sure how to interpret this...
+

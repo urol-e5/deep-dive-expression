@@ -23,23 +23,27 @@ Kathleen Durkin
     precursors</a>
   - <a href="#32-lncrnas-as-mirna-sponges"
     id="toc-32-lncrnas-as-mirna-sponges">3.2 LncRNAs as miRNA sponges</a>
-- <a href="#4-rnahybrid" id="toc-4-rnahybrid">4 RNAhybrid</a>
-  - <a href="#41-get-lncrna-gtf" id="toc-41-get-lncrna-gtf">4.1 Get lncRNA
+- <a href="#4-miranda" id="toc-4-miranda">4 miRanda</a>
+  - <a href="#41-run-miranda" id="toc-41-run-miranda">4.1 Run miRanda</a>
+- <a href="#5-summarize-results" id="toc-5-summarize-results">5 Summarize
+  results</a>
+- <a href="#6-rnahybrid" id="toc-6-rnahybrid">6 RNAhybrid</a>
+  - <a href="#61-get-lncrna-gtf" id="toc-61-get-lncrna-gtf">6.1 Get lncRNA
     gtf</a>
-  - <a href="#42-break-up-100bp-sequences"
-    id="toc-42-break-up-100bp-sequences">4.2 Break up &gt;100bp
+  - <a href="#62-break-up-100bp-sequences"
+    id="toc-62-break-up-100bp-sequences">6.2 Break up &gt;100bp
     sequences</a>
-  - <a href="#43-get-fasta-of-broken-up-lncrna-gtf"
-    id="toc-43-get-fasta-of-broken-up-lncrna-gtf">4.3 Get fasta of broken-up
+  - <a href="#63-get-fasta-of-broken-up-lncrna-gtf"
+    id="toc-63-get-fasta-of-broken-up-lncrna-gtf">6.3 Get fasta of broken-up
     lncRNA gtf</a>
-  - <a href="#44-run-rnahybrid" id="toc-44-run-rnahybrid">4.4 Run
+  - <a href="#64-run-rnahybrid" id="toc-64-run-rnahybrid">6.4 Run
     RNAhybrid</a>
-  - <a href="#45-summarize-rnahybrid-results"
-    id="toc-45-summarize-rnahybrid-results">4.5 Summarize RNAhybrid
+  - <a href="#65-summarize-rnahybrid-results"
+    id="toc-65-summarize-rnahybrid-results">6.5 Summarize RNAhybrid
     results</a>
-- <a href="#5-summarize-final-results"
-  id="toc-5-summarize-final-results">5 Summarize final results</a>
-- <a href="#6-references" id="toc-6-references">6 References</a>
+- <a href="#7-summarize-final-results"
+  id="toc-7-summarize-final-results">7 Summarize final results</a>
+- <a href="#8-references" id="toc-8-references">8 References</a>
 
 ``` r
 library(dplyr)
@@ -416,8 +420,8 @@ the same pre-miRNA occuring inside these lncRNA isoforms.
 
 So there are 3 instances of a unique lncRNA containing a full pre-miRNA
 sequence (and one of those instances occurs in 5 lncRNA isoforms) That
-means there are 3 instances of a lncRNA that may be processed down into
-a pre-miRNA, which may then be processed into a mature miRNA
+means there are **3 instances of a lncRNA that may be processed down
+into a pre-miRNA**, which may then be processed into a mature miRNA
 
 It is also possible that a lncRNA may be directly processed into a
 mature miRNA, without first being processed into pre-miRNA. Let’s look
@@ -482,9 +486,9 @@ only a complementary seed region, as in vertebrate miRNA-mRNA binding).
 that means I don’t know what alignment parameters to require for our
 BLAST results.
 
-For now let’s say the aligned region maust be at least 8 nucleotides
-(the expected length of an miRNA seed region), and let’s require a low
-evalue of 1e-3, to generally restrict results to those with high
+For now let’s say the aligned region must be at least 8 nucleotides (the
+expected length of an miRNA seed region), and let’s require a low evalue
+of 1e-3, to generally restrict results to those with high
 complementarity.
 
 ``` r
@@ -733,12 +737,104 @@ mature_lncRNA_BLASTn %>%
 Ultimately though these results are insufficient to determine lncRNA
 sponging. We need to evaluate miRNA-lncRNA binding.
 
-# 4 RNAhybrid
+# 4 miRanda
 
-RNAhybrid is a miRNA-mRNA target prediction tool, which bases its
-predictions primarily on thermodynamic binding stability. While the tool
-is normally used to predict miRNA-mRNA binding, it should also work for
-miRNA-lncRNA binding
+miRanda is a target prediction software, used to identify likely
+miRNA-mRNA interactions.
+
+Inputs:
+
+- FASTA of A.pulchra lncRNAs
+
+- FASTA of A.pulchra mature miRNAs
+
+## 4.1 Run miRanda
+
+``` bash
+
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
+../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+```
+
+# 5 Summarize results
+
+Let’s look at the output
+
+``` bash
+
+echo "miranda run finished!"
+echo "Counting number of interacting miRNA-lncRNA pairs"
+
+zgrep -c "Performing Scan" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab | sort | grep '>' > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt
+
+echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+```
+
+This is a lot of putative interactions! We can probably narrow it down
+though. In vertebrates, miRNA-mRNA binding only requires complementarity
+of an miRNA seed region of \~8 nucleotides. This requirement is built in
+to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding
+is believed to require near-complete complementarity of the full mature
+miRNA, similarly to plants ( Admoni et al.
+([2023](#ref-admoni_target_2023)) , Admoni et al.
+([2025](#ref-admoni_mirna-target_2025)) ). While I couldn’t find any
+information on expected requirements for miRNA-lncRNA sponges, its
+possible the binding will function similarly to miRNA-mRNA binding.
+Let’s look at how many putative interactions are predicted for a binding
+length of at least 21 nucleotides (the length of our smallest mature
+miRNA).
+
+``` bash
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | head -5
+```
+
+The header for this output is formatted as:
+
+mirna Target Score Energy-Kcal/Mol Query-Aln(start-end)
+Subjetct-Al(Start-End) Al-Len Subject-Identity Query-Identity
+
+We can see from the percent identities (last 2 entries) that this number
+includes alignments with multiple mismatches. Let’s filter again to
+reduce the number of permissible mismatches. Let’s say we want no more
+than 3 mismatches (a gap is counted as a mismatch). For an alignment of
+21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%.
+The miRNA is our “subject”, so we will filter by column 8.
+
+``` bash
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+This is a dramatically smaller number – only 19 interactions are at
+least 21 nucleotides with \<=3 mismatches
+
+# 6 RNAhybrid
+
+RNAhybrid is another miRNA-mRNA target prediction tool, which bases its
+predictions primarily on thermodynamic binding stability (unlike
+miRanda, which considers sequence features expected of miRNA targets).
+While the tool is normally used to predict miRNA-mRNA binding, it should
+also work for miRNA-lncRNA binding
 
 First we need to format our lncRNA and mature miRNA data. RNAhybrid
 requires a query fasta file of mature miRNAs, and a target fasta file
@@ -757,7 +853,7 @@ I need to:
 
 3.  Convert this modified gff back into a fasta file.
 
-## 4.1 Get lncRNA gtf
+## 6.1 Get lncRNA gtf
 
 We have a *candidate* lncRNA gtf that then underwent some filtering and
 was converted to our final Apul_lncRNA.fasta. Let’s filter the gtf to
@@ -843,7 +939,7 @@ awk -F'\t' '{
 head -3 $formatted | awk -F'\t' '{print $9}'
 ```
 
-## 4.2 Break up \>100bp sequences
+## 6.2 Break up \>100bp sequences
 
 ``` bash
 
@@ -929,7 +1025,7 @@ head -5 $MAX1000gtf
 
 Looks good!
 
-## 4.3 Get fasta of broken-up lncRNA gtf
+## 6.3 Get fasta of broken-up lncRNA gtf
 
 ``` bash
 
@@ -941,7 +1037,7 @@ Looks good!
 -fo "../data/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_MAX1000.fa"
 ```
 
-## 4.4 Run RNAhybrid
+## 6.4 Run RNAhybrid
 
 Now we can run RNAhybrid! I was getting a weird issue with all-zero
 pvalues when I used RNAcalibrate-generated shape distribution parameters
@@ -973,7 +1069,7 @@ RNAhybrid \
 > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-RNAhybrid-lncRNA-compact_3utrworm.txt
 ```
 
-## 4.5 Summarize RNAhybrid results
+## 6.5 Summarize RNAhybrid results
 
 ``` bash
 
@@ -1119,7 +1215,7 @@ head(RNAhybrid_lncRNA_annot)
 write.table(RNAhybrid_lncRNA_annot, "../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-RNAhybrid-lncRNA-compact_3utrworm-annot.txt", sep = "\t")
 ```
 
-# 5 Summarize final results
+# 7 Summarize final results
 
 LncRNA as miRNA precursors:
 
@@ -1137,22 +1233,35 @@ isoforms)
 
 LncRNA as miRNA sponges:
 
-``` r
-cat("RNAhybrid Results: ", "\n", "\n",
-    "(as a reminder)", "\n",
-    "Number of A.pulchra lncRNAs: ", length(lncRNA_lengths$seqID), "\n",
-    "Number of A.pulchra miRNAs: ", length(mature_lengths$seqID), "\n",
-    "~~~~~~~~~~~~~~~~~~~~~~", "\n",
-    "for p < 0.05: ", "\n",
-    "Number of significant lncRNA-miRNA hybridizations: ", length(RNAhybrid_lncRNA_annot$parent_id), "\n",
-    "Number of putative lncRNA sponges: ", length(unique(RNAhybrid_lncRNA_annot$parent_id)), "\n",
-    "Number of miRNA putatively sequestered by lncRNA: ", length(unique(RNAhybrid_lncRNA_annot$miRNA_cluster)), "\n",
-    "~~~~~~~~~~~~~~~~~~~~~~", "\n",
-    "for p < 0.01: ", "\n",
-    "Number of lncRNA-miRNA hybridizations: ", length(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$parent_id), "\n",
-    "Number of putative lncRNA sponges: ", length(unique(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$parent_id)), "\n",
-    "Number of miRNA putatively sequestered by lncRNA sponges: ", length(unique(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$miRNA_cluster)))
+``` bash
+
+echo "miRanda Results:"
+echo ""
+echo "Number of putative interactions:"
+wc -l  ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
+echo ""
+echo "Number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | wc -l
+echo ""
+echo "Number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 ```
+
+    ``` r
+    cat("RNAhybrid Results: ", "\n", "\n",
+        "(as a reminder)", "\n",
+        "Number of A.pulchra lncRNAs: ", length(lncRNA_lengths$seqID), "\n",
+        "Number of A.pulchra miRNAs: ", length(mature_lengths$seqID), "\n",
+        "~~~~~~~~~~~~~~~~~~~~~~", "\n",
+        "for p < 0.05: ", "\n",
+        "Number of significant lncRNA-miRNA hybridizations: ", length(RNAhybrid_lncRNA_annot$parent_id), "\n",
+        "Number of putative lncRNA sponges: ", length(unique(RNAhybrid_lncRNA_annot$parent_id)), "\n",
+        "Number of miRNA putatively sequestered by lncRNA: ", length(unique(RNAhybrid_lncRNA_annot$miRNA_cluster)), "\n",
+        "~~~~~~~~~~~~~~~~~~~~~~", "\n",
+        "for p < 0.01: ", "\n",
+        "Number of lncRNA-miRNA hybridizations: ", length(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$parent_id), "\n",
+        "Number of putative lncRNA sponges: ", length(unique(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$parent_id)), "\n",
+        "Number of miRNA putatively sequestered by lncRNA sponges: ", length(unique(filter(RNAhybrid_lncRNA_annot, pval < 0.01)$miRNA_cluster)))
 
     ## RNAhybrid Results:  
     ##  
@@ -1170,7 +1279,7 @@ cat("RNAhybrid Results: ", "\n", "\n",
     ##  Number of putative lncRNA sponges:  259 
     ##  Number of miRNA putatively sequestered by lncRNA sponges:  35
 
-# 6 References
+# 8 References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
@@ -1181,6 +1290,16 @@ Michal Rabani, Uri Frank, and Yehu Moran. 2023. “Target Complementarity
 in Cnidarians Supports a Common Origin for Animal and Plant <span
 class="nocase">microRNAs</span>.” bioRxiv.
 <https://doi.org/10.1101/2023.01.08.523153>.
+
+</div>
+
+<div id="ref-admoni_mirna-target_2025" class="csl-entry">
+
+Admoni, Yael, Arie Fridrich, Paris K Weavers, Reuven Aharoni, Talya
+Razin, Miguel Salinas-Saavedra, Michal Rabani, Uri Frank, and Yehu
+Moran. 2025. “<span class="nocase">miRNA</span>-Target Complementarity
+in Cnidarians Resembles Its Counterpart in Plants.” *EMBO Reports*,
+January, 1–24. <https://doi.org/10.1038/s44319-024-00350-z>.
 
 </div>
 

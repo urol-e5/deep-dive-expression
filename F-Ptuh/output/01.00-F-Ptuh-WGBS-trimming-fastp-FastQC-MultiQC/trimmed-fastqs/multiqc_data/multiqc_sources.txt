@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	POC-48-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-48-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-47-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-47-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-50-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-50-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-50-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-50-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-57-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-57-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-53-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-53-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-53-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-53-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-48-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-48-TP2_R2.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-57-TP2_R1	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-57-TP2_R1.fastp-trim_fastqc.zip
+FastQC	all_sections	POC-47-TP2_R2	/home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POC-47-TP2_R2.fastp-trim_fastqc.zip

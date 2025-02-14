@@ -84,8 +84,8 @@ ggplot(sum_mirna %>% arrange(desc(mRNA_count)),
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "miRNA", y = "mRNA Count", title = "miRNA Regulation of mRNAs") #+
   #coord_flip()  # Optional: horizontal bar plot for better readability
-ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
-ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
+#ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
+#ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 
 # mRNA
 sum_mrna <- miranda_apul %>%
@@ -310,7 +310,7 @@ pcc_results <- pcc_results %>%
   mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
 
 # Save as csv
-write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
+#write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
 ```
 
 Merge with miranda data 
@@ -323,6 +323,11 @@ length(unique(combined_data_pcc$mRNA))
 
 # Save as csv
 write.csv(combined_data_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv")
+```
+
+Read data back in so PCC does not have to be run again
+```{r}
+combined_data_pcc <- read.csv("../output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv")
 ```
 
 Plot number of positive and negative interactions for each miRNA

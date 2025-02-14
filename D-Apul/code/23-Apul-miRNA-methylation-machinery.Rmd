@@ -1,0 +1,107 @@
+---
+title: "23-Apul-miRNA-methylation-machinery"
+author: "Kathleen Durkin"
+date: "2025-01-27"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+bibliography: ../../references.bib
+---
+
+```{r}
+library(dplyr)
+```
+
+One way miRNAs and DNA methylation can interact to influence expression is through miRNAs influencing the transcription/translation of protein machinery involved in DNA methylation. In humans, this has been identified as a potential mechanism of carcinogenisis! (Reviewed in @karimzadeh_regulation_2021)
+
+## Which genes are involved in DNA methylation?
+
+"DNA methylation machinery is composed of several enzymes to accurately regulate the gene expression together. The main enzyme-encoding genes comprise a small family of DNA cytosine-5 methyltransferase, which are involved in established (DNA methyltransferase 3 alpha (DNMT3A) and DNA methyltransferase 3 beta (DNMT3B)) and maintenance (DNMT1) of methylation patterns. The other genes are methyl-CpG-binding proteins (MBPs; methyl-CpG-binding domain (MBD)1–4, methyl-CpG-binding protein 2 (MECP2), UHRF1/2, ZBTB33, ZBTB4, and ZBTB38) that assist in expression repression and 10–11 translocation (TET) enzymes (TET1, TET2, and TET3); seemingly, are implicated in DNA demethylation [10, 11]. Some experiments demonstrated that, based on the importance of oncogenes and/or tumor suppressor genes alterations in the development of each type of cancer, DNA methylation regulator genes may enhance or suppress cancer development in each specific type of cancer [12,13,14,15,16]."
+@karimzadeh_regulation_2021
+
+So we're looking for miRNAs that target genes encoding:
+- DNA methyltransferases (DNMTs)
+- methyl-CpG-binding proteins
+- 10–11 translocation (TET) enzymes
+
+First let's see what a quick search of our annotated A.pulchra genome turns up. I want to find any annotations related to DNA methyltransferase
+
+```{r, engine='bash'}
+
+awk -F'\t' '$5 ~ /methyltransferase/ {print $2, $5}' OFS='\t' \
+../output/02-Apul-reference-annotation/Apulcra-genome-mRNA-IDmapping-2024_12_12.tab \
+| grep "DNA"
+
+```
+
+There's definitely DNMT machinery genes anontated in our A.pulchra genome (as expected)! Now let's create a data frame that associated each annotated mRNA with it's gene ID (i.e. FUN######) and do a more broad search for different machinery involved in methylation
+
+```{r}
+# Read in data
+mRNA_annot <- read.table("../output/02-Apul-reference-annotation/Apulcra-genome-mRNA-IDmapping-2024_12_12.tab", header=TRUE, sep='\t') %>% select(-X)
+mRNA_geneIDs <- read.table("../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt", header=FALSE, sep='\t')
+
+# Join
+mRNA_annot_geneID <- left_join(mRNA_annot, mRNA_geneIDs, by="V1")
+mRNA_annot_geneID$V4 <- gsub("Parent=", "", mRNA_annot_geneID$V4)
+
+# To double-check that this worked correctly, check for NAs in the column containing gene IDs
+# Every mRNA has a gene ID, so this should return FALSE
+any(is.na(mRNA_annot_geneID$V3.y))
+```
+
+Now let's select genes that encode different protein machinery relevant to DNA methylation
+
+```{r}
+methyl_machinery <- subset(mRNA_annot_geneID, 
+                           (grepl("methyltransferase", mRNA_annot_geneID$Protein.names) 
+                            & grepl("DNA", mRNA_annot_geneID$Protein.names))
+                           | grepl("DNMT", mRNA_annot_geneID$Protein.names)
+                           | grepl("Dnmt", mRNA_annot_geneID$Protein.names)
+                           | grepl("MBP", mRNA_annot_geneID$Protein.names)
+                           | grepl("MBD", mRNA_annot_geneID$Protein.names)
+                           | grepl("MECP", mRNA_annot_geneID$Protein.names)
+                           | grepl("UHRF", mRNA_annot_geneID$Protein.names)
+                           | grepl("ZBTB", mRNA_annot_geneID$Protein.names)
+                           | grepl("TET", mRNA_annot_geneID$Protein.names)
+                           )
+
+nrow(methyl_machinery)
+
+```
+
+We find 23 mRNAs in our A.pulchra genome that encode known DNA methylation machinery!
+
+Note that I stipulated the term "methyltransferase" must be accompanied by "DNA" also present in the Protein.names column. I imposed this restriction because, when I searched for "methyltransferase" alone, methyltransferases related to histone modification and modification with nucleotides other than cytosine came up.
+
+Now let's see whether any of these methylation machinery genes are putative miRNA targets, using the output from our target-prediction software, miRanda.
+
+```{r}
+miranda_apul <- read.table("../output/18-Apul-interactions-functional-annotation/miRanda_miRNA_mRNA.txt", header=TRUE, sep='\t')
+
+miranda_methyl_machinery <- left_join(methyl_machinery, miranda_apul, by=c("V4" = "mRNA_FUNid"))
+
+length(na.omit(miranda_apul$miRNA_cluster))
+length(unique(na.omit(miranda_apul$miRNA_cluster)))
+
+length(na.omit(miranda_methyl_machinery$miRNA_cluster))
+length(unique(na.omit(miranda_methyl_machinery$miRNA_cluster)))
+```
+Miranda originally identified 6109 putative targets of 39 of our miRNAs, but none of these targets are included in our list of DNA methylation machinery mRNA. :(
+
+
+So this means that our **A.pulchra miRNAs do not putatively bind to any methylation machinery mRNA** and/or I'm missing some genes in my search.

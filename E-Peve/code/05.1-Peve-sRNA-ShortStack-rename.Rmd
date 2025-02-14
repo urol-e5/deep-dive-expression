@@ -1,0 +1,50 @@
+---
+title: "Peve miRNA renaming"
+author: "Jill Ashey"
+date: "2025-02-10"
+output: html_document
+---
+
+The following script will compare the miRNAs identified using the old and new short stack versions. It will also rename the miRNAs from the new version in accordance with the old version.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in old miRNAs generated during deep dive manuscript (see github repo for that project [here](https://github.com/urol-e5/deep-dive)). This data was generated using this [code](https://github.com/urol-e5/deep-dive/tree/main/E-Peve/code/08.2-Peve-sRNAseq-ShortStack-31bp-fastp-merged_files)) and using the 
+Pevermanni genome. 
+```{r}
+peve_old <- read.csv("../../M-multi-species/data/Peve_results_mature_named_old_ShortStack_version.csv")
+dim(peve_old)
+
+# Add _old to colnames
+colnames(peve_old) <- paste0(colnames(peve_old), "_old")
+```
+
+46 miRNAs were identified using the old version of shortstack. 
+
+Read in new miRNAs generated for this manuscript (see github repo for the current project [here](https://github.com/urol-e5/deep-dive-expression/tree/main)). This data was generated using this [code](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/05-Peve-sRNA-ShortStack_4.1.0.Rmd) and using the Pevermanni genome. 
+```{r}
+peve_new <- read.delim("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt")
+
+# Filter to only retain miRNAs
+peve_new <- peve_new %>%
+  filter(MIRNA == "Y")
+dim(peve_new)
+
+# Add _new to colnames
+colnames(peve_new) <- paste0(colnames(peve_new), "_new")
+```
+
+45 miRNAs were identified using the new version of shortstack. 
+
+Merge dfs together by MajorRNA
+```{r}
+peve_merge <- peve_new %>%
+  full_join(peve_old, by = c("MajorRNA_new" = "MajorRNA_old"))
+```
+
+Not sure how to interpret this...
+
