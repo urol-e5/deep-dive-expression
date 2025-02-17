@@ -39,7 +39,7 @@ dim(apul_new)
 colnames(apul_new) <- paste0(colnames(apul_new), "_new")
 ```
 
-39 miRNAs were identified using the new version of shortstack. 
+39 miRNAs were identified using the new version of shortstack. We also used the new Apul genome with the new version of shortstack. 
 
 Merge dfs together by MajorRNA
 ```{r}
@@ -47,5 +47,67 @@ apul_merge <- apul_new %>%
   full_join(apul_old, by = c("MajorRNA_new" = "MajorRNA_old"))
 ```
 
-Not sure how to interpret this...
+Select specific columns 
+```{r}
+selected_columns <- c(
+  grep("new", colnames(apul_merge), value = TRUE),
+  "given_miRNA_name_old"
+)
+
+apul_merge_selected <- apul_merge[, selected_columns]
+```
+
+There are 8 new miRNAs that need to be named. There are 6 old miRNAs that are NOT present in the miRNAs run with the new genome: apul-mir-novel-1, apul-mir-novel-18, apul-mir-novel-24a/b, and apul-mir-novel-25a/b. This is expected, as we used a totally different genome than from our initial run. There was also a new miRNA that was aligned with both apul-mir-novel-8a/b.
+
+Combine the old miRNA names into one line for a new locus that matched with two different old miRNAs
+```{r}
+apul_merge_combined <- apul_merge_selected %>%
+  group_by(Locus_new) %>%
+  summarise(across(everything(), ~ if(is.character(.x)) paste(unique(.x), collapse = "; ") else first(.x)))
+```
+
+Remove the old miRNA names that were not identified with the new version of shortstack. 
+```{r}
+apul_merge_combined <- apul_merge_combined %>%
+  filter(!is.na(Locus_new))
+```
+
+There are 8 new unnamed miRNAs. Rename them: apul-mir-novel-27, 28, 29, 30, 31, 32, 33, 34.
+
+Use a counter to apply the names to the rows with NAs
+```{r}
+# Create a vector of new names
+new_names <- c("apul-mir-novel-27", "apul-mir-novel-28", "apul-mir-novel-29", "apul-mir-novel-30", "apul-mir-novel-31", "apul-mir-novel-32", "apul-mir-novel-33", "apul-mir-novel-34")
+
+# Initialize a counter
+counter <- 1
+
+# Custom function to replace "NA" with new names
+replace_na <- function(x) {
+  if (x == "NA") {
+    new_name <- new_names[counter]
+    counter <<- counter + 1
+    if (counter > length(new_names)) {
+      counter <<- 1  # Reset counter if we run out of new names
+    }
+    return(new_name)
+  } else {
+    return(x)
+  }
+}
+
+# Apply the replacement
+apul_merge_combined <- apul_merge_combined %>%
+  mutate(given_miRNA_name_old = sapply(given_miRNA_name_old, replace_na))
+```
+
+Format colnames and save as csv 
+```{r}
+apul_merge_final <- apul_merge_combined %>%
+  rename_with(~ gsub("_new$|_old$", "", .), everything())
+
+# Save 
+write.csv(apul_merge_final, "../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv")
+```
+
 

@@ -46,5 +46,65 @@ peve_merge <- peve_new %>%
   full_join(peve_old, by = c("MajorRNA_new" = "MajorRNA_old"))
 ```
 
-Not sure how to interpret this...
+Select specific columns 
+```{r}
+selected_columns <- c(
+  grep("new", colnames(peve_merge), value = TRUE),
+  "given_miRNA_name_old"
+)
+
+peve_merge_selected <- peve_merge[, selected_columns]
+```
+
+With the new version of shortstack, a few clusters joined with multiple old miRNAs. As identified by the old version of shortstack, they are the same sequence but they were found in different places in the genome. 
+
+Combine the old miRNA names into one line for a new locus that matched with two different old miRNAs
+```{r}
+peve_merge_combined <- peve_merge_selected %>%
+  group_by(Locus_new) %>%
+  summarise(across(everything(), ~ if(is.character(.x)) paste(unique(.x), collapse = "; ") else first(.x)))
+```
+
+The following OLD miRNAs were not found in the new miRNA list: peve-mir-novel-5; peve-mir-novel-12; peve-mir-novel-37; peve-mir-novel-33
+
+There are also two clusters that are close to one another that align with both peve-mir-novel-14a/b and peve-mir-novel-17a/b. Cluster_6904 and Cluster_6905 align with peve-mir-novel-14a/b, while Cluster_7657 and Cluster_7658 align with peve-mir-novel-17a/b. 
+
+There are 3 new unnamed miRNAs. Rename them: peve-mir-novel-40, 41, 42. 
+
+Use a counter to apply the names to the rows with NAs
+```{r}
+# Create a vector of new names
+new_names <- c("peve-mir-novel-40", "peve-mir-novel-41", "peve-mir-novel-42")
+
+# Initialize a counter
+counter <- 1
+
+# Custom function to replace "NA" with new names
+replace_na <- function(x) {
+  if (x == "NA") {
+    new_name <- new_names[counter]
+    counter <<- counter + 1
+    if (counter > length(new_names)) {
+      counter <<- 1  # Reset counter if we run out of new names
+    }
+    return(new_name)
+  } else {
+    return(x)
+  }
+}
+
+# Apply the replacement
+peve_merge_combined <- peve_merge_combined %>%
+  mutate(given_miRNA_name_old = sapply(given_miRNA_name_old, replace_na))
+```
+
+Format colnames and save as csv 
+```{r}
+peve_merge_final <- peve_merge_combined %>%
+  rename_with(~ gsub("_new$|_old$", "", .), everything())
+
+# Save 
+write.csv(peve_merge_final, "../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv")
+```
+
 
