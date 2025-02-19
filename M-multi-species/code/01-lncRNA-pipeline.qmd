@@ -1,0 +1,162 @@
+---
+title: "Long non-coding RNA discovery pipeline"
+author: "Steven Roberts"
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    html-math-method: katex
+    css: styles.css
+    theme: sandstone
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+Steven's attempt
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+
+
+```{r setup, include=FALSE}
+# Global R options
+knitr::opts_chunk$set(echo = TRUE)
+
+# Define key paths and tool directories
+ 
+DATA_DIR <- "../data/01-lncRNA"
+OUTPUT_DIR <- "../output/01-lncRNA"
+THREADS <- "32"
+  
+FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"
+FASTQ_SUFFIX <- "fastq.gz"
+GENOME_SOURCE <- "https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta"
+
+GTF_SOURCE <- "https://github.com/urol-e5/timeseries_molecular/blob/e4361d794b8a6887bc80a979491cb931e93f3e2a/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
+GFF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/f62c6d01e04ef0007f2f53af84181481d64d29c1/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
+
+HISAT2_DIR <- "/home/shared/hisat2-2.2.1"
+SAMTOOLS_DIR <- "/home/shared/samtools-1.12"
+STRINGTIE_DIR <- "/home/shared/stringtie-2.2.1.Linux_x86_64"
+GFFCOMPARE_DIR <- "/home/shared/gffcompare-0.12.6.Linux_x86_64"
+BEDTOOLS_DIR <- "/home/shared/bedtools2/bin"
+CPC2_DIR <- "/home/shared/CPC2_standalone-1.0.1"
+CONDA_PATH <- "/opt/anaconda/anaconda3/bin/conda"
+
+GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
+GENOME_GTF <- file.path(DATA_DIR, "genome.gtf")
+GENOME_GFF <- file.path(DATA_DIR, "genome.gff")
+FASTQ_DIR <- file.path(DATA_DIR, "fastq")
+GENOME_INDEX <- file.path(OUTPUT_DIR, "genome.index")
+
+# Export these as environment variables for bash chunks.
+Sys.setenv(
+  THREADS = THREADS,
+  DATA_DIR = DATA_DIR,
+  FASTQ_SOURCE = FASTQ_SOURCE,
+  FASTQ_SUFFIX = FASTQ_SUFFIX,
+  OUTPUT_DIR = OUTPUT_DIR,
+  GENOME_SOURCE = GENOME_SOURCE,
+  GTF_SOURCE = GTF_SOURCE,
+  GFF_SOURCE = GFF_SOURCE,
+  HISAT2_DIR = HISAT2_DIR,
+  SAMTOOLS_DIR = SAMTOOLS_DIR,
+  STRINGTIE_DIR = STRINGTIE_DIR,
+  GFFCOMPARE_DIR = GFFCOMPARE_DIR,
+  BEDTOOLS_DIR = BEDTOOLS_DIR,
+  CPC2_DIR = CPC2_DIR,
+  CONDA_PATH = CONDA_PATH,
+  GENOME_FASTA = GENOME_FASTA,
+  GENOME_GTF = GENOME_GTF,
+  GENOME_GFF = GENOME_GFF,
+  FASTQ_DIR = FASTQ_DIR,
+  GENOME_INDEX = GENOME_INDEX
+)
+```
+
+
+
+
+# Download Genome and Reads for Hisat
+
+```{r, engine='bash'}
+
+wget -nv -r \
+--no-directories --no-parent \
+-P ${FASTQ_DIR} \
+-A "*${FASTQ_SUFFIX}" ${FASTQ_SOURCE}
+```
+
+```{r, engine='bash'}
+ls ${FASTQ_DIR}
+```
+
+
+```{r, engine='bash'}
+
+curl -o "${GENOME_FASTA}" "${GENOME_SOURCE}"
+```
+
+```{r, engine='bash'}
+
+
+curl -o "${GENOME_GTF}" "${GTF_SOURCE}"
+```
+
+
+```{r, engine='bash'}
+
+
+curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
+```
+
+```{bash}
+head "${GENOME_FASTA}"
+head "${GENOME_GFF}"
+head "${GENOME_GTF}"
+```
+
+
+# HISAT
+
+```{r, engine='bash'}
+python
+"${HISAT2_DIR}/hisat2_extract_exons.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/exon.txt"
+
+"${HISAT2_DIR}/hisat2_extract_splice_sites.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/splice_sites.txt"
+
+```
+
+
+
+
+
+```{r, engine='bash'}
+
+"${HISAT2_DIR}/hisat2-build" \
+  -p "${THREADS}" \
+  "${GENOME_FASTA}" \
+  "${GENOME_INDEX}" \
+  2> "${OUTPUT_DIR}/hisat2-build_stats.txt"
+
+```
