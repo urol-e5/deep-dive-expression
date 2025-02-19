@@ -46,5 +46,37 @@ ptuh_merge <- ptuh_new %>%
   full_join(ptuh_old, by = c("MajorRNA_new" = "MajorRNA_old"))
 ```
 
-Not sure how to interpret this...
+Select specific columns 
+```{r}
+selected_columns <- c(
+  grep("new", colnames(ptuh_merge), value = TRUE),
+  "given_miRNA_name_old"
+)
+
+ptuh_merge_selected <- ptuh_merge[, selected_columns]
+```
+
+With the new version of shortstack, Cluster_4435 was joined with both ptuh-mir-novel-11 and ptuh-mir-novel-15. As identified by the old version of shortstack, they are the same sequence but they were found in different places in the genome. I am going to make it so the miRNA name for Cluster_4435 is ptuh-mir-novel-11 / ptuh-mir-novel-15.
+
+Combine the old miRNA names into one line for a new locus that matched with two different old miRNAs
+```{r}
+ptuh_merge_combined <- ptuh_merge_selected %>%
+  group_by(Locus_new) %>%
+  summarise(across(everything(), ~ if(is.character(.x)) paste(unique(.x), collapse = "; ") else first(.x)))
+```
+
+There is one new miRNA identified. Name it "ptuh-mir-novel-33"
+```{r}
+ptuh_merge_combined <- ptuh_merge_combined %>%
+  mutate(given_miRNA_name_old = ifelse(given_miRNA_name_old == "NA", "ptuh-mir-novel-33", given_miRNA_name_old))
+```
+
+Format colnames and save as csv 
+```{r}
+ptuh_merge_final <- ptuh_merge_combined %>%
+  rename_with(~ gsub("_new$|_old$", "", .), everything())
+
+# Save 
+write.csv(ptuh_merge_final, "../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv")
+```
 
