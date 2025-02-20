@@ -257,18 +257,7 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 #GFFCOMPARE
 
 ![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_687474703a2f2f67616e6e65742e666973682e77617368696e67746f6e2e6564752f7365617368656c6c2f736e6170732f323032332d31312d30335f30392d3_2024-12-20_04-02-37.png)
-```{bash}
-gffcompare
-```
 
-
-
-```{bash}
-"${GFFCOMPARE_DIR}gffcompare" \
--r "${GENOME_GFF}" \
--o "${OUTPUT_DIR}/gffcompare_merged" \
-"${OUTPUT_DIR}/stringtie_merged.gtf"
-```
 
 
 
