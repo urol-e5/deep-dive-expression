@@ -18,12 +18,6 @@ Steven's attempt
 
 
 ```{r setup, include=FALSE}
-library(knitr)
-library(tidyverse)
-library(kableExtra)
-library(DT)
-library(Biostrings)
-library(tm)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,         # Evaluate code chunks
@@ -37,7 +31,7 @@ knitr::opts_chunk$set(
 ```
 
 
-
+#Variables
 ```{r setup, include=FALSE}
 # Global R options
 knitr::opts_chunk$set(echo = TRUE)
@@ -46,16 +40,17 @@ knitr::opts_chunk$set(echo = TRUE)
  
 DATA_DIR <- "../data/01-lncRNA"
 OUTPUT_DIR <- "../output/01-lncRNA"
-THREADS <- "32"
+THREADS <- "10"
   
 FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
 GENOME_SOURCE <- "https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta"
 
-GTF_SOURCE <- "https://github.com/urol-e5/timeseries_molecular/blob/e4361d794b8a6887bc80a979491cb931e93f3e2a/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
-GFF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/f62c6d01e04ef0007f2f53af84181481d64d29c1/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
 
-HISAT2_DIR <- "/home/shared/hisat2-2.2.1"
+GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/timeseries_molecular/d5f546705e3df40558eeaa5c18b122c79d2f4453/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
+
+HISAT2_DIR <- ""  # "/home/shared/hisat2-2.2.1/"
 SAMTOOLS_DIR <- "/home/shared/samtools-1.12"
 STRINGTIE_DIR <- "/home/shared/stringtie-2.2.1.Linux_x86_64"
 GFFCOMPARE_DIR <- "/home/shared/gffcompare-0.12.6.Linux_x86_64"
@@ -131,32 +126,34 @@ curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 ```
 
 ```{bash}
-head "${GENOME_FASTA}"
-head "${GENOME_GFF}"
-head "${GENOME_GTF}"
+head -1 "${GENOME_FASTA}"
+head -1 "${GENOME_GFF}" 
+head -1 "${GENOME_GTF}"
 ```
 
 
 # HISAT
 
 ```{r, engine='bash'}
-python
-"${HISAT2_DIR}/hisat2_extract_exons.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/exon.txt"
+"${HISAT2_DIR}hisat2_extract_exons.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/exon.txt"
 
-"${HISAT2_DIR}/hisat2_extract_splice_sites.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/splice_sites.txt"
+"${HISAT2_DIR}hisat2_extract_splice_sites.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/splice_sites.txt"
 
 ```
-
-
 
 
 
 ```{r, engine='bash'}
 
-"${HISAT2_DIR}/hisat2-build" \
+"${HISAT2_DIR}hisat2-build" \
   -p "${THREADS}" \
   "${GENOME_FASTA}" \
   "${GENOME_INDEX}" \
+  --exon "${OUTPUT_DIR}/exon.txt" \
+  --ss "${OUTPUT_DIR}/splice_sites.txt" \
   2> "${OUTPUT_DIR}/hisat2-build_stats.txt"
 
 ```
+
+
+
