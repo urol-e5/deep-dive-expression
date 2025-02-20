@@ -48,7 +48,7 @@ GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-div
 
 
 GTF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
-GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gff"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.gff"
 
 
 #RAVEN
@@ -137,9 +137,17 @@ curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 ```
 
 ```{bash}
-head -1 "${GENOME_FASTA}"
-head -1 "${GENOME_GFF}" 
-head -1 "${GENOME_GTF}"
+output_fasta=$(head -1 "${GENOME_FASTA}")
+output_gff=$(head -2 "${GENOME_GFF}")
+output_gtf=$(head -1 "${GENOME_GTF}")
+
+if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
+    echo "FAIL"
+else
+    echo "$output_fasta"
+    echo "$output_gff"
+    echo "$output_gtf"
+fi
 ```
 
 

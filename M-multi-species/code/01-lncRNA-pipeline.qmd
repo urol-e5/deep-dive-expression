@@ -101,11 +101,16 @@ Sys.setenv(
 ```
 
 
+```{r mkdir, engine='bash}
+mkdir -p "${DATA_DIR}"
+mkdir -p "${OUTPUT_DIR}"
+```
+
 
 
 # Download Genome and Reads for Hisat
 
-```{r, engine='bash'}
+```{r grab fastq, engine='bash'}
 
 wget -nv -r \
 --no-directories --no-parent \
@@ -113,33 +118,41 @@ wget -nv -r \
 -A "*${FASTQ_SUFFIX}" ${FASTQ_SOURCE}
 ```
 
-```{r, engine='bash'}
+```{r ls, engine='bash'}
 ls ${FASTQ_DIR}
 ```
 
 
-```{r, engine='bash'}
+```{r fasta, engine='bash'}
 
 curl -o "${GENOME_FASTA}" "${GENOME_SOURCE}"
 ```
 
-```{r, engine='bash'}
+```{r gtf, engine='bash'}
 
 
 curl -o "${GENOME_GTF}" "${GTF_SOURCE}"
 ```
 
 
-```{r, engine='bash'}
+```{r gff, engine='bash'}
 
 
 curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 ```
 
-```{bash}
-head -1 "${GENOME_FASTA}"
-head -1 "${GENOME_GFF}" 
-head -1 "${GENOME_GTF}"
+```{r file check, engine='bash'}
+output_fasta=$(head -1 "${GENOME_FASTA}")
+output_gff=$(head -2 "${GENOME_GFF}")
+output_gtf=$(head -1 "${GENOME_GTF}")
+
+if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
+    echo "FAIL - FFS you downloaded a HTML not and genome feature file!"
+else
+    echo "$output_fasta"
+    echo "$output_gff"
+    echo "$output_gtf"
+fi
 ```
 
 
