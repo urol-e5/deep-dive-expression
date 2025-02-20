@@ -38,17 +38,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Define key paths and tool directories
  
-DATA_DIR <- "../data/01-lncRNA"
-OUTPUT_DIR <- "../output/01-lncRNA"
-THREADS <- "10"
+DATA_DIR <- "../data/25-lncRNA"
+OUTPUT_DIR <- "../output/25-lncRNA"
+THREADS <- "14"
   
-FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"
+FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
-GENOME_SOURCE <- "https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta"
+GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
 
 
-GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/timeseries_molecular/d5f546705e3df40558eeaa5c18b122c79d2f4453/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
-GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
+GTF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gff"
 
 
 #RAVEN
@@ -167,14 +167,6 @@ head -1 "${GENOME_GTF}"
 ```
 
 
-find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
-| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../data/GCF_013753865.1_Amil_v2.1.index \
--p 20 \
--1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
--2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
--S ../output/05.32-lncRNA-discovery/{}.sam
 
 
 ```{bash}
@@ -201,15 +193,9 @@ for r2 in "${FASTQ_DIR}"/*_R2_*."${FASTQ_SUFFIX}"; do
       -S "$output"
 done
 ```
+
 ## convert SAM to BAM
 
-for samfile in ../analyses/13-hisat-deseq2/*.sam; do
-  bamfile="${samfile%.sam}.bam"
-  sorted_bamfile="${samfile%.sam}.sorted.bam"
-  /home/shared/samtools-1.12/samtools view -bS -@ 20 "$samfile" > "$bamfile"
-  /home/shared/samtools-1.12/samtools sort -@ 20 "$bamfile" -o "$sorted_bamfile"
-  /home/shared/samtools-1.12/samtools index -@ 20 "$sorted_bamfile"
-done
 
 ```{bash}
 for samfile in "${OUTPUT_DIR}/${sample}"*.sam; do
