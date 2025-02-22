@@ -40,7 +40,7 @@ knitr::opts_chunk$set(echo = TRUE)
  
 DATA_DIR <- "../data/01-lncRNA"
 OUTPUT_DIR <- "../output/01-lncRNA"
-THREADS <- "10"
+THREADS <- "14"
   
 FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
@@ -50,6 +50,7 @@ GENOME_SOURCE <- "https://owl.fish.washington.edu/halfshell/genomic-databank/Poc
 GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/timeseries_molecular/d5f546705e3df40558eeaa5c18b122c79d2f4453/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
 GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
 
+GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 
 #RAVEN
 # HISAT2_DIR <- "/home/shared/hisat2-2.2.1/"
@@ -64,9 +65,9 @@ GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-e
 HISAT2_DIR <- ""
 SAMTOOLS_DIR <- ""
 STRINGTIE_DIR <- ""
-GFFCOMPARE_DIR <- ""
+GFFCOMPARE_DIR <- "/srlab/programs/gffcompare-0.12.6.Linux_x86_64/"
 BEDTOOLS_DIR <- ""
-CPC2_DIR <- ""
+CPC2_DIR <- "/srlab/programs/CPC2_standalone-1.0.1/bin/"
 CONDA_PATH <- ""
 
 GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
@@ -101,7 +102,7 @@ Sys.setenv(
 ```
 
 
-```{r mkdir, engine='bash}
+```{r mkdir, engine='bash'}
 mkdir -p "${DATA_DIR}"
 mkdir -p "${OUTPUT_DIR}"
 ```
@@ -180,14 +181,7 @@ fi
 ```
 
 
-find ../data/fastq/*R2_001.fastp-trim.20230519.fastq.gz \
-| xargs basename -s -S1-TP2_R2_001.fastp-trim.20230519.fastq.gz | xargs -I{} \
-/home/shared/hisat2-2.2.1/hisat2 \
--x ../data/GCF_013753865.1_Amil_v2.1.index \
--p 20 \
--1 ../data/fastq/{}-S1-TP2_R1_001.fastp-trim.20230519.fastq.gz \
--2 ../data/fastq/{}-S1-TP2_R2_001.fastp-trim.20230519.fastq.gz \
--S ../output/05.32-lncRNA-discovery/{}.sam
+
 
 
 ```{bash}
@@ -216,15 +210,8 @@ done
 ```
 ## convert SAM to BAM
 
-for samfile in ../analyses/13-hisat-deseq2/*.sam; do
-  bamfile="${samfile%.sam}.bam"
-  sorted_bamfile="${samfile%.sam}.sorted.bam"
-  /home/shared/samtools-1.12/samtools view -bS -@ 20 "$samfile" > "$bamfile"
-  /home/shared/samtools-1.12/samtools sort -@ 20 "$bamfile" -o "$sorted_bamfile"
-  /home/shared/samtools-1.12/samtools index -@ 20 "$sorted_bamfile"
-done
 
-```{bash}
+```{r convertSAM, engine='bash'}
 for samfile in "${OUTPUT_DIR}/${sample}"*.sam; do
   bamfile="${samfile%.sam}.bam"
   sorted_bamfile="${samfile%.sam}.sorted.bam"
@@ -248,7 +235,7 @@ done
 
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples–an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
-```{bash}
+```{r stringtie, engine='bash'}
 find "${OUTPUT_DIR}" -name "*sorted.bam" \
 | xargs -n 1 basename -s .sorted.bam | xargs -I{} \
 "${STRINGTIE_DIR}stringtie" \
@@ -259,7 +246,8 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 ```
 
 
-```{bash}
+
+```{r merge, engine='bash'}
 "${STRINGTIE_DIR}stringtie" \
 --merge \
 -G "${GENOME_GFF}" \
@@ -270,19 +258,158 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 #GFFCOMPARE
 
 ![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_687474703a2f2f67616e6e65742e666973682e77617368696e67746f6e2e6564752f7365617368656c6c2f736e6170732f323032332d31312d30335f30392d3_2024-12-20_04-02-37.png)
-```{bash}
-gffcompare
-```
 
 
 
-```{bash}
+```{r gffcomp, engine='bash'}
 "${GFFCOMPARE_DIR}gffcompare" \
 -r "${GENOME_GFF}" \
 -o "${OUTPUT_DIR}/gffcompare_merged" \
 "${OUTPUT_DIR}/stringtie_merged.gtf"
 ```
 
+```{r viewgff, engine='bash'}
+head -1 "${OUTPUT_DIR}"/gffcompare_merged*
+```
 
 
+
+```{r gff filter, engine='bash'}
+awk '$3 == "transcript" && $1 !~ /^#/' "${OUTPUT_DIR}/gffcompare_merged.annotated.gtf" | \
+grep -E "${GFFPATTERN}" | \
+awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
+```
+
+# Bedtools
+
+```{r fasta, engine='bash'}
+"${BEDTOOLS_DIR}"bedtools getfasta \
+-fi "${GENOME_FASTA}" \
+-bed "${OUTPUT_DIR}/lncRNA_candidates.gtf" \
+-fo "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-name -split
+```
+
+#CPC2
+
+
+
+```{r cpc2, engine='bash'}
+"${CPC2_DIR}"CPC2.py \
+-i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-o "${OUTPUT_DIR}/CPC2"
+```
+
+Filter
+
+```{r filCPC, engine='bash'}
+awk '$8 == "noncoding" {print $1}' "${OUTPUT_DIR}/CPC2.txt" > "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+```
+
+
+Subsetting fasta
+
+```{r ssfasta, engine='bash'}
+"${SAMTOOLS_DIR}samtools" faidx "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-r "${OUTPUT_DIR}/noncoding_transcripts_ids.txt" \
+> "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r, engine='bash'}
+head -2 "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r lncRNAgtf, engine='bash'}
+# Define input and output file paths using the OUTPUT_DIR variable
+input="${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+output="${OUTPUT_DIR}/lncRNA.bed"
+
+# Process each line of the input file
+while IFS= read -r line; do
+    # Remove "transcript::" from the line
+    line="${line//transcript::/}"
+    
+    # Split the line by ':' to get the chromosome and position string
+    IFS=':' read -r chromosome pos <<< "$line"
+    
+    # Split the position string by '-' to separate start and end positions
+    IFS='-' read -r start end <<< "$pos"
+    
+    # Convert the start position to 0-based by subtracting 1
+    start=$((start - 1))
+    
+    # Write the chromosome, updated start, and end positions to the output file (tab-separated)
+    printf "%s\t%s\t%s\n" "$chromosome" "$start" "$end"
+done < "$input" > "$output"
+```
+
+```{r, engine='bash'}
+head -1 "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+
+```{r renamegtf, engine='bash'}
+awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
+> "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+# Summary Table
+
+chck 56446
+
+```{r summary, engine='bash'}
+tf_file="${OUTPUT_DIR}/lncRNA.gtf"
+
+awk '
+BEGIN {
+    total_entries = 0;
+    min_length = 1e9;
+    max_length = 0;
+    sum_length = 0;
+}
+# Skip comment lines
+/^#/ { next }
+{
+    if (NF < 9) next;
+    total_entries++;
+    start = $4;
+    end = $5;
+    gene_length = end - start + 1;
+    if (gene_length < min_length) min_length = gene_length;
+    if (gene_length > max_length) max_length = gene_length;
+    sum_length += gene_length;
+    feature[$3]++;
+    chrom[$1]++;
+    # Use two-argument match() and then extract the gene_id manually.
+    if (match($9, /gene_id "[^"]+"/)) {
+        gene_str = substr($9, RSTART, RLENGTH);
+        # Remove the "gene_id " prefix and the quotes.
+        gsub(/gene_id "/, "", gene_str);
+        gsub(/"/, "", gene_str);
+        genes[gene_str] = 1;
+    }
+}
+END {
+    avg_length = (total_entries > 0) ? sum_length / total_entries : 0;
+    unique_gene_count = 0;
+    for (g in genes)
+        unique_gene_count++;
+    print "Basic GTF File Statistics:";
+    print "--------------------------";
+    print "Total entries:      " total_entries;
+    print "Unique genes:       " unique_gene_count;
+    print "Min gene length:    " min_length;
+    print "Max gene length:    " max_length;
+    printf("Average gene length: %.2f\n", avg_length);
+    print "\nFeature counts:";
+    for (f in feature) {
+        print "  " f ": " feature[f];
+    }
+    print "\nChromosome counts:";
+    for (c in chrom) {
+        print "  " c ": " chrom[c];
+    }
+}
+' "$tf_file"
+```
 
