@@ -52,8 +52,8 @@ FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_cor
 FASTQ_SUFFIX <- "fastq.gz"
 GENOME_SOURCE <- "https://owl.fish.washington.edu/halfshell/genomic-databank/Pocillopora_meandrina_HIv1.assembly.fasta"
 
-GTF_SOURCE <- "https://github.com/urol-e5/timeseries_molecular/blob/e4361d794b8a6887bc80a979491cb931e93f3e2a/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
-GFF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/f62c6d01e04ef0007f2f53af84181481d64d29c1/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
+GTF_SOURCE <- "https://github.com/urol-e5/timeseries_molecular/raw/e4361d794b8a6887bc80a979491cb931e93f3e2a/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
+GFF_SOURCE <- "https://github.com/urol-e5/timeseries_molecular/raw/e4361d794b8a6887bc80a979491cb931e93f3e2a/F-Ptua/data/Pocillopora_meandrina_HIv1.genes-validated.gff3"
 
 HISAT2_DIR <- "/home/shared/hisat2-2.2.1"
 SAMTOOLS_DIR <- "/home/shared/samtools-1.12"
