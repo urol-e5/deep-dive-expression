@@ -105,6 +105,73 @@ awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-m
 
 So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 19133057 to 143.
 
+# miRNA and mRNA 5'UTRs
+
+We've also created a gff of 1kb 5'UTR regions (using the same method used to define 1kb 3'UTRs, in `15-Apul-annotate-UTRs`). Let's try running this through miRanda as well, since it's possible (though not necessarily expected) that miRNAs will bind here
+
+## Get 5'UTR fasta
+
+```{r, engine='bash', eval=FALSE}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi "../data/Apulchra-genome.fa" \
+-bed "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff" \
+-fo "../data/24-Apul-miRanda-input-comparisons/Apul_5UTR_1kb_corrected.fa"
+
+```
+
+## Run miRanda
+
+```{r, engine='bash', eval=FALSE}
+
+# Same settings we've been using: 
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
+../data/24-Apul-miRanda-input-comparisons/Apul_5UTR_1kb_corrected.fa \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab
+```
+
+## Summarize results
+
+Let's look at the output
+
+```{r, engine='bash'}
+
+echo "miranda run finished!"
+echo "Counting number of interacting miRNA-lncRNA pairs"
+
+zgrep -c "Performing Scan" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab | sort | grep '>' > ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt
+
+echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab
+
+```
+
+How many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA)?
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt | wc -l
+```
+
+How many putative interactions are predicted for a binding length of at least 21 nucleotides AND no more than 3 mismatches?
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+```
+
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and 5'UTR sequences from 12729797 to 12
+
 # miRNA and mRNA 3'UTRs
 
 Now let's see how filtering changes the outputs of miRanda run with only the 3'UTR mRNA region (the input we have been using up till now)
@@ -120,9 +187,6 @@ Filter for alignment \>=21 nucleotides:
 ```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides"
 awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | wc -l
-echo ""
-echo "check some:"
-awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | head -5
 ```
 
 Filter again for \<=3 mismatches:
@@ -130,9 +194,6 @@ Filter again for \<=3 mismatches:
 ```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | awk -F'\t' '$8 >= 85' | wc -l
-echo ""
-echo "check some:"
-awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
 When only mRNA 3'UTR regions are used as input, filtering for full/near-full complementarity reduces the number of putative interactions from 6109 to 13.
@@ -243,6 +304,7 @@ How does different input and/or complementarity filtering affect \# putative int
 |-----------|------------|------------------------------|-------------|
 | 3'UTR     | 6109       | 13                           | 0.213 %     |
 | full mRNA | 19133057   | 143                          | 0.000747 %  |
+| 5'UTR     | 12729797   | 12                           | 0.0000943 % |
 
 For different filters, how many putative interactions *also show significant coexpression*?
 
