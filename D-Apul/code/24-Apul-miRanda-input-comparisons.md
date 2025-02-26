@@ -752,3 +752,9 @@ Next steps:
 
 - if we decide to shift target prediction requirements, need to rerun
   all target prediction done thus far :(
+
+``` r
+# Save putative interactions with significantly correlated coexpression for visualization
+# (e.g. creating an interaction network plot in Cytoscape)
+write.csv(combined_df[combined_df$p_value < 0.05,], "../output/24-Apul-miRanda-input-comparisons/miRanda-PCC-significant-mRNA_3UTR_5UTR.csv", row.names = FALSE)
+```
