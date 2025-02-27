@@ -20,6 +20,12 @@ bibliography: ../../references.bib
 link-citations: true
 ---
 
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
 Up to this point, our miRNA target prediction has been primarily performed using the tool miRanda, which requires only seed binding, with 3'UTR regions as input. However, there is growing evidence that cnidarian miRNA binding functions similarly to plants, requiring near-full complementarity and to act primarily through target cleavage, which can occur at any location in the mRNA sequence (not just the 3'UTR). This would mean our current miRanda target predictions are both a) not sufficiently restricted to fll complementarity, and b) incorrectly limited to the 3'UTR.
 
 Let's see what happens when we adjust those parameters
@@ -64,7 +70,7 @@ Inputs:
 
 Let's look at the output
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 
 echo "miranda run finished!"
 echo "Counting number of interacting miRNA-lncRNA pairs"
@@ -77,6 +83,11 @@ grep -A 1 "Scores for this hit:" ../output/24-Apul-miRanda-input-comparisons/Apu
 echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
 wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict_all.tab
 
+```
+
+```{r, engine='bash'}
+echo "number of putative interactions:"
+wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt
 ```
 
 This is a lot of putative interactions! Note though, that miRanda only requires complementarity of a 8bp seed region of the miRNA. We instead want to look for binding with full or near-full complementarity. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
@@ -103,7 +114,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 19133057 to 143.
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 617982 to 143.
 
 # miRNA and mRNA 5'UTRs
 
@@ -141,17 +152,15 @@ We've also created a gff of 1kb 5'UTR regions (using the same method used to def
 
 Let's look at the output
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=FALSE}
 
-echo "miranda run finished!"
-echo "Counting number of interacting miRNA-lncRNA pairs"
-
+echo "Number of interacting miRNA-lncRNA pairs"
 zgrep -c "Performing Scan" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab
 
 echo "Parsing output"
 grep -A 1 "Scores for this hit:" ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab | sort | grep '>' > ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt
 
-echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+echo "Number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
 wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_all.tab
 
 ```
@@ -159,39 +168,29 @@ wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict_a
 How many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA)?
 
 ```{r, engine='bash'}
+echo "number of putative interactions:"
+wc -l ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt
+echo ""
 echo "number of putative interactions of at least 21 nucleotides"
 awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt | wc -l
-```
-
-How many putative interactions are predicted for a binding length of at least 21 nucleotides AND no more than 3 mismatches?
-
-```{r, engine='bash'}
+echo ""
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 ```
 
-So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and 5'UTR sequences from 12729797 to 12
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and 5'UTR sequences from 87830 to 12
 
 # miRNA and mRNA 3'UTRs
 
 Now let's see how filtering changes the outputs of miRanda run with only the 3'UTR mRNA region (the input we have been using up till now)
 
-Unfiltered:
-
 ```{r, engine='bash'}
+echo "total number of putative interactions:"
 wc -l ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt
-```
 
-Filter for alignment \>=21 nucleotides:
-
-```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides"
 awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | wc -l
-```
 
-Filter again for \<=3 mismatches:
-
-```{r, engine='bash'}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt | awk -F'\t' '$8 >= 85' | wc -l
 ```
@@ -202,18 +201,104 @@ When only mRNA 3'UTR regions are used as input, filtering for full/near-full com
 
 Now that we've found putative interactions with high complementarity, we need to validate miRNA function by examining patterns of coexpression. We'd expect a putatively-interacting miRNA-mRNA pair to be highly coexpressed, and we'd expect a negative relationship to indicate target cleavage.
 
+## Obtain Pearson's coefficient correlation values
+
+This has already been run by Jill in `09-Apul-mRNA-miRNA-interactions`, but I think the csv stored in this repo has been filtered in some way, because it contains fewer entries than expected:
+
+```{r, engine='bash'}
+wc -l ../output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv
+```
+
+Read in, format, and normalize data
+
+```{r}
+mRNA_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
+mRNA_counts <- as.data.frame(mRNA_counts)
+rownames(mRNA_counts) <- mRNA_counts[,1] #set first column that contains gene names as rownames
+mRNA_counts <- mRNA_counts[,-1] # remove column w/ gene names 
+
+# Remove any genes with 0 counts across samples 
+mRNA_counts<-mRNA_counts %>%
+    mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+miRNA_counts <- read.delim("../output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
+
+# Remove any miRNAs with 0 for all samples 
+miRNA_counts <- miRNA_counts %>%
+    mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+# Rename gene count cols to match miRNA count cols
+colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
+
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+miRNA_norm <- normalize_counts(miRNA_counts)
+mRNA_norm <- normalize_counts(mRNA_counts)
+
+```
+
+```{r,}
+nrow(miRNA_norm)*nrow(mRNA_norm)
+```
+
+We'd expect 1311336 PCC values (after filtering out genes/miRNAs with 0 counts), but there are only 916384 in Jill's PCC csv. I'll rerun the PCC just to make sure I have correlation values for all miRNA-mRNA pairs of interest
+
+```{r, eval=FALSE}
+library(energy)
+
+# Function to calculate PCC and p-value for a pair of vectors
+calc_pcc <- function(x, y) {
+  result <- cor.test(x, y, method = "pearson")
+  return(c(PCC = result$estimate, p_value = result$p.value))
+}
+
+# Create a data frame of all miRNA-mRNA pairs
+pairs <- expand.grid(miRNA = rownames(miRNA_norm), mRNA = rownames(mRNA_norm))
+
+# Calculate PCC and p-value for each pair
+pcc_results <- pairs %>%
+  rowwise() %>%
+  mutate(
+    pcc_stats = list(calc_pcc(miRNA_norm[miRNA,], mRNA_norm[mRNA,]))
+  ) %>%
+  unnest_wider(pcc_stats)
+
+# Adjust p-values for FDR
+pcc_results <- pcc_results %>%
+  mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
+
+# Save as csv
+write.csv(pcc_results, "../output/24-Apul-miRanda-input-comparisons/Apul-PCC_miRNA_mRNA-full.csv")
+```
+
+Check
+
+```{r}
+# Read in results 
+# pcc_results <- read.csv("../output/24-Apul-miRanda-input-comparisons/Apul-PCC_miRNA_mRNA-full.csv")
+
+# Use this code to download the PCC results if needed 
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/24-Apul-miRanda-input-comparisons/Apul-PCC_miRNA_mRNA-full.csv")
+
+nrow(pcc_results)
+nrow(pcc_results%>% filter(PCC.cor > 0.90))
+nrow(pcc_results %>% filter(p_value < 0.05))
+nrow(pcc_results %>% filter(p_value < 0.05 & PCC.cor > 0.90))
+```
+
+of the 1,311,336 possible miRNA-mRNA interactions, 35,445 have a Pearson's correlation coefficient of above 0.9, and 66,154 have a significant correlation (pval\<0.05). All of the coefficients \>0.9 are significant.
+
 ## full mRNA
 
 ```{r}
-
-library(readr)
-library(dplyr)
-
-# Read in data
-
-# miRNA-mRNA Pearsons correlation coefficients
-miRNA_mRNA_PCC <- read.csv("../output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
-
 # miRNA-mRNA_full miRanda output
 miRNA_mRNA_miRanda <- read_delim("../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-mRNA_full-strict-parsed.txt", col_names=FALSE)
 colnames(miRNA_mRNA_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
@@ -229,11 +314,11 @@ miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, geneIDs, by=c("Target" = "X1
 miRNA_mRNA_miRanda <- select(miRNA_mRNA_miRanda, -X2,-X3,-X5)
 
 # Finally, create a column that conatins both the miRNA and interacting mRNA
-miRNA_mRNA_PCC$interaction <- paste(miRNA_mRNA_PCC$miRNA, "_", miRNA_mRNA_PCC$mRNA)
+pcc_results$interaction <- paste(pcc_results$miRNA, "_", pcc_results$mRNA)
 miRNA_mRNA_miRanda$interaction <- paste(miRNA_mRNA_miRanda$mirna, "_", miRNA_mRNA_miRanda$X4)
 
 # Annotate w PCC info 
-miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, miRNA_mRNA_PCC, by="interaction")
+miRNA_mRNA_miRanda <- left_join(miRNA_mRNA_miRanda, pcc_results, by="interaction")
 ```
 
 ```{r}
@@ -242,18 +327,13 @@ target_21bp <- miRNA_mRNA_miRanda[miRNA_mRNA_miRanda$Al_Len > 20,]
 target_21bp_3mis <- target_21bp[target_21bp$Subject_Identity>85,]
 
 # How many w significant correlation?
+nrow(miRNA_mRNA_miRanda)
+nrow(miRNA_mRNA_miRanda %>% filter(p_value < 0.05))
 nrow(target_21bp %>% filter(p_value < 0.05))
-nrow(target_21bp %>% filter(p_value < 0.05))/nrow(target_21bp)
 nrow(target_21bp_3mis %>% filter(p_value < 0.05))
-nrow(target_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_21bp_3mis)
-
-# Plot correlation values
-hist(target_21bp$PCC.cor)
-hist(target_21bp[target_21bp$p_value < 0.05,]$PCC.cor)
-
-hist(target_21bp_3mis$PCC.cor)
-hist(target_21bp_3mis[target_21bp_3mis$p_value < 0.05,]$PCC.cor)
 ```
+
+For miRNA binding to the mRNA CDS, miRanda predicts 617,982 putative interactions. Of these, 24,936 have significant PCCs; 4,300 are \>21bp and have signficant PCCs; and 7 are \>21bp with \<=3 mismatches and have significant PCCs.
 
 ## 3'UTR
 
@@ -272,7 +352,7 @@ miRNA_3UTR_miRanda$Target <- gsub("::.*", "", miRNA_3UTR_miRanda$Target)
 miRNA_3UTR_miRanda$interaction <- paste(miRNA_3UTR_miRanda$mirna, "_", miRNA_3UTR_miRanda$Target)
 
 # Annotate w PCC info 
-miRNA_3UTR_miRanda <- left_join(miRNA_3UTR_miRanda, miRNA_mRNA_PCC, by="interaction")
+miRNA_3UTR_miRanda <- left_join(miRNA_3UTR_miRanda, pcc_results, by="interaction")
 ```
 
 ```{r}
@@ -281,20 +361,55 @@ target_3UTR_21bp <- miRNA_3UTR_miRanda[miRNA_3UTR_miRanda$Al_Len > 20,]
 target_3UTR_21bp_3mis <- target_3UTR_21bp[target_3UTR_21bp$Subject_Identity>85,]
 
 # How many w significant correlation?
+nrow(miRNA_3UTR_miRanda)
+nrow(miRNA_3UTR_miRanda %>% filter(p_value < 0.05))
 nrow(target_3UTR_21bp %>% filter(p_value < 0.05))
-nrow(target_3UTR_21bp %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp)
 nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))
-nrow(target_3UTR_21bp_3mis %>% filter(p_value < 0.05))/nrow(target_3UTR_21bp_3mis)
-
-# Plot correlation values
-hist(target_3UTR_21bp$PCC.cor)
-hist(target_3UTR_21bp[target_3UTR_21bp$p_value < 0.05,]$PCC.cor)
-
-# hist(target_3UTR_21bp_3mis$PCC.cor)
-# hist(target_3UTR_21bp_3mis[target_3UTR_21bp_3mis$p_value < 0.05,]$PCC.cor)
 ```
 
-# miRNA and mRNA
+For miRNA binding to the 3'UTR, miRanda predicts 6,109 putative interactions. Of these, 266 have significant PCCs; 86 are \>21bp and have signficant PCCs; and 1 is \>21bp with \<=3 mismatches and has a significant PCC.
+
+## 5'UTR
+
+```{r}
+# miRNA-5'UTR miRanda output
+miRNA_5UTR_miRanda <- read_delim("../output/24-Apul-miRanda-input-comparisons/Apul-miRanda-5UTR_1kb-strict-parsed.txt", col_names=FALSE)
+colnames(miRNA_5UTR_miRanda) <- c("mirna", "Target", "Score", "Energy_Kcal_Mol", "Query_Aln", "Subject_Aln", "Al_Len", "Subject_Identity", "Query_Identity")
+
+# format miRNA and mRNA names
+geneIDs <- read_delim("../output/15-Apul-annotate-UTRs/Apul-5UTR-FUNids.txt", col_names=FALSE)
+geneIDs$X4 <- gsub("Parent=", "", geneIDs$X4)
+
+miRNA_5UTR_miRanda$mirna <- gsub(">", "", miRNA_5UTR_miRanda$mirna)
+miRNA_5UTR_miRanda$mirna <- gsub("\\..*", "", miRNA_5UTR_miRanda$mirna)
+
+miRNA_5UTR_miRanda <- left_join(miRNA_5UTR_miRanda, geneIDs, by=c("Target" = "X1"))
+miRNA_5UTR_miRanda <- select(miRNA_5UTR_miRanda, -X2,-X3,-X5)
+
+# Somehow ended up with a many-to-many relationship, so remove duplicate rows
+miRNA_5UTR_miRanda <- miRNA_5UTR_miRanda[!duplicated(miRNA_5UTR_miRanda), ]
+
+# Finally, create a column that contains both the miRNA and interacting mRNA
+pcc_results$interaction <- paste(pcc_results$miRNA, "_", pcc_results$mRNA)
+miRNA_5UTR_miRanda$interaction <- paste(miRNA_5UTR_miRanda$mirna, "_", miRNA_5UTR_miRanda$X4)
+
+# Annotate w PCC info 
+miRNA_5UTR_miRanda <- left_join(miRNA_5UTR_miRanda, pcc_results, by="interaction")
+```
+
+```{r}
+# Filter to high complementarity putative targets
+target_5UTR_21bp <- miRNA_5UTR_miRanda[miRNA_5UTR_miRanda$Al_Len > 20,]
+target_5UTR_21bp_3mis <- target_5UTR_21bp[target_5UTR_21bp$Subject_Identity>85,]
+
+# How many w significant correlation?
+nrow(miRNA_5UTR_miRanda)
+nrow(miRNA_5UTR_miRanda %>% filter(p_value < 0.05))
+nrow(target_5UTR_21bp %>% filter(p_value < 0.05))
+nrow(target_5UTR_21bp_3mis %>% filter(p_value < 0.05))
+```
+
+For miRNA binding to the 5'UTR, miRanda predicts 87,830 putative interactions. Of these, 3,426 have significant PCCs; 596 are \>21bp and have signficant PCCs; and 0 are \>21bp with \<=3 mismatches and have significant PCCs.
 
 # Summary
 
@@ -303,19 +418,55 @@ How does different input and/or complementarity filtering affect \# putative int
 | Input     | unfiltered | filtered for complementarity | \% retained |
 |-----------|------------|------------------------------|-------------|
 | 3'UTR     | 6109       | 13                           | 0.213 %     |
-| full mRNA | 19133057   | 143                          | 0.000747 %  |
-| 5'UTR     | 12729797   | 12                           | 0.0000943 % |
+| full mRNA | 617982     | 143                          | 0.0231 %    |
+| 5'UTR     | 87830      | 12                           | 0.0137 %    |
 
-For different filters, how many putative interactions *also show significant coexpression*?
+For different filters, how many putative interactions ***also show significant coexpression*** (PCC pval \< 0.05)?
 
-| Input     | 21bp                    | 21bp, \>=3 mismatch          |
-|-----------|-------------------------|------------------------------|
-| 3'UTR     | 58 (3.4% of all 21bp)   | 0                            |
-| full mRNA | 3767 (3.7% of all 21bp) | 6 (4.2% of all 21bp,\>=3mis) |
+| Input     | All   | 21bp | 21bp, \>=3 mismatch |
+|-----------|-------|------|---------------------|
+| 3'UTR     | 266   | 86   | 1                   |
+| full mRNA | 24936 | 4300 | 7                   |
+| 5'UTR     | 3426  | 596  | 0                   |
 
-Note that, in general, only \~1/3 of significant coexpressions have a *negative* relationship (which would support functional target cleavage)
+Note that, in general, only \~1/3 of significant coexpressions have a *negative* relationship (which would support functional target cleavage or translational repression)
 
-Note also that some putative interactions examined above weren't included in the PCC table
+Note also that some putative interactions indicated by miRanda are not present in the counts data (i.e. the miRNA and/or mRNA had 0 counts in our RNAseq data), and are thus excluded from the PCC-filtered data
+
+
+Is there a clear "cutoff" for what complementarity parameters are most associated with significant coexpression?
+
+```{r}
+
+miRNA_mRNA_miRanda <- miRNA_mRNA_miRanda %>% mutate(Source = "mRNA")
+miRNA_3UTR_miRanda <- miRNA_3UTR_miRanda %>% mutate(Source = "3UTR")
+miRNA_5UTR_miRanda <- miRNA_5UTR_miRanda %>% mutate(Source = "5UTR")
+
+# Combine
+combined_df <- bind_rows(miRNA_mRNA_miRanda, miRNA_3UTR_miRanda, miRNA_5UTR_miRanda)
+
+# Convert Source to a factor for discrete shapes
+combined_df$Source <- factor(combined_df$Source)
+
+# Convert p-value condition into a categorical variable for coloring
+combined_df$Significance <- ifelse(combined_df$p_value < 0.05, "p < 0.05", "p ≥ 0.05")
+significant_df <- combined_df %>% filter(p_value < 0.05)
+
+# Plot with jitter (significant coexpression only)
+ggplot(significant_df, aes(x = Al_Len, 
+                           y = as.numeric(gsub("%", "", Subject_Identity)), 
+                           color = Source)) +
+  geom_jitter(size = 1.5, width = 1, height = 1, alpha = 0.1) +
+  scale_color_manual(values = c("mRNA" = "red", "3UTR" = "blue", "5UTR" = "green")) +
+  facet_wrap(~ Source) +
+  labs(x = "Alignment Length (Al_Len)", 
+       y = "Subject Identity (%)", 
+       color = "Dataset", 
+       title = "Significant (p < 0.05) Alignment Length vs. Subject Identity") +
+  theme_minimal()
+```
+
+Interesting... there are signifcant coexpressions happening across both metrics of complementarity. Also interesting, there are notably more significant coexpressions from using 5'UTR inputs than using 3'UTRs -- we were expecting more in the 3UTr because that would be the binding location for translational repression.
 
 Next steps:
 
@@ -324,3 +475,11 @@ Next steps:
 -   Run same comparison using BLAST and/or RNAhybrid as the tool. I'm still not 100% clear on what sequence features miRanda takes into consideration, and any that *are* included will have been based on mammalian miRNAs. It may be more appropriate to use a different tool
 
 -   if we decide to shift target prediction requirements, need to rerun all target prediction done thus far :(
+
+```{r}
+# Save putative interactions with significantly correlated coexpression for visualization
+# (e.g. creating an interaction network plot in Cytoscape)
+write.csv(combined_df[combined_df$p_value < 0.05,], "../output/24-Apul-miRanda-input-comparisons/miRanda-PCC-significant-mRNA_3UTR_5UTR.csv", row.names = FALSE)
+
+```
+
