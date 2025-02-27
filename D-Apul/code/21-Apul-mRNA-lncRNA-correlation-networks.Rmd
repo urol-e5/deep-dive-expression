@@ -268,7 +268,7 @@ cor_matrix = cor(moduleEigengenes)
 Compute correlations with Spearman correlation and BH p-value adjustment.   
 ```{r}
 # Compute Spearman correlation between mRNA and lncRNA
-apul_cor_results <- corr.test(moduleEigengenes, method = "spearman", adjust = "BH")
+apul_cor_results <- corr.test(moduleEigengenes, method = "pearson", adjust = "BH")
 
 # Extract correlation values and p-values
 apul_cor_matrix <- apul_cor_results$r  # Correlation coefficients
@@ -394,7 +394,7 @@ expression_plots<-plot_MEs%>%
 Which modules were significantly correlated? Show correlation matrix. 
 
 ```{r}
-# Compute Spearman correlation between mRNA and lncRNA
+# Compute Pearson correlation between mRNA and lncRNA
 apul_cor_results 
 
 # Extract correlation values and p-values
