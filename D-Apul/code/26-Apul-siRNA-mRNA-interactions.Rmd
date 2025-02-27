@@ -1,0 +1,251 @@
+---
+title: "26-Apul-siRNA-mRNA-interactions"
+author: "Kathleen Durkin"
+date: "2024-02-27"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+@gresova_small_2022, @luck_sirna-finder_2019
+
+ShortStack outputs a gff of genomic regions with accumulating sRNAs (`Results.gff3`) and annotates those regions as "unkown sRNA", "miRNA", or "siRNA". However, these regions are generally several hundred basepairs long, since they are "accumulation regions", not the ~21nt sRNA molecules themselves. While ShortStack also identifies and outputs fastas for the miRNAs, it doesn't do that for siRNAs. This means we need to ID the precise siRNA sequences ourselves.
+
+Approach:
+
+1. Extract regions of accumulating siRNA from ShortStack output
+
+2. Convert gff of siRNA regions to .bed
+
+3. Convert sample sRNAseq gtfs to .bed
+
+4. Use bedtools `multiintersect` to find sRNA sequences that appear within the ShortStack siRNA regions and in our sample sRNAseq reads.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Prep for BLASTs
+
+## Isolate the siRNA sequences
+
+```{r extract-mirna-seqs, engine='bash'}
+full_mirna_fasta="../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/mir.fasta"
+premirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor.fasta"
+mature_mirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta"
+star_mirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_star.fasta"
+
+# Pull out all sequences that DON'T contain "mature" or "star" in sequence name
+# Note the pre-miRNAs have sequences for both strands
+awk '
+    # If the line starts with ">", check the header
+    /^>/ {
+        if ($0 ~ /mature/ || $0 ~ /star/) {
+            print_seq = 0  # Skip sequences with "mature" or "star" in the header
+        } else {
+            print_seq = 1  # Mark sequences for printing
+        }
+    }
+    # Print the header and the next two lines if marked for printing
+    print_seq {
+        print
+        if (!/^>/) { getline; print }  # Capture second sequence line
+    }
+' "$full_mirna_fasta" > "$premirna_fasta"
+
+# Pull out all sequences that contain "mature" in sequence name
+grep -A 1 "mature" $full_mirna_fasta | grep -v "^--$" > $mature_mirna_fasta
+
+# Pull out all sequences that contain "star" in sequence name
+grep -A 1 "star" $full_mirna_fasta | grep -v "^--$" > $star_mirna_fasta
+```
+
+```{r, engine='bash', eval=TRUE}
+premirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor.fasta"
+mature_mirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta"
+star_mirna_fasta="../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_star.fasta"
+
+# Check we have appropriate headers, same number of sequences in each
+grep "^>" $premirna_fasta | head -2
+echo ""
+grep "^>" $mature_mirna_fasta | head -2
+echo ""
+grep "^>" $star_mirna_fasta | head -2
+echo ""
+grep "^>" $premirna_fasta | wc -l
+echo ""
+grep "^>" $mature_mirna_fasta | wc -l
+echo ""
+grep "^>" $star_mirna_fasta | wc -l
+echo ""
+```
+
+## Check miRNA lengths
+
+```{r, engine='bash'}
+# Extract sequence lengths for precursors
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor_lengths.txt
+
+# Sequence lengths for matures
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature_lengths.txt
+```
+
+```{r, eval=TRUE}
+# Summary stats of precursor and mature lengths
+
+precursor_lengths <- read.table("../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+mature_lengths <- read.table("../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+
+cat("Average pre-miRNA length: ", mean(precursor_lengths$length))
+cat("\n")
+cat("Range of pre-miRNA lengths: ", range(precursor_lengths$length))
+cat("\n")
+cat("Average mature miRNA length: ", mean(mature_lengths$length))
+cat("\n")
+cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
+```
+
+## check lncRNAs
+
+LncRNAs were identified from Apul RNA-seq data in `deep-dive-expression/D-Apul/code/10-Apul-lncRNA` -- see details there.
+Fasta of Apul lncRNAs stored at `deep-dive-expression/D-Apul/output/10-Apul-lncRNA/Apul_lncRNA.fasta`
+
+
+```{r check-lncRNAs, engine='bash', eval=TRUE}
+echo "Number of lncRNAs:"
+grep "^>" ../output/10-Apul-lncRNA/Apul_lncRNA.fasta | wc -l
+```
+
+```{r, engine='bash'}
+# Extract sequence lengths for precursors
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/10-Apul-lncRNA/Apul_lncRNA.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_lengths.txt
+
+```
+
+```{r, eval=TRUE}
+# Summary stats of lncRNA lengths
+
+lncRNA_lengths <- read.table("../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+
+cat("Average lncRNA length: ", mean(lncRNA_lengths$length))
+cat("\n")
+cat("Range of lncRNA lengths: ", range(lncRNA_lengths$length))
+
+ggplot(lncRNA_lengths, aes(x = length)) +
+  geom_histogram(binwidth = 500) +
+  labs(title = "A. pulchra lncRNA sequence lengths",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency") +
+  xlim(200, 50000) +
+  ylim(0, 800) +
+  theme_minimal()
+```
+
+
+
+# BLASTs
+
+## Make databases
+
+Database of pre-miRNAs:
+
+```{r make-premirna-databse, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_precursor.fasta \
+-dbtype nucl \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_precursor
+```
+
+Database of mature miRNAs:
+
+```{r make-mature-mirna-databse, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
+-dbtype nucl \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_mature
+```
+
+
+## Run BLASTn
+
+Generate a list of blast results. It seems plausible that a single lncRNA, which would be hundreds or thousands of nucleotides long, could interact with multiple miRNAs, so I will allow up to 10 hits (~25% of Apul miRNAs) for each lncRNA. I want to see the top hits no matter how poor the match is, so I will not filter by e-value at this stage. I’ll also include the “-word_size 4” option, which reduces the required length of the initial match.
+
+
+Full pre-miRNAs:
+
+```{r blastn-premirna, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn \
+-query ../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-db ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_precursor \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_precursor_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 10 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_precursor_blastn.tab
+```
+Note we have less than 241830 (10 * [# of lncRNAs]) output alignments because, while I did not set an evalue threshold, the default evalue threshold of evalue=10 is still in place. That means extremely poor matches were still excluded by default. 
+
+
+Mature miRNAs:
+
+Note that I'm using the blastn-short option here because all of our mature miRNAs are less than 30 nucleotides long (recommended by [BLAST user manual](https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.blastn_application_options/))
+
+```{r blastn-mature-mirna, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn \
+-query ../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-db ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_mature \
+-out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_mature_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 10 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_mature_blastn.tab
+```
+
+
+# Examine BLAST tables
+
+Read into R and assign informative column labels
+```{r read-in-blast-tables, eval=TRUE}
+precursor_lncRNA_BLASTn <- read.table("../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_precursor_blastn.tab", sep="\t", header=FALSE)
+mature_lncRNA_BLASTn <- read.table("../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_mature_blastn.tab", sep="\t", header=FALSE)
+
+colnames(precursor_lncRNA_BLASTn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+colnames(mature_lncRNA_BLASTn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+```
+
+
+
+
+
