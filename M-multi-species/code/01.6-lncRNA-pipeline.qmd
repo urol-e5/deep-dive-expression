@@ -1,0 +1,408 @@
+---
+title: "Long non-coding RNA discovery pipeline"
+author: "Zach Bengtsson"
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    html-math-method: katex
+    css: styles.css
+    theme: sandstone
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+Zach's attempt
+
+First for Apulchra with new genome
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+#Variables
+
+```{r setup, include=FALSE}
+# Global R options
+knitr::opts_chunk$set(echo = TRUE)
+
+# Define key paths and tool directories
+ 
+DATA_DIR <- "../data/01.6-lncRNA-pipeline"
+OUTPUT_DIR <- "../output/01.6-lncRNA-pipeline"
+THREADS <- "14"
+  
+FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/"
+FASTQ_SUFFIX <- "fastq.gz"
+GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
+
+
+GTF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.gff"
+
+GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
+
+#RAVEN
+HISAT2_DIR <- "/home/shared/hisat2-2.2.1/"
+SAMTOOLS_DIR <- "/home/shared/samtools-1.12/"
+STRINGTIE_DIR <- "/home/shared/stringtie-2.2.1.Linux_x86_64"
+GFFCOMPARE_DIR <- "/home/shared/gffcompare-0.12.6.Linux_x86_64"
+BEDTOOLS_DIR <- "/home/shared/bedtools2/bin"
+CPC2_DIR <- "/home/shared/CPC2_standalone-1.0.1/bin"
+CONDA_PATH <- "/opt/anaconda/anaconda3/bin"
+
+GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
+GENOME_GTF <- file.path(DATA_DIR, "genome.gtf")
+GENOME_GFF <- file.path(DATA_DIR, "genome.gff")
+FASTQ_DIR <- file.path(DATA_DIR, "fastq")
+GENOME_INDEX <- file.path(OUTPUT_DIR, "genome.index")
+
+# Export these as environment variables for bash chunks.
+Sys.setenv(
+  THREADS = THREADS,
+  DATA_DIR = DATA_DIR,
+  FASTQ_SOURCE = FASTQ_SOURCE,
+  FASTQ_SUFFIX = FASTQ_SUFFIX,
+  OUTPUT_DIR = OUTPUT_DIR,
+  GENOME_SOURCE = GENOME_SOURCE,
+  GTF_SOURCE = GTF_SOURCE,
+  GFF_SOURCE = GFF_SOURCE,
+  HISAT2_DIR = HISAT2_DIR,
+  SAMTOOLS_DIR = SAMTOOLS_DIR,
+  STRINGTIE_DIR = STRINGTIE_DIR,
+  GFFCOMPARE_DIR = GFFCOMPARE_DIR,
+  BEDTOOLS_DIR = BEDTOOLS_DIR,
+  CPC2_DIR = CPC2_DIR,
+  CONDA_PATH = CONDA_PATH,
+  GENOME_FASTA = GENOME_FASTA,
+  GENOME_GTF = GENOME_GTF,
+  GENOME_GFF = GENOME_GFF,
+  FASTQ_DIR = FASTQ_DIR,
+  GENOME_INDEX = GENOME_INDEX
+)
+```
+
+
+
+
+```{r mkdir, engine='bash'}
+mkdir -p "${DATA_DIR}"
+mkdir -p "${OUTPUT_DIR}"
+```
+
+# Download Genome and Reads for Hisat
+
+```{r grab fastq, engine='bash'}
+
+wget -nv -r \
+--no-directories --no-parent \
+-P ${FASTQ_DIR} \
+-A "*${FASTQ_SUFFIX}" ${FASTQ_SOURCE}
+```
+
+```{r ls, engine='bash'}
+ls ${FASTQ_DIR}
+```
+
+```{r fasta, engine='bash'}
+
+curl -o "${GENOME_FASTA}" "${GENOME_SOURCE}"
+```
+
+```{r gtf, engine='bash'}
+
+
+curl -o "${GENOME_GTF}" "${GTF_SOURCE}"
+```
+
+```{r gff, engine='bash'}
+
+
+curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
+```
+
+```{r file check, engine='bash'}
+output_fasta=$(head -1 "${GENOME_FASTA}")
+output_gff=$(head -2 "${GENOME_GFF}")
+output_gtf=$(head -1 "${GENOME_GTF}")
+
+if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
+    echo "FAIL - FFS you downloaded a HTML not and genome feature file!"
+else
+    echo "$output_fasta"
+    echo "$output_gff"
+    echo "$output_gtf"
+fi
+```
+
+# HISAT
+
+```{r, engine='bash'}
+"${HISAT2_DIR}hisat2_extract_exons.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/exon.txt"
+
+"${HISAT2_DIR}hisat2_extract_splice_sites.py" "${GENOME_GTF}" > "${OUTPUT_DIR}/splice_sites.txt"
+
+```
+
+```{r, engine='bash'}
+
+"${HISAT2_DIR}hisat2-build" \
+  -p "${THREADS}" \
+  "${GENOME_FASTA}" \
+  "${GENOME_INDEX}" \
+  --exon "${OUTPUT_DIR}/exon.txt" \
+  --ss "${OUTPUT_DIR}/splice_sites.txt" \
+  2> "${OUTPUT_DIR}/hisat2-build_stats.txt"
+
+```
+
+```{bash}
+# Loop over every file ending in .fastq.gz that contains "_R2_"
+for r2 in "${FASTQ_DIR}"/*_R2_*."${FASTQ_SUFFIX}"; do
+    # Get the basename (filename without path)
+    base=$(basename "$r2")
+    
+    # Derive a sample name by taking everything before "_R2_"
+    sample="${base%%_R2_*}"
+    
+    # Construct the corresponding R1 filename by replacing "_R2_" with "_R1_"
+    r1="${r2/_R2_/_R1_}"
+    
+    # Define the output SAM file name using the sample name
+    output="${OUTPUT_DIR}/${sample}.sam"
+    
+    # Run hisat2 with the paired-end files
+    "${HISAT2_DIR}hisat2" \
+      -x "${GENOME_INDEX}" \
+      -p "${THREADS}" \
+      -1 "$r1" \
+      -2 "$r2" \
+      -S "$output"
+done
+```
+
+## convert SAM to BAM
+
+```{r convertSAM, engine='bash'}
+for samfile in "${OUTPUT_DIR}/${sample}"*.sam; do
+  bamfile="${samfile%.sam}.bam"
+  sorted_bamfile="${samfile%.sam}.sorted.bam"
+  
+  # Convert SAM to BAM
+  "${SAMTOOLS_DIR}samtools" view -bS -@ "${THREADS}" "$samfile" > "$bamfile"
+  
+  # Sort BAM
+  "${SAMTOOLS_DIR}samtools" sort -@ "${THREADS}" "$bamfile" -o "$sorted_bamfile"
+  
+  # Index sorted BAM
+  "${SAMTOOLS_DIR}samtools" index -@ "${THREADS}" "$sorted_bamfile"
+done
+```
+
+# StringTie
+
+StringTie uses the sorted BAM files to assemble transcripts for each
+sample, outputting them as GTF (Gene Transfer Format) files. And then
+merges all individual GTF assemblies into a single merged GTF file. This
+step extracts transcript information and merges GTFs from all
+samples--an important step in creating a canonical list of lncRNAs
+across all samples included in the pipeline.
+
+```{r stringtie, engine='bash'}
+find "${OUTPUT_DIR}" -name "*sorted.bam" \
+| xargs -n 1 basename -s .sorted.bam | xargs -I{} \
+"${STRINGTIE_DIR}/stringtie" \
+-p "${THREADS}" \
+-G "${GENOME_GFF}" \
+-o "${OUTPUT_DIR}/{}.gtf" \
+"${OUTPUT_DIR}/{}.sorted.bam"
+```
+
+```{r merge, engine='bash'}
+"${STRINGTIE_DIR}/stringtie" \
+--merge \
+-G "${GENOME_GFF}" \
+-o "${OUTPUT_DIR}/stringtie_merged.gtf" \
+"${OUTPUT_DIR}/"*.gtf
+```
+
+#GFFCOMPARE
+
+![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_687474703a2f2f67616e6e65742e666973682e77617368696e67746f6e2e6564752f7365617368656c6c2f736e6170732f323032332d31312d30335f30392d3_2024-12-20_04-02-37.png)
+
+```{r gffcomp, engine='bash'}
+"${GFFCOMPARE_DIR}/gffcompare" \
+-r "${GENOME_GFF}" \
+-o "${OUTPUT_DIR}/gffcompare_merged" \
+"${OUTPUT_DIR}/stringtie_merged.gtf"
+```
+
+```{r viewgff, engine='bash'}
+head -1 "${OUTPUT_DIR}"/gffcompare_merged*
+```
+
+```{r gff filter, engine='bash'}
+awk '$3 == "transcript" && $1 !~ /^#/' "${OUTPUT_DIR}/gffcompare_merged.annotated.gtf" | \
+grep -E "${GFFPATTERN}" | \
+awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
+```
+
+# Bedtools
+
+```{r fasta, engine='bash'}
+"${BEDTOOLS_DIR}"/bedtools getfasta \
+-fi "${GENOME_FASTA}" \
+-bed "${OUTPUT_DIR}/lncRNA_candidates.gtf" \
+-fo "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-name -split
+```
+
+```{r, engine='bash', eval=TRUE, echo=FALSE}
+fgrep -c ">" ${OUTPUT_DIR}/lncRNA_candidates.fasta
+
+head ${OUTPUT_DIR}/lncRNA_candidates.fasta
+```
+
+#CPC2
+
+```{r cpc2, engine='bash'}
+eval "${CONDA_PATH}"
+"${CPC2_DIR}"/CPC2.py \
+-i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-o "${OUTPUT_DIR}/CPC2"
+```
+
+```{r}
+install.packages("reticulate")
+library(reticulate)
+
+```
+
+```{r}
+np <- import("numpy")
+print(np$`__version__`)
+
+# Get the file path of numpy's __init__.py (or similar)
+numpy_location <- np$`__file__`
+
+print(numpy_location)
+
+
+```
+
+
+#Filter
+
+```{r filCPC, engine='bash'}
+awk '$8 == "noncoding" {print $1}' "${OUTPUT_DIR}/CPC2.txt" > "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+```
+
+Subsetting fasta
+
+```{r ssfasta, engine='bash'}
+"${SAMTOOLS_DIR}samtools" faidx "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-r "${OUTPUT_DIR}/noncoding_transcripts_ids.txt" \
+> "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r, engine='bash'}
+head -2 "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r lncRNAgtf, engine='bash'}
+# Define input and output file paths using the OUTPUT_DIR variable
+input="${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+output="${OUTPUT_DIR}/lncRNA.bed"
+
+# Process each line of the input file
+while IFS= read -r line; do
+    # Remove "transcript::" from the line
+    line="${line//transcript::/}"
+    
+    # Split the line by ':' to get the chromosome and position string
+    IFS=':' read -r chromosome pos <<< "$line"
+    
+    # Split the position string by '-' to separate start and end positions
+    IFS='-' read -r start end <<< "$pos"
+    
+    # Convert the start position to 0-based by subtracting 1
+    start=$((start - 1))
+    
+    # Write the chromosome, updated start, and end positions to the output file (tab-separated)
+    printf "%s\t%s\t%s\n" "$chromosome" "$start" "$end"
+done < "$input" > "$output"
+```
+
+```{r renamegtf, engine='bash'}
+awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
+> "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+# Summary Table
+
+```{r summary, engine='bash'}
+tf_file="${OUTPUT_DIR}/lncRNA.gtf"
+
+awk '
+BEGIN {
+    total_entries = 0;
+    min_length = 1e9;
+    max_length = 0;
+    sum_length = 0;
+}
+# Skip comment lines
+/^#/ { next }
+{
+    if (NF < 9) next;
+    total_entries++;
+    start = $4;
+    end = $5;
+    gene_length = end - start + 1;
+    if (gene_length < min_length) min_length = gene_length;
+    if (gene_length > max_length) max_length = gene_length;
+    sum_length += gene_length;
+    feature[$3]++;
+    chrom[$1]++;
+    # Use two-argument match() and then extract the gene_id manually.
+    if (match($9, /gene_id "[^"]+"/)) {
+        gene_str = substr($9, RSTART, RLENGTH);
+        # Remove the "gene_id " prefix and the quotes.
+        gsub(/gene_id "/, "", gene_str);
+        gsub(/"/, "", gene_str);
+        genes[gene_str] = 1;
+    }
+}
+END {
+    avg_length = (total_entries > 0) ? sum_length / total_entries : 0;
+    unique_gene_count = 0;
+    for (g in genes)
+        unique_gene_count++;
+    print "Basic GTF File Statistics:";
+    print "--------------------------";
+    print "Total entries:      " total_entries;
+    print "Unique genes:       " unique_gene_count;
+    print "Min gene length:    " min_length;
+    print "Max gene length:    " max_length;
+    printf("Average gene length: %.2f\n", avg_length);
+    print "\nFeature counts:";
+    for (f in feature) {
+        print "  " f ": " feature[f];
+    }
+    print "\nChromosome counts:";
+    for (c in chrom) {
+        print "  " c ": " chrom[c];
+    }
+}
+' "$tf_file"
+```
