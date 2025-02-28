@@ -1,60 +1,91 @@
----
-title: "26-Apul-siRNA-mRNA-interactions"
-author: "Kathleen Durkin"
-date: "2024-02-27"
-always_allow_html: true
-output: 
-  github_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    html_preview: true 
-  bookdown::html_document2:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-bibliography: ../../references.bib
-link-citations: true
----
+26-Apul-siRNA-mRNA-interactions
+================
+Kathleen Durkin
+2024-02-27
 
-The vast majority to work with siRNAs appears to focus on their application in therapeutic treatments, in the field of human health. siRNAs are designed to bind to specific locations are part of these therapeutics. Because of this, while some tools have been developed to predict siRNA targets (@gresova_small_2022), these tools focus on identifying "off-targets", or potential interactions *other* than the siRNAs primary target. One of these tools, siFi (@luck_sirna-finder_2019) could be useful to us, but is unfortunately only available as a windows application, which we can't install on our servers.I may circle back to siFi later by running it locally, but for now we'll just try BLAST. siRNAs require full- or near-full complementarity to bind to their targets, which should make searching for targets through BLAST relatively straightforward.
+- <a href="#1-obtain-sirna-fasta" id="toc-1-obtain-sirna-fasta">1 Obtain
+  siRNA fasta</a>
+  - <a href="#11-extract-sirna-regions-and-convert-to-bed"
+    id="toc-11-extract-sirna-regions-and-convert-to-bed">1.1 Extract siRNA
+    regions and convert to .bed</a>
+  - <a href="#12-convert-sample-srnaseq-bam-files-to-bed"
+    id="toc-12-convert-sample-srnaseq-bam-files-to-bed">1.2 Convert sample
+    sRNAseq bam files to .bed</a>
+  - <a href="#13-use-bedtools-multiintersect"
+    id="toc-13-use-bedtools-multiintersect">1.3 Use bedtools
+    <code>multiintersect</code></a>
+  - <a href="#14-annotate-with-cluster-information-and-filter"
+    id="toc-14-annotate-with-cluster-information-and-filter">1.4 Annotate
+    with cluster information and filter</a>
+- <a href="#2-prep-for-blasts" id="toc-2-prep-for-blasts">2 Prep for
+  BLASTs</a>
+  - <a href="#21-check-sirna-lengths" id="toc-21-check-sirna-lengths">2.1
+    Check siRNA lengths</a>
+- <a href="#3-blasts" id="toc-3-blasts">3 BLASTs</a>
+  - <a href="#31-make-databases" id="toc-31-make-databases">3.1 Make
+    databases</a>
+  - <a href="#32-run-blastn" id="toc-32-run-blastn">3.2 Run BLASTn</a>
+- <a href="#4-examine-blast-tables" id="toc-4-examine-blast-tables">4
+  Examine BLAST tables</a>
+- <a href="#5-transposable-elements" id="toc-5-transposable-elements">5
+  Transposable Elements</a>
 
-# Obtain siRNA fasta
+The vast majority to work with siRNAs appears to focus on their
+application in therapeutic treatments, in the field of human health.
+siRNAs are designed to bind to specific locations are part of these
+therapeutics. Because of this, while some tools have been developed to
+predict siRNA targets (Grešová, Alexiou, and Giassa
+([2022](#ref-gresova_small_2022))), these tools focus on identifying
+“off-targets”, or potential interactions *other* than the siRNAs primary
+target. One of these tools, siFi (Lück et al.
+([2019](#ref-luck_sirna-finder_2019))) could be useful to us, but is
+unfortunately only available as a windows application, which we can’t
+install on our servers.I may circle back to siFi later by running it
+locally, but for now we’ll just try BLAST. siRNAs require full- or
+near-full complementarity to bind to their targets, which should make
+searching for targets through BLAST relatively straightforward.
 
-ShortStack outputs a gff of genomic regions with accumulating sRNAs (`Results.gff3`) and annotates those regions as "unkown sRNA", "miRNA", or "siRNA". However, these regions are generally several hundred basepairs long, since they are "accumulation regions", not the ~21nt sRNA molecules themselves. While ShortStack also identifies and outputs fastas for the miRNAs, it doesn't do that for siRNAs. This means we need to ID the precise siRNA sequences ourselves.
+# 1 Obtain siRNA fasta
+
+ShortStack outputs a gff of genomic regions with accumulating sRNAs
+(`Results.gff3`) and annotates those regions as “unkown sRNA”, “miRNA”,
+or “siRNA”. However, these regions are generally several hundred
+basepairs long, since they are “accumulation regions”, not the \~21nt
+sRNA molecules themselves. While ShortStack also identifies and outputs
+fastas for the miRNAs, it doesn’t do that for siRNAs. This means we need
+to ID the precise siRNA sequences ourselves.
 
 Approach:
 
-1. Extract regions of accumulating siRNA from ShortStack output
+1.  Extract regions of accumulating siRNA from ShortStack output
 
-2. Convert gff of siRNA regions to .bed
+2.  Convert gff of siRNA regions to .bed
 
-3. Convert sample sRNAseq bam files to .bed
+3.  Convert sample sRNAseq bam files to .bed
 
-4. Use bedtools `multiintersect` to find sRNA sequences that appear within the ShortStack siRNA regions and in our sample sRNAseq reads.
+4.  Use bedtools `multiintersect` to find sRNA sequences that appear
+    within the ShortStack siRNA regions and in our sample sRNAseq reads.
 
+## 1.1 Extract siRNA regions and convert to .bed
 
-
-## Extract siRNA regions and convert to .bed
-
-```{r, engine='bash'}
+``` bash
 awk '$3 ~ /siRNA/' ../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.gff3 > ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.gff3
 
 awk '$3 ~ /siRNA/ {print $1 "\t" $4-1 "\t" $5}' ../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.gff3 > ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed
 ```
 
-How many siRNA regions are there? This should be our total number of siRNA at the end of this process
+How many siRNA regions are there? This should be our total number of
+siRNA at the end of this process
 
-```{r, engine='bash'}
+``` bash
 wc -l ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed
 ```
 
-## Convert sample sRNAseq bam files to .bed
+    ## 142 ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed
 
-```{r, engine='bash'}
+## 1.2 Convert sample sRNAseq bam files to .bed
+
+``` bash
 reads_dir="../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out"
 output_dir="../output/26-Apul-siRNA-mRNA-interactions"
 /home/shared/bedtools2/bin/bamToBed \
@@ -78,10 +109,9 @@ output_dir="../output/26-Apul-siRNA-mRNA-interactions"
 > ${output_dir}/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
 ```
 
+## 1.3 Use bedtools `multiintersect`
 
-## Use bedtools `multiintersect`
-
-```{r, engine='bash'}
+``` bash
 output_dir="../output/26-Apul-siRNA-mRNA-interactions"
 
 /home/shared/bedtools2/bin/bedtools multiinter -i \
@@ -93,38 +123,59 @@ ${output_dir}/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
 ${output_dir}/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
 -header \
 > ${output_dir}/Apul-shared-siRNA_clusters.bed
-
 ```
-
 
 How many outputs?
 
-```{r, engine='bash'}
+``` bash
 wc -l ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed
 ```
 
+    ## 2899994 ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed
+
 Ignoring the header line, there are 2899993 intersecting regions.
 
-First, we'll only keep regions identified as siRNA regions by ShortStack (present in the first input file) and present in at least two of the samples
+First, we’ll only keep regions identified as siRNA regions by ShortStack
+(present in the first input file) and present in at least two of the
+samples
 
-```{r, engine='bash'}
+``` bash
 awk '$4 >= 3 && $6 > 0' ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed > ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters-filtered.bed
 
 wc -l ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters-filtered.bed
 ```
 
-There are more than 142  shared clusters here, so most of these are not par of the true siRNA. Let's use intersectBed to annotate each shared segment with the ShortStack siRNA accumulation region it falls within.
+    ## 490 ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters-filtered.bed
 
-```{r, engine='bash'}
+There are more than 142 shared clusters here, so most of these are not
+par of the true siRNA. Let’s use intersectBed to annotate each shared
+segment with the ShortStack siRNA accumulation region it falls within.
+
+``` bash
 /home/shared/bedtools2/bin/bedtools intersect -wa -wb -a ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters-filtered.bed -b ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed > ../output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters-annotated.bed
 ```
 
-## Annotate with cluster information and filter
+## 1.4 Annotate with cluster information and filter
 
-Now read in to R and annotate with additional information on each siRNA region (provided in the ShortStack gff3)
+Now read in to R and annotate with additional information on each siRNA
+region (provided in the ShortStack gff3)
 
-```{r}
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(tidyr)
 
 # Read in data
@@ -152,7 +203,7 @@ intersectBed <- intersectBed %>% separate(attributes, into = c("ID", "DicerCall"
 intersectBed$length <- intersectBed$V3 - intersectBed$V2
 ```
 
-```{r}
+``` r
 # Keep only intersections with lengths of at least the lowest DicerCall value (21)
 intersectBed_filt <- intersectBed[intersectBed$length >= 21,]
 
@@ -160,17 +211,38 @@ intersectBed_filt <- intersectBed[intersectBed$length >= 21,]
 intersectBed_filt <- intersectBed_filt[intersectBed_filt$length <= 30,]
 
 nrow(intersectBed)
-nrow(intersectBed_filt)
+```
 
+    ## [1] 490
+
+``` r
+nrow(intersectBed_filt)
+```
+
+    ## [1] 155
+
+``` r
 length(unique(intersectBed$ID))
+```
+
+    ## [1] 130
+
+``` r
 length(unique(intersectBed_filt$ID))
 ```
-We've filtered 490 intersecting regions to 155, and from coverage of 130 ShortStack siRNA "Clusters" to 116 (out of the 142 output by ShortStack)
 
-In cases where there are multiple long intersections within a single ShortStack siRNA region, I can't think of a robust way to decide which intersecting region is more likely to constitute a genuine siRNA. Instead, I'll just label both as different siRNAs of the same cluster for now. 
+    ## [1] 116
 
-```{r}
+We’ve filtered 490 intersecting regions to 155, and from coverage of 130
+ShortStack siRNA “Clusters” to 116 (out of the 142 output by ShortStack)
 
+In cases where there are multiple long intersections within a single
+ShortStack siRNA region, I can’t think of a robust way to decide which
+intersecting region is more likely to constitute a genuine siRNA.
+Instead, I’ll just label both as different siRNAs of the same cluster
+for now.
+
+``` r
 # Initialize updated_ID col
 intersectBed_filt$updated_ID <- intersectBed_filt$ID
 
@@ -192,11 +264,16 @@ for(i in 1:nrow(intersectBed_filt)) {
 length(unique(intersectBed_filt$updated_ID))
 ```
 
-When accounting for multiple unique putative siRNA loci in a single siRNA region, there are 155 siRNA loci (in 116 siRNA-accumulating regions)
+    ## [1] 155
 
-Ok, we now have a set of putative siRNA loci. Let's save them as a gff and extract fastas for them
+When accounting for multiple unique putative siRNA loci in a single
+siRNA region, there are 155 siRNA loci (in 116 siRNA-accumulating
+regions)
 
-```{r}
+Ok, we now have a set of putative siRNA loci. Let’s save them as a gff
+and extract fastas for them
+
+``` r
 intersectBed_filt$attributes <- paste0("siRNALociID=", intersectBed_filt$updated_ID, ";DicerCall=", intersectBed_filt$DicerCall, ";Length=", intersectBed_filt$length)
 intersectBed_filt_gff <- intersectBed_filt %>% select(V1, source, type, V2, V3, score, strand, phase, attributes)
 
@@ -206,53 +283,63 @@ intersectBed_filt_gff$V2 <- intersectBed_filt_gff$V2 + 1
 write.table(intersectBed_filt_gff, "../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci.gff3", sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 ```
 
-
-```{r, engine='bash'}
+``` bash
 /home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci.gff3 -fo ../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci.fa
 ```
 
-We have a fasta file of putative siRNA loci! Now we can move on to searching for siRNA targets
+We have a fasta file of putative siRNA loci! Now we can move on to
+searching for siRNA targets
 
+# 2 Prep for BLASTs
 
+## 2.1 Check siRNA lengths
 
-# Prep for BLASTs
-
-## Check siRNA lengths
-
-```{r, engine='bash'}
+``` bash
 awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci.fa > ../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci-lengths.txt
 ```
 
-```{r, eval=TRUE}
+``` r
 # Summary stats of precursor and mature lengths
 
 lengths <- read.table("../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci-lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
 
 cat("Average siRNA length: ", mean(lengths$length))
+```
+
+    ## Average siRNA length:  23.45161
+
+``` r
 cat("\n")
+```
+
+``` r
 cat("Range of siRNA lengths: ", range(lengths$length))
 ```
 
-# BLASTs
+    ## Range of siRNA lengths:  21 30
 
-## Make databases
+# 3 BLASTs
+
+## 3.1 Make databases
 
 Database of siRNAs:
 
-```{r make-premirna-databse, engine='bash', eval=FALSE}
+``` bash
 /home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
 -in ../output/26-Apul-siRNA-mRNA-interactions/Apul-siRNA_loci.fa \
 -dbtype nucl \
 -out ../output/26-Apul-siRNA-mRNA-interactions/blasts/Apul-db/Apul-siRNA_loci
 ```
 
+## 3.2 Run BLASTn
 
-## Run BLASTn
+Generate a list of blast results. It’s possible that a single siRNA
+could bind to multiple places in the genome so I will allow up to 20
+hits. Since siRNAs bind with high complementarity, I set minimum percent
+identity to 85%. I’ll also include the “-word_size 4” option, which
+reduces the required length of the initial match
 
-Generate a list of blast results. It's possible that a single siRNA could bind to multiple places in the genome so I will allow up to 20 hits. Since siRNAs bind with high complementarity, I set minimum percent identity to 85%. I’ll also include the “-word_size 4” option, which reduces the required length of the initial match
-
-
-```{r blastn-premirna, engine='bash', eval=FALSE}
+``` bash
 /home/shared/ncbi-blast-2.11.0+/bin/blastn \
 -task blastn \
 -query ../data/Apulchra-genome.fa \
@@ -266,23 +353,23 @@ Generate a list of blast results. It's possible that a single siRNA could bind t
 -outfmt 6
 ```
 
-```{r, engine='bash'}
+``` bash
 wc -l ../output/26-Apul-siRNA-mRNA-interactions/blasts/siRNA_to_genome_blastn.tab
 ```
 
+    ## 2201 ../output/26-Apul-siRNA-mRNA-interactions/blasts/siRNA_to_genome_blastn.tab
 
-# Examine BLAST tables
+# 4 Examine BLAST tables
 
 Read into R and assign informative column labels
 
-```{r read-in-blast-tables, eval=TRUE}
+``` r
 siRNA_genome_BLASTn <- read.table("../output/26-Apul-siRNA-mRNA-interactions/blasts/siRNA_to_genome_blastn.tab", sep="\t", header=FALSE)
 
 colnames(siRNA_genome_BLASTn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
 ```
 
-
-```{r}
+``` r
 # Remove any matches of <21bp (the length of our shortest siRNA)
 siRNA_genome_BLASTn <- siRNA_genome_BLASTn[siRNA_genome_BLASTn$length >= 21,]
 
@@ -291,24 +378,56 @@ siRNA_genome_BLASTn$genome_loc <- paste0(siRNA_genome_BLASTn$qseqid, ":", siRNA_
 siRNA_genome_BLASTn <- siRNA_genome_BLASTn[siRNA_genome_BLASTn$sseqid != siRNA_genome_BLASTn$genome_loc,]
 
 nrow(siRNA_genome_BLASTn)
+```
+
+    ## [1] 829
+
+``` r
 length(unique(siRNA_genome_BLASTn$sseqid))
+```
+
+    ## [1] 89
+
+``` r
 length(unique(siRNA_genome_BLASTn$genome_loc))
 ```
 
-Of the 155 siRNA loci, 89 align to a 724 different locations in the genome with very high complementarity. Some genome locations match multiple siRNA
+    ## [1] 724
 
+Of the 155 siRNA loci, 89 align to a 724 different locations in the
+genome with very high complementarity. Some genome locations match
+multiple siRNA
 
+# 5 Transposable Elements
 
+TE annotation for A.pulchra stored in project OSF:
+<https://osf.io/y8963/files/osfstorage>
 
-# Transposable Elements
-
-TE annotation for A.pulchra stored in project OSF: https://osf.io/y8963/files/osfstorage
-
-```{r, engine='bash'}
+``` bash
 awk '$10 ~ /transposon/' ../data/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.fa.out | wc -l
 ```
 
+    ## 0
 
+<div id="refs" class="references csl-bib-body hanging-indent">
 
+<div id="ref-gresova_small_2022" class="csl-entry">
 
+Grešová, Katarína, Panagiotis Alexiou, and Ilektra-Chara Giassa. 2022.
+“Small RNA Targets: Advances in Prediction Tools and High-Throughput
+Profiling.” *Biology* 11 (12): 1798.
+<https://doi.org/10.3390/biology11121798>.
 
+</div>
+
+<div id="ref-luck_sirna-finder_2019" class="csl-entry">
+
+Lück, Stefanie, Tino Kreszies, Marc Strickert, Patrick Schweizer, Markus
+Kuhlmann, and Dimitar Douchkov. 2019. “<span
+class="nocase">siRNA</span>-Finder (Si-Fi) Software for RNAi-Target
+Design and Off-Target Prediction.” *Frontiers in Plant Science* 10
+(August). <https://doi.org/10.3389/fpls.2019.01023>.
+
+</div>
+
+</div>
