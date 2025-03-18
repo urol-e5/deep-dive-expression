@@ -50,6 +50,7 @@ D-Apul/output/24-Apul-miRanda-input-comparisons/*all.tab
 D-Apul/output/24-Apul-miRanda-input-comparisons/Apul-PCC_miRNA_mRNA-full.csv
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/*_condensed.bed
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed
+D-Apul/output/26-Apul-siRNA-mRNA-interactions/bowtie2/*.bt2
 D-Apul/output/22*
 
 E-Peve/code/.bashvars

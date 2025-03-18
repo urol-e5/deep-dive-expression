@@ -26,7 +26,171 @@ The vast majority to work with siRNAs appears to focus on their application in t
 
 ShortStack outputs a gff of genomic regions with accumulating sRNAs (`Results.gff3`) and annotates those regions as "unkown sRNA", "miRNA", or "siRNA". However, these regions are generally several hundred basepairs long, since they are "accumulation regions", not the ~21nt sRNA molecules themselves. While ShortStack also identifies and outputs fastas for the miRNAs, it doesn't do that for siRNAs. This means we need to ID the precise siRNA sequences ourselves.
 
-Approach:
+Approach 1: 
+
+1. Extract regions of accumulating siRNA from ShortStack output
+
+2. Isolate sRNA reads that fall within these accumulation regions
+
+3. Use bowtie2 to map isolated sRNA reads to genome. Locations with notable depth likely represent siRNA, allowing us to isolate putative siRNA fastas. Note: we may still want to input all siRNA reads that fall within an accumulation region for target prediction, or filter based on siRNA sequence features.
+
+
+## Extract siRNA regions and convert to .bed
+
+```{r, engine='bash'}
+awk '$3 ~ /siRNA/' ../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.gff3 > ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.gff3
+
+awk '$3 ~ /siRNA/ {print $1 "\t" $4-1 "\t" $5}' ../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.gff3 > ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed
+```
+
+How many siRNA regions are there? This should be our total number of siRNA at the end of this process
+
+```{r, engine='bash'}
+wc -l ../output/26-Apul-siRNA-mRNA-interactions/Apul-ShortStack-siRNA_regions.bed
+```
+
+
+## Convert sample sRNAseq bam files to .bed
+
+```{r, engine='bash'}
+reads_dir="../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out"
+output_dir="../output/26-Apul-siRNA-mRNA-interactions"
+/home/shared/bedtools2/bin/bamToBed \
+-i ${reads_dir}/sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam \
+> ${output_dir}/sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
+
+/home/shared/bedtools2/bin/bamToBed \
+-i ${reads_dir}/sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam \
+> ${output_dir}/sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
+
+/home/shared/bedtools2/bin/bamToBed \
+-i ${reads_dir}/sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam \
+> ${output_dir}/sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
+
+/home/shared/bedtools2/bin/bamToBed \
+-i ${reads_dir}/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam \
+> ${output_dir}/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
+
+/home/shared/bedtools2/bin/bamToBed \
+-i ${reads_dir}/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam \
+> ${output_dir}/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed
+```
+
+
+## Isolate sRNA reads in accumulation regions
+
+Since we're only interested in reads that fall within the siRNA-accumulation regions identified by ShortStack, filter sRNA-seq reads. We'll use bedtools intersect. The -wa option will retain the entire sRNA-seq read, even if it only partially overlaps the accumulation region.
+
+```{r, engine='bash'}
+output_dir="../output/26-Apul-siRNA-mRNA-interactions"
+
+/home/shared/bedtools2/bin/bedtools intersect -wa \
+-a ${output_dir}/sRNA-ACR-140-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
+-b ${output_dir}/Apul-ShortStack-siRNA_regions.bed \
+> ${output_dir}/bedtools-intersect/sRNA-ACR-140-S1-TP2-siRNA_accumulation_reads.bed
+
+/home/shared/bedtools2/bin/bedtools intersect -wa \
+-a ${output_dir}/sRNA-ACR-145-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
+-b ${output_dir}/Apul-ShortStack-siRNA_regions.bed \
+> ${output_dir}/bedtools-intersect/sRNA-ACR-145-S1-TP2-siRNA_accumulation_reads.bed
+
+/home/shared/bedtools2/bin/bedtools intersect -wa \
+-a ${output_dir}/sRNA-ACR-150-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
+-b ${output_dir}/Apul-ShortStack-siRNA_regions.bed \
+> ${output_dir}/bedtools-intersect/sRNA-ACR-150-S1-TP2-siRNA_accumulation_reads.bed
+
+/home/shared/bedtools2/bin/bedtools intersect -wa \
+-a ${output_dir}/sRNA-ACR-173-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
+-b ${output_dir}/Apul-ShortStack-siRNA_regions.bed \
+> ${output_dir}/bedtools-intersect/sRNA-ACR-173-S1-TP2-siRNA_accumulation_reads.bed
+
+/home/shared/bedtools2/bin/bedtools intersect -wa \
+-a ${output_dir}/sRNA-ACR-178-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bed \
+-b ${output_dir}/Apul-ShortStack-siRNA_regions.bed \
+> ${output_dir}/bedtools-intersect/sRNA-ACR-178-S1-TP2-siRNA_accumulation_reads.bed
+
+```
+
+Convert these filtered .bed files back to fastas
+```{r, engine='bash'}
+intersect_dir="../output/26-Apul-siRNA-mRNA-interactions/bedtools-intersect"
+
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ${intersect_dir}/sRNA-ACR-140-S1-TP2-siRNA_accumulation_reads.bed -fo ${intersect_dir}/sRNA-ACR-140-S1-TP2-siRNA_accumulation_reads.fa
+
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ${intersect_dir}/sRNA-ACR-145-S1-TP2-siRNA_accumulation_reads.bed -fo ${intersect_dir}/sRNA-ACR-145-S1-TP2-siRNA_accumulation_reads.fa
+
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ${intersect_dir}/sRNA-ACR-150-S1-TP2-siRNA_accumulation_reads.bed -fo ${intersect_dir}/sRNA-ACR-150-S1-TP2-siRNA_accumulation_reads.fa
+
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ${intersect_dir}/sRNA-ACR-173-S1-TP2-siRNA_accumulation_reads.bed -fo ${intersect_dir}/sRNA-ACR-173-S1-TP2-siRNA_accumulation_reads.fa
+
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../data/Apulchra-genome.fa -bed ${intersect_dir}/sRNA-ACR-178-S1-TP2-siRNA_accumulation_reads.bed -fo ${intersect_dir}/sRNA-ACR-178-S1-TP2-siRNA_accumulation_reads.fa
+```
+
+
+## bowtie2 to map putative siRNA reads to genome
+
+First time using bowtie, so used https://rnnh.github.io/bioinfo-notebook/docs/bowtie2.html as a helpful resource
+
+Build index of Apulchra genome
+```{r, engine='bash', eval=FALSE}
+cd ../output/26-Apul-siRNA-mRNA-interactions
+/home/shared/bowtie2-2.4.4-linux-x86_64/bowtie2-build ../../data/Apulchra-genome.fa bowtie2/Apulchra-genome-index
+```
+
+Align putative siRNA reads to indexed genome
+```{r, engine='bash'}
+cd ../output/26-Apul-siRNA-mRNA-interactions/bowtie2
+input_files=(../bedtools-intersect/*.fa)
+
+/home/shared/bowtie2-2.4.4-linux-x86_64/bowtie2 \
+-p 8 \
+-f \
+-x Apulchra-genome-index \
+-U "${input_files[@]}" \
+-S siRNA-reads-to-genome-bowtie2.sam
+
+#for file in "${input_files[@]}"; do
+#    # Extract base name (remove path and extension)
+#    base_name=$(basename "$file" .fa)  # Adjust extension if needed (e.g., .fasta, .fastq)
+#    
+#    # Run Bowtie2 for each file separately
+#    /home/shared/bowtie2-2.4.4-linux-x86_64/bowtie2 \
+#        -p 8 \
+#        -f \
+#        -x Apulchra-genome-index \
+#        -U "$file" \
+#        -S "${base_name}_bowtie2.sam"
+#done
+
+  
+```
+
+Convert SAM to BAM, sort and index the BAM file, get alignment statistics, extract mapped reads, and convert back to fasta
+```{r, engine='bash'}
+cd ../output/26-Apul-siRNA-mRNA-interactions/bowtie2
+
+# Convert SAM to BAM
+/home/shared/samtools-1.12/samtools view -bS siRNA-reads-to-genome-bowtie2.sam > siRNA-reads-to-genome-bowtie2.bam
+
+# Sort BAM file
+/home/shared/samtools-1.12/samtools sort siRNA-reads-to-genome-bowtie2.bam -o siRNA-reads-to-genome-bowtie2.sorted.bam
+
+# Index BAM file
+/home/shared/samtools-1.12/samtools index siRNA-reads-to-genome-bowtie2.sorted.bam
+
+# Get Alignment statistics
+/home/shared/samtools-1.12/samtools flagstat siRNA-reads-to-genome-bowtie2.sorted.bam
+
+# All reads mapped, so need to remove un-mapped reads
+# Convert sorted BAM of mapped reads back to FASTA
+/home/shared/samtools-1.12/samtools fasta siRNA-reads-to-genome-bowtie2.sorted.bam > siRNA-reads-to-genome-bowtie2.sorted.fa
+
+```
+
+
+
+
+Approach 2:
 
 1. Extract regions of accumulating siRNA from ShortStack output
 
