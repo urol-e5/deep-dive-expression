@@ -1258,7 +1258,7 @@ END {
 ```{python}
 
 # Open the input file and the output file
-with open('../output/01.61-lncRNA-pipeline/noncoding_transcripts_ids.txt', 'r') as infile, open('../output/01.61-lncRNA-pipeline/Peve_lncRNA.bed', 'w') as outfile:
+with open('../output/01.62-lncRNA-pipeline/noncoding_transcripts_ids.txt', 'r') as infile, open('../output/01.62-lncRNA-pipeline/Ptuh_lncRNA.bed', 'w') as outfile:
     # Process each line in the input file
     for line in infile:
         # Remove 'transcript::' and then split the line by ':' to extract the relevant parts
