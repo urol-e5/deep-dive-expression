@@ -40,7 +40,7 @@ knitr::opts_chunk$set(echo = TRUE)
  
 DATA_DIR <- "../data/01-lncRNA"
 OUTPUT_DIR <- "../output/01-lncRNA"
-THREADS <- "14"
+THREADS <- "42"
   
 FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_meandrina/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
@@ -53,22 +53,22 @@ GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-e
 GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 
 #RAVEN
-# HISAT2_DIR <- "/home/shared/hisat2-2.2.1/"
-# SAMTOOLS_DIR <- "/home/shared/samtools-1.12/"
-# STRINGTIE_DIR <- "/home/shared/stringtie-2.2.1.Linux_x86_64"
-# GFFCOMPARE_DIR <- "/home/shared/gffcompare-0.12.6.Linux_x86_64"
-# BEDTOOLS_DIR <- "/home/shared/bedtools2/bin"
-# CPC2_DIR <- "/home/shared/CPC2_standalone-1.0.1"
-# CONDA_PATH <- "/opt/anaconda/anaconda3/bin/conda"
+HISAT2_DIR <- "/home/shared/hisat2-2.2.1/"
+SAMTOOLS_DIR <- "/home/shared/samtools-1.12/"
+STRINGTIE_DIR <- "/home/shared/stringtie-2.2.1.Linux_x86_64"
+GFFCOMPARE_DIR <- "/home/shared/gffcompare-0.12.6.Linux_x86_64"
+BEDTOOLS_DIR <- "/home/shared/bedtools2/bin"
+CPC2_DIR <- "/home/shared/CPC2_standalone-1.0.1"
+CONDA_PATH <- "/opt/anaconda/anaconda3/bin/conda"
 
 #KLONE
-HISAT2_DIR <- ""
-SAMTOOLS_DIR <- ""
-STRINGTIE_DIR <- ""
-GFFCOMPARE_DIR <- "/srlab/programs/gffcompare-0.12.6.Linux_x86_64/"
-BEDTOOLS_DIR <- ""
-CPC2_DIR <- "/srlab/programs/CPC2_standalone-1.0.1/bin/"
-CONDA_PATH <- ""
+# HISAT2_DIR <- ""
+# SAMTOOLS_DIR <- ""
+# STRINGTIE_DIR <- ""
+# GFFCOMPARE_DIR <- "/srlab/programs/gffcompare-0.12.6.Linux_x86_64/"
+# BEDTOOLS_DIR <- ""
+# CPC2_DIR <- "/srlab/programs/CPC2_standalone-1.0.1/bin/"
+# CONDA_PATH <- ""
 
 GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
 GENOME_GTF <- file.path(DATA_DIR, "genome.gtf")
@@ -295,7 +295,8 @@ awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
 
 
 ```{r cpc2, engine='bash'}
-"${CPC2_DIR}"CPC2.py \
+eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
+python "${CPC2_DIR}"CPC2.py \
 -i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
 -o "${OUTPUT_DIR}/CPC2"
 ```

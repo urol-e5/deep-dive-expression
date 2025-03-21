@@ -18,10 +18,10 @@ GFFPATTERN='class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 HISAT2_DIR="/home/shared/hisat2-2.2.1/"
 SAMTOOLS_DIR="/home/shared/samtools-1.12/"
 STRINGTIE_DIR="/home/shared/stringtie-2.2.1.Linux_x86_64"
-GFFCOMPARE_DIR="/home/shared/gffcompare-0.12.6.Linux_x86_64"
-BEDTOOLS_DIR="/home/shared/bedtools2/bin"
-CPC2_DIR="/home/shared/CPC2_standalone-1.0.1"
-CONDA_PATH="/opt/anaconda/anaconda3/bin/conda"
+GFFCOMPARE_DIR="/home/shared/gffcompare-0.12.6.Linux_x86_64/"
+BEDTOOLS_DIR="/home/shared/bedtools2/bin/"
+CPC2_DIR="/home/shared/CPC2_standalone-1.0.1/"
+CONDA_PATH="/opt/anaconda/anaconda3/bin/conda/"
 
 GENOME_FASTA="$DATA_DIR/genome.fasta"
 GENOME_GTF="$DATA_DIR/genome.gtf"
@@ -172,7 +172,8 @@ fi
 # Run CPC2 checkpoint
 if [ ! -f "$OUTPUT_DIR/cpc2.done" ]; then
     echo "Running CPC2..."
-    "${CPC2_DIR}CPC2.py" -i "$OUTPUT_DIR/lncRNA_candidates.fasta" -o "$OUTPUT_DIR/CPC2"
+    eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
+    python "${CPC2_DIR}CPC2.py" -i "$OUTPUT_DIR/lncRNA_candidates.fasta" -o "$OUTPUT_DIR/CPC2"
     touch "$OUTPUT_DIR/cpc2.done"
 else
     echo "CPC2 analysis already complete. Skipping."
