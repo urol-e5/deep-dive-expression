@@ -1,0 +1,270 @@
+---
+title: "GO ANnoations"
+author: "Steven Roberts"
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    html-math-method: katex
+    css: styles.css
+    theme: sandstone
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+
+Want to start with grabbing GOs 
+
+see also https://www.ebi.ac.uk/QuickGO/annotations
+
+:GO:0009060
+:aerobic respiration
+
+:GO:0061621
+:canonical glycolysis
+
+:GO:0006119
+:oxidative phosphorylation
+
+
+#Variables
+```{r setup, include=FALSE}
+# Global R options
+knitr::opts_chunk$set(echo = TRUE)
+
+# Define key paths and tool directories
+ 
+DATA_DIR <- "../data/25-lncRNA"
+OUTPUT_DIR <- "../output/25-lncRNA"
+THREADS <- "14"
+  
+FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/"
+FASTQ_SUFFIX <- "fastq.gz"
+GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
+```
+
+
+# GO:0009060
+:aerobic respiration
+
+```{bash}
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0006096%29%29+AND+%28reviewed%3Atrue%29" -o ../output/06-moreGO/SwissProt-GO:0006096.fa
+```
+
+
+```{bash}
+head ../output/06-moreGO/SwissProt-GO:0006096.fa
+grep -c ">" ../output/06-moreGO/SwissProt-GO:0006096.fa
+```
+
+
+Lets Pver as query
+and SwissProt-GO:0006096.fa is the database. 
+
+
+```{bash}
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../output/06-moreGO/SwissProt-GO:0006096.fa \
+-dbtype prot \
+-out ../output/06-moreGO/SwissProt-GO:0006096
+```
+
+
+
+
+
+```{bash}
+fasta="../data/Pver_proteins_names_v1.0.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/06-moreGO/SwissProt-GO:0006096 \
+-out ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+
+```{bash}
+head ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab
+wc -l ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab
+```
+---
+
+
+Tricarboxylic Acid Cycle (GO:0006099)
+
+
+```{bash}
+# Set the variable for the GO term
+GO_TERM="0006099"
+
+# Use the variable in the curl command
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A${GO_TERM}%29%29+AND+%28reviewed%3Atrue%29" -o "../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa"
+
+
+
+head ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+grep -c ">" ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+
+
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa \
+-dbtype prot \
+-out ../output/06-moreGO/SwissProt-GO:${GO_TERM}
+
+
+
+fasta="../data/Pver_proteins_names_v1.0.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/06-moreGO/SwissProt-GO:${GO_TERM} \
+-out ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+2>/dev/null
+
+head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+```
+
+
+
+# Oxidative phosphorylation (GO:0006119)
+
+
+```{bash}
+# Set the variable for the GO term
+GO_TERM="0006119"
+
+# Use the variable in the curl command
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A${GO_TERM}%29%29+AND+%28reviewed%3Atrue%29" -o "../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa"
+
+
+
+head ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+grep -c ">" ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
+
+
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa \
+-dbtype prot \
+-out ../output/06-moreGO/SwissProt-GO:${GO_TERM}
+
+
+
+fasta="../data/Pver_proteins_names_v1.0.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/06-moreGO/SwissProt-GO:${GO_TERM} \
+-out ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+2>/dev/null
+
+head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+```
+
+
+
+## Vizualize in R using heatmaps
+
+```{r}
+# Load necessary libraries
+library(readr)
+library(readxl)
+library(tidyverse)
+library(genefilter) #for pOverA filtering
+
+#install.packages("ComplexHeatmap")
+library(ComplexHeatmap)
+ 
+count_mat <- read_csv("../data/RNAseq/Poc_gene_count_matrix.csv")
+all_genes <- count_mat$gene_id
+#count_mat <- count_mat %>% select(-gene_id)
+#rownames(count_mat) <- all_genes
+
+# Clean up the column names
+colnames(count_mat) <- gsub("_R1.fastp-trim.20230215.fq.gz.sam.sorted.bam.merge.gtf", "", colnames(count_mat))
+
+dim(count_mat)
+```
+
+## pOverA filtering
+
+```{r}
+ffun<-filterfun(pOverA(0.25,10))  #set up filtering parameters
+counts <- count_mat %>% select(-gene_id)
+count_mat_poa <- genefilter((counts), ffun) #apply filter
+sum(count_mat_poa) #count number of genes left
+
+count_mat_poa <- count_mat[count_mat_poa,] #keep only rows that passed filter
+
+count_mat <- count_mat_poa
+```
+
+The gene names in the count matrix and the blast dfs are not the same; this is due to naming errors made by the authors of the [Pverr genome paper](https://academic.oup.com/gbe/article/12/10/1911/5898631?login=false#supplementary-data). They made a supplementary file that has both naming iterations, so this will be used to make sure the gene names are the same in each df 
+
+Read in file with gene name iterations 
+```{r}
+names <- read_excel("../data/RNAseq/FileS2_Pver_gene_annot_May28.xlsx", skip = 4) %>%
+  select(Query, Gene)
+
+count_mat <- count_mat %>% full_join(names, by = c("gene_id" = "Gene"))
+```
+
+##  Glycolysis (GO:0006096)
+
+```{r}
+go_term = "0006096"
+
+# Read the tab file for the specified GO term
+go_file_path <- paste0("../output/06-moreGO/Pver_blastp-GO:", go_term, "_out.tab")
+GO_data <- read_delim(go_file_path, delim = "\t", col_names = FALSE)
+
+colnames(GO_data) <- c("query_id", "subject_id", "percent_identity", "alignment_length", "mismatches", "gap_openings", 
+                       "q_start", "q_end", "s_start", "s_end", "e_value", "bit_score")
+
+head(GO_data)
+dim(GO_data)
+
+count_GO <- GO_data %>%
+  left_join(count_mat, by = c("query_id" = "Query")) %>%
+  na.omit()
+
+# Check the filtered result
+head(count_GO)
+dim(count_GO)
+```
