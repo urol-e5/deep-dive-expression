@@ -1,5 +1,5 @@
 ---
-title: "GO ANnoations"
+title: "GO Annoations"
 author: "Steven Roberts"
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 format:
@@ -52,54 +52,57 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Define key paths and tool directories
  
-DATA_DIR <- "../data/25-lncRNA"
-OUTPUT_DIR <- "../output/25-lncRNA"
-THREADS <- "14"
-  
-FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/"
-FASTQ_SUFFIX <- "fastq.gz"
-GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
+OUT_DIR <- "../output/27-Apul-pheno-annot/"
+
+
+# Export these as environment variables for bash chunks.
+Sys.setenv(
+  OUT_DIR = OUT_DIR
+)
+
 ```
 
 
-# GO:0009060
-:aerobic respiration
+# Aerobic respiration (GO:0009060)
+aerobic respiration
 
 ```{bash}
-curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0006096%29%29+AND+%28reviewed%3Atrue%29" -o ../output/06-moreGO/SwissProt-GO:0006096.fa
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0009060%29%29+AND+%28reviewed%3Atrue%29" -o ../output/27-Apul-pheno-annot/SwissProt-GO:0009060.fa
 ```
 
 
 ```{bash}
-head ../output/06-moreGO/SwissProt-GO:0006096.fa
-grep -c ">" ../output/06-moreGO/SwissProt-GO:0006096.fa
+head ../output/27-Apul-pheno-annot/SwissProt-GO:0009060.fa
+grep -c ">" ../output/27-Apul-pheno-annot/SwissProt-GO:0009060.fa
 ```
 
 
-Lets Pver as query
-and SwissProt-GO:0006096.fa is the database. 
+Lets Apul as query
+and SwissProt-GO:0009060.fa is the database. 
+
+```{r, engine='bash'}
+echo "${OUT_DIR}"
+```
 
 
-```{bash}
+
+```{r, engine='bash'}
 /home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
--in ../output/06-moreGO/SwissProt-GO:0006096.fa \
+-in "${OUT_DIR}"SwissProt-GO:0009060.fa \
 -dbtype prot \
--out ../output/06-moreGO/SwissProt-GO:0006096
+-out "${OUT_DIR}"SwissProt-GO:0009060
 ```
 
 
-
-
-
 ```{bash}
-fasta="../data/Pver_proteins_names_v1.0.faa"
+fasta="../data/Apulchra-genome.pep.faa"
 
 /home/shared/ncbi-blast-2.15.0+/bin/blastp \
 -query $fasta \
--db ../output/06-moreGO/SwissProt-GO:0006096 \
--out ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab \
+-db "${OUT_DIR}"SwissProt-GO:0009060 \
+-out "${OUT_DIR}"Apul_blastp-GO:0009060_out.tab \
 -evalue 1E-05 \
--num_threads 48 \
+-num_threads 42 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6
@@ -107,97 +110,178 @@ fasta="../data/Pver_proteins_names_v1.0.faa"
 
 
 ```{bash}
-head ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab
-wc -l ../output/06-moreGO/Pver_blastp-GO:0006096_out.tab
+head "${OUT_DIR}"Apul_blastp-GO:0009060_out.tab
+wc -l "${OUT_DIR}"Apul_blastp-GO:0009060_out.tab
 ```
----
 
+# Oxidative phosphorylation (GO:0006119)
+:oxidative phosphorylation
 
-Tricarboxylic Acid Cycle (GO:0006099)
+```{r, engine='bash'}
+GO="0006119"
+fasta="../data/Apulchra-genome.pep.faa"
 
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A"${GO}"%29%29+AND+%28reviewed%3Atrue%29" -o "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
-```{bash}
-# Set the variable for the GO term
-GO_TERM="0006099"
+head "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
-# Use the variable in the curl command
-curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A${GO_TERM}%29%29+AND+%28reviewed%3Atrue%29" -o "../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa"
-
-
-
-head ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
-grep -c ">" ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
-
-
+echo "Number of Proteins"
+grep -c ">" "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
 /home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
--in ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa \
+-in "${OUT_DIR}"SwissProt-GO:"${GO}".fa \
 -dbtype prot \
--out ../output/06-moreGO/SwissProt-GO:${GO_TERM}
+-out "${OUT_DIR}"SwissProt-GO:"${GO}"
 
-
-
-fasta="../data/Pver_proteins_names_v1.0.faa"
 
 /home/shared/ncbi-blast-2.15.0+/bin/blastp \
 -query $fasta \
--db ../output/06-moreGO/SwissProt-GO:${GO_TERM} \
--out ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab \
+-db "${OUT_DIR}"SwissProt-GO:"${GO}" \
+-out "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab \
 -evalue 1E-05 \
--num_threads 48 \
+-num_threads 42 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6 \
-2>/dev/null
+2> "${OUT_DIR}"blast_warnings"${GO}".txt
 
-head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
-wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+head "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
+
+echo "Number of hits"
+
+wc -l "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
+```
+
+
+# Canonical glycolysis (GO:0061621)
+GO:0061621
+:canonical glycolysis
+```{bash}
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A0061621%29%29+AND+%28reviewed%3Atrue%29" -o ../output/27-Apul-pheno-annot/SwissProt-GO:0061621.fa
+```
+
+
+```{bash}
+head "${OUT_DIR}"SwissProt-GO:0061621.fa
+grep -c ">" "${OUT_DIR}"SwissProt-GO:0061621.fa
+```
+
+
+Lets Apul as query
+and SwissProt-GO:0061621.fa is the database. 
+
+
+
+```{r, engine='bash'}
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in "${OUT_DIR}"SwissProt-GO:0061621.fa \
+-dbtype prot \
+-out "${OUT_DIR}"SwissProt-GO:0061621
+```
+
+
+```{bash}
+fasta="../data/Apulchra-genome.pep.faa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db "${OUT_DIR}"SwissProt-GO:0061621 \
+-out "${OUT_DIR}"Apul_blastp-GO:0061621_out.tab \
+-evalue 1E-05 \
+-num_threads 42 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+
+```{bash}
+head "${OUT_DIR}"Apul_blastp-GO:0061621_out.tab
+wc -l "${OUT_DIR}"Apul_blastp-GO:0061621_out.tab
+```
+
+
+
+# Tricarboxylic Acid Cycle (GO:0006099)
+
+
+```{r, engine='bash'}
+GO="0006099"
+fasta="../data/Apulchra-genome.pep.faa"
+
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A"${GO}"%29%29+AND+%28reviewed%3Atrue%29" -o "${OUT_DIR}"SwissProt-GO:"${GO}".fa
+
+head "${OUT_DIR}"SwissProt-GO:"${GO}".fa
+
+echo "Number of Proteins"
+grep -c ">" "${OUT_DIR}"SwissProt-GO:"${GO}".fa
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in "${OUT_DIR}"SwissProt-GO:"${GO}".fa \
+-dbtype prot \
+-out "${OUT_DIR}"SwissProt-GO:"${GO}"
+
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db "${OUT_DIR}"SwissProt-GO:"${GO}" \
+-out "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab \
+-evalue 1E-05 \
+-num_threads 42 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+2> "${OUT_DIR}"blast_warnings"${GO}".txt
+
+head "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
+
+echo "Number of hits"
+
+wc -l "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
 ```
 
 
 
 # Oxidative phosphorylation (GO:0006119)
 
+```{r, engine='bash'}
+GO="0006119"
+fasta="../data/Apulchra-genome.pep.faa"
 
-```{bash}
-# Set the variable for the GO term
-GO_TERM="0006119"
+curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A"${GO}"%29%29+AND+%28reviewed%3Atrue%29" -o "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
-# Use the variable in the curl command
-curl -H "Accept: text/plain" "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28%28go%3A${GO_TERM}%29%29+AND+%28reviewed%3Atrue%29" -o "../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa"
+head "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
-
-
-head ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
-grep -c ">" ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa
-
-
+echo "Number of Proteins"
+grep -c ">" "${OUT_DIR}"SwissProt-GO:"${GO}".fa
 
 /home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
--in ../output/06-moreGO/SwissProt-GO:${GO_TERM}.fa \
+-in "${OUT_DIR}"SwissProt-GO:"${GO}".fa \
 -dbtype prot \
--out ../output/06-moreGO/SwissProt-GO:${GO_TERM}
+-out "${OUT_DIR}"SwissProt-GO:"${GO}"
 
-
-
-fasta="../data/Pver_proteins_names_v1.0.faa"
 
 /home/shared/ncbi-blast-2.15.0+/bin/blastp \
 -query $fasta \
--db ../output/06-moreGO/SwissProt-GO:${GO_TERM} \
--out ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab \
+-db "${OUT_DIR}"SwissProt-GO:"${GO}" \
+-out "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab \
 -evalue 1E-05 \
--num_threads 48 \
+-num_threads 42 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6 \
-2>/dev/null
+2> "${OUT_DIR}"blast_warnings"${GO}".txt
 
-head ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
-wc -l ../output/06-moreGO/Pver_blastp-GO:${GO_TERM}_out.tab
+head "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
+
+echo "Number of hits"
+
+wc -l "${OUT_DIR}"Apul_blastp-GO:"${GO}"_out.tab
 ```
 
 
+
+old stuff
 
 ## Vizualize in R using heatmaps
 
