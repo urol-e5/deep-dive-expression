@@ -101,15 +101,16 @@ Sys.setenv(
 ```
 
 
-```{bash}
+```{r mkdir, engine='bash'}
 mkdir -p "${DATA_DIR}"
 mkdir -p "${OUTPUT_DIR}"
 ```
 
 
+
 # Download Genome and Reads for Hisat
 
-```{r, engine='bash'}
+```{r grab fastq, engine='bash'}
 
 wget -nv -r \
 --no-directories --no-parent \
@@ -117,36 +118,36 @@ wget -nv -r \
 -A "*${FASTQ_SUFFIX}" ${FASTQ_SOURCE}
 ```
 
-```{r, engine='bash'}
+```{r ls, engine='bash'}
 ls ${FASTQ_DIR}
 ```
 
 
-```{r, engine='bash'}
+```{r fasta, engine='bash'}
 
 curl -o "${GENOME_FASTA}" "${GENOME_SOURCE}"
 ```
 
-```{r, engine='bash'}
+```{r gtf, engine='bash'}
 
 
 curl -o "${GENOME_GTF}" "${GTF_SOURCE}"
 ```
 
 
-```{r, engine='bash'}
+```{r gff, engine='bash'}
 
 
 curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 ```
 
-```{bash}
+```{r file check, engine='bash'}
 output_fasta=$(head -1 "${GENOME_FASTA}")
 output_gff=$(head -2 "${GENOME_GFF}")
 output_gtf=$(head -1 "${GENOME_GTF}")
 
 if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
-    echo "FAIL"
+    echo "FAIL - FFS you downloaded a HTML not and genome feature file!"
 else
     echo "$output_fasta"
     echo "$output_gff"
@@ -181,6 +182,7 @@ fi
 
 
 
+
 ```{bash}
 # Loop over every file ending in .fastq.gz that contains "_R2_"
 for r2 in "${FASTQ_DIR}"/*_R2_*."${FASTQ_SUFFIX}"; do
@@ -205,11 +207,10 @@ for r2 in "${FASTQ_DIR}"/*_R2_*."${FASTQ_SUFFIX}"; do
       -S "$output"
 done
 ```
-
 ## convert SAM to BAM
 
 
-```{bash}
+```{r convertSAM, engine='bash'}
 for samfile in "${OUTPUT_DIR}/${sample}"*.sam; do
   bamfile="${samfile%.sam}.bam"
   sorted_bamfile="${samfile%.sam}.sorted.bam"
@@ -233,7 +234,7 @@ done
 
 StringTie uses the sorted BAM files to assemble transcripts for each sample, outputting them as GTF (Gene Transfer Format) files. And then merges all individual GTF assemblies into a single merged GTF file. This step extracts transcript information and merges GTFs from all samples–an important step in creating a canonical list of lncRNAs across all samples included in the pipeline.
 
-```{bash}
+```{r stringtie, engine='bash'}
 find "${OUTPUT_DIR}" -name "*sorted.bam" \
 | xargs -n 1 basename -s .sorted.bam | xargs -I{} \
 "${STRINGTIE_DIR}stringtie" \
@@ -244,7 +245,8 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 ```
 
 
-```{bash}
+
+```{r merge, engine='bash'}
 "${STRINGTIE_DIR}stringtie" \
 --merge \
 -G "${GENOME_GFF}" \
@@ -258,5 +260,151 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 
 
 
+```{r gffcomp, engine='bash'}
+"${GFFCOMPARE_DIR}gffcompare" \
+-r "${GENOME_GFF}" \
+-o "${OUTPUT_DIR}/gffcompare_merged" \
+"${OUTPUT_DIR}/stringtie_merged.gtf"
+```
+
+```{r viewgff, engine='bash'}
+head -1 "${OUTPUT_DIR}"/gffcompare_merged*
+```
+
+
+
+```{r gff filter, engine='bash'}
+awk '$3 == "transcript" && $1 !~ /^#/' "${OUTPUT_DIR}/gffcompare_merged.annotated.gtf" | \
+grep -E "${GFFPATTERN}" | \
+awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
+```
+
+# Bedtools
+
+```{r fasta, engine='bash'}
+"${BEDTOOLS_DIR}"bedtools getfasta \
+-fi "${GENOME_FASTA}" \
+-bed "${OUTPUT_DIR}/lncRNA_candidates.gtf" \
+-fo "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-name -split
+```
+
+#CPC2
+
+
+
+```{r cpc2, engine='bash'}
+"${CPC2_DIR}"CPC2.py \
+-i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-o "${OUTPUT_DIR}/CPC2"
+```
+
+Filter
+
+```{r filCPC, engine='bash'}
+awk '$8 == "noncoding" {print $1}' "${OUTPUT_DIR}/CPC2.txt" > "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+```
+
+
+Subsetting fasta
+
+```{r ssfasta, engine='bash'}
+"${SAMTOOLS_DIR}samtools" faidx "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+-r "${OUTPUT_DIR}/noncoding_transcripts_ids.txt" \
+> "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r, engine='bash'}
+head -2 "${OUTPUT_DIR}/lncRNA.fasta"
+```
+
+```{r lncRNAgtf, engine='bash'}
+# Define input and output file paths using the OUTPUT_DIR variable
+input="${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+output="${OUTPUT_DIR}/lncRNA.bed"
+
+# Process each line of the input file
+while IFS= read -r line; do
+    # Remove "transcript::" from the line
+    line="${line//transcript::/}"
+    
+    # Split the line by ':' to get the chromosome and position string
+    IFS=':' read -r chromosome pos <<< "$line"
+    
+    # Split the position string by '-' to separate start and end positions
+    IFS='-' read -r start end <<< "$pos"
+    
+    # Convert the start position to 0-based by subtracting 1
+    start=$((start - 1))
+    
+    # Write the chromosome, updated start, and end positions to the output file (tab-separated)
+    printf "%s\t%s\t%s\n" "$chromosome" "$start" "$end"
+done < "$input" > "$output"
+```
+
+
+```{r renamegtf, engine='bash'}
+awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
+> "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+# Summary Table
+
+
+```{r summary, engine='bash'}
+tf_file="${OUTPUT_DIR}/lncRNA.gtf"
+
+awk '
+BEGIN {
+    total_entries = 0;
+    min_length = 1e9;
+    max_length = 0;
+    sum_length = 0;
+}
+# Skip comment lines
+/^#/ { next }
+{
+    if (NF < 9) next;
+    total_entries++;
+    start = $4;
+    end = $5;
+    gene_length = end - start + 1;
+    if (gene_length < min_length) min_length = gene_length;
+    if (gene_length > max_length) max_length = gene_length;
+    sum_length += gene_length;
+    feature[$3]++;
+    chrom[$1]++;
+    # Use two-argument match() and then extract the gene_id manually.
+    if (match($9, /gene_id "[^"]+"/)) {
+        gene_str = substr($9, RSTART, RLENGTH);
+        # Remove the "gene_id " prefix and the quotes.
+        gsub(/gene_id "/, "", gene_str);
+        gsub(/"/, "", gene_str);
+        genes[gene_str] = 1;
+    }
+}
+END {
+    avg_length = (total_entries > 0) ? sum_length / total_entries : 0;
+    unique_gene_count = 0;
+    for (g in genes)
+        unique_gene_count++;
+    print "Basic GTF File Statistics:";
+    print "--------------------------";
+    print "Total entries:      " total_entries;
+    print "Unique genes:       " unique_gene_count;
+    print "Min gene length:    " min_length;
+    print "Max gene length:    " max_length;
+    printf("Average gene length: %.2f\n", avg_length);
+    print "\nFeature counts:";
+    for (f in feature) {
+        print "  " f ": " feature[f];
+    }
+    print "\nChromosome counts:";
+    for (c in chrom) {
+        print "  " c ": " chrom[c];
+    }
+}
+' "$tf_file"
+```
 
 

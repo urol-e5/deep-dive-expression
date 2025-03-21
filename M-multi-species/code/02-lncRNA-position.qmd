@@ -1,0 +1,108 @@
+---
+title: "02-lncRNA-position"
+format: html
+editor: visual
+---
+
+#!perl
+use strict;
+use warnings;
+
+# Input format check
+die "USAGE: lncRNA_file gtf_file OUT_file" unless @ARGV == 3;
+open IN1,"$ARGV[0]" || die "$!";
+open IN2,"$ARGV[1]" || die "$!";
+open OUT,"> $ARGV[2]" || die "$!";
+
+my %gene_data;
+my %gene_dir;
+
+# Read the GTF file and store exon information
+while(<IN2>){
+    chomp;
+    my @data = split /\t/,$_;
+    if ($data[2] ne 'exon'){
+        next;
+    }
+
+    # Extract gene_name or use gene_id if gene_name is missing
+    my $gene_name;
+    if ($data[8] =~ /gene_name\s\"(.*?)\"/) {
+        $gene_name = $1;
+    } elsif ($data[8] =~ /gene_id\s\"(.*?)\"/) {
+        $gene_name = $1;
+    } else {
+        next;  # Skip if no valid identifier is found
+    }
+
+    my @arr = [$data[3], $data[4]];
+    push(@{$gene_data{$gene_name}}, @arr);
+    $gene_dir{$gene_name} = $data[6];
+}
+
+# Read the lncRNA file and classify lncRNAs
+my @results;
+while(<IN1>){
+    chomp;
+    my $result;
+    my $smname;
+    my @data = split /\t/,$_;
+
+    # Extract transcript name (lncRNA)
+    my @rna = split /;/, $data[8];
+    $rna[1] =~ /\"(.*)\"/;
+    my $linc = $1;
+
+    # Extract distance to the closest gene
+    $rna[2] =~ /\"(\d+)\"/;
+    my $distance = $1;
+
+    # Extract closest gene name or ID
+    $_ =~ /closest_gene\s\"(.*?)\"/;
+    $smname = $1;
+
+    # Classification based on distance and strand orientation
+    if ($distance > 1000){  # c1 - Intergenic
+        $result = "$linc\tIntergenic";
+    } elsif($distance > 0){  # c1 and c2
+        if ($gene_dir{$smname} eq $data[6]) {
+            $result = "$linc\tIntergenic";
+        } else {
+            $result = "$linc\tBidirectional";
+        }
+    } elsif($distance == 0){  # c3, c4, c5
+        if ($gene_dir{$smname} ne $data[6]){  # c3 - Antisense
+            $result = "$linc\tAntisense";
+        } else {  # c4 and c5 - Sense (Exonic or Intronic)
+            my $m = 0;
+            foreach my $gename (keys %gene_data){
+                if ($gename eq $smname){
+                    my @num = @{$gene_data{$gename}};
+                    for (my $i = 0; $i <= $#num; $i++){
+                        if(($num[$i][0] < $data[4]) && ($num[$i][1] > $data[3])){
+                            $m++;
+                        }
+                    }
+                }
+            }
+            if ($m > 0){
+                $result = "$linc\tExonic Sense";
+            } else {
+                $result = "$linc\tIntronic Sense";
+            }
+        }
+    }
+
+    push(@results, $result);
+}
+
+# Remove duplicates and write results to output file
+my %hash;
+@results = grep { !$hash{$_}++ } @results;
+foreach my $result (@results){
+    print OUT "$result\n";
+}
+
+close IN1;
+close IN2;
+close OUT;
