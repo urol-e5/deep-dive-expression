@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "SwissProt-GO:0009060",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../output/27-Apul-pheno-annot/SwissProt-GO:0009060.fa",
+  "number-of-letters": 3889936,
+  "number-of-sequences": 10978,
+  "last-updated": "2025-03-21T11:32:00",
+  "number-of-volumes": 1,
+  "bytes-total": 6270606,
+  "bytes-to-cache": 3988891,
+  "files": [
+    "SwissProt-GO:0009060.pdb",
+    "SwissProt-GO:0009060.phr",
+    "SwissProt-GO:0009060.pin",
+    "SwissProt-GO:0009060.pot",
+    "SwissProt-GO:0009060.psq",
+    "SwissProt-GO:0009060.ptf",
+    "SwissProt-GO:0009060.pto"
+  ]
+}
