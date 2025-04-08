@@ -1,0 +1,2 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X","miRNA","PCC.cor","p_value","adjusted_p_value","score","energy","query_start_end","subject_start_end","total_bp_shared","query_similar","subject_similar"
+"1","FUN_038089","GO:0003924","GTPase activity",67,2,0.24,0.0218,"Molecular Functions",865,"Cluster_5981",0.881461368085258,0.0481112842362314,0.965469243208467,145,-21.45,"2 10","54 76",8,"100.00%","100.00%"
