@@ -117,11 +117,125 @@ return(allScore < 0.05)}
 ```
 
 
-# FE of all targets, as predicted by miranda
+# FA of all miRNA targets
 
-TO DO
+Functional annotation of all putative miRNA targets
+```{r}
+cor_bind_FA <- left_join(data, annot, by = c("mRNA" = "gene_ID")) %>% distinct()
+```
 
-# FE of targets negatively correlated with miRNAs (regardless of correlation significance)
+Save
+```{r}
+write.csv(cor_bind_FA, "../output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_targets_FA.csv")
+```
+
+
+
+# FE of specific miRNA's targets
+
+Create topGO function for use with miRNA names
+```{r}
+
+miRNA_topGO_FE <- function(miRNA.name) {
+  
+  #Isolate genes in our input module of interest
+  interacting_genes <- cor_bind_FA %>%
+    filter(miRNA == miRNA.name) %>%
+    pull(mRNA)
+  
+  if (length(interacting_genes) > 0) {
+    # Create factor for all reference genes, where 1 represents module membership and 0 means the gene is not in module of interest
+    gene_list <- factor(as.integer(all_genes %in% interacting_genes))
+    names(gene_list) <- all_genes
+    str(gene_list)
+    
+    ## Biological Process ##
+    # Create topGO object
+    GO_BP <- new("topGOdata", 
+                ontology = "BP", # Biological Process
+                allGenes = gene_list,
+                annot = annFUN.gene2GO, 
+                gene2GO = gene2go_list,
+                geneSel=topDiffGenes)
+    
+    # Run GO enrichment test
+    GO_BP_FE <- runTest(GO_BP, algorithm = "weight01", statistic = "fisher")
+    # View the results
+    GO_BP_results <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+    # Filter by significant results
+    GO_BP_results$Fisher<-as.numeric(GO_BP_results$Fisher)
+    GO_BP_results_sig<-GO_BP_results[GO_BP_results$Fisher<0.05,]
+    
+    
+    ## Molecular Function ##
+    # Create topGO object
+    GO_MF <- new("topGOdata", 
+                ontology = "MF", # Molecular Function
+                allGenes = gene_list,
+                annot = annFUN.gene2GO, 
+                gene2GO = gene2go_list,
+                geneSel=topDiffGenes)
+    
+    # Run GO enrichment test
+    GO_MF_FE <- runTest(GO_MF, algorithm = "weight01", statistic = "fisher")
+    # View the results
+    GO_MF_results <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher",  topNodes = 100, numChar = 51)
+    # Filter by significant results
+    GO_MF_results$Fisher<-as.numeric(GO_MF_results$Fisher)
+    GO_MF_results_sig<-GO_MF_results[GO_MF_results$Fisher<0.05,]
+  
+    # Return
+    # Add type column only if results exist
+    if (nrow(GO_BP_results_sig) > 0) {
+      GO_BP_results_sig$type <- "Biological.Process"
+    }
+    if (nrow(GO_MF_results_sig) > 0) {
+      GO_MF_results_sig$type <- "Molecular.Function"
+    }
+    GO_results <- rbind(GO_BP_results_sig, GO_MF_results_sig)
+    print(GO_results)
+  }
+}
+
+miRNA_topGO_FE("Cluster_10093")
+```
+
+Loop through all miRNA and run functional enrichment on the miRNA's targets
+```{r}
+
+interacting_miRNAs <- unique(cor_bind_FA$miRNA) %>% na.omit
+results <- NULL  # initialize empty df
+
+for(miRNA in interacting_miRNAs) {
+  
+  # Run topGO enrichment function
+  miRNA_results <- miRNA_topGO_FE(miRNA)
+  
+  # Only keep results if not empty
+  if (nrow(miRNA_results) > 0) {
+    
+    # Add the miRNA source column
+    miRNA_results$miRNA <- miRNA
+
+    # Bind to the accumulating results data frame
+    results <- rbind(results, miRNA_results)
+  }
+}
+
+head(results)
+
+```
+
+
+Save results
+```{r}
+write.csv(results, "../output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_targets_topGO_FE.csv")
+```
+
+
+
+
+# FE of all targets negatively correlated with miRNAs (regardless of correlation significance)
 
 Filter PCC miranda data
 ```{r}
@@ -330,7 +444,7 @@ ggsave("../output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/top10G
 ```
 
 
-# FE of targets positively correlated with miRNAs (regardless of correlation significance)
+# FE of all targets positively correlated with miRNAs (regardless of correlation significance)
 
 Filter PCC miranda data
 ```{r}
@@ -537,7 +651,7 @@ ggsave("../output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/top10G
 
 
 
-# FE of targets significantly negatively correlated with miRNAs
+# FE of all targets significantly negatively correlated with miRNAs
 
 Filter PCC miranda data
 ```{r}
@@ -744,7 +858,7 @@ ggsave("../output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/top10G
 ```
 
 
-# FE of targets significantly positively correlated with miRNAs
+# FE of all targets significantly positively correlated with miRNAs
 
 Filter PCC miranda data
 ```{r}
