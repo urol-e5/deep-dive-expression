@@ -1,4 +1,4 @@
-28-D-Apul-WGBS-bismark.Rmd
+08-Apul-WGBS-bismark.Rmd
 ================
 Zoe Dellaert
 2025-04-09
@@ -154,6 +154,15 @@ done
 | trimmed_467_S5 | L0-1.0    | 52.50%         |
 | trimmed_467_S5 | L-1-0.6   | 39.90%         |
 
+I ran the parameter testing before fixing the file sample names. For
+reference:
+
+- 413 = ACR-178
+- 423 = ACR-150
+- 427 = ACR-145
+- 439 = ACR-173
+- 467 = ACR-140
+
 ## 0.2 Align to genome
 
 ``` bash
@@ -161,7 +170,7 @@ done
 #SBATCH --ntasks=1 --cpus-per-task=48 #split one task over multiple CPU
 #SBATCH --array=0-4 #for 5 samples
 #SBATCH --mem=400GB
-#SBATCH -t 24:00:00
+#SBATCH -t 48:00:00
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT_80 #email you when job stops and/or fails or is nearing its time limit
 #SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
 #SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
