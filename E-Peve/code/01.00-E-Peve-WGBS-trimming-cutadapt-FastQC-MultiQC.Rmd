@@ -1,7 +1,7 @@
 ---
-title: "01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC"
+title: "01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC"
 author: "Zoe Dellaert"
-date: "2025-04-09"
+date: "2025-04-10"
 output: 
   github_document:
     toc: true
@@ -41,7 +41,7 @@ knitr::opts_chunk$set(
 This Rmd file trims WGBS-seq files using [cutadapt](https://cutadapt.readthedocs.io/en/stable/), followed by quality checks with [FastQC](https://github.com/s-andrews/FastQC) and [MultiQC](https://multiqc.info/) [@ewels2016].
 
 ::: {.callout-note}
-If you need to download the raw sequencing reads, please see [00.00-D-Apul-WGBS-reads-FastQC-MultiQC.Rmd](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/00.00-D-Apul-WGBS-reads-FastQC-MultiQC.Rmd)
+If you need to download the raw sequencing reads, please see [00.00-E-Peve-WGBS-reads-FastQC-MultiQC.Rmd](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/00.00-E-Peve-WGBS-reads-FastQC-MultiQC.Rmd)
 :::
 
 ## Outputs
@@ -49,7 +49,7 @@ If you need to download the raw sequencing reads, please see [00.00-D-Apul-WGBS-
 Due to size, trimmed FastQs cannot be uploaded to GitHub.
 All trimmed FastQs produced by this script will be uploaded here:
 
-[01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/)
+[01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC/)
 
 ## Cutadapt trimming, FastQC, and MultiQC
 
@@ -72,7 +72,7 @@ module load cutadapt/3.5-GCCcore-11.2.0
 
 # Set directories and files
 reads_dir="../data/raw-fastqs/"
-out_dir="../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/"
+out_dir="../output/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC/"
 
 mkdir -p ${out_dir}
 
@@ -92,6 +92,10 @@ for i in ${!R1_raw[@]}; do
     -q 20,20 --minimum-length 20 --cores=20
 
     echo "trimming of ${R1_raw[$i]} and ${R2_raw[$i]} complete"
+    
+     # Generate md5 checksums for newly trimmed files
+     md5sum "${out_dir}trimmed_${R1_name[$i]}.fastq.gz" > ${out_dir}trimmed_${R1_name[$i]}.fastq.gz.md5
+     md5sum "${out_dir}trimmed_${R2_name[$i]}.fastq.gz" > ${out_dir}trimmed_${R2_name[$i]}.fastq.gz.md5
 done
 
 # unload conflicting modules with modules needed below
