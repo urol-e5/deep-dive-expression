@@ -1,42 +1,16 @@
----
-title: "08-Apul-WGBS-bismark.Rmd"
-author: "Zoe Dellaert"
-date: "2025-04-09"
-output: 
-  github_document:
-    toc: true
-    number_sections: true
-  bookdown::html_document2:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-  html_document:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-bibliography: references.bib
----
+08-Apul-WGBS-bismark.Rmd
+================
+Zoe Dellaert
+2025-04-09
 
-```{r setup, include=FALSE}
-library(knitr)
-knitr::opts_chunk$set(
-  echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
-  warning = FALSE,     # Hide warnings
-  message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
-)
-```
+- [0.1 Test parameters](#01-test-parameters)
+  - [0.1.1 Results from parameter
+    tests:](#011-results-from-parameter-tests)
+- [0.2 Align to genome](#02-align-to-genome)
 
-## Test parameters 
+## 0.1 Test parameters
 
-```{bash, eval=FALSE}
+``` bash
 #!/usr/bin/env bash
 #SBATCH --ntasks=1 --cpus-per-task=30 #split one task over multiple CPU
 #SBATCH --array=0-4 #for 5 samples
@@ -150,10 +124,10 @@ for dir in ${output_dir}/*_score_*; do
 done
 ```
 
-### Results from parameter tests:
- 
+### 0.1.1 Results from parameter tests:
+
 | Sample         | Score_Min | Alignment_Rate |
-|----------------|-----------|----------------|
+|:---------------|:----------|:---------------|
 | trimmed_413_S1 | L0-0.4    | 32.40%         |
 | trimmed_413_S1 | L0-0.6    | 39.40%         |
 | trimmed_413_S1 | L0-0.8    | 45.20%         |
@@ -180,7 +154,8 @@ done
 | trimmed_467_S5 | L0-1.0    | 52.50%         |
 | trimmed_467_S5 | L-1-0.6   | 39.90%         |
 
-I ran the parameter testing before fixing the file sample names. For reference:
+I ran the parameter testing before fixing the file sample names. For
+reference:
 
 - 413 = ACR-178
 - 423 = ACR-150
@@ -188,9 +163,9 @@ I ran the parameter testing before fixing the file sample names. For reference:
 - 439 = ACR-173
 - 467 = ACR-140
 
-## Align to genome
+## 0.2 Align to genome
 
-```{bash, eval=FALSE}
+``` bash
 #!/usr/bin/env bash
 #SBATCH --ntasks=1 --cpus-per-task=48 #split one task over multiple CPU
 #SBATCH --array=0-4 #for 5 samples
@@ -276,4 +251,3 @@ for file in ${output_dir}/*_report.txt; do
     echo "${sample_name},${score_min},${mapping}" >> ${summary_file}
 done
 ```
-

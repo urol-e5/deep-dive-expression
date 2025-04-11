@@ -1,0 +1,26 @@
+Sample,Score_Min,Alignment_Rate
+trimmed_413_S1,L0-0.4,mapping efficiency  32.4%
+trimmed_413_S1,L0-0.6,mapping efficiency  39.4%
+trimmed_413_S1,L0-0.8,mapping efficiency  45.2%
+trimmed_413_S1,L0-1.0,mapping efficiency  51.6%
+trimmed_413_S1,L-1-0.6,mapping efficiency  39.7%
+trimmed_423_S2,L0-0.4,mapping efficiency  30.6%
+trimmed_423_S2,L0-0.6,mapping efficiency  37.4%
+trimmed_423_S2,L0-0.8,mapping efficiency  42.5%
+trimmed_423_S2,L0-1.0,mapping efficiency  48.1%
+trimmed_423_S2,L-1-0.6,mapping efficiency  37.5%
+trimmed_427_S3,L0-0.4,mapping efficiency  33.1%
+trimmed_427_S3,L0-0.6,mapping efficiency  41.0%
+trimmed_427_S3,L0-0.8,mapping efficiency  47.1%
+trimmed_427_S3,L0-1.0,mapping efficiency  53.0%
+trimmed_427_S3,L-1-0.6,mapping efficiency  41.3%
+trimmed_439_S4,L0-0.4,mapping efficiency  32.6%
+trimmed_439_S4,L0-0.6,mapping efficiency  39.4%
+trimmed_439_S4,L0-0.8,mapping efficiency  44.9%
+trimmed_439_S4,L0-1.0,mapping efficiency  51.1%
+trimmed_439_S4,L-1-0.6,mapping efficiency  39.7%
+trimmed_467_S5,L0-0.4,mapping efficiency  31.8%
+trimmed_467_S5,L0-0.6,mapping efficiency  39.7%
+trimmed_467_S5,L0-0.8,mapping efficiency  45.5%
+trimmed_467_S5,L0-1.0,mapping efficiency  52.5%
+trimmed_467_S5,L-1-0.6,mapping efficiency  39.9%

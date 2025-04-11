@@ -1,0 +1,122 @@
+Bowtie 2 seems to be working fine (tested command 'bowtie2 --version' [2.5.2])
+Output format is BAM (default)
+Alignments will be written out in BAM format. Samtools found here: '/modules/uri_apps/software/SAMtools/1.14-GCC-11.2.0/bin/samtools'
+Reference genome folder provided is ../data/	(absolute path is '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/)'
+FastQ format assumed (by default)
+Processing sequences up to read no. 10000 from the input file
+Attention: using more than 4 cores per alignment thread has been reported to have diminishing returns. If possible try to limit -p to a value of 4
+Each Bowtie 2 instance is going to be run with 8 threads. Please monitor performance closely and tune down if necessary!
+
+Input files to be analysed (in current folder '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/code'):
+../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R1_001.fastq.gz
+../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R2_001.fastq.gz
+Library was specified to be not strand-specific (non-directional), therefore alignments to all four possible bisulfite strands (OT, CTOT, OB and CTOB) will be reported
+Output will be written into the directory: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/align_paramtest_cutadapt_trimmed/trimmed_467_S5_score_L-1-0.6/
+Setting parallelization to single-threaded (default)
+
+Summary of all aligner options:	-q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Current working directory is: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/code
+
+Now reading in and storing sequence information of the genome specified in: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/
+
+Single-core mode: setting pid to 1
+
+Paired-end alignments will be performed
+=======================================
+
+The provided filenames for paired-end alignments are ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R2_001.fastq.gz
+Input files are in FastQ format
+Processing reads up to sequence no. 10000 from ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R1_001.fastq.gz
+Writing a C -> T converted version of the input file trimmed_467_S5_R1_001.fastq.gz to trimmed_467_S5_R1_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_467_S5_R1_001.fastq.gz to trimmed_467_S5_R1_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_467_S5_R1_001.fastq.gz (10001 sequences in total)
+
+Processing reads up to sequence no. 10000 from ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R2_001.fastq.gz
+Writing a C -> T converted version of the input file trimmed_467_S5_R2_001.fastq.gz to trimmed_467_S5_R2_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_467_S5_R2_001.fastq.gz to trimmed_467_S5_R2_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_467_S5_R2_001.fastq.gz (10001 sequences in total)
+
+Input files are trimmed_467_S5_R1_001.fastq.gz_C_to_T.fastq and trimmed_467_S5_R1_001.fastq.gz_G_to_A.fastq and trimmed_467_S5_R2_001.fastq.gz_C_to_T.fastq and trimmed_467_S5_R2_001.fastq.gz_G_to_A.fastq (FastQ)
+Now running 4 individual instances of Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/ with the specified options: -q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2CTgenome (reading in sequences from trimmed_467_S5_R1_001.fastq.gz_C_to_T.fastq and trimmed_467_S5_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1866:1014_1:N:0:AATGCCTC+TNGATCGA/1	77	*	0	0	*	*	0	0	TNTTTTATATTAGTATAGGAAAATAATTAAAATTGGTAAATGATGTGATGTTATTAATATTTTTTTTGATTTGGATAAGGGAGATTTTTTATTTGGGTTTAGGATGTTGTTT	I#IIII9IIII9II9I9IIIIII9I9II9-9-IIIII9I9II9IIIII9IIIIIIIIIIIII9IIIII9IIIII9-I9I9III-II-I9I-III9IIII9IIIIIIIIIIII	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1866:1014_2:N:0:AATGCCTC+TNGATCGA/2	141	*	0	0	*	*	0	0	AAACAACATCCTAAACCCAAATAAAAAATCTCCCTTATCCAAATCAAAAAAAATATTAATAACATCACATCATTTACCAATTTTAATTATTTTCCTATACTAATATAAAAAA	IIIIIII9III9IIIII9IIIIIIIII99III9-I9I9I9IIIIII9-99-99-I-I-9III9IIII--II-II-II9III9IIII9I9-I9-99I-I9999IIIIII---9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2GAgenome (reading in sequences from trimmed_467_S5_R1_001.fastq.gz_G_to_A.fastq and trimmed_467_S5_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1866:1014_1:N:0:AATGCCTC+TNGATCGA/1	77	*	0	0	*	*	0	0	TNTTTTATATTAATATAAAAAAATAATTAAAATTAATAAATAATATAATATTATTAATATTTTTTTTAATTTAAATAAAAAAAATTTTTTATTTAAATTTAAAATATTATTT	I#IIII9IIII9II9I9IIIIII9I9II9-9-IIIII9I9II9IIIII9IIIIIIIIIIIII9IIIII9IIIII9-I9I9III-II-I9I-III9IIII9IIIIIIIIIIII	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1866:1014_2:N:0:AATGCCTC+TNGATCGA/2	141	*	0	0	*	*	0	0	AAATAATATTTTAAATTTAAATAAAAAATTTTTTTTATTTAAATTAAAAAAAATATTAATAATATTATATTATTTATTAATTTTAATTATTTTTTTATATTAATATAAAAAA	IIIIIII9III9IIIII9IIIIIIIII99III9-I9I9I9IIIIII9-99-99-I-I-9III9IIII--II-II-II9III9IIII9I9-I9-99I-I9999IIIIII---9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2CTgenome (reading in sequences from trimmed_467_S5_R1_001.fastq.gz_G_to_A.fastq and trimmed_467_S5_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1866:1014_1:N:0:AATGCCTC+TNGATCGA/1	77	*	0	0	*	*	0	0	TNTTTTATATTAATATAAAAAAATAATTAAAATTAATAAATAATATAATATTATTAATATTTTTTTTAATTTAAATAAAAAAAATTTTTTATTTAAATTTAAAATATTATTT	I#IIII9IIII9II9I9IIIIII9I9II9-9-IIIII9I9II9IIIII9IIIIIIIIIIIII9IIIII9IIIII9-I9I9III-II-I9I-III9IIII9IIIIIIIIIIII	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1866:1014_2:N:0:AATGCCTC+TNGATCGA/2	141	*	0	0	*	*	0	0	AAATAATATTTTAAATTTAAATAAAAAATTTTTTTTATTTAAATTAAAAAAAATATTAATAATATTATATTATTTATTAATTTTAATTATTTTTTTATATTAATATAAAAAA	IIIIIII9III9IIIII9IIIIIIIII99III9-I9I9I9IIIIII9-99-99-I-I-9III9IIII--II-II-II9III9IIII9I9-I9-99I-I9999IIIIII---9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2GAgenome (reading in sequences from trimmed_467_S5_R1_001.fastq.gz_C_to_T.fastq and trimmed_467_S5_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,-1,-0.6 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1866:1014_1:N:0:AATGCCTC+TNGATCGA/1	83	ptg000002l_GA_converted	14467024	42	112M	=	14467024	-112	AAACAACATCCTAAACCCAAATAAAAAATCTCCCTTATCCAAATCAAAAAAAATATTAATAACATCACATCATTTACCAATTTTAATTATTTTCCTATACTAATATAAAANA	IIIIIIIIIIII9IIII9III-I9I-II-III9I9I-9IIIII9IIIII9IIIIIIIIIIIII9IIIII9II9I9IIIII-9-9II9I9IIIIII9I9II9IIII9IIII#I	AS:i:-7	XN:i:0	XM:i:2	XO:i:0	XG:i:0	NM:i:2	MD:Z:29T80A1	YS:i:-6	YT:Z:CP
+LH00260:131:22L7V3LT4:3:1101:1866:1014_2:N:0:AATGCCTC+TNGATCGA/2	163	ptg000002l_GA_converted	14467024	42	112M	=	14467024	112	AAACAACATCCTAAACCCAAATAAAAAATCTCCCTTATCCAAATCAAAAAAAATATTAATAACATCACATCATTTACCAATTTTAATTATTTTCCTATACTAATATAAAAAA	IIIIIII9III9IIIII9IIIIIIIII99III9-I9I9I9IIIIII9-99-99-I-I-9III9IIII--II-II-II9III9IIII9I9-I9-99I-I9999IIIIII---9	AS:i:-6	XN:i:0	XM:i:1	XO:i:0	XG:i:0	NM:i:1	MD:Z:29T82	YS:i:-7	YT:Z:CP
+
+>>> Writing bisulfite mapping results to trimmed_467_S5_L-1-0.6_pe.bam <<<
+
+
+Reading in the sequence files ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_467_S5_R2_001.fastq.gz
+10000 reads; of these:
+  10000 (100.00%) were paired; of these:
+    7603 (76.03%) aligned concordantly 0 times
+    881 (8.81%) aligned concordantly exactly 1 time
+    1516 (15.16%) aligned concordantly >1 times
+23.97% overall alignment rate
+10000 reads; of these:
+  10000 (100.00%) were paired; of these:
+    8337 (83.37%) aligned concordantly 0 times
+10000     reads; of these:619 (
+6.19  %10000) aligned concordantly exactly 1 time (
+    1044 (10.44%) aligned concordantly >1 times
+100.0016.63%%) were paired; of these: overall alignment rate
+
+    8266 (82.66%) aligned concordantly 0 times
+    690 (6.90%) aligned concordantly exactly 1 time
+    1044 (10.44%) aligned concordantly >1 times
+17.34% overall alignment rate
+10000 reads; of these:
+  10000 (100.00%) were paired; of these:
+    7641 (76.41%) aligned concordantly 0 times
+    871 (8.71%) aligned concordantly exactly 1 time
+    1488 (14.88%) aligned concordantly >1 times
+23.59% overall alignment rate
+Processed 10000 sequences in total
+
+
+Successfully deleted the temporary files trimmed_467_S5_R1_001.fastq.gz_C_to_T.fastq, trimmed_467_S5_R1_001.fastq.gz_G_to_A.fastq, trimmed_467_S5_R2_001.fastq.gz_C_to_T.fastq and trimmed_467_S5_R2_001.fastq.gz_G_to_A.fastq
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	10000
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	168045
+
+Total methylated C's in CpG context:	3131
+Total methylated C's in CHG context:	452
+Total methylated C's in CHH context:	1985
+Total methylated C's in Unknown context:	236
+
+Total unmethylated C's in CpG context:	26131
+Total unmethylated C's in CHG context:	31006
+Total unmethylated C's in CHH context:	105340
+Total unmethylated C's in Unknown context:	602
+
+C methylated in CpG context:	10.7%
+C methylated in CHG context:	1.4%
+C methylated in CHH context:	1.8%
+C methylated in unknown context (CN or CHN):	28.2%
+
+
+Bismark completed in 0d 0h 0m 15s
+
+====================
+Bismark run complete
+====================
+

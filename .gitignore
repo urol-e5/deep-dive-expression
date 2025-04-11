@@ -69,9 +69,10 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
-F-Ptuh/output/12*
 .DS_Store
 **/.DS_Store
 */.DS_Store
 blockwiseTOM*
 expression.Rproj
+E-Peve/code/scripts
+F-Ptuh/code/scripts

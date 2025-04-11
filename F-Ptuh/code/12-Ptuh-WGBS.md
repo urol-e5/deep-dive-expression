@@ -1,42 +1,16 @@
----
-title: "08-Apul-WGBS-bismark.Rmd"
-author: "Zoe Dellaert"
-date: "2025-04-09"
-output: 
-  github_document:
-    toc: true
-    number_sections: true
-  bookdown::html_document2:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-  html_document:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-bibliography: references.bib
----
+12-Ptuh-WGBS-bismark.Rmd
+================
+Zoe Dellaert
+2025-04-10
 
-```{r setup, include=FALSE}
-library(knitr)
-knitr::opts_chunk$set(
-  echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
-  warning = FALSE,     # Hide warnings
-  message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
-)
-```
+- [0.1 Test parameters](#01-test-parameters)
+  - [0.1.1 Results from parameter
+    tests:](#011-results-from-parameter-tests)
+- [0.2 Align to genome](#02-align-to-genome)
 
-## Test parameters 
+## 0.1 Test parameters
 
-```{bash, eval=FALSE}
+``` bash
 #!/usr/bin/env bash
 #SBATCH --ntasks=1 --cpus-per-task=30 #split one task over multiple CPU
 #SBATCH --array=0-4 #for 5 samples
@@ -52,10 +26,10 @@ module load Bismark/0.23.1-foss-2021b
 module load bowtie2/2.5.2
 
 # Set directories and files
-reads_dir="../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/"
+reads_dir="../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/"
 genome_folder="../data/"
 
-output_dir="../output/08-Apul-WGBS/bismark_paramtest_cutadapt"
+output_dir="../output/12-Ptuh-WGBS/bismark_paramtest_cutadapt"
 checkpoint_file="${output_dir}/completed_samples.log"
 
 # make output directory
@@ -150,49 +124,41 @@ for dir in ${output_dir}/*_score_*; do
 done
 ```
 
-### Results from parameter tests:
- 
-| Sample         | Score_Min | Alignment_Rate |
-|----------------|-----------|----------------|
-| trimmed_413_S1 | L0-0.4    | 32.40%         |
-| trimmed_413_S1 | L0-0.6    | 39.40%         |
-| trimmed_413_S1 | L0-0.8    | 45.20%         |
-| trimmed_413_S1 | L0-1.0    | 51.60%         |
-| trimmed_413_S1 | L-1-0.6   | 39.70%         |
-| trimmed_423_S2 | L0-0.4    | 30.60%         |
-| trimmed_423_S2 | L0-0.6    | 37.40%         |
-| trimmed_423_S2 | L0-0.8    | 42.50%         |
-| trimmed_423_S2 | L0-1.0    | 48.10%         |
-| trimmed_423_S2 | L-1-0.6   | 37.50%         |
-| trimmed_427_S3 | L0-0.4    | 33.10%         |
-| trimmed_427_S3 | L0-0.6    | 41.00%         |
-| trimmed_427_S3 | L0-0.8    | 47.10%         |
-| trimmed_427_S3 | L0-1.0    | 53.00%         |
-| trimmed_427_S3 | L-1-0.6   | 41.30%         |
-| trimmed_439_S4 | L0-0.4    | 32.60%         |
-| trimmed_439_S4 | L0-0.6    | 39.40%         |
-| trimmed_439_S4 | L0-0.8    | 44.90%         |
-| trimmed_439_S4 | L0-1.0    | 51.10%         |
-| trimmed_439_S4 | L-1-0.6   | 39.70%         |
-| trimmed_467_S5 | L0-0.4    | 31.80%         |
-| trimmed_467_S5 | L0-0.6    | 39.70%         |
-| trimmed_467_S5 | L0-0.8    | 45.50%         |
-| trimmed_467_S5 | L0-1.0    | 52.50%         |
-| trimmed_467_S5 | L-1-0.6   | 39.90%         |
+### 0.1.1 Results from parameter tests:
 
-I ran the parameter testing before fixing the file sample names. For reference:
+| Sample                 | Score_Min | Alignment_Rate |
+|:-----------------------|:----------|:---------------|
+| trimmed_POC-47-TP2_S13 | L0-0.4    | 34.30%         |
+| trimmed_POC-47-TP2_S13 | L0-0.6    | 42.00%         |
+| trimmed_POC-47-TP2_S13 | L0-0.8    | 48.20%         |
+| trimmed_POC-47-TP2_S13 | L0-1.0    | 54.90%         |
+| trimmed_POC-47-TP2_S13 | L-1-0.6   | 42.40%         |
+| trimmed_POC-48-TP2_S11 | L0-0.4    | 35.20%         |
+| trimmed_POC-48-TP2_S11 | L0-0.6    | 44.10%         |
+| trimmed_POC-48-TP2_S11 | L0-0.8    | 51.40%         |
+| trimmed_POC-48-TP2_S11 | L0-1.0    | 58.80%         |
+| trimmed_POC-48-TP2_S11 | L-1-0.6   | 44.60%         |
+| trimmed_POC-50-TP2_S14 | L0-0.4    | 32.80%         |
+| trimmed_POC-50-TP2_S14 | L0-0.6    | 40.40%         |
+| trimmed_POC-50-TP2_S14 | L0-0.8    | 45.70%         |
+| trimmed_POC-50-TP2_S14 | L0-1.0    | 51.40%         |
+| trimmed_POC-50-TP2_S14 | L-1-0.6   | 40.90%         |
+| trimmed_POC-53-TP2_S15 | L0-0.4    | 31.00%         |
+| trimmed_POC-53-TP2_S15 | L0-0.6    | 38.60%         |
+| trimmed_POC-53-TP2_S15 | L0-0.8    | 45.20%         |
+| trimmed_POC-53-TP2_S15 | L0-1.0    | 52.00%         |
+| trimmed_POC-53-TP2_S15 | L-1-0.6   | 38.90%         |
+| trimmed_POC-57-TP2_S12 | L0-0.4    | 34.70%         |
+| trimmed_POC-57-TP2_S12 | L0-0.6    | 43.80%         |
+| trimmed_POC-57-TP2_S12 | L0-0.8    | 50.70%         |
+| trimmed_POC-57-TP2_S12 | L0-1.0    | 58.10%         |
+| trimmed_POC-57-TP2_S12 | L-1-0.6   | 44.20%         |
 
-- 413 = ACR-178
-- 423 = ACR-150
-- 427 = ACR-145
-- 439 = ACR-173
-- 467 = ACR-140
+## 0.2 Align to genome
 
-## Align to genome
-
-```{bash, eval=FALSE}
+``` bash
 #!/usr/bin/env bash
-#SBATCH --ntasks=1 --cpus-per-task=48 #split one task over multiple CPU
+#SBATCH --ntasks=1 --cpus-per-task=24 #split one task over multiple CPU
 #SBATCH --array=0-4 #for 5 samples
 #SBATCH --mem=400GB
 #SBATCH -t 48:00:00
@@ -206,10 +172,10 @@ module load Bismark/0.23.1-foss-2021b
 module load bowtie2/2.5.2
 
 # Set directories and files
-reads_dir="../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/"
+reads_dir="../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/"
 genome_folder="../data/"
 
-output_dir="../output/08-Apul-WGBS/bismark_cutadapt"
+output_dir="../output/12-Ptuh-WGBS/bismark_cutadapt"
 checkpoint_file="${output_dir}/completed_samples.log"
 
 # make output directory
@@ -236,7 +202,7 @@ stderr_log="${output_dir}/${sample_name}_stderr.log"
     # Run Bismark alignment
     bismark \
         -genome ${genome_folder} \
-        -p 48 \
+        -p 8 \
         -score_min L,0,-1.0 \
         --non_directional \
         -1 ${reads_dir}${sample_name}_R1_001.fastq.gz \
@@ -276,4 +242,3 @@ for file in ${output_dir}/*_report.txt; do
     echo "${sample_name},${score_min},${mapping}" >> ${summary_file}
 done
 ```
-

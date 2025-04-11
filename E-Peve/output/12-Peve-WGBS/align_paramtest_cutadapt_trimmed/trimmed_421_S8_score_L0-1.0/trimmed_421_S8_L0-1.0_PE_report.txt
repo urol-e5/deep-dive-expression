@@ -1,0 +1,40 @@
+Bismark report for: ../output/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_421_S8_R1_001.fastq.gz and ../output/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_421_S8_R2_001.fastq.gz (version: v0.23.1)
+Bismark was run with Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/E-Peve/data/ with the specified options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Option '--non_directional' specified: alignments to all strands were being performed (OT, OB, CTOT, CTOB)
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	10000
+Number of paired-end alignments with a unique best hit:	4726
+Mapping efficiency:	47.3% 
+Sequence pairs with no alignments under any condition:	3753
+Sequence pairs did not map uniquely:	1521
+Sequence pairs which were discarded because genomic sequence could not be extracted:	1
+
+Number of sequence pairs with unique best (first) alignment came from the bowtie output:
+CT/GA/CT:	1255	((converted) top strand)
+GA/CT/CT:	1063	(complementary to (converted) top strand)
+GA/CT/GA:	1094	(complementary to (converted) bottom strand)
+CT/GA/GA:	1313	((converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	176042
+
+Total methylated C's in CpG context:	2379
+Total methylated C's in CHG context:	729
+Total methylated C's in CHH context:	3856
+Total methylated C's in Unknown context:	370
+
+Total unmethylated C's in CpG context:	30387
+Total unmethylated C's in CHG context:	33350
+Total unmethylated C's in CHH context:	105341
+Total unmethylated C's in Unknown context:	2068
+
+C methylated in CpG context:	7.3%
+C methylated in CHG context:	2.1%
+C methylated in CHH context:	3.5%
+C methylated in unknown context (CN or CHN):	15.2%
+
+
+Bismark completed in 0d 0h 0m 16s
