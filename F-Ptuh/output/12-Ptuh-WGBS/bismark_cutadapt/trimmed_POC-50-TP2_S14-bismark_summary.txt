@@ -1,0 +1,373 @@
+Bowtie 2 seems to be working fine (tested command 'bowtie2 --version' [2.5.2])
+Output format is BAM (default)
+Alignments will be written out in BAM format. Samtools found here: '/modules/uri_apps/software/SAMtools/1.14-GCC-11.2.0/bin/samtools'
+Reference genome folder provided is ../data/	(absolute path is '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/data/)'
+FastQ format assumed (by default)
+Attention: using more than 4 cores per alignment thread has been reported to have diminishing returns. If possible try to limit -p to a value of 4
+Each Bowtie 2 instance is going to be run with 8 threads. Please monitor performance closely and tune down if necessary!
+
+Input files to be analysed (in current folder '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/code'):
+../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R1_001.fastq.gz
+../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R2_001.fastq.gz
+Library was specified to be not strand-specific (non-directional), therefore alignments to all four possible bisulfite strands (OT, CTOT, OB and CTOB) will be reported
+Output will be written into the directory: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/
+Setting parallelization to single-threaded (default)
+
+Summary of all aligner options:	-q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Current working directory is: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/code
+
+Now reading in and storing sequence information of the genome specified in: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/data/
+
+Single-core mode: setting pid to 1
+
+Paired-end alignments will be performed
+=======================================
+
+The provided filenames for paired-end alignments are ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R1_001.fastq.gz and ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R2_001.fastq.gz
+Input files are in FastQ format
+Writing a C -> T converted version of the input file trimmed_POC-50-TP2_S14_R1_001.fastq.gz to trimmed_POC-50-TP2_S14_R1_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_POC-50-TP2_S14_R1_001.fastq.gz to trimmed_POC-50-TP2_S14_R1_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_POC-50-TP2_S14_R1_001.fastq.gz (167114293 sequences in total)
+
+Writing a C -> T converted version of the input file trimmed_POC-50-TP2_S14_R2_001.fastq.gz to trimmed_POC-50-TP2_S14_R2_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_POC-50-TP2_S14_R2_001.fastq.gz to trimmed_POC-50-TP2_S14_R2_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_POC-50-TP2_S14_R2_001.fastq.gz (167114293 sequences in total)
+
+Input files are trimmed_POC-50-TP2_S14_R1_001.fastq.gz_C_to_T.fastq and trimmed_POC-50-TP2_S14_R1_001.fastq.gz_G_to_A.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_C_to_T.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_G_to_A.fastq (FastQ)
+Now running 4 individual instances of Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/data/ with the specified options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2CTgenome (reading in sequences from trimmed_POC-50-TP2_S14_R1_001.fastq.gz_C_to_T.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TNATTTAAAATTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	9#IIIIIIIIII-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_2:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTTATAATATTTTTATTAATAATATAAAAATTATTATTTTTAATTTTTAATTTTAAATAA	IIIIII-IIIIIII9IIII-IIIIIII9I-I9--II-9I9IIII9I99I-I-III-9999	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2GAgenome (reading in sequences from trimmed_POC-50-TP2_S14_R1_001.fastq.gz_G_to_A.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	CNATTCAAAATTCAAAATTACAAACAATAATTTCCATACCATTAACAAAAATATCACAAA	9#IIIIIIIIII-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_2:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTTGTGGTATTTTTGTTAATGGTATGGAAATTATTGTTTTTAATTTTTAATTTTGAATGG	IIIIII-IIIIIII9IIII-IIIIIII9I-I9--II-9I9IIII9I99I-I-III-9999	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2CTgenome (reading in sequences from trimmed_POC-50-TP2_S14_R1_001.fastq.gz_G_to_A.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	83	Pocillopora_meandrina_HIv1___Sc0000008_CT_converted	1252385	42	60M	=	1252385	-60	TTTGTGATATTTTTGTTAATGGTATGGAAATTATTGTTTGTAATTTTGAATTTTGAATNG	9II-II9III99I9IIIIII9I-I-9IIII9III-IIII9IIII9II-IIIIIIIIII#9	AS:i:-13	XN:i:0	XM:i:3	XO:i:0	XG:i:0	NM:i:3	MD:Z:39T7T10G1	YS:i:-6	YT:Z:CP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_2:N:0:ACAGAATT+TNGCCGGT/2	163	Pocillopora_meandrina_HIv1___Sc0000008_CT_converted	1252385	42	60M	=	1252385	60	TTTGTGGTATTTTTGTTAATGGTATGGAAATTATTGTTTTTAATTTTTAATTTTGAATGG	IIIIII-IIIIIII9IIII-IIIIIII9I-I9--II-9I9IIII9I99I-I-III-9999	AS:i:-6	XN:i:0	XM:i:1	XO:i:0	XG:i:0	NM:i:1	MD:Z:6A53	YS:i:-13	YT:Z:CP
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2GAgenome (reading in sequences from trimmed_POC-50-TP2_S14_R1_001.fastq.gz_C_to_T.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TNATTTAAAATTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	9#IIIIIIIIII-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_2:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTTATAATATTTTTATTAATAATATAAAAATTATTATTTTTAATTTTTAATTTTAAATAA	IIIIII-IIIIIII9IIII-IIIIIII9I-I9--II-9I9IIII9I99I-I-III-9999	YT:Z:UP
+
+>>> Writing bisulfite mapping results to trimmed_POC-50-TP2_S14_pe.bam <<<
+
+
+Reading in the sequence files ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R1_001.fastq.gz and ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-50-TP2_S14_R2_001.fastq.gz
+Processed 1000000 sequence pairs so far
+Processed 2000000 sequence pairs so far
+Processed 3000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1116:23100:6393_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000426	46955
+Processed 4000000 sequence pairs so far
+Processed 5000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1122:21684:20191_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000027	2
+Processed 6000000 sequence pairs so far
+Processed 7000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1130:43929:5777_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000057	3
+Processed 8000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1135:11819:26144_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1135:11827:26158_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1138:27801:1728_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	1
+Processed 9000000 sequence pairs so far
+Processed 10000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1146:6470:22040_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000034	1
+Processed 11000000 sequence pairs so far
+Processed 12000000 sequence pairs so far
+Processed 13000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1157:40498:18692_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000027	3
+Processed 14000000 sequence pairs so far
+Processed 15000000 sequence pairs so far
+Processed 16000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1171:35157:10287_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001231	22842
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1172:10516:1812_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1172:10525:1826_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 17000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1178:37140:9601_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000566	1
+Processed 18000000 sequence pairs so far
+Processed 19000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1188:43913:4320_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000068	1
+Processed 20000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1193:33992:11492_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000301	50682
+Processed 21000000 sequence pairs so far
+Processed 22000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1206:21077:13957_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000027	1
+Processed 23000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1210:46252:9293_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001231	22842
+Processed 24000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1211:28724:11226_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000788	2
+Processed 25000000 sequence pairs so far
+Processed 26000000 sequence pairs so far
+Processed 27000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1223:35991:11562_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000596	42627
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1224:45394:21816_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1224:4609:26438_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1225:6762:26382_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000527	44088
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1225:6770:26396_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000527	44087
+Processed 28000000 sequence pairs so far
+Processed 29000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1231:31127:20009_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000004	14584367
+Processed 30000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1239:45774:21213_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000042	3
+Processed 31000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1241:42974:22782_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000272	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1243:34372:28483_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 32000000 sequence pairs so far
+Processed 33000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1250:49416:28581_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000032	1
+Processed 34000000 sequence pairs so far
+Processed 35000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1259:35012:2695_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	3
+Processed 36000000 sequence pairs so far
+Processed 37000000 sequence pairs so far
+Processed 38000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1276:21773:19925_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	3
+Processed 39000000 sequence pairs so far
+Processed 40000000 sequence pairs so far
+Processed 41000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1290:21376:23048_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	2
+Processed 42000000 sequence pairs so far
+Processed 43000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1301:12823:19504_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 44000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1306:43055:10063_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 45000000 sequence pairs so far
+Processed 46000000 sequence pairs so far
+Processed 47000000 sequence pairs so far
+Processed 48000000 sequence pairs so far
+Processed 49000000 sequence pairs so far
+Processed 50000000 sequence pairs so far
+Processed 51000000 sequence pairs so far
+Processed 52000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1339:41405:23539_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000030	2
+Processed 53000000 sequence pairs so far
+Processed 54000000 sequence pairs so far
+Processed 55000000 sequence pairs so far
+Processed 56000000 sequence pairs so far
+Processed 57000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1366:51544:11394_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000488	1
+Processed 58000000 sequence pairs so far
+Processed 59000000 sequence pairs so far
+Processed 60000000 sequence pairs so far
+Processed 61000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1382:33320:22376_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000272	3
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1382:7199:24393_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001170	1
+Processed 62000000 sequence pairs so far
+Processed 63000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1393:41809:1574_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001231	22818
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1393:41801:1588_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001231	22818
+Processed 64000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1402:31483:6925_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000042	1
+Processed 65000000 sequence pairs so far
+Processed 66000000 sequence pairs so far
+Processed 67000000 sequence pairs so far
+Processed 68000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1416:43419:1644_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 69000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1422:33482:10777_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1422:33474:10791_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000621	1
+Processed 70000000 sequence pairs so far
+Processed 71000000 sequence pairs so far
+Processed 72000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1433:12774:11436_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000272	3
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1433:6365:22306_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000527	44089
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1434:3144:5749_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000272	3
+Processed 73000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1438:25835:18916_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000566	1
+Processed 74000000 sequence pairs so far
+Processed 75000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1447:32382:13663_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001170	1
+Processed 76000000 sequence pairs so far
+Processed 77000000 sequence pairs so far
+Processed 78000000 sequence pairs so far
+Processed 79000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1468:40976:15260_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000704	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1470:15267:5272_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001337	6723
+Processed 80000000 sequence pairs so far
+Processed 81000000 sequence pairs so far
+Processed 82000000 sequence pairs so far
+Processed 83000000 sequence pairs so far
+Processed 84000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1491:19199:24435_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000012	10024529
+Processed 85000000 sequence pairs so far
+Processed 86000000 sequence pairs so far
+Processed 87000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2110:35983:14826_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 88000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2114:47110:27979_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000042	1
+Processed 89000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2117:7110:19672_1:N:0:GCAGAATT+TGACCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Processed 90000000 sequence pairs so far
+Processed 91000000 sequence pairs so far
+Processed 92000000 sequence pairs so far
+Processed 93000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2137:39632:16913_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000030	1
+Processed 94000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2140:46600:26368_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 95000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2146:27818:27251_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000262	3
+Processed 96000000 sequence pairs so far
+Processed 97000000 sequence pairs so far
+Processed 98000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2160:51342:5244_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 99000000 sequence pairs so far
+Processed 100000000 sequence pairs so far
+Processed 101000000 sequence pairs so far
+Processed 102000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2176:23132:12809_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000004	14584367
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2176:50953:19140_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000527	44128
+Processed 103000000 sequence pairs so far
+Processed 104000000 sequence pairs so far
+Processed 105000000 sequence pairs so far
+Processed 106000000 sequence pairs so far
+Processed 107000000 sequence pairs so far
+Processed 108000000 sequence pairs so far
+Processed 109000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2215:36047:5721_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2215:36056:5735_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Processed 110000000 sequence pairs so far
+Processed 111000000 sequence pairs so far
+Processed 112000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2229:24233:12556_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 113000000 sequence pairs so far
+Processed 114000000 sequence pairs so far
+Processed 115000000 sequence pairs so far
+Processed 116000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2244:14474:5300_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000045	3
+Processed 117000000 sequence pairs so far
+Processed 118000000 sequence pairs so far
+Processed 119000000 sequence pairs so far
+Processed 120000000 sequence pairs so far
+Processed 121000000 sequence pairs so far
+Processed 122000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2274:38977:28077_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000885	36373
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2277:17168:17333_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000428	1
+Processed 123000000 sequence pairs so far
+Processed 124000000 sequence pairs so far
+Processed 125000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2290:28878:10904_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000527	44086
+Processed 126000000 sequence pairs so far
+Processed 127000000 sequence pairs so far
+Processed 128000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2310:7967:1378_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	1
+Processed 129000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2313:23326:6085_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000005	1
+Processed 130000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2317:17727:24351_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000045	3
+Processed 131000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2321:30537:9153_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2322:22938:24379_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 132000000 sequence pairs so far
+Processed 133000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2332:44431:24295_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	2
+Processed 134000000 sequence pairs so far
+Processed 135000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2339:8267:14560_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	1
+Processed 136000000 sequence pairs so far
+Processed 137000000 sequence pairs so far
+Processed 138000000 sequence pairs so far
+Processed 139000000 sequence pairs so far
+Processed 140000000 sequence pairs so far
+167114293 reads; of these:
+  167114293 (100.00%) were paired; of these:
+    121342079 (72.61%) aligned concordantly 0 times
+    22346846 (13.37%) aligned concordantly exactly 1 time
+    23425368 (14.02%) aligned concordantly >1 times
+27.39% overall alignment rate
+Processed 141000000 sequence pairs so far
+Processed 142000000 sequence pairs so far
+Processed 143000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2379:46762:23118_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000262	1
+Processed 144000000 sequence pairs so far
+Processed 145000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2388:51609:6491_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001337	3
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2391:8097:19925_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 146000000 sequence pairs so far
+Processed 147000000 sequence pairs so far
+Processed 148000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2407:12968:10567_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2410:28182:2947_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000262	1
+Processed 149000000 sequence pairs so far
+167114293 reads; of these:
+  167114293 (100.00%) were paired; of these:
+    128111273 (76.66%) aligned concordantly 0 times
+    19463080 (11.65%) aligned concordantly exactly 1 time
+    19539940 (11.69%) aligned concordantly >1 times
+23.34% overall alignment rate
+Processed 150000000 sequence pairs so far
+Processed 151000000 sequence pairs so far
+Processed 152000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2424:27672:16268_1:N:0:ACAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000092	2
+Processed 153000000 sequence pairs so far
+Processed 154000000 sequence pairs so far
+Processed 155000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2442:29104:24463_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000010	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2443:3687:6771_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xpSc0001355	2
+Processed 156000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2446:11382:4096_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001122	29030
+167114293 reads; of these:
+  167114293 (100.00%) were paired; of these:
+    117900458 (70.55%) aligned concordantly 0 times
+    24455401 (14.63%) aligned concordantly exactly 1 time
+    24758434 (14.82%) aligned concordantly >1 times
+29.45% overall alignment rate
+Processed 157000000 sequence pairs so far
+Processed 158000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2456:25309:20555_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000045	3
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2456:25301:20569_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000045	3
+Processed 159000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2458:9618:14602_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0001170	1
+Processed 160000000 sequence pairs so far
+167114293 reads; of these:
+  167114293 (100.00%) were paired; of these:
+    126906767 (75.94%) aligned concordantly 0 times
+    20024512 (11.98%) aligned concordantly exactly 1 time
+    20183014 (12.08%) aligned concordantly >1 times
+24.06% overall alignment rate
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2467:43865:10315_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___xfSc0000840	37133
+Processed 161000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2472:40773:4460_1:N:0:GCAGAATT+TGGCCGGT	Pocillopora_meandrina_HIv1___Sc0000019	1
+Processed 162000000 sequence pairs so far
+Processed 163000000 sequence pairs so far
+Processed 164000000 sequence pairs so far
+Processed 165000000 sequence pairs so far
+Processed 166000000 sequence pairs so far
+Processed 167000000 sequence pairs so far
+Processed 167114293 sequences in total
+
+
+Successfully deleted the temporary files trimmed_POC-50-TP2_S14_R1_001.fastq.gz_C_to_T.fastq, trimmed_POC-50-TP2_S14_R1_001.fastq.gz_G_to_A.fastq, trimmed_POC-50-TP2_S14_R2_001.fastq.gz_C_to_T.fastq and trimmed_POC-50-TP2_S14_R2_001.fastq.gz_G_to_A.fastq
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	167114293
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	3215206295
+
+Total methylated C's in CpG context:	24480584
+Total methylated C's in CHG context:	18188843
+Total methylated C's in CHH context:	65242926
+Total methylated C's in Unknown context:	6833414
+
+Total unmethylated C's in CpG context:	553212268
+Total unmethylated C's in CHG context:	643381408
+Total unmethylated C's in CHH context:	1910700266
+Total unmethylated C's in Unknown context:	35089127
+
+C methylated in CpG context:	4.2%
+C methylated in CHG context:	2.7%
+C methylated in CHH context:	3.3%
+C methylated in unknown context (CN or CHN):	16.3%
+
+
+Bismark completed in 0d 11h 26m 2s
+
+====================
+Bismark run complete
+====================
+

@@ -1,0 +1,40 @@
+Bismark report for: ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-57-TP2_S12_R1_001.fastq.gz and ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-57-TP2_S12_R2_001.fastq.gz (version: v0.23.1)
+Bismark was run with Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/data/ with the specified options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Option '--non_directional' specified: alignments to all strands were being performed (OT, OB, CTOT, CTOB)
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	241592172
+Number of paired-end alignments with a unique best hit:	141174678
+Mapping efficiency:	58.4% 
+Sequence pairs with no alignments under any condition:	71647653
+Sequence pairs did not map uniquely:	28769841
+Sequence pairs which were discarded because genomic sequence could not be extracted:	232
+
+Number of sequence pairs with unique best (first) alignment came from the bowtie output:
+CT/GA/CT:	43695068	((converted) top strand)
+GA/CT/CT:	26967206	(complementary to (converted) top strand)
+GA/CT/GA:	26927590	(complementary to (converted) bottom strand)
+CT/GA/GA:	43584582	((converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	5592250056
+
+Total methylated C's in CpG context:	36067872
+Total methylated C's in CHG context:	18974329
+Total methylated C's in CHH context:	97064058
+Total methylated C's in Unknown context:	17354214
+
+Total unmethylated C's in CpG context:	864973038
+Total unmethylated C's in CHG context:	1061369484
+Total unmethylated C's in CHH context:	3513801275
+Total unmethylated C's in Unknown context:	64120788
+
+C methylated in CpG context:	4.0%
+C methylated in CHG context:	1.8%
+C methylated in CHH context:	2.7%
+C methylated in unknown context (CN or CHN):	21.3%
+
+
+Bismark completed in 0d 18h 26m 20s

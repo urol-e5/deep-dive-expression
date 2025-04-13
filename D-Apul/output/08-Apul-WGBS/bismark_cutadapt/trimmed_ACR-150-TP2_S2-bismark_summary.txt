@@ -1,0 +1,470 @@
+Bowtie 2 seems to be working fine (tested command 'bowtie2 --version' [2.5.2])
+Output format is BAM (default)
+Alignments will be written out in BAM format. Samtools found here: '/modules/uri_apps/software/SAMtools/1.14-GCC-11.2.0/bin/samtools'
+Reference genome folder provided is ../data/	(absolute path is '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/)'
+FastQ format assumed (by default)
+Attention: using more than 4 cores per alignment thread has been reported to have diminishing returns. If possible try to limit -p to a value of 4
+Each Bowtie 2 instance is going to be run with 48 threads. Please monitor performance closely and tune down if necessary!
+
+Input files to be analysed (in current folder '/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/code'):
+../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R1_001.fastq.gz
+../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R2_001.fastq.gz
+Library was specified to be not strand-specific (non-directional), therefore alignments to all four possible bisulfite strands (OT, CTOT, OB and CTOB) will be reported
+Output will be written into the directory: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/
+Setting parallelization to single-threaded (default)
+
+Summary of all aligner options:	-q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Current working directory is: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/code
+
+Now reading in and storing sequence information of the genome specified in: /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/
+
+Single-core mode: setting pid to 1
+
+Paired-end alignments will be performed
+=======================================
+
+The provided filenames for paired-end alignments are ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R2_001.fastq.gz
+Input files are in FastQ format
+Writing a C -> T converted version of the input file trimmed_ACR-150-TP2_S2_R1_001.fastq.gz to trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_ACR-150-TP2_S2_R1_001.fastq.gz to trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_ACR-150-TP2_S2_R1_001.fastq.gz (234083660 sequences in total)
+
+Writing a C -> T converted version of the input file trimmed_ACR-150-TP2_S2_R2_001.fastq.gz to trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file trimmed_ACR-150-TP2_S2_R2_001.fastq.gz to trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file trimmed_ACR-150-TP2_S2_R2_001.fastq.gz (234083660 sequences in total)
+
+Input files are trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_C_to_T.fastq and trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_G_to_A.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_C_to_T.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_G_to_A.fastq (FastQ)
+Now running 4 individual instances of Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/ with the specified options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2CTgenome (reading in sequences from trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_C_to_T.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1979:1014_1:N:0:CCGTGAAG+ANCCACTG/1	99	ntLink_8_CT_converted	18032370	1	73M	=	18032370	73	ANTATAATTTAGTGAAATGTTGGATTGATGAATGTTGAGGATGTTTGAATTGTTTTGTGTGTTTGTTTGTTAA	I#IIIIIIIIIIIIIIIIIIIIIIIIIIII99I9III9IIIIIIIII-II99IIII99III9I-II9IIIIII	AS:i:-25	XS:i:-25	XN:i:0	XM:i:5	XO:i:0	XG:i:0	NM:i:5	MD:Z:1T40T1A9A8A9	YS:i:-6	YT:Z:CP
+LH00260:131:22L7V3LT4:3:1101:1979:1014_2:N:0:CCGTGAAG+ANCCACTG/2	147	ntLink_8_CT_converted	18032370	1	73M	=	18032370	-73	ATTATAATTTAGTGAAATGTTGGATTGATGAATGTTGAGGATGTATGAATTGTTATGTGTGTTAGTTTGTTAA	I9IIIIIIIII9-9II-99IIII9IIIIIIII9I-99I-9999I9IIIIIII9-I9I9-I99IIIIIIIIIII	AS:i:-6	XS:i:-6	XN:i:0	XM:i:1	XO:i:0	XG:i:0	NM:i:1	MD:Z:42T30	YS:i:-25	YT:Z:CP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2GAgenome (reading in sequences from trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_G_to_A.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1979:1014_1:N:0:CCGTGAAG+ANCCACTG/1	77	*	0	0	*	*	0	0	ANCATAATTTAATAAAATATTAAATTAATAAATACTAAAAATATCTAAATTATTCTATATATTCATTTATTAA	I#IIIIIIIIIIIIIIIIIIIIIIIIIIII99I9III9IIIIIIIII-II99IIII99III9I-II9IIIIII	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1979:1014_2:N:0:CCGTGAAG+ANCCACTG/2	141	*	0	0	*	*	0	0	TTAATAAATTAATATATATAATAATTTATATATTTTTAGTATTTATTAATTTAATATTTTATTAAATTATGAT	IIIIIIIIIII99I-9I9I-9IIIIIII9I9999-I99-I9IIIIIIII9IIII99-II9-9IIIIIIIII9I	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2CTgenome (reading in sequences from trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_G_to_A.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1979:1014_1:N:0:CCGTGAAG+ANCCACTG/1	77	*	0	0	*	*	0	0	ANCATAATTTAATAAAATATTAAATTAATAAATACTAAAAATATCTAAATTATTCTATATATTCATTTATTAA	I#IIIIIIIIIIIIIIIIIIIIIIIIIIII99I9III9IIIIIIIII-II99IIII99III9I-II9IIIIII	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1979:1014_2:N:0:CCGTGAAG+ANCCACTG/2	141	*	0	0	*	*	0	0	TTAATAAATTAATATATATAATAATTTATATATTTTTAGTATTTATTAATTTAATATTTTATTAAATTATGAT	IIIIIIIIIII99I-9I9I-9IIIIIII9I9999-I99-I9IIIIIIII9IIII99-II9-9IIIIIIIII9I	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2GAgenome (reading in sequences from trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_C_to_T.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1979:1014_1:N:0:CCGTGAAG+ANCCACTG/1	83	ptg000035l_GA_converted	1522201	1	73M	=	1522201	-73	TTAACAAACAAACACACAAAACAATTCAAACATCCTCAACATTCATCAATCCAACATTTCACTAAATTATANT	IIIIII9II-I9III99IIII99II-IIIIIIIII9III9I99IIIIIIIIIIIIIIIIIIIIIIIIIIII#I	AS:i:-19	XS:i:-19	XN:i:0	XM:i:4	XO:i:0	XG:i:0	NM:i:4	MD:Z:9T8T9T42A1	YS:i:0	YT:Z:CP
+LH00260:131:22L7V3LT4:3:1101:1979:1014_2:N:0:CCGTGAAG+ANCCACTG/2	163	ptg000035l_GA_converted	1522201	1	73M	=	1522201	73	TTAACAAACTAACACACATAACAATTCATACATCCTCAACATTCATCAATCCAACATTTCACTAAATTATAAT	IIIIIIIIIII99I-9I9I-9IIIIIII9I9999-I99-I9IIIIIIII9IIII99-II9-9IIIIIIIII9I	AS:i:0	XS:i:0	XN:i:0	XM:i:0	XO:i:0	XG:i:0	NM:i:0	MD:Z:73	YS:i:-19	YT:Z:CP
+
+>>> Writing bisulfite mapping results to trimmed_ACR-150-TP2_S2_pe.bam <<<
+
+
+Reading in the sequence files ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-150-TP2_S2_R2_001.fastq.gz
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1101:8437:15162_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39662
+Processed 1000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1104:25884:23118_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 2000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1107:47579:28679_1:N:0:CCGTGAAG+ATCCACTG	ptg000028l	618554
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1109:13875:24631_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39649
+Processed 3000000 sequence pairs so far
+Processed 4000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1114:3735:24169_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 5000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1118:27680:20737_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259876
+Processed 6000000 sequence pairs so far
+Processed 7000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1125:4682:27937_1:N:0:CCGTGAAG+ATCCACTG	ptg000016l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1126:29420:1196_1:N:0:CCGTGAAG+ATCCACTG	ptg000090l	1
+Processed 8000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1128:31823:25051_1:N:0:CCGTGAAG+ATCCACTG	ptg000108l	75314
+Processed 9000000 sequence pairs so far
+Processed 10000000 sequence pairs so far
+Processed 11000000 sequence pairs so far
+Processed 12000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1142:48971:3718_1:N:0:CCGTGAAG+ATCCACTG	ptg000127l	27777
+Processed 13000000 sequence pairs so far
+Processed 14000000 sequence pairs so far
+Processed 15000000 sequence pairs so far
+Processed 16000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1156:27534:24715_1:N:0:CCGTGAAG+ATCCACTG	ptg000113l	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1156:27543:24729_1:N:0:CCGTGAAG+ATCCACTG	ptg000113l	2
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1158:20980:7318_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625578
+Processed 17000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1159:45499:5805_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625572
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1159:50460:25289_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625658
+Processed 18000000 sequence pairs so far
+Processed 19000000 sequence pairs so far
+Processed 20000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1169:48501:5931_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 21000000 sequence pairs so far
+Processed 22000000 sequence pairs so far
+Processed 23000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1180:25269:8998_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625658
+Processed 24000000 sequence pairs so far
+Processed 25000000 sequence pairs so far
+Processed 26000000 sequence pairs so far
+Processed 27000000 sequence pairs so far
+Processed 28000000 sequence pairs so far
+Processed 29000000 sequence pairs so far
+Processed 30000000 sequence pairs so far
+Processed 31000000 sequence pairs so far
+Processed 32000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1209:44666:11982_1:N:0:CCGTGAAG+ATCCACTG	ptg000112l	35516
+Processed 33000000 sequence pairs so far
+Processed 34000000 sequence pairs so far
+Processed 35000000 sequence pairs so far
+Processed 36000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1223:45944:18958_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095960
+Processed 37000000 sequence pairs so far
+Processed 38000000 sequence pairs so far
+Processed 39000000 sequence pairs so far
+Processed 40000000 sequence pairs so far
+Processed 41000000 sequence pairs so far
+Processed 42000000 sequence pairs so far
+Processed 43000000 sequence pairs so far
+Processed 44000000 sequence pairs so far
+Processed 45000000 sequence pairs so far
+Processed 46000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1257:12499:13761_1:N:0:CCGTGAAG+ATCCACTG	ptg000126l	1
+Processed 47000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1261:23116:26452_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39639
+Processed 48000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1265:26159:20149_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259787
+Processed 49000000 sequence pairs so far
+Processed 50000000 sequence pairs so far
+Processed 51000000 sequence pairs so far
+Processed 52000000 sequence pairs so far
+Processed 53000000 sequence pairs so far
+Processed 54000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1284:44698:6127_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259876
+Processed 55000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1287:17184:12122_1:N:0:CCGTGAAG+ATCCACTG	ptg000025l	21443060
+Processed 56000000 sequence pairs so far
+Processed 57000000 sequence pairs so far
+Processed 58000000 sequence pairs so far
+Processed 59000000 sequence pairs so far
+Processed 60000000 sequence pairs so far
+Processed 61000000 sequence pairs so far
+Processed 62000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1311:28659:15876_1:N:0:CCGTGAAG+ATCCACTG	ptg000095l	40204
+Processed 63000000 sequence pairs so far
+Processed 64000000 sequence pairs so far
+Processed 65000000 sequence pairs so far
+Processed 66000000 sequence pairs so far
+Processed 67000000 sequence pairs so far
+Processed 68000000 sequence pairs so far
+Processed 69000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1334:12022:3493_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Processed 70000000 sequence pairs so far
+Processed 71000000 sequence pairs so far
+Processed 72000000 sequence pairs so far
+Processed 73000000 sequence pairs so far
+Processed 74000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1353:38888:2457_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625572
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1353:22412:9881_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39596
+Processed 75000000 sequence pairs so far
+Processed 76000000 sequence pairs so far
+Processed 77000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1361:49181:29716_1:N:0:CNGTGAAG+NTCCACTG	ptg000126l	1
+Processed 78000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1364:30173:29282_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39590
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1365:45572:23468_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1366:1647:14840_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 79000000 sequence pairs so far
+Processed 80000000 sequence pairs so far
+Processed 81000000 sequence pairs so far
+Processed 82000000 sequence pairs so far
+Processed 83000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1382:8299:3185_1:N:0:CCGTGAAG+ATCCACTG	ptg000105l	1
+Processed 84000000 sequence pairs so far
+Processed 85000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1387:4836:13523_1:N:0:CCGTGAAG+ATCCACTG	ptg000007l	12295845
+Processed 86000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1391:20599:27559_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625576
+Processed 87000000 sequence pairs so far
+Processed 88000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1396:2691:27489_1:N:0:CCGTGAAG+ATCCACTG	ptg000095l	40205
+Processed 89000000 sequence pairs so far
+Processed 90000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1406:32811:3255_1:N:0:TCGTGAAG+ATCCACTG	ptg000082l	1
+Processed 91000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1408:40611:19420_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39589
+Processed 92000000 sequence pairs so far
+Processed 93000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1414:34534:25682_1:N:0:CCGTGAAG+ATCCACTG	ptg000095l	40204
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1416:24532:23468_1:N:0:CCGTGAAG+ATCCACTG	ptg000027l	1
+Processed 94000000 sequence pairs so far
+Processed 95000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1422:20154:22726_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1422:4350:28875_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 96000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1426:18139:23244_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39590
+Processed 97000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1427:9489:16339_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259768
+Processed 98000000 sequence pairs so far
+Processed 99000000 sequence pairs so far
+Processed 100000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1439:49011:11744_1:N:0:CCGTGAAG+ATCCACTG	ptg000117l	29998
+Processed 101000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1440:46041:4054_1:N:0:CCGTGAAG+ATCCACTG	ntLink_1	163066
+Processed 102000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1446:11301:8074_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39662
+Processed 103000000 sequence pairs so far
+Processed 104000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1451:39616:21816_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39590
+Processed 105000000 sequence pairs so far
+Processed 106000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1457:45532:17515_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095978
+Processed 107000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1461:10031:20863_1:N:0:CCGTGAAG+ATCCACTG	ptg000135l	2
+Processed 108000000 sequence pairs so far
+Processed 109000000 sequence pairs so far
+Processed 110000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1470:36347:22712_1:N:0:CCGTGAAG+ATCCACTG	ptg000023l	2
+Processed 111000000 sequence pairs so far
+Processed 112000000 sequence pairs so far
+Processed 113000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1480:21036:23553_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39569
+Processed 114000000 sequence pairs so far
+Processed 115000000 sequence pairs so far
+Processed 116000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1489:24476:11016_1:N:0:CCGTGAAG+ATCCACTG	ptg000146l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1489:40539:27167_1:N:0:CCGTGAAG+ATCCACTG	ptg000053l	71533
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:1489:40531:27181_1:N:0:CCGTGAAG+ATCCACTG	ptg000053l	71533
+Processed 117000000 sequence pairs so far
+Processed 118000000 sequence pairs so far
+Processed 119000000 sequence pairs so far
+Processed 120000000 sequence pairs so far
+Processed 121000000 sequence pairs so far
+Processed 122000000 sequence pairs so far
+Processed 123000000 sequence pairs so far
+Processed 124000000 sequence pairs so far
+Processed 125000000 sequence pairs so far
+Processed 126000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2129:13931:3213_1:N:0:CCGTGAAG+ATCCACTG	ptg000007l	12295850
+Processed 127000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2130:24346:2751_1:N:0:CCGTGAAG+ATCCACTG	ptg000105l	1
+Processed 128000000 sequence pairs so far
+Processed 129000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2137:17597:3199_1:N:0:CCGTGAAG+ATCCACTG	ptg000007l	12295845
+Processed 130000000 sequence pairs so far
+Processed 131000000 sequence pairs so far
+Processed 132000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2147:9788:20583_1:N:0:CCGTGAAG+ATCCACTG	ptg000122l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2148:17516:14321_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39608
+Processed 133000000 sequence pairs so far
+Processed 134000000 sequence pairs so far
+Processed 135000000 sequence pairs so far
+Processed 136000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2162:38103:26088_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2162:38119:26088_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Processed 137000000 sequence pairs so far
+Processed 138000000 sequence pairs so far
+Processed 139000000 sequence pairs so far
+Processed 140000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2172:41332:29604_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Processed 141000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2177:50355:4432_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39662
+Processed 142000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2180:29800:21942_1:N:0:CCGTGAAG+ATCCACTG	ptg000122l	1
+Processed 143000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2182:40806:29590_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39608
+Processed 144000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2185:36315:29380_1:N:0:CCGTGAAG+ATCCACTG	ptg000036l	6407170
+Processed 145000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2187:22291:29702_1:N:0:NCGTGAAG+NTCCACTG	ptg000069l	259767
+Processed 146000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2190:12159:29338_1:N:0:CCGTGAAG+ATCCACTG	ptg000004l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2190:12151:29352_1:N:0:CCGTGAAG+ATCCACTG	ptg000004l	1
+Processed 147000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2194:48566:22068_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625580
+Processed 148000000 sequence pairs so far
+Processed 149000000 sequence pairs so far
+Processed 150000000 sequence pairs so far
+Processed 151000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2212:47466:13831_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39608
+Processed 152000000 sequence pairs so far
+Processed 153000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2217:50767:9040_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625572
+Processed 154000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2221:13535:17907_1:N:0:CCGTGGAG+ATCCACTG	ptg000117l	30028
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2222:24217:17095_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39636
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2223:27551:6757_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625573
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2223:27543:6771_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625573
+Processed 155000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2227:12653:4726_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259768
+Processed 156000000 sequence pairs so far
+Processed 157000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2233:29323:20163_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39649
+Processed 158000000 sequence pairs so far
+Processed 159000000 sequence pairs so far
+Processed 160000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2242:41348:10805_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625620
+Processed 161000000 sequence pairs so far
+Processed 162000000 sequence pairs so far
+Processed 163000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2254:26248:14644_1:N:0:CCGTGAAG+ATCCACTG	ptg000002l	1
+Processed 164000000 sequence pairs so far
+Processed 165000000 sequence pairs so far
+Processed 166000000 sequence pairs so far
+Processed 167000000 sequence pairs so far
+Processed 168000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2271:16173:19588_1:N:0:CCGTGAAG+ATCCACTG	ptg000117l	30028
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2271:16189:19588_1:N:0:CCGTGAAG+ATCCACTG	ptg000117l	30028
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2271:4779:22334_1:N:0:CCGTGAAG+ATCCACTG	ptg000008l	38432900
+Processed 169000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2272:11471:24001_1:N:0:CCGTGAAG+ATCCACTG	ptg000027l	16268220
+Processed 170000000 sequence pairs so far
+Processed 171000000 sequence pairs so far
+Processed 172000000 sequence pairs so far
+Processed 173000000 sequence pairs so far
+Processed 174000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2291:49561:15162_1:N:0:CCGTGAAG+ATCCACTG	ptg000113l	1
+Processed 175000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2293:17994:23693_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625659
+Processed 176000000 sequence pairs so far
+Processed 177000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2304:13826:16927_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 178000000 sequence pairs so far
+Processed 179000000 sequence pairs so far
+Processed 180000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2314:44828:12430_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095978
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2314:43152:12696_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095978
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2314:43169:12696_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095979
+Processed 181000000 sequence pairs so far
+Processed 182000000 sequence pairs so far
+Processed 183000000 sequence pairs so far
+Processed 184000000 sequence pairs so far
+Processed 185000000 sequence pairs so far
+Processed 186000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2335:14012:11002_1:N:0:CCGTGAAG+ATCCACTG	ptg000036l	6407154
+Processed 187000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2338:13689:11226_1:N:0:CCGTGAAG+ATCCACTG	ptg000126l	1
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2338:17727:23118_1:N:0:CCGTGAAG+ATCCACTG	ptg000135l	3
+Processed 188000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2343:19928:12080_1:N:0:CCGTGAAG+ATCCACTG	ptg000090l	1
+Processed 189000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2344:35360:24365_1:N:0:CCGTGAAG+ATCCACTG	ptg000061l	1
+Processed 190000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2349:40199:27671_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625657
+Processed 191000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2353:11463:13089_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259768
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2353:11471:13103_1:N:0:CCGTGAAG+ATCCACTG	ptg000069l	259768
+Processed 192000000 sequence pairs so far
+Processed 193000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2359:28069:22138_1:N:0:CCGTGAAG+ATCCACTG	ptg000093l	1
+Processed 194000000 sequence pairs so far
+Processed 195000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2365:50767:23076_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39608
+Processed 196000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2368:36541:3858_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625572
+Processed 197000000 sequence pairs so far
+Processed 198000000 sequence pairs so far
+Processed 199000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2379:33790:28175_1:N:0:CCGTGAAG+ATCCACTG	ptg000029c	2
+Processed 200000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2382:10541:20989_1:N:0:CCGTGAAG+ATCCACTG	ptg000009l	19095953
+Processed 201000000 sequence pairs so far
+Processed 202000000 sequence pairs so far
+Processed 203000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2394:32697:13537_1:N:0:ACGTGAAG+ATCCACTG	ptg000006l	1
+Processed 204000000 sequence pairs so far
+Processed 205000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2403:17338:13845_1:N:0:CCGTGAAG+ATCCACTG	ptg000006l	3
+Processed 206000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2407:45135:3325_1:N:0:CCGTGAAG+ATCCACTG	ptg000015l	14997082
+Processed 207000000 sequence pairs so far
+Processed 208000000 sequence pairs so far
+Processed 209000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2417:45499:28665_1:N:0:CCGTGAAG+ATCCACTG	ptg000090l	1
+Processed 210000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2419:39398:19644_1:N:0:CCGTGAAG+ATCCACTG	ptg000092l	1
+Processed 211000000 sequence pairs so far
+Processed 212000000 sequence pairs so far
+Processed 213000000 sequence pairs so far
+Processed 214000000 sequence pairs so far
+234083660 reads; of these:
+  234083660 (100.00%) were paired; of these:
+    184440524 (78.79%) aligned concordantly 0 times
+    16124298 (6.89%) aligned concordantly exactly 1 time
+    33518838 (14.32%) aligned concordantly >1 times
+21.21% overall alignment rate
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2437:38046:14251_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39608
+Processed 215000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2437:21894:27307_1:N:0:CCGTGAAG+ATCCACTG	ptg000036l	1
+234083660 reads; of these:
+  234083660 (100.00%) were paired; of these:
+    157752849 (67.39%) aligned concordantly 0 times
+    24328371 (10.39%) aligned concordantly exactly 1 time
+    52002440 (22.22%) aligned concordantly >1 times
+32.61% overall alignment rate
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2440:25285:18272_1:N:0:CCGTGAAG+ATCCACTG	ptg000024l	12381218
+Processed 216000000 sequence pairs so far
+Processed 217000000 sequence pairs so far
+Processed 218000000 sequence pairs so far
+Processed 219000000 sequence pairs so far
+Processed 220000000 sequence pairs so far
+Processed 221000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2459:51172:23356_1:N:0:CCGTGAAG+ATCCACTG	ptg000033l	2625666
+Processed 222000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2461:28465:18566_1:N:0:CCGTGAAG+ATCCACTG	ptg000090l	1
+Processed 223000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2465:26499:12304_1:N:0:CCGTGAAG+ATCCACTG	ptg000109l	39649
+Processed 224000000 sequence pairs so far
+Processed 225000000 sequence pairs so far
+Processed 226000000 sequence pairs so far
+Processed 227000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2476:24120:9727_1:N:0:CCGTGAAG+ATCCACTG	ptg000008l	38432912
+Processed 228000000 sequence pairs so far
+Processed 229000000 sequence pairs so far
+234083660 reads; of these:
+  234083660 (100.00%) were paired; of these:
+    184379674 (78.77%) aligned concordantly 0 times
+    16164490 (6.91%) aligned concordantly exactly 1 time
+    33539496 (14.33%) aligned concordantly >1 times
+21.23% overall alignment rate
+234083660 reads; of these:
+  234083660 (100.00%) were paired; of these:
+    157624239 (67.34%) aligned concordantly 0 times
+    24441848 (10.44%) aligned concordantly exactly 1 time
+    52017573 (22.22%) aligned concordantly >1 times
+32.66% overall alignment rate
+Processed 230000000 sequence pairs so far
+Processed 231000000 sequence pairs so far
+Processed 232000000 sequence pairs so far
+Processed 233000000 sequence pairs so far
+Chromosomal sequence could not be extracted for	LH00260:131:22L7V3LT4:3:2497:37706:7556_1:N:0:CCGTGAAG+ATCCACTG	ptg000027l	1
+Processed 234000000 sequence pairs so far
+Processed 234083660 sequences in total
+
+
+Successfully deleted the temporary files trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_C_to_T.fastq, trimmed_ACR-150-TP2_S2_R1_001.fastq.gz_G_to_A.fastq, trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_C_to_T.fastq and trimmed_ACR-150-TP2_S2_R2_001.fastq.gz_G_to_A.fastq
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	234083660
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	4826708375
+
+Total methylated C's in CpG context:	89607039
+Total methylated C's in CHG context:	18299207
+Total methylated C's in CHH context:	86677563
+Total methylated C's in Unknown context:	13932902
+
+Total unmethylated C's in CpG context:	742472247
+Total unmethylated C's in CHG context:	882032802
+Total unmethylated C's in CHH context:	3007619517
+Total unmethylated C's in Unknown context:	48070600
+
+C methylated in CpG context:	10.8%
+C methylated in CHG context:	2.0%
+C methylated in CHH context:	2.8%
+C methylated in unknown context (CN or CHN):	22.5%
+
+
+Bismark completed in 1d 23h 45m 46s
+
+====================
+Bismark run complete
+====================
+

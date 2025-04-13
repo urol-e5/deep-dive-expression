@@ -1,0 +1,40 @@
+Bismark report for: ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-47-TP2_S13_R1_001.fastq.gz and ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-47-TP2_S13_R2_001.fastq.gz (version: v0.23.1)
+Bismark was run with Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/data/ with the specified options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Option '--non_directional' specified: alignments to all strands were being performed (OT, OB, CTOT, CTOB)
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	151987190
+Number of paired-end alignments with a unique best hit:	90000133
+Mapping efficiency:	59.2% 
+Sequence pairs with no alignments under any condition:	38018588
+Sequence pairs did not map uniquely:	23968469
+Sequence pairs which were discarded because genomic sequence could not be extracted:	93
+
+Number of sequence pairs with unique best (first) alignment came from the bowtie output:
+CT/GA/CT:	25028895	((converted) top strand)
+GA/CT/CT:	20880873	(complementary to (converted) top strand)
+GA/CT/GA:	20847563	(complementary to (converted) bottom strand)
+CT/GA/GA:	23242709	((converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	3022744266
+
+Total methylated C's in CpG context:	21446654
+Total methylated C's in CHG context:	15194531
+Total methylated C's in CHH context:	62636135
+Total methylated C's in Unknown context:	7115726
+
+Total unmethylated C's in CpG context:	516406005
+Total unmethylated C's in CHG context:	602797818
+Total unmethylated C's in CHH context:	1804263123
+Total unmethylated C's in Unknown context:	35351450
+
+C methylated in CpG context:	4.0%
+C methylated in CHG context:	2.5%
+C methylated in CHH context:	3.4%
+C methylated in unknown context (CN or CHN):	16.8%
+
+
+Bismark completed in 0d 11h 8m 24s

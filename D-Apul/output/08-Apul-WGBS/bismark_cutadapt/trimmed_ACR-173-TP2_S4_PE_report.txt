@@ -1,0 +1,40 @@
+Bismark report for: ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-173-TP2_S4_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-173-TP2_S4_R2_001.fastq.gz (version: v0.23.1)
+Bismark was run with Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/ with the specified options: -q --score-min L,0,-1.0 -p 48 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Option '--non_directional' specified: alignments to all strands were being performed (OT, OB, CTOT, CTOB)
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	213856184
+Number of paired-end alignments with a unique best hit:	108437982
+Mapping efficiency:	50.7% 
+Sequence pairs with no alignments under any condition:	60420323
+Sequence pairs did not map uniquely:	44997879
+Sequence pairs which were discarded because genomic sequence could not be extracted:	149
+
+Number of sequence pairs with unique best (first) alignment came from the bowtie output:
+CT/GA/CT:	31883243	((converted) top strand)
+GA/CT/CT:	22449007	(complementary to (converted) top strand)
+GA/CT/GA:	22363582	(complementary to (converted) bottom strand)
+CT/GA/GA:	31742001	((converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	4684212694
+
+Total methylated C's in CpG context:	76855937
+Total methylated C's in CHG context:	14470774
+Total methylated C's in CHH context:	69704529
+Total methylated C's in Unknown context:	12705187
+
+Total unmethylated C's in CpG context:	734021072
+Total unmethylated C's in CHG context:	855050390
+Total unmethylated C's in CHH context:	2934109992
+Total unmethylated C's in Unknown context:	48870104
+
+C methylated in CpG context:	9.5%
+C methylated in CHG context:	1.7%
+C methylated in CHH context:	2.3%
+C methylated in unknown context (CN or CHN):	20.6%
+
+
+Bismark completed in 1d 8h 35m 35s
