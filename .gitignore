@@ -6,6 +6,7 @@
 *.fastq
 *.fq.gz
 *.fastq.gz
+*.tar.gz
 Apulchra-genome.fa
 *.ht2
 *.bashvars

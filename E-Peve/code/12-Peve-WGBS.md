@@ -3,12 +3,84 @@
 Zoe Dellaert
 2025-04-10
 
-- [0.1 Test parameters](#01-test-parameters)
-  - [0.1.1 Results from parameter
-    tests:](#011-results-from-parameter-tests)
-- [0.2 Align to genome](#02-align-to-genome)
+- [0.1 Generate Bismark Bisulfite
+  Genome](#01-generate-bismark-bisulfite-genome)
+  - [0.1.1 output:](#011-output)
+  - [0.1.2 Compress and generate md5](#012-compress-and-generate-md5)
+- [0.2 Test parameters](#02-test-parameters)
+  - [0.2.1 Results from parameter
+    tests:](#021-results-from-parameter-tests)
+- [0.3 Align to genome](#03-align-to-genome)
 
-## 0.1 Test parameters
+## 0.1 Generate Bismark Bisulfite Genome
+
+``` bash
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --mem=200GB
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+# load modules needed
+module load uri/main
+module load Bismark/0.23.1-foss-2021b
+module load bowtie2/2.5.2
+
+cd ../data
+
+bismark_genome_preparation --verbose --parallel 10 ./
+```
+
+### 0.1.1 output:
+
+``` bash
+Using 10 threads for the top and bottom strand indexing processes each, so using 20 cores in total
+Writing bisulfite genomes out into a single MFA (multi FastA) file
+
+Bisulfite Genome Indexer version v0.23.1 (last modified: 27 Jan 2021)
+
+Step I - Prepare genome folders - completed
+
+
+
+Step II - Genome bisulfite conversions - completed
+
+
+Bismark Genome Preparation - Step III: Launching the Bowtie 2 indexer
+Preparing indexing of CT converted genome in /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/E-Peve/data/Bisulfite_Genome/CT_conversion/
+Building a SMALL index
+Preparing indexing of GA converted genome in /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/E-Peve/data/Bisulfite_Genome/GA_conversion/
+Building a SMALL index
+Renaming BS_GA.3.bt2.tmp to BS_GA.3.bt2
+Renaming BS_GA.4.bt2.tmp to BS_GA.4.bt2
+Renaming BS_GA.1.bt2.tmp to BS_GA.1.bt2
+Renaming BS_GA.2.bt2.tmp to BS_GA.2.bt2
+Renaming BS_GA.rev.1.bt2.tmp to BS_GA.rev.1.bt2
+Renaming BS_GA.rev.2.bt2.tmp to BS_GA.rev.2.bt2
+Renaming BS_CT.3.bt2.tmp to BS_CT.3.bt2
+Renaming BS_CT.4.bt2.tmp to BS_CT.4.bt2
+Renaming BS_CT.1.bt2.tmp to BS_CT.1.bt2
+Renaming BS_CT.2.bt2.tmp to BS_CT.2.bt2
+Renaming BS_CT.rev.1.bt2.tmp to BS_CT.rev.1.bt2
+Renaming BS_CT.rev.2.bt2.tmp to BS_CT.rev.2.bt2
+```
+
+### 0.1.2 Compress and generate md5
+
+``` bash
+cd ../data
+tar -czvf Bisulfite_Genome.tar.gz Bisulfite_Genome
+md5sum Bisulfite_Genome.tar.gz | tee Bisulfite_Genome.tar.gz.md5
+```
+
+``` bash
+885c84c233ca313f23b8670903a18db6  Bisulfite_Genome.tar.gz
+```
+
+## 0.2 Test parameters
 
 ``` bash
 #!/usr/bin/env bash
@@ -124,7 +196,7 @@ for dir in ${output_dir}/*_score_*; do
 done
 ```
 
-### 0.1.1 Results from parameter tests:
+### 0.2.1 Results from parameter tests:
 
 | Sample          | Score_Min | Alignment_Rate |
 |:----------------|:----------|:---------------|
@@ -163,7 +235,7 @@ reference:
 - 489 = POR-79
 - 491 = POR-73
 
-## 0.2 Align to genome
+## 0.3 Align to genome
 
 ``` bash
 #!/usr/bin/env bash
