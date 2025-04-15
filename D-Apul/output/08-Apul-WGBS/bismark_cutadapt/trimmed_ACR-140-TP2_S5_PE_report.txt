@@ -1,0 +1,40 @@
+Bismark report for: ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-140-TP2_S5_R1_001.fastq.gz and ../output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_ACR-140-TP2_S5_R2_001.fastq.gz (version: v0.23.1)
+Bismark was run with Bowtie 2 against the bisulfite genome of /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/data/ with the specified options: -q --score-min L,0,-1.0 -p 8 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Option '--non_directional' specified: alignments to all strands were being performed (OT, OB, CTOT, CTOB)
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	253975571
+Number of paired-end alignments with a unique best hit:	129549817
+Mapping efficiency:	51.0% 
+Sequence pairs with no alignments under any condition:	74033883
+Sequence pairs did not map uniquely:	50391871
+Sequence pairs which were discarded because genomic sequence could not be extracted:	223
+
+Number of sequence pairs with unique best (first) alignment came from the bowtie output:
+CT/GA/CT:	38859209	((converted) top strand)
+GA/CT/CT:	25950331	(complementary to (converted) top strand)
+GA/CT/GA:	25911923	(complementary to (converted) bottom strand)
+CT/GA/GA:	38828131	((converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	5587802285
+
+Total methylated C's in CpG context:	98818956
+Total methylated C's in CHG context:	18036512
+Total methylated C's in CHH context:	87165516
+Total methylated C's in Unknown context:	16505398
+
+Total unmethylated C's in CpG context:	857492373
+Total unmethylated C's in CHG context:	1013978029
+Total unmethylated C's in CHH context:	3512310899
+Total unmethylated C's in Unknown context:	62100765
+
+C methylated in CpG context:	10.3%
+C methylated in CHG context:	1.7%
+C methylated in CHH context:	2.4%
+C methylated in unknown context (CN or CHN):	21.0%
+
+
+Bismark completed in 1d 9h 59m 58s
