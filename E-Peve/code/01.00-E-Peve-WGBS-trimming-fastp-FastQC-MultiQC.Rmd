@@ -76,7 +76,7 @@ echo ""
 echo "# Set FastQ filename patterns"
 echo "export fastq_pattern='*.fastq.gz'"
 echo "export R1_fastq_pattern='*_R1_001.fastq.gz'"
-echo "export R2_fastq_pattern='*_R1_001.fastq.gz'"
+echo "export R2_fastq_pattern='*_R2_001.fastq.gz'"
 echo "export trimmed_fastq_pattern='*fastp-trim.fq.gz'"
 echo ""
 
