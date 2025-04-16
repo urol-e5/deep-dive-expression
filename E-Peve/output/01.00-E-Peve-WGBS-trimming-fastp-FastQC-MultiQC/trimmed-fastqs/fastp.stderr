@@ -3,8 +3,7 @@ Detecting adapter sequence for read1...
 AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
 
 Detecting adapter sequence for read2...
->Illumina TruSeq Adapter Read 1
-AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+No adapter detected for read2
 
 WARNING: fastp uses up to 16 threads although you specified 40
 Read1 before filtering:
@@ -16,45 +15,44 @@ Q30 bases: 31186350147(86.355%)
 Read2 before filtering:
 total reads: 239166304
 total bases: 36114111904
-Q20 bases: 33971769569(94.0679%)
-Q30 bases: 31186350147(86.355%)
+Q20 bases: 33212897805(91.9665%)
+Q30 bases: 29603845183(81.9731%)
 
 Read1 after filtering:
-total reads: 226915475
-total bases: 22965979101
-Q20 bases: 22468197478(97.8325%)
-Q30 bases: 21563345551(93.8926%)
+total reads: 223448023
+total bases: 22471074000
+Q20 bases: 22039330980(98.0787%)
+Q30 bases: 21199894405(94.343%)
 
 Read2 after filtering:
-total reads: 226915475
-total bases: 22965979101
-Q20 bases: 22468197478(97.8325%)
-Q30 bases: 21563345551(93.8926%)
+total reads: 223448023
+total bases: 23127492203
+Q20 bases: 22449251904(97.0674%)
+Q30 bases: 21311520356(92.148%)
 
 Filtering result:
-reads passed filter: 453830950
-reads failed due to low quality: 1609984
-reads failed due to too many N: 23914
-reads failed due to too short: 22867760
-reads with adapter trimmed: 340992416
-bases trimmed due to adapters: 17314392884
+reads passed filter: 446896046
+reads failed due to low quality: 19663090
+reads failed due to too many N: 25506
+reads failed due to too short: 11747966
+reads with adapter trimmed: 350408369
+bases trimmed due to adapters: 16596001732
 
-Duplication rate: 14.4787%
+Duplication rate: 7.06647%
 
-Insert size peak (evaluated by paired-end reads): 51
+Insert size peak (evaluated by paired-end reads): 92
 
 JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.json
 HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.html
 
-/home/shared/fastp --in1 POR-71-TP2_S9_R1_001.fastq.gz --in2 POR-71-TP2_S9_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R2.fastp-trim.fq.gz 
-fastp v0.23.2, time used: 808 seconds
+/home/shared/fastp --in1 POR-71-TP2_S9_R1_001.fastq.gz --in2 POR-71-TP2_S9_R2_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-71-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 850 seconds
 Detecting adapter sequence for read1...
 >Illumina TruSeq Adapter Read 1
 AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
 
 Detecting adapter sequence for read2...
->Illumina TruSeq Adapter Read 1
-AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+No adapter detected for read2
 
 WARNING: fastp uses up to 16 threads although you specified 40
 Read1 before filtering:
@@ -66,45 +64,44 @@ Q30 bases: 14074909579(90.7697%)
 Read2 before filtering:
 total reads: 102689899
 total bases: 15506174749
-Q20 bases: 14925147195(96.2529%)
-Q30 bases: 14074909579(90.7697%)
+Q20 bases: 14653177577(94.499%)
+Q30 bases: 13477645517(86.9179%)
 
 Read1 after filtering:
-total reads: 102290999
-total bases: 12462783363
-Q20 bases: 12158579621(97.5591%)
-Q30 bases: 11578967348(92.9084%)
+total reads: 100464571
+total bases: 12274742743
+Q20 bases: 11994178634(97.7143%)
+Q30 bases: 11442862285(93.2228%)
 
 Read2 after filtering:
-total reads: 102290999
-total bases: 12462783363
-Q20 bases: 12158579621(97.5591%)
-Q30 bases: 11578967348(92.9084%)
+total reads: 100464571
+total bases: 12320434789
+Q20 bases: 11940191992(96.9137%)
+Q30 bases: 11208581627(90.9755%)
 
 Filtering result:
-reads passed filter: 204581998
-reads failed due to low quality: 597046
-reads failed due to too many N: 12128
-reads failed due to too short: 188626
-reads with adapter trimmed: 88448880
-bases trimmed due to adapters: 3733140428
+reads passed filter: 200929142
+reads failed due to low quality: 3124584
+reads failed due to too many N: 12724
+reads failed due to too short: 1313348
+reads with adapter trimmed: 100821062
+bases trimmed due to adapters: 3624018853
 
-Duplication rate: 42.8783%
+Duplication rate: 27.9282%
 
-Insert size peak (evaluated by paired-end reads): 51
+Insert size peak (evaluated by paired-end reads): 122
 
 JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.json
 HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.html
 
-/home/shared/fastp --in1 POR-73-TP2_S7_R1_001.fastq.gz --in2 POR-73-TP2_S7_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R2.fastp-trim.fq.gz 
-fastp v0.23.2, time used: 393 seconds
+/home/shared/fastp --in1 POR-73-TP2_S7_R1_001.fastq.gz --in2 POR-73-TP2_S7_R2_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-73-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 404 seconds
 Detecting adapter sequence for read1...
 >Illumina TruSeq Adapter Read 1
 AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
 
 Detecting adapter sequence for read2...
->Illumina TruSeq Adapter Read 1
-AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+No adapter detected for read2
 
 WARNING: fastp uses up to 16 threads although you specified 40
 Read1 before filtering:
@@ -116,45 +113,44 @@ Q30 bases: 22687639255(84.7741%)
 Read2 before filtering:
 total reads: 177234842
 total bases: 26762461142
-Q20 bases: 24966859143(93.2906%)
-Q30 bases: 22687639255(84.7741%)
+Q20 bases: 24109365088(90.0865%)
+Q30 bases: 20971836561(78.3629%)
 
 Read1 after filtering:
-total reads: 159069888
-total bases: 15236272845
-Q20 bases: 14924835381(97.9559%)
-Q30 bases: 14360337440(94.251%)
+total reads: 156151771
+total bases: 14896222800
+Q20 bases: 14629132986(98.207%)
+Q30 bases: 14106700214(94.6998%)
 
 Read2 after filtering:
-total reads: 159069888
-total bases: 15236272845
-Q20 bases: 14924835381(97.9559%)
-Q30 bases: 14360337440(94.251%)
+total reads: 156151771
+total bases: 15500517783
+Q20 bases: 15032224010(96.9789%)
+Q30 bases: 14300385049(92.2575%)
 
 Filtering result:
-reads passed filter: 318139776
-reads failed due to low quality: 1154900
-reads failed due to too many N: 16226
-reads failed due to too short: 35158782
-reads with adapter trimmed: 275194228
-bases trimmed due to adapters: 14370007746
+reads passed filter: 312303542
+reads failed due to low quality: 25330782
+reads failed due to too many N: 17198
+reads failed due to too short: 16818162
+reads with adapter trimmed: 266936184
+bases trimmed due to adapters: 13256133097
 
-Duplication rate: 15.9078%
+Duplication rate: 6.32777%
 
-Insert size peak (evaluated by paired-end reads): 51
+Insert size peak (evaluated by paired-end reads): 86
 
 JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.json
 HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.html
 
-/home/shared/fastp --in1 POR-76-TP2_S6_R1_001.fastq.gz --in2 POR-76-TP2_S6_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R2.fastp-trim.fq.gz 
-fastp v0.23.2, time used: 547 seconds
+/home/shared/fastp --in1 POR-76-TP2_S6_R1_001.fastq.gz --in2 POR-76-TP2_S6_R2_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-76-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 601 seconds
 Detecting adapter sequence for read1...
 >Illumina TruSeq Adapter Read 1
 AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
 
 Detecting adapter sequence for read2...
->Illumina TruSeq Adapter Read 1
-AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+No adapter detected for read2
 
 WARNING: fastp uses up to 16 threads although you specified 40
 Read1 before filtering:
@@ -166,45 +162,44 @@ Q30 bases: 35290623880(86.3687%)
 Read2 before filtering:
 total reads: 270598856
 total bases: 40860427256
-Q20 bases: 38336115055(93.8221%)
-Q30 bases: 35290623880(86.3687%)
+Q20 bases: 37841482914(92.6116%)
+Q30 bases: 33996431796(83.2014%)
 
 Read1 after filtering:
-total reads: 255900452
-total bases: 26769772448
-Q20 bases: 26183189667(97.8088%)
-Q30 bases: 25137310822(93.9018%)
+total reads: 252288231
+total bases: 26235993820
+Q20 bases: 25726877096(98.0595%)
+Q30 bases: 24752075784(94.344%)
 
 Read2 after filtering:
-total reads: 255900452
-total bases: 26769772448
-Q20 bases: 26183189667(97.8088%)
-Q30 bases: 25137310822(93.9018%)
+total reads: 252288231
+total bases: 26861445375
+Q20 bases: 26113729280(97.2164%)
+Q30 bases: 24834203148(92.453%)
 
 Filtering result:
-reads passed filter: 511800904
-reads failed due to low quality: 1921392
-reads failed due to too many N: 20526
-reads failed due to too short: 27454890
-reads with adapter trimmed: 365094030
-bases trimmed due to adapters: 18475793662
+reads passed filter: 504576462
+reads failed due to low quality: 20170678
+reads failed due to too many N: 21948
+reads failed due to too short: 16428624
+reads with adapter trimmed: 377840282
+bases trimmed due to adapters: 17532282434
 
-Duplication rate: 15.3458%
+Duplication rate: 8.75555%
 
-Insert size peak (evaluated by paired-end reads): 51
+Insert size peak (evaluated by paired-end reads): 91
 
 JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.json
 HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.html
 
-/home/shared/fastp --in1 POR-79-TP2_S10_R1_001.fastq.gz --in2 POR-79-TP2_S10_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R2.fastp-trim.fq.gz 
-fastp v0.23.2, time used: 938 seconds
+/home/shared/fastp --in1 POR-79-TP2_S10_R1_001.fastq.gz --in2 POR-79-TP2_S10_R2_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-79-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 981 seconds
 Detecting adapter sequence for read1...
 >Illumina TruSeq Adapter Read 1
 AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
 
 Detecting adapter sequence for read2...
->Illumina TruSeq Adapter Read 1
-AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+No adapter detected for read2
 
 WARNING: fastp uses up to 16 threads although you specified 40
 Read1 before filtering:
@@ -216,35 +211,35 @@ Q30 bases: 33873180604(82.3524%)
 Read2 before filtering:
 total reads: 272397195
 total bases: 41131976445
-Q20 bases: 37955942142(92.2784%)
-Q30 bases: 33873180604(82.3524%)
+Q20 bases: 36514119557(88.7731%)
+Q30 bases: 31018417897(75.4119%)
 
 Read1 after filtering:
-total reads: 229727572
-total bases: 22386268625
-Q20 bases: 21859285989(97.646%)
-Q30 bases: 20937198872(93.527%)
+total reads: 224200417
+total bases: 21753869730
+Q20 bases: 21310682262(97.9627%)
+Q30 bases: 20468844525(94.0929%)
 
 Read2 after filtering:
-total reads: 229727572
-total bases: 22386268625
-Q20 bases: 21859285989(97.646%)
-Q30 bases: 20937198872(93.527%)
+total reads: 224200417
+total bases: 22914155039
+Q20 bases: 22081095185(96.3644%)
+Q30 bases: 20820782100(90.8643%)
 
 Filtering result:
-reads passed filter: 459455144
-reads failed due to low quality: 2338172
-reads failed due to too many N: 23914
-reads failed due to too short: 82977160
-reads with adapter trimmed: 406987848
-bases trimmed due to adapters: 21808095784
+reads passed filter: 448400834
+reads failed due to low quality: 54111892
+reads failed due to too many N: 24990
+reads failed due to too short: 42256674
+reads with adapter trimmed: 375234841
+bases trimmed due to adapters: 18824539343
 
-Duplication rate: 20.4865%
+Duplication rate: 7.80902%
 
-Insert size peak (evaluated by paired-end reads): 51
+Insert size peak (evaluated by paired-end reads): 82
 
 JSON report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.json
 HTML report: /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.html
 
-/home/shared/fastp --in1 POR-82-TP2_S8_R1_001.fastq.gz --in2 POR-82-TP2_S8_R1_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R2.fastp-trim.fq.gz 
-fastp v0.23.2, time used: 828 seconds
+/home/shared/fastp --in1 POR-82-TP2_S8_R1_001.fastq.gz --in2 POR-82-TP2_S8_R2_001.fastq.gz --detect_adapter_for_pe --trim_front1 10 --trim_front2 10 --trim_poly_g --thread 40 --html /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.html --json /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2.fastp-trim.report.json --out1 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R1.fastp-trim.fq.gz --out2 /home/shared/8TB_HDD_01/sam/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-fastp-FastQC-MultiQC/trimmed-fastqs/POR-82-TP2_R2.fastp-trim.fq.gz 
+fastp v0.23.2, time used: 885 seconds
