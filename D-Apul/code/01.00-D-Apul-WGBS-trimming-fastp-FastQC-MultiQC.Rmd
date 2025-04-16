@@ -76,7 +76,7 @@ echo ""
 echo "# Set FastQ filename patterns"
 echo "export fastq_pattern='*.fastq.gz'"
 echo "export R1_fastq_pattern='*_R1_001.fastq.gz'"
-echo "export R2_fastq_pattern='*_R1_001.fastq.gz'"
+echo "export R2_fastq_pattern='*_R2_001.fastq.gz'"
 echo "export trimmed_fastq_pattern='*fastp-trim.fq.gz'"
 echo ""
 
@@ -113,7 +113,7 @@ cat .bashvars
 
 [fastp](https://github.com/OpenGene/fastp) [@chen2023] is set to auto-detect Illumina adapters, as well as trim the first 110bp from each read, as past experience shows these first 10bp are more inconsistent than the remainder of the read length.
 
-```{bash fastp-trimming, engine='bash', eval=FALSE}
+```{bash fastp-trimming, engine='bash', eval=TRUE}
 # Load bash variables into memory
 source .bashvars
 
