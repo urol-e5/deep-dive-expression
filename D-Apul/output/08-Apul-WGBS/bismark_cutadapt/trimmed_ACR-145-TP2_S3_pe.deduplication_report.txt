@@ -1,0 +1,7 @@
+
+Total number of alignments analysed in /scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/trimmed_ACR-145-TP2_S3_pe.bam:	128317168
+Total number duplicated alignments removed:	67184830 (52.36%)
+Duplicated alignments were found at:	27889563 different position(s)
+
+Total count of deduplicated leftover sequences: 61132338 (47.64% of total)
+

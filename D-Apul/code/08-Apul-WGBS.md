@@ -16,9 +16,9 @@ Zoe Dellaert
 - [0.3 Align to genome](#03-align-to-genome)
 - [0.4 Post-alignment code is based once again on Steven’s
   code](#04-post-alignment-code-is-based-once-again-on-stevens-code)
-  - [0.4.1 Deduplication, Sorting, and methylation
-    extraction](#041-deduplication-sorting-and-methylation-extraction)
-  - [0.4.2 Next: Methylation call](#042-next-methylation-call)
+  - [0.4.1 Deduplication, Sorting, and methylation extraction &
+    calling](#041-deduplication-sorting-and-methylation-extraction--calling)
+  - [0.4.2 View output](#042-view-output)
 
 ### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
@@ -336,7 +336,7 @@ done
 
 ## 0.4 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
-### 0.4.1 Deduplication, Sorting, and methylation extraction
+### 0.4.1 Deduplication, Sorting, and methylation extraction & calling
 
 ``` bash
 #!/usr/bin/env bash
@@ -354,7 +354,8 @@ module load Bismark/0.23.1-foss-2021b
 module load parallel/20240822
 
 # set directories
-bismark_dir="/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/"
+bismark_dir="../output/08-Apul-WGBS/bismark_cutadapt/"
+genome_folder="../data/"
 
 ### deduplicate bams
 find ${bismark_dir}*.bam | \
@@ -372,6 +373,17 @@ find ${bismark_dir}*deduplicated.bam | xargs -n 1 -I{} \
 bismark_methylation_extractor --bedGraph --counts --comprehensive --merge_non_CpG \
 --multicore 24 --buffer_size 75% --output ${bismark_dir} "{}"
 
+### methylation call
+
+find ${bismark_dir}*deduplicated.bismark.cov.gz | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.deduplicated.bismark.cov.gz$//' | \
+parallel -j 24 coverage2cytosine \
+--genome_folder ${genome_folder} \
+-o ${bismark_dir}{} \
+--merge_CpG \
+--zero_based \
+${bismark_dir}trimmed_{}_pe.deduplicated.bismark.cov.gz
 
 ### sort bams
 
@@ -389,23 +401,11 @@ ${bismark_dir}trimmed_{}_pe.deduplicated.bam \
 -o ${bismark_dir}{}.sorted.bam
 ```
 
-### 0.4.2 Next: Methylation call
+This took just under 4.5 hours with max memory used per node as
+249.99GiB.
+
+### 0.4.2 View output
 
 ``` bash
-# set directories
-bismark_dir="../output/08-Apul-WGBS/bismark_cutadapt/"
-genome_folder="../data/"
-
-find ${bismark_dir}*deduplicated.bismark.cov.gz | \
-xargs -n 1 basename -s _pe.deduplicated.bismark.cov.gz | \
-parallel -j 24 coverage2cytosine \
---genome_folder ${genome_folder} \
--o ${bismark_dir}{} \
---merge_CpG \
---zero_based \
-${bismark_dir}{}_pe.deduplicated.bismark.cov.gz
-```
-
-``` bash
-head ${bismark_dir}1H3*evidence.cov
+head ${bismark_dir}*evidence.cov
 ```

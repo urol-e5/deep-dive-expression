@@ -33,6 +33,9 @@ D-Apul/output/08-Apul-WGBS/work/
 D-Apul/output/08-Apul-WGBS/.nextflow*
 D-Apul/output/08-Apul-WGBS/*/*gz
 D-Apul/output/08-Apul-WGBS/*/*bam
+D-Apul/output/08-Apul-WGBS/*/*.cov
+D-Apul/output/08-Apul-WGBS/*/*.deduplicated.txt
+D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
@@ -77,3 +80,4 @@ blockwiseTOM*
 expression.Rproj
 E-Peve/code/scripts
 F-Ptuh/code/scripts
+Bisulfite_Genome*
