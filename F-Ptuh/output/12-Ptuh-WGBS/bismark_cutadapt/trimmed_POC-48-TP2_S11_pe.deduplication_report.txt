@@ -1,0 +1,7 @@
+
+Total number of alignments analysed in ../output/12-Ptuh-WGBS/bismark_cutadapt/trimmed_POC-48-TP2_S11_pe.bam:	104251054
+Total number duplicated alignments removed:	23046764 (22.11%)
+Duplicated alignments were found at:	16555603 different position(s)
+
+Total count of deduplicated leftover sequences: 81204290 (77.89% of total)
+

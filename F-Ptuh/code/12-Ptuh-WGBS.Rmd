@@ -6,20 +6,6 @@ output:
   github_document:
     toc: true
     number_sections: true
-  bookdown::html_document2:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
-  html_document:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
 bibliography: references.bib
 ---
 
@@ -337,3 +323,77 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+
+### Deduplication, Sorting, and methylation extraction & calling
+
+```{bash, eval=FALSE}
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --mem=250GB
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+# load modules needed
+module load uri/main
+module load Bismark/0.23.1-foss-2021b
+module load parallel/20240822
+
+# set directories
+bismark_dir="../output/12-Ptuh-WGBS/bismark_cutadapt/"
+genome_folder="../data/"
+
+### deduplicate bams
+find ${bismark_dir}*.bam | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.bam$//' | \
+parallel -j 8 deduplicate_bismark \
+--bam \
+--paired \
+--output_dir ${bismark_dir} \
+${bismark_dir}trimmed_{}_pe.bam
+
+### methylation extraction
+
+find ${bismark_dir}*deduplicated.bam | xargs -n 1 -I{} \
+bismark_methylation_extractor --bedGraph --counts --comprehensive --merge_non_CpG \
+--multicore 24 --buffer_size 75% --output ${bismark_dir} "{}"
+
+### methylation call
+
+find ${bismark_dir}*deduplicated.bismark.cov.gz | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.deduplicated.bismark.cov.gz$//' | \
+parallel -j 24 coverage2cytosine \
+--genome_folder ${genome_folder} \
+-o ${bismark_dir}{} \
+--merge_CpG \
+--zero_based \
+${bismark_dir}trimmed_{}_pe.deduplicated.bismark.cov.gz
+
+### sort bams
+
+# change modules
+
+module purge
+module load samtools/1.19.2
+
+find ${bismark_dir}*deduplicated.bam | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.deduplicated.bam$//' | \
+xargs -I{} samtools \
+sort --threads 24 \
+${bismark_dir}trimmed_{}_pe.deduplicated.bam \
+-o ${bismark_dir}{}.sorted.bam
+```
+
+This took just under 4.5 hours with max memory used per node as 249.99GiB.
+
+### View output
+
+```{bash, eval=FALSE}
+head ${bismark_dir}*evidence.cov
+```

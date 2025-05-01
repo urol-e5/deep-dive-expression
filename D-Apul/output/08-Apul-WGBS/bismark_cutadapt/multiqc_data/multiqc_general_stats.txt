@@ -1,0 +1,16 @@
+Sample	QualiMap_mqc-generalstats-qualimap-avg_gc	QualiMap_mqc-generalstats-qualimap-median_insert_size	QualiMap_mqc-generalstats-qualimap-1_x_pc	QualiMap_mqc-generalstats-qualimap-5_x_pc	QualiMap_mqc-generalstats-qualimap-10_x_pc	QualiMap_mqc-generalstats-qualimap-30_x_pc	QualiMap_mqc-generalstats-qualimap-50_x_pc	QualiMap_mqc-generalstats-qualimap-median_coverage	QualiMap_mqc-generalstats-qualimap-mean_coverage	QualiMap_mqc-generalstats-qualimap-percentage_aligned	QualiMap_mqc-generalstats-qualimap-mapped_reads	QualiMap_mqc-generalstats-qualimap-total_reads	QualiMap_mqc-generalstats-qualimap-general_error_rate	Bismark_mqc-generalstats-bismark-aligned_reads	Bismark_mqc-generalstats-bismark-percent_aligned	Bismark_mqc-generalstats-bismark-percent_cpg_meth	Bismark_mqc-generalstats-bismark-total_c	Bismark_mqc-generalstats-bismark-C_coverage	Bismark_mqc-generalstats-bismark-dup_reads_percent	Bismark_mqc-generalstats-bismark-dedup_reads
+ACR-140-TP2_S5	22.98424315078018	121	88.38660855094618	77.98089276074926	69.89672818277177	46.69385762739197	29.548107869054398	26	38.1083	100.0	170593766.0	170593766.0	25.580000000000002							
+ACR-145-TP2_S3	22.766099394095537	130	87.21591106189787	75.3929500901149	65.55480019178185	36.41131950622757	18.449652430323713	19	28.2719	100.0	122264676.0	122264676.0	25.509999999999998							
+ACR-150-TP2_S2	23.17604861991319	120	86.56183871397349	74.73284877035792	65.5615424379229	39.475429403674354	22.378094320739788	20	31.1902	100.0	140109492.0	140109492.0	25.169999999999998							
+ACR-173-TP2_S4	23.194888536156647	119	87.2648090351485	76.12589259517392	67.7391087064697	44.023278742143596	27.1565477319733	24	35.6531	100.0	161206822.0	161206822.0	25.319999999999997							
+ACR-178-TP2_S1	23.4075059929838	116	85.92457374808359	73.74044960043095	64.43862352327812	38.13112901255771	21.075066408211196	19	29.6861	100.0	135952592.0	135952592.0	25.39							
+trimmed_ACR-140-TP2_S5_PE_report														129549817.0	51.008770839617476					
+trimmed_ACR-140-TP2_S5_pe																10.2	2128091197.0	16.584	34.16	85296883.0
+trimmed_ACR-145-TP2_S3_PE_report														128317307.0	52.40304917983995					
+trimmed_ACR-145-TP2_S3_pe																8.7	1643141123.0	12.179	52.36	61132338.0
+trimmed_ACR-150-TP2_S2_PE_report														113214924.0	48.36515457764117					
+trimmed_ACR-150-TP2_S2_pe																10.4	1735010006.0	14.232	38.12	70054746.0
+trimmed_ACR-173-TP2_S4_PE_report														108437982.0	50.7060305536921					
+trimmed_ACR-173-TP2_S4_pe																9.4	1974259511.0	16.492	25.67	80603411.0
+trimmed_ACR-178-TP2_S1_PE_report														94962955.0	51.901592548842224					
+trimmed_ACR-178-TP2_S1_pe																9.8	1620640931.0	13.509	28.42	67976296.0

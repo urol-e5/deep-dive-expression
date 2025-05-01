@@ -3,6 +3,9 @@
 Zoe Dellaert
 2025-04-10
 
+- [0.0.1 Note: Most of this code is based on the E5 Time Series
+  Molecular code by Steven Roberts
+  here](#001-note-most-of-this-code-is-based-on-the-e5-time-series-molecular-code-by-steven-roberts-here)
 - [0.1 Generate Bismark Bisulfite
   Genome](#01-generate-bismark-bisulfite-genome)
   - [0.1.1 output:](#011-output)
@@ -11,6 +14,13 @@ Zoe Dellaert
   - [0.2.1 Results from parameter
     tests:](#021-results-from-parameter-tests)
 - [0.3 Align to genome](#03-align-to-genome)
+- [0.4 Post-alignment code is based once again on Steven’s
+  code](#04-post-alignment-code-is-based-once-again-on-stevens-code)
+  - [0.4.1 Deduplication, Sorting, and methylation extraction &
+    calling](#041-deduplication-sorting-and-methylation-extraction--calling)
+  - [0.4.2 View output](#042-view-output)
+
+### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
 ## 0.1 Generate Bismark Bisulfite Genome
 
@@ -322,4 +332,80 @@ for file in ${output_dir}/*_report.txt; do
     # Append to the summary file
     echo "${sample_name},${score_min},${mapping}" >> ${summary_file}
 done
+```
+
+## 0.4 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+
+### 0.4.1 Deduplication, Sorting, and methylation extraction & calling
+
+``` bash
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --mem=250GB
+#SBATCH -t 24:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+# load modules needed
+module load uri/main
+module load Bismark/0.23.1-foss-2021b
+module load parallel/20240822
+
+# set directories
+bismark_dir="../output/12-Peve-WGBS/bismark_cutadapt/"
+genome_folder="../data/"
+
+### deduplicate bams
+find ${bismark_dir}*.bam | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.bam$//' | \
+parallel -j 8 deduplicate_bismark \
+--bam \
+--paired \
+--output_dir ${bismark_dir} \
+${bismark_dir}trimmed_{}_pe.bam
+
+### methylation extraction
+
+find ${bismark_dir}*deduplicated.bam | xargs -n 1 -I{} \
+bismark_methylation_extractor --bedGraph --counts --comprehensive --merge_non_CpG \
+--multicore 24 --buffer_size 75% --output ${bismark_dir} "{}"
+
+### methylation call
+
+find ${bismark_dir}*deduplicated.bismark.cov.gz | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.deduplicated.bismark.cov.gz$//' | \
+parallel -j 24 coverage2cytosine \
+--genome_folder ${genome_folder} \
+-o ${bismark_dir}{} \
+--merge_CpG \
+--zero_based \
+${bismark_dir}trimmed_{}_pe.deduplicated.bismark.cov.gz
+
+### sort bams
+
+# change modules
+
+module purge
+module load samtools/1.19.2
+
+find ${bismark_dir}*deduplicated.bam | \
+xargs -n 1 basename | \
+sed 's/^trimmed_//' | sed 's/_pe.deduplicated.bam$//' | \
+xargs -I{} samtools \
+sort --threads 24 \
+${bismark_dir}trimmed_{}_pe.deduplicated.bam \
+-o ${bismark_dir}{}.sorted.bam
+```
+
+This took just under 4.5 hours with max memory used per node as
+249.99GiB.
+
+### 0.4.2 View output
+
+``` bash
+head ${bismark_dir}*evidence.cov
 ```

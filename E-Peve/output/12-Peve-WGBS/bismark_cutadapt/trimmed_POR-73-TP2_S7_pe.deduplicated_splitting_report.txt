@@ -1,0 +1,29 @@
+trimmed_POR-73-TP2_S7_pe.deduplicated.bam
+
+Parameters used to extract methylation information:
+Bismark Extractor Version: v0.23.1
+Bismark result file: paired-end (SAM format)
+Output specified: comprehensive
+No overlapping methylation calls specified
+Methylation in CHG and CHH context will be merged into "non-CpG context" output
+
+
+Processed 14383247 lines in total
+Total number of methylation call strings processed: 28766494
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	449342456
+
+Total methylated C's in CpG context:	5790052
+Total methylated C's in CHG context:	1701285
+Total methylated C's in CHH context:	8600637
+
+Total C to T conversions in CpG context:	69188241
+Total C to T conversions in CHG context:	81592316
+Total C to T conversions in CHH context:	282469925
+
+C methylated in CpG context:	7.7%
+C methylated in non-CpG context:	2.8%
+
+

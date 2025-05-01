@@ -1,0 +1,7 @@
+
+Total number of alignments analysed in ../output/12-Peve-WGBS/bismark_cutadapt/trimmed_POR-79-TP2_S10_pe.bam:	147038994
+Total number duplicated alignments removed:	33961586 (23.10%)
+Duplicated alignments were found at:	23742178 different position(s)
+
+Total count of deduplicated leftover sequences: 113077408 (76.90% of total)
+
