@@ -19,6 +19,7 @@ Zoe Dellaert
   - [0.4.1 Deduplication, Sorting, and methylation extraction &
     calling](#041-deduplication-sorting-and-methylation-extraction--calling)
   - [0.4.2 View output](#042-view-output)
+  - [0.4.3 Make summary reports](#043-make-summary-reports)
 
 ### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
@@ -401,11 +402,54 @@ ${bismark_dir}trimmed_{}_pe.deduplicated.bam \
 -o ${bismark_dir}{}.sorted.bam
 ```
 
-This took just under 4.5 hours with max memory used per node as
-249.99GiB.
+This took just over 6 hours with max memory used per node as 249.99GiB.
 
 ### 0.4.2 View output
 
 ``` bash
 head ${bismark_dir}*evidence.cov
+```
+
+### 0.4.3 Make summary reports
+
+``` bash
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=8
+#SBATCH --mem=250GB
+#SBATCH -t 08:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+module load uri/main
+module load Bismark/0.23.1-foss-2021b
+module load all/MultiQC/1.12-foss-2021b
+module load qualimap/2.2.1
+
+cd ../output/12-Peve-WGBS/bismark_cutadapt/
+
+bam2nuc --genome_folder ../../../data/ *_pe.deduplicated.bam
+
+mkdir -p qualimap/bamqc
+
+for bamFile in *sorted.bam; do
+    prefix=$(basename $bamFile .bam)
+
+    qualimap \
+    --java-mem-size=29491M \
+    bamqc \
+     \
+    -bam ${bamFile}  \
+     \
+    -p non-strand-specific \
+    --collect-overlap-pairs \
+    -outdir qualimap/bamqc/${prefix} \
+    -nt 6
+done
+
+bismark2report
+bismark2summary *pe.bam
+
+multiqc .
 ```

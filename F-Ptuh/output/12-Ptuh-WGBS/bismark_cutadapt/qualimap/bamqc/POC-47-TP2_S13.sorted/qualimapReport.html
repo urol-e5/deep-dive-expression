@@ -1,0 +1,1929 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="stylesheet" href="css/agogo.css" type="text/css" />
+		<link rel="stylesheet" href="css/report.css" type="text/css" />
+	<title>Qualimap report: BAM QC</title>
+
+	</head>
+<body>
+	<div class="header-wrapper">
+		<div class="header">
+		<p class="logo"><a href="http://qualimap.bioinfo.cipf.es/">
+		<img class="logo" src="css/qualimap_logo_small.png" alt="Logo"/>
+		</a></p>
+<div class="headertitle"><a href="">Qualimap Report: BAM QC</a></div>
+	</div>
+</div>
+
+<div class="content-wrapper">
+<div class="content">
+<div class="document">
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body">
+<div class=section>
+<h2>Input data and parameters<a class="headerlink" name="input" title="Permalink to this headline">&nbsp;</a></h2>
+<div class=summary>
+
+
+<div class=table-summary>
+<h3>QualiMap command line</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>qualimap bamqc -bam POC-47-TP2_S13.sorted.bam -nw 400 -hm 3</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Alignment</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Command line: </td>
+<td class=column2>"bismark -genome ../data/ -p 8 -score_min L,0,-1.0 --non_directional -1 ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-47-TP2_S13_R1_001.fastq.gz -2 ../output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/trimmed_POC-47-TP2_S13_R2_001.fastq.gz -o ../output/12-Ptuh-WGBS/bismark_cutadapt --basename trimmed_POC-47-TP2_S13"</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Draw chromosome limits: </td>
+<td class=column2>no
+</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Analyze overlapping paired-end reads:</td>
+<td class=column2>yes
+</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Program: </td>
+<td class=column2>Bismark (v0.23.1)</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Analysis date: </td>
+<td class=column2>Thu May 01 05:45:38 UTC 2025</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Size of a homopolymer: </td>
+<td class=column2>3</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Skip duplicate alignments: </td>
+<td class=column2>no
+</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number of windows: </td>
+<td class=column2>400</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>BAM file: </td>
+<td class=column2>POC-47-TP2_S13.sorted.bam</td>
+</tr>
+</table>
+</div>
+
+</div>
+</div> <!-- summary section -->
+
+<div class=section>
+<h2>Summary<a class="headerlink" name="summary" title="Permalink to this headline">&nbsp;</a></h2>
+<div class=summary>
+
+
+<div class=table-summary>
+<h3>Globals</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Reference size</td>
+<td class=column2>376,579,914</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number of reads</td>
+<td class=column2>151,637,162</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads</td>
+<td class=column2>151,637,162 / 100%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Unmapped reads</td>
+<td class=column2>0 / 0%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped paired reads</td>
+<td class=column2>151,637,162 / 100%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads, first in pair</td>
+<td class=column2>75,818,581 / 50%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads,  second in pair</td>
+<td class=column2>75,818,581 / 50%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads, both in pair</td>
+<td class=column2>151,637,162 / 100%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads, singletons</td>
+<td class=column2>0 / 0%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Read min/max/mean length</td>
+<td class=column2>20 / 151 / 95.72</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Overlapping read pairs</td>
+<td class=column2>75,657,626 / 99.79%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Duplicated reads (estimated)</td>
+<td class=column2>99,881,750 / 65.87%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Duplication rate</td>
+<td class=column2>80.6%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Clipped reads</td>
+<td class=column2>0 / 0%</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>ACGT Content</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number/percentage of A's</td>
+<td class=column2>5,378,280,321 / 38.04%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number/percentage of C's</td>
+<td class=column2>1,687,136,818 / 11.93%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number/percentage of T's</td>
+<td class=column2>5,382,144,751 / 38.07%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number/percentage of G's</td>
+<td class=column2>1,689,716,018 / 11.95%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Number/percentage of N's</td>
+<td class=column2>924,967 / 0.01%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>GC Percentage</td>
+<td class=column2>23.89%</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Coverage</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mean</td>
+<td class=column2>37.7736</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Standard Deviation</td>
+<td class=column2>49.3333</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mean (paired-end reads overlap ignored)</td>
+<td class=column2>19.43</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Mapping Quality</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mean Mapping Quality</td>
+<td class=column2>16.53</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Insert size</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mean</td>
+<td class=column2>96.92</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Standard Deviation</td>
+<td class=column2>38.3</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>P25/Median/P75</td>
+<td class=column2>70 / 91 / 117</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Mismatches and indels</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>General error rate</td>
+<td class=column2>25.41%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mismatches</td>
+<td class=column2>3,237,699,795</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Insertions</td>
+<td class=column2>111,531,898</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads with at least one insertion</td>
+<td class=column2>37.57%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Deletions</td>
+<td class=column2>47,884,279</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Mapped reads with at least one deletion</td>
+<td class=column2>24.69%</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td class=column1>Homopolymer indels</td>
+<td class=column2>46.14%</td>
+</tr>
+</table>
+</div>
+
+
+<div class=table-summary>
+<h3>Chromosome stats</h3>
+<table class="summary hovertable">
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td><b>Name</b></td>
+<td><b>Length</b></td>
+<td><b>Mapped bases</b></td>
+<td><b>Mean coverage</b></td>
+<td><b>Standard deviation</b></td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000000</td>
+<td>21651136</td>
+<td>899892738</td>
+<td>41.5633</td>
+<td>46.3412</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000001</td>
+<td>21507942</td>
+<td>946550355</td>
+<td>44.0093</td>
+<td>47.3195</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000002</td>
+<td>19741974</td>
+<td>849112124</td>
+<td>43.0105</td>
+<td>46.3379</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000003</td>
+<td>19417450</td>
+<td>724386283</td>
+<td>37.3059</td>
+<td>46.5257</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000004</td>
+<td>14584444</td>
+<td>527669550</td>
+<td>36.1803</td>
+<td>58.6063</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000005</td>
+<td>14098929</td>
+<td>587978009</td>
+<td>41.7037</td>
+<td>44.0531</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000006</td>
+<td>14068054</td>
+<td>598909111</td>
+<td>42.5723</td>
+<td>56.6573</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000007</td>
+<td>13590779</td>
+<td>552613761</td>
+<td>40.6609</td>
+<td>47.5708</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000008</td>
+<td>12446599</td>
+<td>539825739</td>
+<td>43.3713</td>
+<td>53.0975</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000009</td>
+<td>11983232</td>
+<td>258052721</td>
+<td>21.5345</td>
+<td>50.9778</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000010</td>
+<td>11763137</td>
+<td>437551416</td>
+<td>37.1968</td>
+<td>44.8305</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000011</td>
+<td>10501528</td>
+<td>505527709</td>
+<td>48.1385</td>
+<td>45.3509</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000012</td>
+<td>10024633</td>
+<td>405007674</td>
+<td>40.4012</td>
+<td>53.4606</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000013</td>
+<td>9946974</td>
+<td>278815529</td>
+<td>28.0302</td>
+<td>40.8061</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000014</td>
+<td>9536826</td>
+<td>412557692</td>
+<td>43.2594</td>
+<td>44.7203</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000015</td>
+<td>9393205</td>
+<td>370571390</td>
+<td>39.451</td>
+<td>44.2829</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000016</td>
+<td>9288165</td>
+<td>345559704</td>
+<td>37.2043</td>
+<td>42.9419</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000017</td>
+<td>9274345</td>
+<td>366872567</td>
+<td>39.5578</td>
+<td>44.4398</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000018</td>
+<td>8584156</td>
+<td>361884132</td>
+<td>42.1572</td>
+<td>45.4672</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000019</td>
+<td>7112774</td>
+<td>285612755</td>
+<td>40.1549</td>
+<td>47.8225</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000020</td>
+<td>6748058</td>
+<td>258258793</td>
+<td>38.2716</td>
+<td>45.7427</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000021</td>
+<td>6546105</td>
+<td>275699938</td>
+<td>42.1166</td>
+<td>43.2459</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000022</td>
+<td>6319256</td>
+<td>217678553</td>
+<td>34.4469</td>
+<td>48.5911</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000023</td>
+<td>5767069</td>
+<td>183088822</td>
+<td>31.7473</td>
+<td>40.78</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000024</td>
+<td>5762297</td>
+<td>134231289</td>
+<td>23.2948</td>
+<td>38.2852</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000025</td>
+<td>5759531</td>
+<td>176531926</td>
+<td>30.6504</td>
+<td>43.1552</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000026</td>
+<td>5647578</td>
+<td>267043153</td>
+<td>47.2845</td>
+<td>46.436</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000027</td>
+<td>5550630</td>
+<td>177449204</td>
+<td>31.9692</td>
+<td>45.4117</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000028</td>
+<td>5130920</td>
+<td>228849378</td>
+<td>44.602</td>
+<td>53.6985</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000029</td>
+<td>4860867</td>
+<td>160829954</td>
+<td>33.0867</td>
+<td>40.7661</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000030</td>
+<td>4843735</td>
+<td>204610056</td>
+<td>42.2422</td>
+<td>45.0256</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000031</td>
+<td>4691590</td>
+<td>182513669</td>
+<td>38.9023</td>
+<td>41.5904</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000032</td>
+<td>3615800</td>
+<td>160834175</td>
+<td>44.4809</td>
+<td>45.5438</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000033</td>
+<td>3306609</td>
+<td>94324795</td>
+<td>28.5261</td>
+<td>39.1727</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000034</td>
+<td>3122802</td>
+<td>131401917</td>
+<td>42.0782</td>
+<td>45.2805</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000035</td>
+<td>3015365</td>
+<td>95982165</td>
+<td>31.831</td>
+<td>43.5972</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000036</td>
+<td>3007169</td>
+<td>141309829</td>
+<td>46.991</td>
+<td>45.8863</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000037</td>
+<td>2860435</td>
+<td>120995992</td>
+<td>42.2999</td>
+<td>110.2165</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000038</td>
+<td>2701138</td>
+<td>100900696</td>
+<td>37.3549</td>
+<td>46.6974</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000039</td>
+<td>2599273</td>
+<td>83036135</td>
+<td>31.9459</td>
+<td>45.0255</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000040</td>
+<td>2445666</td>
+<td>85620013</td>
+<td>35.0089</td>
+<td>47.9956</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000041</td>
+<td>2159376</td>
+<td>92260801</td>
+<td>42.7257</td>
+<td>43.9376</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000042</td>
+<td>1957488</td>
+<td>61560153</td>
+<td>31.4485</td>
+<td>40.4358</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000043</td>
+<td>1845599</td>
+<td>61799483</td>
+<td>33.4848</td>
+<td>42.5649</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000044</td>
+<td>1724711</td>
+<td>74226845</td>
+<td>43.0373</td>
+<td>45.0598</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000045</td>
+<td>1153740</td>
+<td>35591495</td>
+<td>30.8488</td>
+<td>40.5593</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000046</td>
+<td>755410</td>
+<td>21784309</td>
+<td>28.8377</td>
+<td>47.6201</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000047</td>
+<td>239089</td>
+<td>365083</td>
+<td>1.527</td>
+<td>5.5065</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000048</td>
+<td>214660</td>
+<td>86413</td>
+<td>0.4026</td>
+<td>2.9495</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000049</td>
+<td>179266</td>
+<td>538667</td>
+<td>3.0048</td>
+<td>12.101</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000050</td>
+<td>177168</td>
+<td>273624</td>
+<td>1.5444</td>
+<td>7.9236</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000051</td>
+<td>165057</td>
+<td>792962</td>
+<td>4.8042</td>
+<td>12.5695</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000052</td>
+<td>155210</td>
+<td>29726</td>
+<td>0.1915</td>
+<td>1.6763</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000053</td>
+<td>123249</td>
+<td>452825</td>
+<td>3.6741</td>
+<td>15.2248</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000054</td>
+<td>122643</td>
+<td>3592040</td>
+<td>29.2886</td>
+<td>42.6003</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000055</td>
+<td>121609</td>
+<td>1506294</td>
+<td>12.3864</td>
+<td>24.4976</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000056</td>
+<td>112816</td>
+<td>117509</td>
+<td>1.0416</td>
+<td>12.2211</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000057</td>
+<td>107171</td>
+<td>1205006</td>
+<td>11.2438</td>
+<td>35.6998</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000058</td>
+<td>98341</td>
+<td>61086</td>
+<td>0.6212</td>
+<td>4.6382</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000059</td>
+<td>83292</td>
+<td>210390</td>
+<td>2.5259</td>
+<td>13.4713</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000060</td>
+<td>79483</td>
+<td>4936</td>
+<td>0.0621</td>
+<td>0.4588</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000061</td>
+<td>75390</td>
+<td>3174678</td>
+<td>42.1101</td>
+<td>121.2258</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000062</td>
+<td>74194</td>
+<td>48887</td>
+<td>0.6589</td>
+<td>3.4811</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000063</td>
+<td>73457</td>
+<td>195089</td>
+<td>2.6558</td>
+<td>30.8461</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000064</td>
+<td>72700</td>
+<td>21989</td>
+<td>0.3025</td>
+<td>3.5461</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000065</td>
+<td>67986</td>
+<td>277565</td>
+<td>4.0827</td>
+<td>16.7035</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000066</td>
+<td>66659</td>
+<td>720274</td>
+<td>10.8054</td>
+<td>16.8905</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000067</td>
+<td>64947</td>
+<td>276114</td>
+<td>4.2514</td>
+<td>13.2537</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000068</td>
+<td>64340</td>
+<td>98253</td>
+<td>1.5271</td>
+<td>8.0821</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000069</td>
+<td>62616</td>
+<td>484574</td>
+<td>7.7388</td>
+<td>22.097</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000070</td>
+<td>60121</td>
+<td>637923</td>
+<td>10.6107</td>
+<td>116.0664</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000071</td>
+<td>57157</td>
+<td>107311</td>
+<td>1.8775</td>
+<td>6.9127</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000072</td>
+<td>56626</td>
+<td>14598</td>
+<td>0.2578</td>
+<td>2.9607</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000073</td>
+<td>56082</td>
+<td>275216</td>
+<td>4.9074</td>
+<td>10.1901</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000074</td>
+<td>55210</td>
+<td>5462</td>
+<td>0.0989</td>
+<td>0.6959</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000075</td>
+<td>54685</td>
+<td>10768</td>
+<td>0.1969</td>
+<td>2.0632</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000076</td>
+<td>54587</td>
+<td>283652</td>
+<td>5.1963</td>
+<td>30.8592</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000077</td>
+<td>53379</td>
+<td>47840</td>
+<td>0.8962</td>
+<td>2.6199</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000078</td>
+<td>51564</td>
+<td>9451</td>
+<td>0.1833</td>
+<td>1.4148</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000079</td>
+<td>49664</td>
+<td>13181</td>
+<td>0.2654</td>
+<td>1.5825</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000080</td>
+<td>47218</td>
+<td>247083</td>
+<td>5.2328</td>
+<td>24.5417</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000081</td>
+<td>42490</td>
+<td>10710</td>
+<td>0.2521</td>
+<td>1.415</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000082</td>
+<td>32657</td>
+<td>827949</td>
+<td>25.3529</td>
+<td>55.5003</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___Sc0000083</td>
+<td>27992</td>
+<td>46590</td>
+<td>1.6644</td>
+<td>3.5423</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000000</td>
+<td>1601609</td>
+<td>12269646</td>
+<td>7.6608</td>
+<td>18.7125</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000001</td>
+<td>1197718</td>
+<td>4846994</td>
+<td>4.0469</td>
+<td>12.5139</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000002</td>
+<td>779520</td>
+<td>9245756</td>
+<td>11.8608</td>
+<td>28.6583</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000003</td>
+<td>462347</td>
+<td>2653197</td>
+<td>5.7385</td>
+<td>13.8385</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000004</td>
+<td>334777</td>
+<td>2814610</td>
+<td>8.4074</td>
+<td>16.8556</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000006</td>
+<td>290100</td>
+<td>845450</td>
+<td>2.9143</td>
+<td>8.5089</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000007</td>
+<td>252258</td>
+<td>3313890</td>
+<td>13.1369</td>
+<td>27.2525</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000012</td>
+<td>148278</td>
+<td>1902604</td>
+<td>12.8313</td>
+<td>40.1148</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000014</td>
+<td>118081</td>
+<td>23725</td>
+<td>0.2009</td>
+<td>1.2088</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000017</td>
+<td>98555</td>
+<td>2412225</td>
+<td>24.4759</td>
+<td>152.3568</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000021</td>
+<td>95778</td>
+<td>903330</td>
+<td>9.4315</td>
+<td>20.3235</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000024</td>
+<td>90744</td>
+<td>1641330</td>
+<td>18.0875</td>
+<td>38.396</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000029</td>
+<td>85532</td>
+<td>572762</td>
+<td>6.6965</td>
+<td>24.6354</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000038</td>
+<td>77395</td>
+<td>93602</td>
+<td>1.2094</td>
+<td>7.5683</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000058</td>
+<td>69718</td>
+<td>1227472</td>
+<td>17.6062</td>
+<td>35.9782</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000059</td>
+<td>69426</td>
+<td>1466346</td>
+<td>21.121</td>
+<td>35.3024</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000074</td>
+<td>66573</td>
+<td>729512</td>
+<td>10.9581</td>
+<td>20.821</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000081</td>
+<td>65415</td>
+<td>775996</td>
+<td>11.8627</td>
+<td>18.3347</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000083</td>
+<td>65317</td>
+<td>1981404</td>
+<td>30.3352</td>
+<td>50.3654</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000092</td>
+<td>63607</td>
+<td>1416854</td>
+<td>22.2751</td>
+<td>32.0311</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000094</td>
+<td>62842</td>
+<td>181007</td>
+<td>2.8804</td>
+<td>9.0193</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000113</td>
+<td>60556</td>
+<td>2030426</td>
+<td>33.5297</td>
+<td>55.5062</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000132</td>
+<td>59032</td>
+<td>125470</td>
+<td>2.1255</td>
+<td>4.549</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000145</td>
+<td>58221</td>
+<td>352381</td>
+<td>6.0525</td>
+<td>15.7159</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000146</td>
+<td>58151</td>
+<td>153921</td>
+<td>2.6469</td>
+<td>6.3084</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000168</td>
+<td>56681</td>
+<td>861602</td>
+<td>15.2009</td>
+<td>32.4445</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000175</td>
+<td>56271</td>
+<td>420965</td>
+<td>7.481</td>
+<td>14.2017</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000195</td>
+<td>55223</td>
+<td>33687</td>
+<td>0.61</td>
+<td>2.0423</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000199</td>
+<td>55095</td>
+<td>558973</td>
+<td>10.1456</td>
+<td>20.956</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000205</td>
+<td>54658</td>
+<td>599807</td>
+<td>10.9738</td>
+<td>25.0908</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000206</td>
+<td>54623</td>
+<td>383505</td>
+<td>7.0209</td>
+<td>14.0252</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000212</td>
+<td>54299</td>
+<td>683345</td>
+<td>12.5849</td>
+<td>23.2175</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000217</td>
+<td>54168</td>
+<td>1024068</td>
+<td>18.9054</td>
+<td>63.57</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000223</td>
+<td>53823</td>
+<td>671615</td>
+<td>12.4782</td>
+<td>23.0685</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000228</td>
+<td>53382</td>
+<td>569929</td>
+<td>10.6764</td>
+<td>73.0839</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000237</td>
+<td>53049</td>
+<td>710913</td>
+<td>13.4011</td>
+<td>28.1463</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000262</td>
+<td>52308</td>
+<td>1013625</td>
+<td>19.378</td>
+<td>29.9412</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000264</td>
+<td>52264</td>
+<td>3189892</td>
+<td>61.0342</td>
+<td>83.0546</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000272</td>
+<td>52107</td>
+<td>1301187</td>
+<td>24.9714</td>
+<td>41.7637</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000275</td>
+<td>51938</td>
+<td>360094</td>
+<td>6.9332</td>
+<td>17.6664</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000284</td>
+<td>51483</td>
+<td>865973</td>
+<td>16.8206</td>
+<td>33.0888</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000288</td>
+<td>51367</td>
+<td>475056</td>
+<td>9.2483</td>
+<td>26.3927</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000300</td>
+<td>50845</td>
+<td>14107</td>
+<td>0.2775</td>
+<td>1.1842</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000301</td>
+<td>50809</td>
+<td>1244098</td>
+<td>24.4858</td>
+<td>29.5096</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000343</td>
+<td>49544</td>
+<td>603715</td>
+<td>12.1854</td>
+<td>19.5178</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000376</td>
+<td>48519</td>
+<td>1898109</td>
+<td>39.1209</td>
+<td>136.2731</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000415</td>
+<td>47398</td>
+<td>781316</td>
+<td>16.4842</td>
+<td>24.3673</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000423</td>
+<td>47202</td>
+<td>200881</td>
+<td>4.2558</td>
+<td>12.7016</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000426</td>
+<td>47096</td>
+<td>4903796</td>
+<td>104.1234</td>
+<td>151.4256</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000428</td>
+<td>47057</td>
+<td>1131714</td>
+<td>24.0499</td>
+<td>46.5755</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000436</td>
+<td>46816</td>
+<td>209874</td>
+<td>4.483</td>
+<td>10.6501</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000445</td>
+<td>46561</td>
+<td>171940</td>
+<td>3.6928</td>
+<td>8.4103</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000447</td>
+<td>46542</td>
+<td>670253</td>
+<td>14.401</td>
+<td>22.6527</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000469</td>
+<td>45938</td>
+<td>878026</td>
+<td>19.1133</td>
+<td>28.6258</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000477</td>
+<td>45781</td>
+<td>662044</td>
+<td>14.4611</td>
+<td>20.7805</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000479</td>
+<td>45736</td>
+<td>359294</td>
+<td>7.8558</td>
+<td>14.3755</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000482</td>
+<td>45585</td>
+<td>668662</td>
+<td>14.6685</td>
+<td>28.0841</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000488</td>
+<td>45379</td>
+<td>303839</td>
+<td>6.6956</td>
+<td>12.7784</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000506</td>
+<td>44781</td>
+<td>269915</td>
+<td>6.0274</td>
+<td>14.5101</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000527</td>
+<td>44235</td>
+<td>558102</td>
+<td>12.6168</td>
+<td>18.7268</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000540</td>
+<td>43935</td>
+<td>704345</td>
+<td>16.0315</td>
+<td>30.2566</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000555</td>
+<td>43535</td>
+<td>518175</td>
+<td>11.9025</td>
+<td>41.5271</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000565</td>
+<td>43357</td>
+<td>1222653</td>
+<td>28.1997</td>
+<td>32.3987</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000566</td>
+<td>43316</td>
+<td>416340</td>
+<td>9.6117</td>
+<td>17.2477</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000567</td>
+<td>43305</td>
+<td>671619</td>
+<td>15.509</td>
+<td>38.1018</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000570</td>
+<td>43295</td>
+<td>109649</td>
+<td>2.5326</td>
+<td>5.7397</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000579</td>
+<td>43029</td>
+<td>171560</td>
+<td>3.9871</td>
+<td>10.7853</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000583</td>
+<td>42958</td>
+<td>617839</td>
+<td>14.3824</td>
+<td>22.6059</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000596</td>
+<td>42675</td>
+<td>466516</td>
+<td>10.9318</td>
+<td>20.3238</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000612</td>
+<td>42423</td>
+<td>279729</td>
+<td>6.5938</td>
+<td>15.1154</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000616</td>
+<td>42355</td>
+<td>12286592</td>
+<td>290.086</td>
+<td>1,015.607</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000621</td>
+<td>42164</td>
+<td>699076</td>
+<td>16.5799</td>
+<td>22.5344</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000642</td>
+<td>41754</td>
+<td>295589</td>
+<td>7.0793</td>
+<td>16.5037</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000655</td>
+<td>41446</td>
+<td>701673</td>
+<td>16.9298</td>
+<td>44.6463</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000692</td>
+<td>40426</td>
+<td>182704</td>
+<td>4.5195</td>
+<td>12.3431</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000699</td>
+<td>40296</td>
+<td>123662</td>
+<td>3.0688</td>
+<td>8.4418</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000704</td>
+<td>40233</td>
+<td>1235672</td>
+<td>30.7129</td>
+<td>42.3127</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000705</td>
+<td>40197</td>
+<td>176833</td>
+<td>4.3992</td>
+<td>11.2684</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000716</td>
+<td>39998</td>
+<td>468265</td>
+<td>11.7072</td>
+<td>17.3789</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000725</td>
+<td>39827</td>
+<td>84629</td>
+<td>2.1249</td>
+<td>5.5408</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000729</td>
+<td>39775</td>
+<td>196022</td>
+<td>4.9283</td>
+<td>11.4583</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000760</td>
+<td>39228</td>
+<td>23087</td>
+<td>0.5885</td>
+<td>2.3389</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000763</td>
+<td>39151</td>
+<td>526442</td>
+<td>13.4465</td>
+<td>19.1654</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000765</td>
+<td>39117</td>
+<td>209724</td>
+<td>5.3615</td>
+<td>11.6637</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000788</td>
+<td>38513</td>
+<td>815337</td>
+<td>21.1704</td>
+<td>30.1352</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000811</td>
+<td>37888</td>
+<td>746446</td>
+<td>19.7014</td>
+<td>34.381</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000812</td>
+<td>37881</td>
+<td>41546</td>
+<td>1.0968</td>
+<td>4.0285</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000817</td>
+<td>37779</td>
+<td>866056</td>
+<td>22.9243</td>
+<td>32.172</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000824</td>
+<td>37656</td>
+<td>231079</td>
+<td>6.1366</td>
+<td>13.5483</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000835</td>
+<td>37434</td>
+<td>535384</td>
+<td>14.3021</td>
+<td>20.805</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000836</td>
+<td>37372</td>
+<td>592191</td>
+<td>15.8458</td>
+<td>38.3803</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000837</td>
+<td>37368</td>
+<td>268107</td>
+<td>7.1748</td>
+<td>11.6231</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000840</td>
+<td>37283</td>
+<td>619375</td>
+<td>16.6128</td>
+<td>35.3948</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000857</td>
+<td>37006</td>
+<td>247919</td>
+<td>6.6994</td>
+<td>14.0371</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000859</td>
+<td>36995</td>
+<td>45478</td>
+<td>1.2293</td>
+<td>3.0663</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000866</td>
+<td>36925</td>
+<td>97900</td>
+<td>2.6513</td>
+<td>7.3801</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000868</td>
+<td>36831</td>
+<td>369332</td>
+<td>10.0277</td>
+<td>26.7695</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000875</td>
+<td>36611</td>
+<td>77140</td>
+<td>2.107</td>
+<td>7.6406</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000885</td>
+<td>36416</td>
+<td>346407</td>
+<td>9.5125</td>
+<td>20.9776</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000886</td>
+<td>36355</td>
+<td>319391</td>
+<td>8.7853</td>
+<td>17.3915</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000890</td>
+<td>36339</td>
+<td>541106</td>
+<td>14.8905</td>
+<td>41.808</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000892</td>
+<td>36267</td>
+<td>440486</td>
+<td>12.1456</td>
+<td>85.1646</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000943</td>
+<td>35168</td>
+<td>8238</td>
+<td>0.2342</td>
+<td>1.2701</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000948</td>
+<td>35100</td>
+<td>448443</td>
+<td>12.7762</td>
+<td>22.2105</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000952</td>
+<td>34934</td>
+<td>829790</td>
+<td>23.7531</td>
+<td>29.0026</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000953</td>
+<td>34905</td>
+<td>395932</td>
+<td>11.3431</td>
+<td>22.0315</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000957</td>
+<td>34773</td>
+<td>420325</td>
+<td>12.0877</td>
+<td>28.6848</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000968</td>
+<td>34345</td>
+<td>53123</td>
+<td>1.5467</td>
+<td>5.8616</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000974</td>
+<td>34140</td>
+<td>1059966</td>
+<td>31.0476</td>
+<td>53.5876</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000975</td>
+<td>33988</td>
+<td>737618</td>
+<td>21.7023</td>
+<td>32.9063</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0000995</td>
+<td>33324</td>
+<td>153680</td>
+<td>4.6117</td>
+<td>11.3004</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001011</td>
+<td>32918</td>
+<td>238920</td>
+<td>7.258</td>
+<td>13.6213</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001122</td>
+<td>29140</td>
+<td>403370</td>
+<td>13.8425</td>
+<td>20.9849</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001170</td>
+<td>27381</td>
+<td>61535</td>
+<td>2.2474</td>
+<td>11.937</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001179</td>
+<td>27200</td>
+<td>202761</td>
+<td>7.4544</td>
+<td>14.3728</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001231</td>
+<td>22938</td>
+<td>23683</td>
+<td>1.0325</td>
+<td>5.5873</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xfSc0001237</td>
+<td>22715</td>
+<td>32781</td>
+<td>1.4431</td>
+<td>4.0404</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001273</td>
+<td>408270</td>
+<td>3024790</td>
+<td>7.4088</td>
+<td>18.761</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001275</td>
+<td>48561</td>
+<td>339048</td>
+<td>6.9819</td>
+<td>13.6654</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001276</td>
+<td>38618</td>
+<td>52418</td>
+<td>1.3573</td>
+<td>4.0016</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001280</td>
+<td>35955</td>
+<td>273892</td>
+<td>7.6176</td>
+<td>16.7057</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001281</td>
+<td>34238</td>
+<td>485390</td>
+<td>14.1769</td>
+<td>29.1854</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001290</td>
+<td>28931</td>
+<td>1024355</td>
+<td>35.4068</td>
+<td>42.6077</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001321</td>
+<td>15304</td>
+<td>253328</td>
+<td>16.5531</td>
+<td>37.43</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001331</td>
+<td>8958</td>
+<td>343423</td>
+<td>38.337</td>
+<td>33.9633</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001337</td>
+<td>6786</td>
+<td>301280</td>
+<td>44.3973</td>
+<td>29.8197</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001344</td>
+<td>5647</td>
+<td>191071</td>
+<td>33.8358</td>
+<td>82.8522</td>
+</tr>
+<tr onmouseover="this.style.backgroundColor='#EEEEEC';" onmouseout="this.style.backgroundColor='#FFFFFF';">
+<td>Pocillopora_meandrina_HIv1___xpSc0001355</td>
+<td>3576</td>
+<td>148439</td>
+<td>41.5098</td>
+<td>37.9919</td>
+</tr>
+</table>
+</div>
+
+</div>
+</div> <!-- summary section -->
+
+
+
+<div class=section>
+
+<h2>Coverage across reference<a class="headerlink" name="genome_coverage_across_reference.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_coverage_across_reference.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Coverage Histogram<a class="headerlink" name="genome_coverage_histogram.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_coverage_histogram.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Coverage Histogram (0-50X)<a class="headerlink" name="genome_coverage_0to50_histogram.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_coverage_0to50_histogram.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Genome Fraction Coverage<a class="headerlink" name="genome_coverage_quotes.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_coverage_quotes.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Duplication Rate Histogram<a class="headerlink" name="genome_uniq_read_starts_histogram.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_uniq_read_starts_histogram.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Mapped Reads Nucleotide Content<a class="headerlink" name="genome_reads_content_per_read_position.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_reads_content_per_read_position.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Mapped Reads GC-content Distribution<a class="headerlink" name="genome_gc_content_per_window.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_gc_content_per_window.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Homopolymer Indels<a class="headerlink" name="genome_homopolymer_indels" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_homopolymer_indels.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Mapping Quality Across Reference<a class="headerlink" name="genome_mapping_quality_across_reference.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_mapping_quality_across_reference.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Mapping Quality Histogram<a class="headerlink" name="genome_mapping_quality_histogram.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_mapping_quality_histogram.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Insert Size Across Reference<a class="headerlink" name="genome_insert_size_across_reference.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_insert_size_across_reference.png"></div>
+
+</div><!-- graph section -->
+
+
+<div class=section>
+
+<h2>Insert Size Histogram<a class="headerlink" name="genome_insert_size_histogram.png" title="Permalink to this headline">&nbsp;</a></h2>
+
+<div><img width=100% src="images_qualimapReport/genome_insert_size_histogram.png"></div>
+
+</div><!-- graph section -->
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="sidebar">
+<h3>Contents</h3>
+<li class="toctree-l1"><a class="reference internal" href="#input">Input data & parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_coverage_across_reference.png">Coverage across reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_coverage_histogram.png">Coverage Histogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_coverage_0to50_histogram.png">Coverage Histogram (0-50X)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_coverage_quotes.png">Genome Fraction Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_uniq_read_starts_histogram.png">Duplication Rate Histogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_reads_content_per_read_position.png">Mapped Reads Nucleotide Content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_gc_content_per_window.png">Mapped Reads GC-content Distribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_homopolymer_indels">Homopolymer Indels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_mapping_quality_across_reference.png">Mapping Quality Across Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_mapping_quality_histogram.png">Mapping Quality Histogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_insert_size_across_reference.png">Insert Size Across Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#genome_insert_size_histogram.png">Insert Size Histogram</a></li>
+</div> <!-- sidebar -->
+
+<div class="clearer"></div>
+</div>
+
+</div>
+
+
+<div class="footer-wrapper">
+<div class="footer">
+<div class="left">
+<div class="footer">
+2025/05/01 05:45:40
+</div>
+</div>
+<div class="right">
+<div class="footer">
+Generated by QualiMap v.2.2.1
+</div
+</div>
+<div class="clearer"></div>
+</div> <!-- footer -->
+</div>
+</body>

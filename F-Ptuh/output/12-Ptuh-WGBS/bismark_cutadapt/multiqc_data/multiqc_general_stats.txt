@@ -1,0 +1,16 @@
+Sample	QualiMap_mqc-generalstats-qualimap-avg_gc	QualiMap_mqc-generalstats-qualimap-median_insert_size	QualiMap_mqc-generalstats-qualimap-1_x_pc	QualiMap_mqc-generalstats-qualimap-5_x_pc	QualiMap_mqc-generalstats-qualimap-10_x_pc	QualiMap_mqc-generalstats-qualimap-30_x_pc	QualiMap_mqc-generalstats-qualimap-50_x_pc	QualiMap_mqc-generalstats-qualimap-median_coverage	QualiMap_mqc-generalstats-qualimap-mean_coverage	QualiMap_mqc-generalstats-qualimap-percentage_aligned	QualiMap_mqc-generalstats-qualimap-mapped_reads	QualiMap_mqc-generalstats-qualimap-total_reads	QualiMap_mqc-generalstats-qualimap-general_error_rate	Bismark_mqc-generalstats-bismark-aligned_reads	Bismark_mqc-generalstats-bismark-percent_aligned	Bismark_mqc-generalstats-bismark-percent_cpg_meth	Bismark_mqc-generalstats-bismark-total_c	Bismark_mqc-generalstats-bismark-C_coverage	Bismark_mqc-generalstats-bismark-dup_reads_percent	Bismark_mqc-generalstats-bismark-dedup_reads
+POC-47-TP2_S13	24.47086378073947	90	83.50277545604835	73.37690108453315	66.373001774067	43.794514223613106	28.294935294929193	23	37.7736	100.0	151637162.0	151637162.0	25.41							
+POC-48-TP2_S11	22.98477252825433	105	86.34820098238166	77.02363780347562	70.64203907593436	51.20634554077677	35.91711346558967	31	45.6961	100.0	162408580.0	162408580.0	25.64							
+POC-50-TP2_S14	24.455821305135093	93	84.08685095190711	73.9577382239245	66.81897882636406	44.20743534398917	28.676341723313474	24	38.1781	100.0	150268076.0	150268076.0	25.1							
+POC-53-TP2_S15	24.49009850962079	110	83.86353208418865	72.81848707416721	64.75874254939683	41.458172407995185	26.109200024938133	21	35.2351	100.0	121999304.0	121999304.0	25.509999999999998							
+POC-57-TP2_S12	22.484828426762334	111	88.33915979916019	79.53757379635495	73.52629009310358	55.8961896730371	41.30937158799181	37	53.0892	100.0	182344790.0	182344790.0	25.679999999999996							
+trimmed_POC-47-TP2_S13_PE_report														90000133.0	59.215604288756175					
+trimmed_POC-47-TP2_S13_pe																3.5	1337723287.0	17.662	15.76	75818581.0
+trimmed_POC-48-TP2_S11_PE_report														104251182.0	58.87290914598486					
+trimmed_POC-48-TP2_S11_pe																3.9	1679292915.0	19.879	22.11	81204290.0
+trimmed_POC-50-TP2_S14_PE_report														95287182.0	57.01916950933694					
+trimmed_POC-50-TP2_S14_pe																3.6	1354399842.0	17.979	21.15	75134038.0
+trimmed_POC-53-TP2_S15_PE_report														78836445.0	55.7472840730033					
+trimmed_POC-53-TP2_S15_pe																3.6	1293043583.0	14.425	22.62	60999652.0
+trimmed_POC-57-TP2_S12_PE_report														141174678.0	58.43512098562531					
+trimmed_POC-57-TP2_S12_pe																4.0	2027773994.0	22.612	35.42	91172395.0

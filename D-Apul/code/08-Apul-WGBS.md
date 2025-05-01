@@ -19,6 +19,8 @@ Zoe Dellaert
   - [0.4.1 Deduplication, Sorting, and methylation extraction &
     calling](#041-deduplication-sorting-and-methylation-extraction--calling)
   - [0.4.2 View output](#042-view-output)
+  - [0.4.3 Make summary reports](#043-make-summary-reports)
+  - [0.4.4 Steps I didn’t do yet:](#044-steps-i-didnt-do-yet)
 
 ### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
@@ -408,4 +410,138 @@ This took just under 4.5 hours with max memory used per node as
 
 ``` bash
 head ${bismark_dir}*evidence.cov
+```
+
+### 0.4.3 Make summary reports
+
+``` bash
+#!/usr/bin/env bash
+#SBATCH --export=NONE
+#SBATCH --nodes=1 --ntasks-per-node=8
+#SBATCH --mem=250GB
+#SBATCH -t 6:00:00
+#SBATCH --mail-type=BEGIN,END,FAIL #email you when job starts, stops and/or fails
+#SBATCH --error=scripts/outs_errs/"%x_error.%j" #if your job fails, the error report will be put in this file
+#SBATCH --output=scripts/outs_errs/"%x_output.%j" #once your job is completed, any final job report comments will be put in this file
+
+module load uri/main
+module load Bismark/0.23.1-foss-2021b
+module load all/MultiQC/1.12-foss-2021b
+module load qualimap/2.2.1
+
+cd ../output/08-Apul-WGBS/bismark_cutadapt/
+
+bam2nuc --genome_folder ../../../data/ *_pe.deduplicated.bam
+
+mkdir -p qualimap/bamqc
+
+for bamFile in *sorted.bam; do
+    prefix=$(basename $bamFile .bam)
+
+    qualimap \
+    --java-mem-size=29491M \
+    bamqc \
+     \
+    -bam ${bamFile}  \
+     \
+    -p non-strand-specific \
+    --collect-overlap-pairs \
+    -outdir qualimap/bamqc/${prefix} \
+    -nt 6
+done
+
+bismark2report
+bismark2summary *pe.bam
+
+multiqc .
+```
+
+### 0.4.4 Steps I didn’t do yet:
+
+``` bash
+
+# Sort .cov files
+
+module load bedtools2/2.31.1
+
+cd output_WGBS/dedup_V3
+
+for file in *merged_CpG_evidence.cov
+do
+  sample=$(basename "${file}" .CpG_report.merged_CpG_evidence.cov)
+  bedtools sort -i "${file}" \
+  > "${sample}"_sorted.cov
+done
+
+# Create bedgraph files
+# Bedgraphs for 5X coverage 
+
+cd output_WGBS/dedup_V3
+
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
+  > "${sample}"_5x_sorted.bedgraph
+done
+
+# Bedgraphs for 10X coverage 
+
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 10) {print $1, $2, $3, $4}}' \
+  > "${sample}"_10x_sorted.bedgraph
+done
+
+# filter for 5x coverage
+
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4, $5, $6}}' \
+  > "${sample}"_5x_sorted.tab
+done
+
+# intersection of all samples
+
+# load modules needed
+module load bedtools2/2.31.1
+
+cd output_WGBS/dedup_V3
+
+multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
+
+#change number after == to your number of samples
+
+cat CpG.all.samps.5x_sorted.bed | awk '$4 ==10' > CpG.filt.all.samps.5x_sorted.bed 
+
+### and with gene bodies:
+
+awk '{if ($3 == "transcript") {print}}' references/Pocillopora_acuta_HIv2.gtf  > references/Pocillopora_acuta_HIv2_transcripts.gtf
+
+cd output_WGBS/dedup_V3
+
+for i in *5x_sorted.tab
+do
+  intersectBed \
+  -wb \
+  -a ${i} \
+  -b ../../references/Pocillopora_acuta_HIv2_transcripts.gtf \
+  > ${i}_gene
+done
+
+### keep only those loci in all samples
+
+awk '{if ($3 == "transcript") {print}}' references/Pocillopora_acuta_HIv2.gtf  > references/Pocillopora_acuta_HIv2_transcripts.gtf
+
+cd output_WGBS/dedup_V3
+
+for i in *_5x_sorted.tab_gene
+do
+  intersectBed \
+  -a ${i} \
+  -b CpG.filt.all.samps.5x_sorted.bed \
+  > ${i}_CpG_5x_enrichment.bed
+done
 ```

@@ -1,0 +1,16 @@
+Sample	QualiMap_mqc-generalstats-qualimap-avg_gc	QualiMap_mqc-generalstats-qualimap-median_insert_size	QualiMap_mqc-generalstats-qualimap-1_x_pc	QualiMap_mqc-generalstats-qualimap-5_x_pc	QualiMap_mqc-generalstats-qualimap-10_x_pc	QualiMap_mqc-generalstats-qualimap-30_x_pc	QualiMap_mqc-generalstats-qualimap-50_x_pc	QualiMap_mqc-generalstats-qualimap-median_coverage	QualiMap_mqc-generalstats-qualimap-mean_coverage	QualiMap_mqc-generalstats-qualimap-percentage_aligned	QualiMap_mqc-generalstats-qualimap-mapped_reads	QualiMap_mqc-generalstats-qualimap-total_reads	QualiMap_mqc-generalstats-qualimap-general_error_rate	Bismark_mqc-generalstats-bismark-aligned_reads	Bismark_mqc-generalstats-bismark-percent_aligned	Bismark_mqc-generalstats-bismark-percent_cpg_meth	Bismark_mqc-generalstats-bismark-total_c	Bismark_mqc-generalstats-bismark-C_coverage	Bismark_mqc-generalstats-bismark-dup_reads_percent	Bismark_mqc-generalstats-bismark-dedup_reads
+POR-71-TP2_S9	24.018506910663465	105	80.26404726285749	72.9951633025176	67.59820400940178	45.83595252714108	27.79382965691588	26	37.5715	100.0	214924200.0	214924200.0	25.45							
+POR-73-TP2_S7	22.519610298923638	154	65.74031863392382	40.318921433672266	21.512632974384786	2.2308482613275387	0.5285850480022547	3	6.0832	100.0	28766494.0	28766494.0	24.8							
+POR-76-TP2_S6	24.205143294996716	102	78.70815803319728	69.60278168302797	61.447294835997724	31.747334622989484	14.363373153602929	16	25.1957	100.0	146900700.0	146900700.0	25.28							
+POR-79-TP2_S10	23.81648063372533	109	80.86425422888078	73.88383970498786	68.93524358547128	48.853001291866576	30.980563061818852	28	40.597	100.0	226154816.0	226154816.0	25.629999999999995							
+POR-82-TP2_S8	23.71836736207285	104	80.30931979692768	72.81715743815124	66.76129130533694	40.52272402047529	20.576972890477087	22	30.9141	100.0	178671446.0	178671446.0	25.47							
+trimmed_POR-71-TP2_S9_PE_report														132052904.0	55.78683528585356					
+trimmed_POR-71-TP2_S9_pe																7.2	2314697606.0	18.305	18.61	107462100.0
+trimmed_POR-73-TP2_S7_PE_report														61680314.0	60.13961641182276					
+trimmed_POR-73-TP2_S7_pe																7.7	449342456.0	3.044	76.68	14383247.0
+trimmed_POR-76-TP2_S6_PE_report														98546250.0	56.7986646393815					
+trimmed_POR-76-TP2_S6_pe																6.4	1563269175.0	12.910	25.46	73450350.0
+trimmed_POR-79-TP2_S10_PE_report														147058074.0	54.96860889124071					
+trimmed_POR-79-TP2_S10_pe																7.4	2526322290.0	18.915	23.1	113077408.0
+trimmed_POR-82-TP2_S8_PE_report														133958023.0	50.89884348833251					
+trimmed_POR-82-TP2_S8_pe																7.2	1938975922.0	15.185	33.3	89335723.0
