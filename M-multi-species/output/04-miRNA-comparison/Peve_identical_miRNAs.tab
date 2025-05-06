@@ -1,0 +1,2 @@
+"qseqid"	"sseqid"	"pident"	"length"	"mismatch"	"gapopen"	"qstart"	"qend"	"sstart"	"send"	"evalue"	"bitscore"
+"Cluster_7657.mature::Porites_evermani_scaffold_730:81385-81406(-)"	"Cluster_7658.mature::Porites_evermani_scaffold_730:82423-82444(-)"	100	22	0	0	1	22	1	22	6.06e-10	44.1

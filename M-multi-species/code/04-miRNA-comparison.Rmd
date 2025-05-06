@@ -1,0 +1,817 @@
+---
+title: "04-miRNA-comparison"
+author: "Kathleen Durkin"
+date: "2025-05-05"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+library(ggvenn)
+library(ape)
+library(pheatmap)
+library(ggpubr)
+library(gridExtra)
+library(ggplot2)
+
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+I want to find miRNAs that are conserved among either a subset of or all three species of interest (*A.pulchra*, *P.evermanni*, and *P.tuahiniensis*) using Blastn. I want to generally investigate sequence similarity across and within species.
+
+# Prep data
+
+## Isolate mature miRNA sequences
+
+Our ShortStack output contains sequences for the mature, star, and precursor sequences for each identified miRNA. We just want to look at the mature miRNA sequences right now, so let's isolate those.
+
+```{r isolate-mature-miRNA, engine='bash'}
+cd ../output/04-miRNA-comparison
+
+# Copy all sequences whose headers contain "mature"
+awk '/^>/ {p = /mature/} p' ../../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/mir.fasta > Apul_ShortStack_mature.fasta
+
+awk '/^>/ {p = /mature/} p' ../../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta > Peve_ShortStack_mature.fasta
+
+awk '/^>/ {p = /mature/} p' ../../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta > Ptuh_ShortStack_mature.fasta
+
+grep "^>" Apul_ShortStack_mature.fasta | wc -l 
+grep "^>" Peve_ShortStack_mature.fasta | wc -l
+grep "^>" Ptuh_ShortStack_mature.fasta | wc -l
+```
+
+## Check miRNA length distributions
+
+```{r set-colors}
+# Set our color scheme for plotting -- options for both the abbreviated labels or the full, correct species names
+species_colors <- c('A_pulchra' = '#408EC6',
+                    'P_evermanni' = '#1E2761',
+                    'P_tuahiniensis' = '#7A2048')
+
+species_colors_nolabel <- c('#408EC6', '#1E2761', '#7A2048')
+```
+
+Apul:
+```{r calculate-Apul-miRNA-lengths, engine='bash'}
+# Extract sequence lengths and calculate statistics
+grep -v '^>' ../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Apul_ShortStack_mature_lengths.txt
+```
+
+```{r plot-Apul-miRNA-lengths}
+# Read in the lengths
+Apul_lengths <- read.table("../output/04-miRNA-comparison/Apul_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
+
+# Make histogram of lengths
+hist_Apul_lengths <- ggplot(Apul_lengths, aes(x = length)) +
+  geom_histogram(binwidth = 1, fill = species_colors['A_pulchra'], color = "black") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  labs(title = "A. pulchra miRNA sequence lengths",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency") +
+  xlim(20, 25) +
+  ylim(0, 41) +
+  theme_minimal()
+
+hist_Apul_lengths
+
+ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Apul_miRNA_lengths.png",
+         plot   = hist_Apul_lengths,
+         res    = 600,
+         width  = 5000,
+         height = 5000)
+
+# ggexport(filename = "../../supplemental/miRNA/histogram_Apul_miRNA_lengths.png",
+#          plot   = hist_Apul_lengths,
+#          res    = 600,
+#          width  = 5000,
+#          height = 5000)
+```
+
+Ptuh:
+```{r calculate-Ptuh-miRNA-lengths, engine='bash'}
+# Extract sequence lengths and calculate statistics
+grep -v '^>' ../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Ptuh_ShortStack_mature_lengths.txt
+```
+
+```{r plot-Ptuh-miRNA-lengths}
+# Read in the lengths
+Ptuh_lengths <- read.table("../output/04-miRNA-comparison/Ptuh_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
+
+# Make histogram of lengths
+hist_Ptuh_lengths <- ggplot(Ptuh_lengths, aes(x = length)) +
+  geom_histogram(binwidth = 1, fill = species_colors['P_tuahiniensis'], color = "black") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  labs(title = "P. tuahiniensis miRNA sequence lengths",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency") +
+  xlim(20.5, 24.5) +
+  ylim(0, 41) +
+  theme_minimal()
+
+hist_Ptuh_lengths
+
+ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Ptuh_miRNA_lengths.png",
+         plot   = hist_Ptuh_lengths,
+         res    = 600,
+         width  = 5000,
+         height = 5000)
+
+# ggexport(filename = "../../supplemental/miRNA/histogram_Ptuh_miRNA_lengths.png",
+#          plot   = hist_Ptuh_lengths,
+#          res    = 600,
+#          width  = 5000,
+#          height = 5000)
+```
+
+Peve:
+```{r calculate-Peve-miRNA-lengths, engine='bash'}
+# Extract sequence lengths and calculate statistics
+grep -v '^>' ../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Peve_ShortStack_mature_lengths.txt
+```
+
+```{r plot-Peve-miRNA-lengths}
+# Read in the lengths
+Peve_lengths <- read.table("../output/04-miRNA-comparison/Peve_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
+
+# Make histogram of lengths
+hist_Peve_lengths <- ggplot(Peve_lengths, aes(x = length)) +
+  geom_histogram(binwidth = 1, 
+                 fill = species_colors['P_evermanni'], 
+                 color = "black") +
+  geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
+  labs(title = "P. evermanni miRNA sequence lengths",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency") +
+  xlim(20.5, 24.5) +
+  ylim(0, 41) +
+  theme_minimal()
+
+hist_Peve_lengths
+
+ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Peve_miRNA_lengths.png",
+         plot   = hist_Peve_lengths,
+         res    = 600,
+         width  = 5000,
+         height = 5000)
+
+# ggexport(filename = "../../supplemental/miRNA/histogram_Peve_miRNA_lengths.png",
+#          plot   = hist_Peve_lengths,
+#          res    = 600,
+#          width  = 5000,
+#          height = 5000)
+```
+
+Let's also make a plot showing the length distributions of all three species
+
+```{r combine-length-files}
+# Add a new column to each data frame to label the source file
+Apul_lengths <- Apul_lengths %>% mutate(Species = 'A_pulchra')
+Peve_lengths <- Peve_lengths %>% mutate(Species = 'P_evermanni')
+Ptuh_lengths <- Ptuh_lengths %>% mutate(Species = 'P_tuahiniensis')
+
+# Combine the data frames into one
+all_lengths <- rbind(Apul_lengths, Peve_lengths, Ptuh_lengths)
+```
+
+```{r plot-all-lengths}
+hist_all_lengths <- ggplot(all_lengths, aes(x = length, fill = Species)) +
+  geom_histogram(binwidth = 1, 
+                 position = position_dodge(width = 0.91), 
+                 color = "black", 
+                 width = 0.9) +
+  geom_text(stat = 'count', 
+            aes(label = ..count..), 
+            vjust = -0.5, 
+            position = position_dodge(width = 1)) +
+  scale_fill_manual(values = species_colors) +
+  labs(title = "Sequence lengths by species",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency",
+       fill = "Species") +
+  xlim(20.5, 24.5) +
+  ylim(0, 41) +
+  theme_minimal()
+
+hist_all_lengths
+
+ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_all_miRNA_lengths.png",
+         plot   = hist_all_lengths,
+         res    = 600,
+         width  = 5000,
+         height = 5000)
+
+# ggexport(filename = "../../supplemental/miRNA/histogram_all_miRNA_lengths.png",
+#          plot   = hist_all_lengths,
+#          res    = 600,
+#          width  = 5000,
+#          height = 5000)
+```
+
+```{r summarize-length-distributions}
+# Summarize min, max, and average lengths for each species
+length_summary <- all_lengths %>%
+  group_by(Species) %>%
+  summarise(
+    Min_Length = min(length, na.rm = TRUE),
+    Max_Length = max(length, na.rm = TRUE),
+    Avg_Length = mean(length, na.rm = TRUE)
+  )
+
+print(length_summary)
+```
+```{r remove-unneeded-lengths-files, engine='bash'}
+rm -r ../output/04-miRNA-comparison/*lengths.txt
+```
+
+## Merge the three mature miRNA FASTAs
+
+```{r merge-miRNA-FASTAs, engine='bash'}
+cd ../output/04-miRNA-comparison
+
+cat Apul_ShortStack_mature.fasta Peve_ShortStack_mature.fasta Ptuh_ShortStack_mature.fasta > merged_all_ShortStack_mature.fasta
+
+head merged_all_ShortStack_mature.fasta
+tail merged_all_ShortStack_mature.fasta
+```
+
+Let's do a quick investigation of our merged mature miRNAs.
+
+```{r calculate-miRNA-length-stats, engine='bash'}
+# Extract sequence lengths and calculate statistics
+lengths=$(awk '/^>/ {if (seqlen) print seqlen; seqlen=0; next} {seqlen += length($0)} END {print seqlen}' ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta)
+min_length=$(echo "$lengths" | sort -n | head -n 1)
+max_length=$(echo "$lengths" | sort -n | tail -n 1)
+total_length=$(echo "$lengths" | awk '{sum += $1} END {print sum}')
+num_sequences=$(grep -c '^>' ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta)
+average_length=$(echo "scale=2; $total_length / $num_sequences" | bc)
+
+# Output results
+echo "Minimum sequence length: $min_length"
+echo "Maximum sequence length: $max_length"
+echo "Average sequence length: $average_length"
+```
+
+# BLASTs
+
+## Make database for each species:
+
+Apul
+```{r Apul-blast-db, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta \
+-dbtype nucl \
+-out ../output/04-miRNA-comparison/blasts/Apul-db/Apul_ShortStack_mature
+```
+
+Peve
+```{r Peve-blast-db, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta \
+-dbtype nucl \
+-out ../output/04-miRNA-comparison/blasts/Peve-db/Peve_ShortStack_mature
+```
+
+Ptuh
+```{r Ptuh-blast-db, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta \
+-dbtype nucl \
+-out ../output/04-miRNA-comparison/blasts/Ptuh-db/Ptuh_ShortStack_mature
+```
+
+## Run Blastn
+
+Generate a list of blast results that, for each miRNA, shows the top hit in each of two other species. We want to see the top hits no matter how poor the match is, so we will not filter by e-value at this stage. We'll also include the "-word_size 4" option, which reduces the required length of the initial match.
+
+All to Apul:
+```{r blastn-all-to-Apul, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn-short \
+-query ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta \
+-db ../output/04-miRNA-comparison/blasts/Apul-db/Apul_ShortStack_mature \
+-out ../output/04-miRNA-comparison/blasts/Apul_to_all_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/04-miRNA-comparison/blasts/Apul_to_all_blastn.tab
+```
+
+
+All to Peve:
+```{r blastn-all-to-Peve, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn-short \
+-query ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta \
+-db ../output/04-miRNA-comparison/blasts/Peve-db/Peve_ShortStack_mature \
+-out ../output/04-miRNA-comparison/blasts/Peve_to_all_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/04-miRNA-comparison/blasts/Peve_to_all_blastn.tab
+```
+
+All to Ptuh:
+```{r blastn-all-to-Ptuh, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn-short \
+-query ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta \
+-db ../output/04-miRNA-comparison/blasts/Ptuh-db/Ptuh_ShortStack_mature \
+-out ../output/04-miRNA-comparison/blasts/Ptuh_to_all_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+
+wc -l ../output/04-miRNA-comparison/blasts/Ptuh_to_all_blastn.tab
+```
+
+## Join BLAST tables
+
+```{r load-blast-tables}
+apul_to_all_blastn <- read.table("../output/04-miRNA-comparison/blasts/Apul_to_all_blastn.tab", sep="\t", header=FALSE)
+peve_to_all_blastn <- read.table("../output/04-miRNA-comparison/blasts/Peve_to_all_blastn.tab", sep="\t", header=FALSE)
+Ptuh_to_all_blastn <- read.table("../output/04-miRNA-comparison/blasts/Ptuh_to_all_blastn.tab", sep="\t", header=FALSE)
+```
+
+Column labels: 
+qseqid: Query sequence ID 
+sseqid: Subject (database)
+sequence ID pident: Percentage of identical matches 
+length: Alignment length (number of base pairs or amino acids) 
+mismatch: Number of mismatches 
+gapopen: Number of gap openings 
+qstart: Start of alignment in the query 
+qend: End of alignment in the query 
+sstart: Start of alignment in the subject 
+send: End of alignment in the subject 
+evalue: Expect value (number of hits expected by chance) 
+bitscore: Bit score
+
+```{r join-blast-tables}
+# Combine the three blast tables
+combined_blastn <- rbind(apul_to_all_blastn, peve_to_all_blastn, Ptuh_to_all_blastn)
+
+# Assign informative column labels
+colnames(combined_blastn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+
+# Save this original, unfiltered blast table.
+write.table(combined_blastn, "../output/04-miRNA-comparison/combined_blast.tab", sep="\t", row.names=FALSE, quote=FALSE)
+```
+
+
+# Identify conserved miRNAs
+
+Filter our list of blast hits to remove instances where sequences match themselves (e.g. from querying an Apul sequence against our combined database which contained all Apul sequences), and to retain only the significant hits (We'll set this at eval > 1E-5)
+```{r filter-blast-combined}
+# Filter
+filtered_combined_blastn <- combined_blastn %>%
+  filter(qseqid != sseqid) %>%
+  filter(evalue < 0.00001)
+
+# View
+nrow(filtered_combined_blastn)
+head(filtered_combined_blastn)
+
+write.table(filtered_combined_blastn, "../output/04-miRNA-comparison/filtered_combined_blast.tab", sep="\t", row.names=FALSE, quote=FALSE)
+```
+
+Ok now we can start identifying conserved miRNAs. Keep in mind that this list of filtered, combined blastn hits contains duplicates because, for example, querying Apul sequences against a database containing Peve sequences is functionally the same as querying those Peve sequences against a databse which contains Apul. So, for example, this list would contain a hit matching Apul.seq1 to Peve.seq2, *and* a hit matching Peve.seq2 to Apul.seq1.
+
+
+## Conserved across all three species (Apul, Peve, and Ptuh)
+
+First, lets find miRNAs conserved among all three species. These would show up as an miRNA from one species that has hits from both other species (e.g., Apul.seq1 has a hit from Peve *and* a hit from Ptuh).
+```{r id-conserved-three-species}
+# Find Apul miRNAs that have matches from both Peve and Ptuh
+present_in_all <- filtered_combined_blastn %>%
+  # isolate Apul miRNAs with hits
+  filter(!grepl("Porites_evermani|Pocillopora_meandrina", sseqid)) %>%
+  group_by(sseqid) %>%
+  filter(any(grepl("Porites_evermani", qseqid)) & any(grepl("Pocillopora_meandrina", qseqid)))
+
+# View the miRNAs that match across all three species
+# (recall this will include two entries for each conserved miRNA, it's Apul match in Peve, and its Apul match to Ptuh)
+head(present_in_all, nrow(present_in_all))
+ 
+# Count the number of miRNAs conserved across all three species
+paste("Number of miRNAs conserved across all three species:", nrow(distinct(present_in_all, sseqid)))
+```
+
+## Conserved among subsets of the three species
+
+Now we want to find miRNAs that are conserved withing subsets of the three species
+
+### Apul and Peve
+
+Find Apul miRNAs that have hits to Peve miRNAs but *not* hits to Ptuh miRNAs (that would make them conserved among all three species, which we've already identified)
+```{r id-conserved-apul-peve}
+# Find Apul miRNAs that have matches from only Peve
+present_in_apul_peve <- filtered_combined_blastn %>%
+  # isolate Apul miRNAs with hits
+  filter(!grepl("Porites_evermani|Pocillopora_meandrina", sseqid)) %>%
+  group_by(sseqid) %>%
+  # filter for hits to Peve only
+  filter(any(grepl("Porites_evermani", qseqid)) & !any(grepl("Pocillopora_meandrina", qseqid)))
+
+# View the miRNAs that match between Apul and Peve
+head(present_in_apul_peve, nrow(present_in_apul_peve))
+ 
+# Count the number of miRNAs conserved across the two species
+paste("Number of miRNAs conserved in Apul and Peve:", nrow(distinct(present_in_apul_peve, sseqid)))
+```
+
+
+### Apul and Ptuh
+
+Find Apul miRNAs that have hits to Ptuh miRNAs but *not* hits to Peve miRNAs
+
+```{r id-conserved-apul-Ptuh}
+# Find Apul miRNAs that have matches from only Ptuh
+present_in_apul_Ptuh <- filtered_combined_blastn %>%
+  # isolate Apul miRNAs with hits
+  filter(!grepl("Porites_evermani|Pocillopora_meandrina", sseqid)) %>%
+  group_by(sseqid) %>%
+  # filter for hits to Ptuh only
+  filter(!any(grepl("Porites_evermani", qseqid)) & any(grepl("Pocillopora_meandrina", qseqid)))
+
+# View the miRNAs that match between Apul and Ptuh
+head(present_in_apul_Ptuh, nrow(present_in_apul_Ptuh))
+ 
+# Count the number of miRNAs conserved across the two species
+paste("Number of miRNAs conserved in Apul and Ptuh:", nrow(distinct(present_in_apul_Ptuh, sseqid)))
+```
+
+### Peve and Ptuh
+
+Find Peve miRNAs that have hits to Ptuh miRNAs but *not* hits to Apul miRNAs
+
+```{r id-conserved-peve-Ptuh}
+# Find Peve miRNAs that have matches from only Ptuh
+present_in_peve_Ptuh <- filtered_combined_blastn %>%
+  # isolate Peve miRNAs with hits
+  filter(grepl("Porites_evermani", sseqid)) %>%
+  group_by(sseqid) %>%
+  # filter for hits to Ptuh only (note the Apul sequence IDs don't contain the species name, so we have to use a non-descriptive unique identifier for filtering)
+  filter(!any(grepl("mature::ntLink|mature::ptg", qseqid)) & any(grepl("Pocillopora_meandrina", qseqid)))
+
+# View the miRNAs that match between Peve and Ptuh
+head(present_in_peve_Ptuh, nrow(present_in_peve_Ptuh))
+ 
+# Count the number of miRNAs conserved across the two species
+paste("Number of miRNAs conserved in Peve and Ptuh:", nrow(distinct(present_in_peve_Ptuh, sseqid)))
+```
+
+
+## Visualize
+
+### Data munging of the results
+
+```{r grab-fasta-headers, engine='bash'}
+cd ../output/04-miRNA-comparison
+grep "^>"  merged_all_ShortStack_mature.fasta | sed 's/^>//' > merged_all_ShortStack_mature_IDs.txt
+
+head -5 merged_all_ShortStack_mature_IDs.txt
+```
+
+```{r separate-ids-by-species}
+# Read in and separate the ids of all miRNAs from the three species
+merged_IDs <- readLines("../output/04-miRNA-comparison/merged_all_ShortStack_mature_IDs.txt")
+
+apul_IDs <- merged_IDs[grep("mature::ntLink|mature::ptg", merged_IDs)]
+peve_IDs <- merged_IDs[grep("Porites_evermani", merged_IDs)]
+Ptuh_IDs <- merged_IDs[grep("Pocillopora_meandrina", merged_IDs)]
+length(apul_IDs)
+length(peve_IDs)
+length(Ptuh_IDs)
+```
+
+```{r create-shared-conserved-ids}
+# Assign shared miRNA IDs to conserved miRNAs
+
+# Function to append IDs of matching miRNAs to the original query miRNA
+append_IDs <- function(IDs_list, df) {
+  appended_IDs_list <- vector("list", length(IDs_list))
+  for (i in seq_along(IDs_list)) {
+    matching_entries <- df$qseqid[df$sseqid == IDs_list[i]]
+    if (length(matching_entries) > 0) {
+      appended_IDs_list[[i]] <- paste(IDs_list[i], paste(matching_entries, collapse = "|"), sep = "|")
+    } else {
+      appended_IDs_list[[i]] <- IDs_list[i]
+    }
+  }
+  return(appended_IDs_list)
+}
+
+# Apply the function to each set of conserved miRNAs
+appendedIDs_apul_peve_Ptuh <- append_IDs(unique(present_in_all$sseqid), present_in_all)
+
+appendedIDs_apul_peve <- append_IDs(unique(present_in_apul_peve$sseqid), present_in_apul_peve)
+appendedIDs_apul_Ptuh <- append_IDs(unique(present_in_apul_Ptuh$sseqid), present_in_apul_Ptuh)
+appendedIDs_peve_Ptuh <- append_IDs(unique(present_in_peve_Ptuh$sseqid), present_in_peve_Ptuh)
+
+print(appendedIDs_apul_peve_Ptuh[1])
+print(appendedIDs_apul_peve)
+print(appendedIDs_apul_Ptuh)
+print(appendedIDs_peve_Ptuh)
+
+# combine the new appended IDs into a single list of conserved miRNAs
+conserved_miRNAs_all_IDs <- c(appendedIDs_apul_peve_Ptuh, appendedIDs_apul_peve, appendedIDs_apul_Ptuh, appendedIDs_peve_Ptuh)
+```
+
+```{r replace-entries}
+# For each species list of miRNA IDs, replace species-specific IDs of conserved miRNAs with our newly generated appended IDs. This will created lists of miRNA IDs that have shared IDs for the conserved mRNAs
+replace_entries <- function(spec_list, new_conserved_IDs) {
+  # Iterate over each entry in spec_list
+  for (i in seq_along(spec_list)) {
+    # Check if the current entry in spec_list exists in any entry in new_conserved_IDs
+    matching_entry <- new_conserved_IDs[grep(spec_list[i], new_conserved_IDs, fixed = TRUE)]
+    # If a match is found, replace the entry in spec_list with the matching entry from new_conserved_IDs
+    if (length(matching_entry) > 0) {
+      spec_list[i] <- matching_entry[[1]]  # Replace with the first element of matching_entry
+    }
+  }
+  return(spec_list)  # Return the modified spec_list
+}
+
+apul_mature_newconservedID <- replace_entries(apul_IDs, conserved_miRNAs_all_IDs)
+peve_mature_newconservedID <- replace_entries(peve_IDs, conserved_miRNAs_all_IDs)
+Ptuh_mature_newconservedID <- replace_entries(Ptuh_IDs, conserved_miRNAs_all_IDs)
+```
+
+
+### Venn diagram
+
+```{r venn-diagram}
+# Note that mtORF data indicates our P.tuahiniensis samples are actually P.tuahiniensis, so that's the species name we'll be using in figures
+a <- list("A. pulchra" = apul_mature_newconservedID, 
+          "P. evermanni" = peve_mature_newconservedID,
+          "P. tuahiniensis" = Ptuh_mature_newconservedID)
+
+venn_conserved <- ggvenn(a, show_percentage = FALSE, fill_color = species_colors_nolabel)
+venn_conserved
+
+ggexport(filename = "../output/04-miRNA-comparison/figures/venn_conserved_miRNA.png",
+         plot   = venn_conserved,
+         res    = 600,
+         width  = 5000,
+         height = 5000)
+
+# ggexport(filename = "../../supplemental/miRNA/venn_conserved_miRNA.png",
+#          plot   = venn_conserved,
+#          res    = 600,
+#          width  = 5000,
+#          height = 5000)
+```
+
+
+# Identify miRNAs with identical mature miRNAs
+
+It's possible for identical mature miRNAs to arise from non-identical precursor miRNAs. These would be classified by ShortStack as different miRNAs, but could still have similar/identical functions. Let's see if we have any of those in our data.
+
+We've already eliminated instances of miRNAs matching to themselves, so to identify distinct miRNAs from with identical mature sequences we can just look for hits within the same species (e.g. Apul.seq1 matching Apul.seq4)
+
+## Apul
+
+```{r apul-identical-mirna}
+# Identify sets of identical miRNAs
+apul_identical_miRNAs <- filtered_combined_blastn %>%
+  filter(grepl("mature::ntLink|mature::ptg", sseqid)) %>%
+  filter(grepl("mature::ntLink|mature::ptg", qseqid))
+         
+head(apul_identical_miRNAs)
+
+# Save
+write.table(apul_identical_miRNAs, "../output/04-miRNA-comparison/Apul_identical_miRNAs.tab", sep="\t", row.names = FALSE, col.names = TRUE)
+```
+
+There are 0 sets of identical miRNAs identified by ShortStack in A.pulchra.
+
+## Peve
+
+```{r peve-identical-mirna}
+# Identify sets of identical miRNAs
+peve_identical_miRNAs <- filtered_combined_blastn %>%
+  filter(grepl("Porites_evermani", sseqid)) %>%
+  filter(grepl("Porites_evermani", qseqid))
+         
+head(peve_identical_miRNAs)
+
+# Save
+write.table(peve_identical_miRNAs, "../output/04-miRNA-comparison/Peve_identical_miRNAs.tab", sep="\t", row.names = FALSE, col.names = TRUE)
+```
+
+```{r peve-identical-first, engine='bash'}
+# First pair
+head -2 ../output/04-miRNA-comparison/Peve_identical_miRNAs.tab | tail -1
+
+seq1=$(awk 'NR==2 {print $1}' FS='\t' ../output/04-miRNA-comparison/Peve_identical_miRNAs.tab | sed 's/.mature::.*//' | sed 's/"//g')
+seq2=$(awk 'NR==2 {print $2}' FS='\t' ../output/04-miRNA-comparison/Peve_identical_miRNAs.tab | sed 's/.mature::.*//' | sed 's/"//g')
+
+echo ""
+echo $seq1
+echo $seq2
+echo ""
+
+# grab the precursor, star, and mature fasta sequences for the two miRNAs
+awk -v seq="$seq1" 'BEGIN {RS=">"; FS="\n"} $1 ~ seq {print ">"$0}' ../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta
+
+awk -v seq="$seq2" 'BEGIN {RS=">"; FS="\n"} $1 ~ seq {print ">"$0}' ../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta
+```
+
+For this set of identical miRNAs, the mature and star sequences are identical and the precursors only have a single mismatch, despite being located in different places on the chromosome.
+
+
+## Ptuh
+
+```{r Ptuh-identical-mirna}
+# Identify sets of identical miRNAs
+Ptuh_identical_miRNAs <- filtered_combined_blastn %>%
+  filter(grepl("Pocillopora_meandrina", sseqid)) %>%
+  filter(grepl("Pocillopora_meandrina", qseqid))
+         
+head(Ptuh_identical_miRNAs)
+```
+
+There are 0 sets of identical miRNAs identified by ShortStack in P.tuahiniensis
+
+
+# Look at the database matches
+
+```{r isolate-mirna-from-resultstxt, engine='bash'}
+# isolate the full "Results" annotation for each mature miRNA, which includes sequence detail and database matches
+
+# Apul
+awk -F'\t' 'NR==1 || $20 == "Y"' ../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.txt > ../output/04-miRNA-comparison/Apul_results_mature.txt
+
+# Peve
+awk -F'\t' 'NR==1 || $20 == "Y"' ../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt > ../output/04-miRNA-comparison/Peve_results_mature.txt
+
+# Ptuh
+awk -F'\t' 'NR==1 || $20 == "Y"' ../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt > ../output/04-miRNA-comparison/Ptuh_results_mature.txt
+
+```
+
+Annotate our mature miRNA fasta files with associated database matches
+
+Apul
+```{r apul-annotate-with-db-matches, engine='bash'}
+cd ../output/04-miRNA-comparison
+
+while IFS= read -r line; do
+    if [[ $line == ">"* ]]; then
+        # Extract sequence header (without ">") and the accession string
+        header="${line:1}"
+        accession=$(echo "$header" | awk -F '.' '{print $1}')
+
+        # Search for the accession string in the metadata file
+        metadata_line=$(grep -i "$accession" Apul_results_mature.txt)
+
+        # Extract the last column entry from the metadata line
+        last_column=$(echo "$metadata_line" | awk '{print $NF}')
+
+        # Append the last column entry to the sequence header
+        new_header="$header $last_column"
+
+        # Output the new header
+        echo ">$new_header"
+    else
+        # Output the sequence line unchanged
+        echo "$line"
+    fi
+done < ../../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta > Apul_ShortStack_mature_annotated.fasta
+```
+
+Peve
+```{r peve-annotate-with-db-matches, engine='bash'}
+cd ../output/04-miRNA-comparison
+
+while IFS= read -r line; do
+    if [[ $line == ">"* ]]; then
+        # Extract sequence header (without ">") and the accession string
+        header="${line:1}"
+        accession=$(echo "$header" | awk -F '.' '{print $1}')
+
+        # Search for the accession string in the metadata file
+        metadata_line=$(grep -i "$accession" Peve_results_mature.txt)
+
+        # Extract the last column entry from the metadata line
+        last_column=$(echo "$metadata_line" | awk '{print $NF}')
+
+        # Append the last column entry to the sequence header
+        new_header="$header $last_column"
+
+        # Output the new header
+        echo ">$new_header"
+    else
+        # Output the sequence line unchanged
+        echo "$line"
+    fi
+done < ../../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta > Peve_ShortStack_mature_annotated.fasta
+```
+
+Ptuh
+```{r Ptuh-annotate-with-db-matches, engine='bash'}
+cd ../output/04-miRNA-comparison
+
+while IFS= read -r line; do
+    if [[ $line == ">"* ]]; then
+        # Extract sequence header (without ">") and the accession string
+        header="${line:1}"
+        accession=$(echo "$header" | awk -F '.' '{print $1}')
+
+        # Search for the accession string in the metadata file
+        metadata_line=$(grep -i "$accession" Ptuh_results_mature.txt)
+
+        # Extract the last column entry from the metadata line
+        last_column=$(echo "$metadata_line" | awk '{print $NF}')
+
+        # Append the last column entry to the sequence header
+        new_header="$header $last_column"
+
+        # Output the new header
+        echo ">$new_header"
+    else
+        # Output the sequence line unchanged
+        echo "$line"
+    fi
+done < ../../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta > Ptuh_ShortStack_mature_annotated.fasta
+```
+
+## Table
+
+```{r data-summary-compare-dbmatch}
+Apul_shortstack_results <- read.csv("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.txt", sep="\t")
+
+Peve_shortstack_results <- read.csv("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt", sep="\t")
+
+Ptuh_shortstack_results <- read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Results.txt", sep="\t")
+
+Apul_num_miRNA <- Apul_shortstack_results %>% filter(MIRNA == "Y") %>% nrow()
+Apul_num_miRNAmatch <- Apul_shortstack_results %>% filter(MIRNA == "Y" ) %>% filter(!is.na(known_miRNAs)) %>% nrow()
+
+Peve_num_miRNA <- Peve_shortstack_results %>% filter(MIRNA == "Y") %>% nrow()
+Peve_num_miRNAmatch <- Peve_shortstack_results %>% filter(MIRNA == "Y" ) %>% filter(!is.na(known_miRNAs)) %>% nrow()
+
+Ptuh_num_miRNA <- Ptuh_shortstack_results %>% filter(MIRNA == "Y") %>% nrow()
+Ptuh_num_miRNAmatch <- Ptuh_shortstack_results %>% filter(MIRNA == "Y" ) %>% filter(!is.na(known_miRNAs)) %>% nrow()
+
+table_data <- data.frame(
+  Species = c("A. pulchra", "P. evermanni", "P. tuaheniensis"),
+  miRNA = c(Apul_num_miRNA, Peve_num_miRNA, Ptuh_num_miRNA),
+  miRNAmatch = c(Apul_num_miRNAmatch, Peve_num_miRNAmatch, Ptuh_num_miRNAmatch)
+)
+colnames(table_data) <- c("Species", "miRNA", "miRNA with database match(es)")
+```
+
+```{r make-summary-table}
+table <- tableGrob(table_data, rows=NULL)
+miRNA_matches_table <- grid.arrange(table)
+
+png("../output/04-miRNA-comparison/figures/table_miRNA_matches.png", width = 400, height = 100)
+grid.arrange(table)
+
+# png("../../supplemental/miRNA/table_miRNA_matches.png", width = 400, height = 100)
+# grid.arrange(table)
+
+```
