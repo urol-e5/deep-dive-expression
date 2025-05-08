@@ -1,0 +1,24 @@
+---
+title: "Apul-miRNA-lncRNA-interactions"
+author: "Jill Ashey"
+date: "2025-05-08"
+output: html_document
+---
+
+This code will use Pearson's correlation coefficient to examine possible correlations between miRNA and lncRNA expression. This will then be compared to the miRanda interaction results of the miRNAs and lncRNAs. 
+
+Read in miRNA data
+```{r}
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+head(miRNA_counts)
+
+# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+miRNA_counts <- miRNA_counts %>%
+  #select(-sample150) %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+
+# Rename gene count cols to match miRNA count cols
+colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
+```
