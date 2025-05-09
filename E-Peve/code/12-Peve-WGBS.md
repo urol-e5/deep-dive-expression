@@ -3,29 +3,57 @@
 Zoe Dellaert
 2025-04-10
 
-- [0.0.1 Note: Most of this code is based on the E5 Time Series
-  Molecular code by Steven Roberts
-  here](#001-note-most-of-this-code-is-based-on-the-e5-time-series-molecular-code-by-steven-roberts-here)
-- [0.1 Generate Bismark Bisulfite
-  Genome](#01-generate-bismark-bisulfite-genome)
-  - [0.1.1 output:](#011-output)
-  - [0.1.2 Compress and generate md5](#012-compress-and-generate-md5)
-- [0.2 Test parameters](#02-test-parameters)
-  - [0.2.1 Results from parameter
-    tests:](#021-results-from-parameter-tests)
-- [0.3 Align to genome](#03-align-to-genome)
-- [0.4 Post-alignment code is based once again on Steven’s
-  code](#04-post-alignment-code-is-based-once-again-on-stevens-code)
-  - [0.4.1 Deduplication, Sorting, and methylation extraction &
-    calling](#041-deduplication-sorting-and-methylation-extraction--calling)
-  - [0.4.2 View output](#042-view-output)
-  - [0.4.3 Make summary reports](#043-make-summary-reports)
-  - [0.4.4 Sorting cov files and filtering for coverage and gene
-    intersection](#044-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
+- [0.1 This is the downstream methylation analysis of the WGBS data for
+  *Porites
+  evermanni*](#01-this-is-the-downstream-methylation-analysis-of-the-wgbs-data-for-porites-evermanni)
+- [0.2 Important file locations:](#02-important-file-locations)
+  - [0.2.1 Note: Most of this code is based on the E5 Time Series
+    Molecular code by Steven Roberts
+    here](#021-note-most-of-this-code-is-based-on-the-e5-time-series-molecular-code-by-steven-roberts-here)
+- [0.3 Generate Bismark Bisulfite
+  Genome](#03-generate-bismark-bisulfite-genome)
+  - [0.3.1 output:](#031-output)
+  - [0.3.2 Compress and generate md5](#032-compress-and-generate-md5)
+  - [0.3.3 Output file location: Bismark
+    Genome](#033-output-file-location-bismark-genome)
+- [0.4 Test parameters](#04-test-parameters)
+  - [0.4.1 Results from parameter
+    tests:](#041-results-from-parameter-tests)
+- [0.5 Align to genome](#05-align-to-genome)
+  - [0.5.1 Output file location: All Bismark output
+    files](#051-output-file-location-all-bismark-output-files)
+- [0.6 Post-alignment code is based once again on Steven’s
+  code](#06-post-alignment-code-is-based-once-again-on-stevens-code)
+  - [0.6.1 Deduplication, Sorting, and methylation extraction &
+    calling](#061-deduplication-sorting-and-methylation-extraction--calling)
+  - [0.6.2 View output](#062-view-output)
+  - [0.6.3 Make summary reports](#063-make-summary-reports)
+  - [0.6.4 Sorting cov files and filtering for coverage and gene
+    intersection](#064-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
+  - [0.6.5 Output file location: All Bismark output
+    files](#065-output-file-location-all-bismark-output-files)
 
-### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+## 0.1 This is the downstream methylation analysis of the WGBS data for *Porites evermanni*
 
-## 0.1 Generate Bismark Bisulfite Genome
+Reads were trimmed and QC’d in [this
+code](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC.md)
+
+## 0.2 Important file locations:
+
+1.  [Trimmed WGBS
+    Reads](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/01.00-E-Peve-WGBS-trimming-cutadapt-FastQC-MultiQC/)
+2.  [Bismark
+    Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/Bisulfite_Genome/)
+3.  [All Bismark output files (BAMs, .cov files, .bedgraph
+    files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)
+4.  [Bismark and Qualimap
+    MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/multiqc_report.html)
+    and [base bismark
+    report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
+### 0.2.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+
+## 0.3 Generate Bismark Bisulfite Genome
 
 ``` bash
 #!/usr/bin/env bash
@@ -47,7 +75,7 @@ cd ../data
 bismark_genome_preparation --verbose --parallel 10 ./
 ```
 
-### 0.1.1 output:
+### 0.3.1 output:
 
 ``` bash
 Using 10 threads for the top and bottom strand indexing processes each, so using 20 cores in total
@@ -81,7 +109,7 @@ Renaming BS_CT.rev.1.bt2.tmp to BS_CT.rev.1.bt2
 Renaming BS_CT.rev.2.bt2.tmp to BS_CT.rev.2.bt2
 ```
 
-### 0.1.2 Compress and generate md5
+### 0.3.2 Compress and generate md5
 
 ``` bash
 cd ../data
@@ -93,7 +121,9 @@ md5sum Bisulfite_Genome.tar.gz | tee Bisulfite_Genome.tar.gz.md5
 885c84c233ca313f23b8670903a18db6  Bisulfite_Genome.tar.gz
 ```
 
-## 0.2 Test parameters
+### 0.3.3 Output file location: [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/data/Bisulfite_Genome/)
+
+## 0.4 Test parameters
 
 ``` bash
 #!/usr/bin/env bash
@@ -209,7 +239,7 @@ for dir in ${output_dir}/*_score_*; do
 done
 ```
 
-### 0.2.1 Results from parameter tests:
+### 0.4.1 Results from parameter tests:
 
 | Sample          | Score_Min | Alignment_Rate |
 |:----------------|:----------|:---------------|
@@ -248,7 +278,7 @@ reference:
 - 489 = POR-79
 - 491 = POR-73
 
-## 0.3 Align to genome
+## 0.5 Align to genome
 
 ``` bash
 #!/usr/bin/env bash
@@ -337,9 +367,11 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
-## 0.4 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+### 0.5.1 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)
 
-### 0.4.1 Deduplication, Sorting, and methylation extraction & calling
+## 0.6 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+
+### 0.6.1 Deduplication, Sorting, and methylation extraction & calling
 
 ``` bash
 #!/usr/bin/env bash
@@ -406,13 +438,13 @@ ${bismark_dir}trimmed_{}_pe.deduplicated.bam \
 
 This took just over 6 hours with max memory used per node as 249.99GiB.
 
-### 0.4.2 View output
+### 0.6.2 View output
 
 ``` bash
 head ${bismark_dir}*evidence.cov
 ```
 
-### 0.4.3 Make summary reports
+### 0.6.3 Make summary reports
 
 ``` bash
 #!/usr/bin/env bash
@@ -456,7 +488,9 @@ bismark2summary *pe.bam
 multiqc .
 ```
 
-### 0.4.4 Sorting cov files and filtering for coverage and gene intersection
+#### 0.6.3.1 Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
+### 0.6.4 Sorting cov files and filtering for coverage and gene intersection
 
 ``` bash
 # salloc -p cpu -c 8 --mem 16G
@@ -528,3 +562,5 @@ for file in *_sorted.cov; do
   awk '{methylated+=$5; unmethylated+=$6} END {print "'$sample'", methylated/(methylated+unmethylated)}' "$file"
 done > global_methylation_levels.txt
 ```
+
+### 0.6.5 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)

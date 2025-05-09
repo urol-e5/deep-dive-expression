@@ -20,6 +20,17 @@ knitr::opts_chunk$set(
 )
 ```
 
+## This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
+
+Reads were trimmed and QC'd in [this code](https://github.com/urol-e5/deep-dive-expression/blob/daafe2e4d8633a30223f838d41dd90ef8bc7d06c/D-Apul/code/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC.md)
+
+## Important file locations:
+
+1. [Trimmed WGBS Reads](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/)
+2. [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/data/Bisulfite_Genome_ZD/)
+3. [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
+4. [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
 ### Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
 ## Generate Bismark Bisulfite Genome
@@ -89,6 +100,8 @@ md5sum Bisulfite_Genome.tar.gz | tee Bisulfite_Genome.tar.gz.md5
 ```{bash, eval=FALSE}
 09aa94a6744981b7edcb5176197f7cab  Bisulfite_Genome.tar.gz
 ```
+
+### Output file location: [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/data/Bisulfite_Genome_ZD/)
 
 ## Test parameters 
 
@@ -333,6 +346,8 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
+
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
 ### Deduplication, Sorting, and methylation extraction & calling
@@ -452,6 +467,8 @@ bismark2summary *pe.bam
 multiqc .
 ```
 
+#### Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
 ### Sorting cov files and filtering for coverage and gene intersection
 
 ```{bash, eval=FALSE}
@@ -524,6 +541,8 @@ for file in *_sorted.cov; do
   awk '{methylated+=$5; unmethylated+=$6} END {print "'$sample'", methylated/(methylated+unmethylated)}' "$file"
 done > global_methylation_levels.txt
 ```
+
+### Output file location: [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
 
 ## Methylkit
 

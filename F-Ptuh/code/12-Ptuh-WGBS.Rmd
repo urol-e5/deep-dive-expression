@@ -20,6 +20,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+## This is the downstream methylation analysis of the WGBS data for *Pocillopora tuahiniensis*
+
+Reads were trimmed and QC'd in [this code](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC.md)
+
+## Important file locations:
+
+1. [Trimmed WGBS Reads](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/01.00-F-Ptuh-WGBS-trimming-cutadapt-FastQC-MultiQC/)
+2. [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/data/Bisulfite_Genome/)
+3. [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+4. [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
+### Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
+
 ## Generate Bismark Bisulfite Genome
 
 ```{bash, eval=FALSE}
@@ -87,6 +100,8 @@ md5sum Bisulfite_Genome.tar.gz | tee Bisulfite_Genome.tar.gz.md5
 ```{bash, eval=FALSE}
 1d8399fe951b4f0113ddee438f1bfad1  Bisulfite_Genome.tar.gz
 ```
+
+### Output file location: [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/data/Bisulfite_Genome/)
 
 ## Test parameters 
 
@@ -325,6 +340,8 @@ done
 
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
+### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+
 ### Deduplication, Sorting, and methylation extraction & calling
 
 ```{bash, eval=FALSE}
@@ -441,3 +458,80 @@ bismark2summary *pe.bam
 
 multiqc .
 ```
+
+#### Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
+### Sorting cov files and filtering for coverage and gene intersection
+
+```{bash, eval=FALSE}
+# salloc -p cpu -c 8 --mem 16G
+
+# load modules needed
+module load bedtools2/2.31.1
+
+# set directories and files
+root_dir="/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/F-Ptuh/"
+bismark_dir="${root_dir}/output/12-Ptuh-WGBS/bismark_cutadapt/"
+genome_folder="${root_dir}/data/"
+gtf_name="Pocillopora_meandrina_HIv1.genes-validated"
+
+# Sort .cov files
+cd ${bismark_dir}
+for file in *merged_CpG_evidence.cov
+do
+  sample=$(basename "${file}" .CpG_report.merged_CpG_evidence.cov)
+  bedtools sort -i "${file}" \
+  > "${sample}"_sorted.cov
+done
+
+# Create bedgraphs for 5X coverage 
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
+  > "${sample}"_5x_sorted.bedgraph
+done
+
+# Create .tab files for 5x coverage
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4, $5, $6}}' \
+  > "${sample}"_5x_sorted.tab
+done
+
+# Intersection of all samples
+multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
+
+## change number after == to your number of samples
+cat CpG.all.samps.5x_sorted.bed | awk '$4 ==5' > CpG.filt.all.samps.5x_sorted.bed 
+
+# Intersection of all samples with gene bodies:
+awk '{if ($3 == "transcript") {print}}' "${genome_folder}/${gtf_name}.gtf"  > "${genome_folder}/${gtf_name}_transcripts.gtf"
+
+for i in *5x_sorted.tab
+do
+  intersectBed \
+  -wb \
+  -a ${i} \
+  -b "${genome_folder}/${gtf_name}_transcripts.gtf" \
+  > ${i}_gene
+done
+
+# Keep only loci intersecting with genes found in all samples
+for i in *_5x_sorted.tab_gene
+do
+  intersectBed \
+  -a ${i} \
+  -b CpG.filt.all.samps.5x_sorted.bed \
+  > ${i}_CpG_5x_enrichment.bed
+done
+
+# Global methylation levels 
+for file in *_sorted.cov; do
+  sample=$(basename "$file" _sorted.cov)
+  awk '{methylated+=$5; unmethylated+=$6} END {print "'$sample'", methylated/(methylated+unmethylated)}' "$file"
+done > global_methylation_levels.txt
+```
+
+### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
