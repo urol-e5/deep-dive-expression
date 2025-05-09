@@ -20,6 +20,8 @@ Zoe Dellaert
     calling](#041-deduplication-sorting-and-methylation-extraction--calling)
   - [0.4.2 View output](#042-view-output)
   - [0.4.3 Make summary reports](#043-make-summary-reports)
+  - [0.4.4 Sorting cov files and filtering for coverage and gene
+    intersection](#044-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
 
 ### 0.0.1 Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
@@ -452,4 +454,77 @@ bismark2report
 bismark2summary *pe.bam
 
 multiqc .
+```
+
+### 0.4.4 Sorting cov files and filtering for coverage and gene intersection
+
+``` bash
+# salloc -p cpu -c 8 --mem 16G
+
+# load modules needed
+module load bedtools2/2.31.1
+
+# set directories and files
+root_dir="/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/E-Peve/"
+bismark_dir="${root_dir}/output/12-Peve-WGBS/bismark_cutadapt/"
+genome_folder="${root_dir}/data/"
+gtf_name="Porites_evermanni_validated"
+
+# Sort .cov files
+cd ${bismark_dir}
+for file in *merged_CpG_evidence.cov
+do
+  sample=$(basename "${file}" .CpG_report.merged_CpG_evidence.cov)
+  bedtools sort -i "${file}" \
+  > "${sample}"_sorted.cov
+done
+
+# Create bedgraphs for 5X coverage 
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4}}' \
+  > "${sample}"_5x_sorted.bedgraph
+done
+
+# Create .tab files for 5x coverage
+for file in *_sorted.cov
+do
+  sample=$(basename "${file}" _sorted.cov)
+  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 5) {print $1, $2, $3, $4, $5, $6}}' \
+  > "${sample}"_5x_sorted.tab
+done
+
+# Intersection of all samples
+multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
+
+## change number after == to your number of samples
+cat CpG.all.samps.5x_sorted.bed | awk '$4 ==5' > CpG.filt.all.samps.5x_sorted.bed 
+
+# Intersection of all samples with gene bodies:
+awk '{if ($3 == "transcript") {print}}' "${genome_folder}/${gtf_name}.gtf"  > "${genome_folder}/${gtf_name}_transcripts.gtf"
+
+for i in *5x_sorted.tab
+do
+  intersectBed \
+  -wb \
+  -a ${i} \
+  -b "${genome_folder}/${gtf_name}_transcripts.gtf" \
+  > ${i}_gene
+done
+
+# Keep only loci intersecting with genes found in all samples
+for i in *_5x_sorted.tab_gene
+do
+  intersectBed \
+  -a ${i} \
+  -b CpG.filt.all.samps.5x_sorted.bed \
+  > ${i}_CpG_5x_enrichment.bed
+done
+
+# Global methylation levels 
+for file in *_sorted.cov; do
+  sample=$(basename "$file" _sorted.cov)
+  awk '{methylated+=$5; unmethylated+=$6} END {print "'$sample'", methylated/(methylated+unmethylated)}' "$file"
+done > global_methylation_levels.txt
 ```
