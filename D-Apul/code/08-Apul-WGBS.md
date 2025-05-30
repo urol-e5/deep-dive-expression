@@ -34,6 +34,7 @@ Zoe Dellaert
     files, .bedgraph
     files)](#065-output-file-location-all-bismark-output-files-bams-cov-files-bedgraph-files)
 - [0.7 Methylkit](#07-methylkit)
+  - [0.7.1 Annotation](#071-annotation)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
 
@@ -571,19 +572,168 @@ done > global_methylation_levels.txt
 ## 0.7 Methylkit
 
 ``` r
-# Load methylKit
-library(methylKit)
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
 
-setwd("/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/")
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
 
-# Define sample files and conditions
-file.list <- list(
-  "trimmed_ACR-140-TP2_S5_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-145-TP2_S3_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-150-TP2_S2_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-173-TP2_S4_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-178-TP2_S1_pe.deduplicated.bismark.cov.gz"
-)
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d_pe.deduplicated.bismark.cov.gz", "", sample)
 
-treatment <- c(0, 0, 0, 0, 0)
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+```
+
+    [1] "ACR-140-TP2" "ACR-145-TP2" "ACR-150-TP2" "ACR-173-TP2" "ACR-178-TP2"
+
+``` r
+file_list
+```
+
+    [[1]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-140-TP2_S5_pe.deduplicated.bismark.cov.gz"
+
+    [[2]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-145-TP2_S3_pe.deduplicated.bismark.cov.gz"
+
+    [[3]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-150-TP2_S2_pe.deduplicated.bismark.cov.gz"
+
+    [[4]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-173-TP2_S4_pe.deduplicated.bismark.cov.gz"
+
+    [[5]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-178-TP2_S1_pe.deduplicated.bismark.cov.gz"
+
+``` r
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Apul",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/08-Apul-WGBS/methylkit/MethylObj.RData")
+```
+
+``` r
+load("../output/08-Apul-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+```
+
+    methylation statistics per base
+    summary:
+       Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0.000   0.000   0.000   9.926   6.897 100.000 
+    percentiles:
+            0%        10%        20%        30%        40%        50%        60% 
+      0.000000   0.000000   0.000000   0.000000   0.000000   0.000000   1.818182 
+           70%        80%        90%        95%        99%      99.5%      99.9% 
+      5.000000   9.090909  33.333333  75.000000  97.222222 100.000000 100.000000 
+          100% 
+    100.000000 
+
+``` r
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+``` r
+load("../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+    Call:
+    hclust(d = d, method = HCLUST.METHODS[hclust.method])
+
+    Cluster method   : ward.D 
+    Distance         : pearson 
+    Number of objects: 5 
+
+``` r
+getCorrelation(meth_filter)
+```
+
+                ACR-140-TP2 ACR-145-TP2 ACR-150-TP2 ACR-173-TP2 ACR-178-TP2
+    ACR-140-TP2   1.0000000   0.8560488   0.8736195   0.8705030   0.8734043
+    ACR-145-TP2   0.8560488   1.0000000   0.8533332   0.8634015   0.8654321
+    ACR-150-TP2   0.8736195   0.8533332   1.0000000   0.8680254   0.8719720
+    ACR-173-TP2   0.8705030   0.8634015   0.8680254   1.0000000   0.8775790
+    ACR-178-TP2   0.8734043   0.8654321   0.8719720   0.8775790   1.0000000
+
+### 0.7.1 Annotation
+
+``` r
+library("genomationData")
+library("genomation")
+
+gtf.file = "../data/Apulchra-genome.gtf"
+gtf = genomation::gffToGRanges(gtf.file)
+head(gtf)
+```
+
+    GRanges object with 6 ranges and 6 metadata columns:
+          seqnames    ranges strand |      source       type     score     phase
+             <Rle> <IRanges>  <Rle> |    <factor>   <factor> <numeric> <integer>
+      [1] ntLink_0 1105-7056      + | funannotate transcript        NA      <NA>
+      [2] ntLink_0 1105-1188      + | funannotate exon              NA      <NA>
+      [3] ntLink_0 1861-1941      + | funannotate exon              NA      <NA>
+      [4] ntLink_0 2762-2839      + | funannotate exon              NA      <NA>
+      [5] ntLink_0 5044-7056      + | funannotate exon              NA      <NA>
+      [6] ntLink_0 1105-1188      + | funannotate CDS               NA         0
+          transcript_id     gene_id
+            <character> <character>
+      [1] FUN_000001-T1  FUN_000001
+      [2] FUN_000001-T1  FUN_000001
+      [3] FUN_000001-T1  FUN_000001
+      [4] FUN_000001-T1  FUN_000001
+      [5] FUN_000001-T1  FUN_000001
+      [6] FUN_000001-T1  FUN_000001
+      -------
+      seqinfo: 148 sequences from an unspecified genome; no seqlengths
+
+``` r
+exons = gffToGRanges(gtf.file, filter = "exon")
+transcripts = gffToGRanges(gtf.file, filter = "transcript")
 ```

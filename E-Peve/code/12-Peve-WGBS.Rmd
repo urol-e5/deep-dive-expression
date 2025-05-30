@@ -13,10 +13,10 @@ bibliography: references.bib
 library(knitr)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
+  eval = TRUE,        # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
+  comment = "" # Prevents appending '##' to beginning of lines in code output
 )
 ```
 
@@ -544,3 +544,99 @@ done > global_methylation_levels.txt
 ```
 
 ### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)
+
+
+## Methylkit
+
+```{r}
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d{1,2}.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d{1,2}_pe.deduplicated.bismark.cov.gz", "", sample)
+
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+file_list
+
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Peve",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/12-Peve-WGBS/methylkit/MethylObj.RData")
+```
+
+```{r}
+load("../output/12-Peve-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+```{r,eval=FALSE}
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/12-Peve-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+```{r}
+load("../output/12-Peve-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+
+getCorrelation(meth_filter)
+```
+
+```{r}
+library("genomationData")
+library("genomation")
+library("GenomicRanges")
+
+gff_df <- read.delim("../data/Porites_evermanni_v1.annot.gff", header = FALSE, sep = "\t", comment.char = "#",
+                     col.names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
+
+
+gff_gr <- GRanges(
+  seqnames = gff_df$seqid,
+  ranges = IRanges(start = gff_df$start, end = gff_df$end),
+  strand = gff_df$strand,
+  type = gff_df$type,
+  source = gff_df$source,
+  score = gff_df$score,
+  phase = gff_df$phase,
+  attributes = gff_df$attributes
+)
+
+unique(gff_df$type)
+
+# Get only exon entries
+transcripts <- gff_gr[gff_gr$type == "mRNA"]
+```
+
+

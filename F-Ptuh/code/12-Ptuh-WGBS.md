@@ -32,6 +32,7 @@ Zoe Dellaert
     intersection](#065-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
   - [0.6.6 Output file location: All Bismark output
     files](#066-output-file-location-all-bismark-output-files)
+- [0.7 Methylkit](#07-methylkit)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Pocillopora tuahiniensis*
 
@@ -555,3 +556,194 @@ done > global_methylation_levels.txt
 ```
 
 ### 0.6.6 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+
+## 0.7 Methylkit
+
+``` r
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d{1,2}.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d{1,2}_pe.deduplicated.bismark.cov.gz", "", sample)
+
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+```
+
+    [1] "POC-47-TP2" "POC-48-TP2" "POC-50-TP2" "POC-53-TP2" "POC-57-TP2"
+
+``` r
+file_list
+```
+
+    [[1]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt//trimmed_POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz"
+
+    [[2]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt//trimmed_POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz"
+
+    [[3]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt//trimmed_POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz"
+
+    [[4]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt//trimmed_POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz"
+
+    [[5]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt//trimmed_POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz"
+
+``` r
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Ptuh",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/12-Ptuh-WGBS/methylkit/MethylObj.RData")
+```
+
+``` r
+load("../output/12-Ptuh-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+```
+
+    methylation statistics per base
+    summary:
+       Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0.000   0.000   0.000   3.427   2.778 100.000 
+    percentiles:
+            0%        10%        20%        30%        40%        50%        60% 
+      0.000000   0.000000   0.000000   0.000000   0.000000   0.000000   0.000000 
+           70%        80%        90%        95%        99%      99.5%      99.9% 
+      1.515152   4.000000   7.692308  11.764706  80.000000  90.909091 100.000000 
+          100% 
+    100.000000 
+
+``` r
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+```
+
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/12-Ptuh-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+``` r
+load("../output/12-Ptuh-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+```
+
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+```
+
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+    Call:
+    hclust(d = d, method = HCLUST.METHODS[hclust.method])
+
+    Cluster method   : ward.D 
+    Distance         : pearson 
+    Number of objects: 5 
+
+``` r
+getCorrelation(meth_filter)
+```
+
+                                                  POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz
+    POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz                                     1.0000000
+    POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz                                     0.8642741
+    POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz                                     0.8665897
+    POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz                                     0.8656579
+    POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz                                     0.8479776
+                                                  POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz
+    POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz                                     0.8642741
+    POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz                                     1.0000000
+    POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz                                     0.8631870
+    POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz                                     0.8597653
+    POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz                                     0.8641470
+                                                  POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz
+    POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz                                     0.8665897
+    POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz                                     0.8631870
+    POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz                                     1.0000000
+    POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz                                     0.8639496
+    POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz                                     0.8565860
+                                                  POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz
+    POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz                                     0.8656579
+    POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz                                     0.8597653
+    POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz                                     0.8639496
+    POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz                                     1.0000000
+    POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz                                     0.8490203
+                                                  POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz
+    POC-47-TP2_S13_pe.deduplicated.bismark.cov.gz                                     0.8479776
+    POC-48-TP2_S11_pe.deduplicated.bismark.cov.gz                                     0.8641470
+    POC-50-TP2_S14_pe.deduplicated.bismark.cov.gz                                     0.8565860
+    POC-53-TP2_S15_pe.deduplicated.bismark.cov.gz                                     0.8490203
+    POC-57-TP2_S12_pe.deduplicated.bismark.cov.gz                                     1.0000000
+
+``` r
+library("genomationData")
+library("genomation")
+
+gtf.file = "../data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
+gtf = genomation::gffToGRanges(gtf.file)
+head(gtf)
+```
+
+    GRanges object with 6 ranges and 6 metadata columns:
+                        seqnames    ranges strand |   source       type     score
+                           <Rle> <IRanges>  <Rle> | <factor>   <factor> <numeric>
+      [1] Pocillopora_meandrin..  887-6811      - | AUGUSTUS transcript        NA
+      [2] Pocillopora_meandrin..   887-973      - | AUGUSTUS exon              NA
+      [3] Pocillopora_meandrin.. 1828-1882      - | AUGUSTUS exon              NA
+      [4] Pocillopora_meandrin.. 2308-2371      - | AUGUSTUS exon              NA
+      [5] Pocillopora_meandrin.. 2891-2920      - | AUGUSTUS exon              NA
+      [6] Pocillopora_meandrin.. 3013-3067      - | AUGUSTUS exon              NA
+              phase          transcript_id                gene_id
+          <integer>            <character>            <character>
+      [1]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      [2]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      [3]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      [4]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      [5]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      [6]      <NA> mrna-Pocillopora_mea.. gene-Pocillopora_mea..
+      -------
+      seqinfo: 194 sequences from an unspecified genome; no seqlengths
+
+``` r
+exons = gffToGRanges(gtf.file, filter = "exon")
+transcripts = gffToGRanges(gtf.file, filter = "transcript")
+```

@@ -13,10 +13,10 @@ bibliography: references.bib
 library(knitr)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
+  eval = TRUE,        # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
+  comment = "" # Prevents appending '##' to beginning of lines in code output
 )
 ```
 
@@ -547,19 +547,82 @@ done > global_methylation_levels.txt
 ## Methylkit
 
 ```{r}
-# Load methylKit
-library(methylKit)
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
 
-setwd("/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/")
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
 
-# Define sample files and conditions
-file.list <- list(
-  "trimmed_ACR-140-TP2_S5_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-145-TP2_S3_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-150-TP2_S2_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-173-TP2_S4_pe.deduplicated.bismark.cov.gz",
-  "trimmed_ACR-178-TP2_S1_pe.deduplicated.bismark.cov.gz"
-)
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d_pe.deduplicated.bismark.cov.gz", "", sample)
 
-treatment <- c(0, 0, 0, 0, 0)
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+file_list
+
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Apul",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/08-Apul-WGBS/methylkit/MethylObj.RData")
 ```
+
+```{r}
+load("../output/08-Apul-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+```{r, eval=FALSE}
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+```{r}
+load("../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+
+getCorrelation(meth_filter)
+```
+
+
+### Annotation 
+
+```{r}
+library("genomationData")
+library("genomation")
+
+gtf.file = "../data/Apulchra-genome.gtf"
+gtf = genomation::gffToGRanges(gtf.file)
+head(gtf)
+
+exons = gffToGRanges(gtf.file, filter = "exon")
+transcripts = gffToGRanges(gtf.file, filter = "transcript")
+```
+

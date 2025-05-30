@@ -32,6 +32,7 @@ Zoe Dellaert
     intersection](#064-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
   - [0.6.5 Output file location: All Bismark output
     files](#065-output-file-location-all-bismark-output-files)
+- [0.7 Methylkit](#07-methylkit)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Porites evermanni*
 
@@ -564,3 +565,178 @@ done > global_methylation_levels.txt
 ```
 
 ### 0.6.5 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)
+
+## 0.7 Methylkit
+
+``` r
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d{1,2}.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d{1,2}_pe.deduplicated.bismark.cov.gz", "", sample)
+
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+```
+
+    [1] "POR-71-TP2" "POR-73-TP2" "POR-76-TP2" "POR-79-TP2" "POR-82-TP2"
+
+``` r
+file_list
+```
+
+    [[1]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt//trimmed_POR-71-TP2_S9_pe.deduplicated.bismark.cov.gz"
+
+    [[2]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt//trimmed_POR-73-TP2_S7_pe.deduplicated.bismark.cov.gz"
+
+    [[3]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt//trimmed_POR-76-TP2_S6_pe.deduplicated.bismark.cov.gz"
+
+    [[4]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt//trimmed_POR-79-TP2_S10_pe.deduplicated.bismark.cov.gz"
+
+    [[5]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt//trimmed_POR-82-TP2_S8_pe.deduplicated.bismark.cov.gz"
+
+``` r
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Peve",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/12-Peve-WGBS/methylkit/MethylObj.RData")
+```
+
+``` r
+load("../output/12-Peve-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+```
+
+    methylation statistics per base
+    summary:
+       Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0.000   0.000   0.000   7.227   4.762 100.000 
+    percentiles:
+            0%        10%        20%        30%        40%        50%        60% 
+      0.000000   0.000000   0.000000   0.000000   0.000000   0.000000   0.000000 
+           70%        80%        90%        95%        99%      99.5%      99.9% 
+      3.529412   6.250000  14.285714  58.333333  94.736842 100.000000 100.000000 
+          100% 
+    100.000000 
+
+``` r
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+```
+
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/12-Peve-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+``` r
+load("../output/12-Peve-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+```
+
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+```
+
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+    Call:
+    hclust(d = d, method = HCLUST.METHODS[hclust.method])
+
+    Cluster method   : ward.D 
+    Distance         : pearson 
+    Number of objects: 5 
+
+``` r
+getCorrelation(meth_filter)
+```
+
+                                                  POR-71-TP2 POR-73-TP2 POR-76-TP2
+    POR-71-TP2                                     1.0000000  0.8128635  0.8599462
+    POR-73-TP2                                     0.8128635  1.0000000  0.8055159
+    POR-76-TP2                                     0.8599462  0.8055159  1.0000000
+    POR-79-TP2_S10_pe.deduplicated.bismark.cov.gz  0.8687939  0.8218780  0.8673935
+    POR-82-TP2                                     0.8671440  0.8189164  0.8644246
+                                                  POR-79-TP2_S10_pe.deduplicated.bismark.cov.gz
+    POR-71-TP2                                                                        0.8687939
+    POR-73-TP2                                                                        0.8218780
+    POR-76-TP2                                                                        0.8673935
+    POR-79-TP2_S10_pe.deduplicated.bismark.cov.gz                                     1.0000000
+    POR-82-TP2                                                                        0.8769765
+                                                  POR-82-TP2
+    POR-71-TP2                                     0.8671440
+    POR-73-TP2                                     0.8189164
+    POR-76-TP2                                     0.8644246
+    POR-79-TP2_S10_pe.deduplicated.bismark.cov.gz  0.8769765
+    POR-82-TP2                                     1.0000000
+
+``` r
+library("genomationData")
+library("genomation")
+library("GenomicRanges")
+
+gff_df <- read.delim("../data/Porites_evermanni_v1.annot.gff", header = FALSE, sep = "\t", comment.char = "#",
+                     col.names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"))
+
+
+gff_gr <- GRanges(
+  seqnames = gff_df$seqid,
+  ranges = IRanges(start = gff_df$start, end = gff_df$end),
+  strand = gff_df$strand,
+  type = gff_df$type,
+  source = gff_df$source,
+  score = gff_df$score,
+  phase = gff_df$phase,
+  attributes = gff_df$attributes
+)
+
+unique(gff_df$type)
+```
+
+    [1] "mRNA" "CDS"  "UTR" 
+
+``` r
+# Get only exon entries
+transcripts <- gff_gr[gff_gr$type == "mRNA"]
+```
