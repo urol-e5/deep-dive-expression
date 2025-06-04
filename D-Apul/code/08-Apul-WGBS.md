@@ -34,7 +34,15 @@ Zoe Dellaert
     files, .bedgraph
     files)](#065-output-file-location-all-bismark-output-files-bams-cov-files-bedgraph-files)
 - [0.7 Methylkit](#07-methylkit)
-  - [0.7.1 Annotation](#071-annotation)
+- [0.8 Annotation- I want an intersection of methylated CpGs with the
+  various regions in the
+  genome:](#08-annotation--i-want-an-intersection-of-methylated-cpgs-with-the-various-regions-in-the-genome)
+  - [0.8.1 Extract methylation count matrix for
+    transcripts](#081-extract-methylation-count-matrix-for-transcripts)
+  - [0.8.2 Extract additional
+    features](#082-extract-additional-features)
+- [0.9 Plotting annotation
+  information](#09-plotting-annotation-information)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
 
@@ -590,26 +598,13 @@ treatment <- c(0,0,0,0,0)
 sample
 ```
 
-    [1] "ACR-140-TP2" "ACR-145-TP2" "ACR-150-TP2" "ACR-173-TP2" "ACR-178-TP2"
+    character(0)
 
 ``` r
 file_list
 ```
 
-    [[1]]
-    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-140-TP2_S5_pe.deduplicated.bismark.cov.gz"
-
-    [[2]]
-    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-145-TP2_S3_pe.deduplicated.bismark.cov.gz"
-
-    [[3]]
-    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-150-TP2_S2_pe.deduplicated.bismark.cov.gz"
-
-    [[4]]
-    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-173-TP2_S4_pe.deduplicated.bismark.cov.gz"
-
-    [[5]]
-    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-178-TP2_S1_pe.deduplicated.bismark.cov.gz"
+    list()
 
 ``` r
 # methyl_list <- mclapply(seq_along(file_list), function(i) {
@@ -634,31 +629,9 @@ file_list
 load("../output/08-Apul-WGBS/methylkit/MethylObj.RData")
 
 getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
-```
-
-    methylation statistics per base
-    summary:
-       Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-      0.000   0.000   0.000   9.926   6.897 100.000 
-    percentiles:
-            0%        10%        20%        30%        40%        50%        60% 
-      0.000000   0.000000   0.000000   0.000000   0.000000   0.000000   1.818182 
-           70%        80%        90%        95%        99%      99.5%      99.9% 
-      5.000000   9.090909  33.333333  75.000000  97.222222 100.000000 100.000000 
-          100% 
-    100.000000 
-
-``` r
 getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
-```
-
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
-
-``` r
 getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
 ```
-
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ``` r
 filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
@@ -702,12 +675,17 @@ getCorrelation(meth_filter)
     ACR-173-TP2   0.8705030   0.8634015   0.8680254   1.0000000   0.8775790
     ACR-178-TP2   0.8734043   0.8654321   0.8719720   0.8775790   1.0000000
 
-### 0.7.1 Annotation
+## 0.8 Annotation- I want an intersection of methylated CpGs with the various regions in the genome:
 
 ``` r
 library("genomationData")
 library("genomation")
+library("GenomicRanges")
 
+# convert methylation data to GRange object
+meth_GR <- as(meth_filter, "GRanges")
+
+# import gtf
 gtf.file = "../data/Apulchra-genome.gtf"
 gtf = genomation::gffToGRanges(gtf.file)
 head(gtf)
@@ -734,6 +712,296 @@ head(gtf)
       seqinfo: 148 sequences from an unspecified genome; no seqlengths
 
 ``` r
-exons = gffToGRanges(gtf.file, filter = "exon")
+#extract transcripts
 transcripts = gffToGRanges(gtf.file, filter = "transcript")
 ```
+
+### 0.8.1 Extract methylation count matrix for transcripts
+
+``` r
+#extract percent methylation and add this to GRanges object
+meth_matrix <- as.data.frame(percMethylation(meth_filter))
+meth_GR$meth <- meth_matrix
+
+transcript_CpG <- findOverlaps(meth_GR, transcripts)
+
+# Create a data frame with CpG-to-transcript mapping
+df <- data.frame(
+  cpg_ix = queryHits(transcript_CpG),
+  transcript_id = transcripts$transcript_id[subjectHits(transcript_CpG)])
+
+# Merge with CpG methylation 
+meth_df <- as.data.frame(meth_GR)[df$cpg_ix, ]
+meth_df$transcript_id <- df$transcript_id
+
+meth_long <- meth_df %>%
+  select(starts_with("meth."), transcript_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -transcript_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+# Summarize: Mean % methylation per transcript × sample
+CpG_count_transcripts <- meth_long %>%
+  group_by(transcript_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_transcripts, "../output/08-Apul-WGBS/CpG_Transcript_CountMat.csv")
+```
+
+### 0.8.2 Extract additional features
+
+``` r
+#extract exons and introns
+exons = gffToGRanges(gtf.file, filter = "exon")
+introns = GenomicRanges::setdiff(transcripts, exons)
+
+# import 3' UTR and 5' UTR annotation files
+gff.file_3UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff"
+gff.file_5UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff"
+
+gff3UTR = genomation::gffToGRanges(gff.file_3UTR)
+gff5UTR = genomation::gffToGRanges(gff.file_5UTR)
+head(gff3UTR)
+```
+
+    GRanges object with 6 ranges and 7 metadata columns:
+          seqnames      ranges strand |      source       type     score     phase
+             <Rle>   <IRanges>  <Rle> |    <factor>   <factor> <numeric> <integer>
+      [1] ntLink_7   4680-5679      + | funannotate 3prime_UTR        NA      <NA>
+      [2] ntLink_7 11385-12384      - | funannotate 3prime_UTR        NA      <NA>
+      [3] ntLink_7 24188-25187      + | funannotate 3prime_UTR        NA      <NA>
+      [4] ntLink_7 30894-31893      - | funannotate 3prime_UTR        NA      <NA>
+      [5] ntLink_7 41454-42453      + | funannotate 3prime_UTR        NA      <NA>
+      [6] ntLink_7 50376-51375      - | funannotate 3prime_UTR        NA      <NA>
+                     ID          Parent      product
+            <character> <CharacterList>  <character>
+      [1] FUN_002303-T1      FUN_002303 hypothetical
+      [2] FUN_002304-T1      FUN_002304 hypothetical
+      [3] FUN_002305-T1      FUN_002305 hypothetical
+      [4] FUN_002306-T1      FUN_002306 hypothetical
+      [5] FUN_002307-T1      FUN_002307 hypothetical
+      [6] FUN_002308-T1      FUN_002308 hypothetical
+      -------
+      seqinfo: 147 sequences from an unspecified genome; no seqlengths
+
+Transposable elements:
+
+``` r
+# Import Transposable element file from repeat masker format
+rmsk <- read.table("../data/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.fa.out",
+                   skip = 3, fill = TRUE, stringsAsFactors = FALSE, quote = "") %>% drop_na()
+
+# Assign column names based on RepeatMasker .out format
+colnames(rmsk)[c(5, 6, 7, 10)] <- c("seqname", "start", "end", "repeat_name")
+
+# Create a GRanges object
+TE <- GRanges(
+  seqnames = rmsk$seqname,
+  ranges = IRanges(start = as.numeric(rmsk$start), end = as.numeric(rmsk$end)),
+  strand = "*",
+  repeat_name = rmsk$repeat_name
+)
+
+TE$type <- "transposable_element"
+
+head(TE)
+```
+
+    GRanges object with 6 ranges and 2 metadata columns:
+          seqnames    ranges strand |      repeat_name                 type
+             <Rle> <IRanges>  <Rle> |      <character>          <character>
+      [1] ntLink_0     38-57      * |           (TTG)n transposable_element
+      [2] ntLink_0 1219-1282      * |          (TTTC)n transposable_element
+      [3] ntLink_0 7386-7436      * |             (A)n transposable_element
+      [4] ntLink_0 8628-8680      * |        (TTAGGG)n transposable_element
+      [5] ntLink_0 8762-8802      * |       (TTTAGGG)n transposable_element
+      [6] ntLink_0 9000-9223      * | rnd-1_family-302 transposable_element
+      -------
+      seqinfo: 174 sequences from an unspecified genome; no seqlengths
+
+Okay now we have a list of regions we care about:
+
+``` r
+regions <- list(
+  exons = exons,
+  transcripts = transcripts,
+  `3UTR` = gff3UTR,
+  `5UTR` = gff5UTR,
+  TEs = TE
+)
+
+
+for (i in names(regions)){
+  print(unique(regions[[i]]$type))
+}
+```
+
+    [1] exon
+    Levels: transcript exon CDS
+    [1] transcript
+    Levels: transcript exon CDS
+    [1] 3prime_UTR
+    Levels: 3prime_UTR
+    [1] five_prime_UTR
+    Levels: five_prime_UTR
+    [1] "transposable_element"
+
+## 0.9 Plotting annotation information
+
+``` r
+# Define intergenic = genome - all annotations
+# First combine all annotated regions
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns))
+
+# Define genome bounds from methylation object
+genome_range <- GenomicRanges::reduce(meth_GR)
+
+# Intergenic = genome - annotated
+intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
+```
+
+``` r
+# Priority list
+region_priority <- list(
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  exon = exons,
+  intron = introns,
+  intergenic = intergenic
+)
+
+# Start with all CpGs unassigned
+cpg_annot <- rep(NA, length(meth_GR))
+
+# Keep track of which CpGs are still unassigned
+unassigned <- rep(TRUE, length(meth_GR))
+
+# Assign in priority order
+for (region_name in names(region_priority)) {
+  region <- region_priority[[region_name]]
+  transcript_CpG <- findOverlaps(meth_GR[unassigned], region)
+  
+  # Map the indices back to full set
+  full_indices <- which(unassigned)[queryHits(transcript_CpG)]
+  
+  cpg_annot[full_indices] <- region_name
+  unassigned[full_indices] <- FALSE  # Mark these as assigned
+}
+
+# Replace any remaining NA with "unassigned" or "intergenic"
+cpg_annot[is.na(cpg_annot)] <- "intergenic"
+```
+
+``` r
+df_annotated <- as.data.frame(meth_GR)
+df_annotated$region <- cpg_annot
+
+#set as factor
+df_annotated$region <- factor(df_annotated$region,
+                              levels = c("intergenic", "3UTR", "5UTR", "intron", "exon"))
+
+blue_palette <- c("intergenic" = "#c6dbef", "3UTR" = "#9ecae1","5UTR" = "#6baed6","intron"= "#3182bd","exon" = "#08519c"   )
+
+ggplot(df_annotated, aes(x = strand, fill = region)) +
+  geom_bar(position = "fill",color="black") +
+  theme_minimal() +
+  labs(y = "% CpGs",
+    fill = "Genomic Region") +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), anel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
+  scale_fill_manual(values = blue_palette)
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+Percent meth
+
+``` r
+# Extract methylation percentage matrix
+meth_matrix <- percMethylation(meth_filter)
+
+# Calculate average across all samples
+avg_meth <- rowMeans(meth_matrix, na.rm = TRUE)
+
+# Add to annotated data
+df_annotated$avg_meth <- avg_meth
+
+# Classify methylation status
+df_annotated$meth_status <- cut(df_annotated$avg_meth,
+                                breaks = c(-Inf, 30, 70, Inf),
+                                labels = c("hypo", "intermediate", "hyper"))
+```
+
+``` r
+ggplot(df_annotated, aes(x = region, fill = meth_status)) +
+  geom_bar(position = "fill") +  # stacked bar normalized to proportions
+  theme_minimal() +
+  labs(
+    title = "Proportion of Hypo- and Hyper-Methylated CpGs by Region",
+    x = "Genomic Region",
+    y = "Proportion of CpGs",
+    fill = "Methylation Status"
+  ) +
+  scale_fill_manual(values = c(hypo = "#3498db", intermediate = "#bdc3c7", hyper = "#e74c3c")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format())
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+``` r
+df_summary <- df_annotated %>%
+  group_by(region) %>%
+  summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
+
+ggplot(df_summary, aes(x = region, y = mean_meth)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(
+    title = "Mean CpG Methylation per Genomic Region",
+    x = "Genomic Region",
+    y = "Mean % Methylation"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+``` r
+# Add region info
+meth_long <- as.data.frame(meth_matrix)
+meth_long$region <- cpg_annot
+
+# Reshape: One row per CpG × sample
+meth_long_long <- meth_long %>%
+  pivot_longer(
+    cols = -region, 
+    names_to = "sample", 
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth), region != "unassigned")
+
+# Now summarize: mean methylation per sample × region
+meth_summary <- meth_long_long %>%
+  group_by(sample, region) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop")
+```
+
+``` r
+ggplot(meth_summary, aes(x = region, y = mean_meth)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = sample), width = 0.1) +
+  theme_minimal() +
+  labs(
+    title = "Sample-Wise Average Methylation by Genomic Region",
+    x = "Genomic Region",
+    y = "Mean % Methylation per Sample"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
