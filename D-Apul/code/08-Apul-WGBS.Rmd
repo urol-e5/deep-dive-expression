@@ -842,3 +842,122 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
+
+## AltMethylated CpG locations: binomial
+
+```{r}
+# Define sequencing error rate and alpha
+p_error <- 0.01
+alpha <- 0.05
+
+# Function to compute adjusted binomial p-values and flag methylated sites per sample
+compute_methylation_flags <- function(data, coverage_col, methylated_col, p_error = 0.01, alpha = 0.05) {
+  # Extract vectors
+  coverage <- data[[coverage_col]]
+  methylated <- data[[methylated_col]]
+  
+  # Handle zero or NA coverage by setting p-values to 1 (not significant)
+  pvals <- rep(1, length(coverage))
+  
+  valid <- !is.na(coverage) & !is.na(methylated) & coverage > 0
+  
+  # Calculate p-values for valid sites only
+  pvals[valid] <- 1 - pbinom(q = methylated[valid] - 1, size = coverage[valid], prob = p_error)
+  
+  # Adjust p-values for multiple testing with FDR correction
+  pvals_adj <- p.adjust(pvals, method = "fdr")
+  
+  # Return logical vector: TRUE if site methylated (adjusted p < alpha), else FALSE
+  return(pvals_adj < alpha)
+}
+
+# Assuming you know how many samples you have, for example 10 samples:
+num_samples <- 5
+methylated_CpGs <- meth_filter
+
+for (i in 1:num_samples) {
+  coverage_col <- paste0("coverage", i)
+  methylated_col <- paste0("numCs", i)
+  methylation_flag_col <- paste0("methylated_sample", i)
+
+  methylated_CpGs[[methylation_flag_col]] <- compute_methylation_flags(
+    methylated_CpGs, 
+    coverage_col = coverage_col, 
+    methylated_col = methylated_col, 
+    p_error = p_error, 
+    alpha = alpha
+  )
+}
+```
+
+```{r}
+methylated_CpGs <- getData(methylated_CpGs)
+methylated_by_sample <- as.matrix(methylated_CpGs[, paste0("methylated_sample", 1:5)])
+
+# Compute number of TRUEs per row, then check if ≥3
+methylated_CpGs$methylated_overall <- rowSums(methylated_by_sample, na.rm = TRUE) >= 3
+
+# Check results
+nrow(methylated_CpGs)
+sum(methylated_CpGs$methylated_overall)
+```
+
+```{r}
+# Convert to GRanges
+methylated_GR <- makeGRangesFromDataFrame(methylated_CpGs, keep.extra.columns = TRUE)
+
+# Re-run annotation steps
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns))
+intergenic <- GenomicRanges::setdiff(GenomicRanges::reduce(methylated_GR), all_annotated)
+
+region_priority <- list(
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  exon = exons,
+  intron = introns,
+  intergenic = intergenic
+)
+
+# Assign regions
+cpg_annot <- rep(NA, length(methylated_GR))
+unassigned <- rep(TRUE, length(methylated_GR))
+
+for (region_name in names(region_priority)) {
+  region <- region_priority[[region_name]]
+  hits <- findOverlaps(methylated_GR[unassigned], region)
+  full_idx <- which(unassigned)[queryHits(hits)]
+  cpg_annot[full_idx] <- region_name
+  unassigned[full_idx] <- FALSE
+}
+
+cpg_annot[is.na(cpg_annot)] <- "intergenic"
+```
+
+```{r}
+df_annotated <- as.data.frame(methylated_GR)
+df_annotated$region <- factor(cpg_annot,
+                              levels = c("intergenic", "3UTR", "5UTR", "intron", "exon"))
+```
+
+
+```{r}
+df_annotated$methylated_overall_factor <- factor(
+  df_annotated$methylated_overall,
+  levels = c(FALSE, TRUE),
+  labels = c("Unmethylated", "Methylated")
+)
+
+ggplot(df_annotated, aes(x = region, fill = methylated_overall_factor)) +
+  geom_bar(position = "fill", color = "black") +  # stacked proportional bar
+  theme_minimal() +
+  labs(
+    title = "Proportion of Methylated vs Unmethylated CpGs by Genomic Region",
+    x = "Genomic Region",
+    y = "Proportion of CpGs",
+    fill = "Methylation Status"
+  ) +
+  scale_fill_manual(values = c("Unmethylated" = "#3498db", "Methylated" = "#e74c3c")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format())
+```
+

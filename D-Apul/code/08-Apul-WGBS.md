@@ -43,6 +43,8 @@ Zoe Dellaert
     features](#082-extract-additional-features)
 - [0.9 Plotting annotation
   information](#09-plotting-annotation-information)
+- [0.10 AltMethylated CpG locations:
+  binomial](#010-altmethylated-cpg-locations-binomial)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
 
@@ -824,33 +826,6 @@ head(TE)
       -------
       seqinfo: 174 sequences from an unspecified genome; no seqlengths
 
-Okay now we have a list of regions we care about:
-
-``` r
-regions <- list(
-  exons = exons,
-  transcripts = transcripts,
-  `3UTR` = gff3UTR,
-  `5UTR` = gff5UTR,
-  TEs = TE
-)
-
-
-for (i in names(regions)){
-  print(unique(regions[[i]]$type))
-}
-```
-
-    [1] exon
-    Levels: transcript exon CDS
-    [1] transcript
-    Levels: transcript exon CDS
-    [1] 3prime_UTR
-    Levels: 3prime_UTR
-    [1] five_prime_UTR
-    Levels: five_prime_UTR
-    [1] "transposable_element"
-
 ## 0.9 Plotting annotation information
 
 ``` r
@@ -912,18 +887,15 @@ ggplot(df_annotated, aes(x = strand, fill = region)) +
   theme_minimal() +
   labs(y = "% CpGs",
     fill = "Genomic Region") +
-  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), anel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
   scale_fill_manual(values = blue_palette)
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 Percent meth
 
 ``` r
-# Extract methylation percentage matrix
-meth_matrix <- percMethylation(meth_filter)
-
 # Calculate average across all samples
 avg_meth <- rowMeans(meth_matrix, na.rm = TRUE)
 
@@ -931,8 +903,10 @@ avg_meth <- rowMeans(meth_matrix, na.rm = TRUE)
 df_annotated$avg_meth <- avg_meth
 
 # Classify methylation status
+low_thresh <- 30
+high_thresh <- 70
 df_annotated$meth_status <- cut(df_annotated$avg_meth,
-                                breaks = c(-Inf, 30, 70, Inf),
+                                breaks = c(-Inf, low_thresh, high_thresh, Inf),
                                 labels = c("hypo", "intermediate", "hyper"))
 ```
 
@@ -951,25 +925,23 @@ ggplot(df_annotated, aes(x = region, fill = meth_status)) +
   scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
 df_summary <- df_annotated %>%
   group_by(region) %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
-
-ggplot(df_summary, aes(x = region, y = mean_meth)) +
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  labs(
-    title = "Mean CpG Methylation per Genomic Region",
-    x = "Genomic Region",
-    y = "Mean % Methylation"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+df_summary
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+    # A tibble: 5 × 2
+      region     mean_meth
+      <fct>          <dbl>
+    1 intergenic      9.04
+    2 3UTR            7.48
+    3 5UTR            6.32
+    4 intron          9.74
+    5 exon            9.54
 
 ``` r
 # Add region info
@@ -982,16 +954,13 @@ meth_long_long <- meth_long %>%
     cols = -region, 
     names_to = "sample", 
     values_to = "perc_meth"
-  ) %>%
-  filter(!is.na(perc_meth), region != "unassigned")
+  )
 
 # Now summarize: mean methylation per sample × region
 meth_summary <- meth_long_long %>%
   group_by(sample, region) %>%
   summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop")
-```
 
-``` r
 ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   geom_boxplot(outlier.shape = NA) +
   geom_jitter(aes(color = sample), width = 0.1) +
@@ -1004,4 +973,130 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+## 0.10 AltMethylated CpG locations: binomial
+
+``` r
+# Define sequencing error rate and alpha
+p_error <- 0.01
+alpha <- 0.05
+
+# Function to compute adjusted binomial p-values and flag methylated sites per sample
+compute_methylation_flags <- function(data, coverage_col, methylated_col, p_error = 0.01, alpha = 0.05) {
+  # Extract vectors
+  coverage <- data[[coverage_col]]
+  methylated <- data[[methylated_col]]
+  
+  # Handle zero or NA coverage by setting p-values to 1 (not significant)
+  pvals <- rep(1, length(coverage))
+  
+  valid <- !is.na(coverage) & !is.na(methylated) & coverage > 0
+  
+  # Calculate p-values for valid sites only
+  pvals[valid] <- 1 - pbinom(q = methylated[valid] - 1, size = coverage[valid], prob = p_error)
+  
+  # Adjust p-values for multiple testing with FDR correction
+  pvals_adj <- p.adjust(pvals, method = "fdr")
+  
+  # Return logical vector: TRUE if site methylated (adjusted p < alpha), else FALSE
+  return(pvals_adj < alpha)
+}
+
+# Assuming you know how many samples you have, for example 10 samples:
+num_samples <- 5
+methylated_CpGs <- meth_filter
+
+for (i in 1:num_samples) {
+  coverage_col <- paste0("coverage", i)
+  methylated_col <- paste0("numCs", i)
+  methylation_flag_col <- paste0("methylated_sample", i)
+
+  methylated_CpGs[[methylation_flag_col]] <- compute_methylation_flags(
+    methylated_CpGs, 
+    coverage_col = coverage_col, 
+    methylated_col = methylated_col, 
+    p_error = p_error, 
+    alpha = alpha
+  )
+}
+```
+
+``` r
+methylated_CpGs <- getData(methylated_CpGs)
+methylated_by_sample <- as.matrix(methylated_CpGs[, paste0("methylated_sample", 1:5)])
+
+# Compute number of TRUEs per row, then check if ≥3
+methylated_CpGs$methylated_overall <- rowSums(methylated_by_sample, na.rm = TRUE) >= 3
+
+# Check results
+nrow(methylated_CpGs)
+```
+
+    [1] 8597158
+
+``` r
+sum(methylated_CpGs$methylated_overall)
+```
+
+    [1] 1178013
+
+``` r
+# Convert to GRanges
+methylated_GR <- makeGRangesFromDataFrame(methylated_CpGs, keep.extra.columns = TRUE)
+
+# Re-run annotation steps
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns))
+intergenic <- GenomicRanges::setdiff(GenomicRanges::reduce(methylated_GR), all_annotated)
+
+region_priority <- list(
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  exon = exons,
+  intron = introns,
+  intergenic = intergenic
+)
+
+# Assign regions
+cpg_annot <- rep(NA, length(methylated_GR))
+unassigned <- rep(TRUE, length(methylated_GR))
+
+for (region_name in names(region_priority)) {
+  region <- region_priority[[region_name]]
+  hits <- findOverlaps(methylated_GR[unassigned], region)
+  full_idx <- which(unassigned)[queryHits(hits)]
+  cpg_annot[full_idx] <- region_name
+  unassigned[full_idx] <- FALSE
+}
+
+cpg_annot[is.na(cpg_annot)] <- "intergenic"
+```
+
+``` r
+df_annotated <- as.data.frame(methylated_GR)
+df_annotated$region <- factor(cpg_annot,
+                              levels = c("intergenic", "3UTR", "5UTR", "intron", "exon"))
+```
+
+``` r
+df_annotated$methylated_overall_factor <- factor(
+  df_annotated$methylated_overall,
+  levels = c(FALSE, TRUE),
+  labels = c("Unmethylated", "Methylated")
+)
+
+ggplot(df_annotated, aes(x = region, fill = methylated_overall_factor)) +
+  geom_bar(position = "fill", color = "black") +  # stacked proportional bar
+  theme_minimal() +
+  labs(
+    title = "Proportion of Methylated vs Unmethylated CpGs by Genomic Region",
+    x = "Genomic Region",
+    y = "Proportion of CpGs",
+    fill = "Methylation Status"
+  ) +
+  scale_fill_manual(values = c("Unmethylated" = "#3498db", "Methylated" = "#e74c3c")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format())
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
