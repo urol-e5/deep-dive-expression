@@ -38,6 +38,7 @@ D-Apul/output/08-Apul-WGBS/*/*.deduplicated.txt
 D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
 D-Apul/output/08-Apul-WGBS/*/*bed*
 D-Apul/output/08-Apul-WGBS/*/*tab*
+D-Apul/output/08-Apul-WGBS/methylkit/*.RData
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
@@ -72,6 +73,7 @@ E-Peve/output/12-Peve-WGBS/*/*.deduplicated.txt
 E-Peve/output/12-Peve-WGBS/*/*.CpG_report.txt
 E-Peve/output/12-Peve-WGBS/*/*bed*
 E-Peve/output/12-Peve-WGBS/*/*tab*
+E-Peve/output/12-Peve-WGBS/methylkit/*.RData
 F-Ptuh/code/.bashvars
 F-Ptuh/code/*_cache
 F-Ptuh/data/*.fa
@@ -89,6 +91,7 @@ F-Ptuh/output/12-Ptuh-WGBS/*/*.deduplicated.txt
 F-Ptuh/output/12-Ptuh-WGBS/*/*.CpG_report.txt
 F-Ptuh/output/12-Ptuh-WGBS/*/*bed*
 F-Ptuh/output/12-Ptuh-WGBS/*/*tab*
+F-Ptuh/output/12-Ptuh-WGBS/methylkit/*.RData
 .DS_Store
 **/.DS_Store
 */.DS_Store
@@ -97,4 +100,3 @@ expression.Rproj
 E-Peve/code/scripts
 F-Ptuh/code/scripts
 Bisulfite_Genome*
-D-Apul/output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData
