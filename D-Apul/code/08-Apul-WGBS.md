@@ -600,13 +600,26 @@ treatment <- c(0,0,0,0,0)
 sample
 ```
 
-    character(0)
+    [1] "ACR-140-TP2" "ACR-145-TP2" "ACR-150-TP2" "ACR-173-TP2" "ACR-178-TP2"
 
 ``` r
 file_list
 ```
 
-    list()
+    [[1]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-140-TP2_S5_pe.deduplicated.bismark.cov.gz"
+
+    [[2]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-145-TP2_S3_pe.deduplicated.bismark.cov.gz"
+
+    [[3]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-150-TP2_S2_pe.deduplicated.bismark.cov.gz"
+
+    [[4]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-173-TP2_S4_pe.deduplicated.bismark.cov.gz"
+
+    [[5]]
+    [1] "/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt//trimmed_ACR-178-TP2_S1_pe.deduplicated.bismark.cov.gz"
 
 ``` r
 # methyl_list <- mclapply(seq_along(file_list), function(i) {
