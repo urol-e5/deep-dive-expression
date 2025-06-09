@@ -153,6 +153,8 @@ write.csv(pcc_miranda_apul, "../../D-Apul/output/28-Apul-miRNA-lncRNA-interactio
 
 Inspect the data
 ```{r}
+# Read in data again if needed
+pcc_miranda_apul <- read.csv("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv")
 length(unique(pcc_miranda_apul$miRNA))
 length(unique(pcc_miranda_apul$lncRNA))
 
@@ -164,7 +166,15 @@ cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(sig_pairs), "\n")
 # Are there any pairs that have a PCC correlation > |0.5|, a p-value < 0.05, and a query similarity >75%?
 sig_pairs_similar <- pcc_miranda_apul %>%
   filter(abs(PCC.cor) > 0.5 & p_value < 0.05 & query_similar > 75.00)
-cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(sig_pairs_similar), "\n")
+cat("PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%:", nrow(sig_pairs_similar), "\n")
+length(unique(sig_pairs_similar$miRNA))
+length(unique(sig_pairs_similar$lncRNA))
+
+## Count positive and negative PCC.cor values
+positive_count <- sum(sig_pairs_similar$PCC.cor > 0)
+negative_count <- sum(sig_pairs_similar$PCC.cor < 0)
+cat("Number of rows with positive PCC.cor:", positive_count, "\n")
+cat("Number of rows with negative PCC.cor:", negative_count, "\n")
 ```
 
 How many miRNAs per lncRNA and vice versa for the sig pairs? For sig pairs similar? 
@@ -250,48 +260,6 @@ p <- ggraph(g_tbl, layout = "fr") +
 ggsave("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-similar_significant_miRNA_lncRNA_network.png", p, width = 20, height = 15, dpi = 300)
 ```
 
-Try using the [SPONGE](https://www.bioconductor.org/packages/release/bioc/vignettes/SPONGE/inst/doc/SPONGE.html) package ??
 
-
-example workflow from SPONGE vignette
-```{r}
-head(gene_expr)
-dim(gene_expr)
-str(gene_expr)
-
-head(mir_expr)
-dim(mir_expr)
-str(mir_expr)
-
-head(targetscan_symbol)
-dim(targetscan_symbol)
-str(targetscan_symbol)
-
-# Part A: gene-miRNA interactions 
-genes_miRNA_candidates <- sponge_gene_miRNA_interaction_filter(
-gene_expr = gene_expr,
-mir_expr = mir_expr,
-mir_predicted_targets = targetscan_symbol)
-genes_miRNA_candidates[8]
-
-# Part B: ceRNA interactions 
-ceRNA_interactions <- sponge(gene_expr = gene_expr,
-                        mir_expr = mir_expr,
-                        mir_interactions = genes_miRNA_candidates)
-
-# Part C: Null model based p-value computation
-mscor_null_model <- sponge_build_null_model(number_of_datasets = 100, number_of_samples = nrow(gene_expr))
-sponge_plot_simulation_results(mscor_null_model)
-ceRNA_interactions_sign <- sponge_compute_p_values(sponge_result = ceRNA_interactions, 
-                                                   null_model = mscor_null_model)
-
-# Part D: ceRNA interaction network 
-ceRNA_interactions_fdr <- ceRNA_interactions_sign[which(ceRNA_interactions_sign$p.adj < 0.2),]
-sponge_plot_network(ceRNA_interactions_fdr, genes_miRNA_candidates)
-network_centralities <- sponge_node_centralities(ceRNA_interactions_fdr)
-ceRNA_interactions_fdr_weight <- ceRNA_interactions_fdr
-ceRNA_interactions_fdr_weight$weight <- -log10(ceRNA_interactions_fdr$p.adj)
-weighted_network_centralities <- sponge_node_centralities(ceRNA_interactions_fdr)
-```
 
 
