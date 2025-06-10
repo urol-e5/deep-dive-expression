@@ -1,0 +1,39 @@
+---
+title: "mRNA GO enrichment comparison"
+author: "Jill Ashey"
+date: "2025-06-09"
+output: html_document
+---
+
+This code will look at the overlap between the GO terms that were enriched in the expressed mRNAs between species. GO enrichment code for expressed mRNAs for each species can be found at the following links: 
+
+- ACR
+- [POC](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/13-Ptuh-mRNA-GO-enrichment.Rmd)
+- [POR](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/13-Peve-mRNA-GO-enrichment.Rmd) 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in data 
+```{r}
+ptuh_go <- read.csv("../../F-Ptuh/output/13-Ptuh-mRNA-GO-enrichment/Ptuh-GO_en_sig_expressed_genes.csv")
+peve_go <- read.csv("../../E-Peve/output/13-Peve-mRNA-GO-enrichment/Peve-GO_en_sig_expressed_genes.csv")
+
+# How many unique GO terms?
+length(unique(ptuh_go$Term))
+length(unique(peve_go$Term))
+```
+
+297 unique GO terms for Ptuh and 299 unique GO terms for Peve. 
+
+Examine overlap in GO enrichment terms
+```{r}
+ptuh_terms <- unique(ptuh_go$Term)
+peve_terms <- unique(peve_go$Term)
+
+overlapping_terms_ptuh_peve <- intersect(ptuh_terms, peve_terms) # 150 overlapping terms
+```
+
