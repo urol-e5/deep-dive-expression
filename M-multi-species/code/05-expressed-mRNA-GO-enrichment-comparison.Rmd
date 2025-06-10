@@ -7,7 +7,7 @@ output: html_document
 
 This code will look at the overlap between the GO terms that were enriched in the expressed mRNAs between species. GO enrichment code for expressed mRNAs for each species can be found at the following links: 
 
-- ACR
+- [ACR](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/29-Apul-mRNA-GO-enrichment.Rmd)
 - [POC](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/13-Ptuh-mRNA-GO-enrichment.Rmd)
 - [POR](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/13-Peve-mRNA-GO-enrichment.Rmd) 
 
@@ -19,21 +19,55 @@ library(tidyverse)
 
 Read in data 
 ```{r}
+apul_go <- read.csv("../../D-Apul/output/29-Apul-mRNA-GO-enrichment/Apul-GO_en_sig_expressed_genes.csv")
 ptuh_go <- read.csv("../../F-Ptuh/output/13-Ptuh-mRNA-GO-enrichment/Ptuh-GO_en_sig_expressed_genes.csv")
 peve_go <- read.csv("../../E-Peve/output/13-Peve-mRNA-GO-enrichment/Peve-GO_en_sig_expressed_genes.csv")
 
 # How many unique GO terms?
-length(unique(ptuh_go$Term))
-length(unique(peve_go$Term))
+length(unique(apul_go$GO))
+length(unique(ptuh_go$GO))
+length(unique(peve_go$GO))
 ```
 
-297 unique GO terms for Ptuh and 299 unique GO terms for Peve. 
+256 unique GO terms for Apul, 297 unique GO terms for Ptuh, and 299 unique GO terms for Peve. 
 
 Examine overlap in GO enrichment terms
 ```{r}
-ptuh_terms <- unique(ptuh_go$Term)
-peve_terms <- unique(peve_go$Term)
+apul_terms <- unique(apul_go$GO)
+ptuh_terms <- unique(ptuh_go$GO)
+peve_terms <- unique(peve_go$GO)
 
+# Overlap between pairs 
+overlapping_terms_apul_ptuh <- intersect(apul_terms, ptuh_terms) # 120 overlapping terms
+overlapping_terms_apul_peve <- intersect(apul_terms, peve_terms) # 118 overlapping terms
 overlapping_terms_ptuh_peve <- intersect(ptuh_terms, peve_terms) # 150 overlapping terms
+
+common_terms <- Reduce(intersect, list(apul_terms, ptuh_terms, peve_terms)) # 88 common terms
 ```
+
+```{r}
+library(UpSetR)
+go_list <- list(
+  apul = apul_terms,
+  ptuh = ptuh_terms,
+  peve = peve_terms
+)
+upset(fromList(go_list), order.by = "freq")
+```
+
+```{r}
+BiocManager::install("simplifyEnrichment")
+BiocManager::install("org.Hs.eg.db")
+
+library(simplifyEnrichment)
+library(org.Hs.eg.db)
+
+set.seed(888)
+go_id = random_GO(500)
+head(go_id)
+mat = GO_similarity(go_id)
+simplifyGO(mat)
+```
+
+
 
