@@ -15,6 +15,10 @@ This code will look at the overlap between the GO terms that were enriched in th
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(rrvgo)
+library(org.Hs.eg.db)
+library(UpSetR)
+#library(org.Ce.eg.db)
 ```
 
 Read in data 
@@ -31,43 +35,262 @@ length(unique(peve_go$GO))
 
 256 unique GO terms for Apul, 297 unique GO terms for Ptuh, and 299 unique GO terms for Peve. 
 
-Examine overlap in GO enrichment terms
+Examine overlap in GO enrichment terms (ALL ontologies)
 ```{r}
-apul_terms <- unique(apul_go$GO)
-ptuh_terms <- unique(ptuh_go$GO)
-peve_terms <- unique(peve_go$GO)
+apul_go_terms <- unique(apul_go$GO)
+ptuh_go_terms <- unique(ptuh_go$GO)
+peve_go_terms <- unique(peve_go$GO)
 
-# Overlap between pairs 
-overlapping_terms_apul_ptuh <- intersect(apul_terms, ptuh_terms) # 120 overlapping terms
-overlapping_terms_apul_peve <- intersect(apul_terms, peve_terms) # 118 overlapping terms
-overlapping_terms_ptuh_peve <- intersect(ptuh_terms, peve_terms) # 150 overlapping terms
+# Overlap between all three
+go_all_three <- Reduce(intersect, list(apul_go_terms, ptuh_go_terms, peve_go_terms))
 
-common_terms <- Reduce(intersect, list(apul_terms, ptuh_terms, peve_terms)) # 88 common terms
+# Overlap only between apul and ptuh (not peve)
+go_apul_ptuh_only <- setdiff(intersect(apul_go_terms, ptuh_go_terms), peve_go_terms)
+
+# Overlap only between apul and peve (not ptuh)
+go_apul_peve_only <- setdiff(intersect(apul_go_terms, peve_go_terms), ptuh_go_terms)
+
+# Overlap only between ptuh and peve (not apul)
+go_ptuh_peve_only <- setdiff(intersect(ptuh_go_terms, peve_go_terms), apul_go_terms)
+
+# Unique to apul
+go_unique_apul <- setdiff(apul_go_terms, union(ptuh_go_terms, peve_go_terms))
+
+# Unique to ptuh
+go_unique_ptuh <- setdiff(ptuh_go_terms, union(apul_go_terms, peve_go_terms))
+
+# Unique to peve
+go_unique_peve <- setdiff(peve_go_terms, union(apul_go_terms, ptuh_go_terms))
+
+# To check the counts:
+length(go_all_three)
+length(go_apul_ptuh_only)
+length(go_apul_peve_only)
+length(go_ptuh_peve_only)
+length(go_unique_apul)
+length(go_unique_ptuh)
+length(go_unique_peve)
+
 ```
 
+Plot with upset plot 
 ```{r}
-library(UpSetR)
 go_list <- list(
-  apul = apul_terms,
-  ptuh = ptuh_terms,
-  peve = peve_terms
+  apul = apul_go_terms,
+  ptuh = ptuh_go_terms,
+  peve = peve_go_terms
 )
 upset(fromList(go_list), order.by = "freq")
 ```
 
+Plot only BP terms with upset plot 
 ```{r}
-BiocManager::install("simplifyEnrichment")
-BiocManager::install("org.Hs.eg.db")
+# Filter by BP
+apul_go_BP <- apul_go %>%
+  filter(ontology == "Biological Processes")
+ptuh_go_BP <- ptuh_go %>%
+  filter(ontology == "Biological Processes")
+peve_go_BP <- peve_go %>%
+  filter(ontology == "Biological Processes")
 
-library(simplifyEnrichment)
-library(org.Hs.eg.db)
+# Unique terms 
+apul_go_BP_terms <- unique(apul_go_BP$GO)
+ptuh_go_BP_terms <- unique(ptuh_go_BP$GO)
+peve_go_BP_terms <- unique(peve_go_BP$GO)
 
-set.seed(888)
-go_id = random_GO(500)
-head(go_id)
-mat = GO_similarity(go_id)
-simplifyGO(mat)
+# Plot
+go_BP_list <- list(
+  apul = apul_go_BP_terms,
+  ptuh = ptuh_go_BP_terms,
+  peve = peve_go_BP_terms
+)
+upset(fromList(go_BP_list), order.by = "freq")
 ```
 
+Use [rrvgo](https://bioconductor.org/packages/devel/bioc/vignettes/rrvgo/inst/doc/rrvgo.html#calculating-the-similarity-matrix-and-reducing-go-terms) to visualize general trends for GO terms shared and unique. ONLY BP below, as rrvgo appears to be defaulting to just doing BP ontology. 
 
+Overlap of all three
+```{r}
+# Similarity of terms 
+simMatrix_all <- calculateSimMatrix(go_all_three,
+                                orgdb="org.Hs.eg.db",
+                                ont = c("BP", "MF", "CC"),
+                                method="Rel")
 
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_all <- reduceSimMatrix(simMatrix_all,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_all,
+            reducedTerms_all,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_all, reducedTerms_all)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/all_overlap_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_all, force.print.labels=T)
+dev.off()
+```
+
+Overlap of Apul and Ptuh
+```{r}
+# Similarity of terms 
+simMatrix_apul_ptuh <- calculateSimMatrix(go_apul_ptuh_only,
+                                orgdb="org.Hs.eg.db",
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_apul_ptuh <- reduceSimMatrix(simMatrix_apul_ptuh,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_apul_ptuh,
+            reducedTerms_apul_ptuh,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_apul_ptuh, reducedTerms_apul_ptuh)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/apul_ptuh_overlap_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_apul_ptuh, force.print.labels=T)
+dev.off()
+```
+
+Overlap of Apul and Peve
+```{r}
+# Similarity of terms 
+simMatrix_apul_peve <- calculateSimMatrix(go_apul_peve_only,
+                                orgdb="org.Hs.eg.db",
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_apul_peve <- reduceSimMatrix(simMatrix_apul_peve,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_apul_peve,
+            reducedTerms_apul_peve,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_apul_peve, reducedTerms_apul_peve)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/apul_peve_overlap_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_apul_peve, force.print.labels=T)
+dev.off()
+```
+
+Overlap of Ptuh and Peve
+```{r}
+# Similarity of terms 
+simMatrix_ptuh_peve <- calculateSimMatrix(go_ptuh_peve_only,
+                                orgdb="org.Hs.eg.db",
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_ptuh_peve <- reduceSimMatrix(simMatrix_ptuh_peve,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_ptuh_peve,
+            reducedTerms_ptuh_peve,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_ptuh_peve, reducedTerms_ptuh_peve)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/ptuh_peve_overlap_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_ptuh_peve, force.print.labels=T)
+dev.off()
+```
+
+Just Apul
+```{r}
+# Similarity of terms 
+simMatrix_apul <- calculateSimMatrix(go_unique_apul,
+                                orgdb="org.Hs.eg.db",
+                                ont = c("BP", "MF", "CC"),
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_apul <- reduceSimMatrix(simMatrix_apul,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_apul,
+            reducedTerms_apul,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_apul, reducedTerms_apul)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/apul_only_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_apul, force.print.labels=T)
+dev.off()
+```
+
+Just Ptuh
+```{r}
+# Similarity of terms 
+simMatrix_ptuh <- calculateSimMatrix(go_unique_ptuh,
+                                orgdb="org.Hs.eg.db",
+                                ont = c("BP", "MF", "CC"),
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_ptuh <- reduceSimMatrix(simMatrix_ptuh,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_ptuh,
+            reducedTerms_ptuh,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_ptuh, reducedTerms_ptuh)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/ptuh_only_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_ptuh, force.print.labels=T)
+dev.off()
+```
+
+Just Peve
+```{r}
+# Similarity of terms 
+simMatrix_peve <- calculateSimMatrix(go_unique_peve,
+                                orgdb="org.Hs.eg.db",
+                                ont = c("BP", "MF", "CC"),
+                                method="Rel")
+
+# reducing sig enriched terms to higher order terms and grouping them together 
+reducedTerms_peve <- reduceSimMatrix(simMatrix_peve,
+                                scores = "uniqueness",
+                                threshold=0.9,
+                                orgdb="org.Hs.eg.db")
+## Plot
+heatmapPlot(simMatrix_peve,
+            reducedTerms_peve,
+            annotateParent=TRUE,
+            annotationLabel="parentTerm",
+            fontsize=6)
+
+scatterPlot(simMatrix_peve, reducedTerms_peve)
+
+pdf("../output/05-expressed-mRNA-GO-enrichment/peve_only_GO_BP_semsim.pdf", width = 18, height = 8)
+treemapPlot(reducedTerms_peve, force.print.labels=T)
+dev.off()
+```
