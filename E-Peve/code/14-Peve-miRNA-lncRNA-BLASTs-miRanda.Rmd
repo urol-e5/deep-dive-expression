@@ -1,0 +1,363 @@
+---
+title: "14-Peve-miRNA-lncRNA-BLASTs-miRanda"
+author: "Kathleen Durkin"
+date: "2025-06-17"
+always_allow_html: true
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+bibliography: ../../references.bib
+link-citations: true
+---
+
+```{r load packages}
+library(dplyr)
+library(ggplot2)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE         # Evaluate code chunks
+)
+```
+
+
+Two possible interactions between miRNA and lncRNA are:
+
+  1) lncRNA acting as a precursor molecule for miRNA(s), so that the lncRNA contains one or many pre-miRNA sequences and will be broken down into pre-miRNAs molecules, which will then be processed into mature miRNAs.
+    
+  2) lncRNA acting as a "sponge" for miRNAs, so that an miRNA will bind to the lncRNA instead of being incorporated into an RISC complex to alter gene expression.
+  
+
+In situation 1 we would expect one or several **pre-miRNA sequences to appear inside of a lncRNA**. This should be identifiable via BLASTn.
+
+In situation 2 we would expect the **mature miRNA sequence to appear inside a lncRNA**. Note that situation 2 is a bit more complicated, because we can't say for certain what sequence similarity is required for binding. In cnidarians, miRNAs seem to act, like plants, through complementarity of the full mature miRNA (this is in contrast to e.g. mammals, where only binding of a short seed region is required) (@moran_cnidarian_2014, @admoni_target_2023). However, for lncRNA acting as sponges, I don't know whether to expect complementarity of the full mature miRNA or only a section, and I don't know what degree of complementarity is required. **Work to identify lncRNA sponges could use BLASTn, but will likely need to include additional methods like miRanda to identify potential binding.**
+
+
+# Prep for BLASTs
+
+## Isolate the pre-mirna and mature mirna sequences
+
+```{r extract-mirna-seqs, engine='bash'}
+full_mirna_fasta="../output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta"
+premirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor.fasta"
+mature_mirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature.fasta"
+star_mirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_star.fasta"
+
+# Pull out all sequences that DON'T contain "mature" or "star" in sequence name
+# Note the pre-miRNAs have sequences for both strands
+awk '
+    # If the line starts with ">", check the header
+    /^>/ {
+        if ($0 ~ /mature/ || $0 ~ /star/) {
+            print_seq = 0  # Skip sequences with "mature" or "star" in the header
+        } else {
+            print_seq = 1  # Mark sequences for printing
+        }
+    }
+    # Print the header and the next two lines if marked for printing
+    print_seq {
+        print
+        if (!/^>/) { getline; print }  # Capture second sequence line
+    }
+' "$full_mirna_fasta" > "$premirna_fasta"
+
+# Pull out all sequences that contain "mature" in sequence name
+grep -A 1 "mature" $full_mirna_fasta | grep -v "^--$" > $mature_mirna_fasta
+
+# Pull out all sequences that contain "star" in sequence name
+grep -A 1 "star" $full_mirna_fasta | grep -v "^--$" > $star_mirna_fasta
+```
+
+```{r, engine='bash', eval=TRUE}
+premirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor.fasta"
+mature_mirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature.fasta"
+star_mirna_fasta="../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_star.fasta"
+
+# Check we have appropriate headers, same number of sequences in each
+grep "^>" $premirna_fasta | head -2
+echo ""
+grep "^>" $mature_mirna_fasta | head -2
+echo ""
+grep "^>" $star_mirna_fasta | head -2
+echo ""
+grep "^>" $premirna_fasta | wc -l
+echo ""
+grep "^>" $mature_mirna_fasta | wc -l
+echo ""
+grep "^>" $star_mirna_fasta | wc -l
+echo ""
+```
+
+## Check miRNA lengths
+
+```{r, engine='bash'}
+# Extract sequence lengths for precursors
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor.fasta > ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor_lengths.txt
+
+# Sequence lengths for matures
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature.fasta > ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature_lengths.txt
+```
+
+```{r, eval=TRUE}
+# Summary stats of precursor and mature lengths
+
+precursor_lengths <- read.table("../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+mature_lengths <- read.table("../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+
+cat("Average pre-miRNA length: ", mean(precursor_lengths$length))
+cat("\n")
+cat("Range of pre-miRNA lengths: ", range(precursor_lengths$length))
+cat("\n")
+cat("Average mature miRNA length: ", mean(mature_lengths$length))
+cat("\n")
+cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
+```
+
+## check lncRNAs
+
+LncRNAs were identified from Peve RNA-seq data in `deep-dive/E-Peve` -- see details there.
+Fasta of Peve lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive/main/E-Peve/output/Peve_lncRNA.fasta`
+
+
+```{r check-lncRNAs, engine='bash', eval=TRUE}
+curl -L https://raw.githubusercontent.com/urol-e5/deep-dive/main/E-Peve/output/Peve_lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
+
+echo "Number of lncRNAs:"
+grep "^>" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta | wc -l
+```
+
+```{r, engine='bash'}
+# Extract sequence lengths for precursors
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta > ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA_lengths.txt
+
+```
+
+```{r, eval=TRUE}
+# Summary stats of lncRNA lengths
+
+lncRNA_lengths <- read.table("../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA_lengths.txt", sep = " ", header = FALSE, col.names = c("seqID", "length"))
+
+cat("Average lncRNA length: ", mean(lncRNA_lengths$length))
+cat("\n")
+cat("Range of lncRNA lengths: ", range(lncRNA_lengths$length))
+
+ggplot(lncRNA_lengths, aes(x = length)) +
+  geom_histogram(binwidth = 500) +
+  labs(title = "A. pulchra lncRNA sequence lengths",
+       x = "Sequence Length [nucleotides]",
+       y = "Frequency") +
+  xlim(200, 50000) +
+  ylim(0, 800) +
+  theme_minimal()
+```
+
+
+
+# BLASTs
+
+## Make databases
+
+Database of pre-miRNAs:
+
+```{r make-premirna-databse, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_precursor.fasta \
+-dbtype nucl \
+-out ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/Peve-db/Peve_ShortStack_4.1.0_precursor
+```
+
+Database of mature miRNAs:
+
+```{r make-mature-mirna-databse, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+-in ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature.fasta \
+-dbtype nucl \
+-out ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/Peve-db/Peve_ShortStack_4.1.0_mature
+```
+
+
+## Run BLASTn
+
+Generate a list of blast results. It seems plausible that a single lncRNA, which would be hundreds or thousands of nucleotides long, could interact with multiple miRNAs, so I will allow up to 10 hits (~25% of Peve miRNAs) for each lncRNA. I want to see the top hits no matter how poor the match is, so I will not filter by e-value at this stage. I’ll also include the “-word_size 4” option, which reduces the required length of the initial match.
+
+
+Full pre-miRNAs:
+
+```{r blastn-premirna, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn \
+-query ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta \
+-db ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/Peve-db/Peve_ShortStack_4.1.0_precursor \
+-out ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_precursor_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 10 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{r, engine='bash', eval=TRUE}
+wc -l ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_precursor_blastn.tab
+```
+Note we have less than (10 * [# of lncRNAs]) output alignments because, while I did not set an evalue threshold, the default evalue threshold of evalue=10 is still in place. That means extremely poor matches were still excluded by default. 
+
+
+Mature miRNAs:
+
+Note that I'm using the blastn-short option here because all of our mature miRNAs are less than 30 nucleotides long (recommended by [BLAST user manual](https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.blastn_application_options/))
+
+```{r blastn-mature-mirna, engine='bash'}
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+-task blastn \
+-query ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta \
+-db ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/Peve-db/Peve_ShortStack_4.1.0_mature \
+-out ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_mature_blastn.tab \
+-num_threads 40 \
+-word_size 4 \
+-max_target_seqs 10 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{r, engine='bash', eval=TRUE}
+wc -l ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_mature_blastn.tab
+```
+
+# Examine BLAST tables
+
+Read into R and assign informative column labels
+```{r read-in-blast-tables, eval=TRUE}
+precursor_lncRNA_BLASTn <- read.table("../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_precursor_blastn.tab", sep="\t", header=FALSE)
+mature_lncRNA_BLASTn <- read.table("../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/blasts/lncRNA_to_mature_blastn.tab", sep="\t", header=FALSE)
+
+colnames(precursor_lncRNA_BLASTn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+colnames(mature_lncRNA_BLASTn) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+```
+
+## LncRNAs as miRNA precursors
+
+Are there any alignments of the full precursor miRNA to a lncRNA? Our precursor sequences are 90-98 nucleotides long, so let's look for any alignments of at least 90 nucleotides with 0 mismatches.
+```{r, eval=TRUE}
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0)
+
+```
+We have 0 alignments of a full pre-miRNA to a lncRNA with no mismatches.
+
+Save these results
+```{r, engine='bash'}
+precursor_lncRNAs <- precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0)
+
+write.table(precursor_lncRNAs, "../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/lncRNAs_as_miRNA_precursors.txt")
+
+```
+
+
+## LncRNAs as miRNA sponges
+
+I'm not sure whether to expect lncRNAs to bind miRNAs in the same way cnidarian miRNA-mRNA binding occurs (nearly perfect complementarity of mature sequence), or whether the mechanism could differ (e.g., requires only a complementary seed region, as in vertebrate miRNA-mRNA binding). that means I don't know what alignment parameters to require for our BLAST results. 
+
+For now let's say the aligned region must be at least 8 nucleotides (the expected length of an miRNA seed region), and let's require a low evalue of 1e-3, to generally restrict results to those with high complementarity.
+
+```{r, eval=TRUE}
+mature_lncRNA_BLASTn %>%
+  filter(length >= 8) %>%
+  filter(evalue <= 0.001)
+
+```
+44 putative lncRNA sponges with these parameters. 
+
+Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
+
+
+
+# miRanda
+
+miRanda is a target prediction software, used to identify likely miRNA-mRNA interactions.
+
+Inputs:
+
+  - FASTA of A.pulchra lncRNAs
+  
+  - FASTA of A.pulchra mature miRNAs
+
+## Run miRanda
+```{r, engine='bash', eval=FALSE}
+
+# score cutoff >100
+# energy cutoff <-20
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_ShortStack_4.1.0_mature.fasta \
+../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta \
+-sc 100 \
+-en -20 \
+-strict \
+-out ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+```
+
+
+# Summarize results
+
+Let's look at the output
+
+```{r, engine='bash', eval=TRUE}
+
+echo "miranda run finished!"
+echo "Counting number of interacting miRNA-lncRNA pairs"
+
+zgrep -c "Performing Scan" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab | sort | grep '>' > ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt
+
+echo "counting number of putative interactions predicted (can include multiple interactions between single miRNA-lncRNA pair)"
+wc -l ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+
+```
+
+2690450 -- This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+
+```{r, engine='bash', eval=TRUE}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | head -5
+```
+
+455
+
+The header for this output is formatted as:
+
+mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subject-Al(Start-End) Al-Len Subject-Identity Query-Identity
+
+We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+This is a dramatically smaller number -- only 1 interaction was at least 21 nucleotides with <=3 mismatches
+
+
+
+
+

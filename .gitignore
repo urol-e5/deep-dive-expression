@@ -76,7 +76,7 @@ E-Peve/output/12-Peve-WGBS/*/*.CpG_report.txt
 E-Peve/output/12-Peve-WGBS/*/*bed*
 E-Peve/output/12-Peve-WGBS/*/*tab*
 E-Peve/output/12-Peve-WGBS/methylkit/*.RData
-E-Peve/output/13-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+E-Peve/output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
 
 F-Ptuh/code/.bashvars
 F-Ptuh/code/*_cache
@@ -96,7 +96,7 @@ F-Ptuh/output/12-Ptuh-WGBS/*/*.CpG_report.txt
 F-Ptuh/output/12-Ptuh-WGBS/*/*bed*
 F-Ptuh/output/12-Ptuh-WGBS/*/*tab*
 F-Ptuh/output/12-Ptuh-WGBS/methylkit/*.RData
-F-Ptuh/output/13-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
+F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
 
 
 .DS_Store
