@@ -27,6 +27,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 library(knitr)
+library(dplyr)
 library(tidyverse)
 library(kableExtra)
 library(DT)
@@ -74,6 +75,74 @@ grep "^>" Peve_ShortStack_mature.fasta | wc -l
 grep "^>" Ptuh_ShortStack_mature.fasta | wc -l
 ```
 
+# Annotate with asigned miRNA names
+
+Read fastas into R as data frames
+```{r}
+
+# Apul
+Apul_mature_fasta <- readDNAStringSet("../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta")
+Apul_mature_df <- data.frame(
+  miRNA = names(Apul_mature_fasta),
+  sequence = as.character(Apul_mature_fasta),
+  length = width(Apul_mature_fasta),
+  stringsAsFactors = FALSE
+)
+# format miRNA name and coordinates columns
+Apul_mature_df$coordinates <- sub(".*::", "", Apul_mature_df$miRNA)
+Apul_mature_df$miRNA <- gsub("\\.mature.*", "", Apul_mature_df$miRNA)
+Apul_mature_df$species <- "A_pulchra"
+
+# Peve
+Peve_mature_fasta <- readDNAStringSet("../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta")
+Peve_mature_df <- data.frame(
+  miRNA = names(Peve_mature_fasta),
+  sequence = as.character(Peve_mature_fasta),
+  length = width(Peve_mature_fasta),
+  stringsAsFactors = FALSE
+)
+# format miRNA name and coordinates columns
+Peve_mature_df$coordinates <- sub(".*::", "", Peve_mature_df$miRNA)
+Peve_mature_df$miRNA <- gsub("\\.mature.*", "", Peve_mature_df$miRNA)
+Peve_mature_df$species <- "P_evermanni"
+
+# Ptuh
+Ptuh_mature_fasta <- readDNAStringSet("../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta")
+Ptuh_mature_df <- data.frame(
+  miRNA = names(Ptuh_mature_fasta),
+  sequence = as.character(Ptuh_mature_fasta),
+  length = width(Ptuh_mature_fasta),
+  stringsAsFactors = FALSE
+)
+# format miRNA name and coordinates columns
+Ptuh_mature_df$coordinates <- sub(".*::", "", Ptuh_mature_df$miRNA)
+Ptuh_mature_df$miRNA <- gsub("\\.mature.*", "", Ptuh_mature_df$miRNA)
+Ptuh_mature_df$species <- "P_tuahiniensis"
+```
+
+Load in assigned miRNA names
+```{r}
+Apul_names <- read.csv("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+
+Peve_names <- read.csv("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+
+Ptuh_names <- read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+```
+
+Annotate miRNA dfs with given names
+```{r}
+Apul_mature_df <- left_join(Apul_mature_df, Apul_names, by = c("miRNA" = "Name"))
+Peve_mature_df <- left_join(Peve_mature_df, Peve_names, by = c("miRNA" = "Name"))
+Ptuh_mature_df <- left_join(Ptuh_mature_df, Ptuh_names, by = c("miRNA" = "Name"))
+```
+
+
+```{r}
+# merge into single df of all miRNA
+merged_mature_df <- rbind(Apul_mature_df, Peve_mature_df, Ptuh_mature_df)
+```
+
+
 ## Check miRNA length distributions
 
 ```{r set-colors}
@@ -86,17 +155,10 @@ species_colors_nolabel <- c('#408EC6', '#1E2761', '#7A2048')
 ```
 
 Apul:
-```{r calculate-Apul-miRNA-lengths, engine='bash'}
-# Extract sequence lengths and calculate statistics
-grep -v '^>' ../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Apul_ShortStack_mature_lengths.txt
-```
-
 ```{r plot-Apul-miRNA-lengths}
-# Read in the lengths
-Apul_lengths <- read.table("../output/04-miRNA-comparison/Apul_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
 
 # Make histogram of lengths
-hist_Apul_lengths <- ggplot(Apul_lengths, aes(x = length)) +
+hist_Apul_lengths <- ggplot(Apul_mature_df, aes(x = length)) +
   geom_histogram(binwidth = 1, fill = species_colors['A_pulchra'], color = "black") +
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
   labs(title = "A. pulchra miRNA sequence lengths",
@@ -122,17 +184,9 @@ ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Apul_miRNA_
 ```
 
 Ptuh:
-```{r calculate-Ptuh-miRNA-lengths, engine='bash'}
-# Extract sequence lengths and calculate statistics
-grep -v '^>' ../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Ptuh_ShortStack_mature_lengths.txt
-```
-
 ```{r plot-Ptuh-miRNA-lengths}
-# Read in the lengths
-Ptuh_lengths <- read.table("../output/04-miRNA-comparison/Ptuh_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
-
 # Make histogram of lengths
-hist_Ptuh_lengths <- ggplot(Ptuh_lengths, aes(x = length)) +
+hist_Ptuh_lengths <- ggplot(Ptuh_mature_df, aes(x = length)) +
   geom_histogram(binwidth = 1, fill = species_colors['P_tuahiniensis'], color = "black") +
   geom_text(stat = 'count', aes(label = ..count..), vjust = -0.5) +
   labs(title = "P. tuahiniensis miRNA sequence lengths",
@@ -158,17 +212,10 @@ ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Ptuh_miRNA_
 ```
 
 Peve:
-```{r calculate-Peve-miRNA-lengths, engine='bash'}
-# Extract sequence lengths and calculate statistics
-grep -v '^>' ../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta | awk '{ print length($0) }' > ../output/04-miRNA-comparison/Peve_ShortStack_mature_lengths.txt
-```
-
 ```{r plot-Peve-miRNA-lengths}
-# Read in the lengths
-Peve_lengths <- read.table("../output/04-miRNA-comparison/Peve_ShortStack_mature_lengths.txt", header = FALSE, col.names = "length")
 
 # Make histogram of lengths
-hist_Peve_lengths <- ggplot(Peve_lengths, aes(x = length)) +
+hist_Peve_lengths <- ggplot(Peve_mature_df, aes(x = length)) +
   geom_histogram(binwidth = 1, 
                  fill = species_colors['P_evermanni'], 
                  color = "black") +
@@ -197,18 +244,8 @@ ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_Peve_miRNA_
 
 Let's also make a plot showing the length distributions of all three species
 
-```{r combine-length-files}
-# Add a new column to each data frame to label the source file
-Apul_lengths <- Apul_lengths %>% mutate(Species = 'A_pulchra')
-Peve_lengths <- Peve_lengths %>% mutate(Species = 'P_evermanni')
-Ptuh_lengths <- Ptuh_lengths %>% mutate(Species = 'P_tuahiniensis')
-
-# Combine the data frames into one
-all_lengths <- rbind(Apul_lengths, Peve_lengths, Ptuh_lengths)
-```
-
 ```{r plot-all-lengths}
-hist_all_lengths <- ggplot(all_lengths, aes(x = length, fill = Species)) +
+hist_all_lengths <- ggplot(merged_mature_df, aes(x = length, fill = species)) +
   geom_histogram(binwidth = 1, 
                  position = position_dodge(width = 0.91), 
                  color = "black", 
@@ -243,8 +280,8 @@ ggexport(filename = "../output/04-miRNA-comparison/figures/histogram_all_miRNA_l
 
 ```{r summarize-length-distributions}
 # Summarize min, max, and average lengths for each species
-length_summary <- all_lengths %>%
-  group_by(Species) %>%
+length_summary <- merged_mature_df %>%
+  group_by(species) %>%
   summarise(
     Min_Length = min(length, na.rm = TRUE),
     Max_Length = max(length, na.rm = TRUE),
@@ -253,9 +290,8 @@ length_summary <- all_lengths %>%
 
 print(length_summary)
 ```
-```{r remove-unneeded-lengths-files, engine='bash'}
-rm -r ../output/04-miRNA-comparison/*lengths.txt
-```
+
+# BLASTs
 
 ## Merge the three mature miRNA FASTAs
 
@@ -267,25 +303,6 @@ cat Apul_ShortStack_mature.fasta Peve_ShortStack_mature.fasta Ptuh_ShortStack_ma
 head merged_all_ShortStack_mature.fasta
 tail merged_all_ShortStack_mature.fasta
 ```
-
-Let's do a quick investigation of our merged mature miRNAs.
-
-```{r calculate-miRNA-length-stats, engine='bash'}
-# Extract sequence lengths and calculate statistics
-lengths=$(awk '/^>/ {if (seqlen) print seqlen; seqlen=0; next} {seqlen += length($0)} END {print seqlen}' ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta)
-min_length=$(echo "$lengths" | sort -n | head -n 1)
-max_length=$(echo "$lengths" | sort -n | tail -n 1)
-total_length=$(echo "$lengths" | awk '{sum += $1} END {print sum}')
-num_sequences=$(grep -c '^>' ../output/04-miRNA-comparison/merged_all_ShortStack_mature.fasta)
-average_length=$(echo "scale=2; $total_length / $num_sequences" | bc)
-
-# Output results
-echo "Minimum sequence length: $min_length"
-echo "Maximum sequence length: $max_length"
-echo "Average sequence length: $average_length"
-```
-
-# BLASTs
 
 ## Make database for each species:
 
@@ -412,6 +429,19 @@ filtered_combined_blastn <- combined_blastn %>%
 # View
 nrow(filtered_combined_blastn)
 head(filtered_combined_blastn)
+```
+
+Annotate with miRNA names
+```{r}
+# Annotate qseqs
+filtered_combined_blastn$qmiRNA <- sub("\\.mature.*", "", filtered_combined_blastn$qseqid)
+filtered_combined_blastn <- left_join(filtered_combined_blastn, (merged_mature_df %>% select(miRNA, given_miRNA_name)), by = c("qmiRNA" = "miRNA"))
+filtered_combined_blastn <- filtered_combined_blastn %>% dplyr::rename(q_given_miRNA_name = given_miRNA_name)
+
+# Annotate sseqs
+filtered_combined_blastn$smiRNA <- sub("\\.mature.*", "", filtered_combined_blastn$sseqid)
+filtered_combined_blastn <- left_join(filtered_combined_blastn, (merged_mature_df %>% select(miRNA, given_miRNA_name)), by = c("smiRNA" = "miRNA"))
+filtered_combined_blastn <- filtered_combined_blastn %>% dplyr::rename(s_given_miRNA_name = given_miRNA_name)
 
 write.table(filtered_combined_blastn, "../output/04-miRNA-comparison/filtered_combined_blast.tab", sep="\t", row.names=FALSE, quote=FALSE)
 ```
@@ -436,7 +466,11 @@ head(present_in_all, nrow(present_in_all))
  
 # Count the number of miRNAs conserved across all three species
 paste("Number of miRNAs conserved across all three species:", nrow(distinct(present_in_all, sseqid)))
+unique(present_in_all$s_given_miRNA_name)
+unique(present_in_all$q_given_miRNA_name)
 ```
+
+The 4 miRNAs conserved across all species are all previously described: miR-100, miR-2023, miR-2025, and miR-2036.
 
 ## Conserved among subsets of the three species
 
@@ -459,8 +493,10 @@ head(present_in_apul_peve, nrow(present_in_apul_peve))
  
 # Count the number of miRNAs conserved across the two species
 paste("Number of miRNAs conserved in Apul and Peve:", nrow(distinct(present_in_apul_peve, sseqid)))
+head(present_in_apul_peve %>% select(q_given_miRNA_name, s_given_miRNA_name))
 ```
 
+There are 2 miRNAs conserved between A.pulchra and P.evermanni: miR-2030 is one. The other is kind of weird -- one A.pulchra miRNA (apul-mir-novel-27) matches 3 different (but similar) P.evermanni miRNAs.
 
 ### Apul and Ptuh
 
@@ -480,7 +516,10 @@ head(present_in_apul_Ptuh, nrow(present_in_apul_Ptuh))
  
 # Count the number of miRNAs conserved across the two species
 paste("Number of miRNAs conserved in Apul and Ptuh:", nrow(distinct(present_in_apul_Ptuh, sseqid)))
+head(present_in_apul_Ptuh %>% select(q_given_miRNA_name, s_given_miRNA_name))
 ```
+
+The 1 miRNA coserved between A.pulchra and P.tuahiniensis is not previously described
 
 ### Peve and Ptuh
 
@@ -495,13 +534,12 @@ present_in_peve_Ptuh <- filtered_combined_blastn %>%
   # filter for hits to Ptuh only (note the Apul sequence IDs don't contain the species name, so we have to use a non-descriptive unique identifier for filtering)
   filter(!any(grepl("mature::ntLink|mature::ptg", qseqid)) & any(grepl("Pocillopora_meandrina", qseqid)))
 
-# View the miRNAs that match between Peve and Ptuh
-head(present_in_peve_Ptuh, nrow(present_in_peve_Ptuh))
- 
 # Count the number of miRNAs conserved across the two species
 paste("Number of miRNAs conserved in Peve and Ptuh:", nrow(distinct(present_in_peve_Ptuh, sseqid)))
+head(present_in_peve_Ptuh %>% select(q_given_miRNA_name, s_given_miRNA_name))
 ```
 
+The one miRNA shared between P.evermanni and P.tuahiniensis is not previously described.
 
 ## Visualize
 
@@ -620,9 +658,6 @@ apul_identical_miRNAs <- filtered_combined_blastn %>%
   filter(grepl("mature::ntLink|mature::ptg", qseqid))
          
 head(apul_identical_miRNAs)
-
-# Save
-write.table(apul_identical_miRNAs, "../output/04-miRNA-comparison/Apul_identical_miRNAs.tab", sep="\t", row.names = FALSE, col.names = TRUE)
 ```
 
 There are 0 sets of identical miRNAs identified by ShortStack in A.pulchra.
@@ -692,91 +727,6 @@ awk -F'\t' 'NR==1 || $20 == "Y"' ../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1
 
 ```
 
-Annotate our mature miRNA fasta files with associated database matches
-
-Apul
-```{r apul-annotate-with-db-matches, engine='bash'}
-cd ../output/04-miRNA-comparison
-
-while IFS= read -r line; do
-    if [[ $line == ">"* ]]; then
-        # Extract sequence header (without ">") and the accession string
-        header="${line:1}"
-        accession=$(echo "$header" | awk -F '.' '{print $1}')
-
-        # Search for the accession string in the metadata file
-        metadata_line=$(grep -i "$accession" Apul_results_mature.txt)
-
-        # Extract the last column entry from the metadata line
-        last_column=$(echo "$metadata_line" | awk '{print $NF}')
-
-        # Append the last column entry to the sequence header
-        new_header="$header $last_column"
-
-        # Output the new header
-        echo ">$new_header"
-    else
-        # Output the sequence line unchanged
-        echo "$line"
-    fi
-done < ../../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta > Apul_ShortStack_mature_annotated.fasta
-```
-
-Peve
-```{r peve-annotate-with-db-matches, engine='bash'}
-cd ../output/04-miRNA-comparison
-
-while IFS= read -r line; do
-    if [[ $line == ">"* ]]; then
-        # Extract sequence header (without ">") and the accession string
-        header="${line:1}"
-        accession=$(echo "$header" | awk -F '.' '{print $1}')
-
-        # Search for the accession string in the metadata file
-        metadata_line=$(grep -i "$accession" Peve_results_mature.txt)
-
-        # Extract the last column entry from the metadata line
-        last_column=$(echo "$metadata_line" | awk '{print $NF}')
-
-        # Append the last column entry to the sequence header
-        new_header="$header $last_column"
-
-        # Output the new header
-        echo ">$new_header"
-    else
-        # Output the sequence line unchanged
-        echo "$line"
-    fi
-done < ../../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta > Peve_ShortStack_mature_annotated.fasta
-```
-
-Ptuh
-```{r Ptuh-annotate-with-db-matches, engine='bash'}
-cd ../output/04-miRNA-comparison
-
-while IFS= read -r line; do
-    if [[ $line == ">"* ]]; then
-        # Extract sequence header (without ">") and the accession string
-        header="${line:1}"
-        accession=$(echo "$header" | awk -F '.' '{print $1}')
-
-        # Search for the accession string in the metadata file
-        metadata_line=$(grep -i "$accession" Ptuh_results_mature.txt)
-
-        # Extract the last column entry from the metadata line
-        last_column=$(echo "$metadata_line" | awk '{print $NF}')
-
-        # Append the last column entry to the sequence header
-        new_header="$header $last_column"
-
-        # Output the new header
-        echo ">$new_header"
-    else
-        # Output the sequence line unchanged
-        echo "$line"
-    fi
-done < ../../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta > Ptuh_ShortStack_mature_annotated.fasta
-```
 
 ## Table
 

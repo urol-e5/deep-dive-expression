@@ -1,1 +1,1 @@
-"qseqid"	"sseqid"	"pident"	"length"	"mismatch"	"gapopen"	"qstart"	"qend"	"sstart"	"send"	"evalue"	"bitscore"
+"qseqid"	"sseqid"	"pident"	"length"	"mismatch"	"gapopen"	"qstart"	"qend"	"sstart"	"send"	"evalue"	"bitscore"	"qmiRNA"	"q_given_miRNA_name"	"smiRNA"	"s_given_miRNA_name"
