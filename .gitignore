@@ -15,6 +15,7 @@ data/*.fna
 data/*.fasta
 data/*.fasta.gz
 data/blastdb
+
 D-Apul/code/.bashvars
 D-Apul/code/*_cache
 D-Apul/code/scripts
@@ -24,11 +25,11 @@ D-Apul/data/sRNA-trimmed-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/raw-reads
 D-Apul/data/01-Apul-RNA-trimming-FastQC/trimmed-reads
 D-Apul/data/02-Apul-reference-annotation/*.fa
-D-Apul/output/07.2-Apul-Hisat
 D-Apul/data/16-Apul-RNAhybrid/*.fa
 D-Apul/data/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/*.fa
 D-Apul/data/20-Apul-Orthofinder/proteins/*.fa*
 D-Apul/data/24-Apul-miRanda-input-comparisons/*.fa
+D-Apul/output/07.2-Apul-Hisat
 D-Apul/output/08-Apul-WGBS/work/
 D-Apul/output/08-Apul-WGBS/.nextflow*
 D-Apul/output/08-Apul-WGBS/*/*gz
@@ -52,6 +53,7 @@ D-Apul/output/26-Apul-siRNA-mRNA-interactions/*_condensed.bed
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/bowtie2/*.bt2
 D-Apul/output/22*
+
 E-Peve/code/.bashvars
 E-Peve/code/*_cache
 E-Peve/data/*.fa
@@ -63,6 +65,8 @@ E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
 E-Peve/output/11*
+E-Peve/output/13-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+
 F-Ptuh/code/.bashvars
 F-Ptuh/code/*_cache
 F-Ptuh/data/*.fa
@@ -73,6 +77,8 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
+F-Ptuh/output/13-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
+
 .DS_Store
 **/.DS_Store
 */.DS_Store
