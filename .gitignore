@@ -37,6 +37,9 @@ D-Apul/output/08-Apul-WGBS/*/*bam
 D-Apul/output/08-Apul-WGBS/*/*.cov
 D-Apul/output/08-Apul-WGBS/*/*.deduplicated.txt
 D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
+D-Apul/output/08-Apul-WGBS/*/*bed*
+D-Apul/output/08-Apul-WGBS/*/*tab*
+D-Apul/output/08-Apul-WGBS/methylkit/*.RData
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
@@ -65,6 +68,14 @@ E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
 E-Peve/output/11*
+E-Peve/output/12-Peve-WGBS/*/*gz
+E-Peve/output/12-Peve-WGBS/*/*bam
+E-Peve/output/12-Peve-WGBS/*/*.cov
+E-Peve/output/12-Peve-WGBS/*/*.deduplicated.txt
+E-Peve/output/12-Peve-WGBS/*/*.CpG_report.txt
+E-Peve/output/12-Peve-WGBS/*/*bed*
+E-Peve/output/12-Peve-WGBS/*/*tab*
+E-Peve/output/12-Peve-WGBS/methylkit/*.RData
 E-Peve/output/13-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
 
 F-Ptuh/code/.bashvars
@@ -77,7 +88,16 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
+F-Ptuh/output/12-Ptuh-WGBS/*/*gz
+F-Ptuh/output/12-Ptuh-WGBS/*/*bam
+F-Ptuh/output/12-Ptuh-WGBS/*/*.cov
+F-Ptuh/output/12-Ptuh-WGBS/*/*.deduplicated.txt
+F-Ptuh/output/12-Ptuh-WGBS/*/*.CpG_report.txt
+F-Ptuh/output/12-Ptuh-WGBS/*/*bed*
+F-Ptuh/output/12-Ptuh-WGBS/*/*tab*
+F-Ptuh/output/12-Ptuh-WGBS/methylkit/*.RData
 F-Ptuh/output/13-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
+
 
 .DS_Store
 **/.DS_Store

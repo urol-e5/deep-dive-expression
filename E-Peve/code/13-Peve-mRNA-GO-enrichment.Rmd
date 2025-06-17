@@ -1,0 +1,311 @@
+---
+title: "Peve topGO expressed mRNAs"
+author: "Jill Ashey"
+date: "2025-06-09"
+output: html_document
+---
+
+Gene ontology enrichment analysis of mRNAs expressed in Peve. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(topGO)
+library(tidyverse)
+library(genefilter)
+```
+
+Before analysis, make gene2go file from annotation information. Once this is done, it does not have to be redone. 
+```{r}
+peve_annot <- read.delim("../output/02-Peve-reference-annotation/Porites_evermanni_CDS-IDmapping-2024_09_04.tab")
+peve_annot$V1 <- gsub("Parent=", "", peve_annot$V1)
+
+# Select and rename specific columns 
+peve_go <- peve_annot %>%
+  select(V1, Gene.Ontology.IDs) %>%
+  rename(mRNA = V1, GO = Gene.Ontology.IDs) 
+
+# Save as tsv 
+write_tsv(peve_go, file = "../output/13-Peve-mRNA-GO-enrichment/Peve_gene2go.tab")
+```
+
+Read in count matrix 
+```{r}
+counts <- read.csv("../output/06.2-Peve-Hisat/gene_count_matrix.csv")
+dim(counts)
+
+# Remove gene- from gene id name 
+counts$gene_id <- gsub("gene-", "", counts$gene_id)
+
+# Set row names
+rownames(counts) <- counts[,1] #set first column that contains gene names as rownames
+counts <- counts[,-1] # remove column w/ gene names 
+```
+
+There are 40389 genes from the alignment and assembly. 
+
+Perform normalization step. Normalization does not necessarily matter for GO enrichment, but it does matter for pOverA filtering, which is done below. Normalize counts with simple RPM
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Normalize counts
+counts_norm <- normalize_counts(counts)
+counts_norm_df <- as.data.frame(counts_norm)
+```
+
+Remove any genes that were not expressed (ie expression of 0 across all samples)
+```{r}
+counts_norm_filt <-counts_norm_df %>%
+  mutate(Total = rowSums(.[, 1:5]))%>%
+  filter(!Total==0)%>%
+  dplyr::select(!Total)
+dim(counts_norm_filt)
+```
+
+31501 genes were expressed. 
+
+Filter data with pOverA. There are 5 samples for this time point. Genes will pass filtering if they are present in 1/5 = 0.2 of samples and have minimum count of 5
+```{r}
+ffun<-filterfun(pOverA(0.2,5))  #set up filtering parameters
+filt_outrm_poa <- genefilter((counts_norm_filt[,1:5]), ffun) #apply filter
+sum(filt_outrm_poa) #count number of genes left
+
+counts_norm_filt_poa <- counts_norm_filt[filt_outrm_poa,] #keep only rows that passed filter
+```
+
+15808 genes remained after normalization and pOverA filtering. 
+
+Make a list of genes for input to topGO
+```{r}
+# Genes of interest 
+clust_genes <- as.character(rownames(counts_norm_filt_poa))
+
+# All genes 
+all_genes <- as.character(rownames(counts))
+
+# Apply 1 or 0 if gene is gene of interest 
+GeneList <- factor(as.integer(all_genes %in% clust_genes))
+names(GeneList) <- all_genes
+```
+
+Read in gene-to-go-mappings
+```{r}
+gene2go_topgo <- readMappings("../output/13-Peve-mRNA-GO-enrichment/Peve_gene2go.tab", IDsep=";")
+```
+
+Set function to select genes of interest (ie those that have pvalue < 0.05)
+```{r}
+topDiffGenes <- function(allScore) {
+return(allScore < 0.05)}
+```
+
+### Biological Processes
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_BP <-new("topGOdata", ontology="BP", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_BP_FE <- runTest(GO_BP, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_BP_En <- GenTable(GO_BP, Fisher = GO_BP_FE, orderBy = "Fisher", numChar = 51, topNodes = 100)
+```
+
+Filter by significant results
+```{r}
+GO_BP_En$Fisher<-as.numeric(GO_BP_En$Fisher)
+GO_BP_En_sig<-GO_BP_En[GO_BP_En$Fisher<0.05,]
+```
+
+Merge `GO_BP_En_sig` with GO and gene info. Then merge with expressed genes
+```{r}
+# Read in GO terms 
+peve_go <- read.delim("../output/13-Peve-mRNA-GO-enrichment/Peve_gene2go.tab", sep = "\t")
+
+# Separate GO terms 
+peve_go <- peve_go %>%
+  separate_rows(GO, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+peve_go$GO <- trimws(peve_go$GO)
+GO_BP_En_sig$GO.ID <- trimws(GO_BP_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_BP_En_sig_gene <- peve_go %>%
+  left_join(GO_BP_En_sig, by = c("GO" = "GO.ID")) %>%
+  na.omit()
+
+# Join the datasets based on expressed genes 
+GO_BP_En_sig_gene <- GO_BP_En_sig_gene %>%
+  filter(mRNA %in% clust_genes)
+
+# Add ontology column 
+GO_BP_En_sig_gene$ontology <- "Biological Processes"
+```
+
+### Cellular Components
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_CC <-new("topGOdata", ontology="CC", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_CC_FE <- runTest(GO_CC, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_CC_En <- GenTable(GO_CC, Fisher = GO_CC_FE, orderBy = "Fisher", numChar = 51, topNodes = 100)
+```
+
+Filter by significant results
+```{r}
+GO_CC_En$Fisher<-as.numeric(GO_CC_En$Fisher)
+GO_CC_En_sig<-GO_CC_En[GO_CC_En$Fisher<0.05,]
+```
+
+Merge `GO_CC_En_sig` with GO and gene info. Then merge with expressed genes
+```{r}
+# Read in GO terms 
+#peve_go <- read.delim("../output/13-Peve-mRNA-GO-enrichment/Peve_gene2go.tab", sep = "\t")
+
+# Separate GO terms 
+#peve_go <- peve_go %>%
+#  separate_rows(GO, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+#peve_go$GO <- trimws(peve_go$GO)
+GO_CC_En_sig$GO.ID <- trimws(GO_CC_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_CC_En_sig_gene <- peve_go %>%
+  left_join(GO_CC_En_sig, by = c("GO" = "GO.ID")) %>%
+  na.omit()
+
+# Join the datasets based on expressed genes 
+GO_CC_En_sig_gene <- GO_CC_En_sig_gene %>%
+  filter(mRNA %in% clust_genes)
+
+# Add ontology column 
+GO_CC_En_sig_gene$ontology <- "Cellular Components"
+```
+
+### Molecular Functions
+
+Create `topGOdata` object, which is required for topGO analysis
+```{r}
+GO_MF <-new("topGOdata", ontology="MF", gene2GO=gene2go_topgo, allGenes=GeneList, annot = annFUN.gene2GO, geneSel=topDiffGenes)
+```
+
+Run GO enrichment test 
+```{r}
+GO_MF_FE <- runTest(GO_MF, algorithm="weight01", statistic="fisher")
+```
+
+Generate results table 
+```{r}
+GO_MF_En <- GenTable(GO_MF, Fisher = GO_MF_FE, orderBy = "Fisher", numChar = 51, topNodes = 100)
+```
+
+Filter by significant results
+```{r}
+GO_MF_En$Fisher<-as.numeric(GO_MF_En$Fisher)
+GO_MF_En_sig<-GO_MF_En[GO_MF_En$Fisher<0.05,]
+```
+
+Merge `GO_MF_En_sig` with GO and gene info. Then merge with expressed genes
+```{r}
+# Read in GO terms 
+#peve_go <- read.delim("../output/13-Peve-mRNA-GO-enrichment/Peve_gene2go.tab", sep = "\t")
+
+# Separate GO terms 
+#peve_go <- peve_go %>%
+#  separate_rows(GO, sep = ";")
+
+# Ensure GO terms in both datasets are formatted similarly (trim whitespaces)
+#peve_go$GO <- trimws(peve_go$GO)
+GO_MF_En_sig$GO.ID <- trimws(GO_MF_En_sig$GO.ID)
+
+# Join the datasets based on GO term
+GO_MF_En_sig_gene <- peve_go %>%
+  left_join(GO_MF_En_sig, by = c("GO" = "GO.ID")) %>%
+  na.omit()
+
+# Join the datasets based on expressed genes 
+GO_MF_En_sig_gene <- GO_MF_En_sig_gene %>%
+  filter(mRNA %in% clust_genes)
+
+# Add ontology column 
+GO_MF_En_sig_gene$ontology <- "Molecular Functions"
+```
+
+### Join ontologies 
+
+Bind so there is a df that has significantly enriched GO terms for all ontologies 
+```{r}
+GO_En_sig_gene <- rbind(GO_BP_En_sig_gene, GO_CC_En_sig_gene, GO_MF_En_sig_gene)
+
+# Calculate proportion of significant v annotated genes 
+GO_En_sig_gene <- GO_En_sig_gene %>%
+  mutate(sig.prop = Significant/Annotated) %>%
+  na.omit()
+length(unique(GO_En_sig_gene$Term))
+
+# Save as csv 
+write.csv(GO_En_sig_gene, "../output/13-Peve-mRNA-GO-enrichment/Peve-GO_en_sig_expressed_genes.csv")
+```
+
+Plot by number of genes that have enriched terms
+```{r}
+plot_data <- GO_En_sig_gene %>%
+  filter(ontology != "Cellular Components") %>%
+  group_by(Term, ontology) %>%
+  summarise(gene_count = n_distinct(mRNA),
+            Fisher = mean(Fisher), .groups = 'drop') %>%
+  group_by(ontology) %>%
+  slice_max(order_by = gene_count, n = 10)
+
+ggplot(plot_data, aes(x = reorder(Term, gene_count), y = gene_count, fill = Fisher)) +
+  geom_bar(stat = "identity") +
+  #geom_text(aes(label = gene_count), vjust = -0.5, color = "black", size = 3) +
+  coord_flip() +
+  scale_fill_gradient(low = "blue", high = "red") +
+  facet_grid(vars(ontology), scales = "free", space = "free_y") + 
+  labs(x = "GO Term",
+       y = "Number of Genes",
+       fill = "Fisher Value") +
+  theme_bw() +
+  theme(
+    axis.title = element_text(size = 36, face = "bold"),        # Axis title size
+    axis.text = element_text(size = 34, colour = "black"),                        # Axis text size
+    legend.title = element_text(size = 34, face = "bold"),      # Legend title size
+    legend.text = element_text(size = 32),                      # Legend text size
+    strip.text = element_text(size = 34, face = "bold"),        # Facet text size
+    strip.background = element_rect(fill = "lightgray", color = "black", size = 1.5),         # Facet background
+    axis.line = element_line(size = 1, colour = "black"),       # Enhanced axis lines
+    axis.ticks = element_line(size = 1),                        # Thicker axis ticks
+     #panel.border = element_blank()                             # Remove panel border
+    #panel.grid.major = element_blank(),                         # Remove major grid lines
+    #panel.grid.minor = element_blank()                          # Remove minor grid lines
+        panel.border = element_rect(color = "black", size = 1.2),   # Enhanced facet border lines
+    panel.grid.major = element_line(size = 0.5, color = "gray"), # Grid lines inside the facets
+    panel.spacing = unit(1, "lines"),                           # Increase space between facets
+    strip.placement = "outside"    
+  )
+
+ggsave(filename = "../output/13-Peve-mRNA-GO-enrichment/Peve-GO_en_sig_expressed_genes_top10.pdf", last_plot(), width = 30, height = 40)
+ggsave(filename = "../output/13-Peve-mRNA-GO-enrichment/Peve-GO_en_sig_expressed_genes_top10.png", last_plot(), width = 30, height = 40)
+```
+
+

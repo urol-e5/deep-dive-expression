@@ -13,12 +13,23 @@ bibliography: references.bib
 library(knitr)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
+  eval = TRUE,        # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
-  comment = ""         # Prevents appending '##' to beginning of lines in code output
+  comment = "" # Prevents appending '##' to beginning of lines in code output
 )
 ```
+
+## This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
+
+Reads were trimmed and QC'd in [this code](https://github.com/urol-e5/deep-dive-expression/blob/daafe2e4d8633a30223f838d41dd90ef8bc7d06c/D-Apul/code/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC.md)
+
+## Important file locations:
+
+1. [Trimmed WGBS Reads](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/01.00-D-Apul-WGBS-trimming-cutadapt-FastQC-MultiQC/)
+2. [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/data/Bisulfite_Genome_ZD/)
+3. [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
+4. [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/bismark_summary_report.html)
 
 ### Note: Most of this code is based on the [E5 Time Series Molecular](https://github.com/urol-e5/timeseries_molecular) code by Steven Roberts [here](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
@@ -89,6 +100,8 @@ md5sum Bisulfite_Genome.tar.gz | tee Bisulfite_Genome.tar.gz.md5
 ```{bash, eval=FALSE}
 09aa94a6744981b7edcb5176197f7cab  Bisulfite_Genome.tar.gz
 ```
+
+### Output file location: [Bismark Genome](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/data/Bisulfite_Genome_ZD/)
 
 ## Test parameters 
 
@@ -333,6 +346,8 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
+
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
 ### Deduplication, Sorting, and methylation extraction & calling
@@ -452,16 +467,24 @@ bismark2summary *pe.bam
 multiqc .
 ```
 
-### Steps I didn't do yet:
+#### Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/bismark_summary_report.html)
+
+### Sorting cov files and filtering for coverage and gene intersection
 
 ```{bash, eval=FALSE}
+# salloc -p cpu -c 8 --mem 16G
 
-# Sort .cov files
-
+# load modules needed
 module load bedtools2/2.31.1
 
-cd output_WGBS/dedup_V3
+# set directories and files
+root_dir="/scratch3/workspace/zdellaert_uri_edu-deep_dive/deep-dive-expression/D-Apul/"
+bismark_dir="${root_dir}/output/08-Apul-WGBS/bismark_cutadapt/"
+genome_folder="${root_dir}/data/"
+gtf_name="Apulchra-genome"
 
+# Sort .cov files
+cd ${bismark_dir}
 for file in *merged_CpG_evidence.cov
 do
   sample=$(basename "${file}" .CpG_report.merged_CpG_evidence.cov)
@@ -469,11 +492,7 @@ do
   > "${sample}"_sorted.cov
 done
 
-# Create bedgraph files
-# Bedgraphs for 5X coverage 
-
-cd output_WGBS/dedup_V3
-
+# Create bedgraphs for 5X coverage 
 for file in *_sorted.cov
 do
   sample=$(basename "${file}" _sorted.cov)
@@ -481,17 +500,7 @@ do
   > "${sample}"_5x_sorted.bedgraph
 done
 
-# Bedgraphs for 10X coverage 
-
-for file in *_sorted.cov
-do
-  sample=$(basename "${file}" _sorted.cov)
-  cat "${file}" | awk -F $'\t' 'BEGIN {OFS = FS} {if ($5+$6 >= 10) {print $1, $2, $3, $4}}' \
-  > "${sample}"_10x_sorted.bedgraph
-done
-
-# filter for 5x coverage
-
+# Create .tab files for 5x coverage
 for file in *_sorted.cov
 do
   sample=$(basename "${file}" _sorted.cov)
@@ -499,40 +508,25 @@ do
   > "${sample}"_5x_sorted.tab
 done
 
-# intersection of all samples
-
-# load modules needed
-module load bedtools2/2.31.1
-
-cd output_WGBS/dedup_V3
-
+# Intersection of all samples
 multiIntersectBed -i *_5x_sorted.tab > CpG.all.samps.5x_sorted.bed
 
-#change number after == to your number of samples
+## change number after == to your number of samples
+cat CpG.all.samps.5x_sorted.bed | awk '$4 ==5' > CpG.filt.all.samps.5x_sorted.bed 
 
-cat CpG.all.samps.5x_sorted.bed | awk '$4 ==10' > CpG.filt.all.samps.5x_sorted.bed 
-
-### and with gene bodies:
-
-awk '{if ($3 == "transcript") {print}}' references/Pocillopora_acuta_HIv2.gtf  > references/Pocillopora_acuta_HIv2_transcripts.gtf
-
-cd output_WGBS/dedup_V3
+# Intersection of all samples with gene bodies:
+awk '{if ($3 == "transcript") {print}}' "${genome_folder}/${gtf_name}.gtf"  > "${genome_folder}/${gtf_name}_transcripts.gtf"
 
 for i in *5x_sorted.tab
 do
   intersectBed \
   -wb \
   -a ${i} \
-  -b ../../references/Pocillopora_acuta_HIv2_transcripts.gtf \
+  -b "${genome_folder}/${gtf_name}_transcripts.gtf" \
   > ${i}_gene
 done
 
-### keep only those loci in all samples
-
-awk '{if ($3 == "transcript") {print}}' references/Pocillopora_acuta_HIv2.gtf  > references/Pocillopora_acuta_HIv2_transcripts.gtf
-
-cd output_WGBS/dedup_V3
-
+# Keep only loci intersecting with genes found in all samples
 for i in *_5x_sorted.tab_gene
 do
   intersectBed \
@@ -540,4 +534,518 @@ do
   -b CpG.filt.all.samps.5x_sorted.bed \
   > ${i}_CpG_5x_enrichment.bed
 done
+
+# Global methylation levels 
+for file in *_sorted.cov; do
+  sample=$(basename "$file" _sorted.cov)
+  awk '{methylated+=$5; unmethylated+=$6} END {print "'$sample'", methylated/(methylated+unmethylated)}' "$file"
+done > global_methylation_levels.txt
+```
+
+### Output file location: [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
+
+## Methylkit
+
+```{r}
+# Load methylKit and other packages
+library("methylKit")
+library("tidyverse")
+library("parallel")
+library("ggpmisc")
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("_S\\d.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
+
+file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/",pattern = "_pe.deduplicated.bismark.cov.gz",  full.names = TRUE, include.dirs = FALSE)
+sample <- gsub("trimmed_", "", basename(file_list))
+sample <- gsub("_S\\d_pe.deduplicated.bismark.cov.gz", "", sample)
+
+file_list <- as.list(file_list)
+treatment <- c(0,0,0,0,0)
+
+sample
+file_list
+
+# methyl_list <- mclapply(seq_along(file_list), function(i) {
+#   methRead(
+#     file_list[[i]],
+#     assembly = "Apul",
+#     treatment = treatment[i],
+#     sample.id = sample[[i]],
+#     context = "CpG",
+#     mincov = 10,
+#     pipeline = "bismarkCoverage"
+#   )
+# }, mc.cores = 4) 
+# 
+# methylObj <- new("methylRawList", methyl_list)
+# methylObj@treatment <- c(0, 0, 0, 0,0)
+# 
+# save(methylObj, file = "../output/08-Apul-WGBS/methylkit/MethylObj.RData")
+```
+
+```{r, eval=FALSE}
+load("../output/08-Apul-WGBS/methylkit/MethylObj.RData")
+
+getMethylationStats(methylObj[[1]],plot=FALSE,both.strands=FALSE)
+getMethylationStats(methylObj[[1]], plot = TRUE,both.strands=FALSE)
+getCoverageStats(methylObj[[1]],plot=TRUE,both.strands=FALSE)
+```
+
+```{r, eval=FALSE}
+filtered_methylObj=filterByCoverage(methylObj,lo.count=5,lo.perc=NULL,
+                                      hi.count=NULL,hi.perc=99.9)
+
+filtered_methylObj_norm <-  methylKit::normalizeCoverage(filtered_methylObj)
+meth_filter <- methylKit::unite(filtered_methylObj_norm,destrand=FALSE, min.per.group = 4L)
+
+save(meth_filter, file = "../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+```
+
+```{r}
+load("../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
+
+PCASamples(meth_filter)
+
+clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
+
+getCorrelation(meth_filter)
+```
+
+
+## Annotation- I want an intersection of methylated CpGs with the various regions in the genome:
+
+```{r}
+library("genomationData")
+library("genomation")
+library("GenomicRanges")
+
+# convert methylation data to GRange object
+meth_GR <- as(meth_filter, "GRanges")
+
+#extract percent methylation and add this to GRanges object
+meth_matrix <- as.data.frame(percMethylation(meth_filter))
+meth_GR$meth <- meth_matrix
+
+# import gtf
+gtf.file = "../data/Apulchra-genome.gtf"
+gtf = genomation::gffToGRanges(gtf.file)
+head(gtf)
+
+#extract transcripts
+transcripts = gffToGRanges(gtf.file, filter = "transcript")
+```
+
+### Extract additional features
+
+```{r}
+#extract exons and introns
+exons = gffToGRanges(gtf.file, filter = "exon")
+introns = GenomicRanges::setdiff(transcripts, exons)
+
+# import 3' UTR and 5' UTR annotation files
+gff.file_3UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff"
+gff.file_5UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff"
+
+gff3UTR = genomation::gffToGRanges(gff.file_3UTR)
+gff5UTR = genomation::gffToGRanges(gff.file_5UTR)
+head(gff3UTR)
+```
+
+#### Transposable elements:
+
+```{r}
+# Import Transposable element file from repeat masker format
+rmsk <- read.table("../data/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.fa.out",
+                   skip = 3, fill = TRUE, stringsAsFactors = FALSE, quote = "") %>% drop_na()
+
+# Assign column names based on RepeatMasker .out format
+colnames(rmsk)[c(5, 6, 7, 10)] <- c("seqname", "start", "end", "repeat_name")
+
+# Create a GRanges object
+TE <- GRanges(
+  seqnames = rmsk$seqname,
+  ranges = IRanges(start = as.numeric(rmsk$start), end = as.numeric(rmsk$end)),
+  strand = "*",
+  repeat_name = rmsk$repeat_name
+)
+
+TE$type <- "transposable_element"
+
+head(TE)
+```
+
+#### miRNA:
+
+```{r}
+miRNAs = genomation::gffToGRanges("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/known_miRNAs.gff3")
+head(miRNAs)
+```
+
+#### lncRNA:
+
+```{r}
+lncRNAs = genomation::gffToGRanges("../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf")
+head(lncRNAs)
+```
+
+## Plotting annotation information
+
+```{r}
+# Define intergenic = genome - all annotations
+# First combine all annotated regions
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE, lncRNAs, miRNAs))
+
+# Define genome bounds from methylation object
+genome_range <- GenomicRanges::reduce(meth_GR)
+
+# Intergenic = genome - annotated
+intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
+```
+
+```{r}
+# Priority list
+region_priority <- list(
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  exon = exons,
+  intron = introns,
+  miRNA = miRNAs,
+  lncRNA = lncRNAs,
+  TE = TE,
+  intergenic = intergenic
+)
+
+# Start with all CpGs unassigned
+cpg_annot <- rep(NA, length(meth_GR))
+
+# Keep track of which CpGs are still unassigned
+unassigned <- rep(TRUE, length(meth_GR))
+
+# Assign in priority order
+for (region_name in names(region_priority)) {
+  region <- region_priority[[region_name]]
+  transcript_CpG <- findOverlaps(meth_GR[unassigned], region)
+  
+  # Map the indices back to full set
+  full_indices <- which(unassigned)[queryHits(transcript_CpG)]
+  
+  cpg_annot[full_indices] <- region_name
+  unassigned[full_indices] <- FALSE  # Mark these as assigned
+}
+
+# Replace any remaining NA with "unassigned" or "intergenic"
+cpg_annot[is.na(cpg_annot)] <- "intergenic"
+
+```
+
+### Region stacked bars: all CpGs
+
+```{r}
+df_annotated <- as.data.frame(meth_GR)
+df_annotated$region <- cpg_annot
+
+#set as factor
+df_annotated$region <- factor(df_annotated$region,
+                              levels = c("intergenic", "TE", "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+
+blue_palette <- c(
+  "intergenic" = "#deebf7",  
+  "TE"         = "#c6dbef",
+  "lncRNA"     = "#9ecae1",
+  "miRNA"      = "red",#"miRNA"      = "#6baed6",
+  "3UTR"       = "#4292c6",
+  "5UTR"       = "#2171b5",
+  "intron"     = "#08519c",
+  "exon"       = "#08306b"  
+)
+
+ggplot(df_annotated, aes(x = strand, fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+  theme_minimal() +
+  labs(y = "% CpGs",
+    fill = "Genomic Region") +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
+  scale_fill_manual(values = blue_palette)
+```
+
+### Region stacked bars: CpGs by methylation status
+
+```{r}
+# Calculate average across all samples
+avg_meth <- rowMeans(meth_matrix, na.rm = TRUE)
+
+# Add to annotated data
+df_annotated$avg_meth <- avg_meth
+
+# Classify methylation status
+low_thresh <- 10
+high_thresh <- 50
+df_annotated$meth_status <- cut(df_annotated$avg_meth,
+                                breaks = c(-Inf, low_thresh, high_thresh, Inf),
+                                labels = c("lowly", "moderately", "highly"))
+```
+
+```{r}
+df_annotated_facet <- df_annotated %>%
+  mutate(facet_group = meth_status) %>%
+  bind_rows(
+    df_annotated %>% mutate(facet_group = "all")
+  )
+
+df_annotated_facet$facet_group <- factor(df_annotated_facet$facet_group, levels = c("all", "highly","moderately","lowly"))
+
+ggplot(df_annotated_facet, aes(x = strand, fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+  theme_minimal() +
+  labs(y = "% CpGs",
+    fill = "Genomic Region") +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
+  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1)
+
+ggplot(df_annotated, aes(x = region, fill = meth_status)) +
+  geom_bar(position = "fill") +  # stacked bar normalized to proportions
+  theme_minimal() +
+  labs(
+    title = "Proportion of CpG Methylation Status by Region",
+    x = "Genomic Region",
+    y = "Proportion of CpGs",
+    fill = "Methylation Status"
+  ) +
+  scale_fill_manual(values = c(lowly = "#3498db", moderately = "#bdc3c7", highly = "#e74c3c")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_continuous(labels = scales::percent_format())
+
+```
+
+```{r}
+df_summary <- df_annotated %>%
+  group_by(region) %>%
+  summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
+df_summary
+```
+
+### Sample Methylation boxplots
+
+```{r}
+# Add region info
+meth_long <- as.data.frame(meth_matrix)
+meth_long$region <- cpg_annot
+
+# Reshape: One row per CpG × sample
+meth_long_long <- meth_long %>%
+  pivot_longer(
+    cols = -region, 
+    names_to = "sample", 
+    values_to = "perc_meth"
+  )
+
+# Now summarize: mean methylation per sample × region
+meth_summary <- meth_long_long %>%
+  group_by(sample, region) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop")
+
+ggplot(meth_summary, aes(x = region, y = mean_meth)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = sample), width = 0.1) +
+  theme_minimal() +
+  labs(
+    title = "Sample-Wise Average Methylation by Genomic Region",
+    x = "Genomic Region",
+    y = "Mean % Methylation per Sample"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+### Extract methylation count matrix for transcripts
+
+```{r}
+transcript_CpG <- findOverlaps(meth_GR, transcripts)
+
+# Create a data frame with CpG-to-transcript mapping
+df <- data.frame(
+  cpg_ix = queryHits(transcript_CpG),
+  transcript_id = transcripts$transcript_id[subjectHits(transcript_CpG)])
+
+df$transcript_id <- gsub("-T1","",df$transcript_id)
+
+# Merge with CpG methylation 
+meth_df <- as.data.frame(meth_GR)[df$cpg_ix, ]
+meth_df$transcript_id <- df$transcript_id
+
+meth_long <- meth_df %>%
+  select(starts_with("meth."), transcript_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -transcript_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+# Summarize: Mean % methylation per transcript × sample
+CpG_count_transcripts <- meth_long %>%
+  group_by(transcript_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_transcripts, "../output/08-Apul-WGBS/CpG_Transcript_CountMat.csv")
+```
+
+#### For miRNA
+
+```{r}
+# Overlap CpGs with miRNAs
+miRNA_CpG <- findOverlaps(meth_GR, miRNAs)
+
+# Map CpGs to miRNA IDs
+df_miRNA <- data.frame(
+  cpg_ix = queryHits(miRNA_CpG),
+  miRNA_id = miRNAs$ID[subjectHits(miRNA_CpG)]
+)
+
+# Subset methylation data
+meth_df_miRNA <- as.data.frame(meth_GR)[df_miRNA$cpg_ix, ]
+meth_df_miRNA$miRNA_id <- df_miRNA$miRNA_id
+
+# Tidy and summarize
+miRNA_meth_long <- meth_df_miRNA %>%
+  select(starts_with("meth."), miRNA_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -miRNA_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+CpG_count_miRNAs <- miRNA_meth_long %>%
+  group_by(miRNA_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_miRNAs, "../output/08-Apul-WGBS/CpG_miRNA_CountMat.csv")
+```
+
+#### For lncRNA
+
+```{r}
+# Overlap CpGs with lncRNAs
+lncRNA_CpG <- findOverlaps(meth_GR, lncRNAs)
+
+# Map CpGs to lncRNA IDs
+df_lncRNA <- data.frame(
+  cpg_ix = queryHits(lncRNA_CpG),
+  lncRNA_id = lncRNAs$gene_id[subjectHits(lncRNA_CpG)]
+)
+
+# Subset methylation data
+meth_df_lncRNA <- as.data.frame(meth_GR)[df_lncRNA$cpg_ix, ]
+meth_df_lncRNA$lncRNA_id <- df_lncRNA$lncRNA_id
+
+# Tidy and summarize
+lncRNA_meth_long <- meth_df_lncRNA %>%
+  select(starts_with("meth."), lncRNA_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -lncRNA_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+CpG_count_lncRNAs <- lncRNA_meth_long %>%
+  group_by(lncRNA_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_lncRNAs, "../output/08-Apul-WGBS/CpG_lncRNA_CountMat.csv")
+```
+
+## Correlations: Count matrices from https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices
+
+### RNA-seq (REDO THIS with normalized counts)
+
+```{r}
+mRNA <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+
+mRNA_long <- mRNA %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
+                                      names_to = "Sample",
+                                      values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
+
+#fix sample IDs
+mRNA_long$Sample <- gsub("RNA.","",mRNA_long$Sample)
+
+percent_meth_long <- CpG_count_transcripts %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+plot_data_tissue <- merge(percent_meth_long, mRNA_long, by = c("transcript_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of gene", y = "RNA Counts", 
+       title = "Gene Methylation vs Expression") +
+  theme_minimal()
+```
+
+sRNA-seq: https://github.com/urol-e5/deep-dive-expression/tree/main/D-Apul/output/03.1-Apul-sRNA-summary
+
+```{r}
+miRNA <- read.delim("../output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt") %>% rownames_to_column("miRNA_id") 
+
+miRNA_long <- miRNA %>%  pivot_longer(cols =sample140:sample178,
+                                      names_to = "Sample",
+                                      values_to = "miRNA_norm_count")
+
+#fix sample IDs
+miRNA_long$Sample <- gsub("sample","ACR.",miRNA_long$Sample)
+
+percent_meth_long <- CpG_count_miRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+# below not working, miRNA ids are different (cluster vs known IDs)
+
+# plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
+# 
+# ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
+#   geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+#   labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts", 
+#        title = "miRNA Methylation vs Expression") +
+#   theme_minimal()
+```
+
+lncRNA: https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
+
+```{r}
+lncRNA <- read.delim("../output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt",skip=1)
+
+lncRNA_long <- lncRNA %>%  pivot_longer(cols =...output.07.Apul.Hisat.RNA.ACR.140.sorted.bam:...output.07.Apul.Hisat.RNA.ACR.178.sorted.bam,
+                                      names_to = "Sample",
+                                      values_to = "lncRNA_count") %>% rename("lncRNA_id" = Geneid)
+
+#fix sample IDs
+lncRNA_long$Sample <- gsub("...output.07.Apul.Hisat.RNA.","",lncRNA_long$Sample)
+lncRNA_long$Sample <- gsub(".sorted.bam","",lncRNA_long$Sample)
+
+percent_meth_long <- CpG_count_lncRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+plot_data_tissue <- merge(percent_meth_long, lncRNA_long, by = c("lncRNA_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = lncRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of lncRNA region", y = "lncRNA Counts",
+       title = "lncRNA Methylation vs Expression") +
+  theme_minimal()
 ```
