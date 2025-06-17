@@ -1,38 +1,38 @@
-qseqid	sseqid	pident	length	mismatch	gapopen	qstart	qend	sstart	send	evalue	bitscore
-Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	100	23	0	0	1	23	1	23	1.44e-10	46.1
-Cluster_6255.mature::Porites_evermani_scaffold_502:58997-59018(-)	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	100	21	0	0	1	21	1	21	1.99e-09	42.1
-Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	19	0	0	2	20	2	20	3.1e-08	38.2
-Cluster_8887.mature::Porites_evermani_scaffold_910:118742-118762(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	20	0	0	2	21	2	21	7.85e-09	40.1
-Cluster_8888.mature::Porites_evermani_scaffold_910:139353-139373(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	21	0	0	1	21	1	21	1.99e-09	42.1
-Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_390.mature::Pocillopora_meandrina_HIv1___Sc0000001:1459455-1459476(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	94.737	19	1	0	1	19	1	19	8.07e-06	30.2
-Cluster_1068.mature::Pocillopora_meandrina_HIv1___Sc0000002:15749310-15749331(+)	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	100	21	0	0	2	22	2	22	2.12e-09	42.1
-Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	100	21	0	0	1	21	1	21	1.99e-09	42.1
-Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1
-Cluster_1832.mature::ntLink_6:5157559-5157579(+)	Cluster_8888.mature::Porites_evermani_scaffold_910:139353-139373(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1
-Cluster_3437.mature::ptg000004l:1859911-1859933(-)	Cluster_6255.mature::Porites_evermani_scaffold_502:58997-59018(-)	100	22	0	0	1	22	1	22	6.43e-10	44.1
-Cluster_5012.mature::ptg000008l:10754789-10754809(-)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1
-Cluster_15316.mature::ptg000024l:4086254-4086275(+)	Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	100	22	0	0	1	22	1	22	6.06e-10	44.1
-Cluster_18728.mature::ptg000035l:5346054-5346075(+)	Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1
-Cluster_18772.mature::ptg000035l:8367748-8367770(-)	Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	100	23	0	0	1	23	1	23	1.63e-10	46.1
-Cluster_7657.mature::Porites_evermani_scaffold_730:81385-81406(-)	Cluster_7658.mature::Porites_evermani_scaffold_730:82423-82444(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1
-Cluster_390.mature::Pocillopora_meandrina_HIv1___Sc0000001:1459455-1459476(+)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	94.737	19	1	0	1	19	1	19	9.11e-06	30.2
-Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1
-Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	100	21	0	0	2	22	2	22	2.39e-09	42.1
-Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1
-Cluster_2793.mature::Pocillopora_meandrina_HIv1___Sc0000008:1783824-1783844(+)	Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	94.737	19	1	0	2	20	3	21	8.54e-06	30.2
-Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	100	22	0	0	1	22	1	22	6.06e-10	44.1
-Cluster_5012.mature::ptg000008l:10754789-10754809(-)	Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	100	21	0	0	1	21	1	21	1.85e-09	42.1
-Cluster_15316.mature::ptg000024l:4086254-4086275(+)	Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	100	22	0	0	1	22	1	22	4.98e-10	44.1
-Cluster_17776.mature::ptg000031l:5461327-5461348(-)	Cluster_1068.mature::Pocillopora_meandrina_HIv1___Sc0000002:15749310-15749331(+)	100	22	0	0	1	22	1	22	4.98e-10	44.1
-Cluster_18728.mature::ptg000035l:5346054-5346075(+)	Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	100	21	0	0	2	22	2	22	1.97e-09	42.1
-Cluster_18772.mature::ptg000035l:8367748-8367770(-)	Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	100	22	0	0	1	22	1	22	5.29e-10	44.1
-Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	100	21	0	0	2	22	2	22	1.97e-09	42.1
-Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	100	22	0	0	1	22	1	22	5.29e-10	44.1
-Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	100	21	0	0	1	21	1	21	1.85e-09	42.1
-Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	Cluster_2793.mature::Pocillopora_meandrina_HIv1___Sc0000008:1783824-1783844(+)	94.737	19	1	0	3	21	2	20	7.02e-06	30.2
-Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	100	22	0	0	1	22	1	22	4.98e-10	44.1
+qseqid	sseqid	pident	length	mismatch	gapopen	qstart	qend	sstart	send	evalue	bitscore	qmiRNA	q_given_miRNA_name	smiRNA	s_given_miRNA_name
+Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_1167	peve-mir-100	Cluster_18728	apul-mir-100
+Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	100	23	0	0	1	23	1	23	1.44e-10	46.1	Cluster_5563	peve-mir-2036	Cluster_18772	apul-mir-2036
+Cluster_6255.mature::Porites_evermani_scaffold_502:58997-59018(-)	Cluster_3437.mature::ptg000004l:1859911-1859933(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_6255	peve-mir-2030	Cluster_3437	apul-mir-2030
+Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	100	21	0	0	1	21	1	21	1.99e-09	42.1	Cluster_6914	peve-mir-2023	Cluster_5012	apul-mir-2023
+Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	19	0	0	2	20	2	20	3.1e-08	38.2	Cluster_8884	peve-mir-novel-20	Cluster_1832	apul-mir-novel-27
+Cluster_8887.mature::Porites_evermani_scaffold_910:118742-118762(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	20	0	0	2	21	2	21	7.85e-09	40.1	Cluster_8887	peve-mir-novel-21	Cluster_1832	apul-mir-novel-27
+Cluster_8888.mature::Porites_evermani_scaffold_910:139353-139373(+)	Cluster_1832.mature::ntLink_6:5157559-5157579(+)	100	21	0	0	1	21	1	21	1.99e-09	42.1	Cluster_8888	peve-mir-novel-22	Cluster_1832	apul-mir-novel-27
+Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_14999	peve-mir-2025	Cluster_15316	apul-mir-2025
+Cluster_390.mature::Pocillopora_meandrina_HIv1___Sc0000001:1459455-1459476(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	94.737	19	1	0	1	19	1	19	8.07e-06	30.2	Cluster_390	ptuh-mir-novel-33	Cluster_5012	apul-mir-2023
+Cluster_1068.mature::Pocillopora_meandrina_HIv1___Sc0000002:15749310-15749331(+)	Cluster_17776.mature::ptg000031l:5461327-5461348(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_1068	ptuh-mir-novel-7	Cluster_17776	apul-mir-novel-7
+Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	Cluster_18772.mature::ptg000035l:8367748-8367770(-)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_1116	ptuh-mir-2036	Cluster_18772	apul-mir-2036
+Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	Cluster_18728.mature::ptg000035l:5346054-5346075(+)	100	21	0	0	2	22	2	22	2.12e-09	42.1	Cluster_1296	ptuh-mir-100	Cluster_18728	apul-mir-100
+Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	Cluster_5012.mature::ptg000008l:10754789-10754809(-)	100	21	0	0	1	21	1	21	1.99e-09	42.1	Cluster_1793	ptuh-mir-2023	Cluster_5012	apul-mir-2023
+Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	Cluster_15316.mature::ptg000024l:4086254-4086275(+)	100	22	0	0	1	22	1	22	5.36e-10	44.1	Cluster_4039	ptuh-mir-2025	Cluster_15316	apul-mir-2025
+Cluster_1832.mature::ntLink_6:5157559-5157579(+)	Cluster_8888.mature::Porites_evermani_scaffold_910:139353-139373(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1	Cluster_1832	apul-mir-novel-27	Cluster_8888	peve-mir-novel-22
+Cluster_3437.mature::ptg000004l:1859911-1859933(-)	Cluster_6255.mature::Porites_evermani_scaffold_502:58997-59018(-)	100	22	0	0	1	22	1	22	6.43e-10	44.1	Cluster_3437	apul-mir-2030	Cluster_6255	peve-mir-2030
+Cluster_5012.mature::ptg000008l:10754789-10754809(-)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1	Cluster_5012	apul-mir-2023	Cluster_6914	peve-mir-2023
+Cluster_15316.mature::ptg000024l:4086254-4086275(+)	Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	100	22	0	0	1	22	1	22	6.06e-10	44.1	Cluster_15316	apul-mir-2025	Cluster_14999	peve-mir-2025
+Cluster_18728.mature::ptg000035l:5346054-5346075(+)	Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1	Cluster_18728	apul-mir-100	Cluster_1167	peve-mir-100
+Cluster_18772.mature::ptg000035l:8367748-8367770(-)	Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	100	23	0	0	1	23	1	23	1.63e-10	46.1	Cluster_18772	apul-mir-2036	Cluster_5563	peve-mir-2036
+Cluster_7657.mature::Porites_evermani_scaffold_730:81385-81406(-)	Cluster_7658.mature::Porites_evermani_scaffold_730:82423-82444(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1	Cluster_7657	peve-mir-novel-17a; peve-mir-novel-17b	Cluster_7658	peve-mir-novel-17a; peve-mir-novel-17b
+Cluster_390.mature::Pocillopora_meandrina_HIv1___Sc0000001:1459455-1459476(+)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	94.737	19	1	0	1	19	1	19	9.11e-06	30.2	Cluster_390	ptuh-mir-novel-33	Cluster_6914	peve-mir-2023
+Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	100	22	0	0	1	22	1	22	6.06e-10	44.1	Cluster_1116	ptuh-mir-2036	Cluster_5563	peve-mir-2036
+Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	100	21	0	0	2	22	2	22	2.39e-09	42.1	Cluster_1296	ptuh-mir-100	Cluster_1167	peve-mir-100
+Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	100	21	0	0	1	21	1	21	2.24e-09	42.1	Cluster_1793	ptuh-mir-2023	Cluster_6914	peve-mir-2023
+Cluster_2793.mature::Pocillopora_meandrina_HIv1___Sc0000008:1783824-1783844(+)	Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	94.737	19	1	0	2	20	3	21	8.54e-06	30.2	Cluster_2793	ptuh-mir-novel-20	Cluster_8884	peve-mir-novel-20
+Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	100	22	0	0	1	22	1	22	6.06e-10	44.1	Cluster_4039	ptuh-mir-2025	Cluster_14999	peve-mir-2025
+Cluster_5012.mature::ptg000008l:10754789-10754809(-)	Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	100	21	0	0	1	21	1	21	1.85e-09	42.1	Cluster_5012	apul-mir-2023	Cluster_1793	ptuh-mir-2023
+Cluster_15316.mature::ptg000024l:4086254-4086275(+)	Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	100	22	0	0	1	22	1	22	4.98e-10	44.1	Cluster_15316	apul-mir-2025	Cluster_4039	ptuh-mir-2025
+Cluster_17776.mature::ptg000031l:5461327-5461348(-)	Cluster_1068.mature::Pocillopora_meandrina_HIv1___Sc0000002:15749310-15749331(+)	100	22	0	0	1	22	1	22	4.98e-10	44.1	Cluster_17776	apul-mir-novel-7	Cluster_1068	ptuh-mir-novel-7
+Cluster_18728.mature::ptg000035l:5346054-5346075(+)	Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	100	21	0	0	2	22	2	22	1.97e-09	42.1	Cluster_18728	apul-mir-100	Cluster_1296	ptuh-mir-100
+Cluster_18772.mature::ptg000035l:8367748-8367770(-)	Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	100	22	0	0	1	22	1	22	5.29e-10	44.1	Cluster_18772	apul-mir-2036	Cluster_1116	ptuh-mir-2036
+Cluster_1167.mature::Porites_evermani_scaffold_49:151640-151661(-)	Cluster_1296.mature::Pocillopora_meandrina_HIv1___Sc0000003:10366055-10366076(+)	100	21	0	0	2	22	2	22	1.97e-09	42.1	Cluster_1167	peve-mir-100	Cluster_1296	ptuh-mir-100
+Cluster_5563.mature::Porites_evermani_scaffold_430:205887-205909(-)	Cluster_1116.mature::Pocillopora_meandrina_HIv1___Sc0000003:495117-495138(+)	100	22	0	0	1	22	1	22	5.29e-10	44.1	Cluster_5563	peve-mir-2036	Cluster_1116	ptuh-mir-2036
+Cluster_6914.mature::Porites_evermani_scaffold_594:158230-158250(+)	Cluster_1793.mature::Pocillopora_meandrina_HIv1___Sc0000005:601626-601646(+)	100	21	0	0	1	21	1	21	1.85e-09	42.1	Cluster_6914	peve-mir-2023	Cluster_1793	ptuh-mir-2023
+Cluster_8884.mature::Porites_evermani_scaffold_910:99255-99275(+)	Cluster_2793.mature::Pocillopora_meandrina_HIv1___Sc0000008:1783824-1783844(+)	94.737	19	1	0	3	21	2	20	7.02e-06	30.2	Cluster_8884	peve-mir-novel-20	Cluster_2793	ptuh-mir-novel-20
+Cluster_14999.mature::Porites_evermani_scaffold_3072:29480-29501(+)	Cluster_4039.mature::Pocillopora_meandrina_HIv1___Sc0000014:2366060-2366081(-)	100	22	0	0	1	22	1	22	4.98e-10	44.1	Cluster_14999	peve-mir-2025	Cluster_4039	ptuh-mir-2025
