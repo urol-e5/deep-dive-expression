@@ -27,6 +27,7 @@ bibliography: references.bib
 library(knitr)
 library(dplyr)
 library(readr)
+library(Biostrings)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Evaluate code chunks
@@ -53,6 +54,8 @@ count_matrix <- "../output/07-Apul-Hisat/Apul-gene_count_matrix.csv"
 genome_fasta <- file.path("..", "data", "Apulcra-genome.fa")
 genes_fasta <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta")
 genes_fasta_index <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta.fai")
+genes_subset_fasta <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-subset-genes.fasta")
+genes_subset_fasta_index <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-subset-genes.fasta.fai")
 genes_bed <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.bed")
 og_genome_gff <- file.path("..", "data", "Apulcra-genome.gff")
 og_transcripts_gtf <- "Apulchra-genome.gtf"
@@ -67,6 +70,8 @@ Sys.setenv(
   genes_bed = genes_bed,
   genes_fasta = genes_fasta,
   genes_fasta_index = genes_fasta_index,
+  genes_subset_fasta = genes_subset_fasta,
+  genes_subset_fasta_index = genes_subset_fasta_index,
   genome_fasta = genome_fasta,
   og_genome_gff = og_genome_gff,
   og_transcripts_gtf = og_transcripts_gtf,
@@ -125,7 +130,7 @@ echo ""
 
 head "${genes_fasta_index}"
 ```
-## Subset Expressed Genes
+# Subset Expressed Genes
 
 Only those with at least _one_ read in each sample
 
@@ -140,16 +145,8 @@ echo ""
 wc -l "${count_matrix}"
 ```
 
-```{r check-peptide-FastA, engine=bash}
-grep "^>" "${peptide_fasta}" | head
 
-echo ""
-echo ""
-
-head "${peptide_fasta_index}"
-```
-
-
+## Import count matrix
 ```{r import-count-matrix}
 
 # Read the data into a data frame
@@ -158,13 +155,12 @@ count_matrix_df <- read.csv(count_matrix, header = TRUE)
 str(count_matrix_df)
 ```
 
-NOTICE: `gene_id` does _not_ match the IDs in the peptide FastA. Need to deal with this.
-
+## Only genes with at least one read per sample
 ```{r subset-count-matrix}
 # Filter rows where all values are greater than 0
 filtered_count_matrix_df <- count_matrix_df[apply(count_matrix_df > 0, 1, all), ]
 
-# Print the row names (gene_ids) of the filtered data frame
+
 str(filtered_count_matrix_df)
 ```
 
@@ -172,20 +168,24 @@ str(filtered_count_matrix_df)
 
 Only expressed genes
 
-```{r subset-peptides-FastA}
+```{r subset-genes-FastA}
 # Get the row names (gene_ids) of the filtered data frame
-filtered_gene_ids <- rownames(filtered_count_matrix_df)
+filtered_gene_ids <- filtered_count_matrix_df$gene_id
 
-# Construct the samtools faidx command
-samtools_command <- paste(samtools_faidx, peptide_fasta, paste(filtered_gene_ids, collapse = " "), ">", peptide_subset_fasta)
+fasta <- readDNAStringSet(genes_fasta)
 
-cat(samtools_command, "\n")
+subset_fasta <- fasta[names(fasta) %in% filtered_gene_ids]
 
-# Execute the samtools command
-system(samtools_command)
 ```
 
-### Peek at peptide subset FastA
-```{r check-peptide-subset-fasta, engine=bash}
-head "${peptide_subset_fasta}"
+```{r write-genes-subset-fasta}
+writeXStringSet(subset_fasta, genes_subset_fasta)
+```
+
+### Peek at genes subset FastA
+```{r check-genes-subset-fasta, engine=bash}
+head "${genes_subset_fasta}"
+
+echo ""
+grep "^>" --count "${genes_subset_fasta}"
 ```
