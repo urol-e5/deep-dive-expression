@@ -4,6 +4,11 @@ author: "Kathleen Durkin"
 date: "2025-06-17"
 always_allow_html: true
 output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -11,11 +16,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    html_preview: true 
 bibliography: ../../references.bib
 link-citations: true
 ---
@@ -124,12 +124,13 @@ cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
 
 ## check lncRNAs
 
-LncRNAs were identified from Peve RNA-seq data in `deep-dive/E-Peve` -- see details there.
-Fasta of Peve lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive/main/E-Peve/output/Peve_lncRNA.fasta`
+LncRNAs were identified from Peve RNA-seq data
+
+Fasta of Peve lncRNAs stored at `https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta`
 
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
-curl -L https://raw.githubusercontent.com/urol-e5/deep-dive/main/E-Peve/output/Peve_lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
+curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
 
 echo "Number of lncRNAs:"
 grep "^>" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta | wc -l
@@ -155,8 +156,8 @@ ggplot(lncRNA_lengths, aes(x = length)) +
   labs(title = "A. pulchra lncRNA sequence lengths",
        x = "Sequence Length [nucleotides]",
        y = "Frequency") +
-  xlim(200, 50000) +
-  ylim(0, 800) +
+  xlim(200, 110000) +
+  ylim(0, 1000) +
   theme_minimal()
 ```
 
@@ -249,16 +250,40 @@ Are there any alignments of the full precursor miRNA to a lncRNA? Our precursor 
 ```{r, eval=TRUE}
 precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
-  filter(mismatch == 0)
+  filter(mismatch == 0) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(qseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(sseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  unique()
 
 ```
-We have 0 alignments of a full pre-miRNA to a lncRNA with no mismatches.
+We have 37 alignments of a full pre-miRNA to a lncRNA with no mismatches. 36 lncRNA and 21 miRNA are represented. 
+
+Note that, as in A.pulchra, there are instances of a single pre-miRNA matching to several overlapping lncRNA. For example, Cluster_29 is contained within transcript::Porites_evermani_scaffold_1:1380412-1417060 and transcript::Porites_evermani_scaffold_1:1380748-1417060. This may represent multiple isoforms of a single lncRNA gene.
 
 Save these results
-```{r, engine='bash'}
+```{r}
 precursor_lncRNAs <- precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
-  filter(mismatch == 0)
+  filter(mismatch == 0) %>%
+  unique()
 
 write.table(precursor_lncRNAs, "../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/lncRNAs_as_miRNA_precursors.txt")
 
@@ -277,7 +302,7 @@ mature_lncRNA_BLASTn %>%
   filter(evalue <= 0.001)
 
 ```
-44 putative lncRNA sponges with these parameters. 
+421 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
@@ -339,7 +364,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | head -5
 ```
 
-455
+9625
 
 The header for this output is formatted as:
 
@@ -347,7 +372,7 @@ mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subject-Al(Start-End) Al
 
 We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 echo ""
@@ -355,7 +380,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only 1 interaction was at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 61 interactions were at least 21 nucleotides with <=3 mismatches
 
 
 
