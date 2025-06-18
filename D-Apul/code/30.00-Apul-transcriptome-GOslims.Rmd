@@ -26,6 +26,7 @@ bibliography: references.bib
 ```{r setup, include=FALSE}
 library(knitr)
 library(dplyr)
+library(readr)
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
   eval = FALSE,        # Evaluate code chunks
@@ -41,17 +42,19 @@ knitr::opts_chunk$set(
 ```{r variables}
 # PROGRAMS
 programs_dir <- file.path("", "home", "shared")
-bedtools_dir <- file.path(programs_dir, "bedtools-2.31.1", "bin")
+bedtools_dir <- file.path(programs_dir, "bedtools-v2.30.0", "bin")
 blast_dir <- file.path(programs_dir, "ncbi-blast-2.15.0+", "bin")
 fastaFromBed <- file.path(bedtools_dir, "fastaFromBed")
 samtools_dir <- file.path(programs_dir, "samtools-1.12")
-samtools_faidx <- file.path(samtools_dir, "samtools faidx")
+samtools <- file.path(samtools_dir, "samtools")
 
 # FILES
 count_matrix <- "../output/07-Apul-Hisat/Apul-gene_count_matrix.csv"
-peptide_fasta <- "../data/Apulchra-genome.pep.faa"
-peptide_fasta_index <- "../data/Apulchra-genome.pep.faa.fai"
-peptide_subset_fasta <- "../output/30.00-Apul-transcriptome-GOslims/Apulchra-genome.pep-subset.faa"
+genome_fasta <- file.path("..", "data", "Apulcra-genome.fa")
+genes_fasta <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta")
+genes_fasta_index <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta.fai")
+genes_bed <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.bed")
+og_genome_gff <- file.path("..", "data", "Apulcra-genome.gff")
 og_transcripts_gtf <- "Apulchra-genome.gtf"
 transcripts_fasta <- "Apulchra-transcripts.fasta"
 transcripts_gtf <- "Apulchra-transcripts.gtf"
@@ -61,16 +64,67 @@ line <- "-----------------------------------------------"
 Sys.setenv(
   count_matrix = count_matrix,
   fastaFromBed = fastaFromBed,
-  peptide_fasta = peptide_fasta,
-  peptide_fasta_index = peptide_fasta_index,
-  peptide_subset_fasta = peptide_subset_fasta,
+  genes_bed = genes_bed,
+  genes_fasta = genes_fasta,
+  genes_fasta_index = genes_fasta_index,
+  genome_fasta = genome_fasta,
+  og_genome_gff = og_genome_gff,
   og_transcripts_gtf = og_transcripts_gtf,
   line = line,
+  samtools = samtools,
   transcripts_fasta = transcripts_fasta,
   transcripts_gtf = transcripts_gtf
 )
 ```
 
+# Extract genes as FastA
+
+## Extract genes from GFF
+```{r extract-genes-from-gff}
+
+# Read GFF, skipping comment lines
+genome_gff <- readr::read_tsv(
+  og_genome_gff,
+  comment = "#",
+  col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes")
+)
+
+# Filter for gene features
+genes <- as.data.frame(genome_gff) %>%
+  filter(type == "gene") %>%
+  mutate(
+    chrom = seqid,
+    start = start - 1,  # BED is 0-based
+    end = end,
+    gene_id = sub("ID=([^;]+);?.*", "\\1", attributes)
+  ) %>%
+  select(chrom, start, end, gene_id)
+
+str(genes)
+```
+
+### Write genes to BED
+```{r write-genes-to-bed}
+# Write to BED
+write_tsv(genes, genes_bed, col_names = FALSE)
+```
+
+## Create genes FastA
+
+```{r create-genes-FastA, engine='bash'}
+
+"${fastaFromBed}" -fi "${genome_fasta}" -bed "${genes_bed}" -nameOnly > "${genes_fasta}"
+
+# Create FastA index
+"${samtools}" faidx "${genes_fasta}"
+
+head "${genes_fasta}"
+
+echo ""
+echo ""
+
+head "${genes_fasta_index}"
+```
 ## Subset Expressed Genes
 
 Only those with at least _one_ read in each sample
@@ -114,7 +168,7 @@ filtered_count_matrix_df <- count_matrix_df[apply(count_matrix_df > 0, 1, all), 
 str(filtered_count_matrix_df)
 ```
 
-## Subset Peptides FastA
+## Subset genes FastA
 
 Only expressed genes
 
