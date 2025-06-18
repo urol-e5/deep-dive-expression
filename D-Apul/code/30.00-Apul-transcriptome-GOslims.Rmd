@@ -42,15 +42,19 @@ knitr::opts_chunk$set(
 
 ```{r variables}
 # PROGRAMS
+blastdbs_dir <- file.path("..", "..", "M-multi-species", "data", "blastdbs")
 programs_dir <- file.path("", "home", "shared")
 bedtools_dir <- file.path(programs_dir, "bedtools-v2.30.0", "bin")
 blast_dir <- file.path(programs_dir, "ncbi-blast-2.15.0+", "bin")
+diamond <- file.path(programs_dir, "diamond-2.1.8")
 fastaFromBed <- file.path(bedtools_dir, "fastaFromBed")
 samtools_dir <- file.path(programs_dir, "samtools-1.12")
 samtools <- file.path(samtools_dir, "samtools")
 
 # FILES
 count_matrix <- "../output/07-Apul-Hisat/Apul-gene_count_matrix.csv"
+diamond_db <- "20250618-diamond"
+diamond_output <- file.path("..", "output", "Apulchra-expressed-genes.blastx.outfmt6")
 genome_fasta <- file.path("..", "data", "Apulcra-genome.fa")
 genes_fasta <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta")
 genes_fasta_index <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.fasta.fai")
@@ -58,14 +62,21 @@ genes_subset_fasta <- file.path("..", "output", "30.00-Apul-transcriptome-GOslim
 genes_subset_fasta_index <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-subset-genes.fasta.fai")
 genes_bed <- file.path("..", "output", "30.00-Apul-transcriptome-GOslims", "Apulchra-genes.bed")
 og_genome_gff <- file.path("..", "data", "Apulcra-genome.gff")
-og_transcripts_gtf <- "Apulchra-genome.gtf"
-transcripts_fasta <- "Apulchra-transcripts.fasta"
-transcripts_gtf <- "Apulchra-transcripts.gtf"
+
+# THREADS
+threads <- "40"
+
+
+# FORMATTING
 line <- "-----------------------------------------------"
 
 # Export these as environment variables for bash chunks.
 Sys.setenv(
+  blastdbs_dir = blastdbs_dir,
   count_matrix = count_matrix,
+  diamond = diamond,
+  diamond_db = diamond_db,
+  diamond_output = diamond_output,
   fastaFromBed = fastaFromBed,
   genes_bed = genes_bed,
   genes_fasta = genes_fasta,
@@ -77,6 +88,7 @@ Sys.setenv(
   og_transcripts_gtf = og_transcripts_gtf,
   line = line,
   samtools = samtools,
+  threads = threads,
   transcripts_fasta = transcripts_fasta,
   transcripts_gtf = transcripts_gtf
 )
@@ -188,4 +200,50 @@ head "${genes_subset_fasta}"
 
 echo ""
 grep "^>" --count "${genes_subset_fasta}"
+```
+
+# BLASTx
+
+## Download SwissProt
+```{r download-sp, engine=bash}
+cd "${blastdbs_dir}"
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+
+mv uniprot_sprot.fasta.gz 20250618-uniprot_sprot.fasta.gz
+
+gunzip --keep 20250618-uniprot_sprot.fasta.gz
+```
+
+## Create BLASTdb
+```{r create-BLASTdb, engine=bash}
+cd "${blastdbs_dir}"
+
+"${diamond}" makedb \
+--in 20250618-uniprot_sprot.fasta.gz \
+--db "${diamond_db}" \
+--quiet \
+--threads "${threads}"
+```
+
+## Run DIAMOND BLASTx
+```{r diamond-blast, engine=bash}
+"${diamond}" blastx \
+--db "${blastdbs_dir}"/"${diamond_db}.dmnd" \
+--query "${genes_subset_fasta}" \
+--out "${diamond_output}" \
+--outfmt 6  \
+--sensitive \
+--evalue 1e-10 \
+--max-target-seqs 1 \
+--block-size 15.0 \
+--index-chunks 4 \
+--threads "${threads}" \
+2> ../output/30.00-Apul-transcriptome-GOslims/diamond-blastx.log
+
+head "${diamond_output}"
+
+echo ""
+
+wc -l "${diamond_output}"
 ```
