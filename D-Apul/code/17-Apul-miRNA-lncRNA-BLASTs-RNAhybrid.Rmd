@@ -4,6 +4,11 @@ author: "Kathleen Durkin"
 date: "2024-12-11"
 always_allow_html: true
 output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -11,11 +16,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    html_preview: true 
 bibliography: ../../references.bib
 link-citations: true
 ---
@@ -129,13 +129,15 @@ Fasta of Apul lncRNAs stored at `deep-dive-expression/D-Apul/output/10-Apul-lncR
 
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
+curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Apul_lncRNA.fasta -o ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta
+
 echo "Number of lncRNAs:"
-grep "^>" ../output/10-Apul-lncRNA/Apul_lncRNA.fasta | wc -l
+grep "^>" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta | wc -l
 ```
 
 ```{r, engine='bash'}
 # Extract sequence lengths for precursors
-awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/10-Apul-lncRNA/Apul_lncRNA.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_lengths.txt
+awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_lengths.txt
 
 ```
 
@@ -153,8 +155,8 @@ ggplot(lncRNA_lengths, aes(x = length)) +
   labs(title = "A. pulchra lncRNA sequence lengths",
        x = "Sequence Length [nucleotides]",
        y = "Frequency") +
-  xlim(200, 50000) +
-  ylim(0, 800) +
+  xlim(200, 200000) +
+  ylim(0, 1000) +
   theme_minimal()
 ```
 
@@ -193,7 +195,7 @@ Full pre-miRNAs:
 ```{r blastn-premirna, engine='bash'}
 /home/shared/ncbi-blast-2.11.0+/bin/blastn \
 -task blastn \
--query ../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-query ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta \
 -db ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_precursor \
 -out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_precursor_blastn.tab \
 -num_threads 40 \
@@ -201,10 +203,12 @@ Full pre-miRNAs:
 -max_target_seqs 10 \
 -max_hsps 1 \
 -outfmt 6
+```
 
+```{r, engine='bash', eval=TRUE}
 wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_precursor_blastn.tab
 ```
-Note we have less than 241830 (10 * [# of lncRNAs]) output alignments because, while I did not set an evalue threshold, the default evalue threshold of evalue=10 is still in place. That means extremely poor matches were still excluded by default. 
+Note we have less than (10 * [# of lncRNAs]) output alignments because, while I did not set an evalue threshold, the default evalue threshold of evalue=10 is still in place. That means extremely poor matches were still excluded by default. 
 
 
 Mature miRNAs:
@@ -214,7 +218,7 @@ Note that I'm using the blastn-short option here because all of our mature miRNA
 ```{r blastn-mature-mirna, engine='bash'}
 /home/shared/ncbi-blast-2.11.0+/bin/blastn \
 -task blastn \
--query ../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+-query ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta \
 -db ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/Apul-db/Apul_ShortStack_4.1.0_mature \
 -out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_mature_blastn.tab \
 -num_threads 40 \
@@ -222,7 +226,9 @@ Note that I'm using the blastn-short option here because all of our mature miRNA
 -max_target_seqs 10 \
 -max_hsps 1 \
 -outfmt 6
+```
 
+```{r, engine='bash', eval=TRUE}
 wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/blasts/lncRNA_to_mature_blastn.tab
 ```
 
@@ -244,39 +250,44 @@ Are there any alignments of the full precursor miRNA to a lncRNA? Our precursor 
 ```{r, eval=TRUE}
 precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
-  filter(mismatch == 0)
+  filter(mismatch == 0) %>%
+  unique() %>%
+  nrow()
 
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(qseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(sseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  unique() 
 ```
-We have 7 alignments of a full pre-miRNA to a lncRNA with no mismatches.
+We have 34 alignments of a full pre-miRNA to a lncRNA with no mismatches. 31 lncRNA and 23 miRNA are represented.
 
-The first two are two different lncRNAs that both contain the same pre-miRNA. Note that the first lncRNA-miRNA pair lie in the same genomic region, but the second lncRNA, which also contains Cluster_14768 is in a slightly different genomic location.
+Two things are notable. First, the lncRNA which contain full pre-miRNA sequences also sit in the same genomic region as the pre-miRNA. This isn't particularly surprising, but it's important to note that these lncRNA precursors are not *in addition to* the pre-miRNA regions. 
 
-The remaining five lncRNAs are all located within the same reference scaffold (ptg0000351) and have the same end nucleotide (5347816), so these lncRNAs match overlapping portions of the reference genome. This suggests to me they are different isoforms of the same gene. Moreover, if you find the reference starting location of the alignment for each of these five pairs (add qstart to the reference starting location of the qseqid, e.g. 5335161 + 10871), all reference starting locations for the alignments are the same. That means there aren't multiple instances of the same pre-miRNA occuring inside these lncRNA isoforms. 
-
-So there are 3 instances of a unique lncRNA containing a full pre-miRNA sequence (and one of those instances occurs in 5 lncRNA isoforms)
-That means there are **3 instances of a lncRNA that may be processed down into a pre-miRNA**, which may then be processed into a mature miRNA
-
-
+Second, there are several instances where multiple lncRNA not only contain the same pre-miRNA, but are also overlapping (in terms of genomic position). For example, the Cluster_10093 precursor is present in the following lncRNA: transcript::ptg000016l:11748348-11760789, transcript::ptg000016l:11748351-11760789, transcript::ptg000016l:11748671-11760568, and  transcript::ptg000016l:11748715-11760789. These four lncRNA sit on the same scaffold and share the same end position. This suggests to me that there are instances of lncRNA isoforms -- multiple variants of the same molecule. For the purposes of summary, these will likely be treated as distinct lncRNA, since we don't have a god idea of what degree of difference is necessary to alter lncRNA function.
 
 It is also possible that a lncRNA may be directly processed into a mature miRNA, without first being processed into pre-miRNA. Let's look for those by searching for alignments of mature miRNAs to lncRNAs. Our mature miRNAs range 21-24 nucleotides in length. Let's look for alignments of at least 21 nucleotides in length with 0 mismatches and 0 gaps.
 
-
-```{r, eval=TRUE}
-mature_lncRNA_BLASTn %>%
-  filter(length >= 21) %>%
-  filter(mismatch == 0) %>%
-  filter(gapopen == 0)
-
-```
-These are the exact same matches as found above for pre-miRNAs contained within lncRNAs. That means these are just matching to the mature miRNA sequences contained within those pre-miRNAs, and we haven't found any more possible lncRNAs acting as miRNA precursors. 
-
 Save these results
-```{r, engine='bash'}
+```{r}
 precursor_lncRNAs <- precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
   filter(mismatch == 0)
 
-write.table(precursor_lncRNAs, "../output/17apul-miRNA-lncRNA-BLASTs-RNAhybrid/lncRNAs_as_miRNA_precursors.txt")
+write.table(precursor_lncRNAs, "../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/lncRNAs_as_miRNA_precursors.txt")
 
 ```
 
@@ -293,7 +304,7 @@ mature_lncRNA_BLASTn %>%
   filter(evalue <= 0.001)
 
 ```
-77 putative lncRNA sponges with these parameters. 
+281 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
@@ -313,14 +324,14 @@ Inputs:
 ```{r, engine='bash', eval=FALSE}
 
 # score cutoff >100
-# energy cutoff <-10
+# energy cutoff <-20
 # strict binding
 
 /home/shared/miRanda-3.3a/src/miranda \
 ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta \
-../output/10-Apul-lncRNA/Apul_lncRNA.fasta \
+../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta \
 -sc 100 \
--en -10 \
+-en -20 \
 -strict \
 -out ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_all.tab
 ```
@@ -330,7 +341,7 @@ Inputs:
 
 Let's look at the output
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 
 echo "miranda run finished!"
 echo "Counting number of interacting miRNA-lncRNA pairs"
@@ -347,7 +358,7 @@ wc -l ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict
 
 This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides"
 awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | wc -l
 echo ""
@@ -361,7 +372,7 @@ mirna Target  Score Energy-Kcal/Mol Query-Aln(start-end) Subjetct-Al(Start-End) 
 
 We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 echo ""
@@ -369,13 +380,15 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only 19 interactions are at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 163 interactions are at least 21 nucleotides with <=3 mismatches
 
 
 
 
 
 # RNAhybrid
+
+**NOTE: the below code for RNAhybrid has NOT been rerun using updated lncRNA files, since we have decided not to use the tool in final downstream analyses (in favor of miRanda)**
 
 RNAhybrid is another miRNA-mRNA target prediction tool, which bases its predictions primarily on thermodynamic binding stability (unlike miRanda, which considers sequence features expected of miRNA targets). While the tool is normally used to predict miRNA-mRNA binding, it should also work for miRNA-lncRNA binding
 
@@ -695,7 +708,7 @@ Note: So there are 3 instances of a *unique* lncRNA containing a full pre-miRNA 
 
 LncRNA as miRNA sponges:
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 
 echo "miRanda Results:"
 echo ""
@@ -709,8 +722,9 @@ echo "Number of putative interactions of at least 21 nucleotides, with at most 3
 awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 
 ```
-```
 
+
+**NOTE: below RNAhybrid results used lncRNA files that are now outdated**
 
 ```{r, eval=TRUE}
 cat("RNAhybrid Results: ", "\n", "\n",
