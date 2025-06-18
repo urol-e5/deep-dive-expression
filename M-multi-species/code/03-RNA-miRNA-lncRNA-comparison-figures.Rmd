@@ -1,0 +1,97 @@
+---
+title: "03-RNA-miRNA-lncRNA-comparison-figures"
+author: "Kathleen Durkin"
+date: "2024-04-30"
+output: 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: references.bib
+link-citations: true
+---
+
+# Load packages
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(VennDiagram)
+library(grid)
+```
+
+
+# Load data
+
+gene counts:
+```{r}
+Apul_gene <- read.csv("../../D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+Peve_gene <- read.csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
+Ptuh_gene <-  read.csv("../../F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+```
+
+
+miRNA:
+```{r}
+
+```
+
+
+lncRNA:
+```{r}
+
+```
+
+```{r}
+species_colors <- c('A_pulchra' = '#408EC6',
+                    'P_evermanni' = '#1E2761',
+                    'P_tuahiniensis' = '#7A2048')
+
+species_colors_nolabel <- c('#408EC6', '#1E2761', '#7A2048')
+```
+
+
+# Venn diagrams 
+
+Numbers from Ashey et al. paper (can see code used for comparison analyses in `deep-dive` repo)
+
+```{r}
+lncRNA.venn.plot <- draw.triple.venn(
+  area1 = 14715+1115+1151+648,   # Total in A
+  area2 = 6836+1115+396+648,    # Total in B
+  area3 = 11153+1151+396+648,    # Total in C
+  n12 = 1115+648,      # A ∩ B
+  n23 = 396+648,      # B ∩ C
+  n13 = 1151+648,      # A ∩ C
+  n123 = 648,     # A ∩ B ∩ C
+  category = c("A. pulchra", "P. evermanni", "P. tuahiniensis"),
+  fill = c(species_colors[['A_pulchra']], species_colors[['P_evermanni']], species_colors[['P_tuahiniensis']]),
+  lty = "blank",
+  cex = 2,
+  cat.cex = 2,
+  cat.col = c(species_colors[['A_pulchra']], species_colors[['P_evermanni']], species_colors[['P_tuahiniensis']]),
+  alpha = 0.2,
+  lwd=2,
+  col=c("black", "black", "black")
+)
+
+grid.draw(lncRNA.venn.plot)
+grid.newpage()
+```
+
+
+
