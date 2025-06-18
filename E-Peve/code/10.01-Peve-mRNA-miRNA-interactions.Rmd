@@ -26,6 +26,13 @@ Run miRanda using the mRNA coding sequences and the 1kb 5UTR regions as inputs.
 
 # mRNA coding sequence
 
+## Get mature miRNA fasta
+
+```{r, engine='bash'}
+awk '/^>/ {keep = ($0 ~ /mature/)} keep' ../output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/mir.fasta > ../output/10.01-Peve-mRNA-miRNA-interactions/Peve_ShortStack_4.1.0_mature.fasta
+```
+
+
 ## Get coding sequence fasta
 
 ```{r, engine='bash', eval=FALSE}
@@ -46,10 +53,10 @@ Run miRanda using the mRNA coding sequences and the 1kb 5UTR regions as inputs.
 # strict binding
 
 /home/shared/miRanda-3.3a/src/miranda \
-../data/06-Peve-miRNA-mRNA-RNAhybrid/miRNA_mature-Peve.fasta \
+../output/10.01-Peve-mRNA-miRNA-interactions/Peve_ShortStack_4.1.0_mature.fasta \
 ../output/10.01-Peve-mRNA-miRNA-interactions/Peve_mRNA_full.fa \
 -sc 100 \
--en -10 \
+-en -20 \
 -strict \
 -out ../output/10.01-Peve-mRNA-miRNA-interactions/Peve-miRanda-mRNA_full-strict_all.tab
 ```
@@ -120,10 +127,10 @@ We've also created a gff of 1kb 5'UTR regions (using the same method used to def
 # strict binding
 
 /home/shared/miRanda-3.3a/src/miranda \
-../data/06-Peve-miRNA-mRNA-RNAhybrid/miRNA_mature-Peve.fasta \
+../output/10.01-Peve-mRNA-miRNA-interactions/Peve_ShortStack_4.1.0_mature.fasta \
 ../output/10.01-Peve-mRNA-miRNA-interactions/Peve_5UTR_1kb_corrected.fa \
 -sc 100 \
--en -10 \
+-en -20 \
 -strict \
 -out ../output/10.01-Peve-mRNA-miRNA-interactions/Peve-miRanda-5UTR_1kb-strict_all.tab
 ```
