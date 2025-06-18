@@ -77,6 +77,7 @@ E-Peve/output/12-Peve-WGBS/*/*bed*
 E-Peve/output/12-Peve-WGBS/*/*tab*
 E-Peve/output/12-Peve-WGBS/methylkit/*.RData
 E-Peve/output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
+E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv
 
 F-Ptuh/code/.bashvars
 F-Ptuh/code/*_cache
