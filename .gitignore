@@ -71,6 +71,7 @@ E-Peve/data/01-Peve-RNA-trimming-FastQC/trimmed-reads
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
+E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv
 E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/Peve_mRNA_full.fa
 E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 E-Peve/output/11*

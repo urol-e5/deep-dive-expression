@@ -2,7 +2,20 @@
 title: "mRNA-miRNA interactions"
 author: "Jill Ashey"
 date: "2025-02-06"
-output: html_document
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
 ---
 
 This script will investigate mRNA-miRNA interactions using miranda predictions. 
@@ -19,11 +32,11 @@ library(reshape2)
 library(pheatmap)
 library(energy)
 library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
-library(genefilter)
-library(gridExtra)
+# library(ggraph)
+# library(tidygraph)
+# library(igraph)
+# library(genefilter)
+# library(gridExtra)
 ```
 
 Read in mRNA data 
@@ -42,12 +55,11 @@ mRNA_counts<-mRNA_counts %>%
 
 Read in miRNA data
 ```{r}
-miRNA_counts <- read.delim("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_miRNA_normalized.txt")
+miRNA_counts <- read.delim("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
-# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+# Rremove any miRNAs with 0 for all samples 
 miRNA_counts <- miRNA_counts %>%
-  #select(-sample150) %>%
      mutate(Total = rowSums(.[, 1:3]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
