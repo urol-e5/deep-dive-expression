@@ -5,10 +5,10 @@ date: "2025-06-19"
 author: Steven
 ---
 
-Peve
+# Apul
 
 ```{bash}
-wc -l ../output/01.6-lncRNA-pipeline/*
+head ../output/01.6-lncRNA-pipeline/* 
 ```
 
 
@@ -39,7 +39,210 @@ hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
 ```
 
 ```{bash}
+head ../output/Apul_counts.txt
 
 ```
 
+```{bash}
+grep -c '^lncRNA' ../output/Apul_counts.txt
+```
 
+```{r}
+# Load data (adjust path if needed)
+counts <- read.delim("../output/Apul_counts.txt", comment.char = "#", check.names = FALSE)
+
+# Inspect
+head(counts)
+```
+
+```{r}
+# Expression data starts at column 7 (after Length)
+expr_data <- counts[, 7:ncol(counts)]
+
+# Optional: set rownames to Gene IDs
+rownames(expr_data) <- counts$Geneid
+```
+
+```{r}
+# Sum expression across samples for each lncRNA
+lncRNA_totals <- rowSums(expr_data)
+
+# Mean and median expression
+mean_expr <- mean(lncRNA_totals)
+median_expr <- median(lncRNA_totals)
+
+cat(sprintf("Mean expression: %.2f\n", mean_expr))
+cat(sprintf("Median expression: %.2f\n", median_expr))
+```
+
+```{r}
+hist(lncRNA_totals,
+     breaks = 50,
+     main = "Total Expression per lncRNA",
+     xlab = "Total Counts",
+     col = "skyblue")
+```
+
+
+# Peve
+
+
+
+
+```{bash}
+head ../output/01.61-lncRNA-pipeline/* 
+```
+
+
+```{bash}
+wc -l ../output/01.61-lncRNA-pipeline/*
+```
+
+```{bash}
+cd ../data
+curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta
+```
+
+```{bash}
+grep -c ">" ../data/Peve_lncRNA.fasta
+```
+
+```{bash}
+awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Peve_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
+```
+
+```{r}
+library(Biostrings)
+fasta <- readDNAStringSet("../data/Peve_lncRNA.fasta")
+lengths <- width(fasta)
+
+hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
+     xlab = "Sequence Length (bp)", ylab = "Count", col = "skyblue")
+```
+
+```{bash}
+head ../output/Peve_counts.txt
+
+```
+
+```{bash}
+grep -c '^lncRNA' ../output/Peve_counts.txt
+```
+
+```{r}
+# Load data (adjust path if needed)
+counts <- read.delim("../output/Peve_counts.txt", comment.char = "#", check.names = FALSE)
+
+# Inspect
+head(counts)
+```
+
+```{r}
+# Expression data starts at column 7 (after Length)
+expr_data <- counts[, 7:ncol(counts)]
+
+# Optional: set rownames to Gene IDs
+rownames(expr_data) <- counts$Geneid
+```
+
+```{r}
+# Sum expression across samples for each lncRNA
+lncRNA_totals <- rowSums(expr_data)
+
+# Mean and median expression
+mean_expr <- mean(lncRNA_totals)
+median_expr <- median(lncRNA_totals)
+
+cat(sprintf("Mean expression: %.2f\n", mean_expr))
+cat(sprintf("Median expression: %.2f\n", median_expr))
+```
+
+```{r}
+hist(lncRNA_totals,
+     breaks = 50,
+     main = "Total Expression per lncRNA",
+     xlab = "Total Counts",
+     col = "skyblue")
+```
+
+
+
+# Ptuh
+
+
+
+```{bash}
+head ../output/01.61-lncRNA-pipeline/* 
+```
+
+
+```{bash}
+wc -l ../output/01.61-lncRNA-pipeline/*
+```
+
+```{bash}
+cd ../data
+curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta
+```
+
+```{bash}
+grep -c ">" ../data/Peve_lncRNA.fasta
+```
+
+```{bash}
+awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Peve_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
+```
+
+```{r}
+library(Biostrings)
+fasta <- readDNAStringSet("../data/Peve_lncRNA.fasta")
+lengths <- width(fasta)
+
+hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
+     xlab = "Sequence Length (bp)", ylab = "Count", col = "skyblue")
+```
+
+```{bash}
+head ../output/Peve_counts.txt
+
+```
+
+```{bash}
+grep -c '^lncRNA' ../output/Peve_counts.txt
+```
+
+```{r}
+# Load data (adjust path if needed)
+counts <- read.delim("../output/Peve_counts.txt", comment.char = "#", check.names = FALSE)
+
+# Inspect
+head(counts)
+```
+
+```{r}
+# Expression data starts at column 7 (after Length)
+expr_data <- counts[, 7:ncol(counts)]
+
+# Optional: set rownames to Gene IDs
+rownames(expr_data) <- counts$Geneid
+```
+
+```{r}
+# Sum expression across samples for each lncRNA
+lncRNA_totals <- rowSums(expr_data)
+
+# Mean and median expression
+mean_expr <- mean(lncRNA_totals)
+median_expr <- median(lncRNA_totals)
+
+cat(sprintf("Mean expression: %.2f\n", mean_expr))
+cat(sprintf("Median expression: %.2f\n", median_expr))
+```
+
+```{r}
+hist(lncRNA_totals,
+     breaks = 50,
+     main = "Total Expression per lncRNA",
+     xlab = "Total Counts",
+     col = "skyblue")
+```
