@@ -1,5 +1,7 @@
 `deep-dive-expression/D-Apul/output/30.00-Apul-transcriptome-GOslims`
 
+All files in this directory are generated from [`30.00-Apul-transcriptome-GOslims.Rmd`](../../code/30.00-Apul-transcriptome-GOslims.Rmd), annotating expressed genes with Gene Ontology (GO) slim terms.
+
 ---
 
 - [`Apulchra-expressed-genes.blastx.outfmt6`](./Apulchra-expressed-genes.blastx.outfmt6): DIAMOND BLASTx output of expressed genes against the UniProt database.
