@@ -8,7 +8,7 @@ output: html_document
 I attempted to use Part 1 of the R package [mirTarRnaSeq](https://bioconductor.org/packages/3.13/bioc/html/mirTarRnaSeq.html), which an be used for interactive mRNA miRNA sequencing statistical analysis, to assess coexpression between mRNAs and miRNAs but ran into a lot of issues getting my data to run properly. After meeting with the e5 group, we decided to examine correlations based on expression levels instead. 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 #BiocManager::install("SPONGE")
 
@@ -19,15 +19,15 @@ library(reshape2)
 library(pheatmap)
 library(energy)
 library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
-library(genefilter)
-library(gridExtra)
+# library(ggraph)
+# library(tidygraph)
+# library(igraph)
+# library(genefilter)
+# library(gridExtra)
 ```
 
 Read in mRNA data 
-```{r}
+```{r, eval=TRUE}
 mRNA_counts <- read_csv("../../D-Apul/output/07-Apul-Hisat/gene_count_matrix.csv")
 mRNA_counts <- as.data.frame(mRNA_counts)
 rownames(mRNA_counts) <- mRNA_counts[,1] #set first column that contains gene names as rownames
@@ -41,8 +41,8 @@ mRNA_counts<-mRNA_counts %>%
 ```
 
 Read in miRNA data
-```{r}
-miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+```{r, eval=TRUE}
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
 # Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
@@ -57,7 +57,7 @@ colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "
 ```
 
 Read in miranda data 
-```{r}
+```{r, eval=TRUE}
 miranda_apul <- read.delim("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_apul_updated.txt", header = F)
 colnames(miranda_apul) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
 
@@ -72,7 +72,7 @@ dim(miranda_apul)
 ```
 
 Summarize how many mRNAs each miRNA are predicted to interact with. Summarize how many miRNAs each mRNA are predicted to interact with. 
-```{r}
+```{r, eval=TRUE}
 sum_mirna <- miranda_apul %>%
   group_by(miRNA) %>%
   summarise(mRNA_count = n_distinct(mRNA)) %>% 
@@ -94,7 +94,7 @@ sum_mrna <- miranda_apul %>%
 ```
 
 Normalize counts
-```{r}
+```{r, eval=TRUE}
 # Function to normalize counts (simple RPM normalization)
 normalize_counts <- function(counts) {
   rpm <- t(t(counts) / colSums(counts)) * 1e6
@@ -310,11 +310,13 @@ pcc_results <- pcc_results %>%
   mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
 
 # Save as csv
-#write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
+write.csv(pcc_results, "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
 ```
 
 Merge with miranda data 
-```{r}
+```{r, eval=TRUE}
+pcc_results <- read.csv("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv")
+
 combined_data_pcc <- pcc_results %>%
   inner_join(miranda_apul, by = c("miRNA", "mRNA"))
 head(combined_data_pcc)
@@ -326,12 +328,12 @@ write.csv(combined_data_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interaction
 ```
 
 Read data back in so PCC does not have to be run again
-```{r}
+```{r, eval=TRUE}
 combined_data_pcc <- read.csv("../output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv")
 ```
 
 Plot number of positive and negative interactions for each miRNA
-```{r}
+```{r, eval=TRUE}
 # Summarize the data
 summary_data <- combined_data_pcc %>%
   group_by(miRNA) %>%
@@ -371,7 +373,7 @@ ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_positive_
 ```
 
 Investigate data 
-```{r}
+```{r, eval=TRUE}
 # How many p-values are < 0.05 or < 0.1?
 pvalue_summary_pcc <- combined_data_pcc %>%
   summarise(
@@ -400,12 +402,12 @@ write.csv(pairs_of_interest_pcc, "../../D-Apul/output/09-Apul-mRNA-miRNA-interac
 I noticed that the significant pvalues correspond to high correlation values, whereas low correlation values are typically not significant (if using the p<0.05). 
 
 Read data back in so PCC does not have to be run again
-```{r}
+```{r, eval=TRUE}
 pairs_of_interest_pcc <- read.csv("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 Plot number of SIGNIFICANT positive and negative interactions for each miRNA
-```{r}
+```{r, eval=TRUE}
 # Summarize the data
 summary_data <- pairs_of_interest_pcc %>%
   group_by(miRNA) %>%
@@ -445,7 +447,7 @@ ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miRNA_significa
 ```
 
 Plot using igraph 
-```{r}
+```{r, eval=TRUE}
 # Create the graph
 g <- graph_from_data_frame(pairs_of_interest_pcc, directed = FALSE)
 
@@ -479,7 +481,7 @@ ggsave("../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-significant_miR
 
 Super cool! 
 
-```{r}
+```{r, eval=TRUE}
 # Function to create a scatter plot for a miRNA-mRNA pair
 plot_correlation <- function(miRNA, mRNA, miRNA_data, mRNA_data, cor_value, p_value) {
   # Extract data for the specific miRNA and mRNA

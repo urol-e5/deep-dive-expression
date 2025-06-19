@@ -40,6 +40,7 @@ D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
 D-Apul/output/08-Apul-WGBS/*/*bed*
 D-Apul/output/08-Apul-WGBS/*/*tab*
 D-Apul/output/08-Apul-WGBS/methylkit/*.RData
+D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv
 D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/Apul_mRNA_full.fa
 D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
