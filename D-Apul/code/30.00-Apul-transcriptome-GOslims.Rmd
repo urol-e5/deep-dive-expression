@@ -23,6 +23,52 @@ output:
 bibliography: references.bib
 ---
 
+# BACKGROUND
+
+This notebook will perform annotation of expressed genes, as previously determined
+by [`07-Apul-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/1af5c4c898b1770e7ec5f2e4f3a07f8a5ffb72bb/D-Apul/code/07-Apul-Hisat.qmd) (GitHub).
+
+Briefly, the notebook will perform the following tasks:
+
+1. Extract all genes from the genome, as GFF and FastA.
+
+2. Create a subset of only _expressed_ genes, based on gene count matrix.
+
+3. BLASTx expressed genes against SwissProt database.
+
+4. Get gene ontology.
+
+5. Map gene ontology to GOslims and get counts.
+
+::: {.callout-important}
+Expressed genes were defined as those genes having at least one count across all samples.
+:::
+
+## INPUTS
+
+- Gene count matrix
+
+- Genome FastA
+
+- Genome GFF
+
+## OUTPUTS
+
+- Genes BED
+
+- Genes FastA
+
+- Expressed genes FastA
+
+- Expressed genes SwissProt IDs only file.
+
+- Expressed genes to SwissProt IDs mapping file.
+
+- Expressed genes to SwissProtIDs and GO mapping file.
+
+- Counts file of expressed genes GOslims.
+
+
 ```{r setup, include=FALSE}
 library(knitr)
 library(tidyverse)
