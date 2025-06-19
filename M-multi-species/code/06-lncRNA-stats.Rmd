@@ -1,0 +1,45 @@
+---
+title: "06-lncRNA-stats"
+output: html_document
+date: "2025-06-19"
+author: Steven
+---
+
+Peve
+
+```{bash}
+wc -l ../output/01.6-lncRNA-pipeline/*
+```
+
+
+```{bash}
+ head ../output/01.6-lncRNA-pipeline/*
+```
+
+```{bash}
+cd ../data
+curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Apul_lncRNA.fasta
+```
+
+```{bash}
+grep -c ">" ../data/Apul_lncRNA.fasta
+```
+
+```{bash}
+awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Apul_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
+```
+
+```{r}
+library(Biostrings)
+fasta <- readDNAStringSet("../data/Apul_lncRNA.fasta")
+lengths <- width(fasta)
+
+hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
+     xlab = "Sequence Length (bp)", ylab = "Count", col = "skyblue")
+```
+
+```{bash}
+
+```
+
+
