@@ -4,6 +4,11 @@ author: "Kathleen Durkin"
 date: "2025-06-17"
 always_allow_html: true
 output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -11,11 +16,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    html_preview: true 
 bibliography: ../../references.bib
 link-citations: true
 ---
@@ -124,13 +124,12 @@ cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
 
 ## check lncRNAs
 
-LncRNAs were identified from Ptuh RNA-seq data in `deep-dive/main/F-Pmea/output/02-lncRNA-discovery` -- see details there.
-Fasta of Ptuh lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive/main/F-Pmea/output/02-lncRNA-discovery/Pmea_lncRNA.fasta`
+LncRNAs were identified from Ptuh RNA-seq data
 
-(Note the original file is named Pmea beacuse, at the time it was generated, we believed our samples were P. meandrina. Genetic analysis later confirmed the samples are actually P.tuahiniensis, thus the renaming)
+Fasta of Ptuh lncRNAs stored at `https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Ptuh_lncRNA.fasta`
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
-curl -L https://raw.githubusercontent.com/urol-e5/deep-dive/main/F-Pmea/output/02-lncRNA-discovery/Pmea_lncRNA.fasta -o ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
+curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Ptuh_lncRNA.fasta -o ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
 
 echo "Number of lncRNAs:"
 grep "^>" ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta | wc -l
@@ -250,13 +249,35 @@ Are there any alignments of the full precursor miRNA to a lncRNA? Our precursor 
 ```{r, eval=TRUE}
 precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
-  filter(mismatch == 0)
+  filter(mismatch == 0) %>%
+  unique() %>%
+  nrow()
 
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(qseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  select(sseqid) %>%
+  unique() %>%
+  nrow()
+
+precursor_lncRNA_BLASTn %>% 
+  filter(length >= 90) %>%
+  filter(mismatch == 0) %>%
+  unique()
 ```
-We have 0 alignments of a full pre-miRNA to a lncRNA with no mismatches.
+We have 50 alignments of a full pre-miRNA to a lncRNA with no mismatches. 46 lncRNA and 20 miRNA are represented. 
+
+Note that, as in A.pulchra and P.evermanni, there are instances of a single pre-miRNA matching to several overlapping lncRNA, potentially representing multiple isoforms of a single lncRNA gene.
 
 Save these results
-```{r, engine='bash'}
+```{r}
 precursor_lncRNAs <- precursor_lncRNA_BLASTn %>% 
   filter(length >= 90) %>%
   filter(mismatch == 0)
@@ -275,10 +296,11 @@ For now let's say the aligned region must be at least 8 nucleotides (the expecte
 ```{r, eval=TRUE}
 mature_lncRNA_BLASTn %>%
   filter(length >= 8) %>%
-  filter(evalue <= 0.001)
+  filter(evalue <= 0.001) %>%
+  unique()
 
 ```
-44 putative lncRNA sponges with these parameters. 
+207 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
@@ -295,6 +317,7 @@ Inputs:
   - FASTA of A.pulchra mature miRNAs
 
 ## Run miRanda
+
 ```{r, engine='bash', eval=FALSE}
 
 # score cutoff >100
@@ -346,7 +369,7 @@ mirna Target Score Energy-Kcal/Mol Query-Aln(start-end) Subject-Al(Start-End) Al
 
 We can see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches (a gap is counted as a mismatch). For an alignment of 21 nucleotides, this would be an percent identity of (21-3)/21 = 85.7%. The miRNA is our "subject", so we will filter by column 8.
 
-```{r, engine='bash'}
+```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
 awk -F'\t' '$7 >= 21' ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
 echo ""
@@ -354,4 +377,4 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only  interactions are at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only  interactions are at least 115 nucleotides with <=3 mismatches
