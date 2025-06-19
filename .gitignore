@@ -95,7 +95,7 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
-F-Ptuh//output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_mRNA_full.fa
+F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_mRNA_full.fa
 F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 F-Ptuh/output/12-Ptuh-WGBS/*/*gz
 F-Ptuh/output/12-Ptuh-WGBS/*/*bam
