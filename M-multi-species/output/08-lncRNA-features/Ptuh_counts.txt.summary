@@ -1,0 +1,15 @@
+Status	../data/ptuh/RNA-POC-47.sorted.bam	../data/ptuh/RNA-POC-48.sorted.bam	../data/ptuh/RNA-POC-50.sorted.bam	../data/ptuh/RNA-POC-53.sorted.bam	../data/ptuh/RNA-POC-57.sorted.bam
+Assigned	20056340	18735632	18050864	16794272	10779577
+Unassigned_Unmapped	38879515	40335517	41981622	42068498	42015544
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	28695393	28309746	16491142	13528839	7301887
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	18806216	16862247	20987508	20506559	14480255
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	20426214	17030330	23618287	22526119	15169420

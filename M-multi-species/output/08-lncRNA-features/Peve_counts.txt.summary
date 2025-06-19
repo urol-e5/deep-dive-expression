@@ -1,0 +1,15 @@
+Status	../data/peve/RNA-POR-71.sorted.bam	../data/peve/RNA-POR-73.sorted.bam	../data/peve/RNA-POR-76.sorted.bam	../data/peve/RNA-POR-79.sorted.bam	../data/peve/RNA-POR-82.sorted.bam
+Assigned	12976828	10742554	13226641	11108613	13405176
+Unassigned_Unmapped	13826806	13254943	13987382	10928938	15478698
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	42400181	51342514	43111507	53705864	38472880
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	11652588	6015035	9856087	6261709	14688589
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	43524725	48645453	42591135	46219986	36657398
