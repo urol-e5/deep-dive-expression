@@ -25,49 +25,61 @@ bibliography: references.bib
 
 # BACKGROUND
 
-This notebook will perform annotation of expressed genes, as previously determined
-by [`07-Apul-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/1af5c4c898b1770e7ec5f2e4f3a07f8a5ffb72bb/D-Apul/code/07-Apul-Hisat.qmd) (GitHub).
+This notebook will perform annotation of expressed genes, as previously determined by [`07-Apul-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/1af5c4c898b1770e7ec5f2e4f3a07f8a5ffb72bb/D-Apul/code/07-Apul-Hisat.qmd) (GitHub).
 
 Briefly, the notebook will perform the following tasks:
 
-1. Extract all genes from the genome, as GFF and FastA.
+1.  Extract all genes from the genome, as GFF and FastA.
 
-2. Create a subset of only _expressed_ genes, based on gene count matrix.
+2.  Create a subset of only *expressed* genes, based on gene count matrix.
 
-3. BLASTx expressed genes against SwissProt database.
+3.  BLASTx expressed genes against SwissProt database.
 
-4. Get gene ontology.
+4.  Get gene ontology.
 
-5. Map gene ontology to GOslims and get counts.
+5.  Map gene ontology to GOslims and get counts.
 
-::: {.callout-important}
+::: callout-important
 Expressed genes were defined as those genes having at least one count across all samples.
 :::
 
 ## INPUTS
 
-- Gene count matrix
+-   Gene count matrix
 
-- Genome FastA
+-   Genome FastA
 
-- Genome GFF
+-   Genome GFF
 
 ## OUTPUTS
 
-- Genes BED
+-   Genes BED
 
-- Genes FastA
+-   Genes FastA
 
-- Expressed genes FastA
+-   Expressed genes FastA
 
-- Expressed genes SwissProt IDs only file.
+-   Expressed genes SwissProt IDs only file.
 
-- Expressed genes to SwissProt IDs mapping file.
+-   Expressed genes to SwissProt IDs mapping file.
 
-- Expressed genes to SwissProtIDs and GO mapping file.
+-   Expressed genes to SwissProtIDs and GO mapping file.
 
-- Counts file of expressed genes GOslims.
+-   Counts file of expressed genes GOslims.
 
+## SOFTWARE
+
+-   [DIAMOND BLAST](https://github.com/bbuchfink/diamond) [@buchfink2021]
+
+-   [bedtools](https://github.com/arq5x/bedtools2) [@quinlan2010]
+
+-   [samtools](https://github.com/samtools/samtools) [@danecek2021]
+
+-   [Biostrings](https://bioconductor.org/packages/release/bioc/html/Biostrings.html) [@h.pagès2017] (Bioconductor R package)
+
+-   [GO.db](https://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html) [@carlson2017] (Bioconductor R package)
+
+-   [GSEABase](https://www.bioconductor.org/packages/release/bioc/html/GSEABase.html) [@martinmorgan2017] (Bioconductor R package)
 
 ```{r setup, include=FALSE}
 library(knitr)
@@ -84,7 +96,6 @@ knitr::opts_chunk$set(
   comment = ""         # Prevents appending '##' to beginning of lines in code output
 )
 ```
-
 
 # VARIABLES
 
@@ -138,7 +149,6 @@ Sys.setenv(
   genes_subset_fasta_index = genes_subset_fasta_index,
   genome_fasta = genome_fasta,
   og_genome_gff = og_genome_gff,
-  og_transcripts_gtf = og_transcripts_gtf,
   line = line,
   samtools = samtools,
   threads = threads,
@@ -150,6 +160,7 @@ Sys.setenv(
 # Extract genes as FastA
 
 ## Extract genes from GFF
+
 ```{r extract-genes-from-gff}
 
 # Read GFF, skipping comment lines
@@ -174,6 +185,7 @@ str(genes)
 ```
 
 ### Write genes to BED
+
 ```{r write-genes-to-bed}
 # Write to BED
 write_tsv(genes, genes_bed, col_names = FALSE)
@@ -195,9 +207,10 @@ echo ""
 
 head "${genes_fasta_index}"
 ```
+
 # Subset Expressed Genes
 
-Only those with at least _one_ read in each sample
+Only those with at least *one* read in each sample
 
 ### Peek at count matrix
 
@@ -210,8 +223,8 @@ echo ""
 wc -l "${count_matrix}"
 ```
 
-
 ## Import count matrix
+
 ```{r import-count-matrix}
 
 # Read the data into a data frame
@@ -221,6 +234,7 @@ str(count_matrix_df)
 ```
 
 ## Only genes with at least one read per sample
+
 ```{r subset-count-matrix}
 # Filter rows where all values are greater than 0
 filtered_count_matrix_df <- count_matrix_df[apply(count_matrix_df > 0, 1, all), ]
@@ -248,6 +262,7 @@ writeXStringSet(subset_fasta, genes_subset_fasta)
 ```
 
 ### Peek at genes subset FastA
+
 ```{r check-genes-subset-fasta, engine=bash}
 head "${genes_subset_fasta}"
 
@@ -258,6 +273,7 @@ grep "^>" --count "${genes_subset_fasta}"
 # BLASTx
 
 ## Download SwissProt
+
 ```{r download-sp, engine=bash}
 cd "${blastdbs_dir}"
 
@@ -269,6 +285,7 @@ gunzip --keep 20250618-uniprot_sprot.fasta.gz
 ```
 
 ## Create BLASTdb
+
 ```{r create-BLASTdb, engine=bash}
 cd "${blastdbs_dir}"
 
@@ -280,6 +297,7 @@ cd "${blastdbs_dir}"
 ```
 
 ## Run DIAMOND BLASTx
+
 ```{r diamond-blast, engine=bash}
 "${diamond}" blastx \
 --db "${blastdbs_dir}"/"${diamond_db}.dmnd" \
@@ -304,6 +322,7 @@ wc -l "${diamond_output}"
 # GENE ONTOLOGY
 
 ## Get gene IDs and SwissProt IDs
+
 ```{r gene-and-SPIDs, engine=bash}
 awk -F"|" '{print $1"\t"$2}' "${diamond_output}" \
 | awk '{print $1"\t"$3}' \
@@ -318,6 +337,7 @@ wc -l ../output/30.00-Apul-transcriptome-GOslims/gene-SPIDs.txt
 ```
 
 ## Get SwissProt IDs
+
 ```{r get-SPIDs, engine=bash}
 awk -F"|" '{print $2}' "${diamond_output}" \
 | sort --unique \
@@ -333,8 +353,8 @@ wc -l ../output/30.00-Apul-transcriptome-GOslims/SPIDs.txt
 
 ## Retrieve UniProt records
 
-A difference in number of records could be due to retrieval from only "reviewed"
-records, while BLAST may have included both "reviewed" and "unreviewed."
+A difference in number of records could be due to retrieval from only "reviewed" records, while BLAST may have included both "reviewed" and "unreviewed." SwissProt records
+
 ```{r uniprot-records, engine=bash}
 python3 \
 ../../M-multi-species/code/uniprot-retrieval.py \
@@ -350,6 +370,7 @@ wc -l ../output/30.00-Apul-transcriptome-GOslims/uniprot-retrieval.tsv
 ```
 
 ## Map GO to Genes
+
 ```{r merge-genes-GOIDs}
 # Read gene-SPIDs.txt
 gene_spids <- read.delim("../output/30.00-Apul-transcriptome-GOslims/gene-SPIDs.txt", header = FALSE, stringsAsFactors = FALSE)
@@ -366,12 +387,14 @@ str(gene_SPID_GOID_merged)
 ```
 
 ### Write merged to file
+
 ```{r write-merged-gene-SP-GO}
 # Optionally, write to file
 write.table(gene_SPID_GOID_merged, "../output/30.00-Apul-transcriptome-GOslims/gene-SPIDs-GOIDs.tsv", sep = "\t", row.names = FALSE, quote = FALSE)
 ```
 
 ## Clean up merged
+
 ```{r remove-NA-and-uniprotIDs, eval=TRUE}
 
 full.gene.df <- as.data.frame(gene_SPID_GOID_merged)
@@ -387,6 +410,7 @@ str(gene.GO.df)
 ```
 
 ## Flatten gene GOID file
+
 ```{r flatten-gene-and-GO-IDs, eval=TRUE}
 flat.gene.GO.df <- gene.GO.df %>% separate_rows(!!sym("Gene Ontology IDs"), sep = ";")
 
@@ -394,6 +418,7 @@ str(flat.gene.GO.df)
 ```
 
 ## Group by GOID
+
 ```{r group-by-GO, eval=TRUE}
 grouped.gene.GO.df <- flat.gene.GO.df %>%
   group_by(!!sym("Gene Ontology IDs")) %>%
@@ -403,6 +428,7 @@ str(grouped.gene.GO.df)
 ```
 
 ## Vectorize GOIDs
+
 ```{r vectorize-GOIDs, eval=TRUE}
 # Vector of GO IDs
 go_ids <- grouped.gene.GO.df[["Gene Ontology IDs"]]
@@ -410,8 +436,8 @@ go_ids <- grouped.gene.GO.df[["Gene Ontology IDs"]]
 str(go_ids)
 ```
 
-
 ## Prepare GOslim OBO
+
 ```{r download-generic-goslim-obo, eval=TRUE}
 # Find GSEAbase installation location
 gseabase_location <- find.package("GSEABase")
@@ -426,8 +452,8 @@ download.file(url = goslims_url, destfile = goslim_obo_destintation)
 gseabase_files <- system.file("extdata", goslims_obo, package="GSEABase")
 ```
 
-
 ## GOslims from OBO
+
 ```{r extract-GOslims-from-OBO, eval=TRUE}
 
 # Create GSEAbase GOCollection using `go_ids`
@@ -440,6 +466,7 @@ str(slim)
 ```
 
 ## Biological Process GOslims
+
 ```{r retrieve-BP-GOslims, eval=TRUE}
 # Retrieve Biological Process (BP) GOslims
 slimdf <- goSlim(myCollection, slim, "BP", verbose)
@@ -448,6 +475,7 @@ str(slimdf)
 ```
 
 ## Map GO to GOslims
+
 ```{r map-GO-to-GOslims, eval=TRUE}
 # List of GOslims and all GO IDs from `go_ids`
 gomap <- as.list(GOBPOFFSPRING[rownames(slimdf)])
@@ -484,6 +512,7 @@ str(slimdf)
 ```
 
 ## Flatten GOslims
+
 ```{r flatten-GOslims-file, eval=TRUE}
 # "Flatten" file so each row is single GO ID with corresponding GOslim
 # rownames_to_column needed to retain row name info
@@ -503,6 +532,7 @@ str(grouped_slimdf)
 ```
 
 ## Counts of GOslims
+
 ```{r sort-and-select-slimdf-counts, eval=TRUE}
 
 slimdf.sorted <- slimdf %>% arrange(desc(Count))
@@ -516,6 +546,7 @@ str(slim.count.df)
 ### Write GOslims to file
 
 Need to create a column name for GOslimIDs from data frame rownames.
+
 ```{r write-goslim-counts-to-file}
 # Create header vector
 header <- c("GOslimID", colnames(slim.count.df))
@@ -534,3 +565,5 @@ write.table(
   append = TRUE
 )
 ```
+
+# REFERENCES
