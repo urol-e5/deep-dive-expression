@@ -40,6 +40,8 @@ D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
 D-Apul/output/08-Apul-WGBS/*/*bed*
 D-Apul/output/08-Apul-WGBS/*/*tab*
 D-Apul/output/08-Apul-WGBS/methylkit/*.RData
+D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/Apul_mRNA_full.fa
+D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.bam
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.fa
 D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/*.csi
@@ -68,7 +70,8 @@ E-Peve/data/01-Peve-RNA-trimming-FastQC/trimmed-reads
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
-E-Peve/output/10.01-Peve-mRNA-miRNA-interactions/Peve_mRNA_full.fa
+E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/Peve_mRNA_full.fa
+E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 E-Peve/output/11*
 E-Peve/output/12-Peve-WGBS/*/*gz
 E-Peve/output/12-Peve-WGBS/*/*bam
@@ -93,6 +96,7 @@ F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
 F-Ptuh//output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_mRNA_full.fa
+F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
 F-Ptuh/output/12-Ptuh-WGBS/*/*gz
 F-Ptuh/output/12-Ptuh-WGBS/*/*bam
 F-Ptuh/output/12-Ptuh-WGBS/*/*.cov
