@@ -1,0 +1,15 @@
+Status	../data/RNA-ACR-140.sorted.bam	../data/RNA-ACR-145.sorted.bam	../data/RNA-ACR-150.sorted.bam	../data/RNA-ACR-173.sorted.bam	../data/RNA-ACR-178.sorted.bam
+Assigned	18627769	18605539	12630525	16918788	16125685
+Unassigned_Unmapped	29248481	24230818	39954363	30988574	24661716
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	17196884	29686074	33313878	23029310	32689714
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	19470279	16844415	12568178	19377182	18529132
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	24677187	21378866	17451355	23663782	20654061
