@@ -24,6 +24,11 @@ We've decided that we need to expand our consideration of potential miRNA target
 
 Run miRanda using the mRNA coding sequences and the 1kb 5UTR regions as inputs.
 
+```{r}
+library(dplyr)
+```
+
+
 # mRNA coding sequence
 
 ## Get mature miRNA fasta
@@ -188,3 +193,83 @@ When only mRNA 3'UTR regions are used as input, filtering for full/near-full com
 | full mRNA | 38152      | 107                          | 0.280 %     |
 | 5'UTR     | 4959       | 11                           | 0.222 %     |
 | 3'UTR     | 6109       | 13                           | 0.213 %     |
+
+
+
+# Combine with PCC
+
+We've also already calculated pairwise Pearson's correlation coefficients for every miRNA-mRNA pair. Let's merge this table with our CDS and 5UTR miRanda results to see which instances of putative binding are supported through expression correlation.
+
+PCC table available at `D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv`, originally generated in `D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd`
+
+## Merge with CDS miRanda results
+
+Read in PCC and miRanda tables
+```{r}
+# Load
+Apul_PCC_miRNA_mRNA <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv") %>% select(-X)
+Apul_miRanda_miRNA_CDS <- read.table("../output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/Apul-miRanda-mRNA_full-strict-parsed.txt")
+
+# Format the miRNA IDs in miRanda table by removing miRNA coordinates
+Apul_miRanda_miRNA_CDS$V1 <- gsub(">", "", Apul_miRanda_miRNA_CDS$V1)
+Apul_miRanda_miRNA_CDS$V1 <- sub("\\..*", "", Apul_miRanda_miRNA_CDS$V1)
+```
+
+We need to associate the CDS genomic coordinates (used in miRanda output) with gene IDs (used in PCC output)
+```{r}
+# Load and format mapping table
+Apul_mRNA_FUNids <- read.table("../output/15-Apul-annotate-UTRs/Apul-mRNA-FUNids.txt") %>% select(V1, V4)
+Apul_mRNA_FUNids$V4 <- gsub("Parent=", "", Apul_mRNA_FUNids$V4)
+
+# Join with miRanda table to annotate genomic coordinates with gene IDs
+Apul_miRanda_miRNA_CDS <- left_join(Apul_miRanda_miRNA_CDS, Apul_mRNA_FUNids, by = c("V2" = "V1")) %>% unique()
+```
+
+Great! Now we can merge the CDS miRanda results and PCC values
+```{r}
+# Merge
+Apul_miRanda_miRNA_CDS_PCC <- left_join(Apul_miRanda_miRNA_CDS, Apul_PCC_miRNA_mRNA, by = c("V1" = "miRNA", "V4.y" = "mRNA")) %>% unique()
+
+# Save
+write.csv(Apul_miRanda_miRNA_CDS_PCC, "../output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv")
+```
+
+Note: there may be some NA values in the PCC columns. This would indicate that one (or both) of the member of that miRNA-mRNA pair had all-zero counts (i.e. it was unexpressed in all samples)
+
+## Merge with 5UTR miRanda results
+
+Read in PCC and miRanda tables
+```{r}
+# Load
+Apul_PCC_miRNA_mRNA <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv") %>% select(-X)
+Apul_miRanda_miRNA_5UTR <- read.table("../output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/Apul-miRanda-5UTR_1kb-strict-parsed.txt")
+
+# Format the miRNA IDs in miRanda table by removing miRNA coordinates
+Apul_miRanda_miRNA_5UTR$V1 <- gsub(">", "", Apul_miRanda_miRNA_5UTR$V1)
+Apul_miRanda_miRNA_5UTR$V1 <- sub("\\..*", "", Apul_miRanda_miRNA_5UTR$V1)
+```
+
+We need to associate the 5UTR genomic coordinates (used in miRanda output) with gene IDs (used in PCC output)
+```{r}
+# Load and format mapping table
+Apul_5UTR_FUNids <- read.table("../output/15-Apul-annotate-UTRs/Apul-5UTR-FUNids.txt") %>% select(V1, V4)
+Apul_5UTR_FUNids$V4 <- gsub("Parent=", "", Apul_5UTR_FUNids$V4)
+
+# Join with miRanda table to annotate genomic coordinates with gene IDs
+Apul_miRanda_miRNA_5UTR <- left_join(Apul_miRanda_miRNA_5UTR, Apul_5UTR_FUNids, by = c("V2" = "V1")) %>% unique()
+```
+
+Great! Now we can merge the 5UTR miRanda results and PCC values
+```{r}
+# Merge
+Apul_miRanda_miRNA_5UTR_PCC <- left_join(Apul_miRanda_miRNA_5UTR, Apul_PCC_miRNA_mRNA, by = c("V1" = "miRNA", "V4.y" = "mRNA")) %>% unique()
+
+# Save
+write.csv(Apul_miRanda_miRNA_5UTR_PCC, "../output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv")
+```
+
+Note: there may be some NA values in the PCC columns. This would indicate that one (or both) of the member of that miRNA-mRNA pair had all-zero counts (i.e. it was unexpressed in all samples)
+
+
+
+
