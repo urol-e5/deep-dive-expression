@@ -48,15 +48,26 @@ awk 'BEGIN{OFS="\t"} $2>=0 && $3>$2 {print $1,"converted","lncRNA",$2+1,$3,".","
 > ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf
 ```
 
+```{bash}
+head ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf
+```
+
+```{bash}
+wc -l ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf
+wc -l ../output/01.6-lncRNA-pipeline/lncRNA.gtf
+wc -l ../output/01.6-lncRNA-pipeline/lncRNA.bed 
+```
 
 
-
-
+```{bash}
+head ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf
+head ../output/01.6-lncRNA-pipeline/lncRNA.gtf
+```
 
 ```{r, engine='bash'}
 /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/M-multi-species/code/subread-2.0.6-Linux-x86_64/bin/featureCounts \
 -T 24 \
--a ../output/01.6-lncRNA-pipeline/lncRNA.gtf \
+-a ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf \
 -o ../output/08-lncRNA-features/Apul_counts.txt \
 -t lncRNA \
 -g gene_id \
@@ -64,3 +75,102 @@ awk 'BEGIN{OFS="\t"} $2>=0 && $3>$2 {print $1,"converted","lncRNA",$2+1,$3,".","
 ../data/*sorted.bam
 
 ```
+
+
+```{bash}
+head ../output/08-lncRNA-features/Apul_counts.txt
+```
+```{bash}
+grep -c '^lncRNA' ../output/08-lncRNA-features/Apul_counts.txt
+```
+
+
+
+---
+
+# Peve 
+
+bed
+
+```{bash}
+head ../output/01.61-lncRNA-pipeline/lncRNA.bed
+```
+
+```{bash}
+awk 'BEGIN{OFS="\t"} {print $1,"converted","lncRNA",$2+1,$3,".","+",".","gene_id \"lncRNA_"NR"\";"}' \
+../output/01.61-lncRNA-pipeline/lncRNA.bed \
+> ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf
+```
+
+```{bash}
+wc -l ../output/01.61-lncRNA-pipeline/lncRNA.bed
+wc -l ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf
+```
+
+
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/RNA-POR-76.sorted.bam
+
+```{bash}
+cd ../data/peve
+wget -r -l1 -nd -A "*.sorted.bam" https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
+```
+
+
+```{r, engine='bash'}
+/mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/M-multi-species/code/subread-2.0.6-Linux-x86_64/bin/featureCounts \
+-T 24 \
+-a ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf \
+-o ../output/08-lncRNA-features/Peve_counts.txt \
+-t lncRNA \
+-g gene_id \
+-p \
+../data/peve/*sorted.bam
+
+```
+
+
+
+----
+
+
+Ptuh
+
+
+bed
+
+```{bash}
+head ../output/01.62-lncRNA-pipeline/lncRNA.bed
+```
+
+```{bash}
+awk 'BEGIN{OFS="\t"} {print $1,"converted","lncRNA",$2+1,$3,".","+",".","gene_id \"lncRNA_"NR"\";"}' \
+../output/01.61-lncRNA-pipeline/lncRNA.bed \
+> ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf
+```
+
+```{bash}
+wc -l ../output/01.61-lncRNA-pipeline/lncRNA.bed
+wc -l ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf
+```
+
+
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/output/06-Ptuh-Hisat/RNA-POC-47.sorted.bam
+
+```{bash}
+cd ../data/ptuh
+wget -r -l1 -nd -A "*.sorted.bam" https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
+```
+
+
+```{r, engine='bash'}
+/mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/M-multi-species/code/subread-2.0.6-Linux-x86_64/bin/featureCounts \
+-T 24 \
+-a ../output/08-lncRNA-features/Peve_lncRNA_fixed.gtf \
+-o ../output/08-lncRNA-features/Peve_counts.txt \
+-t lncRNA \
+-g gene_id \
+-p \
+../data/peve/*sorted.bam
+
+```
+
