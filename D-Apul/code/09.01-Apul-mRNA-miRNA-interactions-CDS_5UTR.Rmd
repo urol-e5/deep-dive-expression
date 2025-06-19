@@ -200,7 +200,7 @@ When only mRNA 3'UTR regions are used as input, filtering for full/near-full com
 
 We've also already calculated pairwise Pearson's correlation coefficients for every miRNA-mRNA pair. Let's merge this table with our CDS and 5UTR miRanda results to see which instances of putative binding are supported through expression correlation.
 
-PCC table available at `D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv`, originally generated in `D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd`
+PCC table available at `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv` (too large to store on Gannet), originally generated in `D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd`
 
 ## Merge with CDS miRanda results
 
