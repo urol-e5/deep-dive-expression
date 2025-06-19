@@ -37,7 +37,7 @@ awk '/^>/ {keep = ($0 ~ /mature/)} keep' ../output/05-Ptuh-sRNA-ShortStack_4.1.0
 ```{r, engine='bash', eval=FALSE}
 
 /home/shared/bedtools2/bin/bedtools getfasta \
--fi "../data/Pocillopora_meandrina_HIv1.assembly" \
+-fi "../data/Pocillopora_meandrina_HIv1.assembly.fa" \
 -bed "../output/16-Ptuh-annotate-UTRs/Ptuh-genome-mRNA_only.gff" \
 -fo "../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_mRNA_full.fa"
 ```
@@ -51,7 +51,7 @@ awk '/^>/ {keep = ($0 ~ /mature/)} keep' ../output/05-Ptuh-sRNA-ShortStack_4.1.0
 # strict binding
 
 /home/shared/miRanda-3.3a/src/miranda \
-../data/06-Ptuh-miRNA-mRNA-RNAhybrid/miRNA_mature-Ptuh.fasta \
+../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_ShortStack_4.1.0_mature.fasta \
 ../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_mRNA_full.fa \
 -sc 100 \
 -en -20 \
@@ -108,7 +108,7 @@ We've also created a gff of 1kb 5'UTR regions (using the same method used to def
 
 ```{r, engine='bash', eval=FALSE}
 /home/shared/bedtools2/bin/bedtools getfasta \
--fi "../data/Pocillopora_meandrina_HIv1.assembly" \
+-fi "../data/Pocillopora_meandrina_HIv1.assembly.fa" \
 -bed "../output/16-Ptuh-annotate-UTRs/Ptuh.GFFannotation.5UTR_1kb_corrected.gff" \
 -fo "../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_5UTR_1kb_corrected.fa"
 
@@ -124,7 +124,7 @@ We've also created a gff of 1kb 5'UTR regions (using the same method used to def
 # strict binding
 
 /home/shared/miRanda-3.3a/src/miranda \
-../data/06-Ptuh-miRNA-mRNA-RNAhybrid/miRNA_mature-Ptuh.fasta \
+../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_ShortStack_4.1.0_mature.fasta \
 ../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh_5UTR_1kb_corrected.fa \
 -sc 100 \
 -en -20 \
