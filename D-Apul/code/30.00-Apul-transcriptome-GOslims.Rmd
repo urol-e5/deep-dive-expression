@@ -90,7 +90,7 @@ library(GO.db)
 
 knitr::opts_chunk$set(
   echo = TRUE,         # Display code chunks
-  eval = FALSE,        # Evaluate code chunks
+  eval = TRUE,        # Evaluate code chunks
   warning = FALSE,     # Hide warnings
   message = FALSE,     # Hide messages
   comment = ""         # Prevents appending '##' to beginning of lines in code output
@@ -151,9 +151,7 @@ Sys.setenv(
   og_genome_gff = og_genome_gff,
   line = line,
   samtools = samtools,
-  threads = threads,
-  transcripts_fasta = transcripts_fasta,
-  transcripts_gtf = transcripts_gtf
+  threads = threads
 )
 ```
 
@@ -179,7 +177,7 @@ genes <- as.data.frame(genome_gff) %>%
     end = end,
     gene_id = sub("ID=([^;]+);?.*", "\\1", attributes)
   ) %>%
-  select(chrom, start, end, gene_id)
+  dplyr::select(chrom, start, end, gene_id)
 
 str(genes)
 ```
@@ -214,7 +212,7 @@ Only those with at least *one* read in each sample
 
 ### Peek at count matrix
 
-```{r check-count-matrix, engine=bash}
+```{r check-count-matrix, engine='bash'}
 head "${count_matrix}" | column -t -s","
 
 echo ""
@@ -263,7 +261,7 @@ writeXStringSet(subset_fasta, genes_subset_fasta)
 
 ### Peek at genes subset FastA
 
-```{r check-genes-subset-fasta, engine=bash}
+```{r check-genes-subset-fasta, engine='bash'}
 head "${genes_subset_fasta}"
 
 echo ""
@@ -274,7 +272,7 @@ grep "^>" --count "${genes_subset_fasta}"
 
 ## Download SwissProt
 
-```{r download-sp, engine=bash}
+```{r download-sp, engine='bash'}
 cd "${blastdbs_dir}"
 
 curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
@@ -286,7 +284,7 @@ gunzip --keep 20250618-uniprot_sprot.fasta.gz
 
 ## Create BLASTdb
 
-```{r create-BLASTdb, engine=bash}
+```{r create-BLASTdb, engine='bash'}
 cd "${blastdbs_dir}"
 
 "${diamond}" makedb \
@@ -298,7 +296,7 @@ cd "${blastdbs_dir}"
 
 ## Run DIAMOND BLASTx
 
-```{r diamond-blast, engine=bash}
+```{r diamond-blast, engine='bash'}
 "${diamond}" blastx \
 --db "${blastdbs_dir}"/"${diamond_db}.dmnd" \
 --query "${genes_subset_fasta}" \
@@ -323,7 +321,7 @@ wc -l "${diamond_output}"
 
 ## Get gene IDs and SwissProt IDs
 
-```{r gene-and-SPIDs, engine=bash}
+```{r gene-and-SPIDs, engine='bash'}
 awk -F"|" '{print $1"\t"$2}' "${diamond_output}" \
 | awk '{print $1"\t"$3}' \
 > ../output/30.00-Apul-transcriptome-GOslims/gene-SPIDs.txt
@@ -338,7 +336,7 @@ wc -l ../output/30.00-Apul-transcriptome-GOslims/gene-SPIDs.txt
 
 ## Get SwissProt IDs
 
-```{r get-SPIDs, engine=bash}
+```{r get-SPIDs, engine='bash'}
 awk -F"|" '{print $2}' "${diamond_output}" \
 | sort --unique \
 > ../output/30.00-Apul-transcriptome-GOslims/SPIDs.txt
@@ -355,7 +353,7 @@ wc -l ../output/30.00-Apul-transcriptome-GOslims/SPIDs.txt
 
 A difference in number of records could be due to retrieval from only "reviewed" records, while BLAST may have included both "reviewed" and "unreviewed." SwissProt records
 
-```{r uniprot-records, engine=bash}
+```{r uniprot-records, engine='bash'}
 python3 \
 ../../M-multi-species/code/uniprot-retrieval.py \
 ../output/30.00-Apul-transcriptome-GOslims/SPIDs.txt \
