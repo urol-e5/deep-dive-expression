@@ -1,5 +1,5 @@
 ---
-title: "06-lncRNA-stats"
+title: "07-miRNA-stats"
 output: html_document
 date: "2025-06-19"
 author: Steven
@@ -7,31 +7,24 @@ author: Steven
 
 # Apul
 
-```{bash}
-head ../output/01.6-lncRNA-pipeline/* 
-```
 
-
-```{bash}
- head ../output/01.6-lncRNA-pipeline/*
-```
 
 ```{bash}
 cd ../data
-curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Apul_lncRNA.fasta
+curl -O https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_ShortStack_4.1.0_mature.fasta
 ```
 
 ```{bash}
-grep -c ">" ../data/Apul_lncRNA.fasta
+grep -c ">" ../data/Apul_ShortStack_4.1.0_mature.fasta
 ```
 
 ```{bash}
-awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Apul_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
+awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Apul_ShortStack_4.1.0_mature.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
 ```
 
 ```{r}
 library(Biostrings)
-fasta <- readDNAStringSet("../data/Apul_lncRNA.fasta")
+fasta <- readDNAStringSet("../data/Apul_ShortStack_4.1.0_mature.fasta")
 lengths <- width(fasta)
 
 hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
@@ -39,17 +32,17 @@ hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
 ```
 
 ```{bash}
-head ../output/01.7-lncRNA-count-rename-deduplicate/Apul_Counts.tsv
+head ../output/Apul_counts.txt
 
 ```
 
 ```{bash}
-grep -c '^lncRNA' ../output/01.7-lncRNA-count-rename-deduplicate/Apul_Counts.tsv
+grep -c '^lncRNA' ../output/Apul_counts.txt
 ```
 
 ```{r}
 # Load data (adjust path if needed)
-counts <- read.delim("../output/01.7-lncRNA-count-rename-deduplicate/Apul_Counts.tsv", comment.char = "#", check.names = FALSE)
+counts <- read.delim("../output/Apul_counts.txt", comment.char = "#", check.names = FALSE)
 
 # Inspect
 head(counts)
@@ -172,25 +165,25 @@ hist(lncRNA_totals,
 
 
 ```{bash}
-head ../output/01.61-lncRNA-pipeline/* 
+head ../output/01.62-lncRNA-pipeline/* 
 ```
 
 
 ```{bash}
-wc -l ../output/01.61-lncRNA-pipeline/*
+wc -l ../output/01.62-lncRNA-pipeline/*
 ```
 
 ```{bash}
 cd ../data
-curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta
+curl -O https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Ptuh_lncRNA.fasta
 ```
 
 ```{bash}
-grep -c ">" ../data/Peve_lncRNA.fasta
+grep -c ">" ../data/Ptuh_lncRNA.fasta
 ```
 
 ```{bash}
-awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Peve_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
+awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next} {seqlen += length($0)} END {if (seqlen) print seqlen}' ../data/Ptuh_lncRNA.fasta | awk '{sum+=$1} END {if (NR > 0) print "Average length: " sum/NR " bp"; else print "No sequences found."}'
 ```
 
 ```{r}
@@ -203,17 +196,17 @@ hist(lengths, breaks = 50, main = "Histogram of lncRNA Sequence Lengths",
 ```
 
 ```{bash}
-head ../output/Peve_counts.txt
+head ../output/Ptuh_counts.txt
 
 ```
 
 ```{bash}
-grep -c '^lncRNA' ../output/Peve_counts.txt
+grep -c '^lncRNA' ../output/Ptuh_counts.txt
 ```
 
 ```{r}
 # Load data (adjust path if needed)
-counts <- read.delim("../output/Peve_counts.txt", comment.char = "#", check.names = FALSE)
+counts <- read.delim("../output/Ptuh_counts.txt", comment.char = "#", check.names = FALSE)
 
 # Inspect
 head(counts)

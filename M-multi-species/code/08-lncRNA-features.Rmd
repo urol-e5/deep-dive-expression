@@ -1,0 +1,47 @@
+---
+title: "08-lncRNA-features"
+output: html_document
+---
+
+Steven trying feature counts 
+
+Apul
+
+Need GTF
+
+```{bash}
+wc -l ../output/01.6-lncRNA-pipeline/*
+```
+
+
+```{bash}
+wget https://sourceforge.net/projects/subread/files/subread-2.0.6/subread-2.0.6-Linux-x86_64.tar.gz
+```
+
+```{bash}
+tar -xvzf subread-2.0.6-Linux-x86_64.tar.gz
+cd subread-2.0.6-Linux-x86_64
+sudo cp bin/* /usr/local/bin/
+```
+
+
+```{bash}
+/mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/M-multi-species/code/subread-2.0.6-Linux-x86_64/bin/featureCounts -v
+```
+
+Getting BAMS
+
+
+
+
+```{r, engine='bash'}
+/mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/M-multi-species/code/subread-2.0.6-Linux-x86_64/bin/featureCounts \
+-T 24 \
+-a ../output/01.6-lncRNA-pipeline/lncRNA.gtf \
+-o ../output/08-lncRNA-features/Apul_counts.txt \
+-t lncRNA \
+-g gene_id \
+-p \
+../output/01.6-lncRNA-pipeline/*sorted.bam
+
+```
