@@ -1,47 +1,27 @@
----
-title: "mRNA-miRNA interactions"
-author: "Jill Ashey"
-date: "2025-02-06"
-always_allow_html: true
-output: 
-  github_document:
-    toc: true
-    toc_depth: 3
-    number_sections: true
-    html_preview: true 
-  bookdown::html_document2:
-    theme: cosmo
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-    code_download: true
----
+mRNA-miRNA interactions
+================
+Jill Ashey
+2025-02-06
 
-This script will investigate mRNA-miRNA interactions using miranda predictions. 
+This script will investigate mRNA-miRNA interactions using miranda
+predictions.
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Read in mRNA data
 
-#BiocManager::install("SPONGE")
-
-library(tidyverse)
-#library(mirTarRnaSeq)
-library(reshape2)
-#library(SPONGE)
-library(pheatmap)
-# library(energy)
-library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
-library(genefilter)
-library(gridExtra)
+``` r
+mRNA_counts <- read_csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
 ```
 
-Read in mRNA data 
-```{r}
-mRNA_counts <- read_csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
+    ## Rows: 40389 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (1): gene_id
+    ## dbl (5): RNA-POR-71, RNA-POR-73, RNA-POR-76, RNA-POR-79, RNA-POR-82
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
 mRNA_counts <- as.data.frame(mRNA_counts)
 rownames(mRNA_counts) <- mRNA_counts[,1] #set first column that contains gene names as rownames
 mRNA_counts <- mRNA_counts[,-1] # remove column w/ gene names 
@@ -54,10 +34,21 @@ mRNA_counts<-mRNA_counts %>%
 ```
 
 Read in miRNA data
-```{r}
+
+``` r
 miRNA_counts <- read.delim("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
+```
 
+    ##              sample73 sample79 sample82
+    ## Cluster_29       2822     3434     3318
+    ## Cluster_589      1885     1158     1017
+    ## Cluster_796     20505    23687    49156
+    ## Cluster_1140     1339      888      834
+    ## Cluster_1167    86625    64520   116691
+    ## Cluster_2787     1173      887     1284
+
+``` r
 # Rremove any miRNAs with 0 for all samples 
 miRNA_counts <- miRNA_counts %>%
      mutate(Total = rowSums(.[, 1:3]))%>%
@@ -68,15 +59,19 @@ miRNA_counts <- miRNA_counts %>%
 #colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
 ```
 
-Only 3 miRNA samples successfully sequenced for this species. Remove the samples that did not work from the mRNA df and rename columns to match miRNA df
-```{r}
+Only 3 miRNA samples successfully sequenced for this species. Remove the
+samples that did not work from the mRNA df and rename columns to match
+miRNA df
+
+``` r
 mRNA_counts <- mRNA_counts %>%
   dplyr::select("RNA-POR-73", "RNA-POR-79", "RNA-POR-82") %>%
   dplyr::rename("sample73" = "RNA-POR-73", "sample79" = "RNA-POR-79", "sample82" = "RNA-POR-82")
 ```
 
-Read in miranda data 
-```{r}
+Read in miranda data
+
+``` r
 miranda_peve <- read.delim("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_peve_updated.txt", header = F)
 colnames(miranda_peve) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
 
@@ -87,12 +82,26 @@ miranda_peve$mRNA <- sub(";.*", "", miranda_peve$mRNA)  # Remove everything from
 miranda_peve$mRNA <- sub("ID=", "", miranda_peve$mRNA)  # Remove ID=
 
 length(unique(miranda_peve$miRNA))
+```
+
+    ## [1] 45
+
+``` r
 length(unique(miranda_peve$mRNA))
+```
+
+    ## [1] 4399
+
+``` r
 dim(miranda_peve)
 ```
 
-Summarize how many mRNAs each miRNA are predicted to interact with. Summarize how many miRNAs each mRNA are predicted to interact with. 
-```{r}
+    ## [1] 5067    9
+
+Summarize how many mRNAs each miRNA are predicted to interact with.
+Summarize how many miRNAs each mRNA are predicted to interact with.
+
+``` r
 sum_mirna <- miranda_peve %>%
   group_by(miRNA) %>%
   summarise(mRNA_count = n_distinct(mRNA)) %>% 
@@ -103,6 +112,11 @@ ggplot(sum_mirna %>% arrange(desc(mRNA_count)),
   geom_col() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "miRNA", y = "mRNA Count", title = "miRNA Regulation of mRNAs") #+
+```
+
+![](10-Peve-mRNA-miRNA-interactions_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
   #coord_flip()  # Optional: horizontal bar plot for better readability
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
@@ -114,7 +128,8 @@ sum_mrna <- miranda_peve %>%
 ```
 
 Normalize counts
-```{r}
+
+``` r
 # Function to normalize counts (simple RPM normalization)
 normalize_counts <- function(counts) {
   rpm <- t(t(counts) / colSums(counts)) * 1e6
@@ -129,10 +144,14 @@ mRNA_norm <- normalize_counts(mRNA_counts)
 #mRNA_norm <- as.matrix(mRNA_counts_filt)
 ```
 
-In my [Apul mRNA-miRNA interactions code](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd), I calculated the distance correlation coefficient using the energy package. I am not going to do that now, but may come back to it later. 
+In my [Apul mRNA-miRNA interactions
+code](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd),
+I calculated the distance correlation coefficient using the energy
+package. I am not going to do that now, but may come back to it later.
 
-Calculate PCC  
-```{r, eval=FALSE}
+Calculate PCC
+
+``` r
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
@@ -162,31 +181,49 @@ write.csv(pcc_results, "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve
 ```
 
 Read back in (avoid computationally intensive code above)
-```{r}
+
+``` r
 pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv")
 ```
 
+Merge with miranda data
 
-Merge with miranda data 
-```{r}
+``` r
 combined_data_pcc <- pcc_results %>%
   inner_join(miranda_peve, by = c("miRNA", "mRNA")) %>%
   na.omit()
 dim(combined_data_pcc)
-length(unique(combined_data_pcc$miRNA))
-length(unique(combined_data_pcc$mRNA))
+```
 
+    ## [1] 3610   13
+
+``` r
+length(unique(combined_data_pcc$miRNA))
+```
+
+    ## [1] 45
+
+``` r
+length(unique(combined_data_pcc$mRNA))
+```
+
+    ## [1] 3157
+
+``` r
 # Save as csv
 write.csv(combined_data_pcc, "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_miRNA_mRNA.csv")
 ```
 
-Read in data so PCC does not have to be run again, as it is computationally intensive
-```{r}
+Read in data so PCC does not have to be run again, as it is
+computationally intensive
+
+``` r
 combined_data_pcc <- read.csv("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_miRNA_mRNA.csv")
 ```
 
 Plot number of positive and negative interactions for each miRNA
-```{r}
+
+``` r
 # Summarize the data
 summary_data <- combined_data_pcc %>%
   group_by(miRNA) %>%
@@ -197,17 +234,40 @@ summary_data <- combined_data_pcc %>%
   mutate(total_count = positive_count + negative_count) %>%
   arrange(desc(total_count))
 sum(summary_data$positive_count)
-sum(summary_data$negative_count)
+```
 
+    ## [1] 1495
+
+``` r
+sum(summary_data$negative_count)
+```
+
+    ## [1] 2115
+
+``` r
 # Assess how many miRNAs have more positive correlations vs more negative ones 
 positive_dominant <- sum(summary_data$positive_count > summary_data$negative_count)
 negative_dominant <- sum(summary_data$negative_count > summary_data$positive_count)
 equal <- sum(summary_data$positive_count == summary_data$negative_count)
 
 cat("miRNAs with more positive correlations:", positive_dominant, "\n")
-cat("miRNAs with more negative correlations:", negative_dominant, "\n")
-cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+```
 
+    ## miRNAs with more positive correlations: 11
+
+``` r
+cat("miRNAs with more negative correlations:", negative_dominant, "\n")
+```
+
+    ## miRNAs with more negative correlations: 33
+
+``` r
+cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+```
+
+    ## miRNAs with equal positive and negative correlations: 1
+
+``` r
 # Reshape the data for plotting
 plot_data <- summary_data %>%
   tidyr::pivot_longer(cols = c(positive_count, negative_count),
@@ -221,12 +281,18 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Positive and Negative PCC Correlations per miRNA")
+```
+
+![](10-Peve-mRNA-miRNA-interactions_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
-Investigate data 
-```{r}
+Investigate data
+
+``` r
 # How many p-values are < 0.05 or < 0.1?
 pvalue_summary_pcc <- combined_data_pcc %>%
   summarise(
@@ -234,31 +300,58 @@ pvalue_summary_pcc <- combined_data_pcc %>%
     pvalue_0.1 = sum(p_value < 0.1),
   )
 print(pvalue_summary_pcc)
+```
 
+    ##   pvalue_0.05 pvalue_0.1
+    ## 1         208        350
+
+``` r
 # How many pairs have a PCC correlation > |0.5|?
 corr_0.5 <- sum(abs(combined_data_pcc$PCC.cor) > 0.5)
 cat("\nPairs with Pearson Correlation > 0.5:", corr_0.5, "\n")
+```
 
+    ## 
+    ## Pairs with Pearson Correlation > 0.5: 2428
+
+``` r
 # Are there any pairs that have a PCC correlation > |0.5| and a p-value < 0.05?
 pairs_of_interest_pcc <- combined_data_pcc %>%
   filter(abs(PCC.cor) > 0.5 & p_value < 0.05 )
 cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(pairs_of_interest_pcc), "\n")
+```
 
+    ## PCC correlation > |0.5| and a p-value < 0.05: 208
+
+``` r
 # How many unique miRNAs and mRNAs have a PCC correlation > |0.5| and a p-value < 0.05?
 length(unique(pairs_of_interest_pcc$miRNA))
-length(unique(pairs_of_interest_pcc$mRNA))
+```
 
+    ## [1] 37
+
+``` r
+length(unique(pairs_of_interest_pcc$mRNA))
+```
+
+    ## [1] 207
+
+``` r
 # Save pairs of interest df as csv 
 write.csv(pairs_of_interest_pcc, "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
-Read in data so PCC does not have to be run again, as it is computationally intensive
-```{r}
+Read in data so PCC does not have to be run again, as it is
+computationally intensive
+
+``` r
 pairs_of_interest_pcc <- read.csv("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
-Plot number of SIGNIFICANT positive and negative interactions for each miRNA
-```{r}
+Plot number of SIGNIFICANT positive and negative interactions for each
+miRNA
+
+``` r
 # Summarize the data
 summary_data <- pairs_of_interest_pcc %>%
   group_by(miRNA) %>%
@@ -269,17 +362,40 @@ summary_data <- pairs_of_interest_pcc %>%
   mutate(total_count = positive_count + negative_count) %>%
   arrange(desc(total_count))
 sum(summary_data$positive_count)
-sum(summary_data$negative_count)
+```
 
+    ## [1] 129
+
+``` r
+sum(summary_data$negative_count)
+```
+
+    ## [1] 79
+
+``` r
 # Assess how many miRNAs have more positive correlations vs more negative ones 
 positive_dominant <- sum(summary_data$positive_count > summary_data$negative_count)
 negative_dominant <- sum(summary_data$negative_count > summary_data$positive_count)
 equal <- sum(summary_data$positive_count == summary_data$negative_count)
 
 cat("miRNAs with more positive correlations:", positive_dominant, "\n")
-cat("miRNAs with more negative correlations:", negative_dominant, "\n")
-cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+```
 
+    ## miRNAs with more positive correlations: 19
+
+``` r
+cat("miRNAs with more negative correlations:", negative_dominant, "\n")
+```
+
+    ## miRNAs with more negative correlations: 14
+
+``` r
+cat("miRNAs with equal positive and negative correlations:", equal, "\n")
+```
+
+    ## miRNAs with equal positive and negative correlations: 4
+
+``` r
 # Reshape the data for plotting
 plot_data <- summary_data %>%
   tidyr::pivot_longer(cols = c(positive_count, negative_count),
@@ -293,13 +409,18 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Significant Positive and Negative PCC Correlations per miRNA")
+```
 
+![](10-Peve-mRNA-miRNA-interactions_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
-Plot using igraph 
-```{r}
+Plot using igraph
+
+``` r
 # Create the graph
 g <- graph_from_data_frame(pairs_of_interest_pcc, directed = FALSE)
 
@@ -323,5 +444,10 @@ p <- ggraph(g_tbl, layout = "fr") +
   theme_graph() +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
+```
+
+![](10-Peve-mRNA-miRNA-interactions_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
 ggsave("../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
 ```
