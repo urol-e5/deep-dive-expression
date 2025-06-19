@@ -1,0 +1,184 @@
+---
+title: "07.1-Apul-miRNA-mRNA-miRanda-additional_inputs"
+author: "Kathleen Durkin"
+date: "2024-02-21"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+miRanda is a target prediction software, used to identify likely miRNA-mRNA interactions.
+
+We've decided that we need to expand our consideration of potential miRNA target sites to include the coding sequence and (potentially) the 5'UTR region, since cnidarian miRNAs may function primarily through target cleavage, instead of translational repression.
+
+Run miRanda using the mRNA coding sequences and the 1kb 5UTR regions as inputs.
+
+# mRNA coding sequence
+
+## Get coding sequence fasta
+
+```{r, engine='bash', eval=FALSE}
+
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi "../data/Apulchra-genome.fa" \
+-bed "../output/05-Apul-annotate-UTRs/Apulcra-genome-mRNA_only.gff" \
+-fo "../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul_mRNA_full.fa"
+```
+
+## Run miRanda
+
+```{r, engine='bash', eval=FALSE}
+
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../data/06-Apul-miRNA-mRNA-RNAhybrid/miRNA_mature-Apul.fasta \
+../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul_mRNA_full.fa \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict_all.tab
+```
+
+## Summarize results
+
+Let's look at the output
+
+```{r, engine='bash'}
+
+echo "miranda run finished!"
+echo "counting number of putative interactions predicted"
+
+zgrep -c "Performing Scan" ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict_all.tab | sort | grep '>' > ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt
+
+echo "counting number of putative interactions predicted"
+wc -l ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt
+
+```
+
+This is a lot of putative interactions! Note though, that miRanda only requires complementarity of a 8bp seed region of the miRNA. We instead want to look for binding with full or near-full complementarity. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt | head -5
+```
+
+We can also see from the percent identities (last 2 entries) that this number includes alignments with multiple mismatches. Let's filter again to reduce the number of permissible mismatches. Let's say we want no more than 3 mismatches. For an alignment of 21 nucleotides, this would be an alignment rate of (21-3)/21 = 85.7%.
+
+```{r, engine='bash'}
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+echo ""
+echo "check some:"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-mRNA_full-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
+```
+
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and full mRNA sequences from 814426 to 181.
+
+# miRNA and mRNA 5'UTRs
+
+We've also created a gff of 1kb 5'UTR regions (using the same method used to define 1kb 3'UTRs, in `05-Apul-annotate-UTRs`). Let's try running this through miRanda as well, since it's possible (though not necessarily expected) that miRNAs will bind here
+
+## Get 5'UTR fasta
+
+```{r, engine='bash', eval=FALSE}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi "../data/Apulchra-genome.fa" \
+-bed "../output/05-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff" \
+-fo "../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul_5UTR_1kb_corrected.fa"
+
+```
+
+## Run miRanda
+
+```{r, engine='bash', eval=FALSE}
+
+# Same settings we've been using: 
+# score cutoff >100
+# energy cutoff <-10
+# strict binding
+
+/home/shared/miRanda-3.3a/src/miranda \
+../data/06-Apul-miRNA-mRNA-RNAhybrid/miRNA_mature-Apul.fasta \
+../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul_5UTR_1kb_corrected.fa \
+-sc 100 \
+-en -10 \
+-strict \
+-out ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict_all.tab
+```
+
+## Summarize results
+
+Let's look at the output
+
+```{r, engine='bash'}
+
+echo "Number of interacting miRNA-lncRNA pairs"
+zgrep -c "Performing Scan" ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict_all.tab
+
+echo "Parsing output"
+grep -A 1 "Scores for this hit:" ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict_all.tab | sort | grep '>' > ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict-parsed.txt
+
+echo "Number of putative interactions predicted"
+wc -l ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict-parsed.txt
+
+```
+
+How many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA)?
+
+```{r, engine='bash'}
+echo "number of putative interactions:"
+wc -l ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict-parsed.txt
+echo ""
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict-parsed.txt | wc -l
+echo ""
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/07.1-Apul-miRNA-mRNA-miRanda-additional_inputs/Apul-miRanda-5UTR_1kb-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+```
+
+So filtering for full or near-full complementarity reduced the number of putative interactions between miRNA and 5'UTR sequences from 115265 to 20
+
+# miRNA and mRNA 3'UTRs
+
+Now let's see how filtering changes the outputs of miRanda run with only the 3'UTR mRNA region (the input we have been using up till now)
+
+```{r, engine='bash'}
+echo "total number of putative interactions:"
+wc -l ../output/07-Apul-miRNA-mRNA-miRanda/Apul-miRanda-3UTR-strict-parsed.txt
+
+echo "number of putative interactions of at least 21 nucleotides"
+awk -F'\t' '$7 >= 21' ../output/07-Apul-miRNA-mRNA-miRanda/Apul-miRanda-3UTR-strict-parsed.txt | wc -l
+
+echo "number of putative interactions of at least 21 nucleotides, with at most 3 mismatches"
+awk -F'\t' '$7 >= 21' ../output/07-Apul-miRNA-mRNA-miRanda/Apul-miRanda-3UTR-strict-parsed.txt | awk -F'\t' '$8 >= 85' | wc -l
+```
+
+When only mRNA 3'UTR regions are used as input, filtering for full/near-full complementarity reduces the number of putative interactions from 123123 to 33.
+
+# Summary
+
+| Input     | unfiltered | filtered for complementarity | \% retained |
+|-----------|------------|------------------------------|-------------|
+| full mRNA | 814426     | 181                          | 0.0222 %    |
+| 5'UTR     | 115265     | 20                           | 0.0174 %    |
+| 3'UTR     | 123123     | 33                           | 0.0268 %    |
