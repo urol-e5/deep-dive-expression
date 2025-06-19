@@ -31,6 +31,25 @@ sudo cp bin/* /usr/local/bin/
 
 Getting BAMS
 
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07.2-Apul-Hisat/RNA-ACR-150.sorted.bam
+
+```{bash}
+cd ../data
+wget -r -l1 -nd -A "*.sorted.bam" https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07.2-Apul-Hisat/
+```
+
+```{bash}
+head ../output/01.6-lncRNA-pipeline/lncRNA.gtf
+```
+
+```{bash}
+awk 'BEGIN{OFS="\t"} $2>=0 && $3>$2 {print $1,"converted","lncRNA",$2+1,$3,".","+",".","gene_id \"lncRNA_"NR"\";"}' \
+../output/01.6-lncRNA-pipeline/lncRNA.bed \
+> ../output/08-lncRNA-features/Apul_lncRNA_fixed.gtf
+```
+
+
+
 
 
 
@@ -42,6 +61,6 @@ Getting BAMS
 -t lncRNA \
 -g gene_id \
 -p \
-../output/01.6-lncRNA-pipeline/*sorted.bam
+../data/*sorted.bam
 
 ```
