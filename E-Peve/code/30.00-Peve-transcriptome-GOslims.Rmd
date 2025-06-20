@@ -25,7 +25,7 @@ bibliography: references.bib
 
 # BACKGROUND
 
-This notebook will perform annotation of expressed genes, as previously determined by [`06-Peve-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/7958cd3fdd10f4f80fb499d60e8befa55f3600a7/E-Peve/code/06-Peve-Hisat.qmd) (GitHub).
+This notebook will perform annotation of expressed genes, as previously determined by [`06.2-Peve-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/7958cd3fdd10f4f80fb499d60e8befa55f3600a7/E-Peve/code/06-Peve-Hisat.qmd) (GitHub).
 
 Briefly, the notebook will perform the following tasks:
 
@@ -101,7 +101,8 @@ knitr::opts_chunk$set(
 
 ```{r variables}
 # DIRECTORIES
-output_dir <- file.path("..", "output")
+top_output_dir <- file.path("..", "output")
+output_dir <- file.path(top_output_dir, "30.00-Peve-transcriptome-GOslims")
 data_dir <- file.path("..", "data")
 
 # PROGRAMS
@@ -117,15 +118,15 @@ samtools <- file.path(samtools_dir, "samtools")
 
 
 # FILES
-count_matrix <- file.path(output_dir, "06-Peve-Hisat/gene_count_matrix.csv")
+count_matrix <- file.path(top_output_dir, "06.2-Peve-Hisat/gene_count_matrix.csv")
 diamond_db <- "20250620-diamond"
-diamond_output <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-expressed-genes.blastx.outfmt6")
+diamond_output <- file.path(output_dir, "Pevermanni-expressed-genes.blastx.outfmt6")
 genome_fasta <- file.path(data_dir, "Porites_evermanni_v1.fa")
-genes_fasta <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-genes.fasta")
-genes_fasta_index <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-genes.fasta.fai")
-genes_subset_fasta <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-subset-genes.fasta")
-genes_subset_fasta_index <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-subset-genes.fasta.fai")
-genes_bed <- file.path(output_dir, "30.00-Peve-transcriptome-GOslims", "Pevermanni-genes.bed")
+genes_fasta <- file.path(output_dir, "Pevermanni-genes.fasta")
+genes_fasta_index <- file.path(output_dir, "Pevermanni-genes.fasta.fai")
+genes_subset_fasta <- file.path(output_dir, "Pevermanni-subset-genes.fasta")
+genes_subset_fasta_index <- file.path(output_dir, "Pevermanni-subset-genes.fasta.fai")
+genes_bed <- file.path(output_dir, "Pevermanni-genes.bed")
 og_genome_gff <- file.path(data_dir, "Porites_evermanni_validated.gff3")
 
 # THREADS
@@ -155,6 +156,7 @@ Sys.setenv(
   genome_fasta = genome_fasta,
   og_genome_gff = og_genome_gff,
   output_dir = output_dir,
+  top_output_dir = top_output_dir,
   line = line,
   samtools = samtools,
   threads = threads
@@ -382,7 +384,12 @@ gene_spids <- read.delim(file.path(output_dir, "gene-SPIDs.txt"), header = FALSE
 colnames(gene_spids) <- c("GeneID", "Entry")
 
 # Read uniprot-retrieval.tsv
-uniprot <- read.delim(file.path(output_dir, "uniprot-retrieval.tsv", header = TRUE, stringsAsFactors = FALSE, check.names = FALSE))
+uniprot <- read.delim(
+  file.path(output_dir, "uniprot-retrieval.tsv"),
+  header = TRUE,
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
 
 # Merge on Entry
 gene_SPID_GOID_merged <- merge(gene_spids, uniprot[, c("Entry", "Gene Ontology IDs")], by = "Entry", all.x = TRUE)
