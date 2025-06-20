@@ -62,13 +62,13 @@ colnames(miRNA_counts) <- c("sample73", "sample79", "sample82")
 
 
 ```{r}
-lncRNA_counts<-read_table(file="../../M-multi-species/output/Peve_counts.txt", skip=1) %>%
+lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Peve_counts_dedup.txt", skip=1) %>%
   rename("lncrna_id"=Geneid, 
-         "sample71"=`../output/01.61-lncRNA-pipeline/RNA-POR-71-S1-TP2.sorted.bam`, 
-         "sample73"=`../output/01.61-lncRNA-pipeline/RNA-POR-73-S1-TP2.sorted.bam`, 
-         "sample76"=`../output/01.61-lncRNA-pipeline/RNA-POR-76-S1-TP2.sorted.bam`, 
-         "sample79"=`../output/01.61-lncRNA-pipeline/RNA-POR-79-S1-TP2.sorted.bam`, 
-         "sample82"=`../output/01.61-lncRNA-pipeline/RNA-POR-82-S1-TP2.sorted.bam`)
+         "sample71"=`../data/peve/RNA-POR-71.sorted.bam`, 
+         "sample73"=`../data/peve/RNA-POR-73.sorted.bam`, 
+         "sample76"=`../data/peve/RNA-POR-76.sorted.bam`, 
+         "sample79"=`../data/peve/RNA-POR-79.sorted.bam`, 
+         "sample82"=`../data/peve/RNA-POR-82.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
@@ -102,7 +102,7 @@ lncRNA_norm <- normalize_counts(lncRNA_counts_df)
 ```
 
 Calculate PCC  
-```{r, eval=FALSe}
+```{r, eval=FALSE}
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
