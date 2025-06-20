@@ -25,7 +25,7 @@ bibliography: references.bib
 
 # BACKGROUND
 
-This notebook will perform annotation of expressed genes, as previously determined by [`06.2-Peve-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/7958cd3fdd10f4f80fb499d60e8befa55f3600a7/E-Peve/code/06-Peve-Hisat.qmd) (GitHub).
+This notebook will perform annotation of expressed genes, as previously determined by [`06.2-Ptuh-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/a2eb40bed71e946a1df86d51ff58dd59d8943798/F-Ptuh/code/06.2-Ptuh-Hisat.qmd) (GitHub).
 
 Briefly, the notebook will perform the following tasks:
 
