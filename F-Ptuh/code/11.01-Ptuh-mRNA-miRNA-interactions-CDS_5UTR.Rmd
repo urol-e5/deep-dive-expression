@@ -18,6 +18,10 @@ output:
     code_download: true
 ---
 
+```{r}
+library(dplyr)
+```
+
 miRanda is a target prediction software, used to identify likely miRNA-mRNA interactions.
 
 We've decided that we need to expand our consideration of potential miRNA target sites to include the coding sequence and (potentially) the 5'UTR region, since cnidarian miRNAs may function primarily through target cleavage, instead of translational repression.
@@ -188,4 +192,81 @@ When only mRNA 3'UTR regions are used as input, filtering for full/near-full com
 | full mRNA | 9537       | 27                           | 0.283 %     |
 | 5'UTR     | 3881       | 5                            | 0.129 %     |
 | 3'UTR     | 4105       | 11                           | 0.268 %     |
+
+
+
+# Combine with PCC
+
+We've also already calculated pairwise Pearson's correlation coefficients for every miRNA-mRNA pair. Let's merge this table with our CDS and 5UTR miRanda results to see which instances of putative binding are supported through expression correlation.
+
+PCC table available at `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv` (too large to store on Github), originally generated in `F-Ptuh/code/11-Ptuh-mRNA-miRNA-interactions.Rmd`
+
+## Merge with CDS miRanda results
+
+Read in PCC and miRanda tables
+```{r, eval=TRUE}
+# Load
+Ptuh_PCC_miRNA_mRNA <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv") %>% select(-X)
+Ptuh_miRanda_miRNA_CDS <- read.table("../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh-miRanda-mRNA_full-strict-parsed.txt")
+
+# Format the miRNA IDs in miRanda table by removing miRNA coordinates
+Ptuh_miRanda_miRNA_CDS$V1 <- gsub(">", "", Ptuh_miRanda_miRNA_CDS$V1)
+Ptuh_miRanda_miRNA_CDS$V1 <- sub("\\..*", "", Ptuh_miRanda_miRNA_CDS$V1)
+```
+
+We need to associate the CDS genomic coordinates (used in miRanda output) with gene IDs (used in PCC output)
+```{r, eval=TRUE}
+# Load and format mapping table
+Ptuh_mRNA_FUNids <- read.table("../output/16-Ptuh-annotate-UTRs/Ptuh-mRNA-geneIDs.txt") %>% select(V1, V4)
+Ptuh_mRNA_FUNids$V4 <- gsub("Parent=gene-", "", Ptuh_mRNA_FUNids$V4)
+
+# Join with miRanda table to annotate genomic coordinates with gene IDs
+Ptuh_miRanda_miRNA_CDS <- left_join(Ptuh_miRanda_miRNA_CDS, Ptuh_mRNA_FUNids, by = c("V2" = "V1")) %>% unique()
+```
+
+Great! Now we can merge the CDS miRanda results and PCC values
+```{r, eval=TRUE}
+# Merge
+Ptuh_miRanda_miRNA_CDS_PCC <- left_join(Ptuh_miRanda_miRNA_CDS, Ptuh_PCC_miRNA_mRNA, by = c("V1" = "miRNA", "V4.y" = "mRNA")) %>% unique()
+
+# Save
+write.csv(Ptuh_miRanda_miRNA_CDS_PCC, "../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv")
+```
+
+Note: there may be some NA values in the PCC columns. This would indicate that one (or both) of the member of that miRNA-mRNA pair had all-zero counts (i.e. it was unexpressed in all samples)
+
+## Merge with 5UTR miRanda results
+
+Read in PCC and miRanda tables
+```{r, eval=TRUE}
+# Load
+Ptuh_miRanda_miRNA_5UTR <- read.table("../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/Ptuh-miRanda-5UTR_1kb-strict-parsed.txt")
+
+# Format the miRNA IDs in miRanda table by removing miRNA coordinates
+Ptuh_miRanda_miRNA_5UTR$V1 <- gsub(">", "", Ptuh_miRanda_miRNA_5UTR$V1)
+Ptuh_miRanda_miRNA_5UTR$V1 <- sub("\\..*", "", Ptuh_miRanda_miRNA_5UTR$V1)
+```
+
+We need to associate the 5UTR genomic coordinates (used in miRanda output) with gene IDs (used in PCC output)
+```{r, eval=TRUE}
+# Load and format mapping table
+Ptuh_5UTR_FUNids <- read.table("../output/16-Ptuh-annotate-UTRs/Ptuh-5UTR-geneIDs.txt") %>% select(V1, V4)
+Ptuh_5UTR_FUNids$V4 <- gsub("Parent=gene-", "", Ptuh_5UTR_FUNids$V4)
+
+# Join with miRanda table to annotate genomic coordinates with gene IDs
+Ptuh_miRanda_miRNA_5UTR <- left_join(Ptuh_miRanda_miRNA_5UTR, Ptuh_5UTR_FUNids, by = c("V2" = "V1")) %>% unique()
+```
+
+Great! Now we can merge the 5UTR miRanda results and PCC values
+```{r, eval=TRUE}
+# Merge
+Ptuh_miRanda_miRNA_5UTR_PCC <- left_join(Ptuh_miRanda_miRNA_5UTR, Ptuh_PCC_miRNA_mRNA, by = c("V1" = "miRNA", "V4.y" = "mRNA")) %>% unique()
+
+# Save
+write.csv(Ptuh_miRanda_miRNA_5UTR_PCC, "../output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv")
+```
+
+Note: there may be some NA values in the PCC columns. This would indicate that one (or both) of the member of that miRNA-mRNA pair had all-zero counts (i.e. it was unexpressed in all samples)
+
+
 

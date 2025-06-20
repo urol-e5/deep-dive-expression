@@ -2,7 +2,20 @@
 title: "mRNA-miRNA interactions"
 author: "Jill Ashey"
 date: "2025-02-06"
-output: html_document
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
 ---
 
 This script will investigate mRNA-miRNA interactions using miranda predictions. 
@@ -17,7 +30,7 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-library(energy)
+# library(energy)
 library(parallel)
 library(ggraph)
 library(tidygraph)
@@ -42,12 +55,11 @@ mRNA_counts<-mRNA_counts %>%
 
 Read in miRNA data
 ```{r}
-miRNA_counts <- read.delim("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_miRNA_normalized.txt")
+miRNA_counts <- read.delim("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
-# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+# Rremove any miRNAs with 0 for all samples 
 miRNA_counts <- miRNA_counts %>%
-  #select(-sample150) %>%
      mutate(Total = rowSums(.[, 1:3]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
@@ -120,7 +132,7 @@ mRNA_norm <- normalize_counts(mRNA_counts)
 In my [Apul mRNA-miRNA interactions code](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd), I calculated the distance correlation coefficient using the energy package. I am not going to do that now, but may come back to it later. 
 
 Calculate PCC  
-```{r}
+```{r, eval=FALSE}
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
@@ -148,6 +160,12 @@ pcc_results$mRNA <- gsub("gene-", "", pcc_results$mRNA)
 # Save as csv
 write.csv(pcc_results, "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv")
 ```
+
+Read back in (avoid computationally intensive code above)
+```{r}
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv")
+```
+
 
 Merge with miranda data 
 ```{r}

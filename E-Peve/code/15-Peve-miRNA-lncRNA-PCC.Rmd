@@ -3,6 +3,9 @@ title: "15-Peve-miRNA-lncRNA-PCC"
 author: "Kathleen Durkin"
 date: "2025-06-17"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -36,13 +36,13 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-library(energy)
+#library(energy)
 library(parallel)
-# library(ggraph)
-# library(tidygraph)
-# library(igraph)
-# library(genefilter)
-# library(gridExtra)
+library(ggraph)
+library(tidygraph)
+library(igraph)
+library(genefilter)
+library(gridExtra)
 ```
 
 Read in miRNA data
@@ -62,13 +62,13 @@ colnames(miRNA_counts) <- c("sample73", "sample79", "sample82")
 
 
 ```{r}
-lncRNA_counts<-read_table(file="../../M-multi-species/output/Peve_counts.txt", skip=1) %>%
+lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Peve_counts_dedup.txt", skip=1) %>%
   rename("lncrna_id"=Geneid, 
-         "sample71"=`../output/01.61-lncRNA-pipeline/RNA-POR-71-S1-TP2.sorted.bam`, 
-         "sample73"=`../output/01.61-lncRNA-pipeline/RNA-POR-73-S1-TP2.sorted.bam`, 
-         "sample76"=`../output/01.61-lncRNA-pipeline/RNA-POR-76-S1-TP2.sorted.bam`, 
-         "sample79"=`../output/01.61-lncRNA-pipeline/RNA-POR-79-S1-TP2.sorted.bam`, 
-         "sample82"=`../output/01.61-lncRNA-pipeline/RNA-POR-82-S1-TP2.sorted.bam`)
+         "sample71"=`../data/peve/RNA-POR-71.sorted.bam`, 
+         "sample73"=`../data/peve/RNA-POR-73.sorted.bam`, 
+         "sample76"=`../data/peve/RNA-POR-76.sorted.bam`, 
+         "sample79"=`../data/peve/RNA-POR-79.sorted.bam`, 
+         "sample82"=`../data/peve/RNA-POR-82.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
@@ -102,7 +102,7 @@ lncRNA_norm <- normalize_counts(lncRNA_counts_df)
 ```
 
 Calculate PCC  
-```{r, eval=FALSe}
+```{r, eval=FALSE}
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
@@ -126,14 +126,20 @@ pcc_results <- pcc_results %>%
 
 # filter to significant (p < 0.05) results
 pcc_results_sig <- pcc_results %>% filter(p_value < 0.05)
-```
 
-Save (to avoid needing to rerun the computationally-expensive PCC code)
-```{r}
+#Save (to avoid needing to rerun the computationally-expensive PCC code)
 write.csv(pcc_results, "../output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv")
 write.csv(pcc_results_sig, "../output/15-Peve-miRNA-lncRNA-PCC/PCC_sig_miRNA_lncRNA.csv")
 ```
 
+Too large for Github, so available in large-file storage: `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv`
+`https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_sig_miRNA_lncRNA.csv`
+
+Load back in if necessary
+```{r}
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv")
+pcc_results_sig <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_sig_miRNA_lncRNA.csv")
+```
 
 
 # Merge with miRanda
@@ -158,29 +164,26 @@ Now I need to be able to associate the lncRNA IDs used in the count matrix (e.g.
 ```{r}
 # Build mapping table
 lncRNA_mapping <- data.frame(
-  lncRNA_id = lncRNA_counts_filt$lncrna_id,
-  lncRNA_coord = paste0(lncRNA_counts_filt$Chr, ":", lncRNA_counts_filt$Start, "-", lncRNA_counts_filt$End)
+  lncRNA_id = lncRNA_counts$lncrna_id,
+  lncRNA_coord = paste0(lncRNA_counts$Chr, ":", lncRNA_counts$Start, "-", lncRNA_counts$End)
 )
 
 # Save for future use
 write.table(lncRNA_mapping, "../output/15-Peve-miRNA-lncRNA-PCC/Peve_lncRNA_mapping.tab")
-
-# Seems to be a duplicates issue (multiple unique lncRNA ids represent the same coordinates/counts)
-# May only be some instances of all-zero counts, so reduce this mapping to only keep lncRNA included in the PCC calc
-lncRNA_mapping_filt <- lncRNA_mapping[lncRNA_mapping$lncRNA_id %in% rownames(lncRNA_counts_df),]
 ```
 
 ## Merge
 
 Merge the miranda results with `lncRNA_mapping` to get the associated lncRNA ids with the transcript info
 ```{r}
-miranda_peve_names <- left_join(miranda_peve, lncRNA_mapping_filt, by = c("lncRNA" = "lncRNA_coord")) %>%
-  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id))
+miranda_peve_names <- left_join(miranda_peve, lncRNA_mapping, by = c("lncRNA" = "lncRNA_coord")) %>%
+  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+  unique()
 ```
 
 Now we can merge with the PCC results! 
 ```{r}
-pcc_miranda_peve <- left_join(miranda_peve_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA"))
+pcc_miranda_peve <- left_join(miranda_peve_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA")) %>% unique()
 
 # Write as csv 
 write.csv(pcc_miranda_peve, "../output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv")

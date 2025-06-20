@@ -2,7 +2,20 @@
 title: "Ptuh mRNA-miRNA interactions"
 author: "Jill Ashey"
 date: "2025-02-06"
-output: html_document
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
 ---
 
 This script will investigate mRNA-miRNA interactions using miranda predictions for Ptuh. 
@@ -17,7 +30,7 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-library(energy)
+# library(energy)
 library(parallel)
 library(ggraph)
 library(tidygraph)
@@ -42,21 +55,18 @@ mRNA_counts<-mRNA_counts %>%
 
 Read in miRNA data
 ```{r}
-miRNA_counts <- read.delim("../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt")
+miRNA_counts <- read.delim("../output/03.1-Ptuh-sRNA-summary/Ptuh_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
-# Remove sample150 column from mirna counts and remove any miRNAs with 0 for all samples 
+# Remove any miRNAs with 0 for all samples 
 miRNA_counts <- miRNA_counts %>%
-  #select(-sample150) %>%
      mutate(Total = rowSums(.[, 1:5]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 
-# Rename gene count cols to match miRNA count cols
-#colnames(mRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
 ```
 
-Only 3 miRNA samples successfully sequenced for this species. Remove the samples that did not work from the mRNA df and rename columns to match miRNA df
+Rename columns to match miRNA df
 ```{r}
 mRNA_counts <- mRNA_counts %>%
   dplyr::rename("sample47" = "RNA-POC-47", "sample48" = "RNA-POC-48", "sample50" = "RNA-POC-50", "sample53" = "RNA-POC-53", "sample57" = "RNA-POC-57")
@@ -64,7 +74,7 @@ mRNA_counts <- mRNA_counts %>%
 
 Read in miranda data 
 ```{r}
-miranda_ptuh <- read.delim("../output/11-Ptuh-mRNA-miRNA-interactions/miranda_strict_all_1kb_parsed_ptuh_updated.txt", header = F)
+miranda_ptuh <- read.delim("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/miranda_strict_all_1kb_parsed_ptuh_updated.txt", header = F)
 colnames(miranda_ptuh) <- c("miRNA", "mRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar")
 
 # Format miranda df 
@@ -91,8 +101,8 @@ ggplot(sum_mirna %>% arrange(desc(mRNA_count)),
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "miRNA", y = "mRNA Count", title = "miRNA Regulation of mRNAs") #+
   #coord_flip()  # Optional: horizontal bar plot for better readability
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_number_of_targets.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_number_of_targets.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 
 # mRNA
 sum_mrna <- miranda_ptuh %>%
@@ -119,7 +129,7 @@ mRNA_norm <- normalize_counts(mRNA_counts)
 In my [Apul mRNA-miRNA interactions code](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/09-Apul-mRNA-miRNA-interactions.Rmd), I calculated the distance correlation coefficient using the energy package. I am not going to do that now, but may come back to it later. 
 
 Calculate PCC  
-```{r}
+```{r, eval=FALSE}
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
@@ -145,10 +155,16 @@ pcc_results <- pcc_results %>%
 pcc_results$mRNA <- gsub("gene-", "", pcc_results$mRNA)
 
 # Save as csv
-#write.csv(pcc_results, "../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-PCC_miRNA_mRNA.csv")
+write.csv(pcc_results, "../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv")
 ```
 
-This df is too large to push to github; save to personal computer and put on OSF. 
+This df is too large to push to github, instead stored here: `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv` 
+
+Load back in for additional use
+```{r}
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv")
+```
+
 
 Merge with miranda data 
 ```{r}
@@ -160,12 +176,7 @@ length(unique(combined_data_pcc$miRNA))
 length(unique(combined_data_pcc$mRNA))
 
 # Save as csv
-write.csv(combined_data_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
-```
-
-Read in data so that PCC does not have to be run again, as it is computationally intensive
-```{r}
-combined_data_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_miRNA_mRNA.csv")
+write.csv(combined_data_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_miRNA_mRNA.csv")
 ```
 
 Plot number of positive and negative interactions for each miRNA
@@ -204,8 +215,8 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Positive and Negative PCC Correlations per miRNA")
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
-ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
 Investigate data 
@@ -232,12 +243,12 @@ length(unique(pairs_of_interest_pcc$miRNA))
 length(unique(pairs_of_interest_pcc$mRNA))
 
 # Save pairs of interest df as csv 
-write.csv(pairs_of_interest_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
+write.csv(pairs_of_interest_pcc, "../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 Read in data so that PCC does not have to be run again, as it is computationally intensive
 ```{r}
-pairs_of_interest_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
+pairs_of_interest_pcc <- read.csv("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv")
 ```
 
 Plot number of SIGNIFICANT positive and negative interactions for each miRNA
@@ -277,8 +288,8 @@ ggplot(plot_data, aes(x = reorder(miRNA, -total_count), y = count, fill = correl
   labs(x = "miRNA", y = "Count", fill = "Correlation Type",
        title = "Significant Positive and Negative PCC Correlations per miRNA")
 
-#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
-#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_significant_positive_negative_correlations.png", last_plot(), width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miRNA_significant_positive_negative_correlations.pdf", last_plot(), width = 12, height = 10, dpi = 300)
 ```
 
 Plot using igraph 
@@ -306,6 +317,6 @@ p <- ggraph(g_tbl, layout = "fr") +
   theme_graph() +
   labs(title = "miRNA-mRNA Interaction Network",
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
-#ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/Ptuh-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
+ggsave("../output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-significant_miRNA_mRNA_network.png", p, width = 12, height = 10, dpi = 300)
 ```
 

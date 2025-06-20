@@ -2,7 +2,22 @@
 title: "Apul miRNA lncRNA interactions"
 author: "Jill Ashey"
 date: "2025-05-08"
-output: html_document
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
 ---
 
 This code will use Pearson's correlation coefficient to examine possible correlations between miRNA and lncRNA expression. This will then be compared to the miRanda interaction results of the miRNAs and lncRNAs. 
@@ -15,9 +30,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 #library(mirTarRnaSeq)
 library(reshape2)
-library(SPONGE)
+#library(SPONGE)
 library(pheatmap)
-library(energy)
+#library(energy)
 library(parallel)
 library(ggraph)
 library(tidygraph)
@@ -28,7 +43,7 @@ library(gridExtra)
 
 Read in miRNA data
 ```{r}
-miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
 # Remove any miRNAs with 0 for all samples 
@@ -43,17 +58,16 @@ colnames(miRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", 
 
 Read in lncRNA data
 ```{r}
-lncRNA_counts<-read_table(file="../../D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1)%>%
-  select(!c("Chr", "Start", "End", "Strand", "Length"))%>%
-  rename("lncrna_id"=Geneid, 
-         "sample140"=`../output/07-Apul-Hisat/RNA-ACR-140.sorted.bam`, 
-         "sample145"=`../output/07-Apul-Hisat/RNA-ACR-145.sorted.bam`, 
-         "sample150"=`../output/07-Apul-Hisat/RNA-ACR-150.sorted.bam`, 
-         "sample173"=`../output/07-Apul-Hisat/RNA-ACR-173.sorted.bam`, 
-         "sample178"=`../output/07-Apul-Hisat/RNA-ACR-178.sorted.bam`)
+lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Apul_counts_dedup.txt", skip=1) %>%
+  rename("lncrna_id"=Geneid,
+         "sample140"=`../data/RNA-ACR-140.sorted.bam`,
+         "sample145"=`../data/RNA-ACR-145.sorted.bam`,
+         "sample150"=`../data/RNA-ACR-150.sorted.bam`,
+         "sample173"=`../data/RNA-ACR-173.sorted.bam`,
+         "sample178"=`../data/RNA-ACR-178.sorted.bam`)
 
 # Change to df 
-lncRNA_counts_df <- as.data.frame(lncRNA_counts)
+lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
 row.names(lncRNA_counts_df) <- lncRNA_counts_df[,1]
 lncRNA_counts_df <- lncRNA_counts_df[,-1]  # remove the first column (gene names) if needed
 
@@ -81,7 +95,7 @@ lncRNA_norm <- normalize_counts(lncRNA_counts_df)
 ```
 
 Calculate PCC  
-```{r}
+```{r, eval=FALSE}
 # Function to calculate PCC and p-value for a pair of vectors
 calc_pcc <- function(x, y) {
   result <- cor.test(x, y, method = "pearson")
@@ -102,6 +116,14 @@ pcc_results <- pairs %>%
 # Adjust p-values for FDR
 pcc_results <- pcc_results %>%
   mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
+
+# Save
+write.csv(pcc_results, "../output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv")
+```
+
+Read back in PCC results (available in large-file storage at `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv`)
+```{r}
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv")
 ```
 
 Read in miranda data
@@ -120,32 +142,26 @@ miranda_apul$lncRNA <- sub(".*::", "", miranda_apul$lncRNA)  # Remove everything
 
 To join the miranda results with the correlation results, I need the chromosome, start and end information, which can be found in the count matrix
 ```{r}
-lncRNA_names<-read_table(file="../../D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1)%>%
-  #select(c("Geneid", "Chr", "Start", "End")) %>%
-    rename("lncrna_id"=Geneid, 
-         "sample140"=`../output/07-Apul-Hisat/RNA-ACR-140.sorted.bam`, 
-         "sample145"=`../output/07-Apul-Hisat/RNA-ACR-145.sorted.bam`, 
-         "sample150"=`../output/07-Apul-Hisat/RNA-ACR-150.sorted.bam`, 
-         "sample173"=`../output/07-Apul-Hisat/RNA-ACR-173.sorted.bam`, 
-         "sample178"=`../output/07-Apul-Hisat/RNA-ACR-178.sorted.bam`) %>%
-  mutate(Name = paste0(Chr, ":", Start, "-", End)) %>%
-  mutate(Name = paste0(Chr, ":", Start + 1, "-", End)) %>% # off by one
-  mutate(Total = rowSums(.[, 7:11])) %>%
-  filter(!Total==0 )%>% # Filter by lncRNAs expressed (ie those included in the PCC calculation)
-  dplyr::select(!Total)
+# Build mapping table
+lncRNA_names <- data.frame(
+  lncRNA_id = lncRNA_counts$lncrna_id,
+  lncRNA_coord = paste0(lncRNA_counts$Chr, ":", lncRNA_counts$Start, "-", lncRNA_counts$End)
+)
+
+# Save for future use
+write.table(lncRNA_names, "../output/28-Apul-miRNA-lncRNA-interactions/Apul_lncRNA_mapping.tab")
 ```
 
 Merge the miranda results with `lncRNA_names` to get the associated lncRNA ids with the transcript info
 ```{r}
-miranda_apul_names <- miranda_apul %>%
-  inner_join(lncRNA_names, by = c("lncRNA" = "Name")) %>%
-  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncrna_id))
+miranda_apul_names <- left_join(miranda_apul, lncRNA_names, by = c("lncRNA" = "lncRNA_coord")) %>%
+  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+  unique()
 ```
 
 Now we can merge with the PCC results! 
 ```{r}
-pcc_miranda_apul <- pcc_results %>%
-  inner_join(miranda_apul_names, by = c("miRNA", "lncRNA" = "lncrna_id"))
+pcc_miranda_apul <- left_join(miranda_apul_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA")) %>% unique()
 
 # Write as csv 
 write.csv(pcc_miranda_apul, "../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv")
@@ -160,12 +176,14 @@ length(unique(pcc_miranda_apul$lncRNA))
 
 # Are there any pairs that have a PCC correlation > |0.5| and a p-value < 0.05?
 sig_pairs <- pcc_miranda_apul %>%
-  filter(abs(PCC.cor) > 0.5 & p_value < 0.05)
+  filter(abs(PCC.cor) > 0.5 & p_value < 0.05) %>% 
+  select(-X, -X.1)
 cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(sig_pairs), "\n")
 
 # Are there any pairs that have a PCC correlation > |0.5|, a p-value < 0.05, and a query similarity >75%?
 sig_pairs_similar <- pcc_miranda_apul %>%
-  filter(abs(PCC.cor) > 0.5 & p_value < 0.05 & query_similar > 75.00)
+  filter(abs(PCC.cor) > 0.5 & p_value < 0.05 & query_similar > 75.00) %>% 
+  select(-X, -X.1)
 cat("PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%:", nrow(sig_pairs_similar), "\n")
 length(unique(sig_pairs_similar$miRNA))
 length(unique(sig_pairs_similar$lncRNA))
@@ -180,29 +198,52 @@ cat("Number of rows with negative PCC.cor:", negative_count, "\n")
 How many miRNAs per lncRNA and vice versa for the sig pairs? For sig pairs similar? 
 ```{r}
 ## sig pairs 
-miRNAs_per_lncRNA <- sig_pairs %>%
-  group_by(lncRNA) %>%
-  summarize(n_miRNAs = n_distinct(miRNA)) %>%
-  arrange(desc(n_miRNAs))
-
 lncRNAs_per_miRNA <- sig_pairs %>%
   group_by(miRNA) %>%
   summarize(n_lncRNAs = n_distinct(lncRNA)) %>%
   arrange(desc(n_lncRNAs))
 
+print("lncRNAs per miRNA, significant. mean, range:")
+mean(lncRNAs_per_miRNA$n_lncRNAs)
+range(lncRNAs_per_miRNA$n_lncRNAs)
+
+cat("\n")
+
+miRNAs_per_lncRNA <- sig_pairs %>%
+  group_by(lncRNA) %>%
+  summarize(n_miRNAs = n_distinct(miRNA)) %>%
+  arrange(desc(n_miRNAs))
+
+print("miRNAs per lncRNA, significnat. mean, range:")
+mean(miRNAs_per_lncRNA$n_miRNAs)
+range(miRNAs_per_lncRNA$n_miRNAs)
+
+cat("\n")
+
 ## sig pairs similar 
+lncRNAs_per_miRNA_sim <- sig_pairs_similar %>%
+  group_by(miRNA) %>%
+  summarize(n_lncRNAs = n_distinct(lncRNA)) %>%
+  arrange(desc(n_lncRNAs))
+
+print("lncRNAs per miRNA, significant and similar. mean, range:")
+mean(lncRNAs_per_miRNA_sim$n_lncRNAs)
+range(lncRNAs_per_miRNA_sim$n_lncRNAs)
+
+cat("\n")
+
 miRNAs_per_lncRNA_sim <- sig_pairs_similar %>%
   group_by(lncRNA) %>%
   summarize(n_miRNAs = n_distinct(miRNA)) %>%
   arrange(desc(n_miRNAs))
 
-lncRNAs_per_miRNA_sim <- sig_pairs_similar %>%
-  group_by(miRNA) %>%
-  summarize(n_lncRNAs = n_distinct(lncRNA)) %>%
-  arrange(desc(n_lncRNAs))
+print("miRNAs per lncRNA, significnat and similar. mean, range:")
+mean(miRNAs_per_lncRNA_sim$n_miRNAs)
+range(miRNAs_per_lncRNA_sim$n_miRNAs)
+
 ```
 
-For the significant pairs, the miRNAs can interact with 10-171 unique lncRNAs, while the lncRNAs can interact with with 1-8 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 2-50 unique lncRNAs, while the lncRNAs can interact with 1-7 unique miRNAs. Interesting! 
+For the significant pairs, the miRNAs can interact with 4-120 unique lncRNAs, while the lncRNAs can interact with with 1-6 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 2-47 unique lncRNAs, while the lncRNAs can interact with 1-4 unique miRNAs. Interesting! 
 
 Plot as a network plot with the miRNAs as the primary nodes for `sig_pairs` 
 ```{r}
