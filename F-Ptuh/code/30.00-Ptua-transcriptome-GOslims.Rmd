@@ -1,0 +1,586 @@
+---
+title: "30.00-Ptua-transcriptome-GOslims"
+author: "Sam White"
+date: "2025-06-20"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: references.bib
+---
+
+# BACKGROUND
+
+This notebook will perform annotation of expressed genes, as previously determined by [`06.2-Peve-Hisat.qmd`](https://github.com/urol-e5/deep-dive-expression/blob/7958cd3fdd10f4f80fb499d60e8befa55f3600a7/E-Peve/code/06-Peve-Hisat.qmd) (GitHub).
+
+Briefly, the notebook will perform the following tasks:
+
+1.  Extract all genes from the genome, as GFF and FastA.
+
+2.  Create a subset of only *expressed* genes, based on gene count matrix.
+
+3.  BLASTx expressed genes against SwissProt database.
+
+4.  Get gene ontology.
+
+5.  Map gene ontology to GOslims and get counts.
+
+::: callout-important
+Expressed genes were defined as those genes having at least one count across all samples.
+:::
+
+## INPUTS
+
+-   Gene count matrix
+
+-   Genome FastA
+
+-   Genome GFF
+
+## OUTPUTS
+
+-   Genes BED
+
+-   Genes FastA
+
+-   Expressed genes FastA
+
+-   Expressed genes SwissProt IDs only file.
+
+-   Expressed genes to SwissProt IDs mapping file.
+
+-   Expressed genes to SwissProtIDs and GO mapping file.
+
+-   Counts file of expressed genes GOslims.
+
+## SOFTWARE
+
+-   [DIAMOND BLAST](https://github.com/bbuchfink/diamond) [@buchfink2021]
+
+-   [bedtools](https://github.com/arq5x/bedtools2) [@quinlan2010]
+
+-   [samtools](https://github.com/samtools/samtools) [@danecek2021]
+
+-   [Biostrings](https://bioconductor.org/packages/release/bioc/html/Biostrings.html) [@h.pagès2017] (Bioconductor R package)
+
+-   [GO.db](https://www.bioconductor.org/packages/release/data/annotation/html/GO.db.html) [@carlson2017] (Bioconductor R package)
+
+-   [GSEABase](https://www.bioconductor.org/packages/release/bioc/html/GSEABase.html) [@martinmorgan2017] (Bioconductor R package)
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(Biostrings)
+library(GSEABase)
+library(GO.db)
+
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = TRUE,        # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+# VARIABLES
+
+```{r variables}
+# DIRECTORIES
+top_output_dir <- file.path("..", "output")
+output_dir <- file.path(top_output_dir, "30.00-Ptua-transcriptome-GOslims")
+data_dir <- file.path("..", "data")
+
+# PROGRAMS
+blastdbs_dir <- file.path("..", "..", "M-multi-species", "data", "blastdbs")
+programs_dir <- file.path("", "home", "shared")
+bedtools_dir <- file.path(programs_dir, "bedtools-v2.30.0", "bin")
+blast_dir <- file.path(programs_dir, "ncbi-blast-2.15.0+", "bin")
+diamond <- file.path(programs_dir, "diamond-2.1.8")
+fastaFromBed <- file.path(bedtools_dir, "fastaFromBed")
+samtools_dir <- file.path(programs_dir, "samtools-1.12")
+samtools <- file.path(samtools_dir, "samtools")
+
+
+
+# FILES
+count_matrix <- file.path(top_output_dir, "06.2-Ptuh-Hisat/gene_count_matrix.csv")
+diamond_db <- "20250620-diamond"
+diamond_output <- file.path(output_dir, "Ptuahiniensis-expressed-genes.blastx.outfmt6")
+genome_fasta <- file.path(data_dir, "Pocillopora_meandrina_HIv1.assembly.fasta")
+genes_fasta <- file.path(output_dir, "Ptuahiniensis-genes.fasta")
+genes_fasta_index <- file.path(output_dir, "Ptuahiniensis-genes.fasta.fai")
+genes_subset_fasta <- file.path(output_dir, "Ptuahiniensis-subset-genes.fasta")
+genes_subset_fasta_index <- file.path(output_dir, "Ptuahiniensis-subset-genes.fasta.fai")
+genes_bed <- file.path(output_dir, "Ptuahiniensis-genes.bed")
+og_genome_gff <- file.path(data_dir, "Pocillopora_meandrina_HIv1.genes-validated.gff3")
+
+# THREADS
+threads <- "40"
+
+##### Official GO info - no need to change #####
+goslims_obo <- "goslim_generic.obo"
+goslims_url <- "http://current.geneontology.org/ontology/subsets/goslim_generic.obo"
+
+# FORMATTING
+line <- "-----------------------------------------------"
+
+# Export these as environment variables for bash chunks.
+Sys.setenv(
+  blastdbs_dir = blastdbs_dir,
+  count_matrix = count_matrix,
+  data_dir = data_dir,
+  diamond = diamond,
+  diamond_db = diamond_db,
+  diamond_output = diamond_output,
+  fastaFromBed = fastaFromBed,
+  genes_bed = genes_bed,
+  genes_fasta = genes_fasta,
+  genes_fasta_index = genes_fasta_index,
+  genes_subset_fasta = genes_subset_fasta,
+  genes_subset_fasta_index = genes_subset_fasta_index,
+  genome_fasta = genome_fasta,
+  og_genome_gff = og_genome_gff,
+  output_dir = output_dir,
+  top_output_dir = top_output_dir,
+  line = line,
+  samtools = samtools,
+  threads = threads
+)
+```
+
+# Extract genes as FastA
+
+## Extract genes from GFF
+
+```{r extract-genes-from-gff}
+
+# Read GFF, skipping comment lines
+genome_gff <- readr::read_tsv(
+  og_genome_gff,
+  comment = "#",
+  col_names = c("seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes")
+)
+
+# Filter for gene features
+genes <- as.data.frame(genome_gff) %>%
+  filter(type == "gene") %>%
+  mutate(
+    chrom = seqid,
+    start = start - 1,  # BED is 0-based
+    end = end,
+    gene_id = sub("ID=([^;]+);?.*", "\\1", attributes)
+  ) %>%
+  dplyr::select(chrom, start, end, gene_id)
+
+str(genes)
+```
+
+### Write genes to BED
+
+```{r write-genes-to-bed}
+# Write to BED
+write_tsv(genes, genes_bed, col_names = FALSE)
+```
+
+## Create genes FastA
+
+```{r create-genes-FastA, engine='bash'}
+
+"${fastaFromBed}" -fi "${genome_fasta}" -bed "${genes_bed}" -nameOnly > "${genes_fasta}"
+
+# Create FastA index
+"${samtools}" faidx "${genes_fasta}"
+
+head "${genes_fasta}"
+
+echo ""
+echo ""
+
+head "${genes_fasta_index}"
+```
+
+# Subset Expressed Genes
+
+Only those with at least *one* read in each sample
+
+### Peek at count matrix
+
+```{r check-count-matrix, engine='bash'}
+head "${count_matrix}" | column -t -s","
+
+echo ""
+echo ""
+
+wc -l "${count_matrix}"
+```
+
+## Import count matrix
+
+```{r import-count-matrix}
+
+# Read the data into a data frame
+count_matrix_df <- read.csv(count_matrix, header = TRUE)
+
+str(count_matrix_df)
+```
+
+## Only genes with at least one read per sample
+
+```{r subset-count-matrix}
+# Filter rows where all values are greater than 0
+filtered_count_matrix_df <- count_matrix_df[apply(count_matrix_df > 0, 1, all), ]
+
+
+str(filtered_count_matrix_df)
+```
+
+## Subset genes FastA
+
+Only expressed genes
+
+```{r subset-genes-FastA}
+# Get the row names (gene_ids) of the filtered data frame
+filtered_gene_ids <- filtered_count_matrix_df$gene_id
+
+fasta <- readDNAStringSet(genes_fasta)
+
+subset_fasta <- fasta[names(fasta) %in% filtered_gene_ids]
+
+```
+
+```{r write-genes-subset-fasta}
+writeXStringSet(subset_fasta, genes_subset_fasta)
+```
+
+### Peek at genes subset FastA
+
+```{r check-genes-subset-fasta, engine='bash'}
+head "${genes_subset_fasta}"
+
+echo ""
+grep "^>" --count "${genes_subset_fasta}"
+```
+
+# BLASTx
+
+## Download SwissProt
+
+```{r download-sp, engine='bash'}
+cd "${blastdbs_dir}"
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+
+mv uniprot_sprot.fasta.gz 20250618-uniprot_sprot.fasta.gz
+
+gunzip --keep 20250618-uniprot_sprot.fasta.gz
+```
+
+## Create BLASTdb
+
+```{r create-BLASTdb, engine='bash'}
+cd "${blastdbs_dir}"
+
+"${diamond}" makedb \
+--in 20250618-uniprot_sprot.fasta.gz \
+--db "${diamond_db}" \
+--quiet \
+--threads "${threads}"
+```
+
+## Run DIAMOND BLASTx
+
+```{r diamond-blast, engine='bash'}
+"${diamond}" blastx \
+--db "${blastdbs_dir}"/"${diamond_db}.dmnd" \
+--query "${genes_subset_fasta}" \
+--out "${diamond_output}" \
+--outfmt 6  \
+--sensitive \
+--evalue 1e-10 \
+--max-target-seqs 1 \
+--block-size 15.0 \
+--index-chunks 4 \
+--threads "${threads}" \
+2> "${output_dir}"/diamond-blastx.log
+
+head "${diamond_output}"
+
+echo ""
+
+wc -l "${diamond_output}"
+```
+
+# GENE ONTOLOGY
+
+## Get gene IDs and SwissProt IDs
+
+```{r gene-and-SPIDs, engine='bash'}
+awk -F"|" '{print $1"\t"$2}' "${diamond_output}" \
+| awk '{print $1"\t"$3}' \
+> "${output_dir}"/gene-SPIDs.txt
+
+head "${output_dir}"/gene-SPIDs.txt
+
+echo ""
+echo ""
+
+wc -l "${output_dir}"/gene-SPIDs.txt
+```
+
+## Get SwissProt IDs
+
+```{r get-SPIDs, engine='bash'}
+awk -F"|" '{print $2}' "${diamond_output}" \
+| sort --unique \
+> "${output_dir}"/SPIDs.txt
+
+head "${output_dir}"/SPIDs.txt
+
+echo ""
+echo ""
+
+wc -l "${output_dir}"/SPIDs.txt
+```
+
+## Retrieve UniProt records
+
+A difference in number of records could be due to retrieval from only "reviewed" records, while BLAST may have included both "reviewed" and "unreviewed." SwissProt records
+
+```{r uniprot-records, engine='bash'}
+python3 \
+../../M-multi-species/code/uniprot-retrieval.py \
+"${output_dir}"/SPIDs.txt \
+"${output_dir}"/
+
+gunzip "${output_dir}"/uniprot-retrieval.tsv.gz
+
+echo ""
+echo ""
+
+wc -l "${output_dir}"/uniprot-retrieval.tsv
+```
+
+## Map GO to Genes
+
+```{r merge-genes-GOIDs}
+# Read gene-SPIDs.txt
+gene_spids <- read.delim(file.path(output_dir, "gene-SPIDs.txt"), header = FALSE, stringsAsFactors = FALSE)
+
+colnames(gene_spids) <- c("GeneID", "Entry")
+
+# Read uniprot-retrieval.tsv
+uniprot <- read.delim(
+  file.path(output_dir, "uniprot-retrieval.tsv"),
+  header = TRUE,
+  stringsAsFactors = FALSE,
+  check.names = FALSE
+)
+
+# Merge on Entry
+gene_SPID_GOID_merged <- merge(gene_spids, uniprot[, c("Entry", "Gene Ontology IDs")], by = "Entry", all.x = TRUE)
+
+# View result
+str(gene_SPID_GOID_merged)
+```
+
+### Write merged to file
+
+```{r write-merged-gene-SP-GO}
+# Optionally, write to file
+write.table(gene_SPID_GOID_merged, 
+            file = file.path(output_dir, "gene-SPIDs-GOIDs.tsv"), 
+            sep = "\t", 
+            row.names = FALSE, 
+            quote = FALSE)
+```
+
+## Clean up merged
+
+```{r remove-NA-and-uniprotIDs, eval=TRUE}
+
+full.gene.df <- as.data.frame(gene_SPID_GOID_merged)
+
+# Clean whitespace, filter NA/empty rows, select columns, and split GO terms using column name variables
+gene.GO.df <- full.gene.df %>%
+  mutate(!!"Gene Ontology IDs" := str_replace_all(.data[["Gene Ontology IDs"]], "\\s*;\\s*", ";")) %>% # Clean up spaces around ";"
+  filter(!is.na(.data[["GeneID"]]) & !is.na(.data[["Gene Ontology IDs"]]) & .data[["Gene Ontology IDs"]] != "") %>% 
+  dplyr::select(all_of(c("GeneID", "Gene Ontology IDs")))
+
+
+str(gene.GO.df)
+```
+
+## Flatten gene GOID file
+
+```{r flatten-gene-and-GO-IDs, eval=TRUE}
+flat.gene.GO.df <- gene.GO.df %>% separate_rows(!!sym("Gene Ontology IDs"), sep = ";")
+
+str(flat.gene.GO.df)
+```
+
+## Group by GOID
+
+```{r group-by-GO, eval=TRUE}
+grouped.gene.GO.df <- flat.gene.GO.df %>%
+  group_by(!!sym("Gene Ontology IDs")) %>%
+  summarise(!!"GeneID" := paste(.data[["GeneID"]], collapse = ","))
+
+str(grouped.gene.GO.df)
+```
+
+## Vectorize GOIDs
+
+```{r vectorize-GOIDs, eval=TRUE}
+# Vector of GO IDs
+go_ids <- grouped.gene.GO.df[["Gene Ontology IDs"]]
+
+str(go_ids)
+```
+
+## Prepare GOslim OBO
+
+```{r download-generic-goslim-obo, eval=TRUE}
+# Find GSEAbase installation location
+gseabase_location <- find.package("GSEABase")
+
+# Load path to GOslim OBO file
+goslim_obo_destintation <- file.path(gseabase_location, "extdata", goslims_obo, fsep = "/")
+
+# Download the GOslim OBO file
+download.file(url = goslims_url, destfile = goslim_obo_destintation)
+
+# Loads package files
+gseabase_files <- system.file("extdata", goslims_obo, package="GSEABase")
+```
+
+## GOslims from OBO
+
+```{r extract-GOslims-from-OBO, eval=TRUE}
+
+# Create GSEAbase GOCollection using `go_ids`
+myCollection <- GOCollection(go_ids)
+
+# Retrieve GOslims from GO OBO file set
+slim <- getOBOCollection(gseabase_files)
+
+str(slim)
+```
+
+## Biological Process GOslims
+
+```{r retrieve-BP-GOslims, eval=TRUE}
+# Retrieve Biological Process (BP) GOslims
+slimdf <- goSlim(myCollection, slim, "BP", verbose)
+
+str(slimdf)
+```
+
+## Map GO to GOslims
+
+```{r map-GO-to-GOslims, eval=TRUE}
+# List of GOslims and all GO IDs from `go_ids`
+gomap <- as.list(GOBPOFFSPRING[rownames(slimdf)])
+
+# Maps `go_ids` to matching GOslims
+mapped <- lapply(gomap, intersect, ids(myCollection))
+
+# Append all mapped GO IDs to `slimdf`
+# `sapply` needed to apply paste() to create semi-colon delimited values
+slimdf$GO.IDs <- sapply(lapply(gomap, intersect, ids(myCollection)), paste, collapse=";")
+
+# Remove "character(0) string from "GO.IDs" column
+slimdf$GO.IDs[slimdf$GO.IDs == "character(0)"] <- ""
+
+# Add self-matching GOIDs to "GO.IDs" column, if not present
+for (go_id in go_ids) {
+  # Check if the go_id is present in the row names
+  if (go_id %in% rownames(slimdf)) {
+    # Check if the go_id is not present in the GO.IDs column
+    # Also removes white space "trimws()" and converts all to upper case to handle
+    # any weird, "invisible" formatting issues.
+    if (!go_id %in% trimws(toupper(strsplit(slimdf[go_id, "GO.IDs"], ";")[[1]]))) {
+      # Append the go_id to the GO.IDs column with a semi-colon separator
+      if (length(slimdf$GO.IDs) > 0 && nchar(slimdf$GO.IDs[nrow(slimdf)]) > 0) {
+        slimdf[go_id, "GO.IDs"] <- paste0(slimdf[go_id, "GO.IDs"], "; ", go_id)
+      } else {
+        slimdf[go_id, "GO.IDs"] <- go_id
+      }
+    }
+  }
+}
+
+str(slimdf)
+```
+
+## Flatten GOslims
+
+```{r flatten-GOslims-file, eval=TRUE}
+# "Flatten" file so each row is single GO ID with corresponding GOslim
+# rownames_to_column needed to retain row name info
+slimdf_separated <- as.data.frame(slimdf %>%
+  rownames_to_column('GOslim') %>%
+  separate_rows(GO.IDs, sep = ";"))
+
+# Group by unique GO ID
+grouped_slimdf <- slimdf_separated %>%
+  filter(!is.na(GO.IDs) & GO.IDs != "") %>%
+  group_by(GO.IDs) %>%
+  summarize(GOslim = paste(GOslim, collapse = ";"),
+            Term = paste(Term, collapse = ";"))
+
+
+str(grouped_slimdf)
+```
+
+## Counts of GOslims
+
+```{r sort-and-select-slimdf-counts, eval=TRUE}
+
+slimdf.sorted <- slimdf %>% arrange(desc(Count))
+
+slim.count.df <- slimdf.sorted %>% 
+  dplyr::select(Term, Count, Percent)
+
+str(slim.count.df)
+```
+
+### Write GOslims to file
+
+Need to create a column name for GOslimIDs from data frame rownames.
+
+```{r write-goslim-counts-to-file}
+# Create header vector
+header <- c("GOslimID", colnames(slim.count.df))
+
+# Write header to file
+writeLines(paste(header, collapse = "\t"), 
+           file.path(output_dir, "GOslim-counts.tsv"))
+
+# Append data frame contents to existing file, which contains header info
+write.table(
+  slim.count.df,
+  file = file.path(output_dir, "GOslim-counts.tsv"),
+  sep = "\t",
+  row.names = TRUE,
+  quote = FALSE,
+  col.names = FALSE,
+  append = TRUE
+)
+```
+
+# REFERENCES
