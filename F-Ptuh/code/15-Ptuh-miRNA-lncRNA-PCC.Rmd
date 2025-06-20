@@ -3,6 +3,9 @@ title: "15-Ptuh-miRNA-lncRNA-PCC"
 author: "Kathleen Durkin"
 date: "2025-06-19"
 output: 
+  github_document:
+    toc: true
+    number_sections: true
   bookdown::html_document2:
     theme: cosmo
     toc: true
@@ -10,9 +13,6 @@ output:
     number_sections: true
     code_folding: show
     code_download: true
-  github_document:
-    toc: true
-    number_sections: true
   html_document:
     theme: cosmo
     toc: true
@@ -36,13 +36,13 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-library(energy)
+#library(energy)
 library(parallel)
-# library(ggraph)
-# library(tidygraph)
-# library(igraph)
-# library(genefilter)
-# library(gridExtra)
+library(ggraph)
+library(tidygraph)
+library(igraph)
+library(genefilter)
+library(gridExtra)
 ```
 
 Read in miRNA data
@@ -130,6 +130,12 @@ Files too large for Github, so available in large-file storage:
 `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv`
 `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_sig_miRNA_lncRNA.csv`
 
+Read back in if needed
+```{r}
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv")
+pcc_results_sig <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_sig_miRNA_lncRNA.csv")
+```
+
 
 # Merge with miRanda
 
@@ -153,29 +159,26 @@ Now I need to be able to associate the lncRNA IDs used in the count matrix (e.g.
 ```{r}
 # Build mapping table
 lncRNA_mapping <- data.frame(
-  lncRNA_id = lncRNA_counts_filt$lncrna_id,
-  lncRNA_coord = paste0(lncRNA_counts_filt$Chr, ":", lncRNA_counts_filt$Start, "-", lncRNA_counts_filt$End)
+  lncRNA_id = lncRNA_counts$lncrna_id,
+  lncRNA_coord = paste0(lncRNA_counts$Chr, ":", lncRNA_counts$Start, "-", lncRNA_counts$End)
 )
 
 # Save for future use
 write.table(lncRNA_mapping, "../output/15-Ptuh-miRNA-lncRNA-PCC/Ptuh_lncRNA_mapping.tab")
-
-# Seems to be a duplicates issue (multiple unique lncRNA ids represent the same coordinates/counts)
-# May only be some instances of all-zero counts, so reduce this mapping to only keep lncRNA included in the PCC calc
-lncRNA_mapping_filt <- lncRNA_mapping[lncRNA_mapping$lncRNA_id %in% rownames(lncRNA_counts_df),]
 ```
 
 ## Merge
 
 Merge the miranda results with `lncRNA_mapping` to get the associated lncRNA ids with the transcript info
 ```{r}
-miranda_Ptuh_names <- left_join(miranda_Ptuh, lncRNA_mapping_filt, by = c("lncRNA" = "lncRNA_coord")) %>%
-  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id))
+miranda_Ptuh_names <- left_join(miranda_Ptuh, lncRNA_mapping, by = c("lncRNA" = "lncRNA_coord")) %>%
+  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+  unique()
 ```
 
 Now we can merge with the PCC results! 
 ```{r}
-pcc_miranda_Ptuh <- left_join(miranda_Ptuh_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA"))
+pcc_miranda_Ptuh <- left_join(miranda_Ptuh_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA")) %>% unique()
 
 # Write as csv 
 write.csv(pcc_miranda_Ptuh, "../output/15-Ptuh-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv")
@@ -257,7 +260,7 @@ range(miRNAs_per_lncRNA_sim$n_miRNAs)
 
 ```
 
-For the significant pairs, the miRNAs can interact with 3-128 unique lncRNAs, while the lncRNAs can interact with with 1-4 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-68 unique lncRNAs, while the lncRNAs can interact with 1-3 unique miRNAs. Interesting! 
+For the significant pairs, the miRNAs can interact with 1-129 unique lncRNAs, while the lncRNAs can interact with with 1-3 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-64 unique lncRNAs, while the lncRNAs can interact with 1-3 unique miRNAs. These numbers are very similar to the other species!
 
 Plot as a network plot with the miRNAs as the primary nodes for `sig_pairs` 
 ```{r}
