@@ -1,0 +1,24 @@
+---
+title: "17-Ptuh-lncRNA"
+output: html_document
+date: "2025-06-20"
+author: Steven Roberts
+---
+
+
+how good is 
+https://sr320.github.io/tumbling-oysters/posts/39-lncRNA/
+
+```{r}
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,        # Avoid automatic execution
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set default plot width
+  fig.height = 4,      # Set default plot height
+  fig.align = "center", # Center align plots
+  comment = ""         # Prevents '##' in output
+)
+```
+
