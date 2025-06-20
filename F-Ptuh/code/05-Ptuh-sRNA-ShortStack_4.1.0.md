@@ -3,25 +3,40 @@
 Kathleen Durkin
 2024-10-22
 
-- [1 Set R variables](#1-set-r-variables)
-- [2 Create a Bash variables file](#2-create-a-bash-variables-file)
-- [3 Load ShortStack conda
-  environment](#3-load-shortstack-conda-environment)
-  - [3.1 P.meandrina genome](#31-pmeandrina-genome)
-  - [3.2 Cnidarian+miRBase database](#32-cnidarianmirbase-database)
-  - [3.3 Trimmed sRNA-seq reads](#33-trimmed-srna-seq-reads)
-- [4 Run ShortStack](#4-run-shortstack)
-  - [4.1 Modify genome filename for ShortStack
-    compatability](#41-modify-genome-filename-for-shortstack-compatability)
-  - [4.2 Excecute ShortStack command](#42-excecute-shortstack-command)
-  - [4.3 Check runtime](#43-check-runtime)
-- [5 Results](#5-results)
-  - [5.1 ShortStack synopsis](#51-shortstack-synopsis)
-  - [5.2 Inspect `Results.txt`](#52-inspect-resultstxt)
-    - [5.2.1 Directory tree of all ShortStack
-      outputs](#521-directory-tree-of-all-shortstack-outputs)
-  - [5.3 Visualize](#53-visualize)
-- [6 Citations](#6-citations)
+- <a href="#1-set-r-variables" id="toc-1-set-r-variables">1 Set R
+  variables</a>
+- <a href="#2-create-a-bash-variables-file"
+  id="toc-2-create-a-bash-variables-file">2 Create a Bash variables
+  file</a>
+- <a href="#3-load-shortstack-conda-environment"
+  id="toc-3-load-shortstack-conda-environment">3 Load ShortStack conda
+  environment</a>
+  - <a href="#31-pmeandrina-genome" id="toc-31-pmeandrina-genome">3.1
+    P.meandrina genome</a>
+  - <a href="#32-cnidarianmirbase-database"
+    id="toc-32-cnidarianmirbase-database">3.2 Cnidarian+miRBase database</a>
+  - <a href="#33-trimmed-srna-seq-reads"
+    id="toc-33-trimmed-srna-seq-reads">3.3 Trimmed sRNA-seq reads</a>
+- <a href="#4-run-shortstack" id="toc-4-run-shortstack">4 Run
+  ShortStack</a>
+  - <a href="#41-modify-genome-filename-for-shortstack-compatability"
+    id="toc-41-modify-genome-filename-for-shortstack-compatability">4.1
+    Modify genome filename for ShortStack compatability</a>
+  - <a href="#42-excecute-shortstack-command"
+    id="toc-42-excecute-shortstack-command">4.2 Excecute ShortStack
+    command</a>
+  - <a href="#43-check-runtime" id="toc-43-check-runtime">4.3 Check
+    runtime</a>
+- <a href="#5-results" id="toc-5-results">5 Results</a>
+  - <a href="#51-shortstack-synopsis" id="toc-51-shortstack-synopsis">5.1
+    ShortStack synopsis</a>
+  - <a href="#52-inspect-resultstxt" id="toc-52-inspect-resultstxt">5.2
+    Inspect <code>Results.txt</code></a>
+    - <a href="#521-directory-tree-of-all-shortstack-outputs"
+      id="toc-521-directory-tree-of-all-shortstack-outputs">5.2.1 Directory
+      tree of all ShortStack outputs</a>
+  - <a href="#53-visualize" id="toc-53-visualize">5.3 Visualize</a>
+- <a href="#6-citations" id="toc-6-citations">6 Citations</a>
 
 Use [ShortStack](https://github.com/MikeAxtell/ShortStack) ([Axtell
 2013](#ref-axtell2013a); [Shahid and Axtell 2014](#ref-shahid2014);
@@ -131,29 +146,6 @@ echo 'export trimmed_fastqs_array=()'
 cat .bashvars
 ```
 
-    #### Assign Variables ####
-
-    # Trimmed FastQ naming pattern
-    export trimmed_fastqs_pattern='*fastp-adapters-polyG-31bp-merged.fq.gz'
-    # Data directories
-    export expression_dir=/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression
-    export expression_data_dir="${expression_dir}/data"
-    export output_dir_top=${expression_dir}/F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0
-
-    # Input/Output files
-    export genome_fasta_dir=${expression_dir}/F-Ptuh/data
-    export genome_fasta_name="Pocillopora_meandrina_HIv1.assembly.fa"
-    export shortstack_genome_fasta_name="Pocillopora_meandrina_HIv1.assembly.fa"
-    export trimmed_fastqs_dir="${genome_fasta_dir}/sRNA-trimmed-reads"
-    export mirbase_mature_fasta_version=cnidarian-mirbase-mature-v22.1.fasta
-    export genome_fasta="${genome_fasta_dir}/${shortstack_genome_fasta_name}"
-
-    # Set number of CPUs to use
-    export threads=40
-
-    # Initialize arrays
-    export trimmed_fastqs_array=()
-
 # 3 Load [ShortStack](https://github.com/MikeAxtell/ShortStack) conda environment
 
 If this is successful, the first line of output should show that the
@@ -169,15 +161,6 @@ E.g.
 use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
 py_config()
 ```
-
-    python:         /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/python
-    libpython:      /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/lib/libpython3.12.so
-    pythonhome:     /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env:/home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env
-    version:        3.12.7 | packaged by conda-forge | (main, Oct  4 2024, 16:05:46) [GCC 13.3.0]
-    numpy:          /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/lib/python3.12/site-packages/numpy
-    numpy_version:  2.1.1
-
-    NOTE: Python version was forced by use_python() function
 
 Note: I sometimes get an error “failed to initialize requested version
 of Python,” which seems to stem from the `reticulate` package default
@@ -202,17 +185,6 @@ source .bashvars
 head ${genome_fasta_dir}/${shortstack_genome_fasta_name} | cut -c 1-100
 ```
 
-    >Pocillopora_meandrina_HIv1___Sc0000000
-    TTCCTTTATTATTGCTCGAAACTGGCGAAAGATATATTCAATTAGGGGCTCACTGTGCGATGCAAAGGTTATGACAGCATGTGTAGCCTATTATTAACGT
-    >Pocillopora_meandrina_HIv1___Sc0000001
-    CCTAAACCCTACATACCCTAACCTACCCTAACCCTAAGCACCTAAACCCTAACCCTAACCCTACACCCTAACCCCTAACCCTAACCCTAACCCAACCCCT
-    >Pocillopora_meandrina_HIv1___Sc0000002
-    TTATGGCGTAGGCACTTATAAGGCTGGCAGGACCAACAGGGACAGAGCAACAGGAGGCGTTCCGATCTCTTTACACCTGGCTCAACCGTCTTTTACAAGG
-    >Pocillopora_meandrina_HIv1___Sc0000003
-    GACCTCAAAAAAAAAGGAAAAAGCAAAAGGACAAAGAGGAGAAGAAAAAAAACAGAACGAGAACTCTAAGAAGATCCCTTTTCTTCGCTATTGTTGTTTG
-    >Pocillopora_meandrina_HIv1___Sc0000004
-    TCTAAGGTGATCTTTGGATTGCCTGATTAATTTTCCACGGTTTGAATTTGAGAATTACAGCTAATCGCCCAGTGAGATCTCCGTGTGAGGATGGTCCTCT
-
 ## 3.2 Cnidarian+miRBase database
 
 Available n `deep-dive` repo,
@@ -232,16 +204,10 @@ source .bashvars
 head -5 ${expression_data_dir}/"${mirbase_mature_fasta_version}"
 ```
 
-    >cel-let-7-5p MIMAT0000001 Caenorhabditis elegans let-7-5p
-    UGAGGUAGUAGGUUGUAUAGUU
-    >cel-let-7-3p MIMAT0015091 Caenorhabditis elegans let-7-3p
-    CUAUGCAAUUUUCUACCUUACC
-    >cel-lin-4-5p MIMAT0000002 Caenorhabditis elegans lin-4-5p
-
 ## 3.3 Trimmed sRNA-seq reads
 
 Trimmed in `deep-dive`,
-[06.2-Peve-sRNAseq-trimming-31bp-fastp-merged](https://github.com/urol-e5/deep-dive/blob/main/F-Ptuh/code/06.2-Peve-sRNAseq-trimming-31bp-fastp-merged.Rmd)
+[06.2-Ptuh-sRNAseq-trimming-31bp-fastp-merged](https://github.com/urol-e5/deep-dive/blob/main/F-Ptuh/code/06.2-Ptuh-sRNAseq-trimming-31bp-fastp-merged.Rmd)
 
 ``` bash
 # Load bash variables into memory
@@ -284,12 +250,6 @@ fi
 # Confirm
 ls -lh ${genome_fasta_dir}/${shortstack_genome_fasta_name}
 ```
-
-    /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fa
-
-    Already exists. Nothing to do.
-
-    -rw-r--r-- 1 shedurkin labmembers 360M May 23  2022 /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fa
 
 ## 4.2 Excecute ShortStack command
 
@@ -339,8 +299,6 @@ tail -n 3 ${output_dir_top}/shortstack.log \
 | grep "real" \
 | awk '{print "ShortStack runtime:" "\t" $2}'
 ```
-
-    ShortStack runtime: 12m18.158s
 
 # 5 Results
 
@@ -502,6 +460,12 @@ tree -h ${output_dir_top}/
     │   ├── [203K]  Ptuh_ShortStack_miRNA_histogram.png
     │   ├── [190K]  Ptuh_ShortStack_miRNA_histogram_reduced.png
     │   └── [199K]  Ptuh_ShortStack_venn.png
+    ├── [3.7K]  Ptuh_ShortStack_4.1.0_mature.fasta
+    ├── [4.7K]  Ptuh_ShortStack_4.1.0_mature.gff3
+    ├── [6.1K]  Ptuh_ShortStack_4.1.0_precursor.fasta
+    ├── [4.6K]  Ptuh_ShortStack_4.1.0_precursor.gff3
+    ├── [3.7K]  Ptuh_ShortStack_4.1.0_star.fasta
+    ├── [4.5K]  Ptuh_ShortStack_4.1.0_star.gff3
     ├── [9.1K]  shortstack.log
     └── [ 20K]  ShortStack_out
         ├── [ 29K]  alignment_details.tsv
@@ -511,6 +475,7 @@ tree -h ${output_dir_top}/
         ├── [184M]  merged_alignments.bam
         ├── [142K]  merged_alignments.bam.csi
         ├── [ 13K]  mir.fasta
+        ├── [ 13K]  Ptuh_Results_mature_named_miRNAs.csv
         ├── [915K]  Results.gff3
         ├── [1.4M]  Results.txt
         ├── [ 33M]  sRNA-POC-47-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed.bam
@@ -604,7 +569,7 @@ tree -h ${output_dir_top}/
             ├── [8.6K]  Cluster_925.ps.pdf
             └── [ 29K]  Cluster_925.txt
 
-    3 directories, 104 files
+    3 directories, 111 files
 
 ## 5.3 Visualize
 
@@ -726,6 +691,21 @@ ggvenn(Ptuh_shortstack_vennlist)
 
 ``` r
 ggsave("../output/05-Ptuh-sRNA-ShortStack_4.1.0/figures/Ptuh_ShortStack_venn.png", width = 12, height = 7, units = "in")
+```
+
+Generate separate fastas and gffs for the precursor, star, and mature
+miRNAs
+
+``` bash
+cd ../output/05-Ptuh-sRNA-ShortStack_4.1.0
+
+awk '/^>/{keep=($0 !~ /mature|star/)} keep' ShortStack_out/mir.fasta > Ptuh_ShortStack_4.1.0_precursor.fasta
+awk '/^>/{keep=($0 ~ /star/)} keep' ShortStack_out/mir.fasta > Ptuh_ShortStack_4.1.0_star.fasta
+awk '/^>/{keep=($0 ~ /mature/)} keep' ShortStack_out/mir.fasta > Ptuh_ShortStack_4.1.0_mature.fasta
+
+awk -F '\t' '$3 == "MIRNA_hairpin"' ShortStack_out/Results.gff3 > Ptuh_ShortStack_4.1.0_precursor.gff3
+awk -F '\t' '$3 == "mature_miRNA"' ShortStack_out/Results.gff3 > Ptuh_ShortStack_4.1.0_mature.gff3
+awk -F '\t' '$3 == "miRNA-star"' ShortStack_out/Results.gff3 > Ptuh_ShortStack_4.1.0_star.gff3
 ```
 
 ------------------------------------------------------------------------

@@ -85,7 +85,7 @@ which conda
 
 # Set R variables
 
-```{r R-variables, eval=TRUE}
+```{r R-variables}
 shortstack_conda_env_name <- c("ShortStack-4.1.0_env")
 shortstack_cond_path <- c("/home/sam/programs/mambaforge/condabin/conda")
 ```
@@ -94,7 +94,7 @@ shortstack_cond_path <- c("/home/sam/programs/mambaforge/condabin/conda")
 
 This allows usage of Bash variables across R Markdown chunks.
 
-```{r save-bash-variables-to-rvars-file, engine='bash', eval=TRUE}
+```{r save-bash-variables-to-rvars-file, engine='bash'}
 {
 echo "#### Assign Variables ####"
 echo ""
@@ -139,7 +139,7 @@ E.g.
 
 `python:         /home/sam/programs/mambaforge/envs/mirmachine_env/bin/python`
 
-```{r load-shortstack-conda-env, eval=TRUE}
+```{r load-shortstack-conda-env}
 use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
 py_config()
 ```
@@ -148,14 +148,14 @@ Note: I sometimes get an error "failed to initialize requested version of Python
 
 ## P.evermanni genome
 
-```{r download-genome, engine='bash', eval=FALSE}
+```{r download-genome, engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
 wget -O ${genome_fasta_dir}/${shortstack_genome_fasta_name} "https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa"
 ```
 
-```{r check-genome, engine='bash', eval=TRUE}
+```{r check-genome, engine='bash'}
 # Load bash vairables into memory
 source .bashvars
 
@@ -173,7 +173,7 @@ source .bashvars
 wget -O ${expression_data_dir}/"${mirbase_mature_fasta_version}" "https://raw.githubusercontent.com/urol-e5/deep-dive/refs/heads/main/data/cnidarian-mirbase-mature-v22.1.fasta"
 ```
 
-```{r check-db-file, engine='bash', eval=TRUE}
+```{r check-db-file, engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
@@ -184,7 +184,7 @@ head -5 ${expression_data_dir}/"${mirbase_mature_fasta_version}"
 
 Trimmed in `deep-dive`, [06.2-Peve-sRNAseq-trimming-31bp-fastp-merged](https://github.com/urol-e5/deep-dive/blob/main/E-Peve/code/06.2-Peve-sRNAseq-trimming-31bp-fastp-merged.Rmd)
 
-```{r download-trimmed-reads, engine='bash', eval=FALSE}
+```{r download-trimmed-reads, engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
@@ -205,7 +205,7 @@ wget \
 
 ## Modify genome filename for ShortStack compatability
 
-```{r rename-genome-filename, engine='bash', cache=TRUE, eval=TRUE}
+```{r rename-genome-filename, engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
@@ -237,7 +237,7 @@ This part of the code redirects the output of `time` to the end of `shortstack.l
 
 
 
-```{r shortstack, engine='bash', cache=TRUE}
+```{r shortstack, engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
@@ -268,7 +268,7 @@ ShortStack \
 
 ## Check runtime
 
-```{r engine='bash', eval=TRUE}
+```{r engine='bash'}
 # Load bash variables into memory
 source .bashvars
 
@@ -466,6 +466,21 @@ ggvenn(Peve_shortstack_vennlist)
 
 ggsave("../output/05-Peve-sRNA-ShortStack_4.1.0/figures/Peve_ShortStack_venn.png", width = 12, height = 7, units = "in")
 ```
+
+
+Generate separate fastas and gffs for the precursor, star, and mature miRNAs
+```{r, engine='bash'}
+cd ../output/05-Peve-sRNA-ShortStack_4.1.0
+
+awk '/^>/{keep=($0 !~ /mature|star/)} keep' ShortStack_out/mir.fasta > Peve_ShortStack_4.1.0_precursor.fasta
+awk '/^>/{keep=($0 ~ /star/)} keep' ShortStack_out/mir.fasta > Peve_ShortStack_4.1.0_star.fasta
+awk '/^>/{keep=($0 ~ /mature/)} keep' ShortStack_out/mir.fasta > Peve_ShortStack_4.1.0_mature.fasta
+
+awk -F '\t' '$3 == "MIRNA_hairpin"' ShortStack_out/Results.gff3 > Peve_ShortStack_4.1.0_precursor.gff3
+awk -F '\t' '$3 == "mature_miRNA"' ShortStack_out/Results.gff3 > Peve_ShortStack_4.1.0_mature.gff3
+awk -F '\t' '$3 == "miRNA-star"' ShortStack_out/Results.gff3 > Peve_ShortStack_4.1.0_star.gff3
+```
+
 
 ------------------------------------------------------------------------
 

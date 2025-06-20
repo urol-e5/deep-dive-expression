@@ -3,25 +3,40 @@
 Kathleen Durkin
 2024-10-02
 
-- [1 Set R variables](#1-set-r-variables)
-- [2 Create a Bash variables file](#2-create-a-bash-variables-file)
-- [3 Load ShortStack conda
-  environment](#3-load-shortstack-conda-environment)
-  - [3.1 A.pulchra genome](#31-apulchra-genome)
-  - [3.2 Cnidarian+miRBase database](#32-cnidarianmirbase-database)
-  - [3.3 Trimmed sRNA-seq reads](#33-trimmed-srna-seq-reads)
-- [4 Run ShortStack](#4-run-shortstack)
-  - [4.1 Modify genome filename for ShortStack
-    compatability](#41-modify-genome-filename-for-shortstack-compatability)
-  - [4.2 Excecute ShortStack command](#42-excecute-shortstack-command)
-  - [4.3 Check runtime](#43-check-runtime)
-- [5 Results](#5-results)
-  - [5.1 ShortStack synopsis](#51-shortstack-synopsis)
-  - [5.2 Inspect `Results.txt`](#52-inspect-resultstxt)
-    - [5.2.1 Directory tree of all ShortStack
-      outputs](#521-directory-tree-of-all-shortstack-outputs)
-  - [5.3 Visualize](#53-visualize)
-- [6 Citations](#6-citations)
+- <a href="#1-set-r-variables" id="toc-1-set-r-variables">1 Set R
+  variables</a>
+- <a href="#2-create-a-bash-variables-file"
+  id="toc-2-create-a-bash-variables-file">2 Create a Bash variables
+  file</a>
+- <a href="#3-load-shortstack-conda-environment"
+  id="toc-3-load-shortstack-conda-environment">3 Load ShortStack conda
+  environment</a>
+  - <a href="#31-apulchra-genome" id="toc-31-apulchra-genome">3.1 A.pulchra
+    genome</a>
+  - <a href="#32-cnidarianmirbase-database"
+    id="toc-32-cnidarianmirbase-database">3.2 Cnidarian+miRBase database</a>
+  - <a href="#33-trimmed-srna-seq-reads"
+    id="toc-33-trimmed-srna-seq-reads">3.3 Trimmed sRNA-seq reads</a>
+- <a href="#4-run-shortstack" id="toc-4-run-shortstack">4 Run
+  ShortStack</a>
+  - <a href="#41-modify-genome-filename-for-shortstack-compatability"
+    id="toc-41-modify-genome-filename-for-shortstack-compatability">4.1
+    Modify genome filename for ShortStack compatability</a>
+  - <a href="#42-excecute-shortstack-command"
+    id="toc-42-excecute-shortstack-command">4.2 Excecute ShortStack
+    command</a>
+  - <a href="#43-check-runtime" id="toc-43-check-runtime">4.3 Check
+    runtime</a>
+- <a href="#5-results" id="toc-5-results">5 Results</a>
+  - <a href="#51-shortstack-synopsis" id="toc-51-shortstack-synopsis">5.1
+    ShortStack synopsis</a>
+  - <a href="#52-inspect-resultstxt" id="toc-52-inspect-resultstxt">5.2
+    Inspect <code>Results.txt</code></a>
+    - <a href="#521-directory-tree-of-all-shortstack-outputs"
+      id="toc-521-directory-tree-of-all-shortstack-outputs">5.2.1 Directory
+      tree of all ShortStack outputs</a>
+  - <a href="#53-visualize" id="toc-53-visualize">5.3 Visualize</a>
+- <a href="#6-citations" id="toc-6-citations">6 Citations</a>
 
 Use [ShortStack](https://github.com/MikeAxtell/ShortStack) ([Axtell
 2013](#ref-axtell2013a); [Shahid and Axtell 2014](#ref-shahid2014);
@@ -132,29 +147,6 @@ echo 'export trimmed_fastqs_array=()'
 cat .bashvars
 ```
 
-    #### Assign Variables ####
-
-    # Trimmed FastQ naming pattern
-    export trimmed_fastqs_pattern='*fastp-adapters-polyG-31bp-merged.fq.gz'
-    # Data directories
-    export expression_dir=/home/shared/8TB_HDD_02/shedurkin/deep-dive-expression
-    export expression_data_dir="${expression_dir}/data"
-    export output_dir_top=${expression_dir}/D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome
-
-    # Input/Output files
-    export genome_fasta_dir=${expression_dir}/D-Apul/data
-    export genome_fasta_name="Apulchra-genome.fa"
-    export shortstack_genome_fasta_name="Apulchra-genome.fa"
-    export trimmed_fastqs_dir="${genome_fasta_dir}/sRNA-trimmed-reads"
-    export mirbase_mature_fasta_version=cnidarian-mirbase-mature-v22.1.fasta
-    export genome_fasta="${genome_fasta_dir}/${shortstack_genome_fasta_name}"
-
-    # Set number of CPUs to use
-    export threads=40
-
-    # Initialize arrays
-    export trimmed_fastqs_array=()
-
 # 3 Load [ShortStack](https://github.com/MikeAxtell/ShortStack) conda environment
 
 If this is successful, the first line of output should show that the
@@ -170,15 +162,6 @@ E.g.
 use_condaenv(condaenv = shortstack_conda_env_name, conda = shortstack_cond_path)
 py_config()
 ```
-
-    python:         /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/bin/python
-    libpython:      /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/lib/libpython3.12.so
-    pythonhome:     /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env:/home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env
-    version:        3.12.7 | packaged by conda-forge | (main, Oct  4 2024, 16:05:46) [GCC 13.3.0]
-    numpy:          /home/sam/programs/mambaforge/envs/ShortStack-4.1.0_env/lib/python3.12/site-packages/numpy
-    numpy_version:  2.1.1
-
-    NOTE: Python version was forced by use_python() function
 
 Note: I sometimes get an error “failed to initialize requested version
 of Python,” which seems to stem from the `reticulate` package default
@@ -214,12 +197,6 @@ source .bashvars
 
 head -5 ${expression_data_dir}/"${mirbase_mature_fasta_version}"
 ```
-
-    >cel-let-7-5p MIMAT0000001 Caenorhabditis elegans let-7-5p
-    UGAGGUAGUAGGUUGUAUAGUU
-    >cel-let-7-3p MIMAT0015091 Caenorhabditis elegans let-7-3p
-    CUAUGCAAUUUUCUACCUUACC
-    >cel-lin-4-5p MIMAT0000002 Caenorhabditis elegans lin-4-5p
 
 ## 3.3 Trimmed sRNA-seq reads
 
@@ -267,12 +244,6 @@ fi
 # Confirm
 ls -lh ${genome_fasta_dir}/${shortstack_genome_fasta_name}
 ```
-
-    /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/Apulchra-genome.fa
-
-    Already exists. Nothing to do.
-
-    -rw-r--r-- 1 shedurkin labmembers 505M Oct  1 13:31 /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/data/Apulchra-genome.fa
 
 ## 4.2 Excecute ShortStack command
 
@@ -323,8 +294,6 @@ tail -n 3 ${output_dir_top}/shortstack.log \
 | awk '{print "ShortStack runtime:" "\t" $2}'
 ```
 
-    ShortStack runtime: 13m43.312s
-
 # 5 Results
 
 ## 5.1 ShortStack synopsis
@@ -335,32 +304,6 @@ source .bashvars
 
 tail -n 25 ${output_dir_top}/shortstack.log
 ```
-
-    Writing final files
-
-    Found a total of 39 MIRNA loci
-
-
-    Non-MIRNA loci by DicerCall:
-    N 20608
-    22 78
-    23 27
-    21 23
-    24 14
-
-    Creating visualizations of microRNA loci with strucVis
-    <<< WARNING >>>
-    Do not rely on these results alone to annotate new MIRNA loci!
-    The false positive rate for de novo MIRNA identification is low, but NOT ZERO
-    Insepct each mirna locus, especially the strucVis output, and see
-    https://doi.org/10.1105/tpc.17.00851 , https://doi.org/10.1093/nar/gky1141
-
-    Tue 08 Oct 2024 15:54:04 -0700 PDT
-    Run Completed!
-
-    real    13m43.312s
-    user    170m20.326s
-    sys 55m0.571s
 
 ShortStack identified 39 miRNAs. (This is in comparison to running
 ShortStack using the *A. millipora* genome, which yielded 38 miRNAs)
@@ -480,6 +423,12 @@ tree -h ${output_dir_top}/
 ```
 
     /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/
+    ├── [2.9K]  Apul_ShortStack_4.1.0_mature.fasta
+    ├── [4.0K]  Apul_ShortStack_4.1.0_mature.gff3
+    ├── [5.4K]  Apul_ShortStack_4.1.0_precursor.fasta
+    ├── [3.8K]  Apul_ShortStack_4.1.0_precursor.gff3
+    ├── [2.8K]  Apul_ShortStack_4.1.0_star.fasta
+    ├── [3.7K]  Apul_ShortStack_4.1.0_star.gff3
     ├── [4.0K]  figures
     │   ├── [140K]  Apul_ShortStack_dbmatch_histogram.png
     │   ├── [168K]  Apul_ShortStack_dbmatch_histogram_reduced.png
@@ -489,6 +438,7 @@ tree -h ${output_dir_top}/
     ├── [9.0K]  shortstack.log
     └── [ 12K]  ShortStack_out
         ├── [ 30K]  alignment_details.tsv
+        ├── [ 12K]  Apul_Results_mature_named_miRNAs.csv
         ├── [1.2M]  Counts.txt
         ├── [110K]  known_miRNAs.gff3
         ├── [1.8M]  known_miRNAs_unaligned.fasta
@@ -592,7 +542,7 @@ tree -h ${output_dir_top}/
             ├── [8.7K]  Cluster_5981.ps.pdf
             └── [ 23K]  Cluster_5981.txt
 
-    3 directories, 108 files
+    3 directories, 115 files
 
 ## 5.3 Visualize
 
@@ -714,6 +664,21 @@ ggvenn(Apul_shortstack_vennlist)
 
 ``` r
 ggsave("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/figures/Apul_ShortStack_venn.png", width = 12, height = 7, units = "in")
+```
+
+Generate separate fastas and gffs for the precursor, star, and mature
+miRNAs
+
+``` bash
+cd ../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome
+
+awk '/^>/{keep=($0 !~ /mature|star/)} keep' ShortStack_out/mir.fasta > Apul_ShortStack_4.1.0_precursor.fasta
+awk '/^>/{keep=($0 ~ /star/)} keep' ShortStack_out/mir.fasta > Apul_ShortStack_4.1.0_star.fasta
+awk '/^>/{keep=($0 ~ /mature/)} keep' ShortStack_out/mir.fasta > Apul_ShortStack_4.1.0_mature.fasta
+
+awk -F '\t' '$3 == "MIRNA_hairpin"' ShortStack_out/Results.gff3 > Apul_ShortStack_4.1.0_precursor.gff3
+awk -F '\t' '$3 == "mature_miRNA"' ShortStack_out/Results.gff3 > Apul_ShortStack_4.1.0_mature.gff3
+awk -F '\t' '$3 == "miRNA-star"' ShortStack_out/Results.gff3 > Apul_ShortStack_4.1.0_star.gff3
 ```
 
 ------------------------------------------------------------------------
