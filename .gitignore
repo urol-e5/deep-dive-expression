@@ -112,6 +112,7 @@ F-Ptuh/output/12-Ptuh-WGBS/*/*tab*
 F-Ptuh/output/12-Ptuh-WGBS/methylkit/*.RData
 F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
 F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
+F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv
 
 
 .DS_Store
