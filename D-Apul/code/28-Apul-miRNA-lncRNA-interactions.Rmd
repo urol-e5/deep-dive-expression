@@ -28,7 +28,7 @@ library(gridExtra)
 
 Read in miRNA data
 ```{r}
-miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+miRNA_counts <- read.delim("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
 head(miRNA_counts)
 
 # Remove any miRNAs with 0 for all samples 
@@ -43,14 +43,14 @@ colnames(miRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", 
 
 Read in lncRNA data
 ```{r}
-lncRNA_counts<-read_table(file="../../D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1)%>%
-  select(!c("Chr", "Start", "End", "Strand", "Length"))%>%
-  rename("lncrna_id"=Geneid, 
-         "sample140"=`../output/07-Apul-Hisat/RNA-ACR-140.sorted.bam`, 
-         "sample145"=`../output/07-Apul-Hisat/RNA-ACR-145.sorted.bam`, 
-         "sample150"=`../output/07-Apul-Hisat/RNA-ACR-150.sorted.bam`, 
-         "sample173"=`../output/07-Apul-Hisat/RNA-ACR-173.sorted.bam`, 
-         "sample178"=`../output/07-Apul-Hisat/RNA-ACR-178.sorted.bam`)
+lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Apul_counts_dedup.txt", skip=1)%>%
+  select(!c("Chr", "Start", "End", "Strand", "Length")) %>%
+  rename("lncrna_id"=Geneid,
+         "sample140"=`../data/RNA-ACR-140.sorted.bam`,
+         "sample145"=`../data/RNA-ACR-145.sorted.bam`,
+         "sample150"=`../data/RNA-ACR-150.sorted.bam`,
+         "sample173"=`../data/RNA-ACR-173.sorted.bam`,
+         "sample178"=`../data/RNA-ACR-178.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts)
@@ -102,6 +102,9 @@ pcc_results <- pairs %>%
 # Adjust p-values for FDR
 pcc_results <- pcc_results %>%
   mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
+
+# Save
+write.csv(pcc_results, "../output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv")
 ```
 
 Read in miranda data
