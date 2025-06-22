@@ -58,7 +58,7 @@ STRINGTIE_DIR <- ""
 GFFCOMPARE_DIR <- "/srlab/programs/gffcompare-0.12.6.Linux_x86_64/"
 BEDTOOLS_DIR <- ""
 CPC2_DIR <- "/srlab/programs/CPC2_standalone-1.0.1/bin/"
-CONDA_PATH <- ""
+CONDA_PATH <- "/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda"
 
 GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
 GENOME_GTF <- file.path(DATA_DIR, "genome.gtf")
@@ -313,18 +313,26 @@ head ${OUTPUT_DIR}/lncRNA_candidates.fasta
 #CPC2
 
 ```{bash}
-ls /srlab/programs/
+wget https://github.com/gao-lab/CPC2_standalone/archive/refs/tags/v1.0.1.zip
+```
+```{bash}
+unzip v1.0.1.zip
 ```
 
 
 
-
-
 ```{r cpc2, engine='bash'}
-#eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
-python "${CPC2_DIR}"CPC2.py \
+eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
+python /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/F-Ptuh/code/CPC2_standalone-1.0.1/bin/CPC2.py \
 -i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
 -o "${OUTPUT_DIR}/CPC2"
+```
+```{r, engine='bash'}
+eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
+conda activate /mmfs1/gscratch/srlab/nextflow/bin/miniforge/envs/nextflow  # replace with your actual env name
+python /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/F-Ptuh/code/CPC2_standalone-1.0.1/bin/CPC2.py \
+  -i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+  -o "${OUTPUT_DIR}/CPC2"
 ```
 
 
@@ -333,6 +341,16 @@ Filter
 
 ```{r filCPC, engine='bash'}
 awk '$8 == "noncoding" {print $1}' "${OUTPUT_DIR}/CPC2.txt" > "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/CPC2.txt"
+wc -l "${OUTPUT_DIR}/CPC2.txt"
+```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+wc -l "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
 ```
 
 Subsetting fasta
@@ -345,6 +363,7 @@ Subsetting fasta
 
 ```{r, engine='bash'}
 head -2 "${OUTPUT_DIR}/lncRNA.fasta"
+grep -c ">" "${OUTPUT_DIR}/lncRNA.fasta"
 ```
 
 
@@ -377,13 +396,20 @@ done < "$input" > "$output"
 ```
 
 ```{r, engine='bash'}
-head -1 "${OUTPUT_DIR}/lncRNA.gtf"
+head -1 "${OUTPUT_DIR}/lncRNA.bed"
 ```
 
 ```{r renamegtf, engine='bash'}
 awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
 > "${OUTPUT_DIR}/lncRNA.gtf"
 ```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/lncRNA.gtf"
+wc -l "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+
 
 # Summary Table
 
