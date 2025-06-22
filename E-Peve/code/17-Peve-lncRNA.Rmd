@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
  
 DATA_DIR <- "../data/17-Peve-lncRNA"
 OUTPUT_DIR <- "../output/17-Peve-lncRNA"
-THREADS <- "36"
+THREADS <- "48"
   
 FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_evermanni/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
@@ -128,7 +128,7 @@ curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 
 ```{r file check, engine='bash'}
 output_fasta=$(head -1 "${GENOME_FASTA}")
-output_gff=$(head -2 "${GENOME_GFF}")
+output_gff=$(tail -11 "${GENOME_GFF}")
 output_gtf=$(head -1 "${GENOME_GTF}")
 
 if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
@@ -226,12 +226,28 @@ head ${OUTPUT_DIR}/*.gtf
 wc -l ${OUTPUT_DIR}/*.gtf
 ```
 
+
+
+```{r, engine='bash'}
+echo "${STRINGTIE_DIR}stringtie"
+echo "${GENOME_GFF}"
+
+```
+
+```{bash}
+"${STRINGTIE_DIR}stringtie" -h
+```
+
+
+
+
+
 ```{r merge, engine='bash'}
 "${STRINGTIE_DIR}stringtie" \
 --merge \
--G "${GENOME_GFF}" \
--o "${OUTPUT_DIR}/stringtie_merged.gtf" \
-"${OUTPUT_DIR}/"*.gtf
+-G ../data/17-Peve-lncRNA/genome.gff \
+-o ../output/17-Peve-lncRNA/stringtie_merged.gtf \
+../output/17-Peve-lncRNA/RNA-POR*.gtf
 ```
 
 ```{r, engine='bash'}
@@ -313,12 +329,7 @@ head ${OUTPUT_DIR}/lncRNA_candidates.fasta
 
 
 
-```{r cpc2, engine='bash'}
-eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
-python /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/F-Ptuh/code/CPC2_standalone-1.0.1/bin/CPC2.py \
--i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
--o "${OUTPUT_DIR}/CPC2"
-```
+
 ```{r, engine='bash'}
 eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
 conda activate /mmfs1/gscratch/srlab/nextflow/bin/miniforge/envs/nextflow  # replace with your actual env name
