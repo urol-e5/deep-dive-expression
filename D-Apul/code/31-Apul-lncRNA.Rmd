@@ -28,17 +28,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Define key paths and tool directories
  
-DATA_DIR <- "../data/17-Peve-lncRNA"
-OUTPUT_DIR <- "../output/17-Peve-lncRNA"
+DATA_DIR <- "../data/31-Apul-lncRNA"
+OUTPUT_DIR <- "../output/31-Apul-lncRNA"
 THREADS <- "48"
   
-FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/P_evermanni/trimmed/"
+FASTQ_SOURCE <- "https://gannet.fish.washington.edu/Atumefaciens/20230519-E5_coral-fastqc-fastp-multiqc-RNAseq/A_pulchra/trimmed/"
 FASTQ_SUFFIX <- "fastq.gz"
-GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa"
+GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
 
 
 GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gtf"
-GFF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gff3"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
 
 GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 
@@ -139,6 +139,18 @@ else
     echo "$output_gtf"
 fi
 ```
+
+```{r, engine='bash'}
+GTF_FILE="${GENOME_GTF}"
+
+echo "Feature type counts in: $GTF_FILE"
+awk '$0 !~ /^#/ {print $3}' "$GTF_FILE" | sort | uniq -c | sort -nr
+```
+
+
+
+
+
 
 # HISAT
 
