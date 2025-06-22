@@ -239,16 +239,15 @@ echo "${GENOME_GFF}"
 ```
 
 
-
-
-
 ```{r merge, engine='bash'}
 "${STRINGTIE_DIR}stringtie" \
 --merge \
--G ../data/17-Peve-lncRNA/genome.gff \
--o ../output/17-Peve-lncRNA/stringtie_merged.gtf \
-../output/17-Peve-lncRNA/RNA-POR*.gtf
+-G "${GENOME_GFF}" \
+-o "${OUTPUT_DIR}/stringtie_merged.gtf" \
+"${OUTPUT_DIR}/"*2.gtf
 ```
+
+
 
 ```{r, engine='bash'}
 wc -l ${OUTPUT_DIR}/stringtie_merged.gtf
@@ -304,7 +303,7 @@ wc -l ${OUTPUT_DIR}/lncRNA_candidates.gtf
 ```
 
 ```{r, engine='bash'}
-sort ../output/17-Ptuh-lncRNA/lncRNA_candidates.gtf | uniq -d
+sort ../output/17-Peve-lncRNA/lncRNA_candidates.gtf | uniq -d
 ```
 
 
@@ -407,7 +406,7 @@ awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \
 > "${OUTPUT_DIR}/lncRNA.gtf"
 ```
 
-```{r, engine='bas}
+```{r, engine='bash'}
 head "${OUTPUT_DIR}/lncRNA.gtf"
 wc -l "${OUTPUT_DIR}/lncRNA.gtf"
 ```
@@ -470,4 +469,34 @@ END {
     }
 }
 ' "$tf_file"
+```
+
+```{r}
+# File paths
+fasta_url <- 
+gtf_url <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/lncRNA.gtf"
+
+# Read in FASTA and GTF
+fasta <- readDNAStringSet(fasta_url)
+gtf <- import(gtf_url, format = "gtf")
+
+# Extract gene_id from GTF
+gene_ids <- sapply(mcols(gtf)$gene_id, function(x) gsub('"', '', x))  # remove quotes
+unique_gene_ids <- unique(gene_ids)
+
+# Generate new FASTA headers
+new_headers <- paste0("Ptuh_", unique_gene_ids)
+
+# Confirm lengths match
+if (length(fasta) != length(new_headers)) {
+  stop("Mismatch between number of FASTA sequences and GTF gene IDs.")
+}
+
+# Rename sequences
+names(fasta) <- new_headers
+
+# Write new FASTA
+writeXStringSet(fasta, filepath = "lncRNA_renamed.fasta", format = "fasta")
+
+cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
 ```
