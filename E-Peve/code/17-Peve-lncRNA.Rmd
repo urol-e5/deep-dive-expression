@@ -37,8 +37,8 @@ FASTQ_SUFFIX <- "fastq.gz"
 GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/snaps/Porites_evermanni_v1.fa"
 
 
-GTF_SOURCE <- "https://github.com/urol-e5/deep-dive-expression/blob/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gtf"
-GFF_SOURCE <- "https://github.com/urol-e5/deep-dive-expression/blob/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gff3"
+GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gtf"
+GFF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gff3"
 
 GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 
@@ -93,7 +93,10 @@ Sys.setenv(
 ```
 
 
-
+```{r,engine='bash'}
+mkdir -p "${DATA_DIR}"
+mkdir -p "${OUTPUT_DIR}"
+```
 
 ```{r, engine='bash'}
 wget -nv -r \
@@ -289,14 +292,6 @@ sort ../output/17-Ptuh-lncRNA/lncRNA_candidates.gtf | uniq -d
 ```
 
 
-gzip -dc CPC2_standalone-1.0.1.tar.gz | tar xf -
-cd CPC2-beta
-export CPC_HOME="$PWD"
-cd libs/libsvm
-gzip -dc libsvm-3.18.tar.gz | tar xf -
-cd libsvm-3.18
-make clean && make
-
 # Bedtools
 
 ```{r fasta2, engine='bash'}
@@ -315,12 +310,6 @@ head ${OUTPUT_DIR}/lncRNA_candidates.fasta
 
 #CPC2
 
-```{bash}
-wget https://github.com/gao-lab/CPC2_standalone/archive/refs/tags/v1.0.1.zip
-```
-```{bash}
-unzip v1.0.1.zip
-```
 
 
 
