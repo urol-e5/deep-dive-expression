@@ -256,7 +256,7 @@ echo "${GENOME_GFF}"
 --merge \
 -G "${GENOME_GFF}" \
 -o "${OUTPUT_DIR}/stringtie_merged.gtf" \
-"${OUTPUT_DIR}/"*2.gtf
+"${OUTPUT_DIR}/"*.gtf
 ```
 
 
