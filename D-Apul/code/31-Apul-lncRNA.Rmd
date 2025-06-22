@@ -37,8 +37,8 @@ FASTQ_SUFFIX <- "fastq.gz"
 GENOME_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.fa"
 
 
-GTF_SOURCE <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gtf"
-GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
+GTF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf"
+GFF_SOURCE <- "https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulcra-genome.gff"
 
 GFFPATTERN <- 'class_code "u"|class_code "x"|class_code "o"|class_code "i"'
 
@@ -129,7 +129,7 @@ curl -o "${GENOME_GFF}" "${GFF_SOURCE}"
 ```{r file check, engine='bash'}
 output_fasta=$(head -1 "${GENOME_FASTA}")
 output_gff=$(tail -11 "${GENOME_GFF}")
-output_gtf=$(head -1 "${GENOME_GTF}")
+output_gtf=$(head -11 "${GENOME_GTF}")
 
 if [[ "$output_fasta" == *html* || "$output_gff" == *html* || "$output_gtf" == *html* ]]; then
     echo "FAIL - FFS you downloaded a HTML not and genome feature file!"
