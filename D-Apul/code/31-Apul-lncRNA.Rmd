@@ -419,8 +419,10 @@ head -1 "${OUTPUT_DIR}/lncRNA.bed"
 ```
 
 ```{r renamegtf, engine='bash'}
-awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
-> "${OUTPUT_DIR}/lncRNA.gtf"
+awk 'BEGIN{OFS="\t"; count=1} \
+{
+  printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2+1, $3, count++;
+}' "${OUTPUT_DIR}/lncRNA.bed" > "${OUTPUT_DIR}/lncRNA.gtf"
 ```
 
 ```{r, engine='bash'}
@@ -558,9 +560,14 @@ cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
 ```
 ```{bash}
 head ../output/31-Apul-lncRNA/lncRNA_renamed.fasta
+
+
+
 ```
+
+
 ```{bash}
-cp ../output/31-Apul-lncRNA/lncRNA_renamed.fasta ../output/31-Apul-lncRNA/Apul-lncRNA.fasta
+#cp ../output/31-Apul-lncRNA/lncRNA_renamed.fasta ../output/31-Apul-lncRNA/Apul-lncRNA.fasta
 
 cp ../output/31-Apul-lncRNA/lncRNA.gtf ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
 
