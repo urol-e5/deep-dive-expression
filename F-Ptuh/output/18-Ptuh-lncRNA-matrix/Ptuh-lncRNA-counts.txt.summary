@@ -1,0 +1,15 @@
+Status	../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam	../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam	../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam	../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam	../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam
+Assigned	9331180	8920592	5528044	4786936	2812492
+Unassigned_Unmapped	38879515	40335517	41981622	42068498	42015544
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	28695393	28309746	16491142	13528839	7301887
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	48966776	42780340	55976093	53885547	36677579
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	990814	927277	1152522	1154467	939181

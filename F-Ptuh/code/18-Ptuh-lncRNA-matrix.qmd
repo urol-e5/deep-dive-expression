@@ -1,5 +1,5 @@
 ---
-title: "18-Peve lncRNA matrix "
+title: "18-Ptuh lncRNA matrix "
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -30,28 +30,28 @@ knitr::opts_chunk$set(
 
 
 ```{bash}
-head ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
+head ../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf
 ```
 
 Get BAMS
 
 
-https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/RNA-POR-73.sorted.bam
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/output/06-Ptuh-Hisat/RNA-POC-47.sorted.bam
 
 
 
 ```{bash}
-wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/18-Peve-lncRNA-matrix \
-https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
+wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/18-Ptuh-lncRNA-matrix \
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/output/06-Ptuh-Hisat/
 ```
 
 
 
 ```{bash}
-sed -n '261p' ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
+#sed -n '261p' ../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf
 ```
 ```{bash}
-sed -n '261p' ../output/17-Peve-lncRNA/lncRNA.gtf
+#sed -n '261p' ../output/17-Ptuh-lncRNA/lncRNA.gtf
 ```
 
 
@@ -59,19 +59,19 @@ sed -n '261p' ../output/17-Peve-lncRNA/lncRNA.gtf
 ```{r, engine='bash'}
 /home/shared/subread-2.0.5-Linux-x86_64/bin/featureCounts \
 -T 42 \
--a ../output/17-Peve-lncRNA/Peve-lncRNA.gtf \
--o ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt \
+-a ../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf \
+-o ../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt \
 -t lncRNA \
 -g gene_id \
 -p \
-../data/18-Peve-lncRNA-matrix/*sorted.bam
+../data/18-Ptuh-lncRNA-matrix/*sorted.bam
 ```
 
 ```{bash}
-grep -c '^l' ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
-sort ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt | uniq -d
+grep -c '^l' ../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
+sort ../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt | uniq -d
 ```
 ```{bash}
-md5sum ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
+md5sum ../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
 ```
 
