@@ -471,21 +471,31 @@ END {
 ' "$tf_file"
 ```
 
+
+#rename fasta
+
 ```{r}
-# File paths
-fasta_url <- 
-gtf_url <- "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/lncRNA.gtf"
+# Load required libraries
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#install.packages("BiocManager")
+#BiocManager::install(c("Biostrings", "rtracklayer"))
+library(Biostrings)
+library(rtracklayer)
+
+# File paths (local)
+fasta_file <- "../output/17-Peve-lncRNA/lncRNA.fasta"
+gtf_file <- "../output/17-Peve-lncRNA/lncRNA.gtf"
 
 # Read in FASTA and GTF
-fasta <- readDNAStringSet(fasta_url)
-gtf <- import(gtf_url, format = "gtf")
+fasta <- readDNAStringSet(fasta_file)
+gtf <- import(gtf_file, format = "gtf")
 
 # Extract gene_id from GTF
 gene_ids <- sapply(mcols(gtf)$gene_id, function(x) gsub('"', '', x))  # remove quotes
 unique_gene_ids <- unique(gene_ids)
 
 # Generate new FASTA headers
-new_headers <- paste0("Ptuh_", unique_gene_ids)
+new_headers <- paste0("Peve_", unique_gene_ids)
 
 # Confirm lengths match
 if (length(fasta) != length(new_headers)) {
@@ -496,7 +506,23 @@ if (length(fasta) != length(new_headers)) {
 names(fasta) <- new_headers
 
 # Write new FASTA
-writeXStringSet(fasta, filepath = "lncRNA_renamed.fasta", format = "fasta")
+writeXStringSet(fasta, filepath = "../output/17-Peve-lncRNA/lncRNA_renamed.fasta", format = "fasta")
 
 cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
+```
+
+
+```{bash}
+head ../output/17-Peve-lncRNA/lncRNA_renamed.fasta
+```
+
+
+
+```{bash}
+cp ../output/17-Peve-lncRNA/lncRNA_renamed.fasta ../output/17-Peve-lncRNA/Apul-lncRNA.fasta
+
+cp ../output/17-Peve-lncRNA/lncRNA.gtf ../output/17-Peve-lncRNA/Apul-lncRNA.gtf
+
+md5sum ../output/17-Peve-lncRNA/Apul-lncRNA.fasta
+md5sum ../output/17-Peve-lncRNA/Apul-lncRNA.gtf
 ```

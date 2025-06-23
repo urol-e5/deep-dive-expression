@@ -522,15 +522,15 @@ cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
 
 ```{r}
 # Load required libraries
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install(c("Biostrings", "rtracklayer"))
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#install.packages("BiocManager")
+#BiocManager::install(c("Biostrings", "rtracklayer"))
 library(Biostrings)
 library(rtracklayer)
 
 # File paths (local)
-fasta_file <- "${OUTPUT_DIR}/lncRNA.fasta"
-gtf_file <- "${OUTPUT_DIR}/lncRNA.gtf"
+fasta_file <- "../output/31-Apul-lncRNA/lncRNA.fasta"
+gtf_file <- "../output/31-Apul-lncRNA/lncRNA.gtf"
 
 # Read in FASTA and GTF
 fasta <- readDNAStringSet(fasta_file)
@@ -552,8 +552,20 @@ if (length(fasta) != length(new_headers)) {
 names(fasta) <- new_headers
 
 # Write new FASTA
-writeXStringSet(fasta, filepath = "${OUTPUT_DIR}/lncRNA_renamed.fasta", format = "fasta")
+writeXStringSet(fasta, filepath = "../output/31-Apul-lncRNA/lncRNA_renamed.fasta", format = "fasta")
 
 cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
 ```
+```{bash}
+head ../output/31-Apul-lncRNA/lncRNA_renamed.fasta
+```
+```{bash}
+cp ../output/31-Apul-lncRNA/lncRNA_renamed.fasta ../output/31-Apul-lncRNA/Apul-lncRNA.fasta
+
+cp ../output/31-Apul-lncRNA/lncRNA.gtf ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+
+md5sum ../output/31-Apul-lncRNA/Apul-lncRNA.fasta
+md5sum ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+```
+
 
