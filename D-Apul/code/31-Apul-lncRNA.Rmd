@@ -238,6 +238,13 @@ head ${OUTPUT_DIR}/*.gtf
 wc -l ${OUTPUT_DIR}/*.gtf
 ```
 
+```{bash}
+for file in ../output/31-Apul-lncRNA/*merged.gtf; do
+  echo "=== $(basename "$file") ==="
+  awk '$0 !~ /^#/ {print $3}' "$file" | sort | uniq -c | sort -nr
+  echo
+done
+```
 
 
 ```{r, engine='bash'}
@@ -246,9 +253,7 @@ echo "${GENOME_GFF}"
 
 ```
 
-```{bash}
-"${STRINGTIE_DIR}stringtie" -h
-```
+
 
 
 ```{r merge, engine='bash'}
@@ -256,7 +261,7 @@ echo "${GENOME_GFF}"
 --merge \
 -G "${GENOME_GFF}" \
 -o "${OUTPUT_DIR}/stringtie_merged.gtf" \
-"${OUTPUT_DIR}/"*.gtf
+${OUTPUT_DIR}/*.gtf
 ```
 
 
@@ -315,7 +320,7 @@ wc -l ${OUTPUT_DIR}/lncRNA_candidates.gtf
 ```
 
 ```{r, engine='bash'}
-sort ../output/17-Peve-lncRNA/lncRNA_candidates.gtf | uniq -d
+sort ../output/31-Apul-lncRNA/lncRNA_candidates.gtf | uniq -d
 ```
 
 
