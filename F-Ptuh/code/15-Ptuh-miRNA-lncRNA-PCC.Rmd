@@ -36,13 +36,13 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-#library(energy)
+library(energy)
 library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
-library(genefilter)
-library(gridExtra)
+# library(ggraph)
+# library(tidygraph)
+# library(igraph)
+# library(genefilter)
+# library(gridExtra)
 ```
 
 Read in miRNA data
@@ -57,15 +57,16 @@ miRNA_counts <- miRNA_counts %>%
     dplyr::select(!Total)
 ```
 
+Counts generated in `F-Ptuh/code/18-Ptuh-lncRNA-matrix.Rmd`, available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
 
 ```{r}
-lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Ptuh_counts_dedup.txt", skip=1) %>%
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt", skip=1) %>%
   rename("lncrna_id"=Geneid, 
-         "sample47"=`../data/ptuh/RNA-POC-47.sorted.bam`, 
-         "sample48"=`../data/ptuh/RNA-POC-48.sorted.bam`, 
-         "sample50"=`../data/ptuh/RNA-POC-50.sorted.bam`, 
-         "sample53"=`../data/ptuh/RNA-POC-53.sorted.bam`, 
-         "sample57"=`../data/ptuh/RNA-POC-57.sorted.bam`)
+         "sample47"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam`, 
+         "sample48"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam`, 
+         "sample50"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam`, 
+         "sample53"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam`, 
+         "sample57"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))

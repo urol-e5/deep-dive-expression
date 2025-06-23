@@ -36,13 +36,13 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-#library(energy)
+library(energy)
 library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
-library(genefilter)
-library(gridExtra)
+# library(ggraph)
+# library(tidygraph)
+# library(igraph)
+# library(genefilter)
+# library(gridExtra)
 ```
 
 Read in miRNA data
@@ -60,15 +60,16 @@ miRNA_counts <- miRNA_counts %>%
 colnames(miRNA_counts) <- c("sample73", "sample79", "sample82")
 ```
 
+Counts generated in `E-Peve/code/18-Peve-lncRNA-matrix`, available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
 
 ```{r}
-lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Peve_counts_dedup.txt", skip=1) %>%
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", skip=1) %>%
   rename("lncrna_id"=Geneid, 
-         "sample71"=`../data/peve/RNA-POR-71.sorted.bam`, 
-         "sample73"=`../data/peve/RNA-POR-73.sorted.bam`, 
-         "sample76"=`../data/peve/RNA-POR-76.sorted.bam`, 
-         "sample79"=`../data/peve/RNA-POR-79.sorted.bam`, 
-         "sample82"=`../data/peve/RNA-POR-82.sorted.bam`)
+         "sample71"=`../data/18-Peve-lncRNA-matrix/RNA-POR-71.sorted.bam`, 
+         "sample73"=`../data/18-Peve-lncRNA-matrix/RNA-POR-73.sorted.bam`, 
+         "sample76"=`../data/18-Peve-lncRNA-matrix/RNA-POR-76.sorted.bam`, 
+         "sample79"=`../data/18-Peve-lncRNA-matrix/RNA-POR-79.sorted.bam`, 
+         "sample82"=`../data/18-Peve-lncRNA-matrix/RNA-POR-82.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
