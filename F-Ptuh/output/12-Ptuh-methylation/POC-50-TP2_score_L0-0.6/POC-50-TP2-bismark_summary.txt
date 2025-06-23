@@ -1,0 +1,134 @@
+Bowtie 2 seems to be working fine (tested command '/home/shared/bowtie2-2.4.4-linux-x86_64/bowtie2 --version' [2.4.4])
+Output format is BAM (default)
+Alignments will be written out in BAM format. Samtools found here: '/usr/bin/samtools'
+Reference genome folder provided is ../data/	(absolute path is '/home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/data/)'
+FastQ format assumed (by default)
+Processing sequences up to read no. 100000 from the input file
+Attention: using more than 4 cores per alignment thread has been reported to have diminishing returns. If possible try to limit -p to a value of 4
+Each Bowtie 2 instance is going to be run with 16 threads. Please monitor performance closely and tune down if necessary!
+
+Input files to be analysed (in current folder '/home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/code'):
+../data/12-Ptuh-meth/POC-50-TP2_R1.fastp-trim.fq.gz
+../data/12-Ptuh-meth/POC-50-TP2_R2.fastp-trim.fq.gz
+Library was specified to be not strand-specific (non-directional), therefore alignments to all four possible bisulfite strands (OT, CTOT, OB and CTOB) will be reported
+Output will be written into the directory: /home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/output/12-Ptuh-methylation/POC-50-TP2_score_L0-0.6/
+Setting parallelization to single-threaded (default)
+
+Summary of all aligner options:	-q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+Current working directory is: /home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/code
+
+Now reading in and storing sequence information of the genome specified in: /home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/data/
+
+Single-core mode: setting pid to 1
+
+Paired-end alignments will be performed
+=======================================
+
+The provided filenames for paired-end alignments are ../data/12-Ptuh-meth/POC-50-TP2_R1.fastp-trim.fq.gz and ../data/12-Ptuh-meth/POC-50-TP2_R2.fastp-trim.fq.gz
+Input files are in FastQ format
+Processing reads up to sequence no. 100000 from ../data/12-Ptuh-meth/POC-50-TP2_R1.fastp-trim.fq.gz
+Writing a C -> T converted version of the input file POC-50-TP2_R1.fastp-trim.fq.gz to POC-50-TP2_R1.fastp-trim.fq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file POC-50-TP2_R1.fastp-trim.fq.gz to POC-50-TP2_R1.fastp-trim.fq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file POC-50-TP2_R1.fastp-trim.fq.gz (100001 sequences in total)
+
+
+gzip: stdout: Broken pipe
+Processing reads up to sequence no. 100000 from ../data/12-Ptuh-meth/POC-50-TP2_R2.fastp-trim.fq.gz
+Writing a C -> T converted version of the input file POC-50-TP2_R2.fastp-trim.fq.gz to POC-50-TP2_R2.fastp-trim.fq.gz_C_to_T.fastq
+Writing a G -> A converted version of the input file POC-50-TP2_R2.fastp-trim.fq.gz to POC-50-TP2_R2.fastp-trim.fq.gz_G_to_A.fastq
+
+Created C -> T as well as G -> A converted versions of the FastQ file POC-50-TP2_R2.fastp-trim.fq.gz (100001 sequences in total)
+
+Input files are POC-50-TP2_R1.fastp-trim.fq.gz_C_to_T.fastq and POC-50-TP2_R1.fastp-trim.fq.gz_G_to_A.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_C_to_T.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_G_to_A.fastq (FastQ)
+Now running 4 individual instances of Bowtie 2 against the bisulfite genome of /home/shared/8TB_HDD_03/sr320/github/deep-dive-expression/F-Ptuh/data/ with the specified options: -q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500
+
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2CTgenome (reading in sequences from POC-50-TP2_R1.fastp-trim.fq.gz_C_to_T.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTCAAAATTACAAACAATAATTTCCATACCATTAACAAAAATATCACAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2GAgenome (reading in sequences from POC-50-TP2_R1.fastp-trim.fq.gz_G_to_A.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --norc))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TTCAAAATTACAAACAATAATTTCCATACCATTAACAAAAATATCACAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for GAread1CTread2CTgenome (reading in sequences from POC-50-TP2_R1.fastp-trim.fq.gz_G_to_A.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_C_to_T.fastq, with the options: -q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TTCAAAATTACAAACAATAATTTCCATACCATTAACAAAAATATCACAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+Now starting a Bowtie 2 paired-end alignment for CTread1GAread2GAgenome (reading in sequences from POC-50-TP2_R1.fastp-trim.fq.gz_C_to_T.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_G_to_A.fastq, with the options: -q --score-min L,0,-0.6 -p 16 --reorder --ignore-quals --no-mixed --no-discordant --dovetail --maxins 500 --nofw))
+Found first alignment:
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/1	77	*	0	0	*	*	0	0	TTTAAAATTATAAATAATAATTTTTATATTATTAATAAAAATATTATAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+LH00260:131:22L7V3LT4:3:1101:1510:1014_1:N:0:ACAGAATT+TNGCCGGT/2	141	*	0	0	*	*	0	0	TTCAAAATTACAAACAATAATTTCCATACCATTAACAAAAATATCACAAA	II-II9IIII9IIII-III9IIII9-I-I9IIIIII9I99III9II-II9	YT:Z:UP
+
+>>> Writing bisulfite mapping results to POC-50-TP2_L0-0.6_pe.bam <<<
+
+
+Reading in the sequence files ../data/12-Ptuh-meth/POC-50-TP2_R1.fastp-trim.fq.gz and ../data/12-Ptuh-meth/POC-50-TP2_R2.fastp-trim.fq.gz
+100000 reads; of these:
+  100000 (100.00%) were paired; of these:
+    99939 (99.94%) aligned concordantly 0 times
+    40 (0.04%) aligned concordantly exactly 1 time
+    21 (0.02%) aligned concordantly >1 times
+0.06% overall alignment rate
+100000 reads; of these:
+  100000 (100.00%) were paired; of these:
+    99939 (99.94%) aligned concordantly 0 times
+    40 (0.04%) aligned concordantly exactly 1 time
+    21 (0.02%) aligned concordantly >1 times
+0.06% overall alignment rate
+100000 reads; of these:
+  100000 (100.00%) were paired; of these:
+    99949 (99.95%) aligned concordantly 0 times
+    34 (0.03%) aligned concordantly exactly 1 time
+    17 (0.02%) aligned concordantly >1 times
+0.05% overall alignment rate
+100000 reads; of these:
+  100000 (100.00%) were paired; of these:
+    99948 (99.95%) aligned concordantly 0 times
+    35 (0.04%) aligned concordantly exactly 1 time
+    17 (0.02%) aligned concordantly >1 times
+0.05% overall alignment rate
+Processed 100000 sequences in total
+
+Failed to close filehandle AMBIG_1: Bad file descriptor at /home/shared/Bismark-0.24.0/bismark line 2641, <IN2> line 400004.
+Failed to close filehandle AMBIG_2: Bad file descriptor at /home/shared/Bismark-0.24.0/bismark line 2642, <IN2> line 400004.
+Failed to close filehandle UNMAPPED_1: Bad file descriptor at /home/shared/Bismark-0.24.0/bismark line 2643, <IN2> line 400004.
+Failed to close filehandle UNMAPPED_2: Bad file descriptor at /home/shared/Bismark-0.24.0/bismark line 2644, <IN2> line 400004.
+
+Successfully deleted the temporary files POC-50-TP2_R1.fastp-trim.fq.gz_C_to_T.fastq, POC-50-TP2_R1.fastp-trim.fq.gz_G_to_A.fastq, POC-50-TP2_R2.fastp-trim.fq.gz_C_to_T.fastq and POC-50-TP2_R2.fastp-trim.fq.gz_G_to_A.fastq
+
+Final Alignment report
+======================
+Sequence pairs analysed in total:	100000
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	180
+
+Total methylated C's in CpG context:	2
+Total methylated C's in CHG context:	3
+Total methylated C's in CHH context:	149
+Total methylated C's in Unknown context:	3
+
+Total unmethylated C's in CpG context:	7
+Total unmethylated C's in CHG context:	3
+Total unmethylated C's in CHH context:	16
+Total unmethylated C's in Unknown context:	1
+
+C methylated in CpG context:	22.2%
+C methylated in CHG context:	50.0%
+C methylated in CHH context:	90.3%
+C methylated in unknown context (CN or CHN):	75.0%
+
+
+Bismark completed in 0d 0h 0m 29s
+
+====================
+Bismark run complete
+====================
+
+
+gzip: stdout: Broken pipe
+
+gzip: stdout: Broken pipe
+
+gzip: stdout: Broken pipe
