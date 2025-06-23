@@ -136,6 +136,8 @@ echo "Number of lncRNAs:"
 grep "^>" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta | wc -l
 ```
 
+10090 total lncRNA
+
 ```{r, engine='bash'}
 # Extract sequence lengths for precursors
 awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta > ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA_lengths.txt
@@ -354,7 +356,7 @@ wc -l ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_a
 
 ```
 
-2690450 -- This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+3685396 -- This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
 
 ```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides"
@@ -364,7 +366,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | head -5
 ```
 
-9625
+779
 
 The header for this output is formatted as:
 
@@ -380,7 +382,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only 61 interactions were at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 2 interactions were at least 21 nucleotides with <=3 mismatches
 
 
 

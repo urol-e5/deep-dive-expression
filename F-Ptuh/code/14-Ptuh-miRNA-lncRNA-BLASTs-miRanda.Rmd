@@ -379,4 +379,4 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only  interactions are at least 115 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 9 interactions are at least 115 nucleotides with <=3 mismatches

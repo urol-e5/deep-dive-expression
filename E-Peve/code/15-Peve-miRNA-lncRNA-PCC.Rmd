@@ -36,13 +36,13 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-library(energy)
+# library(energy)
 library(parallel)
-# library(ggraph)
-# library(tidygraph)
-# library(igraph)
-# library(genefilter)
-# library(gridExtra)
+library(ggraph)
+library(tidygraph)
+library(igraph)
+library(genefilter)
+library(gridExtra)
 ```
 
 Read in miRNA data
@@ -156,7 +156,8 @@ Format miranda miRNA and lncRNA names
 # miRNA
 miranda_peve$miRNA <- sub("^>", "", miranda_peve$miRNA)  # Remove leading ">"
 miranda_peve$miRNA <- sub("\\..*", "", miranda_peve$miRNA)  # Remove everything from the first period onwards
-miranda_peve$lncRNA <- sub(".*::", "", miranda_peve$lncRNA)  # Remove everything before and including "::"
+#miranda_peve$lncRNA <- sub(".*::", "", miranda_peve$lncRNA)  # Remove everything before and including "::"
+miranda_peve$lncRNA <- sub("Peve_", "", miranda_peve$lncRNA)  # Remove the "Peve_" prefix
 ```
 
 ## Match lncRNA IDs to coordinates
@@ -177,14 +178,14 @@ write.table(lncRNA_mapping, "../output/15-Peve-miRNA-lncRNA-PCC/Peve_lncRNA_mapp
 
 Merge the miranda results with `lncRNA_mapping` to get the associated lncRNA ids with the transcript info
 ```{r}
-miranda_peve_names <- left_join(miranda_peve, lncRNA_mapping, by = c("lncRNA" = "lncRNA_coord")) %>%
-  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
-  unique()
+# miranda_peve_names <- left_join(miranda_peve, lncRNA_mapping, by = c("lncRNA" = "lncRNA_coord")) %>%
+#   select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+#   unique()
 ```
 
 Now we can merge with the PCC results! 
 ```{r}
-pcc_miranda_peve <- left_join(miranda_peve_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA")) %>% unique()
+pcc_miranda_peve <- left_join(miranda_peve, pcc_results, by = c("miRNA", "lncRNA")) %>% unique()
 
 # Write as csv 
 write.csv(pcc_miranda_peve, "../output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv")
@@ -266,7 +267,7 @@ range(miRNAs_per_lncRNA_sim$n_miRNAs)
 
 ```
 
-For the significant pairs, the miRNAs can interact with 3-128 unique lncRNAs, while the lncRNAs can interact with with 1-4 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-68 unique lncRNAs, while the lncRNAs can interact with 1-3 unique miRNAs. Interesting! 
+For the significant pairs, the miRNAs can interact with 1-33 unique lncRNAs, while the lncRNAs can interact with with 1-4 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-11 unique lncRNAs, while the lncRNAs can interact with 1 unique miRNAs. Interesting! 
 
 Plot as a network plot with the miRNAs as the primary nodes for `sig_pairs` 
 ```{r}

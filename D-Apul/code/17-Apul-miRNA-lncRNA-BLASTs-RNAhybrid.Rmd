@@ -135,6 +135,8 @@ echo "Number of lncRNAs:"
 grep "^>" ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta | wc -l
 ```
 
+31491 total lncRNA in Apul.
+
 ```{r, engine='bash'}
 # Extract sequence lengths for precursors
 awk '/^>/ {if (seqlen){print seqlen}; printf $0" " ;seqlen=0;next; } { seqlen += length($0)}END{print seqlen}' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA.fasta > ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul_lncRNA_lengths.txt
@@ -378,7 +380,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only 163 interactions are at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 29 interactions are at least 21 nucleotides with <=3 mismatches
 
 
 
