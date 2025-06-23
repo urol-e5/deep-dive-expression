@@ -124,13 +124,13 @@ cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
 
 ## check lncRNAs
 
-LncRNAs were identified from Peve RNA-seq data
+LncRNAs were identified from Peve RNA-seq data -- see details in `E-Peve/code/17-Peve-lncRNA.Rmd`
 
-Fasta of Peve lncRNAs stored at `https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta`
+Fasta of Peve lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta`
 
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
-curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
+curl -L https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
 
 echo "Number of lncRNAs:"
 grep "^>" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta | wc -l
@@ -156,7 +156,7 @@ ggplot(lncRNA_lengths, aes(x = length)) +
   labs(title = "A. pulchra lncRNA sequence lengths",
        x = "Sequence Length [nucleotides]",
        y = "Frequency") +
-  xlim(200, 110000) +
+  xlim(200, 100000) +
   ylim(0, 1000) +
   theme_minimal()
 ```
@@ -274,9 +274,9 @@ precursor_lncRNA_BLASTn %>%
   unique()
 
 ```
-We have 37 alignments of a full pre-miRNA to a lncRNA with no mismatches. 36 lncRNA and 21 miRNA are represented. 
+We have 2 alignments of a full pre-miRNA to a lncRNA with no mismatches. 2 lncRNA and 1 miRNA are represented. 
 
-Note that, as in A.pulchra, there are instances of a single pre-miRNA matching to several overlapping lncRNA. For example, Cluster_29 is contained within transcript::Porites_evermani_scaffold_1:1380412-1417060 and transcript::Porites_evermani_scaffold_1:1380748-1417060. This may represent multiple isoforms of a single lncRNA gene.
+Note that, as in A.pulchra, this appears to be an instance of a single pre-miRNA matching to several overlapping lncRNA. Cluster_8888's precursor is contained within Peve_lncRNA_9794 (Porites_evermani_scaffold_910:129985-141109) and Peve_lncRNA_9795 (Porites_evermani_scaffold_910:134862-141109). This may represent multiple isoforms of a single lncRNA gene.
 
 Save these results
 ```{r}
@@ -302,7 +302,7 @@ mature_lncRNA_BLASTn %>%
   filter(evalue <= 0.001)
 
 ```
-421 putative lncRNA sponges with these parameters. 
+78 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
