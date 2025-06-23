@@ -1,5 +1,5 @@
 ---
-title: "32-Apul lncRNA matrix "
+title: "18-Peve lncRNA matrix "
 author: Steven Roberts
 date: "`r format(Sys.time(), '%d %B, %Y')`"  
 output: 
@@ -30,39 +30,38 @@ knitr::opts_chunk$set(
 
 
 ```{bash}
-head ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+head ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
 ```
 
 Get BAMS
 
-```{bash}
-wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/32-Apul-lncRNA-matrix \
-https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07.2-Apul-Hisat/
-```
+
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/RNA-POR-73.sorted.bam
+
+
 
 ```{bash}
-sed -n '30956p' ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/18-Peve-lncRNA-matrix \
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
 ```
-```{bash}
-sed -n '30956p' ../output/31-Apul-lncRNA/lncRNA.gtf
-```
+
 
 ```{r, engine='bash'}
 /home/shared/subread-2.0.5-Linux-x86_64/bin/featureCounts \
 -T 42 \
--a ../output/31-Apul-lncRNA/Apul-lncRNA.gtf \
--o ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt \
+-a ../output/17-Peve-lncRNA/Peve-lncRNA.gtf \
+-o ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt \
 -t lncRNA \
 -g gene_id \
 -p \
-../data/32-Apul-lncRNA-matrix/*sorted.bam
+../data/18-Peve-lncRNA-matrix/*sorted.bam
 ```
 
 ```{bash}
-grep -c '^l' ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
-sort ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt | uniq -d
+grep -c '^l' ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
+sort ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt | uniq -d
 ```
 ```{bash}
-md5sum ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
+md5sum ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
 ```
 

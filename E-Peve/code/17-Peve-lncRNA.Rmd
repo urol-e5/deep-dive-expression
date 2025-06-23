@@ -520,10 +520,10 @@ head ../output/17-Peve-lncRNA/lncRNA_renamed.fasta
 
 
 ```{bash}
-cp ../output/17-Peve-lncRNA/lncRNA_renamed.fasta ../output/17-Peve-lncRNA/Apul-lncRNA.fasta
+#cp ../output/17-Peve-lncRNA/lncRNA_renamed.fasta ../output/17-Peve-lncRNA/Apul-lncRNA.fasta
 
-cp ../output/17-Peve-lncRNA/lncRNA.gtf ../output/17-Peve-lncRNA/Apul-lncRNA.gtf
+cp ../output/17-Peve-lncRNA/lncRNA.gtf ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
 
-md5sum ../output/17-Peve-lncRNA/Apul-lncRNA.fasta
-md5sum ../output/17-Peve-lncRNA/Apul-lncRNA.gtf
+
+md5sum ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
 ```
