@@ -61,7 +61,7 @@ D-Apul/output/26-Apul-siRNA-mRNA-interactions/*_condensed.bed
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/Apul-shared-siRNA_clusters.bed
 D-Apul/output/26-Apul-siRNA-mRNA-interactions/bowtie2/*.bt2
 D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv
-D-Apul/output/31*
+D-Apul/output/31*/*sorted*
 D-Apul/data/31*
 
 E-Peve/code/.bashvars

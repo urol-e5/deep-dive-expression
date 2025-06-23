@@ -517,3 +517,43 @@ writeXStringSet(fasta, filepath = "lncRNA_renamed.fasta", format = "fasta")
 
 cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
 ```
+
+#rename fasta
+
+```{r}
+# Load required libraries
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("Biostrings", "rtracklayer"))
+library(Biostrings)
+library(rtracklayer)
+
+# File paths (local)
+fasta_file <- "${OUTPUT_DIR}/lncRNA.fasta"
+gtf_file <- "${OUTPUT_DIR}/lncRNA.gtf"
+
+# Read in FASTA and GTF
+fasta <- readDNAStringSet(fasta_file)
+gtf <- import(gtf_file, format = "gtf")
+
+# Extract gene_id from GTF
+gene_ids <- sapply(mcols(gtf)$gene_id, function(x) gsub('"', '', x))  # remove quotes
+unique_gene_ids <- unique(gene_ids)
+
+# Generate new FASTA headers
+new_headers <- paste0("Apul_", unique_gene_ids)
+
+# Confirm lengths match
+if (length(fasta) != length(new_headers)) {
+  stop("Mismatch between number of FASTA sequences and GTF gene IDs.")
+}
+
+# Rename sequences
+names(fasta) <- new_headers
+
+# Write new FASTA
+writeXStringSet(fasta, filepath = "${OUTPUT_DIR}/lncRNA_renamed.fasta", format = "fasta")
+
+cat("FASTA headers renamed and saved to lncRNA_renamed.fasta\n")
+```
+
