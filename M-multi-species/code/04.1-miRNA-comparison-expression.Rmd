@@ -1,0 +1,138 @@
+---
+title: "04.1-miRNA-comparison-expression"
+author: "Kathleen Durkin"
+date: "2025-06-24"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+We hypothesize that miRNA which are conserved among species are more highly expressed than species-specific miRNA. This document will compare miRNA expression accross species and levels of conservation
+
+Load packages
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+Load and format counts files
+```{r}
+# # mature miRNA count matrices
+# Apul_mature <- read.table("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
+# Apul_mature$mean <- rowMeans(Apul_mature) # Average expression across samples
+# Apul_mature$miRNA <- rownames(Apul_mature)
+# Apul_mature$Species <- "Apul"
+# 
+# Peve_mature <- read.table("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
+# Peve_mature$mean <- rowMeans(Peve_mature) # Average expression across samples
+# Peve_mature$miRNA <- rownames(Peve_mature)
+# Peve_mature$Species <- "Peve"
+# 
+# Ptuh_mature <- read.table("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_miRNA_ShortStack_counts_formatted.txt")
+# Ptuh_mature$mean <- rowMeans(Ptuh_mature) # Average expression across samples
+# Ptuh_mature$miRNA <- rownames(Ptuh_mature)
+# Ptuh_mature$Species <- "Ptuh"
+
+# mature miRNA count matrices
+Apul_mature <- read.table("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+Apul_mature$mean <- rowMeans(Apul_mature) # Average expression across samples
+Apul_mature$miRNA <- rownames(Apul_mature)
+Apul_mature$Species <- "Apul"
+
+Peve_mature <- read.table("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_miRNA_normalized.txt")
+Peve_mature$mean <- rowMeans(Peve_mature) # Average expression across samples
+Peve_mature$miRNA <- rownames(Peve_mature)
+Peve_mature$Species <- "Peve"
+
+Ptuh_mature <- read.table("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt")
+Ptuh_mature$mean <- rowMeans(Ptuh_mature) # Average expression across samples
+Ptuh_mature$miRNA <- rownames(Ptuh_mature)
+Ptuh_mature$Species <- "Ptuh"
+```
+
+Load in assigned miRNA names
+```{r}
+Apul_names <- read.csv("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+
+Peve_names <- read.csv("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+
+Ptuh_names <- read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv") %>% select(Name, given_miRNA_name)
+```
+
+Annotate miRNA dfs with given names
+```{r}
+Apul_mature_df <- left_join(Apul_mature, Apul_names, by = c("miRNA" = "Name"))
+Peve_mature_df <- left_join(Peve_mature, Peve_names, by = c("miRNA" = "Name"))
+Ptuh_mature_df <- left_join(Ptuh_mature, Ptuh_names, by = c("miRNA" = "Name"))
+```
+
+Separate conserved miRNA (present in all 3 species) from the rest. In `04-miRNA-comparison`, identified the miRNA conserved among all 3 species to be: miR-100, miR-2023, miR-2025, and miR-2036
+```{r}
+Apul_mature_conserved <- Apul_mature_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Apul_mature_unconserved <- Apul_mature_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Peve_mature_conserved <- Peve_mature_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Peve_mature_unconserved <- Peve_mature_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Ptuh_mature_conserved <- Ptuh_mature_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Ptuh_mature_unconserved <- Ptuh_mature_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+# Also annotate the full dfs
+Apul_mature_df$conservation <- ifelse(Apul_mature_df$given_miRNA_name %in% Apul_mature_conserved$given_miRNA_name, "conserved", "unconserved")
+Peve_mature_df$conservation <- ifelse(Peve_mature_df$given_miRNA_name %in% Peve_mature_conserved$given_miRNA_name, "conserved", "unconserved")
+Ptuh_mature_df$conservation <- ifelse(Ptuh_mature_df$given_miRNA_name %in% Ptuh_mature_conserved$given_miRNA_name, "conserved", "unconserved")
+```
+
+
+Expression summary stats:
+```{r}
+cat("Mean expression of conserved miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(mean(Apul_mature_conserved$mean), ", ", mean(Peve_mature_conserved$mean), ", ", mean(Ptuh_mature_conserved$mean))
+
+cat("\n")
+cat("\n")
+
+cat("Mean expression of unconserved miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(mean(Apul_mature_unconserved$mean), ", ", mean(Peve_mature_unconserved$mean), ", ", mean(Ptuh_mature_unconserved$mean))
+```
+
+Plot
+```{r}
+# long format
+Apul_mature_long <- Apul_mature_df %>%
+  pivot_longer(cols = starts_with("sample"), 
+               names_to = "sample", 
+               values_to = "expression")
+
+# plot
+ggplot(Apul_mature_long, aes(x=given_miRNA_name, y=expression, group=given_miRNA_name)) +
+  #geom_point() + 
+  #geom_smooth(method = "loess") +
+  geom_boxplot() +
+  scale_y_log10() +
+  facet_wrap(~conservation)
+```
+
+
+
+Notes: should I be doing this with normalized counts instead of raw?
+
