@@ -1,0 +1,231 @@
+---
+title: "10.1-Ptuh-mRNA-lncRNA-correlation-PCC"
+date: "2025-06-23"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: references.bib
+link-citations: true
+---
+
+This code will use Pearson's correlation coefficient to examine possible correlations between mRNA and lncRNA expression. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#BiocManager::install("SPONGE")
+
+library(tidyverse)
+#library(mirTarRnaSeq)
+library(reshape2)
+#library(SPONGE)
+library(pheatmap)
+library(energy)
+library(parallel)
+# library(ggraph)
+# library(tidygraph)
+# library(igraph)
+# library(genefilter)
+# library(gridExtra)
+```
+
+Read in gene counts
+```{r}
+mRNA_counts <- read.csv("../output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+rownames(mRNA_counts) <- mRNA_counts$gene_id
+mRNA_counts <- mRNA_counts %>% select(-gene_id)
+mRNA_counts <- mRNA_counts %>% rename( 
+         "sample47"=`RNA.POC.47`, 
+         "sample48"=`RNA.POC.48`, 
+         "sample50"=`RNA.POC.50`, 
+         "sample53"=`RNA.POC.53`, 
+         "sample57"=`RNA.POC.57`)
+
+head(mRNA_counts)
+
+# Remove any mRNAs with 0 for all samples 
+mRNA_counts <- mRNA_counts %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+```
+
+Read in lncRNA data. Generated in `F-Ptuh/code/32-Ptuh-lncRNA-matrix.Rmd`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/32-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
+
+```{r}
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt", skip=1) %>%
+  rename("lncrna_id"=Geneid, 
+         "sample47"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam`, 
+         "sample48"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam`, 
+         "sample50"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam`, 
+         "sample53"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam`, 
+         "sample57"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam`)
+
+# Change to df 
+lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
+row.names(lncRNA_counts_df) <- lncRNA_counts_df[,1]
+lncRNA_counts_df <- lncRNA_counts_df[,-1]  # remove the first column (gene names) if needed
+
+# Remove any lncRNAs with 0 for all samples 
+lncRNA_counts_df <- lncRNA_counts_df %>%
+     mutate(Total = rowSums(.[, 1:5]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total)
+```
+
+Normalize counts
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Normalize mRNA and mRNA counts
+mRNA_norm <- normalize_counts(mRNA_counts)
+#mRNA_norm <- as.matrix(mRNA_counts_filt)
+
+lncRNA_norm <- normalize_counts(lncRNA_counts_df)
+#mRNA_norm <- as.matrix(mRNA_counts_filt)
+```
+
+Calculate PCC  
+```{r, eval=FALSE}
+# Function to calculate PCC and p-value for a pair of vectors
+calc_pcc <- function(x, y) {
+  result <- cor.test(x, y, method = "pearson")
+  return(c(PCC = result$estimate, p_value = result$p.value))
+}
+
+# Create a data frame of all mRNA-lncRNA pairs
+pairs <- expand.grid(mRNA = rownames(mRNA_norm), lncRNA = rownames(lncRNA_norm))
+
+# Calculate PCC and p-value for each pair
+pcc_results <- pairs %>%
+  rowwise() %>%
+  mutate(
+    pcc_stats = list(calc_pcc(mRNA_norm[mRNA,], lncRNA_norm[lncRNA,]))
+  ) %>%
+  unnest_wider(pcc_stats)
+
+# Adjust p-values for FDR
+pcc_results <- pcc_results %>%
+  mutate(adjusted_p_value = p.adjust(p_value, method = "fdr"))
+
+# Save
+write.csv(pcc_results, "../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
+```
+
+Both matrices (the mRNA counts and lncRNA counts) are prohibitively large (~30,000 rows). I've used the above code to create an R script that will perform the PCC calculations, `run_mRNA_lncRNA_PCC.R` stored in `F-Ptuh/output/21.2-Ptuh-mRNA-lncRNA-correlation-PCC`. To run the PCC calcs in the background, allowing continued work in Rstudio, run the below code chunk from the terminal.
+```{r, engine='bash' eval=FALSE}
+nohup Rscript ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC.R > ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_log.txt 2>&1 &
+```
+
+```{r, engine='bash' eval=FALSE}
+nohup Rscript ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_chunks.R > ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_chunks_log.txt 2>&1 &
+```
+
+
+
+
+Read back in PCC results (available in large-file storage at `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv`)
+```{r}
+pcc_results <- read.csv("../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
+#read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
+```
+
+
+Inspect the data
+```{r}
+nrow(pcc_results)
+length(unique(pcc_results$mRNA))
+length(unique(pcc_results$lncRNA))
+
+# Are there any pairs that have a PCC correlation > |0.5| and a p-value < 0.05?
+sig_pairs <- pcc_results %>%
+  filter(abs(PCC.cor) > 0.5 & p_value < 0.05)
+
+## Count positive and negative PCC.cor values
+all_count <- nrow(sig_pairs)
+positive_count <- sum(sig_pairs$PCC.cor > 0)
+negative_count <- sum(sig_pairs$PCC.cor < 0)
+cat("Number of correlations with |PCC| > 0.5 and p-val < 0.05:", all_count, "\n")
+cat("Number of rows with positive PCC.cor:", positive_count, "(", (100*positive_count)/all_count, ")", "\n")
+cat("Number of rows with negative PCC.cor:", negative_count, "(", (100*negative_count)/all_count, ")", "\n")
+```
+
+26,508 mRNA significantly correlate (p-val < 0.05) with a total of 13,258 lncRNA, with a total of 22,435,054 unique pairs with significantly correlated expression. 
+
+Of these, all also had correlation magnitudes of at least 0.5. The majority of correlations (17,017,892 or 75.9%) were positive, though a fair number (5,417,162 or 24.1%) were negative.
+
+
+How many mRNAs per lncRNA and vice versa for the sig pairs?
+```{r}
+## sig pairs 
+lncRNAs_per_mRNA <- sig_pairs %>%
+  group_by(mRNA) %>%
+  summarize(n_lncRNAs = n_distinct(lncRNA)) %>%
+  arrange(desc(n_lncRNAs))
+
+print("lncRNAs per mRNA, significant. mean, range:")
+mean(lncRNAs_per_mRNA$n_lncRNAs)
+range(lncRNAs_per_mRNA$n_lncRNAs)
+
+cat("\n")
+
+mRNAs_per_lncRNA <- sig_pairs %>%
+  group_by(lncRNA) %>%
+  summarize(n_mRNAs = n_distinct(mRNA)) %>%
+  arrange(desc(n_mRNAs))
+
+print("mRNAs per lncRNA, significnat. mean, range:")
+mean(mRNAs_per_lncRNA$n_mRNAs)
+range(mRNAs_per_lncRNA$n_mRNAs)
+
+```
+
+For the significant pairs (|PCC| > 0.5, pval < 0.05), the mRNAs are correlated with 83-2848 unique lncRNAs, while the lncRNAs are correlated with 478-3271 unique mRNAs. 
+
+Plot as a network plot with the mRNAs as the primary nodes for `sig_pairs` 
+```{r}
+# Create the graph
+g <- graph_from_data_frame(sig_pairs, directed = FALSE)
+
+# Add edge attributes
+E(g)$weight <- abs(E(g)$PCC.cor)  # Use absolute PCC for edge weight
+E(g)$color <- ifelse(E(g)$PCC.cor > 0, "blue", "red")  # Blue for positive, red for negative correlations
+
+# Add node attributes
+V(g)$type <- ifelse(V(g)$name %in% sig_pairs$mRNA, "mRNA", "lncRNA")
+
+# Convert to tbl_graph for ggraph
+g_tbl <- as_tbl_graph(g)
+
+# Create the plot
+p <- ggraph(g_tbl, layout = "auto") +
+  geom_edge_link(aes(edge_width = weight, color = color), alpha = 0.6) +
+  geom_node_point(aes(color = type), size = 5) +
+  #geom_node_text(aes(label = name), repel = TRUE, size = 3) +
+  scale_edge_width(range = c(0.5, 3)) +
+  scale_color_manual(values = c("mRNA" = "lightblue", "lncRNA" = "lightgreen", "Positive correlation" = "blue", "Negative correlation" = "red")) +
+  theme_graph() +
+  labs(title = "mRNA-lncRNA Interaction Network",
+       subtitle = "Edge width represents |PCC|, color represents correlation direction");p
+ggsave("../../F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-significant_mRNA_lncRNA_network.png", p, width = 20, height = 15, dpi = 300)
+```
+
