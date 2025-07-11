@@ -145,8 +145,8 @@ Of the 4075 putative CDS miRNA targets predicted by miRanda that are also have s
 
 Save
 ```{r}
-write.csv(cor_bind_FA, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_targets_FA.csv")
-write.csv(sig_cor_bind_FA, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_sig_cor_targets_FA.csv")
+write.csv(cor_bind_FA, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_targets_FA.csv")
+write.csv(sig_cor_bind_FA, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
 ```
 
 
@@ -249,7 +249,7 @@ head(results_all_targets)
 
 Save results
 ```{r}
-write.csv(results_all_targets, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_all_targets_topGO_FE.csv")
+write.csv(results_all_targets, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_all_targets_topGO_FE.csv")
 ```
 
 
@@ -284,7 +284,7 @@ head(results_sig_cor_targets)
 
 Save results
 ```{r}
-write.csv(results_sig_cor_targets, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_sig_cor_targets_topGO_FE.csv")
+write.csv(results_sig_cor_targets, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_topGO_FE.csv")
 ```
 
 # FE of all targets negatively correlated with miRNAs (regardless of correlation significance)
@@ -430,7 +430,7 @@ test <- GO_neg_corr_df %>%
   #filter(p_value < 0.1)
 
 # Save as csv 
-write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_neg_corr_target_enrichment.csv")
+write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_neg_corr_target_enrichment.csv")
 ```
 
 Plot!
@@ -448,8 +448,8 @@ plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
 ```
 
 Examine the top 10 most significant GO terms for BP and MF
@@ -491,8 +491,8 @@ plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
 ```
 
 
@@ -636,7 +636,7 @@ test <- GO_pos_corr_df %>%
   #filter(p_value < 0.1)
 
 # Save as csv 
-write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_pos_corr_target_enrichment.csv")
+write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_pos_corr_target_enrichment.csv")
 ```
 
 Plot!
@@ -654,8 +654,8 @@ plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
 ```
 
 Examine the top 10 most significant GO terms for BP and MF
@@ -697,8 +697,8 @@ plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_pos_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_pos_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_pos_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
 ```
 
 
@@ -844,7 +844,7 @@ test <- GO_sig_neg_corr_df %>%
   #filter(p_value < 0.1)
 
 # Save as csv 
-write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_sig_neg_corr_target_enrichment.csv")
+write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_sig_neg_corr_target_enrichment.csv")
 ```
 
 Plot!
@@ -862,7 +862,7 @@ plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
 ```
 
 Examine the top 10 most significant GO terms for BP and MF
@@ -904,8 +904,8 @@ plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_sig_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_top10GO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_sig_neg_corr_target_enrichment.pdf", plot, width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_top10GO_sig_neg_corr_target_enrichment.png", plot, width = 20, height = 25, dpi = 300)
 ```
 
 
@@ -920,7 +920,7 @@ sig_pos_corr_data <- data %>%
 
 # Make list of target genes for input to topGO
 # Genes of interest - ie those targeted by miRNAs
-target_genes <- as.character(unique(sig_neg_corr_data$mRNA))
+target_genes <- as.character(unique(sig_pos_corr_data$mRNA))
 
 # Apply 1 or 0 if gene is gene of interest 
 GeneList <- factor(as.integer(all_genes %in% target_genes))
@@ -1049,7 +1049,7 @@ test <- GO_sig_pos_corr_df %>%
   #filter(p_value < 0.1)
 
 # Save as csv 
-write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.csv")
+write.csv(test, "../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.csv")
 ```
 
 Plot!
@@ -1067,8 +1067,8 @@ plot<-ggplot(test, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.pdf", plot, width = 20, height = 35, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_topGO_sig_pos_corr_target_enrichment.png", plot, width = 20, height = 35, dpi = 300)
 ```
 
 Examine the top 10 most significant GO terms for BP and MF
@@ -1110,7 +1110,7 @@ plot<-ggplot(top_10_combined, aes(x = Term, y = Fisher, fill = p_value)) +
   coord_flip(); plot
 
 # Save plot 
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/top10GO_sig_pos_corr_target_enrichment.pdf", last_plot(), width = 20, height = 25, dpi = 300)
-ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS_5UTR/top10GO_sig_pos_corr_target_enrichment.png", last_plot(), width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/top10GO_sig_pos_corr_target_enrichment.pdf", last_plot(), width = 20, height = 25, dpi = 300)
+ggsave("../output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/top10GO_sig_pos_corr_target_enrichment.png", last_plot(), width = 20, height = 25, dpi = 300)
 ```
 
