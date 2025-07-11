@@ -109,7 +109,7 @@ So we have a reference set of 33624 genes present in our samples.
 This is a table of all putative miRNA-mRNA binding predicted by miRanda, plus Pearsons correlation coefficients for coexpression of each putative binding pair.
 ```{r}
 data <- read.csv("../output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv")
-data <- rename(data,
+data <- dplyr::rename(data,
                miRNA = V1,
                mRNA = V4.y)
 head(data)
@@ -137,11 +137,15 @@ Of the 38152 putative miRNA targets (CDS region) predicted by miRanda, 12181 hav
 ```{r}
 sig_cor_bind_FA <- cor_bind_FA[cor_bind_FA$p_value < 0.05,]
 
+# Remove rows where all values are NA
+sig_cor_bind_FA <- sig_cor_bind_FA[!apply(is.na(sig_cor_bind_FA), 1, all), ]
+
+
 nrow(sig_cor_bind_FA)
 nrow(sig_cor_bind_FA[!is.na(sig_cor_bind_FA$Gene.Ontology.IDs),])
 ```
 
-Of the 4075 putative CDS miRNA targets predicted by miRanda that are also have significantly correlated expression, only 540 have available annotations. This is an average of 7 annotated targets per miRNA. This unfortunately means **functional enrichment analysis will likely be uninformative for most groups of significantly coexpressed targets.**
+Of the 1739 putative CDS miRNA targets predicted by miRanda that are also have significantly correlated expression, only 540 have available annotations.
 
 Save
 ```{r}

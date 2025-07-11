@@ -1,0 +1,7 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Fisher","type","miRNA"
+"1","GO:0004983","neuropeptide Y receptor activity",4,1,0.01,0.013,"Molecular.Function","Cluster_1167"
+"2","GO:0000026","alpha-1,2-mannosyltransferase activity",1,1,0,0.0016,"Molecular.Function","Cluster_6906"
+"3","GO:0050233","pyranose oxidase activity",1,1,0,0.0016,"Molecular.Function","Cluster_14999"
+"4","GO:0001822","kidney development",9,1,0.03,0.025,"Biological.Process","Cluster_4079"
+"5","GO:0004140","dephospho-CoA kinase activity",1,1,0,0.0016,"Molecular.Function","Cluster_4735"
+"6","GO:0004252","serine-type endopeptidase activity",14,1,0.02,0.023,"Molecular.Function","Cluster_10061"

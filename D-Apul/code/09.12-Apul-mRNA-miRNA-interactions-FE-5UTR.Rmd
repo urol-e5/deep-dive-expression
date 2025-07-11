@@ -137,11 +137,14 @@ Of the 4959 putative miRNA targets (5UTR region) predicted by miRanda, 963 have 
 ```{r}
 sig_cor_bind_FA <- cor_bind_FA[cor_bind_FA$p_value < 0.05,]
 
+# Remove rows where all values are NA
+sig_cor_bind_FA <- sig_cor_bind_FA[!apply(is.na(sig_cor_bind_FA), 1, all), ]
+
 nrow(sig_cor_bind_FA)
 nrow(sig_cor_bind_FA[!is.na(sig_cor_bind_FA$Gene.Ontology.IDs),])
 ```
 
-Of the 1005 putative 5UTR miRNA targets predicted by miRanda that are also have significantly correlated expression, only 52 have available annotations. This is an average of ~19 annotated targets per miRNA.
+Of the 217 putative 5UTR miRNA targets predicted by miRanda that are also have significantly correlated expression, only 52 have available annotations.
 
 Save
 ```{r}
