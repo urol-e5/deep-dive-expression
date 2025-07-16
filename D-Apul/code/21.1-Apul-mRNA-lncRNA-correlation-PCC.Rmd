@@ -133,7 +133,7 @@ write.csv(pcc_results, "../output/28-Apul-mRNA-lncRNA-interactions/Apul-PCC_mRNA
 
 Both matrices (the mRNA counts and lncRNA counts) are prohibitively large (~30,000 rows). I've used the above code to create an R script that will perform the PCC calculations, `run_mRNA_lncRNA_PCC.R` stored in `D-Apul/output/21.2-Apul-mRNA-lncRNA-correlation-PCC`. To run the PCC calcs in the background, allowing continued work in Rstudio, run the below code chunk from the terminal.
 
-```{r, engine='bash' eval=FALSE}
+```{r, engine='bash', eval=FALSE}
 cd ../output/21.1-Apul-mRNA-lncRNA-correlation-PCC/
 
 nohup Rscript run_mRNA_lncRNA_PCC_chunks100.R > run_mRNA_lncRNA_PCC_chunks100_log.txt 2>&1 &
@@ -150,7 +150,7 @@ Read back in PCC results (available in large-file storage at `https://gannet.fis
 ```
 
 Bash version:
-```{r, engine='bash, eval=FALSE}
+```{r, engine='bash', eval=FALSE}
 wget -O ../output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/21.1-Apul-mRNA_lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv
 
 ```
@@ -235,6 +235,7 @@ How many mRNAs per lncRNA and vice versa for the sig pairs?
 
 Bash version:
 ```{r, engine='bash', cache=TRUE}
+cd ../output/21.1-Apul-mRNA-lncRNA-correlation-PCC/
 
 #lncRNAs per mRNA
 awk -F, 'NR > 1 {pair[$1","$2]=1} END {
