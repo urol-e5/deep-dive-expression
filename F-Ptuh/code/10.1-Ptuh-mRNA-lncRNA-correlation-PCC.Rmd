@@ -132,12 +132,11 @@ write.csv(pcc_results, "../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC
 ```
 
 Both matrices (the mRNA counts and lncRNA counts) are prohibitively large (~30,000 rows). I've used the above code to create an R script that will perform the PCC calculations, `run_mRNA_lncRNA_PCC.R` stored in `F-Ptuh/output/21.2-Ptuh-mRNA-lncRNA-correlation-PCC`. To run the PCC calcs in the background, allowing continued work in Rstudio, run the below code chunk from the terminal.
-```{r, engine='bash' eval=FALSE}
-nohup Rscript ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC.R > ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_log.txt 2>&1 &
-```
 
 ```{r, engine='bash' eval=FALSE}
-nohup Rscript ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_chunks.R > ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PCC_chunks_log.txt 2>&1 &
+cd ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/
+
+nohup Rscript run_mRNA_lncRNA_PCC_chunks100.R > run_mRNA_lncRNA_PCC_chunks100_log.txt 2>&1 &
 ```
 
 
@@ -145,8 +144,7 @@ nohup Rscript ../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/run_mRNA_lncRNA_PC
 
 Read back in PCC results (available in large-file storage at `https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv`)
 ```{r}
-pcc_results <- read.csv("../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
-#read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
+pcc_results <- read.csv("https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv")
 ```
 
 
