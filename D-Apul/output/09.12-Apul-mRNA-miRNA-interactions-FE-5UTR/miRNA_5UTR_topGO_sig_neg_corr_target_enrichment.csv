@@ -1,0 +1,4 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X","miRNA","V2","V3","V4.x","V5","V6","V7","V8","V9","V10","V11","PCC.cor","p_value","adjusted_p_value"
+"1","FUN_008411","GO:0002291","T cell activation via T cell receptor contact with ...",10,1,0.02,0.021,"Biological Processes",1728,"Cluster_15928","ptg000002l:11228246-11229246",170,-23.47,2,19,206,227,17,"76.47%","94.12%",-0.900690623244978,0.0370034107087467,0.96546924320845
+"2","FUN_032410","GO:0001762","beta-alanine transport",17,1,0.04,0.035,"Biological Processes",1335,"Cluster_15340","ptg000023l:31651337-31652337",147,-20.78,2,21,27,49,20,"65.00%","70.00%",-0.905311242381801,0.0344758463038359,0.952057835755528
+"3","FUN_038633","GO:0004843","cysteine-type deubiquitinase activity",6,1,0.01,0.011,"Molecular Functions",4580,"Cluster_5900","ptg000027l:9518580-9519580",157,-22.22,2,21,780,803,22,"68.18%","81.82%",-0.965103191651987,0.00778441455860867,0.677119396353841

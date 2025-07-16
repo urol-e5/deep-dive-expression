@@ -1,0 +1,8 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Fisher","type","miRNA"
+"1","GO:0004560","alpha-L-fucosidase activity",1,1,0,0.004,"Molecular.Function","Cluster_1015"
+"2","GO:0003943","N-acetylgalactosamine-4-sulfatase activity",3,1,0.01,0.012,"Molecular.Function","Cluster_1015"
+"3","GO:0001825","blastocyst formation",2,1,0.01,0.0092,"Biological.Process","Cluster_1068"
+"4","GO:0005509","calcium ion binding",21,1,0.04,0.042,"Molecular.Function","Cluster_1296"
+"5","GO:0003017","lymph circulation",1,1,0,0.0046,"Biological.Process","Cluster_1938"
+"6","GO:0003723","RNA binding",6,1,0.01,0.012,"Molecular.Function","Cluster_1938"
+"7","GO:0004222","metalloendopeptidase activity",22,1,0.04,0.044,"Molecular.Function","Cluster_21"

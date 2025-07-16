@@ -1,0 +1,4 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X.1","X","miRNA","PCC.cor","p_value","adjusted_p_value","score","energy","query_start_end","subject_start_end","total_bp_shared","query_similar","subject_similar"
+"1","Peve_00029393","GO:0004983","neuropeptide Y receptor activity",4,1,0.05,0.045,"Molecular Functions",1529,560930,"Cluster_1167",0.999909726776791,0.00855416971793389,0.573710369894872,149,-22.43,"2 20","154 174",18,"72.22%","72.22%"
+"2","Peve_00030693","GO:0000026","alpha-1,2-mannosyltransferase activity",1,1,0.01,0.011,"Molecular Functions",1346,489169,"Cluster_6906",0.999488224375111,0.0203682371525405,0.810097073649321,155,-20.73,"2 21","558 576",19,"73.68%","84.21%"
+"3","Peve_00042916","GO:0004140","dephospho-CoA kinase activity",1,1,0.01,0.011,"Molecular Functions",2775,1012693,"Cluster_4735",0.999824590062268,0.011924181187447,0.672885963152335,173,-22.62,"2 18","311 332",16,"87.50%","93.75%"

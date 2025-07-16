@@ -1,0 +1,7 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Fisher","type","miRNA"
+"1","GO:0004714","transmembrane receptor protein tyrosine kinase acti...",8,1,0.03,0.026,"Molecular.Function","Cluster_1167"
+"2","GO:0002175","protein localization to paranode region of axon",14,1,0.04,0.04,"Biological.Process","Cluster_15726"
+"3","GO:0004713","protein tyrosine kinase activity",18,1,0.03,0.029,"Molecular.Function","Cluster_2854"
+"4","GO:0001822","kidney development",9,1,0.03,0.025,"Biological.Process","Cluster_4079"
+"5","GO:0000146","microfilament motor activity",2,1,0,0.0033,"Molecular.Function","Cluster_4629"
+"6","GO:0000070","mitotic sister chromatid segregation",2,1,0.01,0.0057,"Biological.Process","Cluster_589"
