@@ -52,6 +52,8 @@ Zoe Dellaert
 - [0.10 Correlations: Count matrices from
   https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices](#010-correlations-count-matrices-from-httpsgithubcomurol-e5deep-dive-expressionwiki03e28090expression-count-matrices)
   - [0.10.1 RNA-seq](#0101-rna-seq)
+  - [0.10.2 sRNA-seq](#0102-srna-seq)
+  - [0.10.3 lncRNA](#0103-lncrna)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
 
@@ -1237,8 +1239,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
 
 ![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-2.png)<!-- -->
 
-sRNA-seq:
-<https://github.com/urol-e5/deep-dive-expression/tree/main/D-Apul/output/03.1-Apul-sRNA-summary>
+### 0.10.2 sRNA-seq
 
 ``` r
 miRNA <- read.delim("../output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt") %>% rownames_to_column("miRNA_id") 
@@ -1258,8 +1259,6 @@ percent_meth_long <- CpG_count_miRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.17
 percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
 percent_meth_long$miRNA_id <- gsub(".mature","",percent_meth_long$miRNA_id)
 
-# below not working, miRNA ids are different (cluster vs known IDs)
-
 plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
 
 ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
@@ -1271,18 +1270,17 @@ ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
 
 ![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
-lncRNA:
-<https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt>
+### 0.10.3 lncRNA
 
 ``` r
-lncRNA <- read.delim("../output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt",skip=1)
+lncRNA <- read.delim("../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt",skip=1)
 
-lncRNA_long <- lncRNA %>%  pivot_longer(cols =...output.07.Apul.Hisat.RNA.ACR.140.sorted.bam:...output.07.Apul.Hisat.RNA.ACR.178.sorted.bam,
+lncRNA_long <- lncRNA %>%  pivot_longer(cols =...data.32.Apul.lncRNA.matrix.RNA.ACR.140.sorted.bam:...data.32.Apul.lncRNA.matrix.RNA.ACR.178.sorted.bam,
                                       names_to = "Sample",
                                       values_to = "lncRNA_count") %>% rename("lncRNA_id" = Geneid)
 
 #fix sample IDs
-lncRNA_long$Sample <- gsub("...output.07.Apul.Hisat.RNA.","",lncRNA_long$Sample)
+lncRNA_long$Sample <- gsub("...data.32.Apul.lncRNA.matrix.RNA.","",lncRNA_long$Sample)
 lncRNA_long$Sample <- gsub(".sorted.bam","",lncRNA_long$Sample)
 
 percent_meth_long <- CpG_count_lncRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
