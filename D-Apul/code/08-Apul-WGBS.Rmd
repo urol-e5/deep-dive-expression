@@ -678,14 +678,15 @@ head(TE)
 #### miRNA:
 
 ```{r}
-miRNAs = genomation::gffToGRanges("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/known_miRNAs.gff3")
+miRNAs = genomation::gffToGRanges("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/Apul_ShortStack_4.1.0_mature.gff3")
+
 head(miRNAs)
 ```
 
 #### lncRNA:
 
 ```{r}
-lncRNAs = genomation::gffToGRanges("../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf")
+lncRNAs = genomation::gffToGRanges("../output/31-Apul-lncRNA/Apul-lncRNA.gtf")
 head(lncRNAs)
 ```
 
@@ -856,6 +857,7 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 ### Extract methylation count matrix for transcripts
 
 ```{r}
@@ -963,12 +965,18 @@ write.csv(CpG_count_lncRNAs, "../output/08-Apul-WGBS/CpG_lncRNA_CountMat.csv")
 
 ## Correlations: Count matrices from https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices
 
-### RNA-seq (REDO THIS with normalized counts)
+### RNA-seq
 
 ```{r}
-mRNA <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+mRNA_counts <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
 
-mRNA_long <- mRNA %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
+# Remove any genes with 0 counts across samples 
+mRNA_counts<-mRNA_counts %>%
+     mutate(Total = rowSums(.[, 2:6]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total) 
+
+mRNA_long <- mRNA_counts %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
                                       names_to = "Sample",
                                       values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
 
@@ -989,6 +997,39 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   labs(x = "Average CpG % methylation of gene", y = "RNA Counts", 
        title = "Gene Methylation vs Expression") +
   theme_minimal()
+
+## Normalized counts:
+
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+mRNA_norm <- as.data.frame(normalize_counts(mRNA_counts[,-1]))
+mRNA_norm$gene_id <- mRNA_counts[,1]
+
+mRNA_long <- mRNA_norm %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
+                                      names_to = "Sample",
+                                      values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
+
+#fix sample IDs
+mRNA_long$Sample <- gsub("RNA.","",mRNA_long$Sample)
+
+percent_meth_long <- CpG_count_transcripts %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+plot_data_tissue <- merge(percent_meth_long, mRNA_long, by = c("transcript_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of gene", y = "Normalized RNA Counts (RPM)", 
+       title = "Gene Methylation vs Expression: RPM Normalized Counts") +
+  theme_minimal()
 ```
 
 sRNA-seq: https://github.com/urol-e5/deep-dive-expression/tree/main/D-Apul/output/03.1-Apul-sRNA-summary
@@ -1007,18 +1048,19 @@ percent_meth_long <- CpG_count_miRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.17
                                       names_to = "Sample",
                                       values_to = "percent_meth") 
 
-#fix sample IDs
+#fix sample and miRNA IDs
 percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+percent_meth_long$miRNA_id <- gsub(".mature","",percent_meth_long$miRNA_id)
 
 # below not working, miRNA ids are different (cluster vs known IDs)
 
-# plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
-# 
-# ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
-#   geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
-#   labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts", 
-#        title = "miRNA Methylation vs Expression") +
-#   theme_minimal()
+plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts",
+       title = "miRNA Methylation vs Expression") +
+  theme_minimal()
 ```
 
 lncRNA: https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt

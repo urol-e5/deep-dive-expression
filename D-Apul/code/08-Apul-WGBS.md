@@ -47,10 +47,11 @@ Zoe Dellaert
     status](#092-region-stacked-bars-cpgs-by-methylation-status)
   - [0.9.3 Sample Methylation
     boxplots](#093-sample-methylation-boxplots)
+  - [0.9.4 Extract methylation count matrix for
+    transcripts](#094-extract-methylation-count-matrix-for-transcripts)
 - [0.10 Correlations: Count matrices from
   https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices](#010-correlations-count-matrices-from-httpsgithubcomurol-e5deep-dive-expressionwiki03e28090expression-count-matrices)
-  - [0.10.1 RNA-seq (REDO THIS with normalized
-    counts)](#0101-rna-seq-redo-this-with-normalized-counts)
+  - [0.10.1 RNA-seq](#0101-rna-seq)
 
 ## 0.1 This is the downstream methylation analysis of the WGBS data for *Acropora pulchra*
 
@@ -816,46 +817,47 @@ head(TE)
 #### 0.8.1.2 miRNA:
 
 ``` r
-miRNAs = genomation::gffToGRanges("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/known_miRNAs.gff3")
+miRNAs = genomation::gffToGRanges("../output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/Apul_ShortStack_4.1.0_mature.gff3")
+
 head(miRNAs)
 ```
 
-    GRanges object with 6 ranges and 5 metadata columns:
-          seqnames          ranges strand |     source     type     score     phase
-             <Rle>       <IRanges>  <Rle> |   <factor> <factor> <numeric> <integer>
-      [1] ntLink_8   539068-539087      - | ShortStack     sRNA         0      <NA>
-      [2] ntLink_8 3648372-3648386      - | ShortStack     sRNA         0      <NA>
-      [3] ntLink_8 4113963-4113980      + | ShortStack     sRNA         0      <NA>
-      [4] ntLink_8 4118491-4118510      - | ShortStack     sRNA         0      <NA>
-      [5] ntLink_8 4118493-4118512      - | ShortStack     sRNA         0      <NA>
-      [6] ntLink_8 4305318-4305337      - | ShortStack     sRNA         0      <NA>
-                       ID
-              <character>
-      [1]     bfl-miR-153
-      [2] mmu-miR-7238-3p
-      [3] dme-miR-2491-3p
-      [4] mmu-miR-466i-5p
-      [5] mmu-miR-466i-5p
-      [6] mmu-miR-466i-5p
+    GRanges object with 6 ranges and 6 metadata columns:
+            seqnames            ranges strand |     source         type     score
+               <Rle>         <IRanges>  <Rle> |   <factor>     <factor> <numeric>
+      [1]   ntLink_6   4847465-4847486      - | ShortStack mature_miRNA      4002
+      [2]   ntLink_6   5157559-5157579      + | ShortStack mature_miRNA      7111
+      [3]   ntLink_6   7263537-7263560      - | ShortStack mature_miRNA      4073
+      [4]   ntLink_6 13351801-13351822      - | ShortStack mature_miRNA     12566
+      [5] ptg000001l   5548893-5548914      - | ShortStack mature_miRNA     70488
+      [6] ptg000001l 20063094-20063116      + | ShortStack mature_miRNA      1409
+              phase                  ID          Parent
+          <integer>         <character> <CharacterList>
+      [1]      <NA> Cluster_1826.mature    Cluster_1826
+      [2]      <NA> Cluster_1832.mature    Cluster_1832
+      [3]      <NA> Cluster_1862.mature    Cluster_1862
+      [4]      <NA> Cluster_1951.mature    Cluster_1951
+      [5]      <NA> Cluster_2463.mature    Cluster_2463
+      [6]      <NA> Cluster_2859.mature    Cluster_2859
       -------
-      seqinfo: 42 sequences from an unspecified genome; no seqlengths
+      seqinfo: 17 sequences from an unspecified genome; no seqlengths
 
 #### 0.8.1.3 lncRNA:
 
 ``` r
-lncRNAs = genomation::gffToGRanges("../output/19-Apul-lncRNA-matrix/Apul-lncRNAs.gtf")
+lncRNAs = genomation::gffToGRanges("../output/31-Apul-lncRNA/Apul-lncRNA.gtf")
 head(lncRNAs)
 ```
 
     GRanges object with 6 ranges and 5 metadata columns:
-          seqnames        ranges strand |   source     type     score     phase
-             <Rle>     <IRanges>  <Rle> | <factor> <factor> <numeric> <integer>
-      [1] ntLink_0   84514-93551      + |       NA   lncRNA        NA      <NA>
-      [2] ntLink_0   15627-19151      + |       NA   lncRNA        NA      <NA>
-      [3] ntLink_0   23443-23874      + |       NA   lncRNA        NA      <NA>
-      [4] ntLink_1     7484-9525      + |       NA   lncRNA        NA      <NA>
-      [5] ntLink_1   51265-51766      + |       NA   lncRNA        NA      <NA>
-      [6] ntLink_2 217051-217761      + |       NA   lncRNA        NA      <NA>
+          seqnames      ranges strand |   source     type     score     phase
+             <Rle>   <IRanges>  <Rle> | <factor> <factor> <numeric> <integer>
+      [1] ntLink_0 25262-29713      + |       NA   lncRNA        NA      <NA>
+      [2] ntLink_0 25263-30830      + |       NA   lncRNA        NA      <NA>
+      [3] ntLink_0 84577-93547      + |       NA   lncRNA        NA      <NA>
+      [4] ntLink_0 23405-24922      + |       NA   lncRNA        NA      <NA>
+      [5] ntLink_1   7486-8513      + |       NA   lncRNA        NA      <NA>
+      [6] ntLink_1 14013-18684      + |       NA   lncRNA        NA      <NA>
               gene_id
           <character>
       [1]  lncRNA_001
@@ -865,7 +867,7 @@ head(lncRNAs)
       [5]  lncRNA_005
       [6]  lncRNA_006
       -------
-      seqinfo: 96 sequences from an unspecified genome; no seqlengths
+      seqinfo: 104 sequences from an unspecified genome; no seqlengths
 
 ## 0.9 Plotting annotation information
 
@@ -1012,10 +1014,10 @@ df_summary
     # A tibble: 8 × 2
       region     mean_meth
       <fct>          <dbl>
-    1 intergenic      9.14
-    2 TE              9.92
-    3 lncRNA          7.36
-    4 miRNA          17.4 
+    1 intergenic      9.19
+    2 TE              9.96
+    3 lncRNA          7.24
+    4 miRNA           5.77
     5 3UTR            7.48
     6 5UTR            6.32
     7 intron          9.74
@@ -1053,8 +1055,9 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- --> \###
-Extract methylation count matrix for transcripts
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+### 0.9.4 Extract methylation count matrix for transcripts
 
 ``` r
 transcript_CpG <- findOverlaps(meth_GR, transcripts)
@@ -1089,7 +1092,7 @@ CpG_count_transcripts <- meth_long %>%
 write.csv(CpG_count_transcripts, "../output/08-Apul-WGBS/CpG_Transcript_CountMat.csv")
 ```
 
-#### 0.9.3.1 For miRNA
+#### 0.9.4.1 For miRNA
 
 ``` r
 # Overlap CpGs with miRNAs
@@ -1124,7 +1127,7 @@ CpG_count_miRNAs <- miRNA_meth_long %>%
 write.csv(CpG_count_miRNAs, "../output/08-Apul-WGBS/CpG_miRNA_CountMat.csv")
 ```
 
-#### 0.9.3.2 For lncRNA
+#### 0.9.4.2 For lncRNA
 
 ``` r
 # Overlap CpGs with lncRNAs
@@ -1161,12 +1164,18 @@ write.csv(CpG_count_lncRNAs, "../output/08-Apul-WGBS/CpG_lncRNA_CountMat.csv")
 
 ## 0.10 Correlations: Count matrices from <https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices>
 
-### 0.10.1 RNA-seq (REDO THIS with normalized counts)
+### 0.10.1 RNA-seq
 
 ``` r
-mRNA <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+mRNA_counts <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
 
-mRNA_long <- mRNA %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
+# Remove any genes with 0 counts across samples 
+mRNA_counts<-mRNA_counts %>%
+     mutate(Total = rowSums(.[, 2:6]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total) 
+
+mRNA_long <- mRNA_counts %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
                                       names_to = "Sample",
                                       values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
 
@@ -1191,6 +1200,43 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
 
 ![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
+``` r
+## Normalized counts:
+
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+mRNA_norm <- as.data.frame(normalize_counts(mRNA_counts[,-1]))
+mRNA_norm$gene_id <- mRNA_counts[,1]
+
+mRNA_long <- mRNA_norm %>% pivot_longer(cols = RNA.ACR.140:RNA.ACR.178,
+                                      names_to = "Sample",
+                                      values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
+
+#fix sample IDs
+mRNA_long$Sample <- gsub("RNA.","",mRNA_long$Sample)
+
+percent_meth_long <- CpG_count_transcripts %>% pivot_longer(cols = ACR.140.TP2:ACR.178.TP2,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+plot_data_tissue <- merge(percent_meth_long, mRNA_long, by = c("transcript_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of gene", y = "Normalized RNA Counts (RPM)", 
+       title = "Gene Methylation vs Expression: RPM Normalized Counts") +
+  theme_minimal()
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-2.png)<!-- -->
+
 sRNA-seq:
 <https://github.com/urol-e5/deep-dive-expression/tree/main/D-Apul/output/03.1-Apul-sRNA-summary>
 
@@ -1208,19 +1254,22 @@ percent_meth_long <- CpG_count_miRNAs %>% pivot_longer(cols = ACR.140.TP2:ACR.17
                                       names_to = "Sample",
                                       values_to = "percent_meth") 
 
-#fix sample IDs
+#fix sample and miRNA IDs
 percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+percent_meth_long$miRNA_id <- gsub(".mature","",percent_meth_long$miRNA_id)
 
 # below not working, miRNA ids are different (cluster vs known IDs)
 
-# plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
-# 
-# ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
-#   geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
-#   labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts", 
-#        title = "miRNA Methylation vs Expression") +
-#   theme_minimal()
+plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts",
+       title = "miRNA Methylation vs Expression") +
+  theme_minimal()
 ```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 lncRNA:
 <https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt>
