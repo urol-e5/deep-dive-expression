@@ -1,0 +1,147 @@
+---
+title: "ncRNA protein expression"
+author: "Jill Ashey"
+date: "2025-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in ncRNA protein related info 
+```{r}
+prot_df <- read.csv("../data/e5_deep-dive_ncRNA_proteins.csv")
+```
+
+Read in Peve and Ptua mRNA counts 
+```{r}
+peve <- read.csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
+peve$gene_id <- gsub("^gene-", "", peve$gene_id)
+
+ptua <- read.csv("../../F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+ptua$gene_id <- gsub("^gene-", "", ptua$gene_id)
+```
+
+### Peve 
+
+Join prot_df with Peve counts matrix 
+```{r}
+peve_prots <- prot_df %>%
+  inner_join(peve, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- peve_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+peve_prots_rpm <- peve_prots %>%
+  select(Species, Protein_of_interest, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Peve 
+```{r}
+peve_summary_stats <- peve_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            .groups = "drop")
+
+write.csv(peve_summary_stats, "../output/09-ncRNA-protein-expression/peve_ncRNA_protein_transcript_rpm.csv")
+```
+
+### Ptua
+
+Join prot_df with Ptua counts matrix 
+```{r}
+ptua_prots <- prot_df %>%
+  inner_join(ptua, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- ptua_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+ptua_prots_rpm <- ptua_prots %>%
+  select(Species, Protein_of_interest, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Ptua 
+```{r}
+ptua_summary_stats <- ptua_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            .groups = "drop")
+
+write.csv(ptua_summary_stats, "../output/09-ncRNA-protein-expression/ptuh_ncRNA_protein_transcript_rpm.csv")
+```
+
+### All species 
+
+```{r}
+all_spp <- rbind(summary_stats, ptua_summary_stats)
+```
+
+Plot 
+```{r}
+ggplot(all_spp, aes(x = Species, y = avg_rpm, fill = Species)) +
+  geom_col(color = "black", width = 0.6) +  # black outline
+  geom_errorbar(aes(ymin = avg_rpm - std_rpm, ymax = avg_rpm + std_rpm),
+                width = 0.2, color = "black") +
+  facet_wrap(~ Protein_of_interest, scales = "free_y") +
+  scale_fill_manual(values = c("Peve" = "#1E2761", "Ptua" = "#7A2048")) +
+  scale_y_continuous(expand = c(0, 0)) +  # bars sit on x-axis
+  labs(x = "Species",
+       y = "Average RPM") +
+  theme_bw() +
+  theme(
+    strip.text = element_text(face = "bold", size = 11),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.spacing = unit(1, "lines"),
+    axis.line.y = element_line(color = "black"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    axis.ticks.y = element_line(color = "black"),
+    axis.text = element_text(color = "black"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+  )
+
+ggsave(filename = "../output/09-ncRNA-protein-expression/ncRNA_protein_transcript_rpm_by_spp.pdf", last_plot(), width = 7, height = 7)
+ggsave(filename = "../output/09-ncRNA-protein-expression/ncRNA_protein_transcript_rpm_by_spp.png", last_plot(), width = 7, height = 7)
+```
+
