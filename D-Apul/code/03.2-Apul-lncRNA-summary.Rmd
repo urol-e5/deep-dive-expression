@@ -18,6 +18,8 @@ output:
     code_download: true
 ---
 
+Re-run 7/29/25 with updated lncRNA counts matrix
+
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
@@ -29,7 +31,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-lncRNA expression summary for *Acropora pulchra* lncRNA, isolated in `19-Apul-lncRNA-matrix`
+lncRNA expression summary for *Acropora pulchra* lncRNA, isolated in `32-Apul-lncRNA-matrix`
 
 ### Install and load packages
 
@@ -50,7 +52,7 @@ library(pheatmap)
 
 ```{r load-count-data}
 # Read in counts data.
-Apul_counts_lncRNA_OG <- read.table("../output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=TRUE, skip=1) 
+Apul_counts_lncRNA_OG <- read.table("../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=TRUE, skip=1) 
 head(Apul_counts_lncRNA_OG)
 
 ```
@@ -70,7 +72,7 @@ Apul_counts_lncRNA <- Apul_counts_lncRNA %>% select(-Chr, -Start, -End, -Strand,
 Apul_counts_lncRNA <- Apul_counts_lncRNA[!apply(Apul_counts_lncRNA, 1, function(row) all(row < 6)), ]
 
 # Remove the superfluous portions of the column names, to leave just the sample names
-colnames(Apul_counts_lncRNA) <- sub("...output.07.Apul.Hisat.RNA.", "", colnames(Apul_counts_lncRNA))
+colnames(Apul_counts_lncRNA) <- sub("...data.32.Apul.lncRNA.matrix.RNA.", "", colnames(Apul_counts_lncRNA))
 colnames(Apul_counts_lncRNA) <- sub(".sorted.bam", "", colnames(Apul_counts_lncRNA))
 
 # Reorder the columns into alphabetical order (to make it easier to create an associated metadata spreadsheet)
@@ -144,7 +146,7 @@ ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
 ```
 
-Interesting! Theres actually notable intraspecific variation in the number of unique lncRNA present, ranging from ~10000 to ~18000.
+Interesting! Theres actually notable intraspecific variation in the number of unique lncRNA present, ranging from ~13000 to ~23000.
 
 
 # Normalized counts
@@ -326,7 +328,7 @@ ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
 plotPCA(vsd_Apul_lncRNA, intgroup="Sample")
 ```
 
-Samples ACR-145 and ACR-173 are notably divergent from the other samples (and each other)
+Samples ACR-145 and ACR-173 are notably divergent from the other samples (and each other). They also have notably higher normalized transcript counts than the other 3 samples.
 
 ## Sample clustering
 
