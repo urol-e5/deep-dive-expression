@@ -18,6 +18,8 @@ output:
     code_download: true
 ---
 
+Rerun 7/29/25 with updated lncRNA counts matrix
+
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
@@ -29,7 +31,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-lncRNA expression summary for *Porites Evermanni* lncRNA, isolated in `07-Peve-lncRNA-matrix`
+lncRNA expression summary for *Porites Evermanni* lncRNA, isolated in `18-Peve-lncRNA-matrix`
 
 ### Install and load packages
 
@@ -50,7 +52,7 @@ library(pheatmap)
 
 ```{r load-count-data}
 # Read in counts data.
-Peve_counts_lncRNA_OG <- read.table("../output/07-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", header=TRUE, skip=1) 
+Peve_counts_lncRNA_OG <- read.table("../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", header=TRUE, skip=1) 
 head(Peve_counts_lncRNA_OG)
 
 ```
@@ -70,7 +72,7 @@ Peve_counts_lncRNA <- Peve_counts_lncRNA %>% select(-Chr, -Start, -End, -Strand,
 Peve_counts_lncRNA <- Peve_counts_lncRNA[!apply(Peve_counts_lncRNA, 1, function(row) all(row < 6)), ]
 
 # Remove the superfluous portions of the column names, to leave just the sample names
-colnames(Peve_counts_lncRNA) <- sub("...output.06.Peve.Hisat.RNA.", "", colnames(Peve_counts_lncRNA))
+colnames(Peve_counts_lncRNA) <- sub("...data.18.Peve.lncRNA.matrix.RNA.", "", colnames(Peve_counts_lncRNA))
 colnames(Peve_counts_lncRNA) <- sub(".sorted.bam", "", colnames(Peve_counts_lncRNA))
 
 # Reorder the columns into alphabetical order (to make it easier to create an associated metadata spreadsheet)
@@ -325,7 +327,7 @@ ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
 plotPCA(vsd_Peve_lncRNA, intgroup="Sample")
 ```
 
-Samples POR-73 and POR-76 are notably divergent from the other samples (and each other)
+Samples POR-73 and POR-76 are notably divergent from the other samples (and each other), and also have dramatically higher normalized transcript counts than the other 3 samples.
 
 ## Sample clustering
 
