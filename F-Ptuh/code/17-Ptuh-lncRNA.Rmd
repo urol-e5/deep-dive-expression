@@ -5,9 +5,7 @@ date: "2025-06-20"
 author: Steven Roberts
 ---
 
-
-how good is 
-https://sr320.github.io/tumbling-oysters/posts/39-lncRNA/
+how good is <https://sr320.github.io/tumbling-oysters/posts/39-lncRNA/>
 
 ```{r}
 knitr::opts_chunk$set(
@@ -21,7 +19,6 @@ knitr::opts_chunk$set(
   comment = ""         # Prevents '##' in output
 )
 ```
-
 
 Some
 
@@ -61,7 +58,7 @@ STRINGTIE_DIR <- ""
 GFFCOMPARE_DIR <- "/srlab/programs/gffcompare-0.12.6.Linux_x86_64/"
 BEDTOOLS_DIR <- ""
 CPC2_DIR <- "/srlab/programs/CPC2_standalone-1.0.1/bin/"
-CONDA_PATH <- ""
+CONDA_PATH <- "/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda"
 
 GENOME_FASTA <- file.path(DATA_DIR, "genome.fasta")
 GENOME_GTF <- file.path(DATA_DIR, "genome.gtf")
@@ -90,10 +87,10 @@ Sys.setenv(
   GENOME_GTF = GENOME_GTF,
   GENOME_GFF = GENOME_GFF,
   FASTQ_DIR = FASTQ_DIR,
-  GENOME_INDEX = GENOME_INDEX
+  GENOME_INDEX = GENOME_INDEX,
+  GFFPATTERN = GFFPATTERN
 )
 ```
-
 
 ```{r, engine='bash'}
 wget -nv -r \
@@ -101,7 +98,6 @@ wget -nv -r \
 -P ${FASTQ_DIR} \
 -A "*${FASTQ_SUFFIX}" ${FASTQ_SOURCE}
 ```
-
 
 ```{r ls, engine='bash'}
 ls ${FASTQ_DIR}
@@ -216,6 +212,14 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 "${OUTPUT_DIR}/{}.sorted.bam"
 ```
 
+```{r, engine='bash'}
+head ${OUTPUT_DIR}/*.gtf
+```
+
+```{r, engine='bash'}
+wc -l ${OUTPUT_DIR}/*.gtf
+```
+
 ```{r merge, engine='bash'}
 "${STRINGTIE_DIR}stringtie" \
 --merge \
@@ -224,9 +228,20 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 "${OUTPUT_DIR}/"*.gtf
 ```
 
+```{r, engine='bash'}
+wc -l ${OUTPUT_DIR}/stringtie_merged.gtf
+```
+
+```{r, engine='bash'}
+head ${OUTPUT_DIR}/stringtie_merged.gtf
+```
+
 #GFFCOMPARE
 
 ![](http://gannet.fish.washington.edu/seashell/snaps/Monosnap_687474703a2f2f67616e6e65742e666973682e77617368696e67746f6e2e6564752f7365617368656c6c2f736e6170732f323032332d31312d30335f30392d3_2024-12-20_04-02-37.png)
+
+
+
 
 ```{r gffcomp, engine='bash'}
 "${GFFCOMPARE_DIR}gffcompare" \
@@ -236,14 +251,48 @@ find "${OUTPUT_DIR}" -name "*sorted.bam" \
 ```
 
 ```{r viewgff, engine='bash'}
-head -1 "${OUTPUT_DIR}"/gffcompare_merged*
+head -4 "${OUTPUT_DIR}"/gffcompare_merged*
 ```
+
+```{r viewgff, engine='bash'}
+wc -l "${OUTPUT_DIR}"/gffcompare_merged*
+```
+
+
+```{r, engine='bash'}
+echo "${GFFPATTERN}"
+echo "${OUTPUT_DIR}"
+```
+
+
 
 ```{r gff filter, engine='bash'}
 awk '$3 == "transcript" && $1 !~ /^#/' "${OUTPUT_DIR}/gffcompare_merged.annotated.gtf" | \
 grep -E "${GFFPATTERN}" | \
 awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
 ```
+
+
+```{r, engine='bash'}
+head ${OUTPUT_DIR}/lncRNA_candidates.gtf
+```
+
+```{r, engine='bash'}
+wc -l ${OUTPUT_DIR}/lncRNA_candidates.gtf
+```
+
+```{r, engine='bash'}
+sort ../output/17-Ptuh-lncRNA/lncRNA_candidates.gtf | uniq -d
+```
+
+
+gzip -dc CPC2_standalone-1.0.1.tar.gz | tar xf -
+cd CPC2-beta
+export CPC_HOME="$PWD"
+cd libs/libsvm
+gzip -dc libsvm-3.18.tar.gz | tar xf -
+cd libsvm-3.18
+make clean && make
 
 # Bedtools
 
@@ -255,19 +304,53 @@ awk '($5 - $4 > 199) || ($4 - $5 > 199)' > "${OUTPUT_DIR}/lncRNA_candidates.gtf"
 -name -split
 ```
 
+```{r, engine='bash'}
+head ${OUTPUT_DIR}/lncRNA_candidates.fasta
+```
+
+
+
 #CPC2
 
+```{bash}
+wget https://github.com/gao-lab/CPC2_standalone/archive/refs/tags/v1.0.1.zip
+```
+```{bash}
+unzip v1.0.1.zip
+```
+
+
+
 ```{r cpc2, engine='bash'}
-eval "$(/opt/anaconda/anaconda3/bin/conda shell.bash hook)"
-python "${CPC2_DIR}"CPC2.py \
+eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
+python /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/F-Ptuh/code/CPC2_standalone-1.0.1/bin/CPC2.py \
 -i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
 -o "${OUTPUT_DIR}/CPC2"
 ```
+```{r, engine='bash'}
+eval "$(/mmfs1/gscratch/srlab/nextflow/bin/miniforge/bin/conda shell.bash hook)"
+conda activate /mmfs1/gscratch/srlab/nextflow/bin/miniforge/envs/nextflow  # replace with your actual env name
+python /mmfs1/gscratch/scrubbed/sr320/github/deep-dive-expression/F-Ptuh/code/CPC2_standalone-1.0.1/bin/CPC2.py \
+  -i "${OUTPUT_DIR}/lncRNA_candidates.fasta" \
+  -o "${OUTPUT_DIR}/CPC2"
+```
+
+
 
 Filter
 
 ```{r filCPC, engine='bash'}
 awk '$8 == "noncoding" {print $1}' "${OUTPUT_DIR}/CPC2.txt" > "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/CPC2.txt"
+wc -l "${OUTPUT_DIR}/CPC2.txt"
+```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
+wc -l "${OUTPUT_DIR}/noncoding_transcripts_ids.txt"
 ```
 
 Subsetting fasta
@@ -280,7 +363,13 @@ Subsetting fasta
 
 ```{r, engine='bash'}
 head -2 "${OUTPUT_DIR}/lncRNA.fasta"
+grep -c ">" "${OUTPUT_DIR}/lncRNA.fasta"
 ```
+
+
+
+
+
 
 ```{r lncRNAgtf, engine='bash'}
 # Define input and output file paths using the OUTPUT_DIR variable
@@ -298,8 +387,8 @@ while IFS= read -r line; do
     # Split the position string by '-' to separate start and end positions
     IFS='-' read -r start end <<< "$pos"
     
-    # Convert the start position to 0-based by subtracting 1
-    start=$((start - 1))
+    # Convert the start position to 0-based by subtracting 1 --mod
+    start=$((start - 0))
     
     # Write the chromosome, updated start, and end positions to the output file (tab-separated)
     printf "%s\t%s\t%s\n" "$chromosome" "$start" "$end"
@@ -307,13 +396,21 @@ done < "$input" > "$output"
 ```
 
 ```{r, engine='bash'}
-head -1 "${OUTPUT_DIR}/lncRNA.gtf"
+head -1 "${OUTPUT_DIR}/lncRNA.bed"
 ```
 
 ```{r renamegtf, engine='bash'}
-awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
-> "${OUTPUT_DIR}/lncRNA.gtf"
+awk 'BEGIN{OFS="\t"; count=1} {
+  printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, ($2+1), $3, count++;
+}' "${OUTPUT_DIR}/lncRNA.bed" > "${OUTPUT_DIR}/lncRNA.gtf"
 ```
+
+```{r, engine='bash'}
+head "${OUTPUT_DIR}/lncRNA.gtf"
+wc -l "${OUTPUT_DIR}/lncRNA.gtf"
+```
+
+
 
 # Summary Table
 
@@ -371,4 +468,14 @@ END {
     }
 }
 ' "$tf_file"
+```
+
+
+
+```{bash}
+
+cp ../output/17-Ptuh-lncRNA/lncRNA.gtf ../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf
+
+
+md5sum ../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf
 ```

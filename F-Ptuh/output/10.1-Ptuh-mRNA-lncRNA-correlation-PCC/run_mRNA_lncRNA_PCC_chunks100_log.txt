@@ -1,0 +1,153 @@
+nohup: ignoring input
+Starting PCC correlation analysis in chunks...
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  Geneid = col_character(),
+  Chr = col_character(),
+  Start = col_double(),
+  End = col_double(),
+  Strand = col_character(),
+  Length = col_double(),
+  `../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam` = col_double(),
+  `../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam` = col_double(),
+  `../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam` = col_double(),
+  `../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam` = col_double(),
+  `../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam` = col_double()
+)
+
+Processing chunk 1 of 133
+Processing chunk 2 of 133
+Processing chunk 3 of 133
+Processing chunk 4 of 133
+Processing chunk 5 of 133
+Processing chunk 6 of 133
+Processing chunk 7 of 133
+Processing chunk 8 of 133
+Processing chunk 9 of 133
+Processing chunk 10 of 133
+Processing chunk 11 of 133
+Processing chunk 12 of 133
+Processing chunk 13 of 133
+Processing chunk 14 of 133
+Processing chunk 15 of 133
+Processing chunk 16 of 133
+Processing chunk 17 of 133
+Processing chunk 18 of 133
+Processing chunk 19 of 133
+Processing chunk 20 of 133
+Processing chunk 21 of 133
+Processing chunk 22 of 133
+Processing chunk 23 of 133
+Processing chunk 24 of 133
+Processing chunk 25 of 133
+Processing chunk 26 of 133
+Processing chunk 27 of 133
+Processing chunk 28 of 133
+Processing chunk 29 of 133
+Processing chunk 30 of 133
+Processing chunk 31 of 133
+Processing chunk 32 of 133
+Processing chunk 33 of 133
+Processing chunk 34 of 133
+Processing chunk 35 of 133
+Processing chunk 36 of 133
+Processing chunk 37 of 133
+Processing chunk 38 of 133
+Processing chunk 39 of 133
+Processing chunk 40 of 133
+Processing chunk 41 of 133
+Processing chunk 42 of 133
+Processing chunk 43 of 133
+Processing chunk 44 of 133
+Processing chunk 45 of 133
+Processing chunk 46 of 133
+Processing chunk 47 of 133
+Processing chunk 48 of 133
+Processing chunk 49 of 133
+Processing chunk 50 of 133
+Processing chunk 51 of 133
+Processing chunk 52 of 133
+Processing chunk 53 of 133
+Processing chunk 54 of 133
+Processing chunk 55 of 133
+Processing chunk 56 of 133
+Processing chunk 57 of 133
+Processing chunk 58 of 133
+Processing chunk 59 of 133
+Processing chunk 60 of 133
+Processing chunk 61 of 133
+Processing chunk 62 of 133
+Processing chunk 63 of 133
+Processing chunk 64 of 133
+Processing chunk 65 of 133
+Processing chunk 66 of 133
+Processing chunk 67 of 133
+Processing chunk 68 of 133
+Processing chunk 69 of 133
+Processing chunk 70 of 133
+Processing chunk 71 of 133
+Processing chunk 72 of 133
+Processing chunk 73 of 133
+Processing chunk 74 of 133
+Processing chunk 75 of 133
+Processing chunk 76 of 133
+Processing chunk 77 of 133
+Processing chunk 78 of 133
+Processing chunk 79 of 133
+Processing chunk 80 of 133
+Processing chunk 81 of 133
+Processing chunk 82 of 133
+Processing chunk 83 of 133
+Processing chunk 84 of 133
+Processing chunk 85 of 133
+Processing chunk 86 of 133
+Processing chunk 87 of 133
+Processing chunk 88 of 133
+Processing chunk 89 of 133
+Processing chunk 90 of 133
+Processing chunk 91 of 133
+Processing chunk 92 of 133
+Processing chunk 93 of 133
+Processing chunk 94 of 133
+Processing chunk 95 of 133
+Processing chunk 96 of 133
+Processing chunk 97 of 133
+Processing chunk 98 of 133
+Processing chunk 99 of 133
+Processing chunk 100 of 133
+Processing chunk 101 of 133
+Processing chunk 102 of 133
+Processing chunk 103 of 133
+Processing chunk 104 of 133
+Processing chunk 105 of 133
+Processing chunk 106 of 133
+Processing chunk 107 of 133
+Processing chunk 108 of 133
+Processing chunk 109 of 133
+Processing chunk 110 of 133
+Processing chunk 111 of 133
+Processing chunk 112 of 133
+Processing chunk 113 of 133
+Processing chunk 114 of 133
+Processing chunk 115 of 133
+Processing chunk 116 of 133
+Processing chunk 117 of 133
+Processing chunk 118 of 133
+Processing chunk 119 of 133
+Processing chunk 120 of 133
+Processing chunk 121 of 133
+Processing chunk 122 of 133
+Processing chunk 123 of 133
+Processing chunk 124 of 133
+Processing chunk 125 of 133
+Processing chunk 126 of 133
+Processing chunk 127 of 133
+Processing chunk 128 of 133
+Processing chunk 129 of 133
+Processing chunk 130 of 133
+Processing chunk 131 of 133
+Processing chunk 132 of 133
+Processing chunk 133 of 133
+Combining chunk results...
+Finished PCC correlation analysis. Results saved to: ../../output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC//Ptuh-PCC_mRNA_lncRNA.csv

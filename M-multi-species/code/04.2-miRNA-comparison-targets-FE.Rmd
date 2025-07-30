@@ -1,0 +1,183 @@
+---
+title: "04.1-miRNA-comparison-expression"
+author: "Kathleen Durkin"
+date: "2025-07-10"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Load packages
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+```
+
+
+Hypothesize that conserved miRNA present in all three species will also have targets enriched for the same processes across species.
+
+## Functionally enriched processes
+
+Load 3UTR FE tables:
+
+```{r}
+Apul_3UTR_FE <- read.csv("../../D-Apul/output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_sig_cor_targets_topGO_FE.csv")
+
+Peve_3UTR_FE <- read.csv("../../E-Peve/output/10.13-Peve-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_topGO_FE.csv")
+  
+Ptuh_3UTR_FE <- read.csv("../../F-Ptuh/output/11.13-Ptuh-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_topGO_FE.csv")
+```
+
+Load in assigned miRNA names
+```{r}
+Apul_names <- read.csv("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv") %>% dplyr::select(Name, given_miRNA_name)
+
+Peve_names <- read.csv("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv") %>% dplyr::select(Name, given_miRNA_name)
+
+Ptuh_names <- read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv") %>% dplyr::select(Name, given_miRNA_name)
+```
+
+Annotate miRNA dfs with given names
+```{r}
+Apul_3UTR_FE_df <- left_join(Apul_3UTR_FE, Apul_names, by = c("miRNA" = "Name"))
+Peve_3UTR_FE_df <- left_join(Peve_3UTR_FE, Peve_names, by = c("miRNA" = "Name"))
+Ptuh_3UTR_FE_df <- left_join(Ptuh_3UTR_FE, Ptuh_names, by = c("miRNA" = "Name"))
+```
+
+Separate conserved miRNA (present in all 3 species) from the rest. In `04-miRNA-comparison`, identified the miRNA conserved among all 3 species to be: miR-100, miR-2023, miR-2025, and miR-2036
+```{r}
+Apul_3UTR_FE_conserved <- Apul_3UTR_FE_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Apul_3UTR_FE_unconserved <- Apul_3UTR_FE_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Peve_3UTR_FE_conserved <- Peve_3UTR_FE_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Peve_3UTR_FE_unconserved <- Peve_3UTR_FE_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Ptuh_3UTR_FE_conserved <- Ptuh_3UTR_FE_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Ptuh_3UTR_FE_unconserved <- Ptuh_3UTR_FE_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+# Also annotate the full dfs
+Apul_3UTR_FE_df$conservation <- ifelse(Apul_3UTR_FE_df$given_miRNA_name %in% Apul_3UTR_FE_conserved$given_miRNA_name, "conserved", "unconserved")
+Peve_3UTR_FE_df$conservation <- ifelse(Peve_3UTR_FE_df$given_miRNA_name %in% Peve_3UTR_FE_conserved$given_miRNA_name, "conserved", "unconserved")
+Ptuh_3UTR_FE_df$conservation <- ifelse(Ptuh_3UTR_FE_df$given_miRNA_name %in% Ptuh_3UTR_FE_conserved$given_miRNA_name, "conserved", "unconserved")
+```
+
+Take a look
+```{r}
+print(Apul_3UTR_FE_conserved)
+print(Peve_3UTR_FE_conserved)
+print(Ptuh_3UTR_FE_conserved)
+```
+Very few functionally enriched processes in conserved miRNA, and in general, likely due to a small smaple size and only a subset of all genes being annotated. 
+
+Let's instead look at the annotations themseleves, regardless of whether the processes were statistically overrepresented
+
+## Functionally annotated
+
+Load 3UTR FA tables:
+
+```{r}
+Apul_3UTR_FA <- read.csv("../../D-Apul/output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_sig_cor_targets_FA.csv")
+
+Peve_3UTR_FA <- read.csv("../../E-Peve/output/10.13-Peve-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv")
+  
+Ptuh_3UTR_FA <- read.csv("../../F-Ptuh/output/11.13-Ptuh-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv")
+```
+
+Annotate miRNA dfs with given names
+```{r}
+Apul_3UTR_FA_df <- left_join(Apul_3UTR_FA, Apul_names, by = c("miRNA" = "Name"))
+Peve_3UTR_FA_df <- left_join(Peve_3UTR_FA, Peve_names, by = c("miRNA" = "Name"))
+Ptuh_3UTR_FA_df <- left_join(Ptuh_3UTR_FA, Ptuh_names, by = c("miRNA" = "Name"))
+```
+
+Separate conserved miRNA (present in all 3 species) from the rest. In `04-miRNA-comparison`, identified the miRNA conserved among all 3 species to be: miR-100, miR-2023, miR-2025, and miR-2036
+```{r}
+Apul_3UTR_FA_conserved <- Apul_3UTR_FA_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Apul_3UTR_FA_unconserved <- Apul_3UTR_FA_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Peve_3UTR_FA_conserved <- Peve_3UTR_FA_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Peve_3UTR_FA_unconserved <- Peve_3UTR_FA_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+Ptuh_3UTR_FA_conserved <- Ptuh_3UTR_FA_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+Ptuh_3UTR_FA_unconserved <- Ptuh_3UTR_FA_df %>% filter(!str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
+
+# Also annotate the full dfs
+Apul_3UTR_FA_df$conservation <- ifelse(Apul_3UTR_FA_df$given_miRNA_name %in% Apul_3UTR_FA_conserved$given_miRNA_name, "conserved", "unconserved")
+Peve_3UTR_FA_df$conservation <- ifelse(Peve_3UTR_FA_df$given_miRNA_name %in% Peve_3UTR_FA_conserved$given_miRNA_name, "conserved", "unconserved")
+Ptuh_3UTR_FA_df$conservation <- ifelse(Ptuh_3UTR_FA_df$given_miRNA_name %in% Ptuh_3UTR_FA_conserved$given_miRNA_name, "conserved", "unconserved")
+```
+
+Take a look
+```{r}
+print(Apul_3UTR_FA_conserved %>% dplyr::select(given_miRNA_name, Protein.names,  Gene.Ontology..biological.process.) %>% filter(!is.na(Protein.names)))
+print(Peve_3UTR_FA_conserved %>% dplyr::select(given_miRNA_name, Protein.names, Gene.Ontology..biological.process.) %>% filter(!is.na(Protein.names)))
+print(Ptuh_3UTR_FA_conserved %>% dplyr::select(given_miRNA_name, Protein.names, Gene.Ontology..biological.process.) %>% filter(!is.na(Protein.names)))
+```
+
+The only miRNA that is conserved accross the 3 species and has at least one functionally annotated target (miRanda + significant PCC) is miR-100. This isn't surprising in A.pulchra and P.evermanni, it is also the conserved miRNA with the highest number of putative targets (see below). miR-100 is functionally conserved across the three species in cell cycle regulation and early development. The other conserved miRNA don't have enough annotated targets in all species to determine whether functional conservation exists. Also keep in mind that some important functions (e.g. reproduction, development, immune response) make not appear in this dataset, since deep-dive samples were collected only at a single site and timepoint, and are limited in number.
+
+```{r}
+# Apul
+# Count number of unique mRNA targets per miRNA
+Apul_target_counts <- Apul_3UTR_FA_df %>%
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n_distinct(mRNA)) %>%
+  arrange(desc(num_targets))
+
+# Plot
+ggplot(Apul_target_counts, aes(x = reorder(given_miRNA_name, -num_targets), y = num_targets)) +
+  geom_col(fill = "#408EC6") +
+  labs(x = "miRNA", y = "Number of unique mRNA targets", title = "Apul: Target Count per miRNA") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Peve
+# Count number of unique mRNA targets per miRNA
+Peve_target_counts <- Peve_3UTR_FA_df %>%
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n_distinct(mRNA)) %>%
+  arrange(desc(num_targets))
+
+# Plot
+ggplot(Peve_target_counts, aes(x = reorder(given_miRNA_name, -num_targets), y = num_targets)) +
+  geom_col(fill = "#1E2761") +
+  labs(x = "miRNA", y = "Number of unique mRNA targets", title = "Peve: Target Count per miRNA") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Ptuh
+# Count number of unique mRNA targets per miRNA
+Ptuh_target_counts <- Ptuh_3UTR_FA_df %>%
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n_distinct(mRNA)) %>%
+  arrange(desc(num_targets))
+
+# Plot
+ggplot(Ptuh_target_counts, aes(x = reorder(given_miRNA_name, -num_targets), y = num_targets)) +
+  geom_col(fill = "#7A2048") +
+  labs(x = "miRNA", y = "Number of unique mRNA targets", title = "Ptuh: Target Count per miRNA") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+

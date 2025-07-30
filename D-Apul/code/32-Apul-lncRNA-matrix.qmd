@@ -1,0 +1,68 @@
+---
+title: "32-Apul lncRNA matrix "
+author: Steven Roberts
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+output: 
+  html_document:
+    theme: readable
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+
+
+```{bash}
+head ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+```
+
+Get BAMS
+
+```{bash}
+wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/32-Apul-lncRNA-matrix \
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07.2-Apul-Hisat/
+```
+
+```{bash}
+sed -n '30956p' ../output/31-Apul-lncRNA/Apul-lncRNA.gtf
+```
+```{bash}
+sed -n '30956p' ../output/31-Apul-lncRNA/lncRNA.gtf
+```
+
+```{r, engine='bash'}
+/home/shared/subread-2.0.5-Linux-x86_64/bin/featureCounts \
+-T 42 \
+-a ../output/31-Apul-lncRNA/Apul-lncRNA.gtf \
+-o ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt \
+-t lncRNA \
+-g gene_id \
+-p \
+../data/32-Apul-lncRNA-matrix/*sorted.bam
+```
+
+```{bash}
+grep -c '^l' ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
+sort ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt | uniq -d
+```
+```{bash}
+md5sum ../output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
+```
+

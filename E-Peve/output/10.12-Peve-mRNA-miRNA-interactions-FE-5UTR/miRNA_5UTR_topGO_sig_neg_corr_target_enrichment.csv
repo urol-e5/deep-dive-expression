@@ -1,0 +1,2 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X","miRNA","V2","V3","V4.x","V5","V6","V7","V8","V9","V10","V11","PCC.cor","p_value","adjusted_p_value"
+"1","Peve_00009458","GO:0000070","mitotic sister chromatid segregation",2,1,0.01,0.011,"Biological Processes",3051,"Cluster_589","Porites_evermani_scaffold_1654:21847-22847",160,-23.47,2,19,629,649,17,"76.47%","88.24%",-0.998175220682579,0.0384650550931703,0.909359886114279

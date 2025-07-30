@@ -1,0 +1,5 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Fisher","type","miRNA"
+"1","GO:0004089","carbonate dehydratase activity",2,1,0,0.004,"Molecular.Function","Cluster_1938"
+"2","GO:0004222","metalloendopeptidase activity",22,1,0.04,0.044,"Molecular.Function","Cluster_2973"
+"3","GO:0001504","neurotransmitter uptake",3,1,0.01,0.014,"Biological.Process","Cluster_4438"
+"4","GO:0004177","aminopeptidase activity",3,1,0.01,0.006,"Molecular.Function","Cluster_4823"

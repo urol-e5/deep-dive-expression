@@ -124,17 +124,19 @@ cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
 
 ## check lncRNAs
 
-LncRNAs were identified from Peve RNA-seq data
+LncRNAs were identified from Peve RNA-seq data -- see details in `E-Peve/code/17-Peve-lncRNA.Rmd`
 
-Fasta of Peve lncRNAs stored at `https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta`
+Fasta of Peve lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta`
 
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
-curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Peve_lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
+curl -L https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta -o ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
 
 echo "Number of lncRNAs:"
 grep "^>" ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta | wc -l
 ```
+
+10090 total lncRNA
 
 ```{r, engine='bash'}
 # Extract sequence lengths for precursors
@@ -156,7 +158,7 @@ ggplot(lncRNA_lengths, aes(x = length)) +
   labs(title = "A. pulchra lncRNA sequence lengths",
        x = "Sequence Length [nucleotides]",
        y = "Frequency") +
-  xlim(200, 110000) +
+  xlim(200, 100000) +
   ylim(0, 1000) +
   theme_minimal()
 ```
@@ -274,9 +276,9 @@ precursor_lncRNA_BLASTn %>%
   unique()
 
 ```
-We have 37 alignments of a full pre-miRNA to a lncRNA with no mismatches. 36 lncRNA and 21 miRNA are represented. 
+We have 2 alignments of a full pre-miRNA to a lncRNA with no mismatches. 2 lncRNA and 1 miRNA are represented. 
 
-Note that, as in A.pulchra, there are instances of a single pre-miRNA matching to several overlapping lncRNA. For example, Cluster_29 is contained within transcript::Porites_evermani_scaffold_1:1380412-1417060 and transcript::Porites_evermani_scaffold_1:1380748-1417060. This may represent multiple isoforms of a single lncRNA gene.
+Note that, as in A.pulchra, this appears to be an instance of a single pre-miRNA matching to several overlapping lncRNA. Cluster_8888's precursor is contained within Peve_lncRNA_9794 (Porites_evermani_scaffold_910:129985-141109) and Peve_lncRNA_9795 (Porites_evermani_scaffold_910:134862-141109). This may represent multiple isoforms of a single lncRNA gene.
 
 Save these results
 ```{r}
@@ -302,7 +304,7 @@ mature_lncRNA_BLASTn %>%
   filter(evalue <= 0.001)
 
 ```
-421 putative lncRNA sponges with these parameters. 
+78 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
@@ -354,7 +356,7 @@ wc -l ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_a
 
 ```
 
-2690450 -- This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
+3685396 -- This is a lot of putative interactions! We can probably narrow it down though. In vertebrates, miRNA-mRNA binding only requires complementarity of an miRNA seed region of ~8 nucleotides. This requirement is built in to miRanda target prediction. In cnidarians, however, miRNA-mRNA binding is believed to require near-complete complementarity of the full mature miRNA, similarly to plants ( @admoni_target_2023 , @admoni_mirna-target_2025 ). While I couldn't find any information on expected requirements for miRNA-lncRNA sponges, its possible the binding will function similarly to miRNA-mRNA binding. Let's look at how many putative interactions are predicted for a binding length of at least 21 nucleotides (the length of our smallest mature miRNA).
 
 ```{r, engine='bash', eval=TRUE}
 echo "number of putative interactions of at least 21 nucleotides"
@@ -364,7 +366,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | head -5
 ```
 
-9625
+779
 
 The header for this output is formatted as:
 
@@ -380,7 +382,7 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only 61 interactions were at least 21 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 2 interactions were at least 21 nucleotides with <=3 mismatches
 
 
 

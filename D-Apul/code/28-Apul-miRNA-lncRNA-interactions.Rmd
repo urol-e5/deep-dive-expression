@@ -32,7 +32,7 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-#library(energy)
+# library(energy)
 library(parallel)
 library(ggraph)
 library(tidygraph)
@@ -56,15 +56,15 @@ miRNA_counts <- miRNA_counts %>%
 colnames(miRNA_counts) <- c("sample140", "sample145", "sample150", "sample173", "sample178")
 ```
 
-Read in lncRNA data
+Read in lncRNA data. Generated in `D-Apul/code/32-Apul-lncRNA-matrix.Rmd`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
 ```{r}
-lncRNA_counts<-read_table(file="../../M-multi-species/output/08-lncRNA-features/Apul_counts_dedup.txt", skip=1) %>%
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1) %>%
   rename("lncrna_id"=Geneid,
-         "sample140"=`../data/RNA-ACR-140.sorted.bam`,
-         "sample145"=`../data/RNA-ACR-145.sorted.bam`,
-         "sample150"=`../data/RNA-ACR-150.sorted.bam`,
-         "sample173"=`../data/RNA-ACR-173.sorted.bam`,
-         "sample178"=`../data/RNA-ACR-178.sorted.bam`)
+         "sample140"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-140.sorted.bam`,
+         "sample145"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-145.sorted.bam`,
+         "sample150"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-150.sorted.bam`,
+         "sample173"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-173.sorted.bam`,
+         "sample178"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-178.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
@@ -137,7 +137,8 @@ Format miranda miRNA and lncRNA names
 # miRNA
 miranda_apul$miRNA <- sub("^>", "", miranda_apul$miRNA)  # Remove leading ">"
 miranda_apul$miRNA <- sub("\\..*", "", miranda_apul$miRNA)  # Remove everything from the first period onwards
-miranda_apul$lncRNA <- sub(".*::", "", miranda_apul$lncRNA)  # Remove everything before and including "::"
+# miranda_apul$lncRNA <- sub(".*::", "", miranda_apul$lncRNA)  # Remove everything before and including "::"
+miranda_apul$lncRNA <- sub("Apul_", "", miranda_apul$lncRNA)  # Remove Apul_ prefix
 ```
 
 To join the miranda results with the correlation results, I need the chromosome, start and end information, which can be found in the count matrix
@@ -154,14 +155,14 @@ write.table(lncRNA_names, "../output/28-Apul-miRNA-lncRNA-interactions/Apul_lncR
 
 Merge the miranda results with `lncRNA_names` to get the associated lncRNA ids with the transcript info
 ```{r}
-miranda_apul_names <- left_join(miranda_apul, lncRNA_names, by = c("lncRNA" = "lncRNA_coord")) %>%
-  select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
-  unique()
+# miranda_apul_names <- left_join(miranda_apul, lncRNA_names, by = c("lncRNA" = "lncRNA_coord")) %>%
+#   select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+#   unique()
 ```
 
 Now we can merge with the PCC results! 
 ```{r}
-pcc_miranda_apul <- left_join(miranda_apul_names, pcc_results, by = c("miRNA", "lncRNA_id" = "lncRNA")) %>% unique()
+pcc_miranda_apul <- left_join(miranda_apul, pcc_results, by = c("miRNA", "lncRNA")) %>% unique()
 
 # Write as csv 
 write.csv(pcc_miranda_apul, "../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv")
@@ -243,7 +244,7 @@ range(miRNAs_per_lncRNA_sim$n_miRNAs)
 
 ```
 
-For the significant pairs, the miRNAs can interact with 4-120 unique lncRNAs, while the lncRNAs can interact with with 1-6 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 2-47 unique lncRNAs, while the lncRNAs can interact with 1-4 unique miRNAs. Interesting! 
+For the significant pairs, the miRNAs can interact with 1-39 unique lncRNAs, while the lncRNAs can interact with with 1-5 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-21 unique lncRNAs, while the lncRNAs can interact with 1-4 unique miRNAs. Interesting! 
 
 Plot as a network plot with the miRNAs as the primary nodes for `sig_pairs` 
 ```{r}

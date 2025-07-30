@@ -18,6 +18,8 @@ output:
     code_download: true
 ---
 
+Re-ran 7/29/25 with updated lncRNA counts matrix
+
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
@@ -29,7 +31,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-lncRNA expression summary for *Pocillopora tuahiniensis* lncRNA, isolated in `08-Ptuh-lncRNA-matrix`
+lncRNA expression summary for *Pocillopora tuahiniensis* lncRNA, isolated in `18-Ptuh-lncRNA-matrix`
 
 ### Install and load packages
 
@@ -50,8 +52,7 @@ library(pheatmap)
 
 ```{r load-count-data}
 # Read in counts data.
-# note the file is currently misnamed "Peve", but it contains the correct "Ptuh" counts
-Ptuh_counts_lncRNA_OG <- read.table("../output/08-Ptuh-lncRNA-matrix/Peve-lncRNA-counts.txt", header=TRUE, skip=1) 
+Ptuh_counts_lncRNA_OG <- read.table("../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt", header=TRUE, skip=1) 
 head(Ptuh_counts_lncRNA_OG)
 
 ```
@@ -71,7 +72,7 @@ Ptuh_counts_lncRNA <- Ptuh_counts_lncRNA %>% select(-Chr, -Start, -End, -Strand,
 Ptuh_counts_lncRNA <- Ptuh_counts_lncRNA[!apply(Ptuh_counts_lncRNA, 1, function(row) all(row < 6)), ]
 
 # Remove the superfluous portions of the column names, to leave just the sample names
-colnames(Ptuh_counts_lncRNA) <- sub("...output.06.Ptuh.Hisat.RNA.", "", colnames(Ptuh_counts_lncRNA))
+colnames(Ptuh_counts_lncRNA) <- sub("...data.18.Ptuh.lncRNA.matrix.RNA.", "", colnames(Ptuh_counts_lncRNA))
 colnames(Ptuh_counts_lncRNA) <- sub(".sorted.bam", "", colnames(Ptuh_counts_lncRNA))
 
 # Reorder the columns into alphabetical order (to make it easier to create an associated metadata spreadsheet)
@@ -145,7 +146,7 @@ ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
 ```
 
-Some variation, but not as dramatic as in Apul.
+Some variation
 
 # Normalized counts
 
@@ -326,6 +327,7 @@ ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
 plotPCA(vsd_Ptuh_lncRNA, intgroup="Sample")
 ```
 
+As in Apul and Peve, there is a fair bit of divergence betweem samples. However, unlike the other two species, this variation doesn't seem to be driven by differences in normalized transcript counts. The two samples with highest normalized counts are POC.47 and POC.48. However, there POC.47 is only one of the samples that pulls out on the PCC, and POC.48 clusters with another sample with lower counts (POC.53). We also se in the sample clustering (below) that POC.47is most similar to POC.57, and that both are notably different from the other 3 samples. This is despite POC.57 having very similar normalized transcript counts to POC.53 and POC.50. This all suggest that in Ptuh, unlike the other two species, the divergent lncRNA profiles seem driven by composition, not just total counts (overall expression level).
 
 ## Sample clustering
 

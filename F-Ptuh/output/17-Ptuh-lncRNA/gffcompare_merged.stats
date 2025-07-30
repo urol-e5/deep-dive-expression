@@ -1,0 +1,30 @@
+# gffcompare v0.12.6 | Command line was:
+#/srlab/programs/gffcompare-0.12.6.Linux_x86_64/gffcompare -r ../data/17-Ptuh-lncRNA/genome.gff -o ../output/17-Ptuh-lncRNA/gffcompare_merged ../output/17-Ptuh-lncRNA/stringtie_merged.gtf
+#
+
+#= Summary for dataset: ../output/17-Ptuh-lncRNA/stringtie_merged.gtf 
+#     Query mRNAs :   76723 in   48358 loci  (56588 multi-exon transcripts)
+#            (11668 multi-transcript loci, ~1.6 transcripts per locus)
+# Reference mRNAs :   31840 in   31765 loci  (23907 multi-exon)
+# Super-loci w/ reference transcripts:    29671
+#-----------------| Sensitivity | Precision  |
+        Base level:   100.0     |    60.7    |
+        Exon level:    95.9     |    69.4    |
+      Intron level:   100.0     |    80.9    |
+Intron chain level:   100.0     |    42.2    |
+  Transcript level:    99.2     |    41.2    |
+       Locus level:    99.2     |    61.0    |
+
+     Matching intron chains:   23907
+       Matching transcripts:   31583
+              Matching loci:   31520
+
+          Missed exons:       0/208535	(  0.0%)
+           Novel exons:   51679/290755	( 17.8%)
+        Missed introns:       5/176695	(  0.0%)
+         Novel introns:   24795/218378	( 11.4%)
+           Missed loci:       0/31765	(  0.0%)
+            Novel loci:   18687/48358	( 38.6%)
+
+ Total union super-loci across all input datasets: 48358 
+76723 out of 76723 consensus transcripts written in ../output/17-Ptuh-lncRNA/gffcompare_merged.annotated.gtf (0 discarded as redundant)

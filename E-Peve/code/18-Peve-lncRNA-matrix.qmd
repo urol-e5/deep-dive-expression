@@ -1,0 +1,77 @@
+---
+title: "18-Peve lncRNA matrix "
+author: Steven Roberts
+date: "`r format(Sys.time(), '%d %B, %Y')`"  
+output: 
+  html_document:
+    theme: readable
+    highlight: zenburn
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center" # Align plots to the center
+)
+```
+
+
+
+```{bash}
+head ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
+```
+
+Get BAMS
+
+
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/RNA-POR-73.sorted.bam
+
+
+
+```{bash}
+wget -r -l1 -nd -nc -A ".sorted.bam" -P ../data/18-Peve-lncRNA-matrix \
+https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
+```
+
+
+
+```{bash}
+sed -n '261p' ../output/17-Peve-lncRNA/Peve-lncRNA.gtf
+```
+```{bash}
+sed -n '261p' ../output/17-Peve-lncRNA/lncRNA.gtf
+```
+
+
+
+```{r, engine='bash'}
+/home/shared/subread-2.0.5-Linux-x86_64/bin/featureCounts \
+-T 42 \
+-a ../output/17-Peve-lncRNA/Peve-lncRNA.gtf \
+-o ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt \
+-t lncRNA \
+-g gene_id \
+-p \
+../data/18-Peve-lncRNA-matrix/*sorted.bam
+```
+
+```{bash}
+grep -c '^l' ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
+sort ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt | uniq -d
+```
+```{bash}
+md5sum ../output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt
+```
+

@@ -1,0 +1,73 @@
+GOslimID	Term	Count	Percent
+GO:0048856	anatomical structure development	1736	21.339889366933
+GO:0030154	cell differentiation	742	9.12108174554395
+GO:0023052	signaling	728	8.94898586355255
+GO:0002376	immune system process	447	5.49477566072526
+GO:0006629	lipid metabolic process	282	3.46650276582667
+GO:1901135	carbohydrate derivative metabolic process	263	3.23294406883835
+GO:0022414	reproductive process	246	3.0239704978488
+GO:0055086	nucleobase-containing small molecule metabolic process	202	2.48309772587585
+GO:0016192	vesicle-mediated transport	200	2.45851259987707
+GO:0055085	transmembrane transport	184	2.26183159188691
+GO:0012501	programmed cell death	181	2.22495390288875
+GO:0007010	cytoskeleton organization	144	1.77012907191149
+GO:0048870	cell motility	140	1.72095881991395
+GO:0006520	cellular amino acid metabolic process	135	1.65949600491703
+GO:0065003	protein-containing complex assembly	127	1.56115550092194
+GO:0061024	membrane organization	114	1.40135218192993
+GO:0034330	cell junction organization	100	1.22925629993854
+GO:0050877	nervous system process	95	1.16779348494161
+GO:0007155	cell adhesion	94	1.15550092194222
+GO:0000278	mitotic cell cycle	93	1.14320835894284
+GO:0003013	circulatory system process	89	1.0940381069453
+GO:0005975	carbohydrate metabolic process	82	1.0079901659496
+GO:0098542	defense response to other organism	78	0.958819913952059
+GO:0006790	sulfur compound metabolic process	77	0.946527350952674
+GO:0006351	DNA-templated transcription	72	0.885064535955747
+GO:0006886	intracellular protein transport	71	0.872771972956361
+GO:0007005	mitochondrion organization	71	0.872771972956361
+GO:0016071	mRNA metabolic process	68	0.835894283958205
+GO:0030163	protein catabolic process	68	0.835894283958205
+GO:0007059	chromosome segregation	61	0.749846342962508
+GO:0003012	muscle system process	56	0.688383527965581
+GO:0006281	DNA repair	56	0.688383527965581
+GO:0006091	generation of precursor metabolites and energy	55	0.676090964966195
+GO:0006399	tRNA metabolic process	55	0.676090964966195
+GO:0006914	autophagy	51	0.626920712968654
+GO:0007018	microtubule-based movement	49	0.602335586969883
+GO:0006355	regulation of DNA-templated transcription	43	0.528580208973571
+GO:0006310	DNA recombination	41	0.5039950829748
+GO:0140014	mitotic nuclear division	41	0.5039950829748
+GO:0006260	DNA replication	40	0.491702519975415
+GO:0006954	inflammatory response	38	0.467117393976644
+GO:0042254	ribosome biogenesis	37	0.454824830977259
+GO:0051604	protein maturation	37	0.454824830977259
+GO:0006575	cellular modified amino acid metabolic process	35	0.430239704978488
+GO:0006325	chromatin organization	34	0.417947141979103
+GO:0140013	meiotic nuclear division	34	0.417947141979103
+GO:0007163	establishment or maintenance of cell polarity	32	0.393362015980332
+GO:0042060	wound healing	32	0.393362015980332
+GO:0006766	vitamin metabolic process	31	0.381069452980947
+GO:0044782	cilium organization	30	0.368776889981561
+GO:0006913	nucleocytoplasmic transport	28	0.34419176398279
+GO:0032200	telomere organization	28	0.34419176398279
+GO:0000910	cytokinesis	23	0.282728948985864
+GO:0003014	renal system process	23	0.282728948985864
+GO:0002181	cytoplasmic translation	21	0.258143822987093
+GO:0031047	gene silencing by RNA	21	0.258143822987093
+GO:0050886	endocrine process	19	0.233558696988322
+GO:0030198	extracellular matrix organization	18	0.221266133988937
+GO:0006486	protein glycosylation	17	0.208973570989551
+GO:0140053	mitochondrial gene expression	17	0.208973570989551
+GO:0022600	digestive system process	16	0.196681007990166
+GO:0016073	snRNA metabolic process	13	0.15980331899201
+GO:0072659	protein localization to plasma membrane	13	0.15980331899201
+GO:0006457	protein folding	12	0.147510755992624
+GO:0007040	lysosome organization	12	0.147510755992624
+GO:0071554	cell wall organization or biogenesis	11	0.135218192993239
+GO:0007031	peroxisome organization	10	0.122925629993854
+GO:0098754	detoxification	10	0.122925629993854
+GO:0003016	respiratory system process	4	0.0491702519975415
+GO:0071941	nitrogen cycle metabolic process	2	0.0245851259987707
+GO:0015979	photosynthesis	0	0
+GO:0061007	hepaticobiliary system process	0	0

@@ -1,0 +1,80 @@
+Species,Protein_of_interest,Protein_ID
+Apul,AGO2,FUN_032699-T1
+Apul,AGO2,FUN_032747-T1
+Peve,AGO2,Peve_00006280
+Peve,AGO2,Peve_00006288
+Ptua,AGO2,Pocillopora_meandrina_HIv1___RNAseq.g29883.t1
+Ptua,AGO2,Pocillopora_meandrina_HIv1___RNAseq.g29941.t1
+Ptua,AGO2,Pocillopora_meandrina_HIv1___RNAseq.g29894.t1
+Apul,DGCR8,FUN_014592-T1
+Apul,DGCR8,FUN_014592-T2
+Peve,DGCR8,Peve_00031717
+Ptua,DGCR8,Pocillopora_meandrina_HIv1___RNAseq.g22731.t1
+Apul,Dicer,FUN_002354-T1
+Apul,Dicer,FUN_008214-T1
+Apul,Dicer,FUN_008214-T2
+Apul,Dicer,FUN_008282-T1
+Peve,Dicer,Peve_00005268
+Peve,Dicer,Peve_00022943
+Peve,Dicer,Peve_00023969
+Peve,Dicer,Peve_00033245
+Ptua,Dicer,Pocillopora_meandrina_HIv1___RNAseq.g36.t1
+Ptua,Dicer,Pocillopora_meandrina_HIv1___TS.g20979.t1
+Apul,DNMT1,FUN_004423-T1
+Apul,DNMT1,FUN_043321-T1
+Peve,DNMT1,Peve_00007510
+Peve,DNMT1,Peve_00024112
+Peve,DNMT1,Peve_00028677
+Ptua,DNMT1,Pocillopora_meandrina_HIv1___RNAseq.g16703.t1
+Ptua,DNMT1,Pocillopora_meandrina_HIv1___RNAseq.g8948.t1
+Apul,DNMT3A,FUN_021938-T1
+Apul,DNMT3A,FUN_042971-T1
+Peve,DNMT3A,Peve_00023930
+Peve,DNMT3A,Peve_00039041
+Ptua,DNMT3A,Pocillopora_meandrina_HIv1___RNAseq.g2960.t2
+Ptua,DNMT3A,Pocillopora_meandrina_HIv1___RNAseq.g7105.t1
+Apul,Drosha,FUN_014768-T1
+Apul,Drosha,FUN_042971-T1
+Peve,Drosha,Peve_00000347
+Peve,Drosha,Peve_00039041
+Ptua,Drosha,Pocillopora_meandrina_HIv1___RNAseq.g22569.t1
+Ptua,Drosha,Pocillopora_meandrina_HIv1___RNAseq.g7105.t1
+Apul,Pip5k1a,FUN_000194-T1
+Apul,Pip5k1a,FUN_022059-T1
+Peve,Pip5k1a,Peve_00012098
+Peve,Pip5k1a,Peve_00014932
+Peve,Pip5k1a,Peve_00038470
+Ptua,Pip5k1a,Pocillopora_meandrina_HIv1___RNAseq.g28898.t1
+Ptua,Pip5k1a,Pocillopora_meandrina_HIv1___RNAseq.g4610.t1
+Apul,Piwi,FUN_010978-T1
+Apul,Piwi,FUN_037091-T1
+Peve,Piwi,Peve_00004756
+Peve,Piwi,Peve_00013381
+Ptua,Piwi,Pocillopora_meandrina_HIv1___RNAseq.g11093.t1
+Ptua,Piwi,Pocillopora_meandrina_HIv1___RNAseq.g22015.t1
+Apul,RNase P,FUN_026489-T1
+Apul,RNase P,FUN_035869-T1
+Apul,RNase P,FUN_036754-T1
+Apul,RNase P,FUN_038002-T1
+Apul,RNase P,FUN_038737-T1
+Apul,RNase P,FUN_040901-T1
+Apul,RNase P,FUN_041526-T1
+Apul,RNase P,FUN_043153-T1
+Peve,RNase P,Peve_00001068
+Peve,RNase P,Peve_00002086
+Peve,RNase P,Peve_00002290
+Peve,RNase P,Peve_00004457
+Peve,RNase P,Peve_00009276
+Peve,RNase P,Peve_00012618
+Peve,RNase P,Peve_00017090
+Peve,RNase P,Peve_00021254
+Ptua,RNase P,Pocillopora_meandrina_HIv1___RNAseq.g26255.t1
+Ptua,RNase P,Pocillopora_meandrina_HIv1___TS.g21598.t2
+Ptua,RNase P,Pocillopora_meandrina_HIv1___TS.g3454.t2
+Ptua,RNase P,Pocillopora_meandrina_HIv1___RNAseq.g26431.t1
+Ptua,RNase P,Pocillopora_meandrina_HIv1___RNAseq.g11973.t1
+Ptua,RNase P,Pocillopora_meandrina_HIv1___RNAseq.g6828.t1
+Ptua,RNase P,Pocillopora_meandrina_HIv1___TS.g269.t1
+Apul,XPO5,FUN_007775-T1
+Peve,XPO5,Peve_00032268
+Ptua,XPO5,Pocillopora_meandrina_HIv1___TS.g24628.t2

@@ -1,0 +1,218 @@
+---
+title: "ncRNA protein expression"
+author: "Jill Ashey"
+date: "2025-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Read in ncRNA protein related info 
+```{r}
+prot_df <- read.csv("../data/e5_deep-dive_ncRNA_proteins.csv")
+
+# Remove -T* from Apul protein names 
+prot_df <- prot_df %>%
+  mutate(Protein_ID = if_else(
+    Species == "Apul",
+    sub("-T\\d+$", "", Protein_ID),
+    Protein_ID
+  ))
+```
+
+Read in Apul, Peve and Ptua mRNA counts 
+```{r}
+peve <- read.csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
+peve$gene_id <- gsub("^gene-", "", peve$gene_id)
+
+ptua <- read.csv("../../F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+ptua$gene_id <- gsub("^gene-", "", ptua$gene_id)
+
+apul <- read.csv("../../D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+```
+
+### Apul
+
+Join prot_df with Peve counts matrix 
+```{r}
+apul_prots <- prot_df %>%
+  inner_join(apul, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- apul_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+apul_prots_rpm <- apul_prots %>%
+  select(Species, Protein_of_interest, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Apul 
+```{r}
+apul_summary_stats <- apul_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(apul_summary_stats, "../output/09-ncRNA-protein-expression/apul_ncRNA_protein_transcript_rpm.csv")
+```
+
+### Peve 
+
+Join prot_df with Peve counts matrix 
+```{r}
+peve_prots <- prot_df %>%
+  inner_join(peve, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- peve_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+peve_prots_rpm <- peve_prots %>%
+  select(Species, Protein_of_interest, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Peve 
+```{r}
+peve_summary_stats <- peve_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(peve_summary_stats, "../output/09-ncRNA-protein-expression/peve_ncRNA_protein_transcript_rpm.csv")
+```
+
+### Ptua
+
+Join prot_df with Ptua counts matrix 
+```{r}
+ptua_prots <- prot_df %>%
+  inner_join(ptua, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- ptua_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+ptua_prots_rpm <- ptua_prots %>%
+  select(Species, Protein_of_interest, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Ptua 
+```{r}
+ptua_summary_stats <- ptua_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(ptua_summary_stats, "../output/09-ncRNA-protein-expression/ptuh_ncRNA_protein_transcript_rpm.csv")
+```
+
+### All species 
+
+```{r}
+all_spp <- rbind(apul_summary_stats, peve_summary_stats, ptua_summary_stats)
+```
+
+Plot 
+```{r}
+species_labels <- c(
+  Apul = expression(italic("Acropora pulchra")),
+  Peve = expression(italic("Porites evermanni")),
+  Ptua = expression(italic("Pocillopora tuahiniensis"))
+)
+
+ggplot(all_spp, aes(x = Species, y = avg_rpm, fill = Species)) +
+  geom_col(color = "black", width = 0.7, size = 1.5) +
+  geom_errorbar(aes(ymin = avg_rpm - std_rpm, ymax = avg_rpm + std_rpm),
+                width = 0.2, color = "black", size = 1.2) +
+  facet_wrap(~ Protein_of_interest, scales = "free_y") +
+  scale_fill_manual(
+    values = c("Apul" = "#408EC6", "Peve" = "#1E2761", "Ptua" = "#7A2048"),
+    labels = species_labels
+  ) +
+  scale_x_discrete(labels = species_labels) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = "", y = "Average RPM", fill = "Species") +
+  theme_bw() +
+  theme(
+    axis.title = element_text(size = 36, face = "bold"),        # Y-axis title
+    axis.text = element_text(size = 34, colour = "black"),      # Axis text
+    axis.text.x = element_text(angle = 45, hjust = 1),          # X-axis angle
+    legend.title = element_text(size = 34, face = "bold"),      # Legend title
+    legend.position = "top",
+    legend.text = element_text(size = 32),                      # Legend labels
+    strip.text = element_text(size = 34, face = "bold"),        # Facet labels
+    strip.background = element_rect(fill = "lightgray", color = "black", size = 1.5),  # Facet background
+    panel.border = element_rect(color = "black", size = 1.2),   # Panel border
+    panel.grid.major = element_line(size = 0.5, color = "gray"),# Internal grid lines
+    panel.grid.minor = element_blank(),
+    panel.spacing = unit(1, "lines"),
+    axis.line = element_line(size = 1, colour = "black"),       # Axis lines
+    axis.ticks = element_line(size = 1),                        # Axis ticks
+    strip.placement = "outside"
+  )
+
+ggsave(filename = "../output/09-ncRNA-protein-expression/ncRNA_protein_transcript_rpm_by_spp.pdf", last_plot(), width = 31, height = 20)
+ggsave(filename = "../output/09-ncRNA-protein-expression/ncRNA_protein_transcript_rpm_by_spp.png", last_plot(), width = 31, height = 20)
+```
+
