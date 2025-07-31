@@ -33,42 +33,36 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(stringr)
+library(edgeR)
 ```
 
-Load and format counts files
-```{r}
-# # mature miRNA count matrices
-# Apul_mature <- read.table("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
-# Apul_mature$mean <- rowMeans(Apul_mature) # Average expression across samples
-# Apul_mature$miRNA <- rownames(Apul_mature)
-# Apul_mature$Species <- "Apul"
-# 
-# Peve_mature <- read.table("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
-# Peve_mature$mean <- rowMeans(Peve_mature) # Average expression across samples
-# Peve_mature$miRNA <- rownames(Peve_mature)
-# Peve_mature$Species <- "Peve"
-# 
-# Ptuh_mature <- read.table("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_miRNA_ShortStack_counts_formatted.txt")
-# Ptuh_mature$mean <- rowMeans(Ptuh_mature) # Average expression across samples
-# Ptuh_mature$miRNA <- rownames(Ptuh_mature)
-# Ptuh_mature$Species <- "Ptuh"
 
+Load and format counts files
+
+Note: will be normalizing using CPM (counts per million, normalized for library size) to describe expression level in miRNA. We don't use TPM (transcripts per milion), which is normalized for both transcript length and library size, for miRNA because they are, by definition, all the same size (~22nt)
+
+```{r}
 # mature miRNA count matrices
-Apul_mature <- read.table("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt")
+Apul_mature <- read.table("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_miRNA_ShortStack_counts_formatted.txt")
+Apul_mature <- data.frame(cpm(Apul_mature)) # CPM normalization
 Apul_mature$mean <- rowMeans(Apul_mature) # Average expression across samples
 Apul_mature$miRNA <- rownames(Apul_mature)
 Apul_mature$species <- "Apul"
 
-Peve_mature <- read.table("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_miRNA_normalized.txt")
+Peve_mature <- read.table("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_miRNA_ShortStack_counts_formatted.txt")
+Peve_mature <- data.frame(cpm(Peve_mature)) # CPM normalization
 Peve_mature$mean <- rowMeans(Peve_mature) # Average expression across samples
 Peve_mature$miRNA <- rownames(Peve_mature)
 Peve_mature$species <- "Peve"
 
-Ptuh_mature <- read.table("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt")
+Ptuh_mature <- read.table("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_miRNA_ShortStack_counts_formatted.txt")
+Ptuh_mature <- data.frame(cpm(Ptuh_mature)) # CPM normalization
 Ptuh_mature$mean <- rowMeans(Ptuh_mature) # Average expression across samples
 Ptuh_mature$miRNA <- rownames(Ptuh_mature)
 Ptuh_mature$species <- "Ptuh"
+
 ```
+
 
 Load in assigned miRNA names
 ```{r}
@@ -104,16 +98,46 @@ Ptuh_mature_df$conservation <- ifelse(Ptuh_mature_df$given_miRNA_name %in% Ptuh_
 ```
 
 
-Expression summary stats:
+Expression summary stats (already normalized using CPM):
 ```{r}
-cat("Mean expression of conserved miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
-cat(mean(Apul_mature_conserved$mean), ", ", mean(Peve_mature_conserved$mean), ", ", mean(Ptuh_mature_conserved$mean))
+Apul_mature_counts <- as.matrix(Apul_mature[,1:5])
+Peve_mature_counts <- as.matrix(Peve_mature[,1:3])
+Ptuh_mature_counts <- as.matrix(Ptuh_mature[,1:5])
+
+Apul_mature_conserved_counts <- as.matrix(Apul_mature_conserved[,1:5])
+Peve_mature_conserved_counts <- as.matrix(Peve_mature_conserved[,1:3])
+Ptuh_mature_conserved_counts <- as.matrix(Ptuh_mature_conserved[,1:5])
+
+Apul_mature_unconserved_counts <- as.matrix(Apul_mature_unconserved[,1:5])
+Peve_mature_unconserved_counts <- as.matrix(Peve_mature_unconserved[,1:3])
+Ptuh_mature_unconserved_counts <- as.matrix(Ptuh_mature_unconserved[,1:5])
+```
+
+```{r}
+cat("Mean expression of all miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(mean(Apul_mature_counts), ", ", mean(Peve_mature_counts), ", ", mean(Ptuh_mature_counts))
+cat("\n")
+cat("Median expression of all miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(median(Apul_mature_counts), ", ", median(Peve_mature_counts), ", ", median(Ptuh_mature_counts))
 
 cat("\n")
 cat("\n")
 
-cat("Mean expression of unconserved miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
-cat(mean(Apul_mature_unconserved$mean), ", ", mean(Peve_mature_unconserved$mean), ", ", mean(Ptuh_mature_unconserved$mean))
+cat("Mean expression of *conserved* miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(mean(Apul_mature_conserved_counts), ", ", mean(Peve_mature_conserved_counts), ", ", mean(Ptuh_mature_conserved_counts))
+cat("\n")
+cat("Median expression of *conserved* miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(median(Apul_mature_conserved_counts), ", ", median(Peve_mature_conserved_counts), ", ", median(Ptuh_mature_conserved_counts))
+
+cat("\n")
+cat("\n")
+
+cat("Mean expression of *unconserved* miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(mean(Apul_mature_unconserved_counts), ", ", mean(Peve_mature_unconserved_counts), ", ", mean(Ptuh_mature_unconserved_counts))
+cat("\n")
+cat("Median expression of *unconserved* miRNA in A.pulchra, P.evermanni, and P.tuahiniensis:  ")
+cat(median(Apul_mature_unconserved_counts), ", ", median(Peve_mature_unconserved_counts), ", ", median(Ptuh_mature_unconserved_counts))
+
 ```
 
 Plot
@@ -231,7 +255,4 @@ Ptuh_unconserved_sampleMeans <- colMeans(Ptuh_mature_unconserved[,1:5])
 # Small sample size (n=5), so use non-parametric test
 wilcox.test(x=Ptuh_conserved_sampleMeans, y=Ptuh_unconserved_sampleMeans, paired=TRUE)
 ```
-
-
-Notes: should I be doing this with normalized counts instead of raw?
 
