@@ -41,68 +41,20 @@ library(tidyverse)
 
 Hypothesize that conserved miRNA present in all three species will also have targets enriched for the same processes across species.
 
-## Functionally enriched processes
+# Functionally enriched processes
 
 Load FE tables:
 
 ```{r}
 # Apul
-Apul_3UTR_FE <- read.csv("../../D-Apul/output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Apul_CDS_FE <- read.csv("../../D-Apul/output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Apul_5UTR_FE <- read.csv("../../D-Apul/output/09.12-Apul-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
+Apul_FE <- read.csv("../../D-Apul/output/09.13-Apul-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
 
 # Peve
-Peve_3UTR_FE <- read.csv("../../E-Peve/output/10.13-Peve-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Peve_CDS_FE <- read.csv("../../E-Peve/output/10.11-Peve-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Peve_5UTR_FE <- read.csv("../../E-Peve/output/10.12-Peve-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-  
+Peve_FE <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
 
 # Ptuh
-Ptuh_3UTR_FE <- read.csv("../../F-Ptuh/output/11.13-Ptuh-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Ptuh_CDS_FE <- read.csv("../../F-Ptuh/output/11.11-Ptuh-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
-
-Ptuh_5UTR_FE <- read.csv("../../F-Ptuh/output/11.12-Ptuh-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
+Ptuh_FE <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_topGO_FE.csv") %>% dplyr::select(-X)
 ```
-
-Format and combine dfs
-```{r}
-# annotate each df with its mRNA region
-Apul_3UTR_FE$region <- "3UTR"
-Apul_CDS_FE$region <- "CDS"
-Apul_5UTR_FE$region <- "5UTR"
-
-Peve_3UTR_FE$region <- "3UTR"
-Peve_CDS_FE$region <- "CDS"
-Peve_5UTR_FE$region <- "5UTR"
-
-Ptuh_3UTR_FE$region <- "3UTR"
-Ptuh_CDS_FE$region <- "CDS"
-Ptuh_5UTR_FE$region <- "5UTR"
-
-# Check each df has same col names in same order
-colnames(Apul_3UTR_FE) == colnames(Apul_CDS_FE)
-colnames(Apul_3UTR_FE) == colnames(Apul_5UTR_FE)
-
-colnames(Peve_3UTR_FE) == colnames(Peve_CDS_FE)
-colnames(Peve_3UTR_FE) == colnames(Peve_5UTR_FE)
-
-colnames(Ptuh_3UTR_FE) == colnames(Ptuh_CDS_FE)
-colnames(Ptuh_3UTR_FE) == colnames(Ptuh_5UTR_FE)
-
-# Combine dfs
-Apul_FE <- rbind(Apul_3UTR_FE, Apul_CDS_FE, Apul_5UTR_FE)
-Peve_FE <- rbind(Peve_3UTR_FE, Peve_CDS_FE, Peve_5UTR_FE)
-Ptuh_FE <- rbind(Ptuh_3UTR_FE, Ptuh_CDS_FE, Ptuh_5UTR_FE)
-
-```
-
 
 Load in assigned miRNA names
 ```{r}
@@ -137,117 +89,88 @@ Peve_FE_df$conservation <- ifelse(Peve_FE_df$given_miRNA_name %in% Peve_FE_conse
 Ptuh_FE_df$conservation <- ifelse(Ptuh_FE_df$given_miRNA_name %in% Ptuh_FE_conserved$given_miRNA_name, "conserved", "unconserved")
 ```
 
+## Conserved miRNA 
+
 Take a look
 ```{r}
 print(Apul_FE_conserved)
 print(Peve_FE_conserved)
 print(Ptuh_FE_conserved)
 ```
+
+### miR-100
+
 The only miRNA with targets that are enriched for a given function across all three species is miR-100:
 
-- In Apul, miR-100 targets are functionally enriched for terms related to for fundamental cellular processes like metabolism, transport, expression and cell cycle, and cellular activity and development
+- In Apul, miR-100 targets are functionally enriched for terms related to fundamental cellular processes like **lipid transport/metabolism and gene expression regulation**
 
-- In Peve, miR-100 targets are also enriched for fundamental terms related to signaling, development, homeostasis, and immune function.
+- In Peve, miR-100 targets are also enriched for fundamental terms, but of a different theme, including **immune signaling, developmental processes, and DNA/protein modifications**
 
-- In Ptuh, miR-100 targets are only enriched for a single Molecular Function, calcium ion binding. This is a fundamental molecular function and would be important to the processes enriched in both Apul and Peve. It is also an enriched term in Peve. 
+- In Ptuh, miR-100 targets are only enriched for a single Molecular Function, **calcium ion binding**. This is a fundamental molecular function involved in signaling, and would be important to the processes enriched in both Apul and Peve. It is also an enriched term in Peve. 
 
 Note: Our ability to describe the functional role of miRNA in Ptuh will likely be particularly limited, since our functional annotation of the Ptuh genome is the least complete of our three species (A.millepora genome: 99% of genes functionally annotated; P.evermanni genome: 72%; P.meandrina genome: 60%)
+
+### miR-2025
+
+miR-2025 only has targets with enriched functions in two species, A.pulchra and P.evermanni. 
+
+In both, miR-2025 targets are enriched for child terms of oxidoreductase activity, suggesting potential role in redox balance or metabolism.
+
 
 
 Let's also look at the annotations themselves, regardless of whether the processes were statistically overrepresented. This will give more terms to look at for the less-well-annotated P.tuahiniensis.
 
 # Functionally annotated
 
-## FA terms (and join with GOSlim)
-
 Load and format FA tables:
 
 ```{r}
-
 # Apul
-Apul_3UTR_FA <- read.csv("../../D-Apul/output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
-
-Apul_CDS_FA <- read.csv("../../D-Apul/output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
-
-Apul_CDS_FA$query_start_end <- paste0(Apul_CDS_FA$V5, " ", Apul_CDS_FA$V6)
-Apul_CDS_FA$subject_start_end <- paste0(Apul_CDS_FA$V7, " ", Apul_CDS_FA$V8)
-Apul_CDS_FA <- Apul_CDS_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V1, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Apul_CDS_FA) <- colnames(Apul_3UTR_FA)
-
-
-Apul_5UTR_FA <- read.csv("../../D-Apul/output/09.12-Apul-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
-
-Apul_5UTR_FA$query_start_end <- paste0(Apul_5UTR_FA$V5, " ", Apul_5UTR_FA$V6)
-Apul_5UTR_FA$subject_start_end <- paste0(Apul_5UTR_FA$V7, " ", Apul_5UTR_FA$V8)
-Apul_5UTR_FA <- Apul_5UTR_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V1, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Apul_5UTR_FA) <- colnames(Apul_3UTR_FA)
-
+Apul_FA <- read.csv("../../D-Apul/output/09.13-Apul-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
 
 # Peve
-Peve_3UTR_FA <- read.csv("../../E-Peve/output/10.13-Peve-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
-
-Peve_CDS_FA <- read.csv("../../E-Peve/output/10.11-Peve-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
-
-Peve_CDS_FA$query_start_end <- paste0(Peve_CDS_FA$V5, " ", Peve_CDS_FA$V6)
-Peve_CDS_FA$subject_start_end <- paste0(Peve_CDS_FA$V7, " ", Peve_CDS_FA$V8)
-Peve_CDS_FA <- Peve_CDS_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Peve_CDS_FA) <- colnames(Peve_3UTR_FA)
-
-Peve_5UTR_FA <- read.csv("../../E-Peve/output/10.12-Peve-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
-
-Peve_5UTR_FA$query_start_end <- paste0(Peve_5UTR_FA$V5, " ", Peve_5UTR_FA$V6)
-Peve_5UTR_FA$subject_start_end <- paste0(Peve_5UTR_FA$V7, " ", Peve_5UTR_FA$V8)
-Peve_5UTR_FA <- Peve_5UTR_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Peve_5UTR_FA) <- colnames(Peve_3UTR_FA)
-
+Peve_FA <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
 
 # Ptuh
-Ptuh_3UTR_FA <- read.csv("../../F-Ptuh/output/11.13-Ptuh-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
-
-Ptuh_CDS_FA <- read.csv("../../F-Ptuh/output/11.11-Ptuh-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
-
-Ptuh_CDS_FA$query_start_end <- paste0(Ptuh_CDS_FA$V5, " ", Ptuh_CDS_FA$V6)
-Ptuh_CDS_FA$subject_start_end <- paste0(Ptuh_CDS_FA$V7, " ", Ptuh_CDS_FA$V8)
-Ptuh_CDS_FA <- Ptuh_CDS_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Ptuh_CDS_FA) <- colnames(Peve_3UTR_FA)
-
-Ptuh_5UTR_FA <- read.csv("../../F-Ptuh/output/11.12-Ptuh-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
-
-Ptuh_5UTR_FA$query_start_end <- paste0(Ptuh_5UTR_FA$V5, " ", Ptuh_5UTR_FA$V6)
-Ptuh_5UTR_FA$subject_start_end <- paste0(Ptuh_5UTR_FA$V7, " ", Ptuh_5UTR_FA$V8)
-Ptuh_5UTR_FA <- Ptuh_5UTR_FA %>%
-  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
-colnames(Ptuh_5UTR_FA) <- colnames(Peve_3UTR_FA)
+Ptuh_FA <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
 ```
 
-Combine dfs
+# Check for ncRNA machinery
+
 ```{r}
-# annotate each df with its mRNA region
-Apul_3UTR_FA$region <- "3UTR"
-Apul_CDS_FA$region <- "CDS"
-Apul_5UTR_FA$region <- "5UTR"
+prot_df <- read.csv("../data/e5_deep-dive_ncRNA_proteins.csv")
 
-Peve_3UTR_FA$region <- "3UTR"
-Peve_CDS_FA$region <- "CDS"
-Peve_5UTR_FA$region <- "5UTR"
+# Remove -T* from Apul protein names 
+prot_df <- prot_df %>%
+  mutate(Protein_ID = if_else(
+    Species == "Apul",
+    sub("-T\\d+$", "", Protein_ID),
+    Protein_ID
+  ))
 
-Ptuh_3UTR_FA$region <- "3UTR"
-Ptuh_CDS_FA$region <- "CDS"
-Ptuh_5UTR_FA$region <- "5UTR"
+left_join(prot_df[prot_df$species == "Apul",], Apul_FA_df, by = c("Protein_ID" = "mRNA"))
+left_join(prot_df[prot_df$species == "Peve",], Peve_FA_df, by = c("Protein_ID" = "mRNA"))
+left_join(prot_df[prot_df$species == "Ptuh",], Ptuh_FA_df, by = c("Protein_ID" = "mRNA"))
 
-# Combine dfs
-Apul_FA <- rbind(Apul_3UTR_FA, Apul_CDS_FA, Apul_5UTR_FA)
-Peve_FA <- rbind(Peve_3UTR_FA, Peve_CDS_FA, Peve_5UTR_FA)
-Ptuh_FA <- rbind(Ptuh_3UTR_FA, Ptuh_CDS_FA, Ptuh_5UTR_FA)
+Apul_FA_df[grep("dnmt", ignore.case = TRUE, Apul_FA_df$Protein.names),]
+Peve_FA_df[grep("dnmt", ignore.case = TRUE, Peve_FA_df$Protein.names),]
+Ptuh_FA_df[grep("dnmt", ignore.case = TRUE, Ptuh_FA_df$Protein.names),]
+
 
 ```
 
-## Get GoSlim summary terms
+### peve-mir-novel-7
+
+The only miRNA that targets *and* is significantly coexpressed with a protein that's involved in epigenetic regulation is peve-mir-novel-7. This miRNA targets and is significantly negatively coexpressed with DNMT1, the DNMT responsible for maintaining DNA methylation marks. This miRNa is one of the few that is almost exclusively *negagively* correlated with its many targets, which provides strong support for its role as a valid miRNA acting through translational repression or mRNA degradation. It is also partially conserved, matching the P.tuahiniensis miRNA ptuh-mir-novel-7 (see https://github.com/urol-e5/deep-dive-expression/blob/main/M-multi-species/code/04-miRNA-comparison.md#421-apul-and-peve).
+
+We can also check to see which terms are functionally expressed in the miRNA's targets:
+```{r}
+Peve_FE_df %>% filter(given_miRNA_name == "peve-mir-novel-7")
+Peve_FA_df %>% filter(given_miRNA_name == "peve-mir-novel-7", !is.na(Gene.Ontology.IDs))
+```
+
+
+## GoSlim summary terms
 
 Code from [Roberts Lab Handbook](https://robertslab.github.io/resources/bio-Annotation/#map-go-ids-to-goslims)
 
@@ -560,146 +483,9 @@ Reduce(intersect, list(Ptuh_BP_counts$`ptuh-mir-2036`$GO_Slim_Terms))
 miR-100 is functionally conserved across the three species in cell cycle regulation and early development. The other conserved miRNA don't have enough annotated targets in all species to determine whether functional conservation exists. Also keep in mind that some important functions (e.g. reproduction, development, immune response) make not appear in this dataset, since deep-dive samples were collected only at a single site and timepoint, and are limited in number.
 
 
-# Semantic similarity
-
-First, get lists of GO terms targeted by each miRNA in each species
-```{r}
-# Apul
-# Filter out NA terms
-Apul_FA_conserved_filt <- Apul_FA_conserved %>%
-  filter(!is.na(Gene.Ontology.IDs))
-
-# Loop through each unique miRNA and calculate term counts
-Apul_GO_counts <- Apul_FA_conserved_filt %>%
-  group_split(given_miRNA_name) %>%
-  set_names(map_chr(., ~ unique(.$given_miRNA_name))) %>%
-  map(~ .x %>%
-        separate_rows(Gene.Ontology.IDs, sep = ";\\s*") %>%
-        mutate(Gene.Ontology.IDs = str_trim(Gene.Ontology.IDs)) %>%
-        count(Gene.Ontology.IDs, sort = TRUE)
-      )
-
-
-# Peve
-# Filter out NA biological processes
-Peve_FA_conserved_filt <- Peve_FA_conserved %>%
-  filter(!is.na(Gene.Ontology.IDs))
-
-# Loop through each unique miRNA and calculate term counts
-Peve_GO_counts <- Peve_FA_conserved_filt %>%
-  group_split(given_miRNA_name) %>%
-  set_names(map_chr(., ~ unique(.$given_miRNA_name))) %>%
-  map(~ .x %>%
-        separate_rows(Gene.Ontology.IDs, sep = ";\\s*") %>%
-        mutate(Gene.Ontology.IDs = str_trim(Gene.Ontology.IDs)) %>%
-        count(Gene.Ontology.IDs, sort = TRUE)
-      )
-
-
-# Ptuh
-# Filter out NA biological processes
-Ptuh_FA_conserved_filt <- Ptuh_FA_conserved %>%
-  filter(!is.na(Gene.Ontology.IDs))
-
-# Loop through each unique miRNA and calculate term counts
-Ptuh_GO_counts <- Ptuh_FA_conserved_filt %>%
-  group_split(given_miRNA_name) %>%
-  set_names(map_chr(., ~ unique(.$given_miRNA_name))) %>%
-  map(~ .x %>%
-        separate_rows(Gene.Ontology.IDs, sep = ";\\s*") %>%
-        mutate(Gene.Ontology.IDs = str_trim(Gene.Ontology.IDs)) %>%
-        count(Gene.Ontology.IDs, sort = TRUE)
-      )
-```
-
-
-
-```{r}
-library(GOSemSim)
-library(org.Hs.eg.db)  # Use human as a placeholder for GO DAG structure
-library(ComplexHeatmap)  # for heatmap visualization
-library(circlize)  # color scaling for heatmap
-
-# Load semantic data
-semData <- godata("org.Hs.eg.db", ont = "BP", computeIC = TRUE)
-# Get all available GO terms in this database
-available_GO <- names(semData@IC)
-
-# GO term sets
-Apul_GO_miR100 <- Apul_GO_counts$`apul-mir-100`$Gene.Ontology.IDs
-Apul_GO_miR2023 <- Apul_GO_counts$`apul-mir-2023`$Gene.Ontology.IDs
-Apul_GO_miR2025 <- Apul_GO_counts$`apul-mir-2025`$Gene.Ontology.IDs
-
-Peve_GO_miR100 <- Peve_GO_counts$`peve-mir-100`$Gene.Ontology.IDs
-Peve_GO_miR2023 <- Peve_GO_counts$`peve-mir-2023`$Gene.Ontology.IDs
-Peve_GO_miR2025 <- Peve_GO_counts$`peve-mir-2025`$Gene.Ontology.IDs
-Peve_GO_miR2036 <- Peve_GO_counts$`peve-mir-2036`$Gene.Ontology.IDs
-
-Ptuh_GO_miR100 <- Ptuh_GO_counts$`ptuh-mir-100`$Gene.Ontology.IDs
-Ptuh_GO_miR2023 <- Ptuh_GO_counts$`ptuh-mir-2023`$Gene.Ontology.IDs
-Ptuh_GO_miR2036 <- Ptuh_GO_counts$`ptuh-mir-2036`$Gene.Ontology.IDs
-
-
-# Combine all unique GO terms from the three sets
-GO_miR100 <- unique(c(Apul_GO_miR2023, Peve_GO_miR2023, Ptuh_GO_miR2023)) %>% trimws()
-GO_miR100 <- GO_miR100[GO_miR100 != ""]
-
-# Filter your list
-GO_miR100_valid <- GO_miR100[GO_miR100 %in% available_GO]
-
-# Compute semantic similarity matrix
-sim_matrix <- mgoSim(GO_miR100_valid, GO_miR100_valid, semData, measure = "Wang", combine = NULL)
-
-# Cluster GO terms (e.g., k-means or hclust) to group semantically similar terms
-d <- as.dist(1 - sim_matrix)
-hc <- hclust(d, method = "average")
-k <- 4  # Number of semantic clusters
-clusters <- cutree(hc, k = k)
-
-# Add cluster assignments
-go_cluster_df <- data.frame(GO = GO_miR100_valid, Cluster = clusters)
-
-# Create a function to count GO terms per cluster
-count_cluster <- function(go_terms, cluster_df) {
-  cluster_df %>%
-    filter(GO %in% go_terms) %>%
-    count(Cluster) %>%
-    complete(Cluster = 1:k, fill = list(n = 0)) %>%
-    arrange(Cluster)
-}
-
-species_counts <- list(
-  Species1 = count_cluster(Apul_GO_miR100, go_cluster_df),
-  Species2 = count_cluster(Peve_GO_miR100, go_cluster_df),
-  Species3 = count_cluster(Ptuh_GO_miR100, go_cluster_df)
-)
-
-# Combine into a matrix
-count_matrix <- do.call(cbind, lapply(species_counts, `[[`, "n"))
-rownames(count_matrix) <- paste0("Cluster ", 1:k)
-colnames(count_matrix) <- names(species_counts)
-
-Heatmap(count_matrix,
-        name = "GO Count",
-        col = colorRamp2(c(0, max(count_matrix)), c("white", "darkgreen")),
-        cluster_rows = FALSE,
-        cluster_columns = FALSE,
-        column_title = "miR100: Semantic Clusters of GO Terms across Species",
-        row_names_gp = gpar(fontsize = 10),
-        column_names_gp = gpar(fontsize = 10))
-
-go_names <- Term(GOTERM[go_cluster_df$GO])
-go_cluster_df$GO_Name <- go_names
-
-# For each cluster, pick a representative term
-go_cluster_df %>%
-  group_by(Cluster) %>%
-  summarise(Representative = GO_Name[1])
-
-```
-
 
 # Plotting
+
 ```{r}
 # Apul
 # Count number of unique mRNA targets per miRNA
@@ -745,12 +531,11 @@ ggplot(Ptuh_target_counts, aes(x = reorder(given_miRNA_name, -num_targets), y = 
 
 ```
 
-# 
 
 ```{r}
 stacked_opacity_bar <- function(df, species_color) {
 
-  # Step 1: Label correlation direction
+  # Label correlation direction
   df_labeled <- df %>%
     mutate(
       correlation_direction = case_when(
@@ -760,16 +545,18 @@ stacked_opacity_bar <- function(df, species_color) {
       )
     )
 
-  # Step 2: Count number of unique mRNA targets per miRNA, correlation, and region
+  # Count number of unique mRNA targets per miRNA, correlation, and region
   plot_data <- df_labeled %>%
     group_by(given_miRNA_name, correlation_direction, region) %>%
-    summarise(n_mRNA = n_distinct(mRNA), .groups = "drop")
+    summarise(n_mRNA = n_distinct(mRNA), .groups = "drop") %>%
+    # Step 2.5: Flip sign for negative correlations
+    mutate(n_mRNA = ifelse(correlation_direction == "negative", -n_mRNA, n_mRNA))
 
-  # ✅ Step 3: Alphabetical ordering
+  # Alphabetical ordering
   plot_data <- plot_data %>%
     mutate(given_miRNA_name = factor(given_miRNA_name, levels = sort(unique(given_miRNA_name))))
 
-  # Step 4: Plot
+  # Plot
   ggplot(plot_data, aes(x = given_miRNA_name, y = n_mRNA)) +
     geom_col(aes(fill = correlation_direction, alpha = region), position = "stack") +
     scale_fill_manual(values = c(positive = species_color, negative = "#d7191c")) +
@@ -784,7 +571,6 @@ stacked_opacity_bar <- function(df, species_color) {
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
-
 
 stacked_opacity_bar(Apul_FA_df, "#408EC6")
 stacked_opacity_bar(Peve_FA_df, "#1E2761")
@@ -918,6 +704,7 @@ ggplot(Ptuh_binding_sum, aes(x = total_binding_sites, y = abs(PCC.cor), color = 
   geom_point() + 
   geom_jitter()
 ```
-No apparent relationship between number of binding sites and magnitude of PCC expression correlation.
+
+There's no apparent relationship between number of binding sites and magnitude of PCC expression correlation.
 
 
