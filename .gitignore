@@ -54,7 +54,7 @@ D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict_a
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/WorkingDirectory
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Gene_Trees
 D-Apul/output/20-Apul-Orthofinder/Results_Dec20/*Sequences
-D-Apul/output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv
+D-Apul/output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA*.csv
 D-Apul/output/21.1-Apul-mRNA-lncRNA-correlation-PCC/sig_pairs.csv
 D-Apul/output/21.1-Apul-mRNA-lncRNA-correlation-PCC/chunk*
 D-Apul/output/22*
@@ -77,7 +77,7 @@ E-Peve/data/01-Peve-RNA-trimming-FastQC/trimmed-reads
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
-E-Peve/output/09.1-Peve-mRNA-lncRNA-correlation-PCC/Peve-PCC_mRNA_lncRNA.csv
+E-Peve/output/09.1-Peve-mRNA-lncRNA-correlation-PCC/Peve-PCC_mRNA_lncRNA*.csv
 E-Peve/output/09.1-Peve-mRNA-lncRNA-correlation-PCC/sig_pairs.csv
 E-Peve/output/09.1-Peve-mRNA-lncRNA-correlation-PCC/chunk*
 E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv
@@ -106,7 +106,7 @@ F-Ptuh/data/01-Ptuh-RNA-trimming-FastQC/trimmed-reads
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.bam
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.fa
 F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/*.csi
-F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA.csv
+F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/Ptuh-PCC_mRNA_lncRNA*.csv
 F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/sig_pairs.csv
 F-Ptuh/output/10.1-Ptuh-mRNA-lncRNA-correlation-PCC/chunk*
 F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv
