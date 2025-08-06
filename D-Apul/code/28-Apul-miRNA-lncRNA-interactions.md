@@ -3,6 +3,8 @@ Apul miRNA lncRNA interactions
 Jill Ashey
 2025-05-08
 
+Reran PCC 8/6/2025 with updated lncRNA count matrix
+
 This code will use Pearson’s correlation coefficient to examine possible
 correlations between miRNA and lncRNA expression. This will then be
 compared to the miRanda interaction results of the miRNAs and lncRNAs.
@@ -38,13 +40,13 @@ Read in lncRNA data. Generated in
 <https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt>
 
 ``` r
-lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip=1) %>%
-  rename("lncrna_id"=Geneid,
-         "sample140"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-140.sorted.bam`,
-         "sample145"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-145.sorted.bam`,
-         "sample150"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-150.sorted.bam`,
-         "sample173"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-173.sorted.bam`,
-         "sample178"=`../data/32-Apul-lncRNA-matrix/RNA-ACR-178.sorted.bam`)
+lncRNA_counts<-read_table(file="../../M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt") %>%
+  dplyr::rename("lncrna_id"=Geneid,
+         "sample140"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.140.sorted.bam`,
+         "sample145"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.145.sorted.bam`,
+         "sample150"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.150.sorted.bam`,
+         "sample173"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.173.sorted.bam`,
+         "sample178"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.178.sorted.bam`)
 ```
 
     ## 
@@ -56,16 +58,16 @@ lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-d
     ##   End = col_double(),
     ##   Strand = col_character(),
     ##   Length = col_double(),
-    ##   `../data/32-Apul-lncRNA-matrix/RNA-ACR-140.sorted.bam` = col_double(),
-    ##   `../data/32-Apul-lncRNA-matrix/RNA-ACR-145.sorted.bam` = col_double(),
-    ##   `../data/32-Apul-lncRNA-matrix/RNA-ACR-150.sorted.bam` = col_double(),
-    ##   `../data/32-Apul-lncRNA-matrix/RNA-ACR-173.sorted.bam` = col_double(),
-    ##   `../data/32-Apul-lncRNA-matrix/RNA-ACR-178.sorted.bam` = col_double()
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.140.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.145.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.150.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.173.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.178.sorted.bam = col_double()
     ## )
 
 ``` r
 # Change to df 
-lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
+lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% dplyr::select(!c("Chr", "Start", "End", "Strand", "Length"))
 row.names(lncRNA_counts_df) <- lncRNA_counts_df[,1]
 lncRNA_counts_df <- lncRNA_counts_df[,-1]  # remove the first column (gene names) if needed
 
@@ -75,6 +77,20 @@ lncRNA_counts_df <- lncRNA_counts_df %>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 ```
+
+Number of miRNA and lncRNA
+
+``` r
+nrow(miRNA_counts)
+```
+
+    ## [1] 39
+
+``` r
+nrow(lncRNA_counts)
+```
+
+    ## [1] 31490
 
 Normalize counts
 
@@ -165,7 +181,7 @@ lncRNA ids with the transcript info
 
 ``` r
 # miranda_apul_names <- left_join(miranda_apul, lncRNA_names, by = c("lncRNA" = "lncRNA_coord")) %>%
-#   select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
+#   dplyr::select(c(miRNA, lncRNA, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, lncRNA_id)) %>%
 #   unique()
 ```
 
@@ -198,33 +214,33 @@ length(unique(pcc_miranda_apul$lncRNA))
 # Are there any pairs that have a PCC correlation > |0.5| and a p-value < 0.05?
 sig_pairs <- pcc_miranda_apul %>%
   filter(abs(PCC.cor) > 0.5 & p_value < 0.05) %>% 
-  select(-X, -X.1)
+  dplyr::select(-X)
 cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(sig_pairs), "\n")
 ```
 
-    ## PCC correlation > |0.5| and a p-value < 0.05: 365
+    ## PCC correlation > |0.5| and a p-value < 0.05: 564
 
 ``` r
 # Are there any pairs that have a PCC correlation > |0.5|, a p-value < 0.05, and a query similarity >75%?
 sig_pairs_similar <- pcc_miranda_apul %>%
   filter(abs(PCC.cor) > 0.5 & p_value < 0.05 & query_similar > 75.00) %>% 
-  select(-X, -X.1)
+  dplyr::select(-X)
 cat("PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%:", nrow(sig_pairs_similar), "\n")
 ```
 
-    ## PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%: 181
+    ## PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%: 273
 
 ``` r
 length(unique(sig_pairs_similar$miRNA))
 ```
 
-    ## [1] 35
+    ## [1] 36
 
 ``` r
 length(unique(sig_pairs_similar$lncRNA))
 ```
 
-    ## [1] 146
+    ## [1] 224
 
 ``` r
 ## Count positive and negative PCC.cor values
@@ -233,13 +249,13 @@ negative_count <- sum(sig_pairs_similar$PCC.cor < 0)
 cat("Number of rows with positive PCC.cor:", positive_count, "\n")
 ```
 
-    ## Number of rows with positive PCC.cor: 99
+    ## Number of rows with positive PCC.cor: 207
 
 ``` r
 cat("Number of rows with negative PCC.cor:", negative_count, "\n")
 ```
 
-    ## Number of rows with negative PCC.cor: 82
+    ## Number of rows with negative PCC.cor: 66
 
 How many miRNAs per lncRNA and vice versa for the sig pairs? For sig
 pairs similar?
@@ -260,13 +276,13 @@ print("lncRNAs per miRNA, significant. mean, range:")
 mean(lncRNAs_per_miRNA$n_lncRNAs)
 ```
 
-    ## [1] 8.833333
+    ## [1] 13.52778
 
 ``` r
 range(lncRNAs_per_miRNA$n_lncRNAs)
 ```
 
-    ## [1]  1 39
+    ## [1]  1 61
 
 ``` r
 cat("\n")
@@ -287,7 +303,7 @@ print("miRNAs per lncRNA, significnat. mean, range:")
 mean(miRNAs_per_lncRNA$n_miRNAs)
 ```
 
-    ## [1] 1.108014
+    ## [1] 1.10181
 
 ``` r
 range(miRNAs_per_lncRNA$n_miRNAs)
@@ -315,13 +331,13 @@ print("lncRNAs per miRNA, significant and similar. mean, range:")
 mean(lncRNAs_per_miRNA_sim$n_lncRNAs)
 ```
 
-    ## [1] 4.514286
+    ## [1] 6.583333
 
 ``` r
 range(lncRNAs_per_miRNA_sim$n_lncRNAs)
 ```
 
-    ## [1]  1 21
+    ## [1]  1 22
 
 ``` r
 cat("\n")
@@ -342,19 +358,19 @@ print("miRNAs per lncRNA, significnat and similar. mean, range:")
 mean(miRNAs_per_lncRNA_sim$n_miRNAs)
 ```
 
-    ## [1] 1.082192
+    ## [1] 1.058036
 
 ``` r
 range(miRNAs_per_lncRNA_sim$n_miRNAs)
 ```
 
-    ## [1] 1 4
+    ## [1] 1 5
 
-For the significant pairs, the miRNAs can interact with 1-39 unique
+For the significant pairs, the miRNAs can interact with 1-61 unique
 lncRNAs, while the lncRNAs can interact with with 1-5 unique miRNAs. For
 the significant pairs that have high query similarity, the miRNAs can
-interact with 1-21 unique lncRNAs, while the lncRNAs can interact with
-1-4 unique miRNAs. Interesting!
+interact with 1-22 unique lncRNAs, while the lncRNAs can interact with
+1-5 unique miRNAs. Interesting!
 
 Plot as a network plot with the miRNAs as the primary nodes for
 `sig_pairs`
@@ -385,9 +401,9 @@ p <- ggraph(g_tbl, layout = "auto") +
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
 ```
 
-    ## Using "stress" as default layout
+    ## Using "tree" as default layout
 
-![](28-Apul-miRNA-lncRNA-interactions_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](28-Apul-miRNA-lncRNA-interactions_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 ggsave("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-significant_miRNA_lncRNA_network.png", p, width = 20, height = 15, dpi = 300)
@@ -422,7 +438,7 @@ p <- ggraph(g_tbl, layout = "fr") +
        subtitle = "Edge width represents |PCC|, color represents correlation direction");p
 ```
 
-![](28-Apul-miRNA-lncRNA-interactions_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](28-Apul-miRNA-lncRNA-interactions_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 ggsave("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-similar_significant_miRNA_lncRNA_network.png", p, width = 20, height = 15, dpi = 300)
