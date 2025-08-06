@@ -25,16 +25,14 @@ mRNA_counts <- mRNA_counts %>%
   select(-Total)
 
 # === Read in lncRNA data ===
-lncRNA_counts <- read_table(
-  file = "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt", 
-  skip = 1
-) %>%
-  rename("lncrna_id" = Geneid, 
-         "sample47" = `../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam`, 
-         "sample48" = `../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam`, 
-         "sample50" = `../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam`, 
-         "sample53" = `../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam`, 
-         "sample57" = `../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam`)
+lncRNA_counts<-read_table(file="../../../M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt") %>%
+  rename("lncrna_id"=Geneid, 
+         "sample47"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.47.S1.TP2.sorted.bam`, 
+         "sample48"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.48.S1.TP2.sorted.bam`, 
+         "sample50"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.50.S1.TP2.sorted.bam`, 
+         "sample53"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.53.S1.TP2.sorted.bam`, 
+         "sample57"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.57.S1.TP2.sorted.bam`)
+
 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>%
   select(-Chr, -Start, -End, -Strand, -Length)
