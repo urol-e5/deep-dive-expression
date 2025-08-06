@@ -13,6 +13,9 @@ Kathleen Durkin
 - <a href="#6-plotting-with-igraph" id="toc-6-plotting-with-igraph">6
   Plotting with igraph</a>
 
+Reran 08/06/2025 to incorporate changes due to updated lncRNA counts
+matrix
+
 ``` r
 library(dplyr)
 ```
@@ -308,7 +311,7 @@ edges_pval_0.05 <- edges %>% filter(p_value < 0.05)
 nrow(edges_pval_0.05)
 ```
 
-    ## [1] 2587
+    ## [1] 2786
 
 Nodes:
 
@@ -338,7 +341,7 @@ edges_pval_0.01 <- edges %>% filter(p_value < 0.01)
 nrow(edges_pval_0.01)
 ```
 
-    ## [1] 590
+    ## [1] 660
 
 Nodes:
 
