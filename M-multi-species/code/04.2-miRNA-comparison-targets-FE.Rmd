@@ -114,7 +114,7 @@ Note: Our ability to describe the functional role of miRNA in Ptuh will likely b
 
 miR-2025 only has targets with enriched functions in two species, A.pulchra and P.evermanni. 
 
-In both, miR-2025 targets are enriched for child terms of oxidoreductase activity, suggesting potential role in redox balance or metabolism.
+In both, miR-2025 targets are enriched for child terms of **oxidoreductase activity**, suggesting potential role in **redox balance or metabolism**.
 
 
 
@@ -126,49 +126,14 @@ Load and format FA tables:
 
 ```{r}
 # Apul
-Apul_FA <- read.csv("../../D-Apul/output/09.13-Apul-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
+Apul_FA <- read.csv("../../D-Apul/output/09.13-Apul-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(-X)
 
 # Peve
-Peve_FA <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
+Peve_FA <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(-X)
 
 # Ptuh
-Ptuh_FA <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_sig_cor_targets_FA.csv") %>% dplyr::select(-X)
+Ptuh_FA <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(-X)
 ```
-
-# Check for ncRNA machinery
-
-```{r}
-prot_df <- read.csv("../data/e5_deep-dive_ncRNA_proteins.csv")
-
-# Remove -T* from Apul protein names 
-prot_df <- prot_df %>%
-  mutate(Protein_ID = if_else(
-    Species == "Apul",
-    sub("-T\\d+$", "", Protein_ID),
-    Protein_ID
-  ))
-
-left_join(prot_df[prot_df$species == "Apul",], Apul_FA_df, by = c("Protein_ID" = "mRNA"))
-left_join(prot_df[prot_df$species == "Peve",], Peve_FA_df, by = c("Protein_ID" = "mRNA"))
-left_join(prot_df[prot_df$species == "Ptuh",], Ptuh_FA_df, by = c("Protein_ID" = "mRNA"))
-
-Apul_FA_df[grep("dnmt", ignore.case = TRUE, Apul_FA_df$Protein.names),]
-Peve_FA_df[grep("dnmt", ignore.case = TRUE, Peve_FA_df$Protein.names),]
-Ptuh_FA_df[grep("dnmt", ignore.case = TRUE, Ptuh_FA_df$Protein.names),]
-
-
-```
-
-### peve-mir-novel-7
-
-The only miRNA that targets *and* is significantly coexpressed with a protein that's involved in epigenetic regulation is peve-mir-novel-7. This miRNA targets and is significantly negatively coexpressed with DNMT1, the DNMT responsible for maintaining DNA methylation marks. This miRNa is one of the few that is almost exclusively *negagively* correlated with its many targets, which provides strong support for its role as a valid miRNA acting through translational repression or mRNA degradation. It is also partially conserved, matching the P.tuahiniensis miRNA ptuh-mir-novel-7 (see https://github.com/urol-e5/deep-dive-expression/blob/main/M-multi-species/code/04-miRNA-comparison.md#421-apul-and-peve).
-
-We can also check to see which terms are functionally expressed in the miRNA's targets:
-```{r}
-Peve_FE_df %>% filter(given_miRNA_name == "peve-mir-novel-7")
-Peve_FA_df %>% filter(given_miRNA_name == "peve-mir-novel-7", !is.na(Gene.Ontology.IDs))
-```
-
 
 ## GoSlim summary terms
 
@@ -337,8 +302,6 @@ slim.count.df <- slimdf.sorted %>%
 ```
 
 
-
-
 Annotate miRNA dfs with given names and GOSlim terms
 ```{r}
 Apul_FA_df <- left_join(Apul_FA, Apul_names, by = c("miRNA" = "Name"))
@@ -376,6 +339,18 @@ Peve_FA_df <- left_join(Peve_FA_df, Peve_FA_slims, by = "mRNA")
 Ptuh_FA_df <- left_join(Ptuh_FA_df, Ptuh_FA_slims, by = "mRNA")
 ```
 
+Separate based on correlation significance
+```{r}
+Apul_FA_unsig <- Apul_FA_df %>% filter(p_value >= 0.05)
+Peve_FA_unsig <- Peve_FA_df  %>% filter(p_value >= 0.05)
+Ptuh_FA_unsig <- Ptuh_FA_df  %>% filter(p_value >= 0.05)
+
+Apul_FA_df <- Apul_FA_df %>% filter(p_value < 0.05)
+Peve_FA_df<- Peve_FA_df  %>% filter(p_value < 0.05)
+Ptuh_FA_df <- Ptuh_FA_df  %>% filter(p_value < 0.05)
+```
+
+
 Separate conserved miRNA (present in all 3 species) from the rest. In `04-miRNA-comparison`, identified the miRNA conserved among all 3 species to be: miR-100, miR-2023, miR-2025, and miR-2036
 ```{r}
 Apul_FA_conserved <- Apul_FA_df %>% filter(str_detect(given_miRNA_name, "mir-100|mir-2023|mir-2025|mir-2036"))
@@ -393,7 +368,7 @@ Peve_FA_df$conservation <- ifelse(Peve_FA_df$given_miRNA_name %in% Peve_FA_conse
 Ptuh_FA_df$conservation <- ifelse(Ptuh_FA_df$given_miRNA_name %in% Ptuh_FA_conserved$given_miRNA_name, "conserved", "unconserved")
 ```
 
-# Overlapping GOSlim terms
+## Overlapping GOSlim terms
 
 Take a look
 ```{r}
@@ -456,6 +431,8 @@ Ptuh_BP_counts <- Ptuh_FA_conserved_filt %>%
       )
 ```
 
+### miR-100
+
 ```{r}
 # miR-100 (annotations in all 3)
 cat("miR-100 annotations present in all 3 species:", "\n")
@@ -479,10 +456,113 @@ cat("\n", "miR-2036 annotations present in P.tuahiniensis:", "\n")
 Reduce(intersect, list(Ptuh_BP_counts$`ptuh-mir-2036`$GO_Slim_Terms))
 ```
 
+miR-100 is functionally conserved across the three species for functions related to **cellular organization, transport and signaling, immune response, gene regulation, cell cycle, and development**. These GOSlim terms agree with functions that are functionally enriched in miR-100 targets across the three species.
 
-miR-100 is functionally conserved across the three species in cell cycle regulation and early development. The other conserved miRNA don't have enough annotated targets in all species to determine whether functional conservation exists. Also keep in mind that some important functions (e.g. reproduction, development, immune response) make not appear in this dataset, since deep-dive samples were collected only at a single site and timepoint, and are limited in number.
+The other conserved miRNA don't have enough annotated targets in all species to determine whether functional conservation exists. 
+
+Also keep in mind that some important functions (e.g. reproduction, development, immune response) make not appear in this dataset, since deep-dive samples were collected only at a single site and timepoint, and are limited in number.
+
+## Check for ncRNA machinery
+
+load table of genes annotated for ncRNA/methylation machinery
+```{r}
+prot_df <- read.csv("../data/e5_deep-dive_ncRNA_proteins.csv")
+
+# Remove -T* from Apul protein names 
+prot_df <- prot_df %>%
+  mutate(Protein_ID = if_else(
+    Species == "Apul",
+    sub("-T\\d+$", "", Protein_ID),
+    Protein_ID
+  ))
+```
+
+### All putatively binding targets
+```{r}
+# Check Jill's table of epigenetic machinery genes
+left_join(prot_df[prot_df$species == "Apul",], Apul_FA_unsig, by = c("Protein_ID" = "mRNA")) %>% nrow()
+left_join(prot_df[prot_df$species == "Peve",], Peve_FA_unsig, by = c("Protein_ID" = "mRNA")) %>% nrow()
+left_join(prot_df[prot_df$species == "Ptuh",], Ptuh_FA_unsig, by = c("Protein_ID" = "mRNA")) %>% nrow()
+
+# Manually search for matching words
+
+## function to loop across a list of search terms
+count_word_hits <- function(df, column, words) {
+  # Ensure relevant columns are character
+  text_column <- as.character(df[[column]])
+  miRNA_column <- as.character(df$given_miRNA_name)
+
+  # Loop through words and collect counts + miRNAs
+  results <- lapply(words, function(word) {
+    matches <- grepl(word, text_column, ignore.case = TRUE)
+    n_hits <- sum(matches)
+    
+    if (n_hits > 0) {
+      miRNAs <- unique(miRNA_column[matches])
+      miRNAs_combined <- paste(miRNAs, collapse = "; ")
+    } else {
+      miRNAs_combined <- NA
+    }
+    
+    data.frame(
+      word = word,
+      hits = n_hits,
+      associated_miRNAs = miRNAs_combined,
+      stringsAsFactors = FALSE
+    )
+  })
+  
+  # Combine into one data frame
+  result_df <- do.call(rbind, results)
+  return(result_df)
+}
 
 
+# Make a list of proteins of interest (DNMT1, Dicer, etc.) from Jill's table 
+word_list <- unique(prot_df$Protein_of_interest)
+
+# Search for these proteins of interested in our annotated miRNA targets (correlation significance not considered here)
+count_word_hits(Apul_FA_unsig, "Protein.names", word_list)
+count_word_hits(Peve_FA_unsig, "Protein.names", word_list)
+count_word_hits(Ptuh_FA_unsig, "Protein.names", word_list)
+```
+
+Wow! So there are actually quite a few miRNA that putatively bind to the genes that produce epigenetic protein machinery, in all species. All species have miRNA that bind to genes encoding proteins related to AGO2, Dicer, DNMT1, and Piwi. 
+
+Note, however, that this is just a simple, grep-based alphanumeric search for protein names. The above counts may inlude genes that are associated with the search term, but do not actuallye encode that protein (e.g., "DNA methyltransferase 1-associated protein 1 (DNMAP1) (DNMT1-associated protein 1)", instead of "DNA (cytosine-5)-methyltransferase 1 (Dnmt1) (EC 2.1.1.37) (DNA methyltransferase GgaI) (DNA MTase GgaI) (M.GgaI) (MCMT)")
+
+### Significantly correlated targets
+```{r}
+left_join(prot_df[prot_df$species == "Apul",], Apul_FA_df, by = c("Protein_ID" = "mRNA")) %>% nrow()
+left_join(prot_df[prot_df$species == "Peve",], Peve_FA_df, by = c("Protein_ID" = "mRNA")) %>% nrow()
+left_join(prot_df[prot_df$species == "Ptuh",], Ptuh_FA_df, by = c("Protein_ID" = "mRNA")) %>% nrow()
+
+# Search for these proteins of interested in our annotated miRNA targets (only those with significantly correlated expression)
+count_word_hits(Apul_FA_df, "Protein.names", word_list)
+count_word_hits(Peve_FA_df, "Protein.names", word_list)
+count_word_hits(Ptuh_FA_df, "Protein.names", word_list)
+```
+There are only 2 miRNA that target *and* are significantly coexpressed with a protein(s) that's involved in epigenetic regulation: peve-mir-novel-7 and ptuh-mir-novel-6.
+
+#### peve-mir-novel-7
+
+This miRNA targets and is significantly negatively coexpressed with DNMT1, the DNMT responsible for maintaining DNA methylation marks. This miRNA is one of the few that is almost exclusively *negatively* correlated with its many targets, which provides strong support for its role as a valid miRNA acting through translational repression or mRNA degradation. It is also partially conserved, matching the P.tuahiniensis miRNA ptuh-mir-novel-7 (see https://github.com/urol-e5/deep-dive-expression/blob/main/M-multi-species/code/04-miRNA-comparison.md#421-apul-and-peve).
+
+We can also check to see which terms are functionally expressed in the miRNA's targets:
+```{r}
+Peve_FE_df %>% filter(given_miRNA_name == "peve-mir-novel-7")
+Peve_FA_df %>% filter(given_miRNA_name == "peve-mir-novel-7", !is.na(Gene.Ontology.IDs))
+```
+
+#### ptuh-mir-novel-6
+
+This miRNA targets and is significantly negatively coexpressed with AGO2 and Piwi. This miRNA is one of the few that is almost exclusively *negatively* correlated with its many targets, which provides strong support for its role as a valid miRNA acting through translational repression or mRNA degradation. It is not conserved with any other study species.
+
+We can also check to see which terms are functionally expressed in the miRNA's targets:
+```{r}
+Peve_FE_df %>% filter(given_miRNA_name == "peve-mir-novel-7")
+Peve_FA_df %>% filter(given_miRNA_name == "peve-mir-novel-7", !is.na(Gene.Ontology.IDs))
+```
 
 # Plotting
 
@@ -630,6 +710,7 @@ region_pie(Peve_FA_df[sign(Peve_FA_df$PCC.cor) > 0,], "#1E2761")
 region_pie(Ptuh_FA_df[sign(Ptuh_FA_df$PCC.cor) > 0,], "#7A2048")
 
 ```
+
 
 
 # Which miRNA targets have multiple binding sites?
