@@ -256,3 +256,223 @@ Ptuh_unconserved_sampleMeans <- colMeans(Ptuh_mature_unconserved[,1:5])
 wilcox.test(x=Ptuh_conserved_sampleMeans, y=Ptuh_unconserved_sampleMeans, paired=TRUE)
 ```
 
+
+# Check expression-num.targets relationship
+
+We may expect that miRNA with more targets are also more highly expressed.
+
+## Load and format target dfs
+
+```{r}
+
+# Apul
+Apul_3UTR_FA <- read.csv("../../D-Apul/output/09.1-Apul-mRNA-miRNA-interactions-functional-enrichment/miRNA_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
+
+Apul_CDS_FA <- read.csv("../../D-Apul/output/09.11-Apul-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
+
+Apul_CDS_FA$query_start_end <- paste0(Apul_CDS_FA$V5, " ", Apul_CDS_FA$V6)
+Apul_CDS_FA$subject_start_end <- paste0(Apul_CDS_FA$V7, " ", Apul_CDS_FA$V8)
+Apul_CDS_FA <- Apul_CDS_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V1, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Apul_CDS_FA) <- colnames(Apul_3UTR_FA)
+
+
+Apul_5UTR_FA <- read.csv("../../D-Apul/output/09.12-Apul-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
+
+Apul_5UTR_FA$query_start_end <- paste0(Apul_5UTR_FA$V5, " ", Apul_5UTR_FA$V6)
+Apul_5UTR_FA$subject_start_end <- paste0(Apul_5UTR_FA$V7, " ", Apul_5UTR_FA$V8)
+Apul_5UTR_FA <- Apul_5UTR_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V1, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Apul_5UTR_FA) <- colnames(Apul_3UTR_FA)
+
+
+# Peve
+Peve_3UTR_FA <- read.csv("../../E-Peve/output/10.13-Peve-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
+
+Peve_CDS_FA <- read.csv("../../E-Peve/output/10.11-Peve-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
+
+Peve_CDS_FA$query_start_end <- paste0(Peve_CDS_FA$V5, " ", Peve_CDS_FA$V6)
+Peve_CDS_FA$subject_start_end <- paste0(Peve_CDS_FA$V7, " ", Peve_CDS_FA$V8)
+Peve_CDS_FA <- Peve_CDS_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Peve_CDS_FA) <- colnames(Peve_3UTR_FA)
+
+Peve_5UTR_FA <- read.csv("../../E-Peve/output/10.12-Peve-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
+
+Peve_5UTR_FA$query_start_end <- paste0(Peve_5UTR_FA$V5, " ", Peve_5UTR_FA$V6)
+Peve_5UTR_FA$subject_start_end <- paste0(Peve_5UTR_FA$V7, " ", Peve_5UTR_FA$V8)
+Peve_5UTR_FA <- Peve_5UTR_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Peve_5UTR_FA) <- colnames(Peve_3UTR_FA)
+
+
+# Ptuh
+Ptuh_3UTR_FA <- read.csv("../../F-Ptuh/output/11.13-Ptuh-mRNA-miRNA-interactions-FE-3UTR/miRNA_3UTR_sig_cor_targets_FA.csv") %>% dplyr::select(-X, -X.1, -X.2)
+
+Ptuh_CDS_FA <- read.csv("../../F-Ptuh/output/11.11-Ptuh-mRNA-miRNA-interactions-FE-CDS/miRNA_CDS_sig_cor_targets_FA.csv")
+
+Ptuh_CDS_FA$query_start_end <- paste0(Ptuh_CDS_FA$V5, " ", Ptuh_CDS_FA$V6)
+Ptuh_CDS_FA$subject_start_end <- paste0(Ptuh_CDS_FA$V7, " ", Ptuh_CDS_FA$V8)
+Ptuh_CDS_FA <- Ptuh_CDS_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Ptuh_CDS_FA) <- colnames(Peve_3UTR_FA)
+
+Ptuh_5UTR_FA <- read.csv("../../F-Ptuh/output/11.12-Ptuh-mRNA-miRNA-interactions-FE-5UTR/miRNA_5UTR_sig_cor_targets_FA.csv")
+
+Ptuh_5UTR_FA$query_start_end <- paste0(Ptuh_5UTR_FA$V5, " ", Ptuh_5UTR_FA$V6)
+Ptuh_5UTR_FA$subject_start_end <- paste0(Ptuh_5UTR_FA$V7, " ", Ptuh_5UTR_FA$V8)
+Ptuh_5UTR_FA <- Ptuh_5UTR_FA %>%
+  dplyr::select(miRNA, mRNA, PCC.cor, p_value, adjusted_p_value, V3.x, V4.x, query_start_end, subject_start_end, V9, V10, V11, V3.y, Protein.names, Organism, Gene.Ontology..biological.process., Gene.Ontology.IDs)
+colnames(Ptuh_5UTR_FA) <- colnames(Peve_3UTR_FA)
+```
+
+Combine and annotate dfs
+```{r}
+# annotate each df with its mRNA region
+Apul_3UTR_FA$region <- "3UTR"
+Apul_CDS_FA$region <- "CDS"
+Apul_5UTR_FA$region <- "5UTR"
+
+Peve_3UTR_FA$region <- "3UTR"
+Peve_CDS_FA$region <- "CDS"
+Peve_5UTR_FA$region <- "5UTR"
+
+Ptuh_3UTR_FA$region <- "3UTR"
+Ptuh_CDS_FA$region <- "CDS"
+Ptuh_5UTR_FA$region <- "5UTR"
+
+# Combine dfs
+Apul_FA <- rbind(Apul_3UTR_FA, Apul_CDS_FA, Apul_5UTR_FA)
+Peve_FA <- rbind(Peve_3UTR_FA, Peve_CDS_FA, Peve_5UTR_FA)
+Ptuh_FA <- rbind(Ptuh_3UTR_FA, Ptuh_CDS_FA, Ptuh_5UTR_FA)
+
+# Annotate with given miRNA names
+Apul_FA_df <- left_join(Apul_FA, Apul_names, by = c("miRNA" = "Name"))
+Peve_FA_df <- left_join(Peve_FA, Peve_names, by = c("miRNA" = "Name"))
+Ptuh_FA_df <- left_join(Ptuh_FA, Ptuh_names, by = c("miRNA" = "Name"))
+```
+
+## Plot
+
+ Should plot both the number of interactions (distinct binding regions, of which there can be many in a single mRNA) and number of mRNA targets
+ 
+ 
+Count number of interactions and number of targets
+```{r}
+# Number of interactions (may be many predicted interactions between a single miRNA-mRNa pair, with multiple bidning sites)
+Apul_interactions_n <- Apul_FA_df %>% 
+  group_by(given_miRNA_name) %>%
+  summarise(num_interactions = n())
+
+Peve_interactions_n <- Peve_FA_df %>% 
+  group_by(given_miRNA_name) %>%
+  summarise(num_interactions = n())
+
+Ptuh_interactions_n <- Ptuh_FA_df %>% 
+  group_by(given_miRNA_name) %>%
+  summarise(num_interactions = n())
+
+# Number of targets (may be many predicted interactions between a single miRNA-mRNa pair, with multiple bidning sites)
+Apul_targets_n <- Apul_FA_df %>% 
+  distinct(given_miRNA_name, mRNA) %>%  
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n())
+
+Peve_targets_n <- Peve_FA_df %>% 
+  distinct(given_miRNA_name, mRNA) %>%  
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n())
+
+Ptuh_targets_n <- Ptuh_FA_df %>% 
+  distinct(given_miRNA_name, mRNA) %>%  
+  group_by(given_miRNA_name) %>%
+  summarise(num_targets = n())
+```
+ 
+Add these counts to the expression dfs
+```{r}
+Apul_mature_df <- left_join(Apul_mature_df, Apul_interactions_n, by = "given_miRNA_name")
+Apul_mature_df <- left_join(Apul_mature_df, Apul_targets_n, by = "given_miRNA_name")
+
+Peve_mature_df <- left_join(Peve_mature_df, Peve_interactions_n, by = "given_miRNA_name")
+Peve_mature_df <- left_join(Peve_mature_df, Peve_targets_n, by = "given_miRNA_name")
+
+Ptuh_mature_df <- left_join(Ptuh_mature_df, Ptuh_interactions_n, by = "given_miRNA_name")
+Ptuh_mature_df <- left_join(Ptuh_mature_df, Ptuh_targets_n, by = "given_miRNA_name")
+```
+
+
+Plot
+```{r}
+ggplot(Apul_mature_df, aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Peve_mature_df, aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Ptuh_mature_df, aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+```
+
+Now exclude miR-100, which is exceptionally highly expressed in all species
+```{r}
+ggplot(Apul_mature_df[Apul_mature_df$given_miRNA_name != "apul-mir-100",], aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Peve_mature_df[Peve_mature_df$given_miRNA_name != "peve-mir-100",], aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Ptuh_mature_df[Ptuh_mature_df$given_miRNA_name != "ptuh-mir-100",], aes(x = num_interactions, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+```
+
+There originally appears to be a relationship between the number of interactions and expression, but that is driven by miR-100, which has both very high number of interactions and very high expression. Removing miR-100 from consideration also eliminates the trend.
+
+Check number of distinct targets as well:
+```{r}
+ggplot(Apul_mature_df, aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Peve_mature_df, aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Ptuh_mature_df, aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+
+
+ggplot(Apul_mature_df[Apul_mature_df$given_miRNA_name != "apul-mir-100",], aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Peve_mature_df[Peve_mature_df$given_miRNA_name != "peve-mir-100",], aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+
+ggplot(Ptuh_mature_df[Ptuh_mature_df$given_miRNA_name != "ptuh-mir-100",], aes(x = num_targets, y = mean)) +
+  geom_point() +
+  #scale_y_log10() +
+  geom_smooth(method = "lm")
+```
+Yes, as with number of interactions, number of unique targets is not related to expression when you exclude miR-100.
+

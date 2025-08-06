@@ -796,4 +796,36 @@ ggplot(Ptuh_binding_sum, aes(x = total_binding_sites, y = abs(PCC.cor), color = 
 
 There's no apparent relationship between number of binding sites and magnitude of PCC expression correlation.
 
+# Is correlation direction related to binding region?
+
+```{r}
+cat("A.pulchra:", "\n")
+# Create table of binding region vs. correlation direction
+Apul_cont_table <- table(Apul_FA_df$region, 
+                         ifelse(Apul_FA_df$PCC.cor < 0, "negative", "positive"))
+print(Apul_cont_table)
+# Chisq test of independence
+chisq.test(Apul_cont_table)
+chisq.test(Apul_cont_table)$stdres
+
+cat("\n", "\n", "P.evermanni:", "\n")
+
+# Create table of binding region vs. correlation direction
+Peve_cont_table <- table(Peve_FA_df$region, 
+                         ifelse(Peve_FA_df$PCC.cor < 0, "negative", "positive"))
+print(Peve_cont_table)
+# Chisq test of independence
+chisq.test(Peve_cont_table)
+chisq.test(Peve_cont_table)$stdres
+
+cat("\n", "\n", "P.tuahiniensis:", "\n")
+
+# Create table of binding region vs. correlation direction
+Ptuh_cont_table <- table(Ptuh_FA_df$region, 
+                         ifelse(Ptuh_FA_df$PCC.cor < 0, "negative", "positive"))
+print(Ptuh_cont_table)
+# Chisq test of independence
+chisq.test(Ptuh_cont_table)
+chisq.test(Ptuh_cont_table)$stdres
+```
 
