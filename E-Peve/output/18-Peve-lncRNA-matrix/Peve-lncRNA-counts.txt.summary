@@ -1,0 +1,15 @@
+Status	../data/18-Peve-lncRNA-matrix/RNA-POR-71.sorted.bam	../data/18-Peve-lncRNA-matrix/RNA-POR-73.sorted.bam	../data/18-Peve-lncRNA-matrix/RNA-POR-76.sorted.bam	../data/18-Peve-lncRNA-matrix/RNA-POR-79.sorted.bam	../data/18-Peve-lncRNA-matrix/RNA-POR-82.sorted.bam
+Assigned	25193699	31088373	25327374	28547579	18326731
+Unassigned_Unmapped	13826806	13254943	13987382	10928938	15478698
+Unassigned_Read_Type	0	0	0	0	0
+Unassigned_Singleton	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0
+Unassigned_MultiMapping	42400181	51342514	43111507	53705864	38472880
+Unassigned_Secondary	0	0	0	0	0
+Unassigned_NonSplit	0	0	0	0	0
+Unassigned_NoFeatures	41832068	33728613	39503243	34507346	44932641
+Unassigned_Overlapping_Length	0	0	0	0	0
+Unassigned_Ambiguity	1128374	586056	843246	535383	1491791

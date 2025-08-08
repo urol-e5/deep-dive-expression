@@ -124,16 +124,18 @@ cat("Range of mature miRNA lengths: ", range(mature_lengths$length))
 
 ## check lncRNAs
 
-LncRNAs were identified from Ptuh RNA-seq data
+LncRNAs were identified from Ptuh RNA-seq data -- see details in `F-Ptuh/code/17-Ptuh-lncRNA.Rmd`
 
-Fasta of Ptuh lncRNAs stored at `https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Ptuh_lncRNA.fasta`
+Fasta of Ptuh lncRNAs stored at `https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.fasta`
 
 ```{r check-lncRNAs, engine='bash', eval=TRUE}
-curl -L https://gannet.fish.washington.edu/acropora/E5-deep-dive-expression/output/01.6-lncRNA-pipline/Ptuh_lncRNA.fasta -o ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
+curl -L https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.fasta -o ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
 
 echo "Number of lncRNAs:"
 grep "^>" ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta | wc -l
 ```
+
+16153 total lncRNA
 
 ```{r, engine='bash'}
 # Extract sequence lengths for precursors
@@ -155,7 +157,7 @@ ggplot(lncRNA_lengths, aes(x = length)) +
   labs(title = "A. pulchra lncRNA sequence lengths",
        x = "Sequence Length [nucleotides]",
        y = "Frequency") +
-  xlim(200, 50000) +
+  xlim(200, 250000) +
   ylim(0, 800) +
   theme_minimal()
 ```
@@ -272,7 +274,7 @@ precursor_lncRNA_BLASTn %>%
   filter(mismatch == 0) %>%
   unique()
 ```
-We have 50 alignments of a full pre-miRNA to a lncRNA with no mismatches. 46 lncRNA and 20 miRNA are represented. 
+We have 8 alignments of a full pre-miRNA to a lncRNA with no mismatches. 8 lncRNA and 2 miRNA are represented. 
 
 Note that, as in A.pulchra and P.evermanni, there are instances of a single pre-miRNA matching to several overlapping lncRNA, potentially representing multiple isoforms of a single lncRNA gene.
 
@@ -300,7 +302,7 @@ mature_lncRNA_BLASTn %>%
   unique()
 
 ```
-207 putative lncRNA sponges with these parameters. 
+72 putative lncRNA sponges with these parameters. 
 
 Ultimately though these results are insufficient to determine lncRNA sponging. We need to evaluate miRNA-lncRNA binding.
 
@@ -377,4 +379,4 @@ echo "check some:"
 awk -F'\t' '$7 >= 21' ../output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict-parsed.txt | awk -F'\t' '$8 >= 85' | head -5
 ```
 
-This is a dramatically smaller number -- only  interactions are at least 115 nucleotides with <=3 mismatches
+This is a dramatically smaller number -- only 9 interactions are at least 115 nucleotides with <=3 mismatches

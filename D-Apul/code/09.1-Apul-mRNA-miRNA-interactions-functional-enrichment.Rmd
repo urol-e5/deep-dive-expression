@@ -916,7 +916,7 @@ sig_pos_corr_data <- data %>%
 
 # Make list of target genes for input to topGO
 # Genes of interest - ie those targeted by miRNAs
-target_genes <- as.character(unique(sig_neg_corr_data$mRNA))
+target_genes <- as.character(unique(sig_pos_corr_data$mRNA))
 
 # Apply 1 or 0 if gene is gene of interest 
 GeneList <- factor(as.integer(all_genes %in% target_genes))

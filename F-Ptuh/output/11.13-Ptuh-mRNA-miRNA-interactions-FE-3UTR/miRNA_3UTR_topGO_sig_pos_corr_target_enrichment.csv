@@ -1,0 +1,2 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X.1","X","miRNA","PCC.cor","p_value","adjusted_p_value","score","energy","query_start_end","subject_start_end","total_bp_shared","query_similar","subject_similar"
+"1","Pocillopora_meandrina_HIv1___RNAseq.g14438.t1","GO:0004518","nuclease activity",4,1,0.01,0.008,"Molecular Functions",2655,782098,"Cluster_4438",0.895299567906285,0.0400235567571622,0.760878962620332,146,-20.38,"2 19","467 487",18,"72.22%","77.78%"

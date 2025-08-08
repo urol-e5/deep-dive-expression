@@ -1,0 +1,2 @@
+"","gene_ID","GO.ID","Term","Annotated","Significant","Expected","Fisher","ontology","X","miRNA","V2","V3","V4.x","V5","V6","V7","V8","V9","V10","V11","PCC.cor","p_value","adjusted_p_value"
+"1","Pocillopora_meandrina_HIv1___RNAseq.g30111.t1","GO:0004089","carbonate dehydratase activity",2,1,0,0.004,"Molecular Functions",895,"Cluster_1938","Pocillopora_meandrina_HIv1___Sc0000032:1354641-1355641",157,-22.65,2,20,143,164,18,"72.22%","83.33%",-0.931929555088538,0.0211002187421591,0.687095063784671

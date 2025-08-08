@@ -534,7 +534,7 @@ for file in *_sorted.cov; do
 done > global_methylation_levels.txt
 ```
 
-### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+### Output file location: [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
 
 ## Methylkit
 
@@ -543,6 +543,7 @@ done > global_methylation_levels.txt
 library("methylKit")
 library("tidyverse")
 library("parallel")
+library("ggpmisc")
 
 file_list <- list.files("/scratch3/workspace/zdellaert_uri_edu-deep_dive_exp/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/",pattern = ".merged_CpG_evidence.cov$",  full.names = TRUE, include.dirs = FALSE)
 sample <- gsub("_S\\d{1,2}.CpG_report.merged_CpG_evidence.cov", "", basename(file_list))
@@ -616,51 +617,19 @@ library("GenomicRanges")
 # convert methylation data to GRange object
 meth_GR <- as(meth_filter, "GRanges")
 
+#extract percent methylation and add this to GRanges object
+meth_matrix <- as.data.frame(percMethylation(meth_filter))
+meth_GR$meth <- meth_matrix
+
 # import gtf
 gtf.file = "../data/Pocillopora_meandrina_HIv1.genes-validated.gtf"
 gtf = genomation::gffToGRanges(gtf.file)
 head(gtf)
 
+#extract transcripts
 transcripts = gffToGRanges(gtf.file, filter = "transcript")
 
 unique(gtf$type)
-```
-
-### Extract methylation count matrix for transcripts
-
-```{r}
-#extract percent methylation and add this to GRanges object
-meth_matrix <- as.data.frame(percMethylation(meth_filter))
-meth_GR$meth <- meth_matrix
-
-transcript_CpG <- findOverlaps(meth_GR, transcripts)
-
-# Create a data frame with CpG-to-transcript mapping
-df <- data.frame(
-  cpg_ix = queryHits(transcript_CpG),
-  transcript_id = transcripts$transcript_id[subjectHits(transcript_CpG)])
-
-# Merge with CpG methylation 
-meth_df <- as.data.frame(meth_GR)[df$cpg_ix, ]
-meth_df$transcript_id <- df$transcript_id
-
-meth_long <- meth_df %>%
-  select(starts_with("meth."), transcript_id) %>%
-  rename_with(~gsub("meth\\.", "", .x)) %>%
-  pivot_longer(
-    cols = -transcript_id,
-    names_to = "sample",
-    values_to = "perc_meth"
-  ) %>%
-  filter(!is.na(perc_meth))
-
-# Summarize: Mean % methylation per transcript × sample
-CpG_count_transcripts <- meth_long %>%
-  group_by(transcript_id, sample) %>%
-  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
-  pivot_wider(names_from = sample, values_from = mean_meth)
-
-write.csv(CpG_count_transcripts, "../output/12-Ptuh-WGBS/CpG_Transcript_CountMat.csv")
 ```
 
 ### Extract additional features
@@ -670,55 +639,49 @@ write.csv(CpG_count_transcripts, "../output/12-Ptuh-WGBS/CpG_Transcript_CountMat
 exons = gffToGRanges(gtf.file, filter = "exon")
 introns = GenomicRanges::setdiff(transcripts, exons)
 
-# # import 3' UTR and 5' UTR annotation files
-# gff.file_3UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff"
-# gff.file_5UTR = "../output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff"
-# 
-# gff3UTR = genomation::gffToGRanges(gff.file_3UTR)
-# gff5UTR = genomation::gffToGRanges(gff.file_5UTR)
-# head(gff3UTR)
+# import 3' UTR and 5' UTR annotation files
+gff.file_3UTR = "../output/16-Ptuh-annotate-UTRs/Ptuh.GFFannotation.3UTR_1kb_corrected.gff"
+gff.file_5UTR = "../output/16-Ptuh-annotate-UTRs/Ptuh.GFFannotation.5UTR_1kb_corrected.gff"
+
+gff3UTR = genomation::gffToGRanges(gff.file_3UTR)
+gff5UTR = genomation::gffToGRanges(gff.file_5UTR)
+head(gff3UTR)
 ```
 
 #### Transposable elements:
 
-```{bash, eval=FALSE}
-cd ../data
-wget https://gannet.fish.washington.edu/Atumefaciens/20230526-pmea-repeatmasker-Pocillopora_meandrina_HIv1.assembly/Pocillopora_meandrina_HIv1.assembly.fasta.out.gff
-```
+Import Transposable element file from repeat masker format, downloaded from [deep-dive repo](https://github.com/urol-e5/deep-dive/blob/main/F-Pmea/data/Pocillopora_meandrina_HIv1.assembly.fasta.out) and uploaded to https://github.com/urol-e5/deep-dive-expression/tree/main/F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fasta.out
 
 ```{r}
-# Import Transposable element file from repeat masker format
-rmsk <- read.table("../data/Pocillopora_meandrina_HIv1.assembly.fasta.out.gff",
-                   skip = 3, sep = "\t", header = FALSE, stringsAsFactors = FALSE, quote = "")
+rmsk <- read.table("../data/Pocillopora_meandrina_HIv1.assembly.fasta.out",
+                   skip = 3, fill = TRUE, stringsAsFactors = FALSE, quote = "") %>% drop_na()
 
-colnames(rmsk) <- c("seqname", "source", "feature", "start", "end", "score", "strand", "frame", "attribute")
-# Extract repeat name or motif from the attribute column
-rmsk$repeat_name <- str_extract(rmsk$attribute, '(?<=Motif:)[^" ]+')
+# Assign column names based on RepeatMasker .out format
+colnames(rmsk)[c(5, 6, 7, 10)] <- c("seqname", "start", "end", "repeat_name")
 
 # Create a GRanges object
 TE <- GRanges(
   seqnames = rmsk$seqname,
   ranges = IRanges(start = as.numeric(rmsk$start), end = as.numeric(rmsk$end)),
-  strand = rmsk$strand,
+  strand = "*",
   repeat_name = rmsk$repeat_name
 )
 
-# Add a type annotation
 TE$type <- "transposable_element"
 
-# Show first few elements
 head(TE)
 ```
 #### miRNA:
 
 ```{r}
-miRNAs = genomation::gffToGRanges("../output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/known_miRNAs.gff3")
+miRNAs = genomation::gffToGRanges("../output/05-Ptuh-sRNA-ShortStack_4.1.0/Ptuh_ShortStack_4.1.0_mature.gff3")
+
 head(miRNAs)
 ```
 #### lncRNA:
 
 ```{r}
-lncRNAs = genomation::gffToGRanges("../output/08-Ptuh-lncRNA-matrix/Peve-lncRNAs.gtf")
+lncRNAs = genomation::gffToGRanges("../output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf")
 head(lncRNAs)
 ```
 
@@ -727,8 +690,7 @@ head(lncRNAs)
 ```{r}
 # Define intergenic = genome - all annotations
 # First combine all annotated regions
-#all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE))
-all_annotated <- GenomicRanges::reduce(c(exons, introns, TE))
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE, lncRNAs, miRNAs))
 
 # Define genome bounds from methylation object
 genome_range <- GenomicRanges::reduce(meth_GR)
@@ -740,10 +702,12 @@ intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
 ```{r}
 # Priority list
 region_priority <- list(
-  #`5UTR` = gff5UTR,
-  #`3UTR` = gff3UTR,
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
   exon = exons,
   intron = introns,
+  miRNA = miRNAs,
+  lncRNA = lncRNAs,
   TE = TE,
   intergenic = intergenic
 )
@@ -768,8 +732,9 @@ for (region_name in names(region_priority)) {
 
 # Replace any remaining NA with "unassigned" or "intergenic"
 cpg_annot[is.na(cpg_annot)] <- "intergenic"
-
 ```
+
+### Region stacked bars: all CpGs
 
 ```{r}
 df_annotated <- as.data.frame(meth_GR)
@@ -777,12 +742,21 @@ df_annotated$region <- cpg_annot
 
 #set as factor
 df_annotated$region <- factor(df_annotated$region,
-                              levels = c("intergenic", "TE"," 3UTR", "5UTR", "intron", "exon"))
+                              levels = c("intergenic", "TE", "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
 
-blue_palette <- c("intergenic" = "#e9edf0", "TE"= "#c6dbef", "3UTR" = "#9ecae1","5UTR" = "#6baed6","intron"= "#3182bd","exon" = "#08519c"   )
+blue_palette <- c(
+  "intergenic" = "#deebf7",  
+  "TE"         = "#c6dbef",
+  "lncRNA"     = "#9ecae1",
+  "miRNA"      = "red",#"miRNA"      = "#6baed6",
+  "3UTR"       = "#4292c6",
+  "5UTR"       = "#2171b5",
+  "intron"     = "#08519c",
+  "exon"       = "#08306b"  
+)
 
 ggplot(df_annotated, aes(x = strand, fill = region)) +
-  geom_bar(position = "fill",color="black") +
+  geom_bar(position = "fill",color="darkgrey",size=0.05) +
   theme_minimal() +
   labs(y = "% CpGs",
     fill = "Genomic Region") +
@@ -790,7 +764,8 @@ ggplot(df_annotated, aes(x = strand, fill = region)) +
   scale_fill_manual(values = blue_palette)
 ```
 
-Percent meth
+### Region stacked bars: CpGs by methylation status
+
 ```{r}
 # Calculate average across all samples
 avg_meth <- rowMeans(meth_matrix, na.rm = TRUE)
@@ -802,11 +777,27 @@ df_annotated$avg_meth <- avg_meth
 low_thresh <- 10
 high_thresh <- 50
 df_annotated$meth_status <- cut(df_annotated$avg_meth,
-                                breaks = c(0, low_thresh, high_thresh, 100),
+                                breaks = c(-Inf, low_thresh, high_thresh, Inf),
                                 labels = c("lowly", "moderately", "highly"))
 ```
 
 ```{r}
+df_annotated_facet <- df_annotated %>%
+  mutate(facet_group = meth_status) %>%
+  bind_rows(
+    df_annotated %>% mutate(facet_group = "all")
+  )
+
+df_annotated_facet$facet_group <- factor(df_annotated_facet$facet_group, levels = c("all", "highly","moderately","lowly"))
+
+ggplot(df_annotated_facet, aes(x = strand, fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+  theme_minimal() +
+  labs(y = "% CpGs",
+    fill = "Genomic Region") +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
+  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1)
+
 ggplot(df_annotated, aes(x = region, fill = meth_status)) +
   geom_bar(position = "fill") +  # stacked bar normalized to proportions
   theme_minimal() +
@@ -827,6 +818,9 @@ df_summary <- df_annotated %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
 df_summary
 ```
+
+
+### Sample Methylation boxplots
 
 ```{r}
 # Add region info
@@ -856,4 +850,245 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
     y = "Mean % Methylation per Sample"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Extract methylation count matrix for transcripts
+
+```{r}
+transcript_CpG <- findOverlaps(meth_GR, transcripts)
+
+# Create a data frame with CpG-to-transcript mapping
+df <- data.frame(
+  cpg_ix = queryHits(transcript_CpG),
+  transcript_id = transcripts$transcript_id[subjectHits(transcript_CpG)])
+
+df$transcript_id <- gsub("-T1","",df$transcript_id)
+
+# Merge with CpG methylation 
+meth_df <- as.data.frame(meth_GR)[df$cpg_ix, ]
+meth_df$transcript_id <- df$transcript_id
+
+meth_long <- meth_df %>%
+  select(starts_with("meth."), transcript_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -transcript_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+# Summarize: Mean % methylation per transcript × sample
+CpG_count_transcripts <- meth_long %>%
+  group_by(transcript_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_transcripts, "../output/12-Ptuh-WGBS/CpG_Transcript_CountMat.csv")
+```
+
+#### For miRNA
+
+```{r}
+# Overlap CpGs with miRNAs
+miRNA_CpG <- findOverlaps(meth_GR, miRNAs)
+
+# Map CpGs to miRNA IDs
+df_miRNA <- data.frame(
+  cpg_ix = queryHits(miRNA_CpG),
+  miRNA_id = miRNAs$ID[subjectHits(miRNA_CpG)]
+)
+
+# Subset methylation data
+meth_df_miRNA <- as.data.frame(meth_GR)[df_miRNA$cpg_ix, ]
+meth_df_miRNA$miRNA_id <- df_miRNA$miRNA_id
+
+# Tidy and summarize
+miRNA_meth_long <- meth_df_miRNA %>%
+  select(starts_with("meth."), miRNA_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -miRNA_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+CpG_count_miRNAs <- miRNA_meth_long %>%
+  group_by(miRNA_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_miRNAs, "../output/12-Ptuh-WGBS/CpG_miRNA_CountMat.csv")
+```
+
+#### For lncRNA
+
+```{r}
+# Overlap CpGs with lncRNAs
+lncRNA_CpG <- findOverlaps(meth_GR, lncRNAs)
+
+# Map CpGs to lncRNA IDs
+df_lncRNA <- data.frame(
+  cpg_ix = queryHits(lncRNA_CpG),
+  lncRNA_id = lncRNAs$gene_id[subjectHits(lncRNA_CpG)]
+)
+
+# Subset methylation data
+meth_df_lncRNA <- as.data.frame(meth_GR)[df_lncRNA$cpg_ix, ]
+meth_df_lncRNA$lncRNA_id <- df_lncRNA$lncRNA_id
+
+# Tidy and summarize
+lncRNA_meth_long <- meth_df_lncRNA %>%
+  select(starts_with("meth."), lncRNA_id) %>%
+  rename_with(~gsub("meth\\.", "", .x)) %>%
+  pivot_longer(
+    cols = -lncRNA_id,
+    names_to = "sample",
+    values_to = "perc_meth"
+  ) %>%
+  filter(!is.na(perc_meth))
+
+CpG_count_lncRNAs <- lncRNA_meth_long %>%
+  group_by(lncRNA_id, sample) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = sample, values_from = mean_meth)
+
+write.csv(CpG_count_lncRNAs, "../output/12-Ptuh-WGBS/CpG_lncRNA_CountMat.csv")
+```
+
+## Correlations: Count matrices from https://github.com/urol-e5/deep-dive-expression/wiki/03%E2%80%90Expression-Count-Matrices
+
+### RNA-seq
+
+```{r}
+mRNA_counts <- read.csv("../output/06.2-Ptuh-Hisat/gene_count_matrix.csv")
+
+# Remove any genes with 0 counts across samples 
+mRNA_counts<-mRNA_counts %>%
+     mutate(Total = rowSums(.[, 2:6]))%>%
+    filter(!Total==0)%>%
+    dplyr::select(!Total) 
+
+mRNA_long <- mRNA_counts %>% pivot_longer(cols = 2:6,
+                                      names_to = "Sample",
+                                      values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
+
+#fix sample and gene IDs
+mRNA_long$Sample <- gsub("RNA.","",mRNA_long$Sample)
+mRNA_long$transcript_id <- gsub("gene-","",mRNA_long$transcript_id)
+mRNA_long$transcript_id <- gsub("\\.t[0-9]+$","",mRNA_long$transcript_id)
+
+percent_meth_long <- CpG_count_transcripts %>% pivot_longer(cols = 2:6,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample and gene IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+percent_meth_long$transcript_id <- gsub("mrna-","",percent_meth_long$transcript_id)
+percent_meth_long$transcript_id <- gsub("_t","",percent_meth_long$transcript_id)
+
+plot_data_tissue <- merge(percent_meth_long, mRNA_long, by = c("transcript_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of gene", y = "RNA Counts", 
+       title = "Gene Methylation vs Expression") +
+  theme_minimal()
+
+## Normalized counts:
+
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+mRNA_norm <- as.data.frame(normalize_counts(mRNA_counts[,-1]))
+mRNA_norm$gene_id <- mRNA_counts[,1]
+
+mRNA_long <- mRNA_norm %>% pivot_longer(cols = 1:5,
+                                      names_to = "Sample",
+                                      values_to = "mRNA_count") %>% rename("transcript_id"=gene_id)
+
+#fix sample and gene IDs
+mRNA_long$Sample <- gsub("RNA.","",mRNA_long$Sample)
+mRNA_long$transcript_id <- gsub("gene-","",mRNA_long$transcript_id)
+mRNA_long$transcript_id <- gsub("\\.t[0-9]+$","",mRNA_long$transcript_id)
+
+
+percent_meth_long <- CpG_count_transcripts %>% pivot_longer(cols = 2:6,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample and gene IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+percent_meth_long$transcript_id <- gsub("mrna-","",percent_meth_long$transcript_id)
+percent_meth_long$transcript_id <- gsub("_t","",percent_meth_long$transcript_id)
+
+plot_data_tissue <- merge(percent_meth_long, mRNA_long, by = c("transcript_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of gene", y = "Normalized RNA Counts (RPM)", 
+       title = "Gene Methylation vs Expression: RPM Normalized Counts") +
+  theme_minimal()
+```
+
+### sRNA-seq
+
+```{r}
+miRNA <- read.delim("../output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt") %>% rownames_to_column("miRNA_id") 
+
+miRNA_long <- miRNA %>%  pivot_longer(cols =2:6,
+                                      names_to = "Sample",
+                                      values_to = "miRNA_norm_count")
+
+#fix sample IDs
+miRNA_long$Sample <- gsub("sample","POC.",miRNA_long$Sample)
+
+percent_meth_long <- CpG_count_miRNAs %>% pivot_longer(cols = 2:6,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample and miRNA IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+percent_meth_long$miRNA_id <- gsub(".mature","",percent_meth_long$miRNA_id)
+
+plot_data_tissue <- merge(percent_meth_long, miRNA_long, by = c("miRNA_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of miRNA region", y = "miRNA Normalized Counts",
+       title = "miRNA Methylation vs Expression") +
+  theme_minimal()
+```
+
+### lncRNA
+
+```{r}
+lncRNA <- read.delim("../output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt",skip=1)
+
+lncRNA_long <- lncRNA %>%  pivot_longer(cols =...data.18.Ptuh.lncRNA.matrix.RNA.POC.47.sorted.bam:...data.18.Ptuh.lncRNA.matrix.RNA.POC.57.sorted.bam,
+                                      names_to = "Sample",
+                                      values_to = "lncRNA_count") %>% rename("lncRNA_id" = Geneid)
+
+#fix sample IDs
+lncRNA_long$Sample <- gsub("...data.18.Ptuh.lncRNA.matrix.RNA.","",lncRNA_long$Sample)
+lncRNA_long$Sample <- gsub(".sorted.bam","",lncRNA_long$Sample)
+
+percent_meth_long <- CpG_count_lncRNAs %>% pivot_longer(cols = 2:6,
+                                      names_to = "Sample",
+                                      values_to = "percent_meth") 
+
+#fix sample IDs
+percent_meth_long$Sample <- gsub(".TP2","",percent_meth_long$Sample)
+
+plot_data_tissue <- merge(percent_meth_long, lncRNA_long, by = c("lncRNA_id","Sample"))
+
+ggplot(plot_data_tissue, aes(y = lncRNA_count, x = percent_meth)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm") + stat_poly_eq(use_label(c("eq","R2")))+
+  labs(x = "Average CpG % methylation of lncRNA region", y = "lncRNA Counts",
+       title = "lncRNA Methylation vs Expression") +
+  theme_minimal()
 ```

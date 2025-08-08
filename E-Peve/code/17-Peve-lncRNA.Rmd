@@ -389,8 +389,8 @@ while IFS= read -r line; do
     # Split the position string by '-' to separate start and end positions
     IFS='-' read -r start end <<< "$pos"
     
-    # Convert the start position to 0-based by subtracting 1
-    start=$((start - 1))
+    # Convert the start position to 0-based by subtracting 1 ---MOD
+    start=$((start - 0))
     
     # Write the chromosome, updated start, and end positions to the output file (tab-separated)
     printf "%s\t%s\t%s\n" "$chromosome" "$start" "$end"
@@ -402,8 +402,9 @@ head -1 "${OUTPUT_DIR}/lncRNA.bed"
 ```
 
 ```{r renamegtf, engine='bash'}
-awk 'BEGIN{OFS="\t"; count=1} {printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, $2, $3, count++;}' "${OUTPUT_DIR}/lncRNA.bed" \
-> "${OUTPUT_DIR}/lncRNA.gtf"
+awk 'BEGIN{OFS="\t"; count=1} {
+  printf "%s\t.\tlncRNA\t%d\t%d\t.\t+\t.\tgene_id \"lncRNA_%03d\";\n", $1, ($2+1), $3, count++;
+}' "${OUTPUT_DIR}/lncRNA.bed" > "${OUTPUT_DIR}/lncRNA.gtf"
 ```
 
 ```{r, engine='bash'}

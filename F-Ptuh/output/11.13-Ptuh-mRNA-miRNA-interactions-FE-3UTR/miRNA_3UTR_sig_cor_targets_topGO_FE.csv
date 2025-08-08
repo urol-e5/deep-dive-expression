@@ -1,0 +1,4 @@
+"","GO.ID","Term","Annotated","Significant","Expected","Fisher","type","miRNA"
+"1","GO:0004518","nuclease activity",4,1,0.01,0.008,"Molecular.Function","Cluster_4438"
+"2","GO:0002227","innate immune response in mucosa",1,1,0,0.0046,"Biological.Process","Cluster_3661"
+"3","GO:0000987","cis-regulatory region sequence-specific DNA binding",12,1,0.02,0.024,"Molecular.Function","Cluster_3661"

@@ -18,6 +18,8 @@ output:
     code_download: true
 ---
 
+Re-run 8/6/25 with updated lncRNA counts matrix
+
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
@@ -29,7 +31,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-lncRNA expression summary for *Acropora pulchra* lncRNA, isolated in `19-Apul-lncRNA-matrix`
+lncRNA expression summary for *Acropora pulchra* lncRNA, isolated in `deep-dive-expression/M-multi-species/code/01.6-lncRNA-pipeline.Rmd`
 
 ### Install and load packages
 
@@ -50,7 +52,7 @@ library(pheatmap)
 
 ```{r load-count-data}
 # Read in counts data.
-Apul_counts_lncRNA_OG <- read.table("../output/19-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", header=TRUE, skip=1) 
+Apul_counts_lncRNA_OG <- read.table("../../M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt", header=TRUE) 
 head(Apul_counts_lncRNA_OG)
 
 ```
@@ -70,7 +72,7 @@ Apul_counts_lncRNA <- Apul_counts_lncRNA %>% select(-Chr, -Start, -End, -Strand,
 Apul_counts_lncRNA <- Apul_counts_lncRNA[!apply(Apul_counts_lncRNA, 1, function(row) all(row < 6)), ]
 
 # Remove the superfluous portions of the column names, to leave just the sample names
-colnames(Apul_counts_lncRNA) <- sub("...output.07.Apul.Hisat.RNA.", "", colnames(Apul_counts_lncRNA))
+colnames(Apul_counts_lncRNA) <- sub("X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.", "", colnames(Apul_counts_lncRNA))
 colnames(Apul_counts_lncRNA) <- sub(".sorted.bam", "", colnames(Apul_counts_lncRNA))
 
 # Reorder the columns into alphabetical order (to make it easier to create an associated metadata spreadsheet)
@@ -144,7 +146,7 @@ ggplot(unique_transcripts_df, aes(x = sample, y = uniques)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
 ```
 
-Interesting! Theres actually notable intraspecific variation in the number of unique lncRNA present, ranging from ~10000 to ~18000.
+Interesting! Theres actually notable intraspecific variation in the number of unique lncRNA present, ranging from ~22000 to ~30000.
 
 
 # Normalized counts
@@ -180,11 +182,17 @@ rownames(Apul_metadata_lncRNA) <- Apul_sample_names
 head(Apul_metadata_lncRNA)
 ```
 
+DESeq2 also requires that input counts be integers
+```{r}
+Apul_counts_lncRNA_round <- round(Apul_counts_lncRNA)
+```
+
+
 ### DESeq object
 
 ```{r make-RNA-deseq-object, cache=TRUE}
 # Calculate DESeq object
-dds_Apul_lncRNA <- DESeqDataSetFromMatrix(countData = Apul_counts_lncRNA,
+dds_Apul_lncRNA <- DESeqDataSetFromMatrix(countData = Apul_counts_lncRNA_round,
                               colData = Apul_metadata_lncRNA,
                               design = ~ 1) 
 
@@ -326,7 +334,7 @@ ggplot(total_transcripts_norm_df, aes(x = sample, y = totals)) +
 plotPCA(vsd_Apul_lncRNA, intgroup="Sample")
 ```
 
-Samples ACR-145 and ACR-173 are notably divergent from the other samples (and each other)
+Samples ACR-145 and ACR-173 are notably divergent from the other samples (and each other). They also have higher normalized transcript counts than the other 3 samples.
 
 ## Sample clustering
 
@@ -360,3 +368,22 @@ pheatmap(Apul_counts_lncRNA_vsd_q95,
          color = heat_colors,
          scale="row")
 ```
+
+
+## General summary stats
+
+
+\# unique lncRNA
+avg transcript length
+mean and median expression level 
+
+```{r, eval=FALSE}
+# Note: the Apul_counts_lncRNA df has already been filtered to onl retain lncRNA present in at least one sample with at least 5 counts (to exclude spurious transcripts)
+num_unique <- nrow(Apul_counts_lncRNA)
+
+mean_expression <- 
+median_expression <- 
+```
+
+
+
