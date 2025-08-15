@@ -7,11 +7,29 @@ Zoe Dellaert
   filtered using methylkit for *Acropora pulchra*, *Porites evermanni*,
   and *Pocillopora
   tuahiniensis*.](#01-this-is-the-plotting-and-analysis-for-cpg-methylation-data-filtered-using-methylkit-for-acropora-pulchra-porites-evermanni-and-pocillopora-tuahiniensis)
+- [0.2 Orthogroup Methylation](#02-orthogroup-methylation)
+  - [0.2.1 *Step 1*: Load Orthogroup
+    data](#021-step-1-load-orthogroup-data)
+  - [0.2.2 *Step 2*: Expand table to show each gene as a row and the
+    gene ID and orthogroup ID as the 2
+    columns](#022-step-2-expand-table-to-show-each-gene-as-a-row-and-the-gene-id-and-orthogroup-id-as-the-2-columns)
+  - [0.2.3 Clean transcript names in the three orthogroup
+    matrices](#023-clean-transcript-names-in-the-three-orthogroup-matrices)
+  - [0.2.4 Methylation count data by
+    CpG](#024-methylation-count-data-by-cpg)
+  - [0.2.5 Combine methylation data with gene/orthogroup data for mean
+    methylation per
+    gene](#025-combine-methylation-data-with-geneorthogroup-data-for-mean-methylation-per-gene)
+  - [0.2.6 Set methylated gene threshold as \> 50% CpG
+    methylation](#026-set-methylated-gene-threshold-as--50-cpg-methylation)
+  - [0.2.7 Summarize by orthogroup within each
+    species](#027-summarize-by-orthogroup-within-each-species)
+  - [0.2.8 Plot](#028-plot)
 
 ## 0.1 This is the plotting and analysis for CpG methylation data filtered using methylkit for [*Acropora pulchra*](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/08-Apul-WGBS.md), [*Porites evermanni*](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/12-Peve-WGBS.md), and [*Pocillopora tuahiniensis*](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/12-Ptuh-WGBS.md).
 
 ``` r
-library(dplyr)
+library(tidyverse)
 library(ggplot2)
 
 ACR <- read.csv("../../D-Apul/output/08-Apul-WGBS/CpG_meth_genome_feature_annotated.csv")
@@ -205,3 +223,158 @@ multi_summary %>% filter(region %in% c("intron", "exon","TE_intronic","TE_exonic
 ``` r
 ggsave("../output/06-Cross-Species-Methylation/TE_nonTE_region_bar.jpeg", width = 8, height = 5, dpi = 600)
 ```
+
+## 0.2 Orthogroup Methylation
+
+### 0.2.1 *Step 1*: Load Orthogroup data
+
+``` r
+# Read in orthofinder data 
+ortho <- read.table(file = "../../D-Apul/output/20-Apul-Orthofinder/Results_Dec20/Phylogenetic_Hierarchical_Orthogroups/N0.tsv", sep = '\t', header = TRUE, na.strings=c(""," ","NA")) %>% select(-c(HOG, Gene.Tree.Parent.Clade)) %>% rename(Orthogroup = OG)
+
+genus_list <- c("Acropora", "Pocillopora", "Porites")
+
+species_list_abbrv <- c("apul", "pmea", "peve")
+
+colnames(ortho) <- c("Orthogroup", genus_list)
+length(unique(ortho$Orthogroup)) # 23124 total orthogroups
+```
+
+    [1] 23124
+
+### 0.2.2 *Step 2*: Expand table to show each gene as a row and the gene ID and orthogroup ID as the 2 columns
+
+``` r
+# Split by species
+for (i in 1:length(genus_list)) {
+  assign(paste0(species_list_abbrv[i], "_ortho"), select(ortho, c("Orthogroup", genus_list[i])))
+}
+```
+
+``` r
+# Now split strings of gene names into cols w/ corresponding orthogroup
+
+for (i in 1:length(genus_list)) {
+  df_name <- paste0(species_list_abbrv[i], "_ortho")
+  
+  # Extract the species column and perform operations
+  assign(df_name, get(df_name) %>%
+           mutate(!!genus_list[i] := strsplit(as.character(!!as.symbol(genus_list[i])), ",")) %>%
+           unnest(!!as.symbol(genus_list[i])) %>%
+           na.omit() %>%
+           mutate(!!as.symbol(genus_list[i]) := gsub(" ", "", !!as.symbol(genus_list[i])))
+  )
+}
+```
+
+### 0.2.3 Clean transcript names in the three orthogroup matrices
+
+``` r
+apul_ortho$Acropora <- gsub("-T1","",apul_ortho$Acropora)
+```
+
+### 0.2.4 Methylation count data by CpG
+
+``` r
+CpG_count_transcripts_ACR <- read.csv("../../D-Apul/output/08-Apul-WGBS/CpG_Transcript_CountMat.csv")
+CpG_count_transcripts_POR <- read.csv("../../E-Peve/output/12-Peve-WGBS/CpG_Transcript_CountMat.csv")
+CpG_count_transcripts_POC <- read.csv("../../F-Ptuh/output/12-Ptuh-WGBS/CpG_Transcript_CountMat.csv")
+
+# Average methylation across all samples per transcript
+CpG_count_transcripts_ACR$mean_meth <- rowMeans(CpG_count_transcripts_ACR[ , grep("ACR", colnames(CpG_count_transcripts_ACR))], na.rm=TRUE)
+CpG_count_transcripts_POR$mean_meth <- rowMeans(CpG_count_transcripts_POR[ , grep("POR", colnames(CpG_count_transcripts_POR))], na.rm=TRUE)
+CpG_count_transcripts_POC$mean_meth <- rowMeans(CpG_count_transcripts_POC[ , grep("POC", colnames(CpG_count_transcripts_POC))], na.rm=TRUE)
+```
+
+### 0.2.5 Combine methylation data with gene/orthogroup data for mean methylation per gene
+
+``` r
+# Apul
+apul_ortho_meth <- apul_ortho %>%
+  left_join(CpG_count_transcripts_ACR %>% select(transcript_id, mean_meth), by = c("Acropora" = "transcript_id"))
+
+# Peve
+peve_ortho_meth <- peve_ortho %>%
+  left_join(CpG_count_transcripts_POR %>% select(transcript_id, mean_meth), by = c("Porites" = "transcript_id"))
+
+# Ptuh (using Pmea genome)
+CpG_count_transcripts_POC$transcript_id <- gsub("mrna-","",CpG_count_transcripts_POC$transcript_id)
+ptuh_ortho_meth <- pmea_ortho %>%
+  left_join(CpG_count_transcripts_POC %>% select(transcript_id, mean_meth), by = c("Pocillopora" = "transcript_id"))
+```
+
+### 0.2.6 Set methylated gene threshold as \> 50% CpG methylation
+
+``` r
+meth_thresh <- 50
+
+apul_ortho_meth <- apul_ortho_meth %>% mutate(methylated = mean_meth > meth_thresh)
+peve_ortho_meth <- peve_ortho_meth %>% mutate(methylated = mean_meth > meth_thresh)
+ptuh_ortho_meth <- ptuh_ortho_meth %>% mutate(methylated = mean_meth > meth_thresh)
+```
+
+### 0.2.7 Summarize by orthogroup within each species
+
+``` r
+# Apul
+apul_summary <- apul_ortho_meth %>%
+  group_by(Orthogroup) %>%
+  summarise(Apul_meth = any(methylated), .groups="drop")
+
+# Peve
+peve_summary <- peve_ortho_meth %>%
+  group_by(Orthogroup) %>%
+  summarise(Peve_meth = any(methylated), .groups="drop")
+
+# ptuh
+ptuh_summary <- ptuh_ortho_meth %>%
+  group_by(Orthogroup) %>%
+  summarise(Ptuh_meth = any(methylated), .groups="drop")
+
+meth_orthogroups <- full_join(apul_summary, peve_summary, by="Orthogroup") %>%
+  full_join(ptuh_summary, by="Orthogroup") %>%
+  replace(is.na(.), FALSE)  # missing = not methylated
+```
+
+### 0.2.8 Plot
+
+``` r
+meth_orthogroups <- meth_orthogroups %>%
+  mutate(
+    conserved = Apul_meth & Peve_meth & Ptuh_meth,
+    Apul_specific = Apul_meth & !Peve_meth & !Ptuh_meth,
+    Peve_specific = !Apul_meth & Peve_meth & !Ptuh_meth,
+    Ptuh_specific = !Apul_meth & !Peve_meth & Ptuh_meth
+  )
+
+meth_orthogroups <- as.data.frame(meth_orthogroups)
+
+# Summary counts
+summary_counts <- meth_orthogroups %>%
+  summarise(
+    conserved = sum(conserved),
+    Apul_specific = sum(Apul_specific),
+    Peve_specific = sum(Peve_specific),
+    Ptuh_specific = sum(Ptuh_specific)
+  )
+
+summary_counts
+```
+
+      conserved Apul_specific Peve_specific Ptuh_specific
+    1       109          1507          1518           226
+
+``` r
+# install.packages("UpSetR")
+
+library(UpSetR)
+
+upset_data <- meth_orthogroups %>% 
+  select(Apul_meth, Peve_meth, Ptuh_meth) %>% mutate_all(as.numeric) %>%
+  mutate(Orthogroup = meth_orthogroups$Orthogroup) %>%
+  select(Orthogroup,everything())
+
+upset(upset_data)
+```
+
+![](06-Cross-Species-WGBS_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
