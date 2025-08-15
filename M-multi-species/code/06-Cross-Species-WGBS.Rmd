@@ -6,7 +6,6 @@ output:
   github_document:
     toc: true
     number_sections: true
-bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -72,22 +71,42 @@ combined_all <- combined_all %>%
   )
 
 combined_all$facet_group <- factor(combined_all$facet_group, levels = c("All 10X CpGs", "Low (< 10%)", "Moderate", "High (> 50%)"))
+combined_all$meth_status <- factor(combined_all$meth_status, levels = c("Low (< 10%)", "Moderate", "High (> 50%)"))
+
+#set as factor
+combined_all$region <- factor(combined_all$region,levels = c("intergenic", "TE_intergenic",
+                                                             "TE_exonic",
+                                                             "TE_intronic",
+                                                             "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+
+blue_palette <- c(
+  "intergenic"     = "#deebf7",  
+  "TE_intergenic"  = "#c6dbef",
+  "TE_exonic"      = "#9ecae1",
+  "TE_intronic"    = "#6baed6",
+  "lncRNA"         = "#4292c6",
+  "miRNA"          = "#7b3294", 
+  "3UTR"           = "#2171b5",  
+  "5UTR"           = "#084594",  
+  "intron"         = "#08306b", 
+  "exon"           = "#041f3d"  
+)
 
 ggplot(combined_all, aes(x = 1, fill = region)) +
   geom_bar(position = "fill",color="darkgrey",size=0.05) +
-  theme_minimal() +
+  theme_minimal() + 
   labs(y = "% CpGs in Feature",
-    fill = "Genomic Feature", title="Methylation Landscape of Acropora pulchra: By Methylation Level") +
+    fill = "Genomic Feature", title="Methylation Landscape: By Methylation Level") +
   theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
-  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1) +
+  scale_fill_manual(values = blue_palette)  + facet_wrap(species~facet_group) +
   scale_y_continuous(labels = scales::percent_format())
-
+ggsave("../output/06-Cross-Species-Methylation/feature_meth_level_species.jpeg", width = 8, height = 10, dpi = 600)
 
 ggplot(combined_all, aes(x = region, fill = meth_status)) +
   geom_bar(position = "fill") + 
   theme_minimal() + facet_grid(~species) +
   labs(
-    title = "Methylation Landscape of Acropora pulchra: By Genomic Feature",
+    title = "Methylation Landscape: By Genomic Feature",
     x = "Genomic Feature",
     y = "% of CpGs with Methylation Stauts",
     fill = "Methylation Status"
@@ -96,6 +115,9 @@ ggplot(combined_all, aes(x = region, fill = meth_status)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::percent_format())
 
+ggsave("../output/06-Cross-Species-Methylation/feature_meth_level_percent_species.jpeg", width = 8, height = 6, dpi = 600)
+
+rm(combined_all)
 ```
 
 
@@ -160,14 +182,29 @@ colors <- c(
 multi_summary_broad %>% filter(region_broad %in% c("5UTR", "intron", "exon","intergenic")) %>%
   ggplot(aes(x = species, y = mean_meth, fill = region_broad)) +
   geom_bar(stat = "identity", position = position_dodge(),color="black") +
-  scale_fill_manual(values = colors) + theme_minimal()
+  scale_x_discrete(labels = c(
+  "Apul" = "Acropora pulchra",
+  "Peve" = "Porites evermanni",
+  "Ptuh" = "Pocillopora tuahiniensis")) +
+  scale_fill_manual(values = colors, 
+                    name = "Genomic Feature",
+                    labels = c("Protmoter/5'UTR","Intron","Exon", "Intergenic")) +
+  theme_minimal()
 
 ggsave("../output/06-Cross-Species-Methylation/broad_region_bar.jpeg", width = 8, height = 5, dpi = 600)
 
 multi_summary %>% filter(region %in% c("intron", "exon","TE_intronic","TE_exonic","intergenic","TE_intergenic")) %>%
   ggplot(aes(x = species, y = mean_meth, fill = region)) +
   geom_bar(stat = "identity", position = position_dodge(),color="black") +
-   scale_fill_manual(values = colors) + theme_minimal()
+  scale_x_discrete(labels = c(
+  "Apul" = "Acropora pulchra",
+  "Peve" = "Porites evermanni",
+  "Ptuh" = "Pocillopora tuahiniensis")) +
+  scale_fill_manual(values = colors, 
+                    name = "Genomic Feature",
+                    labels = c("Exon", "Intron", "TE Exonic", "TE Intronic", "Intergenic", "TE Intergenic")) + theme_minimal()
 
 ggsave("../output/06-Cross-Species-Methylation/TE_nonTE_region_bar.jpeg", width = 8, height = 5, dpi = 600)
 ```
+
+
