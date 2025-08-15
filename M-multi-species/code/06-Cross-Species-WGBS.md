@@ -1,27 +1,16 @@
----
-title: "06-Cross-Species-WGBS.Rmd"
-author: "Zoe Dellaert"
-date: "2025-08-15"
-output: 
-  github_document:
-    toc: true
-    number_sections: true
----
+06-Cross-Species-WGBS.Rmd
+================
+Zoe Dellaert
+2025-08-15
 
-```{r setup, include=FALSE}
-library(knitr)
-knitr::opts_chunk$set(
-  echo = TRUE,         # Display code chunks
-  eval = TRUE,        # Evaluate code chunks
-  warning = FALSE,     # Hide warnings
-  message = FALSE,     # Hide messages
-  comment = "" # Prevents appending '##' to beginning of lines in code output
-)
-```
+- [0.1 This is the plotting and analysis for CpG methylation data
+  filtered using methylkit for *Acropora pulchra*, *Porites evermanni*,
+  and *Pocillopora
+  tuahiniensis*.](#01-this-is-the-plotting-and-analysis-for-cpg-methylation-data-filtered-using-methylkit-for-acropora-pulchra-porites-evermanni-and-pocillopora-tuahiniensis)
 
-## This is the plotting and analysis for CpG methylation data filtered using methylkit for [*Acropora pulchra*](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/08-Apul-WGBS.md), [*Porites evermanni*](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/12-Peve-WGBS.md), and [*Pocillopora tuahiniensis*](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/12-Ptuh-WGBS.md).
+## 0.1 This is the plotting and analysis for CpG methylation data filtered using methylkit for [*Acropora pulchra*](https://github.com/urol-e5/deep-dive-expression/blob/main/D-Apul/code/08-Apul-WGBS.md), [*Porites evermanni*](https://github.com/urol-e5/deep-dive-expression/blob/main/E-Peve/code/12-Peve-WGBS.md), and [*Pocillopora tuahiniensis*](https://github.com/urol-e5/deep-dive-expression/blob/main/F-Ptuh/code/12-Ptuh-WGBS.md).
 
-```{r}
+``` r
 library(dplyr)
 library(ggplot2)
 
@@ -37,7 +26,7 @@ POC <- POC %>% select(region,avg_meth,meth_status) %>%
   mutate(species = "Ptuh")
 ```
 
-```{r}
+``` r
 ACR <- ACR %>% mutate(region_broad = case_when(
     region == "TE_intergenic" ~ "intergenic",
     region == "TE_exonic" ~ "exon",
@@ -60,8 +49,7 @@ POC <- POC %>% mutate(region_broad = case_when(
   ))
 ```
 
-
-```{r, eval=FALSE}
+``` r
 combined_all <- rbind(ACR, POR, POC)
 
 combined_all <- combined_all %>%
@@ -124,8 +112,7 @@ rm(combined_all)
 
 ![](../output/06-Cross-Species-Methylation/feature_meth_level_percent_species.jpeg)
 
-
-```{r}
+``` r
 ACR_summary <- ACR %>%
   group_by(region) %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE)) %>%
@@ -150,7 +137,7 @@ multi_summary$region <- factor(multi_summary$region,levels = c("exon",
                                                              "lncRNA","miRNA","3UTR", "5UTR", "intergenic", "TE_intergenic"))
 ```
 
-```{r}
+``` r
 ACR_summary <- ACR %>%
   group_by(region_broad) %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE)) %>%
@@ -171,8 +158,8 @@ multi_summary_broad <- rbind(ACR_summary, POR_summary, POC_summary)
 #set as factor
 multi_summary_broad$region_broad <- factor(multi_summary_broad$region_broad,levels = c("lncRNA","miRNA","3UTR", "5UTR", "intron", "exon","intergenic"))
 ```
-       
-```{r}
+
+``` r
 colors <- c(
   "5UTR" = "#e41a1c",        # red 
   "exon" = "#377eb8",        # blue
@@ -194,7 +181,11 @@ multi_summary_broad %>% filter(region_broad %in% c("5UTR", "intron", "exon","int
                     name = "Genomic Feature",
                     labels = c("Protmoter/5'UTR","Intron","Exon", "Intergenic")) +
   theme_minimal()
+```
 
+![](06-Cross-Species-WGBS_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
 ggsave("../output/06-Cross-Species-Methylation/broad_region_bar.jpeg", width = 8, height = 5, dpi = 600)
 
 multi_summary %>% filter(region %in% c("intron", "exon","TE_intronic","TE_exonic","intergenic","TE_intergenic")) %>%
@@ -207,17 +198,10 @@ multi_summary %>% filter(region %in% c("intron", "exon","TE_intronic","TE_exonic
   scale_fill_manual(values = colors, 
                     name = "Genomic Feature",
                     labels = c("Exon", "Intron", "TE Exonic", "TE Intronic", "Intergenic", "TE Intergenic")) + theme_minimal()
+```
 
+![](06-Cross-Species-WGBS_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+``` r
 ggsave("../output/06-Cross-Species-Methylation/TE_nonTE_region_bar.jpeg", width = 8, height = 5, dpi = 600)
 ```
-
-## Orthogroups
-
-```{r}
-CpG_count_transcripts_ACR <- read.csv("../../D-Apul/output/08-Apul-WGBS/CpG_Transcript_CountMat.csv")
-CpG_count_transcripts_POR <- read.csv("../../E-Peve/output/12-Peve-WGBS/CpG_Transcript_CountMat.csv")
-CpG_count_transcripts_POC <- read.csv("../../F-Ptuh/output/12-Ptuh-WGBS/CpG_Transcript_CountMat.csv")
-
-
-```
-
