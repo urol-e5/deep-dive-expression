@@ -389,6 +389,24 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+``` r
+alignment_rate <- read.csv("../output/12-Peve-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+```
+
+                      Sample Score_Min Alignment_Rate
+    1  trimmed_POR-71-TP2_S9    L0-1.0           55.8
+    2  trimmed_POR-73-TP2_S7    L0-1.0           60.1
+    3  trimmed_POR-76-TP2_S6    L0-1.0           56.8
+    4 trimmed_POR-79-TP2_S10    L0-1.0           55.0
+    5  trimmed_POR-82-TP2_S8    L0-1.0           50.9
+
+``` r
+mean(alignment_rate$Alignment_Rate)
+```
+
+    [1] 55.72
+
 ### 0.5.1 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/E-Peve/output/12-Peve-WGBS/bismark_cutadapt/)
 
 ## 0.6 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
@@ -673,13 +691,13 @@ load("../output/12-Peve-WGBS/methylkit/MethylObj_filtered.RData")
 PCASamples(meth_filter)
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
     Call:
     hclust(d = d, method = HCLUST.METHODS[hclust.method])
@@ -1025,7 +1043,7 @@ ggplot(df_annotated, aes(x=1,fill = region)) +
   scale_fill_manual(values = blue_palette)
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ### 0.9.2 Region stacked bars: CpGs by methylation status
 
@@ -1063,7 +1081,7 @@ ggplot(df_annotated, aes(x = 1, fill = region)) +
   scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
 ggsave("../code/12-Peve-WGBS_files/figures/CpG_landscape_methylation_facet.jpeg", width = 8, height = 5, dpi = 600)
@@ -1082,10 +1100,12 @@ ggplot(df_annotated, aes(x = region, fill = meth_status)) +
   scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-25-2.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
 
 ``` r
 ggsave("../code/12-Peve-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/12-Peve-WGBS/CpG_meth_genome_feature_annotated.csv")
 ```
 
 ``` r
@@ -1141,7 +1161,7 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ### 0.9.4 Extract methylation count matrix for transcripts
 
@@ -1284,7 +1304,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 ## Normalized counts:
@@ -1324,7 +1344,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-31-2.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-32-2.png)<!-- -->
 
 ### 0.10.2 sRNA-seq
 
@@ -1355,7 +1375,7 @@ ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ### 0.10.3 lncRNA
 
@@ -1386,4 +1406,4 @@ ggplot(plot_data_tissue, aes(y = lncRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+![](12-Peve-WGBS_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->

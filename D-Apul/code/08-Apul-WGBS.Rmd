@@ -346,6 +346,14 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+```{r}
+alignment_rate <- read.csv("../output/08-Apul-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+
+mean(alignment_rate$Alignment_Rate)
+```
+
+
 ### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
 
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
@@ -841,6 +849,8 @@ ggplot(df_annotated, aes(x = region, fill = meth_status)) +
   scale_y_continuous(labels = scales::percent_format())
 
 ggsave("../code/08-Apul-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/08-Apul-WGBS/CpG_meth_genome_feature_annotated.csv")
 ```
 
 ```{r}
@@ -848,6 +858,9 @@ df_summary <- df_annotated %>%
   group_by(region) %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
 df_summary
+
+df_summary %>% ggplot(aes(x = region, y = mean_meth)) +
+  geom_bar(stat="identity")
 ```
 
 ### Sample Methylation boxplots

@@ -338,6 +338,13 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+```{r}
+alignment_rate <- read.csv("../output/12-Ptuh-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+
+mean(alignment_rate$Alignment_Rate)
+```
+
 ### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
 
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
@@ -841,6 +848,8 @@ ggplot(df_annotated, aes(x = region, fill = meth_status)) +
   scale_y_continuous(labels = scales::percent_format())
 
 ggsave("../code/12-Ptuh-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/12-Ptuh-WGBS/CpG_meth_genome_feature_annotated.csv")
 ```
 
 ```{r}
