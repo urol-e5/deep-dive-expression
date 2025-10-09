@@ -10,6 +10,9 @@ Kathleen Durkin
     coordinates</a>
   - <a href="#12-merge" id="toc-12-merge">1.2 Merge</a>
 
+Reran PCC 10/9/25 using updated lncRNA counts (counts were updated \~3
+months ago)
+
 This code will use Pearson’s correlation coefficient to examine possible
 correlations between miRNA and lncRNA expression. This will then be
 compared to the miRanda interaction results of the miRNAs and lncRNAs.
@@ -40,17 +43,18 @@ miRNA_counts <- miRNA_counts %>%
 colnames(miRNA_counts) <- c("sample73", "sample79", "sample82")
 ```
 
-Counts generated in `E-Peve/code/18-Peve-lncRNA-matrix`, available at
-<https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt>
+Counts generated in `M-multi-species/output/01.6-lncRNA-pipeline`,
+available at
+<https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt>
 
 ``` r
-lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", skip=1) %>%
-  rename("lncrna_id"=Geneid, 
-         "sample71"=`../data/18-Peve-lncRNA-matrix/RNA-POR-71.sorted.bam`, 
-         "sample73"=`../data/18-Peve-lncRNA-matrix/RNA-POR-73.sorted.bam`, 
-         "sample76"=`../data/18-Peve-lncRNA-matrix/RNA-POR-76.sorted.bam`, 
-         "sample79"=`../data/18-Peve-lncRNA-matrix/RNA-POR-79.sorted.bam`, 
-         "sample82"=`../data/18-Peve-lncRNA-matrix/RNA-POR-82.sorted.bam`)
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt") %>%
+  dplyr::rename("lncrna_id"=Geneid, 
+         "sample71"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.71.sorted.bam`, 
+         "sample73"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.73.sorted.bam`, 
+         "sample76"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.76.sorted.bam`, 
+         "sample79"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.79.sorted.bam`, 
+         "sample82"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.82.sorted.bam`)
 ```
 
     ## 
@@ -62,11 +66,11 @@ lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-d
     ##   End = col_double(),
     ##   Strand = col_character(),
     ##   Length = col_double(),
-    ##   `../data/18-Peve-lncRNA-matrix/RNA-POR-71.sorted.bam` = col_double(),
-    ##   `../data/18-Peve-lncRNA-matrix/RNA-POR-73.sorted.bam` = col_double(),
-    ##   `../data/18-Peve-lncRNA-matrix/RNA-POR-76.sorted.bam` = col_double(),
-    ##   `../data/18-Peve-lncRNA-matrix/RNA-POR-79.sorted.bam` = col_double(),
-    ##   `../data/18-Peve-lncRNA-matrix/RNA-POR-82.sorted.bam` = col_double()
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.71.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.73.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.76.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.79.sorted.bam = col_double(),
+    ##   X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.82.sorted.bam = col_double()
     ## )
 
 ``` r
@@ -83,7 +87,22 @@ lncRNA_counts_df <- lncRNA_counts_df %>%
      mutate(Total = rowSums(.[, 1:3]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
+
+# Number of lncRNA included
+nrow(lncRNA_counts)
 ```
+
+    ## [1] 10085
+
+``` r
+nrow(lncRNA_counts_df)
+```
+
+    ## [1] 9362
+
+NOTE: This miRNA-lncRNA PCC analysis ends up using fewer lncRNA than are
+present in all samples because we had to toss samples 71 and 76. There
+are only 9362 unique lncRNA present in the remaining 3 samples.
 
 Normalize counts
 
@@ -94,7 +113,7 @@ normalize_counts <- function(counts) {
   return(rpm)
 }
 
-# Normalize miRNA and mRNA counts
+# Normalize miRNA and lncRNA counts
 miRNA_norm <- normalize_counts(miRNA_counts)
 #miRNA_norm <- as.matrix(miRNA_counts_filt)
 
@@ -228,7 +247,7 @@ sig_pairs <- pcc_miranda_peve %>%
 cat("PCC correlation > |0.5| and a p-value < 0.05:", nrow(sig_pairs), "\n")
 ```
 
-    ## PCC correlation > |0.5| and a p-value < 0.05: 118
+    ## PCC correlation > |0.5| and a p-value < 0.05: 175
 
 ``` r
 # Are there any pairs that have a PCC correlation > |0.5|, a p-value < 0.05, and a query similarity >75%?
@@ -237,19 +256,19 @@ sig_pairs_similar <- pcc_miranda_peve %>%
 cat("PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%:", nrow(sig_pairs_similar), "\n")
 ```
 
-    ## PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%: 48
+    ## PCC correlation > |0.5| and a p-value < 0.05 and query similarity >75%: 77
 
 ``` r
 length(unique(sig_pairs_similar$miRNA))
 ```
 
-    ## [1] 20
+    ## [1] 25
 
 ``` r
 length(unique(sig_pairs_similar$lncRNA))
 ```
 
-    ## [1] 46
+    ## [1] 73
 
 ``` r
 ## Count positive and negative PCC.cor values
@@ -258,13 +277,13 @@ negative_count <- sum(sig_pairs_similar$PCC.cor < 0)
 cat("Number of rows with positive PCC.cor:", positive_count, "\n")
 ```
 
-    ## Number of rows with positive PCC.cor: 28
+    ## Number of rows with positive PCC.cor: 40
 
 ``` r
 cat("Number of rows with negative PCC.cor:", negative_count, "\n")
 ```
 
-    ## Number of rows with negative PCC.cor: 20
+    ## Number of rows with negative PCC.cor: 37
 
 How many miRNAs per lncRNA and vice versa for the sig pairs? For sig
 pairs similar?
@@ -285,13 +304,13 @@ print("lncRNAs per miRNA, significant. mean, range:")
 mean(lncRNAs_per_miRNA$n_lncRNAs)
 ```
 
-    ## [1] 4.035714
+    ## [1] 5.5
 
 ``` r
 range(lncRNAs_per_miRNA$n_lncRNAs)
 ```
 
-    ## [1]  1 33
+    ## [1]  1 55
 
 ``` r
 cat("\n")
@@ -312,13 +331,13 @@ print("miRNAs per lncRNA, significnat. mean, range:")
 mean(miRNAs_per_lncRNA$n_miRNAs)
 ```
 
-    ## [1] 1.056075
+    ## [1] 1.03125
 
 ``` r
 range(miRNAs_per_lncRNA$n_miRNAs)
 ```
 
-    ## [1] 1 4
+    ## [1] 1 2
 
 ``` r
 cat("\n")
@@ -340,13 +359,13 @@ print("lncRNAs per miRNA, significant and similar. mean, range:")
 mean(lncRNAs_per_miRNA_sim$n_lncRNAs)
 ```
 
-    ## [1] 2.3
+    ## [1] 2.92
 
 ``` r
 range(lncRNAs_per_miRNA_sim$n_lncRNAs)
 ```
 
-    ## [1]  1 11
+    ## [1] 1 9
 
 ``` r
 cat("\n")
@@ -375,10 +394,10 @@ range(miRNAs_per_lncRNA_sim$n_miRNAs)
 
     ## [1] 1 1
 
-For the significant pairs, the miRNAs can interact with 1-33 unique
-lncRNAs, while the lncRNAs can interact with with 1-4 unique miRNAs. For
+For the significant pairs, the miRNAs can interact with 1-55 unique
+lncRNAs, while the lncRNAs can interact with with 1-2 unique miRNAs. For
 the significant pairs that have high query similarity, the miRNAs can
-interact with 1-11 unique lncRNAs, while the lncRNAs can interact with 1
+interact with 1-9 unique lncRNAs, while the lncRNAs can interact with 1
 unique miRNAs. Interesting!
 
 Plot as a network plot with the miRNAs as the primary nodes for
