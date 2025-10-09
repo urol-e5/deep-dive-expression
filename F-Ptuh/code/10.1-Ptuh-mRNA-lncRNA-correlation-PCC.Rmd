@@ -89,7 +89,7 @@ mRNA_counts <- mRNA_counts %>%
 nrow(mRNA_counts)
 ```
 
-Read in lncRNA data. Generated in `F-Ptuh/code/32-Ptuh-lncRNA-matrix.Rmd`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/32-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
+Read in lncRNA data. Generated in `M-multi-species/output/01.6-lncRNA-pipeline`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main//M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt
 
 ```{r}
 lncRNA_counts<-read_table(file="../../M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt") %>%

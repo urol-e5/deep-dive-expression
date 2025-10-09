@@ -25,13 +25,13 @@ mRNA_counts <- mRNA_counts %>%
   select(-Total)
 
 # === Read in lncRNA data ===
-lncRNA_counts <- read_table(file = "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt", skip = 1) %>%
-  rename("lncrna_id" = Geneid,
-         "sample71" = `../data/18-Peve-lncRNA-matrix/RNA-POR-71.sorted.bam`,
-         "sample73" = `../data/18-Peve-lncRNA-matrix/RNA-POR-73.sorted.bam`,
-         "sample76" = `../data/18-Peve-lncRNA-matrix/RNA-POR-76.sorted.bam`,
-         "sample79" = `../data/18-Peve-lncRNA-matrix/RNA-POR-79.sorted.bam`,
-         "sample82" = `../data/18-Peve-lncRNA-matrix/RNA-POR-82.sorted.bam`)
+lncRNA_counts<-read_table(file="../../../M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt") %>%
+  rename("lncrna_id"=Geneid, 
+         "sample71"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.71.sorted.bam`, 
+         "sample73"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.73.sorted.bam`, 
+         "sample76"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.76.sorted.bam`, 
+         "sample79"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.79.sorted.bam`, 
+         "sample82"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.82.sorted.bam`)
 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>%
   select(-Chr, -Start, -End, -Strand, -Length)

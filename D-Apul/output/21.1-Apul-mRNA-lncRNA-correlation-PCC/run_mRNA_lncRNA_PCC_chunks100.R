@@ -25,24 +25,25 @@ mRNA_counts <- mRNA_counts %>%
   select(-Total)
 
 # === Read in lncRNA data ===
-lncRNA_counts <- read_table(file = "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt", skip = 1) %>%
-  rename("lncrna_id" = Geneid,
-         "sample140" = `../data/32-Apul-lncRNA-matrix/RNA-ACR-140.sorted.bam`,
-         "sample145" = `../data/32-Apul-lncRNA-matrix/RNA-ACR-145.sorted.bam`,
-         "sample150" = `../data/32-Apul-lncRNA-matrix/RNA-ACR-150.sorted.bam`,
-         "sample173" = `../data/32-Apul-lncRNA-matrix/RNA-ACR-173.sorted.bam`,
-         "sample178" = `../data/32-Apul-lncRNA-matrix/RNA-ACR-178.sorted.bam`)
+# Updated counts matrix, accessed 8/5/2025
+lncRNA_counts<-read_table(file="../../../M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt") %>%
+  rename("lncrna_id"=Geneid,
+         "sample140"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.140.sorted.bam`,
+         "sample145"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.145.sorted.bam`,
+         "sample150"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.150.sorted.bam`,
+         "sample173"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.173.sorted.bam`,
+         "sample178"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.178.sorted.bam`)
 
-lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>%
-  select(-Chr, -Start, -End, -Strand, -Length)
-rownames(lncRNA_counts_df) <- lncRNA_counts_df$lncrna_id
-lncRNA_counts_df <- lncRNA_counts_df %>% select(-lncrna_id)
+# Change to df 
+lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
+row.names(lncRNA_counts_df) <- lncRNA_counts_df[,1]
+lncRNA_counts_df <- lncRNA_counts_df[,-1]  # remove the first column (gene names) if needed
 
-# Remove any lncRNAs with 0 for all samples
+# Remove any lncRNAs with 0 for all samples 
 lncRNA_counts_df <- lncRNA_counts_df %>%
-  mutate(Total = rowSums(.)) %>%
-  filter(Total != 0) %>%
-  select(-Total)
+  mutate(Total = rowSums(.[, 1:5]))%>%
+  filter(!Total==0)%>%
+  dplyr::select(!Total)
 
 # === Normalize counts (RPM) ===
 normalize_counts <- function(counts) {
