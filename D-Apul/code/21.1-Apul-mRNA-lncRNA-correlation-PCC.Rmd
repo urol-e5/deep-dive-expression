@@ -62,12 +62,12 @@ Read in gene counts
 mRNA_counts <- read.csv("../output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
 rownames(mRNA_counts) <- mRNA_counts$gene_id
 mRNA_counts <- mRNA_counts %>% select(-gene_id)
-mRNA_counts %>%
-rename("sample140"=`RNA.ACR.140`,
-         "sample145"=`RNA.ACR.145`,
-         "sample150"=`RNA.ACR.150`,
-         "sample173"=`RNA.ACR.173`,
-         "sample178"=`RNA.ACR.178`)
+# mRNA_counts %>%
+# dplyr::rename("sample140"=`RNA.ACR.140`,
+#          "sample145"=`RNA.ACR.145`,
+#          "sample150"=`RNA.ACR.150`,
+#          "sample173"=`RNA.ACR.173`,
+#          "sample178"=`RNA.ACR.178`)
 
 head(mRNA_counts)
 
@@ -78,12 +78,12 @@ mRNA_counts <- mRNA_counts %>%
     dplyr::select(!Total)
 ```
 
-Read in lncRNA data. Generated in `D-Apul/code/32-Apul-lncRNA-matrix.Rmd`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt
+Read in lncRNA data. Generated in `/M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt`, counts matrix available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt
 
 ```{r}
 # Updated counts matrix, accessed 8/5/2025
-lncRNA_counts<-read_table(file="../..//M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt") %>%
-  rename("lncrna_id"=Geneid,
+lncRNA_counts<-read_table(file="../../M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt") %>%
+  dplyr::rename("lncrna_id"=Geneid,
          "sample140"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.140.sorted.bam`,
          "sample145"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.145.sorted.bam`,
          "sample150"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Apul.lncRNA.pipeline.RNA.ACR.150.sorted.bam`,
@@ -101,6 +101,15 @@ lncRNA_counts_df <- lncRNA_counts_df %>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 ```
+
+Number of mRNA and lncRNA included in the correlation analysis
+```{r}
+nrow(mRNA_counts)
+nrow(lncRNA_counts)
+```
+
+33,624 mRNA and 31,490 lncRNA will be included in the PCC analysis.
+
 
 Normalize counts
 ```{r}
@@ -209,9 +218,9 @@ awk -F, 'NR>1 && $3 < -0.5 && $4 < 0.05' sig_pairs.csv | wc -l
 
 ```
 
-33,624 mRNA significantly correlate (p-val < 0.05) with a total of 26,416 lncRNA, with a total of 96,470,124 unique pairs with significantly correlated expression. 
+33,624 mRNA significantly correlate (p-val < 0.05) with a total of 31,490 lncRNA, with a total of 118,197,142 unique pairs with significantly correlated expression. 
 
-Of these, all also had correlation magnitudes of at least 0.5. The majority of correlations (87,393,834 or 90.6%) were positive, though some (9,076,290 or 9.4%) were negative.
+Of these, all also had correlation magnitudes of at least 0.5. The majority of correlations (107,168,482 or 90.7%) were positive, though some (11,028,660 or 9.3%) were negative.
 
 
 How many mRNAs per lncRNA and vice versa for the sig pairs?
@@ -279,5 +288,5 @@ sort -n mRNAs_per_lncRNA_counts.txt | awk 'NR==1{min=$1} {max=$1} END {print "Ra
 ```
 
 
+For the significant pairs (|PCC| > 0.5, pval < 0.05), the mRNAs are correlated with 490-13,731 unique lncRNAs (3,515 on average), while the lncRNAs are correlated with 646-7,702 unique mRNAs (3,753 on average). 
 
-For the significant pairs (|PCC| > 0.5, pval < 0.05), the mRNAs are correlated with 290-10,692 unique lncRNAs, while the lncRNAs are correlated with 1-7,695 unique mRNAs. 

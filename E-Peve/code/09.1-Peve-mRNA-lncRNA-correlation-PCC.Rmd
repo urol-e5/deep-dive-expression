@@ -60,11 +60,11 @@ Read in gene counts
 mRNA_counts <- read.csv("../output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
 rownames(mRNA_counts) <- mRNA_counts$gene_id
 mRNA_counts <- mRNA_counts %>% select(-gene_id)
-mRNA_counts <- mRNA_counts %>% rename("sample71"=`RNA.POR.71`, 
-                       "sample73"=`RNA.POR.73`, 
-                       "sample76"=`RNA.POR.76`, 
-                       "sample79"=`RNA.POR.79`, 
-                       "sample82"=`RNA.POR.82`)
+# mRNA_counts <- mRNA_counts %>% dplyr::rename("sample71"=`RNA.POR.71`, 
+#                        "sample73"=`RNA.POR.73`, 
+#                        "sample76"=`RNA.POR.76`, 
+#                        "sample79"=`RNA.POR.79`, 
+#                        "sample82"=`RNA.POR.82`)
 
 head(mRNA_counts)
 
@@ -79,7 +79,7 @@ Read in lncRNA data. Generated in `E-Peve/code/32-Peve-lncRNA-matrix.Rmd`, count
 
 ```{r}
 lncRNA_counts<-read_table(file="../../M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt") %>%
-  rename("lncrna_id"=Geneid, 
+  dplyr::rename("lncrna_id"=Geneid, 
          "sample71"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.71.sorted.bam`, 
          "sample73"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.73.sorted.bam`, 
          "sample76"=`X.home.shared.8TB_HDD_02.zbengt.github.deep.dive.expression.M.multi.species.data.01.6.Peve.lncRNA.pipeline.RNA.POR.76.sorted.bam`, 
@@ -97,6 +97,14 @@ lncRNA_counts_df <- lncRNA_counts_df %>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
 ```
+
+Number of mRNA and lncRNA included in the correlation analysis
+```{r}
+nrow(mRNA_counts)
+nrow(lncRNA_counts)
+```
+
+31,501 mRNA and 10,085 lncRNA will be included in the PCC analysis.
 
 Normalize counts
 ```{r}
