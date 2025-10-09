@@ -24,6 +24,8 @@ bibliography: references.bib
 link-citations: true
 ---
 
+Reran PCC 10/9/25 using updated lncRNA counts (counts were updated ~3 months ago)
+
 This code will use Pearson's correlation coefficient to examine possible correlations between miRNA and lncRNA expression. This will then be compared to the miRanda interaction results of the miRNAs and lncRNAs. 
 
 ```{r setup, include=FALSE}
@@ -36,11 +38,11 @@ library(tidyverse)
 library(reshape2)
 #library(SPONGE)
 library(pheatmap)
-# library(energy)
+library(energy)
 library(parallel)
-library(ggraph)
-library(tidygraph)
-library(igraph)
+#library(ggraph)
+#library(tidygraph)
+#library(igraph)
 library(genefilter)
 library(gridExtra)
 ```
@@ -57,16 +59,16 @@ miRNA_counts <- miRNA_counts %>%
     dplyr::select(!Total)
 ```
 
-Counts generated in `F-Ptuh/code/18-Ptuh-lncRNA-matrix.Rmd`, available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt
+Counts generated in `M-multi-species/output/01.6-lncRNA-pipeline`, available at https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt
 
 ```{r}
-lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt", skip=1) %>%
-  rename("lncrna_id"=Geneid, 
-         "sample47"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-47.sorted.bam`, 
-         "sample48"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-48.sorted.bam`, 
-         "sample50"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-50.sorted.bam`, 
-         "sample53"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-53.sorted.bam`, 
-         "sample57"=`../data/18-Ptuh-lncRNA-matrix/RNA-POC-57.sorted.bam`)
+lncRNA_counts<-read_table(file="https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt") %>%
+  dplyr::rename("lncrna_id"=Geneid, 
+         "sample47"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.47.S1.TP2.sorted.bam`, 
+         "sample48"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.48.S1.TP2.sorted.bam`, 
+         "sample50"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.50.S1.TP2.sorted.bam`, 
+         "sample53"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.53.S1.TP2.sorted.bam`, 
+         "sample57"=`...output.01.6.Ptuh.lncRNA.pipeline.RNA.POC.57.S1.TP2.sorted.bam`)
 
 # Change to df 
 lncRNA_counts_df <- as.data.frame(lncRNA_counts) %>% select(!c("Chr", "Start", "End", "Strand", "Length"))
@@ -78,6 +80,10 @@ lncRNA_counts_df <- lncRNA_counts_df %>%
      mutate(Total = rowSums(.[, 1:5]))%>%
     filter(!Total==0)%>%
     dplyr::select(!Total)
+
+# How many lncRNA included
+nrow(lncRNA_counts)
+nrow(lncRNA_counts_df)
 ```
 
 Normalize counts
@@ -262,7 +268,7 @@ range(miRNAs_per_lncRNA_sim$n_miRNAs)
 
 ```
 
-For the significant pairs, the miRNAs can interact with 1-35 unique lncRNAs, while the lncRNAs can interact with with 1-3 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-16 unique lncRNAs, while the lncRNAs can interact with 1-2 unique miRNAs. These numbers are very similar to the other species!
+For the significant pairs, the miRNAs can interact with 2-61 unique lncRNAs, while the lncRNAs can interact with with 1-4 unique miRNAs. For the significant pairs that have high query similarity, the miRNAs can interact with 1-29 unique lncRNAs, while the lncRNAs can interact with 1-2 unique miRNAs. These numbers are very similar to the other species!
 
 Plot as a network plot with the miRNAs as the primary nodes for `sig_pairs` 
 ```{r}
