@@ -20,19 +20,19 @@ Zoe Dellaert
   - [0.4.1 Results from parameter
     tests:](#041-results-from-parameter-tests)
 - [0.5 Align to genome](#05-align-to-genome)
+  - [0.5.1 Output file location: All Bismark output
+    files](#051-output-file-location-all-bismark-output-files)
 - [0.6 Post-alignment code is based once again on Steven’s
   code](#06-post-alignment-code-is-based-once-again-on-stevens-code)
-  - [0.6.1 Output file location: All Bismark output
-    files](#061-output-file-location-all-bismark-output-files)
-  - [0.6.2 Deduplication, Sorting, and methylation extraction &
-    calling](#062-deduplication-sorting-and-methylation-extraction--calling)
-  - [0.6.3 View output](#063-view-output)
-  - [0.6.4 Make summary reports](#064-make-summary-reports)
-  - [0.6.5 Sorting cov files and filtering for coverage and gene
-    intersection](#065-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
-  - [0.6.6 Output file location: All Bismark output files (BAMs, .cov
+  - [0.6.1 Deduplication, Sorting, and methylation extraction &
+    calling](#061-deduplication-sorting-and-methylation-extraction--calling)
+  - [0.6.2 View output](#062-view-output)
+  - [0.6.3 Make summary reports](#063-make-summary-reports)
+  - [0.6.4 Sorting cov files and filtering for coverage and gene
+    intersection](#064-sorting-cov-files-and-filtering-for-coverage-and-gene-intersection)
+  - [0.6.5 Output file location: All Bismark output files (BAMs, .cov
     files, .bedgraph
-    files)](#066-output-file-location-all-bismark-output-files-bams-cov-files-bedgraph-files)
+    files)](#065-output-file-location-all-bismark-output-files-bams-cov-files-bedgraph-files)
 - [0.7 Methylkit](#07-methylkit)
 - [0.8 Annotation- I want an intersection of methylated CpGs with the
   various regions in the
@@ -380,11 +380,29 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+``` r
+alignment_rate <- read.csv("../output/12-Ptuh-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+```
+
+                      Sample Score_Min Alignment_Rate
+    1 trimmed_POC-47-TP2_S13    L0-1.0           59.2
+    2 trimmed_POC-48-TP2_S11    L0-1.0           58.9
+    3 trimmed_POC-50-TP2_S14    L0-1.0           57.0
+    4 trimmed_POC-53-TP2_S15    L0-1.0           55.7
+    5 trimmed_POC-57-TP2_S12    L0-1.0           58.4
+
+``` r
+mean(alignment_rate$Alignment_Rate)
+```
+
+    [1] 57.84
+
+### 0.5.1 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+
 ## 0.6 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
 
-### 0.6.1 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
-
-### 0.6.2 Deduplication, Sorting, and methylation extraction & calling
+### 0.6.1 Deduplication, Sorting, and methylation extraction & calling
 
 ``` bash
 #!/usr/bin/env bash
@@ -451,13 +469,13 @@ ${bismark_dir}trimmed_{}_pe.deduplicated.bam \
 
 This took just over 5 hours with max memory used per node as 249.99GiB.
 
-### 0.6.3 View output
+### 0.6.2 View output
 
 ``` bash
 head ${bismark_dir}*evidence.cov
 ```
 
-### 0.6.4 Make summary reports
+### 0.6.3 Make summary reports
 
 ``` bash
 #!/usr/bin/env bash
@@ -501,9 +519,9 @@ bismark2summary *pe.bam
 multiqc .
 ```
 
-#### 0.6.4.1 Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/bismark_summary_report.html)
+#### 0.6.3.1 Output file location: [Bismark and Qualimap MultiQC](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/multiqc_report.html) and [base bismark report](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/bismark_summary_report.html)
 
-### 0.6.5 Sorting cov files and filtering for coverage and gene intersection
+### 0.6.4 Sorting cov files and filtering for coverage and gene intersection
 
 ``` bash
 # salloc -p cpu -c 8 --mem 16G
@@ -576,7 +594,7 @@ for file in *_sorted.cov; do
 done > global_methylation_levels.txt
 ```
 
-### 0.6.6 Output file location: [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
+### 0.6.5 Output file location: [All Bismark output files (BAMs, .cov files, .bedgraph files)](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt/)
 
 ## 0.7 Methylkit
 
@@ -664,13 +682,13 @@ load("../output/12-Ptuh-WGBS/methylkit/MethylObj_filtered.RData")
 PCASamples(meth_filter)
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
     Call:
     hclust(d = d, method = HCLUST.METHODS[hclust.method])
@@ -696,6 +714,13 @@ getCorrelation(meth_filter)
 library("genomationData")
 library("genomation")
 library("GenomicRanges")
+
+# get a list of all chromosomes and lengths in the genome
+chr_sizes <- read.table("../data/Pocillopora_meandrina_HIv1.assembly.fa.fai", header = FALSE)[,1:2]
+colnames(chr_sizes) <- c("seqnames", "seqlengths")
+
+genome_GR <- GRanges(seqnames = chr_sizes$seqnames,
+                     ranges   = IRanges(start = 1, end = chr_sizes$seqlengths))
 
 # convert methylation data to GRange object
 meth_GR <- as(meth_filter, "GRanges")
@@ -884,25 +909,36 @@ head(lncRNAs)
 ``` r
 # Define intergenic = genome - all annotations
 # First combine all annotated regions
-all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE, lncRNAs, miRNAs))
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, lncRNAs, miRNAs))
 
-# Define genome bounds from methylation object
-genome_range <- GenomicRanges::reduce(meth_GR)
+# Intergenic CpGs = All CpGs not in above annotated regions
+intergenic <- GenomicRanges::setdiff(genome_GR, all_annotated, ignore.strand=TRUE)
 
-# Intergenic = genome - annotated
-intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
+# TEs - intergenic
+
+TE_intergenic <- IRanges::subsetByOverlaps(TE, intergenic, ignore.strand = TRUE)
+
+# TEs - exonic
+
+TE_exonic <- IRanges::subsetByOverlaps(TE, exons, ignore.strand = TRUE)
+
+# TEs - intronic
+
+TE_intronic <- IRanges::subsetByOverlaps(TE, introns, ignore.strand = TRUE)
 ```
 
 ``` r
 # Priority list
 region_priority <- list(
-  `5UTR` = gff5UTR,
-  `3UTR` = gff3UTR,
-  exon = exons,
-  intron = introns,
   miRNA = miRNAs,
   lncRNA = lncRNAs,
-  TE = TE,
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  TE_exonic = TE_exonic,
+  TE_intronic = TE_intronic,
+  exon = exons,
+  intron = introns,
+  TE_intergenic = TE_intergenic,
   intergenic = intergenic
 )
 
@@ -923,34 +959,53 @@ for (region_name in names(region_priority)) {
   cpg_annot[full_indices] <- region_name
   unassigned[full_indices] <- FALSE  # Mark these as assigned
 }
-
-# Replace any remaining NA with "unassigned" or "intergenic"
-cpg_annot[is.na(cpg_annot)] <- "intergenic"
 ```
 
 ### 0.9.1 Region stacked bars: all CpGs
 
 ``` r
-df_annotated <- as.data.frame(meth_GR)
+df_annotated <- meth_matrix
 df_annotated$region <- cpg_annot
 
-#set as factor
-df_annotated$region <- factor(df_annotated$region,
-                              levels = c("intergenic", "TE", "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+table(df_annotated$region)
+```
 
+             3UTR          5UTR          exon    intergenic        intron 
+           406304        601623       1640957       1957672       1795327 
+           lncRNA         miRNA     TE_exonic TE_intergenic   TE_intronic 
+           421988            16         13868         29083         26168 
+
+``` r
+#set as factor
+df_annotated$region <- factor(df_annotated$region,levels = c("intergenic", "TE_intergenic",
+                                                             "TE_exonic",
+                                                             "TE_intronic",
+                                                             "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+
+table(df_annotated$region)
+```
+
+       intergenic TE_intergenic     TE_exonic   TE_intronic        lncRNA 
+          1957672         29083         13868         26168        421988 
+            miRNA          3UTR          5UTR        intron          exon 
+               16        406304        601623       1795327       1640957 
+
+``` r
 blue_palette <- c(
-  "intergenic" = "#deebf7",  
-  "TE"         = "#c6dbef",
-  "lncRNA"     = "#9ecae1",
-  "miRNA"      = "red",#"miRNA"      = "#6baed6",
-  "3UTR"       = "#4292c6",
-  "5UTR"       = "#2171b5",
-  "intron"     = "#08519c",
-  "exon"       = "#08306b"  
+  "intergenic"     = "#deebf7",  
+  "TE_intergenic"  = "#c6dbef",
+  "TE_exonic"      = "#9ecae1",
+  "TE_intronic"    = "#6baed6",
+  "lncRNA"         = "#4292c6",
+  "miRNA"          = "#7b3294", 
+  "3UTR"           = "#2171b5",  
+  "5UTR"           = "#084594",  
+  "intron"         = "#08306b", 
+  "exon"           = "#041f3d"  
 )
 
-ggplot(df_annotated, aes(x = strand, fill = region)) +
-  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+ggplot(df_annotated, aes(x=1,fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.1) +
   theme_minimal() +
   labs(y = "% CpGs",
     fill = "Genomic Region") +
@@ -958,7 +1013,7 @@ ggplot(df_annotated, aes(x = strand, fill = region)) +
   scale_fill_manual(values = blue_palette)
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ### 0.9.2 Region stacked bars: CpGs by methylation status
 
@@ -974,45 +1029,54 @@ low_thresh <- 10
 high_thresh <- 50
 df_annotated$meth_status <- cut(df_annotated$avg_meth,
                                 breaks = c(-Inf, low_thresh, high_thresh, Inf),
-                                labels = c("lowly", "moderately", "highly"))
+                                labels = c("Low (< 10%)", "Moderate", "High (> 50%)"))
 ```
 
 ``` r
-df_annotated_facet <- df_annotated %>%
+df_annotated <- df_annotated %>%
   mutate(facet_group = meth_status) %>%
   bind_rows(
-    df_annotated %>% mutate(facet_group = "all")
+    df_annotated %>% mutate(facet_group = "All 10X CpGs")
   )
 
-df_annotated_facet$facet_group <- factor(df_annotated_facet$facet_group, levels = c("all", "highly","moderately","lowly"))
+df_annotated$facet_group <- factor(df_annotated$facet_group, levels = c("All 10X CpGs", "Low (< 10%)", "Moderate", "High (> 50%)"))
 
-ggplot(df_annotated_facet, aes(x = strand, fill = region)) +
+ggplot(df_annotated, aes(x = 1, fill = region)) +
   geom_bar(position = "fill",color="darkgrey",size=0.05) +
   theme_minimal() +
-  labs(y = "% CpGs",
-    fill = "Genomic Region") +
+  labs(y = "% CpGs in Feature",
+    fill = "Genomic Feature", title="Methylation Landscape of Pocillopora tuahiniensis: By Methylation Level") +
   theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
-  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1)
+  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1) +
+  scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
+ggsave("../code/12-Ptuh-WGBS_files/figures/CpG_landscape_methylation_facet.jpeg", width = 8, height = 5, dpi = 600)
+
 ggplot(df_annotated, aes(x = region, fill = meth_status)) +
-  geom_bar(position = "fill") +  # stacked bar normalized to proportions
+  geom_bar(position = "fill") + 
   theme_minimal() +
   labs(
-    title = "Proportion of CpG Methylation Status by Region",
-    x = "Genomic Region",
-    y = "Proportion of CpGs",
+    title = "Methylation Landscape of Pocillopora tuahiniensis: By Genomic Feature",
+    x = "Genomic Feature",
+    y = "% of CpGs with Methylation Stauts",
     fill = "Methylation Status"
   ) +
-  scale_fill_manual(values = c(lowly = "#3498db", moderately = "#bdc3c7", highly = "#e74c3c")) +
+  scale_fill_manual(values = c("Low (< 10%)" = "#3498db", "Moderate" = "#bdc3c7", "High (> 50%)" = "#e74c3c")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
+
+``` r
+ggsave("../code/12-Ptuh-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/12-Ptuh-WGBS/CpG_meth_genome_feature_annotated.csv")
+```
 
 ``` r
 df_summary <- df_annotated %>%
@@ -1021,17 +1085,19 @@ df_summary <- df_annotated %>%
 df_summary
 ```
 
-    # A tibble: 8 × 2
-      region     mean_meth
-      <fct>          <dbl>
-    1 intergenic      2.08
-    2 TE              3.90
-    3 lncRNA          2.36
-    4 miRNA           1.42
-    5 3UTR            2.85
-    6 5UTR            2.31
-    7 intron          3.74
-    8 exon            5.60
+    # A tibble: 10 × 2
+       region        mean_meth
+       <fct>             <dbl>
+     1 intergenic         2.08
+     2 TE_intergenic      3.89
+     3 TE_exonic          8.52
+     4 TE_intronic        4.71
+     5 lncRNA             2.66
+     6 miRNA              7.55
+     7 3UTR               2.86
+     8 5UTR               2.30
+     9 intron             3.73
+    10 exon               5.60
 
 ### 0.9.3 Sample Methylation boxplots
 
@@ -1065,7 +1131,7 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ### 0.9.4 Extract methylation count matrix for transcripts
 
@@ -1212,7 +1278,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 ## Normalized counts:
@@ -1254,7 +1320,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-30-2.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-32-2.png)<!-- -->
 
 ### 0.10.2 sRNA-seq
 
@@ -1285,7 +1351,7 @@ ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ### 0.10.3 lncRNA
 
@@ -1316,4 +1382,4 @@ ggplot(plot_data_tissue, aes(y = lncRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](12-Ptuh-WGBS_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->

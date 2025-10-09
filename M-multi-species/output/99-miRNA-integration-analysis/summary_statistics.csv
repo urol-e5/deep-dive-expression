@@ -1,0 +1,9 @@
+"metric","value"
+"total_mirnas",121
+"total_interactions",11656
+"significant_interactions",677
+"species_count",3
+"expression_range_min",5.26964308805822
+"expression_range_max",642916.856940613
+"correlation_range_min",-0.999999797342096
+"correlation_range_max",1

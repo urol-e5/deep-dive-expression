@@ -389,6 +389,24 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+``` r
+alignment_rate <- read.csv("../output/08-Apul-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+```
+
+                      Sample Score_Min Alignment_Rate
+    1 trimmed_ACR-140-TP2_S5    L0-1.0           51.0
+    2 trimmed_ACR-145-TP2_S3    L0-1.0           52.4
+    3 trimmed_ACR-150-TP2_S2    L0-1.0           48.4
+    4 trimmed_ACR-173-TP2_S4    L0-1.0           50.7
+    5 trimmed_ACR-178-TP2_S1    L0-1.0           51.9
+
+``` r
+mean(alignment_rate$Alignment_Rate)
+```
+
+    [1] 50.88
+
 ### 0.5.1 Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
 
 ## 0.6 Post-alignment code is based once again on [Steven’s code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
@@ -674,13 +692,13 @@ load("../output/08-Apul-WGBS/methylkit/MethylObj_filtered.RData")
 PCASamples(meth_filter)
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 clusterSamples(meth_filter, dist = "correlation", method = "ward", plot = TRUE)
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
     Call:
     hclust(d = d, method = HCLUST.METHODS[hclust.method])
@@ -706,6 +724,13 @@ getCorrelation(meth_filter)
 library("genomationData")
 library("genomation")
 library("GenomicRanges")
+
+# get a list of all chromosomes and lengths in the genome
+chr_sizes <- read.table("../data/Apulchra-genome.fa.fai", header = FALSE)[,1:2]
+colnames(chr_sizes) <- c("seqnames", "seqlengths")
+
+genome_GR <- GRanges(seqnames = chr_sizes$seqnames,
+                     ranges   = IRanges(start = 1, end = chr_sizes$seqlengths))
 
 # convert methylation data to GRange object
 meth_GR <- as(meth_filter, "GRanges")
@@ -799,20 +824,18 @@ TE <- GRanges(
   repeat_name = rmsk$repeat_name
 )
 
-TE$type <- "transposable_element"
-
 head(TE)
 ```
 
-    GRanges object with 6 ranges and 2 metadata columns:
-          seqnames    ranges strand |      repeat_name                 type
-             <Rle> <IRanges>  <Rle> |      <character>          <character>
-      [1] ntLink_0     38-57      * |           (TTG)n transposable_element
-      [2] ntLink_0 1219-1282      * |          (TTTC)n transposable_element
-      [3] ntLink_0 7386-7436      * |             (A)n transposable_element
-      [4] ntLink_0 8628-8680      * |        (TTAGGG)n transposable_element
-      [5] ntLink_0 8762-8802      * |       (TTTAGGG)n transposable_element
-      [6] ntLink_0 9000-9223      * | rnd-1_family-302 transposable_element
+    GRanges object with 6 ranges and 1 metadata column:
+          seqnames    ranges strand |      repeat_name
+             <Rle> <IRanges>  <Rle> |      <character>
+      [1] ntLink_0     38-57      * |           (TTG)n
+      [2] ntLink_0 1219-1282      * |          (TTTC)n
+      [3] ntLink_0 7386-7436      * |             (A)n
+      [4] ntLink_0 8628-8680      * |        (TTAGGG)n
+      [5] ntLink_0 8762-8802      * |       (TTTAGGG)n
+      [6] ntLink_0 9000-9223      * | rnd-1_family-302
       -------
       seqinfo: 174 sequences from an unspecified genome; no seqlengths
 
@@ -876,25 +899,36 @@ head(lncRNAs)
 ``` r
 # Define intergenic = genome - all annotations
 # First combine all annotated regions
-all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE, lncRNAs, miRNAs))
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, lncRNAs, miRNAs))
 
-# Define genome bounds from methylation object
-genome_range <- GenomicRanges::reduce(meth_GR)
+# Intergenic CpGs = All CpGs not in above annotated regions
+intergenic <- GenomicRanges::setdiff(genome_GR, all_annotated, ignore.strand=TRUE)
 
-# Intergenic = genome - annotated
-intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
+# TEs - intergenic
+
+TE_intergenic <- IRanges::subsetByOverlaps(TE, intergenic, ignore.strand = TRUE)
+
+# TEs - exonic
+
+TE_exonic <- IRanges::subsetByOverlaps(TE, exons, ignore.strand = TRUE)
+
+# TEs - intronic
+
+TE_intronic <- IRanges::subsetByOverlaps(TE, introns, ignore.strand = TRUE)
 ```
 
 ``` r
 # Priority list
 region_priority <- list(
-  `5UTR` = gff5UTR,
-  `3UTR` = gff3UTR,
-  exon = exons,
-  intron = introns,
   miRNA = miRNAs,
   lncRNA = lncRNAs,
-  TE = TE,
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  TE_exonic = TE_exonic,
+  TE_intronic = TE_intronic,
+  exon = exons,
+  intron = introns,
+  TE_intergenic = TE_intergenic,
   intergenic = intergenic
 )
 
@@ -915,34 +949,43 @@ for (region_name in names(region_priority)) {
   cpg_annot[full_indices] <- region_name
   unassigned[full_indices] <- FALSE  # Mark these as assigned
 }
-
-# Replace any remaining NA with "unassigned" or "intergenic"
-cpg_annot[is.na(cpg_annot)] <- "intergenic"
 ```
 
 ### 0.9.1 Region stacked bars: all CpGs
 
 ``` r
-df_annotated <- as.data.frame(meth_GR)
+df_annotated <- meth_matrix
 df_annotated$region <- cpg_annot
 
-#set as factor
-df_annotated$region <- factor(df_annotated$region,
-                              levels = c("intergenic", "TE", "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+table(df_annotated$region)
+```
 
+             3UTR          5UTR          exon    intergenic        intron 
+           476991        613214       1423622       2081605       2313446 
+           lncRNA         miRNA     TE_exonic TE_intergenic   TE_intronic 
+           708200            18         18610        526733        434719 
+
+``` r
+#set as factor
+df_annotated$region <- factor(df_annotated$region,levels = c("intergenic", "TE_intergenic",
+                                                             "TE_exonic",
+                                                             "TE_intronic",
+                                                             "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
 blue_palette <- c(
-  "intergenic" = "#deebf7",  
-  "TE"         = "#c6dbef",
-  "lncRNA"     = "#9ecae1",
-  "miRNA"      = "red",#"miRNA"      = "#6baed6",
-  "3UTR"       = "#4292c6",
-  "5UTR"       = "#2171b5",
-  "intron"     = "#08519c",
-  "exon"       = "#08306b"  
+  "intergenic"     = "#deebf7",  
+  "TE_intergenic"  = "#c6dbef",
+  "TE_exonic"      = "#9ecae1",
+  "TE_intronic"    = "#6baed6",
+  "lncRNA"         = "#4292c6",
+  "miRNA"          = "#7b3294", 
+  "3UTR"           = "#2171b5",  
+  "5UTR"           = "#084594",  
+  "intron"         = "#08306b", 
+  "exon"           = "#041f3d"  
 )
 
-ggplot(df_annotated, aes(x = strand, fill = region)) +
-  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+ggplot(df_annotated, aes(x=1,fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.1) +
   theme_minimal() +
   labs(y = "% CpGs",
     fill = "Genomic Region") +
@@ -950,7 +993,7 @@ ggplot(df_annotated, aes(x = strand, fill = region)) +
   scale_fill_manual(values = blue_palette)
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ### 0.9.2 Region stacked bars: CpGs by methylation status
 
@@ -966,45 +1009,54 @@ low_thresh <- 10
 high_thresh <- 50
 df_annotated$meth_status <- cut(df_annotated$avg_meth,
                                 breaks = c(-Inf, low_thresh, high_thresh, Inf),
-                                labels = c("lowly", "moderately", "highly"))
+                                labels = c("Low (< 10%)", "Moderate", "High (> 50%)"))
 ```
 
 ``` r
-df_annotated_facet <- df_annotated %>%
+df_annotated <- df_annotated %>%
   mutate(facet_group = meth_status) %>%
   bind_rows(
-    df_annotated %>% mutate(facet_group = "all")
+    df_annotated %>% mutate(facet_group = "All 10X CpGs")
   )
 
-df_annotated_facet$facet_group <- factor(df_annotated_facet$facet_group, levels = c("all", "highly","moderately","lowly"))
+df_annotated$facet_group <- factor(df_annotated$facet_group, levels = c("All 10X CpGs", "Low (< 10%)", "Moderate", "High (> 50%)"))
 
-ggplot(df_annotated_facet, aes(x = strand, fill = region)) +
+ggplot(df_annotated, aes(x = 1, fill = region)) +
   geom_bar(position = "fill",color="darkgrey",size=0.05) +
   theme_minimal() +
-  labs(y = "% CpGs",
-    fill = "Genomic Region") +
+  labs(y = "% CpGs in Feature",
+    fill = "Genomic Feature", title="Methylation Landscape of Acropora pulchra: By Methylation Level") +
   theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
-  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1)
+  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1) +
+  scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
+ggsave("../code/08-Apul-WGBS_files/figures/CpG_landscape_methylation_facet.jpeg", width = 8, height = 5, dpi = 600)
+
 ggplot(df_annotated, aes(x = region, fill = meth_status)) +
-  geom_bar(position = "fill") +  # stacked bar normalized to proportions
+  geom_bar(position = "fill") + 
   theme_minimal() +
   labs(
-    title = "Proportion of CpG Methylation Status by Region",
-    x = "Genomic Region",
-    y = "Proportion of CpGs",
+    title = "Methylation Landscape of Acropora pulchra: By Genomic Feature",
+    x = "Genomic Feature",
+    y = "% of CpGs with Methylation Stauts",
     fill = "Methylation Status"
   ) +
-  scale_fill_manual(values = c(lowly = "#3498db", moderately = "#bdc3c7", highly = "#e74c3c")) +
+  scale_fill_manual(values = c("Low (< 10%)" = "#3498db", "Moderate" = "#bdc3c7", "High (> 50%)" = "#e74c3c")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::percent_format())
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-26-2.png)<!-- -->
+
+``` r
+ggsave("../code/08-Apul-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/08-Apul-WGBS/CpG_meth_genome_feature_annotated.csv")
+```
 
 ``` r
 df_summary <- df_annotated %>%
@@ -1013,17 +1065,26 @@ df_summary <- df_annotated %>%
 df_summary
 ```
 
-    # A tibble: 8 × 2
-      region     mean_meth
-      <fct>          <dbl>
-    1 intergenic      9.19
-    2 TE              9.96
-    3 lncRNA          7.24
-    4 miRNA           5.77
-    5 3UTR            7.48
-    6 5UTR            6.32
-    7 intron          9.74
-    8 exon            9.54
+    # A tibble: 10 × 2
+       region        mean_meth
+       <fct>             <dbl>
+     1 intergenic         9.19
+     2 TE_intergenic      9.96
+     3 TE_exonic         13.1 
+     4 TE_intronic       12.8 
+     5 lncRNA             7.09
+     6 miRNA              5.32
+     7 3UTR               7.54
+     8 5UTR               6.38
+     9 intron             9.35
+    10 exon               9.57
+
+``` r
+df_summary %>% ggplot(aes(x = region, y = mean_meth)) +
+  geom_bar(stat="identity")
+```
+
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
 ### 0.9.3 Sample Methylation boxplots
 
@@ -1057,7 +1118,7 @@ ggplot(meth_summary, aes(x = region, y = mean_meth)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 ### 0.9.4 Extract methylation count matrix for transcripts
 
@@ -1200,7 +1261,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 ## Normalized counts:
@@ -1237,7 +1298,7 @@ ggplot(plot_data_tissue, aes(y = mRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-30-2.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-32-2.png)<!-- -->
 
 ### 0.10.2 sRNA-seq
 
@@ -1268,7 +1329,7 @@ ggplot(plot_data_tissue, aes(y = miRNA_norm_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
 
 ### 0.10.3 lncRNA
 
@@ -1299,4 +1360,4 @@ ggplot(plot_data_tissue, aes(y = lncRNA_count, x = percent_meth)) +
   theme_minimal()
 ```
 
-![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](08-Apul-WGBS_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->

@@ -433,6 +433,11 @@ wc -l "${OUTPUT_DIR}/lncRNA.gtf"
 
 # Summary Table
 
+```{bash}
+
+```
+
+
 ```{r summary, engine='bash'}
 tf_file="${OUTPUT_DIR}/lncRNA.gtf"
 

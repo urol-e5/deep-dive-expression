@@ -346,6 +346,14 @@ for file in ${output_dir}/*_report.txt; do
 done
 ```
 
+```{r}
+alignment_rate <- read.csv("../output/08-Apul-WGBS/bismark_cutadapt/alignment_summary.csv")
+alignment_rate
+
+mean(alignment_rate$Alignment_Rate)
+```
+
+
 ### Output file location: [All Bismark output files](https://gannet.fish.washington.edu/gitrepos/urol-e5/deep-dive-expression/D-Apul/output/08-Apul-WGBS/bismark_cutadapt/)
 
 ## Post-alignment code is based once again on [Steven's code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/15.5-Apul-bismark.qmd)
@@ -620,6 +628,13 @@ library("genomationData")
 library("genomation")
 library("GenomicRanges")
 
+# get a list of all chromosomes and lengths in the genome
+chr_sizes <- read.table("../data/Apulchra-genome.fa.fai", header = FALSE)[,1:2]
+colnames(chr_sizes) <- c("seqnames", "seqlengths")
+
+genome_GR <- GRanges(seqnames = chr_sizes$seqnames,
+                     ranges   = IRanges(start = 1, end = chr_sizes$seqlengths))
+
 # convert methylation data to GRange object
 meth_GR <- as(meth_filter, "GRanges")
 
@@ -670,8 +685,6 @@ TE <- GRanges(
   repeat_name = rmsk$repeat_name
 )
 
-TE$type <- "transposable_element"
-
 head(TE)
 ```
 
@@ -695,25 +708,36 @@ head(lncRNAs)
 ```{r}
 # Define intergenic = genome - all annotations
 # First combine all annotated regions
-all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, TE, lncRNAs, miRNAs))
+all_annotated <- GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns, lncRNAs, miRNAs))
 
-# Define genome bounds from methylation object
-genome_range <- GenomicRanges::reduce(meth_GR)
+# Intergenic CpGs = All CpGs not in above annotated regions
+intergenic <- GenomicRanges::setdiff(genome_GR, all_annotated, ignore.strand=TRUE)
 
-# Intergenic = genome - annotated
-intergenic <- GenomicRanges::setdiff(genome_range, all_annotated)
+# TEs - intergenic
+
+TE_intergenic <- IRanges::subsetByOverlaps(TE, intergenic, ignore.strand = TRUE)
+
+# TEs - exonic
+
+TE_exonic <- IRanges::subsetByOverlaps(TE, exons, ignore.strand = TRUE)
+
+# TEs - intronic
+
+TE_intronic <- IRanges::subsetByOverlaps(TE, introns, ignore.strand = TRUE)
 ```
 
 ```{r}
 # Priority list
 region_priority <- list(
-  `5UTR` = gff5UTR,
-  `3UTR` = gff3UTR,
-  exon = exons,
-  intron = introns,
   miRNA = miRNAs,
   lncRNA = lncRNAs,
-  TE = TE,
+  `5UTR` = gff5UTR,
+  `3UTR` = gff3UTR,
+  TE_exonic = TE_exonic,
+  TE_intronic = TE_intronic,
+  exon = exons,
+  intron = introns,
+  TE_intergenic = TE_intergenic,
   intergenic = intergenic
 )
 
@@ -734,35 +758,39 @@ for (region_name in names(region_priority)) {
   cpg_annot[full_indices] <- region_name
   unassigned[full_indices] <- FALSE  # Mark these as assigned
 }
-
-# Replace any remaining NA with "unassigned" or "intergenic"
-cpg_annot[is.na(cpg_annot)] <- "intergenic"
-
 ```
+
 
 ### Region stacked bars: all CpGs
 
 ```{r}
-df_annotated <- as.data.frame(meth_GR)
+df_annotated <- meth_matrix
 df_annotated$region <- cpg_annot
 
-#set as factor
-df_annotated$region <- factor(df_annotated$region,
-                              levels = c("intergenic", "TE", "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
+table(df_annotated$region)
+```
 
+```{r}
+#set as factor
+df_annotated$region <- factor(df_annotated$region,levels = c("intergenic", "TE_intergenic",
+                                                             "TE_exonic",
+                                                             "TE_intronic",
+                                                             "lncRNA","miRNA","3UTR", "5UTR", "intron", "exon"))
 blue_palette <- c(
-  "intergenic" = "#deebf7",  
-  "TE"         = "#c6dbef",
-  "lncRNA"     = "#9ecae1",
-  "miRNA"      = "red",#"miRNA"      = "#6baed6",
-  "3UTR"       = "#4292c6",
-  "5UTR"       = "#2171b5",
-  "intron"     = "#08519c",
-  "exon"       = "#08306b"  
+  "intergenic"     = "#deebf7",  
+  "TE_intergenic"  = "#c6dbef",
+  "TE_exonic"      = "#9ecae1",
+  "TE_intronic"    = "#6baed6",
+  "lncRNA"         = "#4292c6",
+  "miRNA"          = "#7b3294", 
+  "3UTR"           = "#2171b5",  
+  "5UTR"           = "#084594",  
+  "intron"         = "#08306b", 
+  "exon"           = "#041f3d"  
 )
 
-ggplot(df_annotated, aes(x = strand, fill = region)) +
-  geom_bar(position = "fill",color="darkgrey",size=0.05) +
+ggplot(df_annotated, aes(x=1,fill = region)) +
+  geom_bar(position = "fill",color="darkgrey",size=0.1) +
   theme_minimal() +
   labs(y = "% CpGs",
     fill = "Genomic Region") +
@@ -784,39 +812,45 @@ low_thresh <- 10
 high_thresh <- 50
 df_annotated$meth_status <- cut(df_annotated$avg_meth,
                                 breaks = c(-Inf, low_thresh, high_thresh, Inf),
-                                labels = c("lowly", "moderately", "highly"))
+                                labels = c("Low (< 10%)", "Moderate", "High (> 50%)"))
 ```
 
 ```{r}
-df_annotated_facet <- df_annotated %>%
+df_annotated <- df_annotated %>%
   mutate(facet_group = meth_status) %>%
   bind_rows(
-    df_annotated %>% mutate(facet_group = "all")
+    df_annotated %>% mutate(facet_group = "All 10X CpGs")
   )
 
-df_annotated_facet$facet_group <- factor(df_annotated_facet$facet_group, levels = c("all", "highly","moderately","lowly"))
+df_annotated$facet_group <- factor(df_annotated$facet_group, levels = c("All 10X CpGs", "Low (< 10%)", "Moderate", "High (> 50%)"))
 
-ggplot(df_annotated_facet, aes(x = strand, fill = region)) +
+ggplot(df_annotated, aes(x = 1, fill = region)) +
   geom_bar(position = "fill",color="darkgrey",size=0.05) +
   theme_minimal() +
-  labs(y = "% CpGs",
-    fill = "Genomic Region") +
+  labs(y = "% CpGs in Feature",
+    fill = "Genomic Feature", title="Methylation Landscape of Acropora pulchra: By Methylation Level") +
   theme(axis.title.x = element_blank(),axis.text.x = element_blank(), panel.grid.minor = element_blank(),panel.grid.major.x = element_blank()) +
-  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1)
+  scale_fill_manual(values = blue_palette)  + facet_wrap(~facet_group,nrow=1) +
+  scale_y_continuous(labels = scales::percent_format())
+
+ggsave("../code/08-Apul-WGBS_files/figures/CpG_landscape_methylation_facet.jpeg", width = 8, height = 5, dpi = 600)
 
 ggplot(df_annotated, aes(x = region, fill = meth_status)) +
-  geom_bar(position = "fill") +  # stacked bar normalized to proportions
+  geom_bar(position = "fill") + 
   theme_minimal() +
   labs(
-    title = "Proportion of CpG Methylation Status by Region",
-    x = "Genomic Region",
-    y = "Proportion of CpGs",
+    title = "Methylation Landscape of Acropora pulchra: By Genomic Feature",
+    x = "Genomic Feature",
+    y = "% of CpGs with Methylation Stauts",
     fill = "Methylation Status"
   ) +
-  scale_fill_manual(values = c(lowly = "#3498db", moderately = "#bdc3c7", highly = "#e74c3c")) +
+  scale_fill_manual(values = c("Low (< 10%)" = "#3498db", "Moderate" = "#bdc3c7", "High (> 50%)" = "#e74c3c")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::percent_format())
 
+ggsave("../code/08-Apul-WGBS_files/figures/CpG_landscape_methylation_facet_by_feature.jpeg", width = 8, height = 5, dpi = 600)
+
+write.csv(df_annotated %>% select(region,avg_meth,meth_status), "../output/08-Apul-WGBS/CpG_meth_genome_feature_annotated.csv")
 ```
 
 ```{r}
@@ -824,6 +858,9 @@ df_summary <- df_annotated %>%
   group_by(region) %>%
   summarise(mean_meth = mean(avg_meth, na.rm = TRUE))
 df_summary
+
+df_summary %>% ggplot(aes(x = region, y = mean_meth)) +
+  geom_bar(stat="identity")
 ```
 
 ### Sample Methylation boxplots
