@@ -20,6 +20,8 @@ bibliography: ../../references.bib
 link-citations: true
 ---
 
+Reran 10/09/2025 to incorporate changes due to updated lncRNA counts matrix
+
 ```{r load packages}
 library(dplyr)
 library(ggplot2)
@@ -312,7 +314,7 @@ p <- ggraph(g_tbl, layout = "fr") +
   ) +
 
   theme_graph() +
-  labs(title = "miRNA-mRNA Interaction Network")
+  labs(title = "miRNA-lncRNA-mRNA Interaction Network")
 
 print(p)
 

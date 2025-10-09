@@ -13,6 +13,9 @@ Kathleen Durkin
 - <a href="#6-plotting-with-igraph" id="toc-6-plotting-with-igraph">6
   Plotting with igraph</a>
 
+Reran 10/09/2025 to incorporate changes due to updated lncRNA counts
+matrix
+
 ``` r
 library(dplyr)
 ```
@@ -323,7 +326,7 @@ edges_pval_0.05 <- edges %>% filter(p_value < 0.05)
 nrow(edges_pval_0.05)
 ```
 
-    ## [1] 1254
+    ## [1] 1466
 
 Nodes:
 
@@ -346,7 +349,7 @@ nodes_pval_0.05 <- nodes_pval_0.05 %>%
 nrow(nodes_pval_0.05)
 ```
 
-    ## [1] 1132
+    ## [1] 1266
 
 # 3 pval \< 0.01
 
@@ -357,7 +360,7 @@ edges_pval_0.01 <- edges %>% filter(p_value < 0.01)
 nrow(edges_pval_0.01)
 ```
 
-    ## [1] 230
+    ## [1] 270
 
 Nodes:
 
@@ -380,7 +383,7 @@ nodes_pval_0.01 <- nodes_pval_0.01 %>%
 nrow(nodes_pval_0.01)
 ```
 
-    ## [1] 246
+    ## [1] 278
 
 # 4 Save
 
@@ -437,7 +440,7 @@ p <- ggraph(g_tbl, layout = "fr") +
   ) +
 
   theme_graph() +
-  labs(title = "miRNA-mRNA Interaction Network")
+  labs(title = "miRNA-lncRNA-mRNA Interaction Network")
 
 print(p)
 ```

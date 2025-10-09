@@ -417,7 +417,7 @@ p <- ggraph(g_tbl, layout = "fr") +
   ) +
 
   theme_graph() +
-  labs(title = "miRNA-mRNA Interaction Network")
+  labs(title = "miRNA-lncRNA-mRNA Interaction Network")
 
 print(p)
 ```
