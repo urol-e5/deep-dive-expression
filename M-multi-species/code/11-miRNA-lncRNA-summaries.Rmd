@@ -1,0 +1,249 @@
+---
+title: "11-miRNA-lncRNA-summaries"
+author: "Kathleen Durkin"
+date: "2025-10-09"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+Load packages
+```{r}
+library(dplyr)
+library(readr)
+library(stringr)
+library(tidyr)
+```
+
+
+## Apul
+
+Reminder that miRanda output files are formatted as such:
+"miRNA", "lncRNA", "score", "energy", "query_start_end", "subject_start_end", "total_bp_shared", "query_similar", "subject_similar"
+
+Jill has previously suggested filtering miRNA-lncRNA binding results to retain only instances in which at least 75% of the miRNA query is complementary, so I will include this as a filter option in the below summary stats (query_similar > 75%). Note, however, that the query may not be the entire miRNA, it is the portion of the miRNA that is predicted to bind. So, for example, the query may be positions 2 to 10 on the miRNA (likely the seed) and have 100% query similarity. This would indicate that those 8 nucleotides of the miRNA are perfectly complementary to a set of 8 nucleotides in the lncRNA, NOT that the entire ~22nt long miRNA is perfectly complementary. For now, though, I'll include filters for just "query_similar" because that's what Jill used. We shouldn't need to use that filter in final results, because the join of predicted binding + coexpression is already a sufficient reduction of network size.
+
+
+```{r}
+
+apul_miranda <- "../../D-Apul/output/17-Apul-miRNA-lncRNA-BLASTs-RNAhybrid/Apul-miRanda-lncRNA-strict-parsed.txt"
+apul_pcc_link <- "https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv"
+apul_pcc_loc <- "../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv"
+apul_miranda_pcc <- "../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv"
+
+# ---- Optionally PCC download file if missing ----
+if (!file.exists(apul_pcc_loc)) {
+  download.file(apul_pcc_link, apul_pcc_loc)
+}
+
+# ---- miRanda binding interactions ----
+cat("\nNum. of miRNA-lncRNA binding interactions (miRanda):\n")
+num_clusters <- sum(grepl("^>Cluster", readLines(apul_miranda)))
+print(num_clusters)
+
+cat("\nNum. of miRNA-lncRNA bindings >75% (miRanda):\n")
+miranda_df <- read.table(apul_miranda, header = FALSE, sep = "\t", quote = "", stringsAsFactors = FALSE)
+miranda_df$V8 <- as.numeric(str_remove(miranda_df$V8, "%"))
+num_75 <- sum(miranda_df$V8 >= 75, na.rm = TRUE)
+print(num_75)
+
+# ---- Significant PCC correlations ----
+pcc_df <- read_csv(apul_pcc_loc, show_col_types = FALSE)
+
+count_sig <- sum(pcc_df[[5]] < 0.05, na.rm = TRUE)
+count_sig_pos <- sum(pcc_df[[5]] < 0.05 & pcc_df[[4]] > 0, na.rm = TRUE)
+percent <- if (count_sig > 0) round((count_sig_pos / count_sig) * 100, 2) else 0
+
+cat("\nSignificant PCC correlations + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos, "\n")
+cat("Percent positive:               ", percent, "%\n")
+
+# ---- Overlap (binding AND sig. PCC) ----
+miranda_pcc <- read_csv(apul_miranda_pcc, show_col_types = FALSE)
+
+# Clean columns 9, 12, 13 (remove quotes/percent)
+miranda_pcc <- miranda_pcc %>%
+  mutate(
+    across(c(9, 12, 13), ~ as.numeric(str_remove_all(as.character(.x), '["%]')))
+  )
+
+count_sig2 <- sum(miranda_pcc[[13]] < 0.05, na.rm = TRUE)
+count_sig_pos2 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0, na.rm = TRUE)
+percent2 <- if (count_sig2 > 0) round((count_sig_pos2 / count_sig2) * 100, 2) else 0
+
+cat("\nOverlap (binding AND sig. PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig2, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos2, "\n")
+cat("Percent positive:               ", percent2, "%\n")
+
+# ---- Overlap >75% (binding >75% AND PCC) ----
+count_sig3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+count_sig_pos3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+percent3 <- if (count_sig3 > 0) round((count_sig_pos3 / count_sig3) * 100, 2) else 0
+
+cat("\nOverlap >75% (binding >75% AND PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig3, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos3, "\n")
+cat("Percent positive:               ", percent3, "%\n")
+
+```
+
+
+
+## Peve
+
+```{r}
+
+peve_miranda <- "../../E-Peve/output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict-parsed.txt"
+peve_pcc_link <- "https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"
+peve_pcc_loc <- "../../E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"
+peve_miranda_pcc <- "../../E-Peve/output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv"
+
+# ---- Optionally PCC download file if missing ----
+if (!file.exists(peve_pcc_loc)) {
+  download.file(peve_pcc_link, peve_pcc_loc)
+}
+
+
+# ---- miRanda binding interactions ----
+cat("\nNum. of miRNA-lncRNA binding interactions (miRanda):\n")
+num_clusters <- sum(grepl("^>Cluster", readLines(peve_miranda)))
+print(num_clusters)
+
+cat("\nNum. of miRNA-lncRNA bindings >75% (miRanda):\n")
+miranda_df <- read.table(peve_miranda, header = FALSE, sep = "\t", quote = "", stringsAsFactors = FALSE)
+miranda_df$V8 <- as.numeric(str_remove(miranda_df$V8, "%"))
+num_75 <- sum(miranda_df$V8 >= 75, na.rm = TRUE)
+print(num_75)
+
+# ---- Significant PCC correlations ----
+pcc_df <- read_csv(peve_pcc_loc, show_col_types = FALSE)
+
+count_sig <- sum(pcc_df[[5]] < 0.05, na.rm = TRUE)
+count_sig_pos <- sum(pcc_df[[5]] < 0.05 & pcc_df[[4]] > 0, na.rm = TRUE)
+percent <- if (count_sig > 0) round((count_sig_pos / count_sig) * 100, 2) else 0
+
+cat("\nSignificant PCC correlations + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos, "\n")
+cat("Percent positive:               ", percent, "%\n")
+
+# ---- Overlap (binding AND sig. PCC) ----
+miranda_pcc <- read_csv(peve_miranda_pcc, show_col_types = FALSE)
+
+# Clean columns 9, 12, 13 (remove quotes/percent)
+miranda_pcc <- miranda_pcc %>%
+  mutate(
+    across(c(9, 12, 13), ~ as.numeric(str_remove_all(as.character(.x), '["%]')))
+  )
+
+count_sig2 <- sum(miranda_pcc[[13]] < 0.05, na.rm = TRUE)
+count_sig_pos2 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0, na.rm = TRUE)
+percent2 <- if (count_sig2 > 0) round((count_sig_pos2 / count_sig2) * 100, 2) else 0
+
+cat("\nOverlap (binding AND sig. PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig2, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos2, "\n")
+cat("Percent positive:               ", percent2, "%\n")
+
+# ---- Overlap >75% (binding >75% AND PCC) ----
+count_sig3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+count_sig_pos3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+percent3 <- if (count_sig3 > 0) round((count_sig_pos3 / count_sig3) * 100, 2) else 0
+
+cat("\nOverlap >75% (binding >75% AND PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig3, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos3, "\n")
+cat("Percent positive:               ", percent3, "%\n")
+
+```
+
+## Ptuh
+
+```{r}
+
+ptuh_miranda <- "../../F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict-parsed.txt"
+ptuh_pcc_link <- "https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"
+ptuh_pcc_loc <- "../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"
+ptuh_miranda_pcc <- "../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv"
+
+# ---- Optionally PCC download file if missing ----
+if (!file.exists(ptuh_pcc_loc)) {
+  download.file(ptuh_pcc_link, ptuh_pcc_loc)
+}
+
+# ---- File line counts ----
+cat("Num. of lines in miranda_PCC file:\n")
+print(length(readLines(ptuh_miranda_pcc)))
+
+# ---- miRanda binding interactions ----
+cat("\nNum. of miRNA-lncRNA binding interactions (miRanda):\n")
+num_clusters <- sum(grepl("^>Cluster", readLines(ptuh_miranda)))
+print(num_clusters)
+
+cat("\nNum. of miRNA-lncRNA bindings >75% (miRanda):\n")
+miranda_df <- read.table(ptuh_miranda, header = FALSE, sep = "\t", quote = "", stringsAsFactors = FALSE)
+miranda_df$V8 <- as.numeric(str_remove(miranda_df$V8, "%"))
+num_75 <- sum(miranda_df$V8 >= 75, na.rm = TRUE)
+print(num_75)
+
+# ---- Significant PCC correlations ----
+pcc_df <- read_csv(ptuh_pcc_loc, show_col_types = FALSE)
+
+count_sig <- sum(pcc_df[[5]] < 0.05, na.rm = TRUE)
+count_sig_pos <- sum(pcc_df[[5]] < 0.05 & pcc_df[[4]] > 0, na.rm = TRUE)
+percent <- if (count_sig > 0) round((count_sig_pos / count_sig) * 100, 2) else 0
+
+cat("\nSignificant PCC correlations + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos, "\n")
+cat("Percent positive:               ", percent, "%\n")
+
+# ---- Overlap (binding AND sig. PCC) ----
+miranda_pcc <- read_csv(ptuh_miranda_pcc, show_col_types = FALSE)
+
+# Clean columns 9, 12, 13 (remove quotes/percent)
+miranda_pcc <- miranda_pcc %>%
+  mutate(
+    across(c(9, 12, 13), ~ as.numeric(str_remove_all(as.character(.x), '["%]')))
+  )
+
+count_sig2 <- sum(miranda_pcc[[13]] < 0.05, na.rm = TRUE)
+count_sig_pos2 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0, na.rm = TRUE)
+percent2 <- if (count_sig2 > 0) round((count_sig_pos2 / count_sig2) * 100, 2) else 0
+
+cat("\nOverlap (binding AND sig. PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig2, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos2, "\n")
+cat("Percent positive:               ", percent2, "%\n")
+
+# ---- Overlap >75% (binding >75% AND PCC) ----
+count_sig3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+count_sig_pos3 <- sum(miranda_pcc[[13]] < 0.05 & miranda_pcc[[12]] > 0 & miranda_pcc[[9]] > 75, na.rm = TRUE)
+percent3 <- if (count_sig3 > 0) round((count_sig_pos3 / count_sig3) * 100, 2) else 0
+
+cat("\nOverlap >75% (binding >75% AND PCC) + % positive\n")
+cat("Significant PCC (p<0.05):       ", count_sig3, "\n")
+cat("Significant (p<0.05), pos. PCC: ", count_sig_pos3, "\n")
+cat("Percent positive:               ", percent3, "%\n")
+
+```
