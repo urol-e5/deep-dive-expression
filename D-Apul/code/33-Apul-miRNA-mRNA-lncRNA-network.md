@@ -12,8 +12,10 @@ Kathleen Durkin
   Cytoscape</a>
 - <a href="#6-plotting-with-igraph" id="toc-6-plotting-with-igraph">6
   Plotting with igraph</a>
+  - <a href="#61-p--005" id="toc-61-p--005">6.1 p &lt; 0.05</a>
+  - <a href="#62-p--001" id="toc-62-p--001">6.2 p , 0.01</a>
 
-Reran 08/06/2025 to incorporate changes due to updated lncRNA counts
+Reran 10/14/2025 to incorporate changes due to updated lncRNA counts
 matrix
 
 ``` r
@@ -330,7 +332,34 @@ nodes_pval_0.05 <- nodes_pval_0.05 %>%
     grepl("lncRNA", id) ~ "lncRNA",
     TRUE ~ "other"
   ))
+
+nrow(nodes_pval_0.05)
 ```
+
+    ## [1] 2302
+
+``` r
+nrow(filter(nodes_pval_0.05, type=="miRNA"))
+```
+
+    ## [1] 39
+
+``` r
+nrow(filter(nodes_pval_0.05, type=="gene"))
+```
+
+    ## [1] 1821
+
+``` r
+nrow(filter(nodes_pval_0.05, type=="lncRNA"))
+```
+
+    ## [1] 442
+
+When using a PCC significance level of 0.05, there are 2786 edges and
+2302 nodes. In other words, 2302 features (39 miRNA, 1821 mRNA, and 442
+lncRNA) form 2786 pairwise interactions based on both putative binding
+and expression correlation.
 
 # 3 pval \< 0.01
 
@@ -360,7 +389,34 @@ nodes_pval_0.01 <- nodes_pval_0.01 %>%
     grepl("lncRNA", id) ~ "lncRNA",
     TRUE ~ "other"
   ))
+
+nrow(nodes_pval_0.01)
 ```
+
+    ## [1] 624
+
+``` r
+nrow(filter(nodes_pval_0.01, type=="miRNA"))
+```
+
+    ## [1] 39
+
+``` r
+nrow(filter(nodes_pval_0.01, type=="gene"))
+```
+
+    ## [1] 467
+
+``` r
+nrow(filter(nodes_pval_0.01, type=="lncRNA"))
+```
+
+    ## [1] 118
+
+When using a PCC significance level of 0.01, there are 660 edges and 624
+nodes. In other words, 2302 features (39 miRNA, 467 mRNA, and 118
+lncRNA) form 2786 pairwise interactions based on both putative binding
+and expression correlation.
 
 # 4 Save
 
@@ -385,6 +441,48 @@ To load a network into Cytoscape:
 3.  To load “Nodes” file, select File \> Import \> Table from File…
 
 # 6 Plotting with igraph
+
+## 6.1 p \< 0.05
+
+``` r
+# Rename columns for igraph
+colnames(edges_pval_0.05)[1:2] <- c("from", "to")         # For igraph edge input
+colnames(nodes_pval_0.05)[1] <- "name"                    # For igraph vertex input; must match nodes in edges
+
+# Build graph
+g <- graph_from_data_frame(d = edges_pval_0.05, vertices = nodes_pval_0.05, directed = FALSE)
+
+# Edge attributes
+E(g)$edge_color <- ifelse(E(g)$PCC_direction > 0, "positive", "negative")
+
+# Convert to tbl_graph
+g_tbl <- as_tbl_graph(g)
+
+
+p <- ggraph(g_tbl, layout = "fr") +
+  geom_edge_link(aes(edge_width = PCC_magnitude, color = edge_color), alpha = 0.6) +
+  geom_node_point(aes(color = type), size = 2) +
+  scale_edge_width(range = c(0.5, 3)) +
+  
+  # Split color scales
+  scale_edge_color_manual(
+    values = c("positive" = "green3", "negative" = "red"),
+    name = "Correlation Direction"
+  ) +
+  scale_color_manual(
+    values = c("miRNA" = "orange", "gene" = "lightblue", "lncRNA" = "steelblue4"),
+    name = "type"
+  ) +
+
+  theme_graph() +
+  labs(title = "miRNA-lncRNA-mRNA Interaction Network")
+
+print(p)
+```
+
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+## 6.2 p , 0.01
 
 ``` r
 # Rename columns for igraph
@@ -422,4 +520,4 @@ p <- ggraph(g_tbl, layout = "fr") +
 print(p)
 ```
 
-![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
