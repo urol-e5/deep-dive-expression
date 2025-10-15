@@ -361,6 +361,135 @@ When using a PCC significance level of 0.05, there are 2786 edges and
 lncRNA) form 2786 pairwise interactions based on both putative binding
 and expression correlation.
 
+Some more summary stats: Keep in mind that there may be multiple
+predicted interactions between a single feature pair (e.g. a single
+miRNA-mRNA pair), since there may be multiple viable binding sites. One
+must consider both interaction-level and unique feature level (e.g. An
+miRNA may target 15 unique mRNAs via 20 putative interactions)
+
+``` r
+# Helper function to summarize counts
+summarize_counts <- function(df, group_col) {
+  df %>%
+    count({{ group_col }}) %>%
+    summarise(
+      mean = round(mean(n),1),
+      median = round(median(n),1),
+      min = min(n),
+      max = max(n)
+    )
+}
+
+network_summary_stats <- function(edges_df){
+
+# Separate mRNA and lncRNA edges
+mRNA_edges <- edges_df %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
+lncRNA_edges <- edges_df %>% filter(region == "lncRNA")
+
+# ---- For miRNAs ----
+# mRNA interactions (all and unique)
+mRNA_int_all <- summarize_counts(mRNA_edges, source)
+mRNA_int_unique <- summarize_counts(distinct(mRNA_edges, source, target), source)
+
+# lncRNA interactions (all and unique)
+lncRNA_int_all <- summarize_counts(lncRNA_edges, source)
+lncRNA_int_unique <- summarize_counts(distinct(lncRNA_edges, source, target), source)
+
+# ---- For targets ----
+# miRNA interactions on mRNA (all and unique)
+miRNA_int_mRNA_all <- summarize_counts(mRNA_edges, target)
+miRNA_int_mRNA_unique <- summarize_counts(distinct(mRNA_edges, source, target), target)
+
+# miRNA interactions on lncRNA (all and unique)
+miRNA_int_lncRNA_all <- summarize_counts(lncRNA_edges, target)
+miRNA_int_lncRNA_unique <- summarize_counts(distinct(lncRNA_edges, source, target), target)
+
+# ---- Combine into summary table ----
+summary_stats <- tibble(
+  Metric = c(
+    "mRNA interactions per miRNA (all)",
+    "mRNA targets per miRNA (unique)",
+    "lncRNA interactions per miRNA (all)",
+    "lncRNA targets per miRNA (unique)",
+    "miRNA interactions per mRNA (all)",
+    "miRNAs per mRNA (unique)",
+    "miRNA interactions per lncRNA (all)",
+    "miRNAs per lncRNA (unique)"
+  ),
+  Mean = c(
+    mRNA_int_all$mean,
+    mRNA_int_unique$mean,
+    lncRNA_int_all$mean,
+    lncRNA_int_unique$mean,
+    miRNA_int_mRNA_all$mean,
+    miRNA_int_mRNA_unique$mean,
+    miRNA_int_lncRNA_all$mean,
+    miRNA_int_lncRNA_unique$mean
+  ),
+  Median = c(
+    mRNA_int_all$median,
+    mRNA_int_unique$median,
+    lncRNA_int_all$median,
+    lncRNA_int_unique$median,
+    miRNA_int_mRNA_all$median,
+    miRNA_int_mRNA_unique$median,
+    miRNA_int_lncRNA_all$median,
+    miRNA_int_lncRNA_unique$median
+  ),
+  Min = c(
+    mRNA_int_all$min,
+    mRNA_int_unique$min,
+    lncRNA_int_all$min,
+    lncRNA_int_unique$min,
+    miRNA_int_mRNA_all$min,
+    miRNA_int_mRNA_unique$min,
+    miRNA_int_lncRNA_all$min,
+    miRNA_int_lncRNA_unique$min
+  ),
+  Max = c(
+    mRNA_int_all$max,
+    mRNA_int_unique$max,
+    lncRNA_int_all$max,
+    lncRNA_int_unique$max,
+    miRNA_int_mRNA_all$max,
+    miRNA_int_mRNA_unique$max,
+    miRNA_int_lncRNA_all$max,
+    miRNA_int_lncRNA_unique$max
+  )
+)
+
+return(summary_stats)
+}
+
+network_summary_stats(edges_pval_0.05)
+```
+
+    ## # A tibble: 8 × 5
+    ##   Metric                               Mean Median   Min   Max
+    ##   <chr>                               <dbl>  <dbl> <int> <int>
+    ## 1 mRNA interactions per miRNA (all)    57     43       1   199
+    ## 2 mRNA targets per miRNA (unique)      51     39       1   193
+    ## 3 lncRNA interactions per miRNA (all)  15.7    8       1    74
+    ## 4 lncRNA targets per miRNA (unique)    13.5    7.5     1    61
+    ## 5 miRNA interactions per mRNA (all)     1.2    1       1    75
+    ## 6 miRNAs per mRNA (unique)              1.1    1       1     6
+    ## 7 miRNA interactions per lncRNA (all)   1.3    1       1    11
+    ## 8 miRNAs per lncRNA (unique)            1.1    1       1     5
+
+At the interaction-level (which allows for multiple interactions between
+a single feature pair):
+
+Each miRNA has 57 interactions with mRNA and 15.7 interactions with
+lncRNA, on average, though there is quite a bit of variability. Each
+mRNA has an average of 1.2 interactions with miRNA, and each lncRNA has
+an average of 1.3 interactions with miRNA.
+
+At the unique-feature level:
+
+On average, each miRNA has 51 unique mRNA targets and 13.5 unique lncRNA
+targets, though again there is a lot of variation. Both mRNA and lncRNA
+are targeted by 1.1 unique miRNA, on average.
+
 # 3 pval \< 0.01
 
 Edges:
@@ -417,6 +546,42 @@ When using a PCC significance level of 0.01, there are 660 edges and 624
 nodes. In other words, 2302 features (39 miRNA, 467 mRNA, and 118
 lncRNA) form 2786 pairwise interactions based on both putative binding
 and expression correlation.
+
+Some more summary stats: Keep in mind that there may be multiple
+predicted interactions between a single feature pair (e.g. a single
+miRNA-mRNA pair), since there may be multiple viable binding sites. One
+must consider both interaction-level and unique feature level (e.g. An
+miRNA may target 15 unique mRNAs via 20 putative interactions)
+
+``` r
+network_summary_stats(edges_pval_0.01)
+```
+
+    ## # A tibble: 8 × 5
+    ##   Metric                               Mean Median   Min   Max
+    ##   <chr>                               <dbl>  <dbl> <int> <int>
+    ## 1 mRNA interactions per miRNA (all)    12.9    8       1    70
+    ## 2 mRNA targets per miRNA (unique)      12.4    8       1    64
+    ## 3 lncRNA interactions per miRNA (all)   6      3.5     1    30
+    ## 4 lncRNA targets per miRNA (unique)     4.7    3       1    16
+    ## 5 miRNA interactions per mRNA (all)     1.1    1       1     6
+    ## 6 miRNAs per mRNA (unique)              1      1       1     3
+    ## 7 miRNA interactions per lncRNA (all)   1.3    1       1     6
+    ## 8 miRNAs per lncRNA (unique)            1      1       1     5
+
+At the interaction-level (which allows for multiple interactions between
+a single feature pair):
+
+Each miRNA has 12.9 interactions with mRNA and 6.0 interactions with
+lncRNA, on average, though there is quite a bit of variability. Each
+mRNA has an average of 1.1 interactions with miRNA, and each lncRNA has
+an average of 1.3 interactions with miRNA.
+
+At the unique-feature level:
+
+On average, each miRNA has 12.4 unique mRNA targets and 4.7 unique
+lncRNA targets, though again there is a bit of variation. Both mRNA and
+lncRNA are targeted by 1.0 unique miRNA, on average.
 
 # 4 Save
 
@@ -480,7 +645,7 @@ p <- ggraph(g_tbl, layout = "fr") +
 print(p)
 ```
 
-![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ## 6.2 p , 0.01
 
@@ -520,4 +685,4 @@ p <- ggraph(g_tbl, layout = "fr") +
 print(p)
 ```
 
-![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
