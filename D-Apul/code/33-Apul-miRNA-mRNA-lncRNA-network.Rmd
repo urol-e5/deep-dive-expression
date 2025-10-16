@@ -229,111 +229,91 @@ Some more summary stats:
 Keep in mind that there may be multiple predicted interactions between a single feature pair (e.g. a single miRNA-mRNA pair), since there may be multiple viable binding sites. One must consider both interaction-level and unique feature level (e.g. An miRNA may target 15 unique mRNAs via 20 putative interactions)
 
 ```{r}
+
 # Helper function to summarize counts
 summarize_counts <- function(df, group_col) {
   df %>%
     count({{ group_col }}) %>%
     summarise(
-      mean = round(mean(n),1),
-      median = round(median(n),1),
+      mean = signif(mean(n), 3),
+      median = signif(median(n), 3),
       min = min(n),
       max = max(n)
     )
 }
 
-network_summary_stats <- function(edges_df){
+network_summary_stats <- function(edges_df) {
 
-# Separate mRNA and lncRNA edges
-mRNA_edges <- edges_df %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
-lncRNA_edges <- edges_df %>% filter(region == "lncRNA")
+  # Separate mRNA and lncRNA edges
+  mRNA_edges <- edges_df %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
+  lncRNA_edges <- edges_df %>% filter(region == "lncRNA")
 
-# ---- For miRNAs ----
-# mRNA interactions (all and unique)
-mRNA_int_all <- summarize_counts(mRNA_edges, source)
-mRNA_int_unique <- summarize_counts(distinct(mRNA_edges, source, target), source)
+  # ---- For miRNAs ----
+  # mRNA interactions (all and unique)
+  mRNA_int_all <- summarize_counts(mRNA_edges, source)
+  mRNA_int_unique <- summarize_counts(distinct(mRNA_edges, source, target), source)
 
-# lncRNA interactions (all and unique)
-lncRNA_int_all <- summarize_counts(lncRNA_edges, source)
-lncRNA_int_unique <- summarize_counts(distinct(lncRNA_edges, source, target), source)
+  # lncRNA interactions (all and unique)
+  lncRNA_int_all <- summarize_counts(lncRNA_edges, source)
+  lncRNA_int_unique <- summarize_counts(distinct(lncRNA_edges, source, target), source)
 
-# ---- For targets ----
-# miRNA interactions on mRNA (all and unique)
-miRNA_int_mRNA_all <- summarize_counts(mRNA_edges, target)
-miRNA_int_mRNA_unique <- summarize_counts(distinct(mRNA_edges, source, target), target)
+  # ---- For targets ----
+  # miRNA interactions on mRNA (all and unique)
+  miRNA_int_mRNA_all <- summarize_counts(mRNA_edges, target)
+  miRNA_int_mRNA_unique <- summarize_counts(distinct(mRNA_edges, source, target), target)
 
-# miRNA interactions on lncRNA (all and unique)
-miRNA_int_lncRNA_all <- summarize_counts(lncRNA_edges, target)
-miRNA_int_lncRNA_unique <- summarize_counts(distinct(lncRNA_edges, source, target), target)
+  # miRNA interactions on lncRNA (all and unique)
+  miRNA_int_lncRNA_all <- summarize_counts(lncRNA_edges, target)
+  miRNA_int_lncRNA_unique <- summarize_counts(distinct(lncRNA_edges, source, target), target)
 
-# ---- Combine into summary table ----
-summary_stats <- tibble(
-  Metric = c(
-    "mRNA interactions per miRNA (all)",
-    "mRNA targets per miRNA (unique)",
-    "lncRNA interactions per miRNA (all)",
-    "lncRNA targets per miRNA (unique)",
-    "miRNA interactions per mRNA (all)",
-    "miRNAs per mRNA (unique)",
-    "miRNA interactions per lncRNA (all)",
-    "miRNAs per lncRNA (unique)"
-  ),
-  Mean = c(
-    mRNA_int_all$mean,
-    mRNA_int_unique$mean,
-    lncRNA_int_all$mean,
-    lncRNA_int_unique$mean,
-    miRNA_int_mRNA_all$mean,
-    miRNA_int_mRNA_unique$mean,
-    miRNA_int_lncRNA_all$mean,
-    miRNA_int_lncRNA_unique$mean
-  ),
-  Median = c(
-    mRNA_int_all$median,
-    mRNA_int_unique$median,
-    lncRNA_int_all$median,
-    lncRNA_int_unique$median,
-    miRNA_int_mRNA_all$median,
-    miRNA_int_mRNA_unique$median,
-    miRNA_int_lncRNA_all$median,
-    miRNA_int_lncRNA_unique$median
-  ),
-  Min = c(
-    mRNA_int_all$min,
-    mRNA_int_unique$min,
-    lncRNA_int_all$min,
-    lncRNA_int_unique$min,
-    miRNA_int_mRNA_all$min,
-    miRNA_int_mRNA_unique$min,
-    miRNA_int_lncRNA_all$min,
-    miRNA_int_lncRNA_unique$min
-  ),
-  Max = c(
-    mRNA_int_all$max,
-    mRNA_int_unique$max,
-    lncRNA_int_all$max,
-    lncRNA_int_unique$max,
-    miRNA_int_mRNA_all$max,
-    miRNA_int_mRNA_unique$max,
-    miRNA_int_lncRNA_all$max,
-    miRNA_int_lncRNA_unique$max
+  # ---- Proportion of mRNA targets per miRNA ----
+ 
+  # Unique target level
+ miRNA_target_mRNA_prop_unique <- edges_df %>%
+  mutate(type = ifelse(region %in% c("CDS", "3UTR", "5UTR"), "mRNA", "lncRNA")) %>%
+  distinct(source, target, type) %>%                     # Keep unique miRNA–mRNA or miRNA-lncRNA pairs
+  group_by(source, type) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(source) %>%
+  mutate(prop = count / sum(count)) %>%
+  filter(type == "mRNA") %>%                               # Keep only mRNA proportions
+  ungroup() %>%
+  summarise(
+    mean = signif(mean(prop), 3),
+    median = signif(median(prop), 3),
+    min = signif(min(prop), 3),
+    max = signif(max(prop), 3)
   )
-)
 
-return(summary_stats)
+  # ---- Combine into summary table ----
+summary_stats <- bind_rows(
+  mRNA_int_all %>% mutate(Metric = "mRNA interactions per miRNA (all)"),
+  mRNA_int_unique %>% mutate(Metric = "mRNA targets per miRNA (unique)"),
+  lncRNA_int_all %>% mutate(Metric = "lncRNA interactions per miRNA (all)"),
+  lncRNA_int_unique %>% mutate(Metric = "lncRNA targets per miRNA (unique)"),
+  miRNA_int_mRNA_all %>% mutate(Metric = "miRNA interactions per mRNA (all)"),
+  miRNA_int_mRNA_unique %>% mutate(Metric = "miRNAs per mRNA (unique)"),
+  miRNA_int_lncRNA_all %>% mutate(Metric = "miRNA interactions per lncRNA (all)"),
+  miRNA_int_lncRNA_unique %>% mutate(Metric = "miRNAs per lncRNA (unique)"),
+  miRNA_target_mRNA_prop_unique %>% mutate(Metric = "Prop. mRNA targets per miRNA (unique)")
+) %>%
+  select(Metric, everything())
+
+  return(summary_stats)
 }
 
 network_summary_stats(edges_pval_0.05)
+
 ```
 
-At the interaction-level (which allows for multiple interactions between a single feature pair):
-
+**At the interaction-level (which allows for multiple interactions between a single feature pair):**
 Each miRNA has 57 interactions with mRNA and 15.7 interactions with lncRNA, on average, though there is quite a bit of variability. Each mRNA has an average of 1.2 interactions with miRNA, and each lncRNA has an average of 1.3 interactions with miRNA.
 
 
-At the unique-feature level:
-
+**At the unique-feature level:**
 On average, each miRNA has 51 unique mRNA targets and 13.5 unique lncRNA targets, though again there is a lot of variation. Both mRNA and lncRNA are targeted by 1.1 unique miRNA, on average.
 
+Additionally, there is some variation in the relative proportion of miRNA targets that are mRNA. However, unlike in P.tuh, which had some lncRNA-dominant modules, all miRNA modules are dominated by mRNA, with relative proportions ranging from 62.5% mRNA to 100%, with a mean of 82.6%.
 
 # pval \< 0.01
 
@@ -377,22 +357,20 @@ Keep in mind that there may be multiple predicted interactions between a single 
 network_summary_stats(edges_pval_0.01)
 ```
 
-At the interaction-level (which allows for multiple interactions between a single feature pair):
-
+**At the interaction-level (which allows for multiple interactions between a single feature pair):**
 Each miRNA has 12.9 interactions with mRNA and 6.0 interactions with lncRNA, on average, though there is quite a bit of variability. Each mRNA has an average of 1.1 interactions with miRNA, and each lncRNA has an average of 1.3 interactions with miRNA.
 
-
-At the unique-feature level:
-
+**At the unique-feature level:**
 On average, each miRNA has 12.4 unique mRNA targets and 4.7 unique lncRNA targets, though again there is a bit of variation. Both mRNA and lncRNA are targeted by 1.0 unique miRNA, on average.
 
+Additionally, there is variation in the relative proportion of miRNA targets that are mRNA, and this variation is notably higher than our Apul network at the 0.05 significance level. Relative mRNA proportion ranges from 33.3% (lncRNA-dominant) to 100% (mRNA-dominant), with an average of 81.9% (mRNA-dominant)
 
 
 # Save
 
 Save files
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 write.csv(edges_pval_0.05, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(nodes_pval_0.05, "../output/33-Apul-miRNA-mRNA-lncRNA-network/nodes_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(edges_pval_0.01, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.01.csv", quote = FALSE)

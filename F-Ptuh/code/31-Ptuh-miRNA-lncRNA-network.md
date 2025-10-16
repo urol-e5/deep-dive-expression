@@ -388,108 +388,86 @@ summarize_counts <- function(df, group_col) {
   df %>%
     count({{ group_col }}) %>%
     summarise(
-      mean = round(mean(n),1),
-      median = round(median(n),1),
+      mean = signif(mean(n), 3),
+      median = signif(median(n), 3),
       min = min(n),
       max = max(n)
     )
 }
 
-network_summary_stats <- function(edges_df){
+network_summary_stats <- function(edges_df) {
 
-# Separate mRNA and lncRNA edges
-mRNA_edges <- edges_df %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
-lncRNA_edges <- edges_df %>% filter(region == "lncRNA")
+  # Separate mRNA and lncRNA edges
+  mRNA_edges <- edges_df %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
+  lncRNA_edges <- edges_df %>% filter(region == "lncRNA")
 
-# ---- For miRNAs ----
-# mRNA interactions (all and unique)
-mRNA_int_all <- summarize_counts(mRNA_edges, source)
-mRNA_int_unique <- summarize_counts(distinct(mRNA_edges, source, target), source)
+  # ---- For miRNAs ----
+  # mRNA interactions (all and unique)
+  mRNA_int_all <- summarize_counts(mRNA_edges, source)
+  mRNA_int_unique <- summarize_counts(distinct(mRNA_edges, source, target), source)
 
-# lncRNA interactions (all and unique)
-lncRNA_int_all <- summarize_counts(lncRNA_edges, source)
-lncRNA_int_unique <- summarize_counts(distinct(lncRNA_edges, source, target), source)
+  # lncRNA interactions (all and unique)
+  lncRNA_int_all <- summarize_counts(lncRNA_edges, source)
+  lncRNA_int_unique <- summarize_counts(distinct(lncRNA_edges, source, target), source)
 
-# ---- For targets ----
-# miRNA interactions on mRNA (all and unique)
-miRNA_int_mRNA_all <- summarize_counts(mRNA_edges, target)
-miRNA_int_mRNA_unique <- summarize_counts(distinct(mRNA_edges, source, target), target)
+  # ---- For targets ----
+  # miRNA interactions on mRNA (all and unique)
+  miRNA_int_mRNA_all <- summarize_counts(mRNA_edges, target)
+  miRNA_int_mRNA_unique <- summarize_counts(distinct(mRNA_edges, source, target), target)
 
-# miRNA interactions on lncRNA (all and unique)
-miRNA_int_lncRNA_all <- summarize_counts(lncRNA_edges, target)
-miRNA_int_lncRNA_unique <- summarize_counts(distinct(lncRNA_edges, source, target), target)
+  # miRNA interactions on lncRNA (all and unique)
+  miRNA_int_lncRNA_all <- summarize_counts(lncRNA_edges, target)
+  miRNA_int_lncRNA_unique <- summarize_counts(distinct(lncRNA_edges, source, target), target)
 
-# ---- Combine into summary table ----
-summary_stats <- tibble(
-  Metric = c(
-    "mRNA interactions per miRNA (all)",
-    "mRNA targets per miRNA (unique)",
-    "lncRNA interactions per miRNA (all)",
-    "lncRNA targets per miRNA (unique)",
-    "miRNA interactions per mRNA (all)",
-    "miRNAs per mRNA (unique)",
-    "miRNA interactions per lncRNA (all)",
-    "miRNAs per lncRNA (unique)"
-  ),
-  Mean = c(
-    mRNA_int_all$mean,
-    mRNA_int_unique$mean,
-    lncRNA_int_all$mean,
-    lncRNA_int_unique$mean,
-    miRNA_int_mRNA_all$mean,
-    miRNA_int_mRNA_unique$mean,
-    miRNA_int_lncRNA_all$mean,
-    miRNA_int_lncRNA_unique$mean
-  ),
-  Median = c(
-    mRNA_int_all$median,
-    mRNA_int_unique$median,
-    lncRNA_int_all$median,
-    lncRNA_int_unique$median,
-    miRNA_int_mRNA_all$median,
-    miRNA_int_mRNA_unique$median,
-    miRNA_int_lncRNA_all$median,
-    miRNA_int_lncRNA_unique$median
-  ),
-  Min = c(
-    mRNA_int_all$min,
-    mRNA_int_unique$min,
-    lncRNA_int_all$min,
-    lncRNA_int_unique$min,
-    miRNA_int_mRNA_all$min,
-    miRNA_int_mRNA_unique$min,
-    miRNA_int_lncRNA_all$min,
-    miRNA_int_lncRNA_unique$min
-  ),
-  Max = c(
-    mRNA_int_all$max,
-    mRNA_int_unique$max,
-    lncRNA_int_all$max,
-    lncRNA_int_unique$max,
-    miRNA_int_mRNA_all$max,
-    miRNA_int_mRNA_unique$max,
-    miRNA_int_lncRNA_all$max,
-    miRNA_int_lncRNA_unique$max
+  # ---- Proportion of mRNA targets per miRNA ----
+ 
+  # Unique target level
+ miRNA_target_mRNA_prop_unique <- edges_df %>%
+  mutate(type = ifelse(region %in% c("CDS", "3UTR", "5UTR"), "mRNA", "lncRNA")) %>%
+  distinct(source, target, type) %>%                     # Keep unique miRNA–mRNA or miRNA-lncRNA pairs
+  group_by(source, type) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(source) %>%
+  mutate(prop = count / sum(count)) %>%
+  filter(type == "mRNA") %>%                               # Keep only mRNA proportions
+  ungroup() %>%
+  summarise(
+    mean = signif(mean(prop), 3),
+    median = signif(median(prop), 3),
+    min = signif(min(prop), 3),
+    max = signif(max(prop), 3)
   )
-)
 
-return(summary_stats)
+  # ---- Combine into summary table ----
+summary_stats <- bind_rows(
+  mRNA_int_all %>% mutate(Metric = "mRNA interactions per miRNA (all)"),
+  mRNA_int_unique %>% mutate(Metric = "mRNA targets per miRNA (unique)"),
+  lncRNA_int_all %>% mutate(Metric = "lncRNA interactions per miRNA (all)"),
+  lncRNA_int_unique %>% mutate(Metric = "lncRNA targets per miRNA (unique)"),
+  miRNA_int_mRNA_all %>% mutate(Metric = "miRNA interactions per mRNA (all)"),
+  miRNA_int_mRNA_unique %>% mutate(Metric = "miRNAs per mRNA (unique)"),
+  miRNA_int_lncRNA_all %>% mutate(Metric = "miRNA interactions per lncRNA (all)"),
+  miRNA_int_lncRNA_unique %>% mutate(Metric = "miRNAs per lncRNA (unique)"),
+  miRNA_target_mRNA_prop_unique %>% mutate(Metric = "Prop. mRNA targets per miRNA (unique)")
+) %>%
+  select(Metric, everything())
+
+  return(summary_stats)
 }
 
 network_summary_stats(edges_pval_0.05)
 ```
 
-    ## # A tibble: 8 × 5
-    ##   Metric                               Mean Median   Min   Max
-    ##   <chr>                               <dbl>  <dbl> <int> <int>
-    ## 1 mRNA interactions per miRNA (all)    24.4     10     1   225
-    ## 2 mRNA targets per miRNA (unique)      22.9     10     1   195
-    ## 3 lncRNA interactions per miRNA (all)  18.2      8     2   126
-    ## 4 lncRNA targets per miRNA (unique)    13.8      8     2    61
-    ## 5 miRNA interactions per mRNA (all)     1.1      1     1     7
-    ## 6 miRNAs per mRNA (unique)              1        1     1     2
-    ## 7 miRNA interactions per lncRNA (all)   1.4      1     1    16
-    ## 8 miRNAs per lncRNA (unique)            1.1      1     1     4
+    ##                                  Metric   mean median   min max
+    ## 1     mRNA interactions per miRNA (all) 24.400  10.00 1.000 225
+    ## 2       mRNA targets per miRNA (unique) 22.900  10.00 1.000 195
+    ## 3   lncRNA interactions per miRNA (all) 18.200   8.00 2.000 126
+    ## 4     lncRNA targets per miRNA (unique) 13.800   8.00 2.000  61
+    ## 5     miRNA interactions per mRNA (all)  1.080   1.00 1.000   7
+    ## 6              miRNAs per mRNA (unique)  1.010   1.00 1.000   2
+    ## 7   miRNA interactions per lncRNA (all)  1.440   1.00 1.000  16
+    ## 8            miRNAs per lncRNA (unique)  1.090   1.00 1.000   4
+    ## 9 Prop. mRNA targets per miRNA (unique)  0.658   0.67 0.111   1
 
 **At the interaction-level (which allows for multiple interactions
 between a single feature pair):** Each miRNA has 24.4 interactions with
@@ -502,6 +480,10 @@ miRNA.
 mRNA targets and 13.8 unique lncRNA targets, though again there is a lot
 of variation. mRNA are targeted by 1.0 unique miRNA on average, and
 lncRNA are targeted by 1.4 unique miRNA, on average.
+
+Additionally, the relative proportion of miRNA targets that are mRNA is
+highly variable, ranging from 11.1% (lncRNA-dominant) to 100%
+(mRNA-dominant), with a mean of 65.8% (slightly mRNA-dominant)
 
 # 3 pval \< 0.01
 
@@ -570,17 +552,16 @@ miRNA may target 15 unique mRNAs via 20 putative interactions)
 network_summary_stats(edges_pval_0.01)
 ```
 
-    ## # A tibble: 8 × 5
-    ##   Metric                               Mean Median   Min   Max
-    ##   <chr>                               <dbl>  <dbl> <int> <int>
-    ## 1 mRNA interactions per miRNA (all)     6.1      2     1    37
-    ## 2 mRNA targets per miRNA (unique)       5.7      2     1    35
-    ## 3 lncRNA interactions per miRNA (all)   3.9      2     1    21
-    ## 4 lncRNA targets per miRNA (unique)     3.2      2     1    10
-    ## 5 miRNA interactions per mRNA (all)     1.1      1     1     3
-    ## 6 miRNAs per mRNA (unique)              1        1     1     2
-    ## 7 miRNA interactions per lncRNA (all)   1.2      1     1     4
-    ## 8 miRNAs per lncRNA (unique)            1        1     1     1
+    ##                                  Metric  mean median   min max
+    ## 1     mRNA interactions per miRNA (all) 6.060  2.000 1.000  37
+    ## 2       mRNA targets per miRNA (unique) 5.740  2.000 1.000  35
+    ## 3   lncRNA interactions per miRNA (all) 3.900  2.000 1.000  21
+    ## 4     lncRNA targets per miRNA (unique) 3.190  2.000 1.000  10
+    ## 5     miRNA interactions per mRNA (all) 1.060  1.000 1.000   3
+    ## 6              miRNAs per mRNA (unique) 1.010  1.000 1.000   2
+    ## 7   miRNA interactions per lncRNA (all) 1.220  1.000 1.000   4
+    ## 8            miRNAs per lncRNA (unique) 1.000  1.000 1.000   1
+    ## 9 Prop. mRNA targets per miRNA (unique) 0.782  0.897 0.167   1
 
 **At the interaction-level (which allows for multiple interactions
 between a single feature pair):** Each miRNA has 6.1 interactions with
@@ -592,6 +573,10 @@ miRNA, and each lncRNA has an average of 1.2 interactions with miRNA.
 mRNA targets and 3.2 unique lncRNA targets, though again there is a lot
 of variation. Both mRNA and lncRNA are targeted by 1.0 unique miRNA on
 average.
+
+Additionally, the relative proportion of miRNA targets that are mRNA is
+highly variable, ranging from 16.7% (lncRNA-dominant) to 100%
+(mRNA-dominant), with a mean of 78.2% (mRNA-dominant)
 
 # 4 Save
 
