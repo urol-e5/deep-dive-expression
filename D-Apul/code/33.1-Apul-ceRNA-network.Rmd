@@ -1,0 +1,245 @@
+---
+title: "33.1-Apul-ceRNA-network"
+author: "Kathleen Durkin"
+date: "2025-10-15"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+Load packages
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+```
+
+To meet the conditions of a putative ceRNA, lncRNA must meet the following conditions:
+
+-  putatively bind to an miRNA
+
+-  are negatively coexpressed with that miRNA, and 
+
+-  show positive coexpression with the miRNA’s mRNA targets
+
+To look for instances of ceRNA I'll need to do the following:
+
+First, from the network generated in `33-Apul-miRNA-mRNA-lncRNA-network`, Find modules in which an miRNA targets both mRNA and lncRNA, and in which the miRNA is *negatively* coexpressed with the lncRNA(s). Then, from the lncRNA-mRNA PCC tables generated in `21.1-Apul-mRNA-lncRNA-correlation-PCC`, check whether the module's lncRNA(s) are *positively* coexpressed with the module(s) mRNA.
+
+
+Load files
+```{bash, eval=FALSE}
+wget -O ../output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/D-Apul/output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv
+```
+
+```{r}
+edges <- read.csv("../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05.csv") %>% dplyr::select(-X)
+
+#  lncRNA_PCC <- read.csv("../output/21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv")
+# The above file is too big to read into R, apparently, so I'll have to work with it from the command line
+```
+
+
+First, I only have targets assigned regional labels (CDS, 3UTR, 5UTR, or lncRNA), so assign the higher-level target type (mRNA or lncRNA)
+```{r}
+# Assign target type
+edges <- edges %>%
+  mutate(target_type = ifelse(region %in% c("CDS", "3UTR", "5UTR"), "mRNA",
+                       ifelse(region == "lncRNA", "lncRNA", NA)))
+```
+
+Find miRNA modules that involve at least >=1 mRNA and >=lncRNA
+```{r}
+miRNAs_with_both <- edges %>%
+  group_by(source) %>%
+  summarise(has_mRNA = any(target_type == "mRNA"),
+            has_lncRNA = any(target_type == "lncRNA")) %>%
+  filter(has_mRNA & has_lncRNA) %>%
+  pull(source)
+
+length(miRNAs_with_both)
+length(unique(edges$source))
+```
+ 36 of the 39 Apul miRNA involved in our network target at least one miRNA and at least one lncRNA
+
+From modules with mRNA and lncRNA, identify which lncRNA are *negatively* coexpressed with their miRNA
+```{r}
+neg_lncRNA_pairs <- edges %>%
+  filter(source %in% miRNAs_with_both,
+         target_type == "lncRNA",
+         PCC_direction == -1)
+
+nrow(neg_lncRNA_pairs)
+nrow(distinct(neg_lncRNA_pairs, target, source))
+length(unique(neg_lncRNA_pairs$target))
+```
+
+There are 120 instances, involving 118 unique lncRNA, of lncRNA being part of a module that includes mRNA AND being negatively expressed with their targeting miRNA.
+
+Note: the nrow(neg_lncRNA_pairs) returns 131 because the table includes every *putative interaction* that meets requirements, which means if an miRNA is predicted to bind in 2 different places on a single lncRNA, there are two rows representing those interactions. So there are 131 **interactions**, among 120 **miRNA-lncRNA** pairs, which involve 118 **unique lncRNA** (so 2 miRNA-lncRNA pairs involve a lncRNA that is also targeted by another miRNA(s))
+
+
+Now I want to for each lncRNA that is *negatively correlated* with a parent miRNA, check whether that same lncRNA is *positively correlated* with **any mRNA targeted by the same miRNA.**
+
+The lncRNA-mRNA PCC table is too large to load into R, so we'll have to work with it from the terminal. 
+
+First step is to save our list of negatively coexpressed lncRNA wnd their targeting miRNA, so we can also access it from terminal
+```{r}
+# Ensure we don't have any rows with multiple miRNA sources
+#neg_lncRNA_pairs <- neg_lncRNA_pairs %>% separate_rows(source, sep = "; ")
+
+neg_lncRNA_pairs %>%
+  select(source, target) %>%   # source = miRNA, target = lncRNA
+  distinct() %>%
+  write.table("../output/33.1-Apul-ceRNA-network/neg_miRNA_lncRNA_pairs.csv", sep = ",", quote = FALSE, row.names = FALSE, col.names = TRUE)
+
+```
+
+
+For every miRNA, get a list of its mRNA targets and save, so we can access it from terminal
+```{r}
+edges %>%
+  filter(target_type == "mRNA") %>%
+  select(source, target) %>%
+  distinct() %>%
+  write.table("../output/33.1-Apul-ceRNA-network/miRNA_mRNA_targets.csv", sep = ",", quote = FALSE, row.names = FALSE, col.names = TRUE)
+
+```
+
+
+Now we can move to terminal work. 
+
+I want to, for each lncRNA that negatively correlates with its miRNA, find the lncRNA-mRNA pairs that are positively correlated, *and* belong to the same miRNA module
+
+**Note:** The below code will take a while to finish, since it has to repeatedly `grep` search the extremely-large lncRNA-mRNA PCC file.
+```{r, engine='bash', eval=FALSE}
+#!/bin/bash
+
+cd ../output/33.1-Apul-ceRNA-network
+
+# Input files:
+lncRNA_mRNA_file="../21.1-Apul-mRNA-lncRNA-correlation-PCC/Apul-PCC_mRNA_lncRNA.csv"
+neg_pairs="neg_miRNA_lncRNA_pairs.csv"
+mirna_mrna="miRNA_mRNA_targets.csv"
+
+out="pos_lncRNA_mRNA_hits.txt"
+echo -e "miRNA\tlncRNA\tmRNA\tPCC\tp_value\tFDR" > "$out"
+
+# Loop over each miRNA–lncRNA pair
+tail -n +2 "$neg_pairs" | while IFS=, read -r miRNA lncRNA; do
+    echo "Processing $miRNA ↔ $lncRNA"
+
+    # Get all mRNAs targeted by this miRNA
+    mirna_targets=$(awk -F, -v miRNA="$miRNA" '$1 == miRNA {print $2}' "$mirna_mrna")
+
+    # Skip if no mRNAs found
+    if [ -z "$mirna_targets" ]; then
+        echo "  No mRNA targets found for $miRNA"
+        continue
+    fi
+
+    # Extract all PCC entries for this lncRNA once
+    grep -w "$lncRNA" "$lncRNA_mRNA_file" > "${lncRNA}_tmp.txt"
+
+    # Skip if lncRNA not found in PCC file
+    if [ ! -s "${lncRNA}_tmp.txt" ]; then
+        echo "  No PCC entries found for $lncRNA"
+        rm -f "${lncRNA}_tmp.txt"
+        continue
+    fi
+
+    # For each mRNA, check if there’s a positive correlation
+    for mRNA in $mirna_targets; do
+        awk -F, -v OFS="\t" -v miRNA="$miRNA" -v lncRNA="$lncRNA" -v mRNA="$mRNA" '
+        {
+            gsub(/"/, "", $0)          # remove quotes
+            if ($1 == mRNA && $2 == lncRNA && $3 > 0) {
+                print miRNA, lncRNA, mRNA, $3, $4, $5
+            }
+        }' "${lncRNA}_tmp.txt" >> "$out"
+    done
+
+    # Clean up
+    rm -f "${lncRNA}_tmp.txt"
+done
+
+# Update column names to be more clear about what relationship the PCC stats represent
+sed -i '1s/.*/miRNA\tlncRNA\tmRNA\tPCC_lncRNA_mRNA\tp_value_lncRNA_mRNA\tFDR_lncRNA_mRNA/' pos_lncRNA_mRNA_hits.txt
+
+```
+
+
+Now let's read this into R
+```{r}
+ceRNA <- read.delim("../output/33.1-Apul-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+
+nrow(ceRNA)
+length(unique(ceRNA$lncRNA))
+length(unique(ceRNA$miRNA))
+head(ceRNA)
+```
+
+Ok! We now have a file that shows sets of miRNA, lncRNA, and mRNA for which:
+
+- the lncRNA and mRNA are both putatively targeted by the miRNA
+
+- the lncRNA is negatively coexpressed with the miRNA
+
+- the lncRNA is positively coexpressed with the mRNA
+
+That means these lncRNA are putatively functioning as ceRNA, sequestering the miRNA to prevent them from acting on their mRNA targets.
+
+There are **117 putative ceRNA** included in this list, regulating 19 miRNA, forming a total of 3172 unique sets. Note that this table currently contains duplicate miRNA-mRNA sets, because a new search was made for each lncRNA. For example, say miRNA-1 had two negatively coexpressed lncRNA, lncRNA-A and lncRNA-B, and 10 targeted mRNA. Say lncRNA-A was positively coexpressed with 8 of those mRNA, and lncRNA-B was positively coexpressed with 5. All 13 of those miRNA+lncRNA+mRNA sets would be recorded in our ceRNA table.
+
+Let's summarize the ceRNA network:
+```{r}
+miRNA_list <- ceRNA$miRNA %>% unique()
+
+lncRNA_counts <- c()
+mRNA_counts <- c()
+
+for (i in 1:length(miRNA_list)) {
+  lncRNA_counts[i] <- ceRNA %>% filter(miRNA==miRNA_list[i]) %>% dplyr::select(lncRNA) %>% unique() %>% nrow()
+  mRNA_counts[i] <- ceRNA %>% filter(miRNA==miRNA_list[i]) %>% dplyr::select(mRNA) %>% unique() %>% nrow()
+}
+
+list <- data.frame(
+  miRNA = miRNA_list,
+  lncRNA_n = lncRNA_counts,
+  mRNA_n = mRNA_counts
+)
+
+sum <- data.frame(
+  lncRNA = c(mean(lncRNA_counts), median(lncRNA_counts), min(lncRNA_counts), max(lncRNA_counts)),
+  mRNA = c(mean(mRNA_counts), median(mRNA_counts), min(mRNA_counts), max(mRNA_counts))
+)
+rownames(sum) <- c("mean", "median", "min", "max")
+
+list
+t(sum)
+```
+
+Generally, the ceRNA modules involve medians of 2 lncRNA and 7 mRNA. Since there are a small number of modules with a *lot* of members (e.g. the miR-100 module), median values are probably more representative than the means.
+
+
+Of the 19 miRNA putatively sequestered by ceRNA(s), 5 are previously described (miR-2028, miR-2022, miR-100, miR-9425, miR-2050). 1 is conserved among all three species (miR-100), and 1 between *A.pulchra* and *P.evermanni* (apul-mir-novel-27, which matched peve-mir-novel-20, peve-mir-novel-21, and peve-mir-novel22).
+
+
+
+
+
+
