@@ -1,0 +1,1 @@
+miRNA	lncRNA	mRNA	PCC_lncRNA_mRNA	p_value_lncRNA_mRNA	FDR_lncRNA_mRNA
