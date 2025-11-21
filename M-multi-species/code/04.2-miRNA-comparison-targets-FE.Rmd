@@ -621,7 +621,7 @@ ggplot(Ptuh_target_counts, aes(x = reorder(given_miRNA_name, -num_targets), y = 
 
 
 ```{r}
-stacked_opacity_bar <- function(df, species_color) {
+stacked_opacity_bar <- function(df, species_color, ymin = NULL, ymax = NULL, cons_asterisk = FALSE) {
 
   # Label correlation direction
   df_labeled <- df %>%
@@ -633,21 +633,45 @@ stacked_opacity_bar <- function(df, species_color) {
       )
     )
 
+  # miRNA ordering: Conserved first, then alphabetically
+  conserved <- df_labeled %>% filter(conservation == "conserved") %>% pull(given_miRNA_name)
+  unconserved <- df_labeled %>% filter(conservation != "conserved") %>% pull(given_miRNA_name)
+  ## Unique & sorted
+  conserved <- sort(unique(conserved))
+  unconserved <- sort(unique(unconserved))
+  ## Final ordering
+  final_order <- c(conserved, unconserved)
+  
   # Count number of unique mRNA targets per miRNA, correlation, and region
   plot_data <- df_labeled %>%
     group_by(given_miRNA_name, correlation_direction, region) %>%
     summarise(n_mRNA = n_distinct(mRNA), .groups = "drop") %>%
     # Step 2.5: Flip sign for negative correlations
     mutate(n_mRNA = ifelse(correlation_direction == "negative", -n_mRNA, n_mRNA))
-
-  # Alphabetical ordering
+  
+  # Order miRNA names as desired  
   plot_data <- plot_data %>%
-    mutate(given_miRNA_name = factor(given_miRNA_name, levels = sort(unique(given_miRNA_name))))
+    mutate(given_miRNA_name = factor(given_miRNA_name, levels = final_order))
+  
+  # Calculate where to place asterisks denoting conservation status
+  bar_heights_pos <- plot_data %>%
+    group_by(given_miRNA_name) %>%
+    summarise(pos_height = sum(n_mRNA[n_mRNA > 0]), .groups = "drop")
 
+  offset <- 2
+  
+  asterisk_df <- bar_heights_pos %>%
+    filter(given_miRNA_name %in% conserved) %>%
+    mutate(
+      label = "*",
+      y_pos = pos_height + offset
+    )
+  
   # Plot
-  ggplot(plot_data, aes(x = given_miRNA_name, y = n_mRNA)) +
+  p <- ggplot(plot_data, aes(x = given_miRNA_name, y = n_mRNA)) +
     geom_col(aes(fill = correlation_direction, alpha = region), position = "stack") +
-    scale_fill_manual(values = c(positive = species_color, negative = "#d7191c")) +
+    scale_fill_manual(values = c(positive = species_color, negative = "#d7191c"), 
+                      breaks = c("positive", "negative")) +
     scale_alpha_manual(values = c("3UTR" = 1, "5UTR" = 0.6, "CDS" = 0.3)) +
     theme_minimal() +
     labs(
@@ -658,22 +682,104 @@ stacked_opacity_bar <- function(df, species_color) {
       alpha = "Region"
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # Add custom y-limits if both supplied
+  if (!is.null(ymin) & !is.null(ymax)) {
+    p <- p + coord_cartesian(ylim = c(ymin, ymax))
+  }
+  
+  # Add asterisks denoting conservation if requested
+  if (cons_asterisk == TRUE) {
+    p <- p + geom_text(data = asterisk_df, aes(x = given_miRNA_name, y = y_pos, label = label), color = "black", size = 5, vjust = 0
+    )
+  }
+ return(p) 
 }
 
-stacked_opacity_bar(Apul_FA_df, "#408EC6")
-stacked_opacity_bar(Peve_FA_df, "#1E2761")
-stacked_opacity_bar(Ptuh_FA_df, "#7A2048")
+stacked_opacity_bar(Apul_FA_df, "#408EC6", ymin=-200 , ymax=250, cons_asterisk=TRUE)
+stacked_opacity_bar(Peve_FA_df, "#1E2761", ymin=-200 , ymax=250, cons_asterisk=TRUE)
+stacked_opacity_bar(Ptuh_FA_df, "#7A2048", ymin=-200 , ymax=250, cons_asterisk=TRUE)
 
-stacked_opacity_bar(Apul_FA_conserved, "#408EC6")
-stacked_opacity_bar(Peve_FA_conserved, "#1E2761")
-stacked_opacity_bar(Ptuh_FA_conserved, "#7A2048")
-
-# Without the miR-100s, since their high expression levels dominate the plots
-stacked_opacity_bar(Apul_FA_conserved[!grepl("mir-100",Apul_FA_conserved$given_miRNA_name),], "#408EC6")
-stacked_opacity_bar(Peve_FA_conserved[!grepl("mir-100",Peve_FA_conserved$given_miRNA_name),], "#1E2761")
-stacked_opacity_bar(Ptuh_FA_conserved[!grepl("mir-100",Ptuh_FA_conserved$given_miRNA_name),], "#7A2048")
+stacked_opacity_bar(Apul_FA_df[Apul_FA_df$conservation=="conserved",], "#408EC6", ymin=-50, ymax=250)
+stacked_opacity_bar(Peve_FA_df[Peve_FA_df$conservation=="conserved",], "#1E2761", ymin=-50, ymax=250)
+stacked_opacity_bar(Ptuh_FA_df[Ptuh_FA_df$conservation=="conserved",], "#7A2048", ymin=-50, ymax=250)
 
 ```
+
+Couldn't figure out how to add a "transpose" option without messing up other features (e.g. axis min/max), so just write a completely alternate function for now. Also tried different placement for the asterisks.
+```{r}
+stacked_opacity_bar_t <- function(df, species_color, xmin = NULL, xmax = NULL, cons_asterisk = FALSE) {
+  
+  # Label correlation direction
+  df_labeled <- df %>%
+    mutate(
+      correlation_direction = case_when(
+        PCC.cor > 0 ~ "positive",
+        PCC.cor < 0 ~ "negative",
+        TRUE        ~ "zero"
+      )
+    )
+  
+  # miRNA ordering: conserved first, then alphabetical
+  conserved <- df_labeled %>% filter(conservation == "conserved") %>% pull(given_miRNA_name)
+  unconserved <- df_labeled %>% filter(conservation != "conserved") %>% pull(given_miRNA_name)
+  final_order <- c(sort(unique(unconserved), decreasing=TRUE), sort(unique(conserved), decreasing=TRUE)) 
+  
+  # Count mRNA targets per miRNA + region + correlation
+  plot_data <- df_labeled %>%
+    group_by(given_miRNA_name, correlation_direction, region) %>%
+    summarise(n_mRNA = n_distinct(mRNA), .groups = "drop") %>%
+    mutate(n_mRNA = ifelse(correlation_direction == "negative", -n_mRNA, n_mRNA)) %>%
+    mutate(given_miRNA_name = factor(given_miRNA_name, levels = final_order))
+  
+  # Asterisk placement (next to miRNA name)
+  asterisk_df <- tibble(
+    given_miRNA_name = factor(conserved, levels = final_order),
+    x_pos = xmin,
+    label = "*"
+  )
+  
+  # Horizontal bar plot (miRNA on y-axis)
+  p <- ggplot(plot_data, aes(y = given_miRNA_name, x = n_mRNA)) +
+    geom_col(aes(fill = correlation_direction, alpha = region), position = "stack") +
+    scale_fill_manual(
+      values = c(positive = species_color, negative = "#d7191c"),
+      breaks = c("positive", "negative")
+    ) +
+    scale_alpha_manual(values = c("3UTR" = 1, "5UTR" = 0.6, "CDS" = 0.3)) +
+    theme_minimal() +
+    labs(
+      title = "miRNA-mRNA Interactions by Correlation and Region",
+      y = "miRNA (alphabetical)",
+      x = "Number of Predicted mRNA Targets",
+      fill = "Correlation",
+      alpha = "Region"
+    )
+  
+  # Apply x-axis limits if given
+  if (!is.null(xmin) & !is.null(xmax)) {
+    p <- p + coord_cartesian(xlim = c(xmin, xmax))
+  }
+  
+  # Add asterisks
+  if (cons_asterisk) {
+    p <- p + geom_text(data = asterisk_df, aes(x = xmin, y = given_miRNA_name, label = label),
+        size = 7, color = "black", vjust = .8)
+  }
+  
+  return(p)
+}
+
+stacked_opacity_bar_t(Apul_FA_df, "#408EC6", xmin=-200 , xmax=250, cons_asterisk=TRUE)
+stacked_opacity_bar_t(Peve_FA_df, "#1E2761", xmin=-200 , xmax=250, cons_asterisk=TRUE)
+stacked_opacity_bar_t(Ptuh_FA_df, "#7A2048", xmin=-200 , xmax=250, cons_asterisk=TRUE)
+
+stacked_opacity_bar_t(Apul_FA_df[Apul_FA_df$conservation=="conserved",], "#408EC6", xmin=-50, xmax=250)
+stacked_opacity_bar_t(Peve_FA_df[Peve_FA_df$conservation=="conserved",], "#1E2761", xmin=-50, xmax=250)
+stacked_opacity_bar_t(Ptuh_FA_df[Ptuh_FA_df$conservation=="conserved",], "#7A2048", xmin=-50, xmax=250)
+
+```
+
 
 miR-100 primarily targets via the CDS region. Interestingly, while miR-100 is primarily negatively coexpressed with its targets in A.pulchra and P.tuahiniensis, it is primarily *positively* coexpressed with its targets in P.evermanni. This suggest that, miR-100 primarily silences its targets in A. pulchra and P.tuahiniensis, through translational repression or mRNA degradation, but *upregulates* its targets in P.evermanni.
 
@@ -827,5 +933,15 @@ print(Ptuh_cont_table)
 # Chisq test of independence
 chisq.test(Ptuh_cont_table)
 chisq.test(Ptuh_cont_table)$stdres
+```
+
+# Save files
+
+```{r}
+# FE tables annotated with given miRNa names
+write.csv(Apul_FE_df, "../output/04.2-miRNA-comparison-targets-FE/Apul_miRNA_pooled_sig_cor_targets_topGO_FE_named.csv", row.names=FALSE)
+write.csv(Peve_FE_df, "../output/04.2-miRNA-comparison-targets-FE/Peve_miRNA_pooled_sig_cor_targets_topGO_FE_named.csv", row.names=FALSE)
+write.csv(Ptuh_FE_df, "../output/04.2-miRNA-comparison-targets-FE/Ptuh_miRNA_pooled_sig_cor_targets_topGO_FE_named.csv", row.names=FALSE)
+
 ```
 
