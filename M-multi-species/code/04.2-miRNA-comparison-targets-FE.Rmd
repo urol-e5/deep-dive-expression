@@ -574,6 +574,8 @@ Peve_FA_df %>% filter(given_miRNA_name == "peve-mir-novel-7", !is.na(Gene.Ontolo
 
 # Plotting
 
+Note the below plots are showing *unique* interactions (one per miRNA-mRNA pair that is predicted to interact). They do *not* show multiple counts if an miRNA is predicted to bind in multiple location on a given mRNA.
+
 ```{r}
 # Apul
 # Count number of unique mRNA targets per miRNA
