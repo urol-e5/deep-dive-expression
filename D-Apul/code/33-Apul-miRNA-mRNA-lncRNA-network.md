@@ -3,17 +3,14 @@
 Kathleen Durkin
 2025-07-16
 
-- <a href="#1-all-interactions" id="toc-1-all-interactions">1 All
-  interactions</a>
-- <a href="#2-pval--005" id="toc-2-pval--005">2 pval &lt; 0.05</a>
-- <a href="#3-pval--001" id="toc-3-pval--001">3 pval &lt; 0.01</a>
-- <a href="#4-save" id="toc-4-save">4 Save</a>
-- <a href="#5-using-cytoscape" id="toc-5-using-cytoscape">5 Using
-  Cytoscape</a>
-- <a href="#6-plotting-with-igraph" id="toc-6-plotting-with-igraph">6
-  Plotting with igraph</a>
-  - <a href="#61-p--005" id="toc-61-p--005">6.1 p &lt; 0.05</a>
-  - <a href="#62-p--001" id="toc-62-p--001">6.2 p , 0.01</a>
+- [1 All interactions](#1-all-interactions)
+- [2 pval \< 0.05](#2-pval--005)
+- [3 pval \< 0.01](#3-pval--001)
+- [4 Save](#4-save)
+- [5 Using Cytoscape](#5-using-cytoscape)
+- [6 Plotting with igraph](#6-plotting-with-igraph)
+  - [6.1 p \< 0.05](#61-p--005)
+  - [6.2 p , 0.01](#62-p--001)
 
 Reran 10/14/2025 to incorporate changes due to updated lncRNA counts
 matrix
@@ -571,11 +568,24 @@ average of 81.9% (mRNA-dominant)
 
 Save files
 
+**At the interaction-level (which allows for multiple interactions
+between a single feature pair):**
+
 ``` r
 write.csv(edges_pval_0.05, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(nodes_pval_0.05, "../output/33-Apul-miRNA-mRNA-lncRNA-network/nodes_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(edges_pval_0.01, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.01.csv", quote = FALSE)
 write.csv(nodes_pval_0.01, "../output/33-Apul-miRNA-mRNA-lncRNA-network/nodes_miRNA_mRNA_lncRNA_network_p0.01.csv", quote = FALSE)
+```
+
+**At the unique-feature level:**
+
+``` r
+edges_pval_0.05_unique <- edges_pval_0.05 %>% dplyr::select(-region, -Alignment, -energy, -total_bp_shared, -query_similar, -subject_similar) %>% distinct()
+edges_pval_0.01_unique <- edges_pval_0.01 %>% dplyr::select(-region, -Alignment, -energy, -total_bp_shared, -query_similar, -subject_similar) %>% distinct()
+
+write.csv(edges_pval_0.05_unique, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05_unique.csv", quote = FALSE)
+write.csv(edges_pval_0.01_unique, "../output/33-Apul-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.01_unique.csv", quote = FALSE)
 ```
 
 # 5 Using Cytoscape
@@ -629,7 +639,7 @@ p <- ggraph(g_tbl, layout = "fr") +
 print(p)
 ```
 
-![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ## 6.2 p , 0.01
 
@@ -669,4 +679,4 @@ p <- ggraph(g_tbl, layout = "fr") +
 print(p)
 ```
 
-![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](33-Apul-miRNA-mRNA-lncRNA-network_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->

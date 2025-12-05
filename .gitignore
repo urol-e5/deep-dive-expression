@@ -2,6 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+.RData_backup
+.Rhistory_backup
+.Rproj.user_backup
 *.fq
 *.fastq
 *.fq.gz

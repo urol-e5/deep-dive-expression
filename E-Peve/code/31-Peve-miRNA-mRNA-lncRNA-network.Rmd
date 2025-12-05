@@ -377,11 +377,22 @@ Additionally, there is some variation in the relative proportion of miRNA target
 
 Save files
 
+**At the interaction-level (which allows for multiple interactions between a single feature pair):**
 ```{r, eval=TRUE}
 write.csv(edges_pval_0.05, "../output/31-Peve-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(nodes_pval_0.05, "../output/31-Peve-miRNA-mRNA-lncRNA-network/nodes_miRNA_mRNA_lncRNA_network_p0.05.csv", quote = FALSE)
 write.csv(edges_pval_0.01, "../output/31-Peve-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.01.csv", quote = FALSE)
 write.csv(nodes_pval_0.01, "../output/31-Peve-miRNA-mRNA-lncRNA-network/nodes_miRNA_mRNA_lncRNA_network_p0.01.csv", quote = FALSE)
+
+```
+
+**At the unique-feature level:**
+```{r, eval=TRUE}
+edges_pval_0.05_unique <- edges_pval_0.05 %>% dplyr::select(-region, -Alignment, -energy, -total_bp_shared, -query_similar, -subject_similar) %>% distinct()
+edges_pval_0.01_unique <- edges_pval_0.01 %>% dplyr::select(-region, -Alignment, -energy, -total_bp_shared, -query_similar, -subject_similar) %>% distinct()
+
+write.csv(edges_pval_0.05_unique, "../output/31-Peve-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.05_unique.csv", quote = FALSE)
+write.csv(edges_pval_0.01_unique, "../output/31-Peve-miRNA-mRNA-lncRNA-network/edges_miRNA_mRNA_lncRNA_network_p0.01_unique.csv", quote = FALSE)
 
 ```
 
