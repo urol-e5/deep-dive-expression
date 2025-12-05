@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apul-mir-100 Interaction Network</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 15px 0;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.1), transparent);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #00d4aa 0%, #00a8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 20px;
+            min-height: 0;
+        }
+        
+        #network-container {
+            flex: 1;
+            background: rgba(15, 15, 35, 0.8);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #network-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 168, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sidebar {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .panel {
+            background: rgba(15, 15, 35, 0.9);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00d4aa;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+        
+        .legend-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .legend-line {
+            width: 30px;
+            height: 3px;
+            flex-shrink: 0;
+            border-radius: 2px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .stat-item {
+            background: rgba(0, 212, 170, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00d4aa;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        
+        .info-panel {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00d4aa #1a1a2e;
+        }
+        
+        .info-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
+            color: #00d4aa;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 15, 35, 0.95);
+            border: 1px solid rgba(0, 212, 170, 0.5);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tooltip-title {
+            font-weight: 600;
+            color: #00d4aa;
+            margin-bottom: 8px;
+        }
+        
+        .node {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .node:hover {
+            filter: brightness(1.3);
+        }
+        
+        .link {
+            stroke-opacity: 0.6;
+            transition: stroke-opacity 0.2s;
+        }
+        
+        .link:hover {
+            stroke-opacity: 1;
+        }
+        
+        .node-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            fill: #e0e0e0;
+            pointer-events: none;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .instructions {
+            font-size: 0.75rem;
+            color: #666;
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid rgba(0, 212, 170, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>apul-mir-100 Interaction Network</h1>
+            <div class="subtitle">Acropora pulchra miRNA Target Analysis (p &lt; 0.01)</div>
+        </header>
+        
+        <div class="main-content">
+            <div id="network-container">
+                <svg id="network"></svg>
+            </div>
+            
+            <div class="sidebar">
+                <div class="panel">
+                    <div class="panel-title">Network Statistics</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="node-count">0</div>
+                            <div class="stat-label">Nodes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="edge-count">0</div>
+                            <div class="stat-label">Edges</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="mrna-count">0</div>
+                            <div class="stat-label">mRNAs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="lncrna-count">0</div>
+                            <div class="stat-label">lncRNAs</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">Legend</div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: linear-gradient(135deg, #ff6b6b, #ee5a5a);"></div>
+                        <span>miRNA (apul-mir-100)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: linear-gradient(135deg, #4ecdc4, #3dbdb5);"></div>
+                        <span>mRNA target</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: linear-gradient(135deg, #a855f7, #9333ea);"></div>
+                        <span>lncRNA target</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #ff6b6b;"></div>
+                        <span>Negative correlation</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-line" style="background: #4ecdc4;"></div>
+                        <span>Positive correlation</span>
+                    </div>
+                </div>
+                
+                <div class="panel info-panel">
+                    <div class="panel-title">Selected Node Info</div>
+                    <div class="info-content" id="node-info">
+                        <div style="color: #666; text-align: center; padding: 20px;">
+                            Click on a node to view details
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    Drag nodes to rearrange • Scroll to zoom • Click for details
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // mir-100 interaction data from p0.01 filtered results
+        const edgesData = [
+            { target: "FUN_028974", region: "3UTR", energy: -21.49, pcc: -0.976, pvalue: 0.00438 },
+            { target: "FUN_018376", region: "3UTR", energy: -21.71, pcc: -0.972, pvalue: 0.00557 },
+            { target: "FUN_002508", region: "CDS", energy: -23.52, pcc: -0.960, pvalue: 0.00968 },
+            { target: "FUN_004760", region: "CDS", energy: -20.28, pcc: -0.991, pvalue: 0.00105 },
+            { target: "FUN_014090", region: "CDS", energy: -23.56, pcc: -0.975, pvalue: 0.00482 },
+            { target: "FUN_016425", region: "CDS", energy: -23.13, pcc: -0.968, pvalue: 0.00689 },
+            { target: "FUN_029385", region: "CDS", energy: -22.64, pcc: -0.975, pvalue: 0.00478 },
+            { target: "FUN_035913", region: "CDS", energy: -22.27, pcc: -0.975, pvalue: 0.00485 },
+            { target: "FUN_036045", region: "CDS", energy: -23.62, pcc: -0.959, pvalue: 0.00998 },
+            { target: "FUN_037125", region: "CDS", energy: -21.48, pcc: -0.975, pvalue: 0.00474 },
+            { target: "FUN_037144", region: "CDS", energy: -20.46, pcc: -0.976, pvalue: 0.00453 },
+            { target: "FUN_043367", region: "CDS", energy: -24.42, pcc: -0.983, pvalue: 0.00273 },
+            { target: "FUN_043474", region: "CDS", energy: -24.49, pcc: -0.973, pvalue: 0.00523 },
+            { target: "FUN_016425", region: "5UTR", energy: -25.36, pcc: -0.968, pvalue: 0.00689 },
+            { target: "FUN_034722", region: "5UTR", energy: -22.65, pcc: 0.974, pvalue: 0.00487 },
+            { target: "lncRNA_17281", region: "lncRNA", energy: -25.34, pcc: -0.994, pvalue: 0.000583 },
+            { target: "lncRNA_17282", region: "lncRNA", energy: -25.34, pcc: -0.977, pvalue: 0.00423 },
+            { target: "lncRNA_17525", region: "lncRNA", energy: -25.34, pcc: -0.989, pvalue: 0.00145 },
+            { target: "lncRNA_20390", region: "lncRNA", energy: -22.64, pcc: -0.980, pvalue: 0.00344 },
+            { target: "lncRNA_20909", region: "lncRNA", energy: -25.39, pcc: -0.983, pvalue: 0.00255 },
+            { target: "lncRNA_20984", region: "lncRNA", energy: -25.84, pcc: -0.968, pvalue: 0.00668 },
+            { target: "lncRNA_20997", region: "lncRNA", energy: -22.64, pcc: -0.977, pvalue: 0.00406 },
+            { target: "lncRNA_25297", region: "lncRNA", energy: -20.27, pcc: -0.960, pvalue: 0.00940 },
+            { target: "lncRNA_480", region: "lncRNA", energy: -24.44, pcc: -0.962, pvalue: 0.00896 }
+        ];
+
+        // Get unique targets (some appear in multiple regions)
+        const uniqueTargets = [...new Set(edgesData.map(d => d.target))];
+        
+        // Create nodes array
+        const nodes = [
+            { id: "apul-mir-100", type: "miRNA", label: "apul-mir-100" }
+        ];
+        
+        uniqueTargets.forEach(target => {
+            const type = target.startsWith("lncRNA") ? "lncRNA" : "mRNA";
+            nodes.push({ id: target, type: type, label: target });
+        });
+
+        // Create links with aggregated data for duplicates
+        const linkMap = new Map();
+        edgesData.forEach(d => {
+            const key = d.target;
+            if (!linkMap.has(key)) {
+                linkMap.set(key, {
+                    source: "apul-mir-100",
+                    target: d.target,
+                    regions: [d.region],
+                    energy: d.energy,
+                    pcc: d.pcc,
+                    pvalue: d.pvalue
+                });
+            } else {
+                linkMap.get(key).regions.push(d.region);
+            }
+        });
+        
+        const links = Array.from(linkMap.values());
+
+        // Update statistics
+        const mRNACount = uniqueTargets.filter(t => !t.startsWith("lncRNA")).length;
+        const lncRNACount = uniqueTargets.filter(t => t.startsWith("lncRNA")).length;
+        
+        document.getElementById('node-count').textContent = nodes.length;
+        document.getElementById('edge-count').textContent = links.length;
+        document.getElementById('mrna-count').textContent = mRNACount;
+        document.getElementById('lncrna-count').textContent = lncRNACount;
+
+        // Set up SVG
+        const container = document.getElementById('network-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        
+        const svg = d3.select("#network")
+            .attr("viewBox", [0, 0, width, height]);
+
+        // Add zoom behavior
+        const g = svg.append("g");
+        
+        svg.call(d3.zoom()
+            .scaleExtent([0.3, 4])
+            .on("zoom", (event) => g.attr("transform", event.transform)));
+
+        // Color scales
+        const nodeColors = {
+            miRNA: "#ff6b6b",
+            mRNA: "#4ecdc4",
+            lncRNA: "#a855f7"
+        };
+
+        // Create force simulation
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(180))
+            .force("charge", d3.forceManyBody().strength(-400))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(50));
+
+        // Create gradient definitions
+        const defs = svg.append("defs");
+        
+        // Gradient for miRNA node
+        const miRNAGradient = defs.append("radialGradient")
+            .attr("id", "miRNA-gradient");
+        miRNAGradient.append("stop").attr("offset", "0%").attr("stop-color", "#ff8a8a");
+        miRNAGradient.append("stop").attr("offset", "100%").attr("stop-color", "#ee5a5a");
+
+        // Gradient for mRNA nodes
+        const mRNAGradient = defs.append("radialGradient")
+            .attr("id", "mRNA-gradient");
+        mRNAGradient.append("stop").attr("offset", "0%").attr("stop-color", "#6ee7de");
+        mRNAGradient.append("stop").attr("offset", "100%").attr("stop-color", "#3dbdb5");
+
+        // Gradient for lncRNA nodes
+        const lncRNAGradient = defs.append("radialGradient")
+            .attr("id", "lncRNA-gradient");
+        lncRNAGradient.append("stop").attr("offset", "0%").attr("stop-color", "#c084fc");
+        lncRNAGradient.append("stop").attr("offset", "100%").attr("stop-color", "#9333ea");
+
+        // Create links
+        const link = g.append("g")
+            .selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("class", "link")
+            .attr("stroke", d => d.pcc > 0 ? "#4ecdc4" : "#ff6b6b")
+            .attr("stroke-width", d => Math.abs(d.pcc) * 3)
+            .on("mouseover", showLinkTooltip)
+            .on("mouseout", hideTooltip);
+
+        // Create nodes
+        const node = g.append("g")
+            .selectAll("g")
+            .data(nodes)
+            .join("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended))
+            .on("click", showNodeInfo)
+            .on("mouseover", showNodeTooltip)
+            .on("mouseout", hideTooltip);
+
+        // Add circles to nodes
+        node.append("circle")
+            .attr("r", d => d.type === "miRNA" ? 30 : 18)
+            .attr("fill", d => `url(#${d.type}-gradient)`)
+            .attr("stroke", d => nodeColors[d.type])
+            .attr("stroke-width", 2)
+            .style("filter", d => d.type === "miRNA" ? "drop-shadow(0 0 15px rgba(255, 107, 107, 0.5))" : "drop-shadow(0 0 8px rgba(0, 0, 0, 0.3))");
+
+        // Add labels
+        node.append("text")
+            .attr("class", "node-label")
+            .attr("dy", d => d.type === "miRNA" ? 45 : 30)
+            .attr("text-anchor", "middle")
+            .text(d => d.type === "miRNA" ? d.label : d.label.replace("FUN_", "").replace("lncRNA_", "lnc_"))
+            .style("font-weight", d => d.type === "miRNA" ? "600" : "400");
+
+        // Tooltip element
+        const tooltip = document.getElementById('tooltip');
+
+        function showNodeTooltip(event, d) {
+            const linkData = links.find(l => l.target.id === d.id || l.target === d.id);
+            let content = `<div class="tooltip-title">${d.label}</div>`;
+            content += `<div>Type: ${d.type}</div>`;
+            if (linkData) {
+                content += `<div>Region: ${linkData.regions.join(", ")}</div>`;
+                content += `<div>PCC: ${linkData.pcc.toFixed(3)}</div>`;
+            }
+            
+            tooltip.innerHTML = content;
+            tooltip.style.left = (event.pageX + 15) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.style.opacity = 1;
+        }
+
+        function showLinkTooltip(event, d) {
+            let content = `<div class="tooltip-title">${d.source.id || d.source} → ${d.target.id || d.target}</div>`;
+            content += `<div>Region: ${d.regions.join(", ")}</div>`;
+            content += `<div>Energy: ${d.energy.toFixed(2)} kcal/mol</div>`;
+            content += `<div>PCC: ${d.pcc.toFixed(3)}</div>`;
+            content += `<div>P-value: ${d.pvalue.toExponential(3)}</div>`;
+            
+            tooltip.innerHTML = content;
+            tooltip.style.left = (event.pageX + 15) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.style.opacity = 1;
+        }
+
+        function hideTooltip() {
+            tooltip.style.opacity = 0;
+        }
+
+        function showNodeInfo(event, d) {
+            const infoDiv = document.getElementById('node-info');
+            const linkData = links.find(l => (l.target.id === d.id || l.target === d.id) || (l.source.id === d.id || l.source === d.id));
+            
+            let html = '';
+            html += `<div class="info-row"><span class="info-label">ID</span><span class="info-value">${d.label}</span></div>`;
+            html += `<div class="info-row"><span class="info-label">Type</span><span class="info-value">${d.type}</span></div>`;
+            
+            if (d.type === "miRNA") {
+                html += `<div class="info-row"><span class="info-label">Targets</span><span class="info-value">${links.length}</span></div>`;
+                html += `<div class="info-row"><span class="info-label">mRNA</span><span class="info-value">${mRNACount}</span></div>`;
+                html += `<div class="info-row"><span class="info-label">lncRNA</span><span class="info-value">${lncRNACount}</span></div>`;
+            } else if (linkData) {
+                html += `<div class="info-row"><span class="info-label">Region</span><span class="info-value">${linkData.regions.join(", ")}</span></div>`;
+                html += `<div class="info-row"><span class="info-label">Energy</span><span class="info-value">${linkData.energy.toFixed(2)} kcal/mol</span></div>`;
+                html += `<div class="info-row"><span class="info-label">PCC</span><span class="info-value">${linkData.pcc.toFixed(4)}</span></div>`;
+                html += `<div class="info-row"><span class="info-label">P-value</span><span class="info-value">${linkData.pvalue.toExponential(3)}</span></div>`;
+                html += `<div class="info-row"><span class="info-label">Direction</span><span class="info-value">${linkData.pcc > 0 ? 'Positive' : 'Negative'}</span></div>`;
+            }
+            
+            infoDiv.innerHTML = html;
+        }
+
+        // Simulation tick function
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
+        // Drag functions
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
+            svg.attr("viewBox", [0, 0, newWidth, newHeight]);
+            simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 2));
+            simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>
+
