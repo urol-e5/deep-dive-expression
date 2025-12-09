@@ -697,61 +697,64 @@ stacked_opacity_bar <- function(df, species_color, ymin = NULL, ymax = NULL, con
   }
  return(p) 
 }
+```
 
-stacked_bar_simple <- function(df, species_color, species_name, ymin = NULL, ymax = NULL, cons_asterisk = FALSE) {
-
+```{r}
+stacked_bar_simple <- function(df, species_color, species_name, ymin = NULL, ymax = NULL, cons_asterisk = FALSE, max_targets = NULL) {
   # Label correlation direction
   df_labeled <- df %>%
     mutate(
       correlation_direction = case_when(
-        PCC.cor > 0 ~ "positive",
         PCC.cor < 0 ~ "negative",
-        TRUE ~ "zero"
+        PCC.cor > 0 ~ "positive"
       )
     )
-
-  # Count number of unique mRNA targets per miRNA & correlation direction
+  # Count mRNA targets per miRNA & direction
   plot_data <- df_labeled %>%
     group_by(given_miRNA_name, correlation_direction) %>%
     summarise(n_mRNA = n_distinct(mRNA), .groups = "drop")
-
-  # ---- NEW: order miRNAs by number of targets (descending) ----
+  # Order miRNAs by number of targets
   miRNA_order <- plot_data %>%
     group_by(given_miRNA_name) %>%
     summarise(total = sum(n_mRNA), .groups = "drop") %>%
-    arrange(desc(total)) %>%
+    arrange(desc(total))
+  
+  # Filter to miRNAs below max_targets threshold if specified
+  if (!is.null(max_targets)) {
+    miRNA_order <- miRNA_order %>%
+      filter(total < max_targets)
+  }
+  
+  miRNA_order <- miRNA_order %>%
     pull(given_miRNA_name)
-
+  
+  # Filter plot_data to only include miRNAs that passed the threshold
   plot_data <- plot_data %>%
-    mutate(given_miRNA_name = factor(given_miRNA_name, levels = miRNA_order))
-
-  # Asterisks for conserved miRNAs (placed above the stacked bar)
+    filter(given_miRNA_name %in% miRNA_order) %>%
+    mutate(given_miRNA_name = factor(given_miRNA_name, levels = miRNA_order)) %>%
+    mutate(correlation_direction = factor(correlation_direction, levels = c("negative", "positive"))) %>%
+    arrange(given_miRNA_name, correlation_direction)
+  
+  # Asterisks for conserved miRNAs
   bar_heights_pos <- plot_data %>%
     group_by(given_miRNA_name) %>%
     summarise(pos_height = sum(n_mRNA), .groups = "drop")
-
   conserved <- df_labeled %>%
     filter(conservation == "conserved") %>%
     pull(given_miRNA_name) %>% unique()
-
   offset <- 2
   asterisk_df <- bar_heights_pos %>%
     filter(given_miRNA_name %in% conserved) %>%
-    mutate(
-      label = "*",
-      y_pos = pos_height + offset
-    )
-
-  # ---- PLOT: no shading, no negative direction flip ----
+    mutate(label = "*", y_pos = pos_height + offset)
+  
   p <- ggplot(plot_data, aes(x = given_miRNA_name, y = n_mRNA)) +
-    geom_col(aes(fill = correlation_direction), position = "stack") +
+    geom_col(aes(fill = correlation_direction), position = position_stack(reverse = TRUE)) +
     scale_fill_manual(
       values = c(
-        positive = species_color,
         negative = "#d7191c",
-        zero = "grey70"
+        positive = species_color
       ),
-      breaks = c("positive", "negative", "zero")
+      breaks = c("negative", "positive")
     ) +
     theme_minimal() +
     labs(
@@ -761,13 +764,12 @@ stacked_bar_simple <- function(df, species_color, species_name, ymin = NULL, yma
       fill = "Correlation"
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+  
   # Optional y-limits
   if (!is.null(ymin) & !is.null(ymax)) {
     p <- p + coord_cartesian(ylim = c(ymin, ymax))
   }
-
-  # Add conservation asterisks
+  # Asterisks for conserved miRNAs
   if (cons_asterisk == TRUE) {
     p <- p + geom_text(
       data = asterisk_df,
@@ -775,17 +777,24 @@ stacked_bar_simple <- function(df, species_color, species_name, ymin = NULL, yma
       color = "black", size = 5, vjust = 0
     )
   }
-
+  
   return(p)
 }
+```
 
+```{r, eval=TRUE}
 stacked_opacity_bar(Apul_FA_df, "#408EC6", ymin=-200 , ymax=250, cons_asterisk=TRUE)
 stacked_opacity_bar(Peve_FA_df, "#1E2761", ymin=-200 , ymax=250, cons_asterisk=TRUE)
 stacked_opacity_bar(Ptuh_FA_df, "#7A2048", ymin=-200 , ymax=250, cons_asterisk=TRUE)
 
+# Basic plotting, using all same color, for manuscript
 stacked_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=0 , ymax=250, cons_asterisk=TRUE)
-stacked_bar_simple(Peve_FA_df, "#1E2761", "P. evermanni", ymin=0 , ymax=250, cons_asterisk=TRUE)
-stacked_bar_simple(Ptuh_FA_df, "#7A2048", "P. tuahiniensis", ymin=0 , ymax=250, cons_asterisk=TRUE)
+stacked_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=0 , ymax=250, cons_asterisk=TRUE)
+stacked_bar_simple(Ptuh_FA_df, "#408EC6", "P. tuahiniensis", ymin=0 , ymax=250, cons_asterisk=TRUE)
+# Also plot stuff with <100 counts for better visibility of low counts
+stacked_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=0 , ymax=25, cons_asterisk=TRUE, max_targets=25)
+stacked_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=0 , ymax=25, cons_asterisk=TRUE, max_targets=25)
+stacked_bar_simple(Ptuh_FA_df, "#408EC6", "P. tuahiniensis", ymin=0 , ymax=25, cons_asterisk=TRUE, max_targets=25)
 
 stacked_opacity_bar(Apul_FA_df[Apul_FA_df$conservation=="conserved",], "#408EC6", ymin=-50, ymax=250)
 stacked_opacity_bar(Peve_FA_df[Peve_FA_df$conservation=="conserved",], "#1E2761", ymin=-50, ymax=250)
@@ -860,11 +869,95 @@ stacked_opacity_bar_t <- function(df, species_color, xmin = NULL, xmax = NULL, c
 stacked_opacity_bar_t(Apul_FA_df, "#408EC6", xmin=-200 , xmax=250, cons_asterisk=TRUE)
 stacked_opacity_bar_t(Peve_FA_df, "#1E2761", xmin=-200 , xmax=250, cons_asterisk=TRUE)
 stacked_opacity_bar_t(Ptuh_FA_df, "#7A2048", xmin=-200 , xmax=250, cons_asterisk=TRUE)
+```
 
-stacked_opacity_bar_t(Apul_FA_df[Apul_FA_df$conservation=="conserved",], "#408EC6", xmin=-50, xmax=250)
-stacked_opacity_bar_t(Peve_FA_df[Peve_FA_df$conservation=="conserved",], "#1E2761", xmin=-50, xmax=250)
-stacked_opacity_bar_t(Ptuh_FA_df[Ptuh_FA_df$conservation=="conserved",], "#7A2048", xmin=-50, xmax=250)
+Can't add a log scale to stacked bar plots, it would cause distortion. Instead, make an option where the bars are not stacked
+```{r}
+log_bar_simple <- function(df, species_color, species_name, ymin = NULL, ymax = NULL, cons_asterisk = FALSE) {
+  
+  # Label correlation direction
+  df_labeled <- df %>%
+    mutate(
+      correlation_direction = case_when(
+        PCC.cor < 0 ~ "negative",
+        PCC.cor > 0 ~ "positive"
+      )
+    )
+  
+  # Count mRNA targets per miRNA & direction
+  plot_data <- df_labeled %>%
+    group_by(given_miRNA_name, correlation_direction) %>%
+    summarise(n_mRNA = n_distinct(mRNA), .groups = "drop")
+  
+  # Order miRNAs by total interactions
+  miRNA_order <- plot_data %>%
+    group_by(given_miRNA_name) %>%
+    summarise(total = sum(n_mRNA)) %>%
+    arrange(desc(total)) %>%
+    pull(given_miRNA_name)
+  
+  plot_data <- plot_data %>%
+    mutate(given_miRNA_name = factor(given_miRNA_name, levels = miRNA_order),
+           correlation_direction = factor(correlation_direction, 
+                                          levels = c("negative", "positive")))
+  
+  # Asterisks for conserved miRNAs
+  conserved <- df_labeled %>%
+    filter(conservation == "conserved") %>%
+    pull(given_miRNA_name) %>% unique()
+  
+  # Sum of both neg + pos for placement of asterisk
+  asterisk_df <- plot_data %>%
+    group_by(given_miRNA_name) %>%
+    summarise(total_height = sum(n_mRNA)) %>%
+    filter(given_miRNA_name %in% conserved) %>%
+    mutate(label = "*", y_pos = total_height * 1.1)   # 10% above tallest bar
+  
+  p <- ggplot(plot_data, aes(x = given_miRNA_name, y = n_mRNA,
+                             fill = correlation_direction)) +
+    geom_col(position = position_dodge()) +
+    scale_fill_manual(
+      values = c(
+        negative = "#d7191c",      # red
+        positive = species_color    # species color
+      ),
+      breaks = c("negative", "positive")
+    ) +
+    scale_y_log10(
+      breaks = scales::trans_breaks("log10", function(x) 10^x),
+      labels = scales::trans_format("log10", scales::math_format(10^.x))
+    ) +
+    theme_minimal() +
+    labs(
+      title = paste0(species_name, " miRNA–mRNA Interactions"),
+      x = "miRNA",
+      y = "Number of mRNA Targets (log10)",
+      fill = "Correlation"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # y-limits if provided
+  if (!is.null(ymin) & !is.null(ymax)) {
+    p <- p + coord_cartesian(ylim = c(ymin, ymax))
+  }
+  
+  # Add asterisks if requested
+  if (cons_asterisk) {
+    p <- p + geom_text(
+      data = asterisk_df,
+      aes(x = given_miRNA_name, y = y_pos, label = label),
+      inherit.aes = FALSE,
+      color = "black",
+      size = 5
+    )
+  }
+  
+  return(p)
+}
 
+log_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=1, ymax=1000, cons_asterisk=TRUE)
+log_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=1, ymax=1000, cons_asterisk=TRUE)
+log_bar_simple(Ptuh_FA_df, "#408EC6", "P. tuahiniensis", ymin=1, ymax=1000, cons_asterisk=TRUE)
 ```
 
 
