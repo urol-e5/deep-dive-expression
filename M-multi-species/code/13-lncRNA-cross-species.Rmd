@@ -1,0 +1,513 @@
+---
+title: "13-lncRNA-cross-species"
+author: "Zach Bengtsson"
+date: "2026-01-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Libraries and directories
+
+```{r libraries}
+library(tidyverse)
+library(Biostrings)
+library(purrr)
+
+blast_dir      <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/blast"
+out_table_dir  <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/length_expr_tables"
+plot_dir       <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/plots"
+
+dir.create(out_table_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(plot_dir,      showWarnings = FALSE, recursive = TRUE)
+```
+
+# Download FASTAs and counts
+```{bash}
+# Download lncRNA FASTAs + filtered count matrices for Apul, Peve, Ptuh
+# into: ~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species
+
+set -euo pipefail
+
+DEST="$HOME/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species"
+cd "$DEST"
+
+# IMPORTANT: use raw.githubusercontent.com for actual file downloads (not github.com/blob)
+URLS=(
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/31-Apul-lncRNA/Apul-lncRNA.fasta"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.fasta"
+
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt"
+)
+
+# -L follows redirects, -O keeps original filenames, --fail makes errors loud
+for u in "${URLS[@]}"; do
+  echo "Downloading: $u"
+  curl -L --fail -O "$u"
+done
+
+echo
+echo "Done. Files in: $DEST"
+ls -lh
+
+```
+
+
+# Species metadata
+
+```{r species-meta}
+species_meta <- tibble::tribble(
+  ~species, ~fasta,                           ~counts,
+  "Apul",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Apul-lncRNA.fasta",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Apul-lncRNA-counts-filtered.txt",
+  "Peve",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Peve-lncRNA.fasta",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Peve-lncRNA-counts-filtered.txt",
+  "Ptuh",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Ptuh-lncRNA.fasta",   "~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species/Ptuh-lncRNA-counts-filtered.txt"
+)
+species_meta
+```
+
+# Helper functions
+
+```{r helpers}
+get_lnc_lengths <- function(fasta_path) {
+  dna <- Biostrings::readDNAStringSet(fasta_path)
+
+  ids_raw <- names(dna)
+  # Remove species prefix up to the first underscore:
+  # "Apul_lncRNA_001" -> "lncRNA_001"
+  # "Peve_lncRNA_001" -> "lncRNA_001"
+  # "Ptuh_lncRNA_001" -> "lncRNA_001"
+  ids_clean <- sub("^[^_]+_", "", ids_raw)
+
+  tibble(
+    lnc_id    = ids_clean,
+    length_nt = as.integer(width(dna))
+  )
+}
+
+get_lnc_expression <- function(counts_path) {
+  counts <- readr::read_tsv(counts_path, show_col_types = FALSE)
+
+  if ("Geneid" %in% names(counts)) {
+    counts <- counts %>% dplyr::rename(lnc_id = Geneid)
+  } else if (!"lnc_id" %in% names(counts)) {
+    names(counts)[1] <- "lnc_id"
+  }
+
+  meta_cols <- c("lnc_id", "Chr", "Start", "End", "Strand", "Length")
+
+  expr_mat <- counts %>%
+    dplyr::select(-dplyr::any_of(meta_cols)) %>%
+    dplyr::mutate(across(everything(), as.numeric))
+
+  tibble::tibble(
+    lnc_id          = counts$lnc_id,
+    mean_expr       = rowMeans(expr_mat, na.rm = TRUE),
+    log10_mean_expr = log10(rowMeans(expr_mat, na.rm = TRUE) + 1)
+  )
+}
+
+read_blast_best_hits <- function(path,
+                                 pident_min = 70,
+                                 qcov_min   = 0.5,
+                                 evalue_max = 1e-5) {
+  empty <- tibble(
+    qseqid   = character(),
+    sseqid   = character(),
+    pident   = numeric(),
+    aln_len  = integer(),
+    qlen     = integer(),
+    slen     = integer(),
+    evalue   = numeric(),
+    bitscore = numeric(),
+    qcov     = numeric()
+  )
+
+  if (!file.exists(path)) {
+    warning("BLAST file not found: ", path)
+    return(empty)
+  }
+
+  x <- readr::read_tsv(
+    path,
+    col_names = c("qseqid", "sseqid", "pident",
+                  "aln_len", "qlen", "slen", "evalue", "bitscore"),
+    show_col_types = FALSE
+  )
+
+  if (nrow(x) == 0) {
+    warning("BLAST file is empty: ", path)
+    return(empty)
+  }
+
+  x %>%
+    mutate(qcov = aln_len / qlen) %>%
+    filter(
+      pident >= pident_min,
+      qcov   >= qcov_min,
+      evalue <= evalue_max
+    ) %>%
+    dplyr::group_by(qseqid) %>%
+    dplyr::arrange(
+      dplyr::desc(bitscore),
+      evalue,
+      dplyr::desc(qcov),
+      .by_group = TRUE
+    ) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup()
+}
+
+
+```
+
+# BLAST execution
+```{bash eval=FALSE}
+
+FASTA_DIR=~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species
+BLAST_DIR=~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/blast
+
+mkdir -p "$BLAST_DIR"
+
+echo "Making BLAST databases..."
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Apul_lnc_db"
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Peve_lnc_db"
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Ptuh_lnc_db"
+
+
+echo "Running pairwise BLASTn comparisons..."
+
+# Apul as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -db "$BLAST_DIR/Peve_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Apul_vs_Peve.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -db "$BLAST_DIR/Ptuh_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Apul_vs_Ptuh.blastn.tsv"
+
+
+# Peve as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -db "$BLAST_DIR/Apul_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Peve_vs_Apul.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -db "$BLAST_DIR/Ptuh_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Peve_vs_Ptuh.blastn.tsv"
+
+
+# Ptuh as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -db "$BLAST_DIR/Apul_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Ptuh_vs_Apul.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -db "$BLAST_DIR/Peve_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Ptuh_vs_Peve.blastn.tsv"
+
+
+echo "BLAST complete. Outputs in: $BLAST_DIR"
+ls -lh "$BLAST_DIR"
+```
+
+# BLAST pair metadata
+
+```{r blast-pairs}
+blast_pairs <- tibble::tribble(
+  ~query, ~subject, ~file,
+  "Apul", "Peve", file.path(blast_dir, "Apul_vs_Peve.blastn.tsv"),
+  "Apul", "Ptuh", file.path(blast_dir, "Apul_vs_Ptuh.blastn.tsv"),
+  "Peve", "Apul", file.path(blast_dir, "Peve_vs_Apul.blastn.tsv"),
+  "Peve", "Ptuh", file.path(blast_dir, "Peve_vs_Ptuh.blastn.tsv"),
+  "Ptuh", "Apul", file.path(blast_dir, "Ptuh_vs_Apul.blastn.tsv"),
+  "Ptuh", "Peve", file.path(blast_dir, "Ptuh_vs_Peve.blastn.tsv")
+) %>%
+  mutate(
+    hits_best = map(file, read_blast_best_hits),
+    query_ids_with_hit = map(hits_best, ~ distinct(.x, qseqid) %>% pull(qseqid))
+  )
+blast_pairs
+```
+
+
+# Build combined table
+
+```{r build-table}
+get_conserved_ids <- function(species, blast_pairs) {
+  blast_pairs %>%
+    dplyr::filter(query == species) %>%
+    dplyr::select(hits_best) %>%
+    tidyr::unnest(hits_best) %>%
+    # Clean qseqid to match lnc_id convention:
+    # "Apul_lncRNA_00001" -> "lncRNA_00001"
+    dplyr::mutate(
+      lnc_id = sub("^[^_]+_", "", qseqid)
+    ) %>%
+    dplyr::distinct(lnc_id) %>%
+    dplyr::pull(lnc_id)
+}
+
+all_species_df <- species_meta %>%
+  mutate(
+    lengths       = purrr::map(fasta,  get_lnc_lengths),
+    expr          = purrr::map(counts, get_lnc_expression),
+    conserved_ids = purrr::map(species, ~ get_conserved_ids(.x, blast_pairs))
+  ) %>%
+  mutate(
+    merged = purrr::pmap(
+      list(lengths, expr, conserved_ids),
+      function(lengths, expr, conserved_ids) {
+        lengths %>%
+          dplyr::left_join(expr, by = "lnc_id") %>%
+          dplyr::mutate(is_conserved = lnc_id %in% conserved_ids)
+      }
+    )
+  )
+
+lnc_df <- all_species_df %>%
+  dplyr::select(species, merged) %>%
+  tidyr::unnest(merged)
+
+readr::write_tsv(
+  lnc_df,
+  file = file.path(out_table_dir, "lncRNA_length_expr_conservation_all_species_besthit.tsv")
+)
+
+lnc_df %>% head()
+```
+
+# Plots
+
+```{r venn_conservation, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(igraph)
+library(ggvenn)
+
+# 1) Build an undirected graph of best-hit relationships ------------------
+
+edges <- blast_pairs %>%
+  select(query, subject, hits_best) %>%
+  tidyr::unnest(hits_best) %>%
+  transmute(
+    node_query   = paste(query,  qseqid, sep = "::"),  # e.g. "Apul::Apul_lncRNA_00001"
+    node_subject = paste(subject, sseqid, sep = "::")  # e.g. "Peve::Peve_lncRNA_01234"
+  ) %>%
+  distinct()
+
+if (nrow(edges) == 0) {
+  stop("No BLAST best-hit edges found; cannot build conservation Venn diagram.")
+}
+
+g <- igraph::graph_from_data_frame(edges, directed = FALSE)
+
+# 2) Connected components = orthogroups ----------------------------------
+
+comp <- igraph::components(g)
+
+nodes_df <- tibble(
+  node  = names(comp$membership),
+  group = comp$membership
+) %>%
+  tidyr::separate(node, into = c("species", "lnc_raw"), sep = "::", remove = FALSE)
+
+group_species <- nodes_df %>%
+  group_by(group) %>%
+  summarise(species = list(unique(species)), .groups = "drop")
+
+# 3) Venn sets: which orthogroups contain each species -------------------
+
+get_groups_for_species <- function(sp, group_species) {
+  group_species$group[vapply(group_species$species, function(x) sp %in% x, logical(1))]
+}
+
+venn_groups <- list(
+  Apul = get_groups_for_species("Apul", group_species),
+  Peve = get_groups_for_species("Peve", group_species),
+  Ptuh = get_groups_for_species("Ptuh", group_species)
+)
+
+# 4) Count lncRNAs unique to each species --------------------------------
+# "Unique" = found only in orthogroups that contain a single species.
+
+single_species_groups <- group_species %>%
+  mutate(n_species = lengths(species)) %>%
+  filter(n_species == 1) %>%
+  mutate(species = map_chr(species, ~ .x[1]))
+
+# lncRNAs in those single-species groups
+unique_lnc_counts <- nodes_df %>%
+  semi_join(single_species_groups, by = "group") %>%
+  count(species, name = "n_unique_lnc") %>%
+  tibble::deframe()
+
+# Ensure all species present in the vector
+for (sp in c("Apul", "Peve", "Ptuh")) {
+  if (is.na(unique_lnc_counts[sp])) unique_lnc_counts[sp] <- 0L
+}
+
+# Build nicer labels for the Venn sets
+label_vec <- c(
+  Apul = sprintf("A. pulchra"),
+  Peve = sprintf("P. evermanni"),
+  Ptuh = sprintf("P. tuahiniensis")
+)
+
+names(venn_groups) <- label_vec
+
+# Optional: print unique counts as a table
+tibble(
+  species = c("Apul", "Peve", "Ptuh"),
+  n_unique_lnc = as.integer(unique_lnc_counts[c("Apul", "Peve", "Ptuh")])
+) %>% print()
+
+# 5) Plot the Venn diagram -----------------------------------------------
+
+ggvenn(
+  venn_groups,
+  show_percentage = FALSE,
+  fill_color = c("#8da0cb", "#66c2a5", "#fc8d62"),
+  stroke_size = 0.5,
+  set_name_size = 4
+)
+```
+
+```{r lncRNA_summary_stats}
+lncRNA_summary <- lnc_df %>%
+  dplyr::group_by(species) %>%
+  dplyr::summarise(
+    n_lncRNAs = dplyr::n(),
+    mean_length_bp = round(mean(length_nt, na.rm = TRUE), 0),
+    median_length_bp = round(median(length_nt, na.rm = TRUE), 0),
+    mean_expression = round(mean(mean_expr, na.rm = TRUE), 1),
+    median_expression = round(median(mean_expr, na.rm = TRUE), 1),
+    .groups = "drop"
+  )
+
+lncRNA_summary
+
+```
+
+```{r length_plots, fig.width=10, fig.height=5}
+lnc_df_plot <- lnc_df %>%
+  dplyr::mutate(
+    conservation = dplyr::if_else(is_conserved, "Conserved", "Not conserved"),
+    species_facet = dplyr::case_when(
+      species == "Apul" ~ "italic('A. pulchra')",
+      species == "Peve" ~ "italic('P. evermanni')",
+      species == "Ptuh" ~ "italic('P. tuahiniensis')",
+      TRUE ~ species
+    )
+  )
+
+base_theme <- theme_bw() +
+  theme(
+    panel.grid        = element_blank(),
+    strip.background  = element_blank(),
+    strip.text.x      = element_text(face = "plain"),
+    strip.text.y      = element_text(face = "bold"),
+    plot.title        = element_text(face = "bold"),
+    legend.background = element_blank(),
+    legend.key        = element_blank()
+  )
+
+## 1) Histogram of lncRNA length
+p_hist <- ggplot(lnc_df_plot, aes(x = length_nt)) +
+  geom_histogram(bins = 40, fill = "grey80", color = "grey40") +
+  scale_x_log10() +
+  facet_grid(
+    conservation ~ species_facet,
+    labeller = labeller(
+      species_facet = label_parsed,  # parse only species
+      conservation  = label_value    # leave conservation as plain text
+    )
+  ) +
+  labs(
+    x = "lncRNA length (nt, log10 scale)",
+    y = "Count",
+    title = "lncRNA length distributions by species and conservation status"
+  ) +
+  base_theme
+
+p_hist
+
+ggsave(
+  filename = file.path(plot_dir, "lncRNA_length_histograms_by_conservation_besthit.png"),
+  plot     = p_hist,
+  width    = 10,
+  height   = 6,
+  dpi      = 300
+)
+
+## 2) Scatterplot: length vs expression (conserved highlighted)
+p_scatter <- ggplot(
+  dplyr::filter(lnc_df_plot, !is.na(log10_mean_expr)),
+  aes(x = length_nt, y = log10_mean_expr, color = conservation)
+) +
+  geom_point(aes(alpha = conservation), size = 0.7) +
+  scale_alpha_manual(
+    values = c("Not conserved" = 0.25, "Conserved" = 1),
+    guide = "none"
+  ) +
+  scale_x_log10() +
+  facet_wrap(
+    ~ species_facet,
+    labeller = labeller(species_facet = label_parsed)  # parse only species
+  ) +
+  scale_color_manual(
+    values = c("Not conserved" = "grey60", "Conserved" = "#D73027")
+  ) +
+  labs(
+    x = "lncRNA length (nt, log10 scale)",
+    y = "log10(mean expression + 1)",
+    color = "Conservation",
+    title = "lncRNA length vs expression by species",
+    subtitle = "Conserved lncRNAs highlighted"
+  ) +
+  base_theme
+
+p_scatter
+
+```
