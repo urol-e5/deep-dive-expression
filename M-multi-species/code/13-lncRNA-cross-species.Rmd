@@ -29,8 +29,6 @@ dir.create(plot_dir,      showWarnings = FALSE, recursive = TRUE)
 # Download lncRNA FASTAs + filtered count matrices for Apul, Peve, Ptuh
 # into: ~/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species
 
-set -euo pipefail
-
 DEST="$HOME/github/deep-dive-expression/M-multi-species/data/13-lncRNA-cross-species"
 cd "$DEST"
 
