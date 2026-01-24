@@ -1,0 +1,749 @@
+---
+title: "13.1-lncRNA-cross-species"
+author: "Zach Bengtsson"
+date: "2026-01-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# STRICT: Stringent filtering of blast hits for strongly similar lncRNAs
+
+# Libraries and Directories
+
+```{r}
+library(tidyverse)
+library(Biostrings)
+library(purrr)
+
+blast_dir      <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/blast"
+out_table_dir  <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/length_expr_tables"
+plot_dir       <- "~/github/deep-dive-expression/M-multi-species/output/13-lncRNA-cross-species/plots"
+
+dir.create(out_table_dir, showWarnings = FALSE, recursive = TRUE)
+dir.create(plot_dir,      showWarnings = FALSE, recursive = TRUE)
+```
+
+# Download FASTAs and Counts
+
+```{bash}
+# Download lncRNA FASTAs + filtered count matrices for Apul, Peve, Ptuh
+# into: ~/github/deep-dive-expression/M-multi-species/data/13.1-lncRNA-cross-species
+
+DEST="$HOME/github/deep-dive-expression/M-multi-species/data/13.1-lncRNA-cross-species"
+cd "$DEST"
+
+# IMPORTANT: use raw.githubusercontent.com for actual file downloads (not github.com/blob)
+URLS=(
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/31-Apul-lncRNA/Apul-lncRNA.fasta"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.fasta"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.fasta"
+
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt"
+  "https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt"
+)
+
+# -L follows redirects, -O keeps original filenames, --fail makes errors loud
+for u in "${URLS[@]}"; do
+  echo "Downloading: $u"
+  curl -L --fail -O "$u"
+done
+
+echo
+echo "Done. Files in: $DEST"
+ls -lh
+```
+
+# Helper Functions
+
+```{r}
+get_lnc_lengths <- function(fasta_path) {
+  dna <- Biostrings::readDNAStringSet(fasta_path)
+
+  ids_raw <- names(dna)
+  # Remove species prefix up to the first underscore:
+  # "Apul_lncRNA_001" -> "lncRNA_001"
+  # "Peve_lncRNA_001" -> "lncRNA_001"
+  # "Ptuh_lncRNA_001" -> "lncRNA_001"
+  ids_clean <- sub("^[^_]+_", "", ids_raw)
+
+  tibble(
+    lnc_id    = ids_clean,
+    length_nt = as.integer(width(dna))
+  )
+}
+
+get_lnc_expression <- function(counts_path) {
+  counts <- readr::read_tsv(counts_path, show_col_types = FALSE)
+
+  if ("Geneid" %in% names(counts)) {
+    counts <- counts %>% dplyr::rename(lnc_id = Geneid)
+  } else if (!"lnc_id" %in% names(counts)) {
+    names(counts)[1] <- "lnc_id"
+  }
+
+  meta_cols <- c("lnc_id", "Chr", "Start", "End", "Strand", "Length")
+
+  expr_mat <- counts %>%
+    dplyr::select(-dplyr::any_of(meta_cols)) %>%
+    dplyr::mutate(across(everything(), as.numeric))
+
+  tibble::tibble(
+    lnc_id          = counts$lnc_id,
+    mean_expr       = rowMeans(expr_mat, na.rm = TRUE),
+    log10_mean_expr = log10(rowMeans(expr_mat, na.rm = TRUE) + 1)
+  )
+}
+
+read_blast_best_hits <- function(path,
+                                 pident_min = 70,
+                                 qcov_min   = 0.5,
+                                 evalue_max = 1e-5) {
+  empty <- tibble(
+    qseqid   = character(),
+    sseqid   = character(),
+    pident   = numeric(),
+    aln_len  = integer(),
+    qlen     = integer(),
+    slen     = integer(),
+    evalue   = numeric(),
+    bitscore = numeric(),
+    qcov     = numeric()
+  )
+
+  if (!file.exists(path)) {
+    warning("BLAST file not found: ", path)
+    return(empty)
+  }
+
+  x <- readr::read_tsv(
+    path,
+    col_names = c("qseqid", "sseqid", "pident",
+                  "aln_len", "qlen", "slen", "evalue", "bitscore"),
+    show_col_types = FALSE
+  )
+
+  if (nrow(x) == 0) {
+    warning("BLAST file is empty: ", path)
+    return(empty)
+  }
+
+  x %>%
+    dplyr::mutate(qcov = aln_len / qlen) %>%
+    dplyr::filter(
+      pident >= pident_min,
+      qcov   >= qcov_min,
+      evalue <= evalue_max
+    ) %>%
+    dplyr::group_by(qseqid) %>%
+    dplyr::arrange(
+      dplyr::desc(bitscore),
+      evalue,
+      dplyr::desc(qcov),
+      .by_group = TRUE
+    ) %>%
+    dplyr::slice(1) %>%
+    dplyr::ungroup()
+}
+```
+
+# BLAST
+
+```{bash}
+
+FASTA_DIR=~/github/deep-dive-expression/M-multi-species/data/13.1-lncRNA-cross-species
+BLAST_DIR=~/github/deep-dive-expression/M-multi-species/output/13.1-lncRNA-cross-species/blast
+
+mkdir -p "$BLAST_DIR"
+
+echo "Making BLAST databases..."
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Apul_lnc_db"
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Peve_lnc_db"
+
+/home/shared/ncbi-blast-2.11.0+/bin/makeblastdb \
+  -in "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -dbtype nucl \
+  -out "$BLAST_DIR/Ptuh_lnc_db"
+
+
+echo "Running pairwise BLASTn comparisons..."
+
+# Apul as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -db "$BLAST_DIR/Peve_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Apul_vs_Peve.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Apul-lncRNA.fasta" \
+  -db "$BLAST_DIR/Ptuh_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Apul_vs_Ptuh.blastn.tsv"
+
+
+# Peve as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -db "$BLAST_DIR/Apul_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Peve_vs_Apul.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Peve-lncRNA.fasta" \
+  -db "$BLAST_DIR/Ptuh_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Peve_vs_Ptuh.blastn.tsv"
+
+
+# Ptuh as query
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -db "$BLAST_DIR/Apul_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Ptuh_vs_Apul.blastn.tsv"
+
+/home/shared/ncbi-blast-2.11.0+/bin/blastn \
+  -query "$FASTA_DIR/Ptuh-lncRNA.fasta" \
+  -db "$BLAST_DIR/Peve_lnc_db" \
+  -evalue 1e-5 \
+  -max_target_seqs 5 \
+  -outfmt "6 qseqid sseqid pident length qlen slen evalue bitscore" \
+  > "$BLAST_DIR/Ptuh_vs_Peve.blastn.tsv"
+
+
+echo "BLAST complete. Outputs in: $BLAST_DIR"
+ls -lh "$BLAST_DIR"
+```
+
+# Build combined length/expression table
+
+```{r}
+
+all_species_df <- species_meta %>%
+  dplyr::mutate(
+    lengths = purrr::map(fasta,  get_lnc_lengths),
+    expr    = purrr::map(counts, get_lnc_expression)
+  ) %>%
+  dplyr::mutate(
+    merged = purrr::map2(
+      lengths, expr,
+      ~ dplyr::left_join(.x, .y, by = "lnc_id")
+    )
+  )
+
+lnc_df <- all_species_df %>%
+  dplyr::select(species, merged) %>%
+  tidyr::unnest(merged)
+
+# Save basic table
+readr::write_tsv(
+  lnc_df,
+  file = file.path(out_table_dir, "lncRNA_length_expr_all_species.tsv")
+)
+
+lnc_df %>% head()
+```
+
+# Homology-like categories (1:1, 1:1:1) and join back to lnc_df
+
+```{r}
+
+## 1) Pairwise best reciprocal hits (BRHs) -----------------------------
+
+apul_vs_peve <- read_blast_best_hits(file.path(blast_dir, "Apul_vs_Peve.blastn.tsv"))
+peve_vs_apul <- read_blast_best_hits(file.path(blast_dir, "Peve_vs_Apul.blastn.tsv"))
+
+apul_vs_ptuh <- read_blast_best_hits(file.path(blast_dir, "Apul_vs_Ptuh.blastn.tsv"))
+ptuh_vs_apul <- read_blast_best_hits(file.path(blast_dir, "Ptuh_vs_Apul.blastn.tsv"))
+
+peve_vs_ptuh <- read_blast_best_hits(file.path(blast_dir, "Peve_vs_Ptuh.blastn.tsv"))
+ptuh_vs_peve <- read_blast_best_hits(file.path(blast_dir, "Ptuh_vs_Peve.blastn.tsv"))
+
+get_brh_pairs <- function(q_to_s, s_to_q, q_species, s_species) {
+  dplyr::inner_join(
+    q_to_s %>% dplyr::select(qseqid, sseqid),
+    s_to_q %>% dplyr::select(qseqid, sseqid),
+    by = c("qseqid" = "sseqid", "sseqid" = "qseqid")
+  ) %>%
+    dplyr::transmute(
+      !!q_species := qseqid,
+      !!s_species := sseqid
+    ) %>%
+    dplyr::mutate(
+      !!q_species := sub("^[^_]+_", "", .data[[q_species]]),
+      !!s_species := sub("^[^_]+_", "", .data[[s_species]])
+    )
+}
+
+brh_Apul_Peve <- get_brh_pairs(apul_vs_peve, peve_vs_apul, "Apul", "Peve")
+brh_Apul_Ptuh <- get_brh_pairs(apul_vs_ptuh, ptuh_vs_apul, "Apul", "Ptuh")
+brh_Peve_Ptuh <- get_brh_pairs(peve_vs_ptuh, ptuh_vs_peve, "Peve", "Ptuh")
+
+## 2) Three-way 1:1:1 triplets (Apul–Peve–Ptuh) -----------------------
+
+triplets_1to1to1 <- brh_Apul_Peve %>%
+  dplyr::inner_join(brh_Apul_Ptuh, by = "Apul") %>%
+  # now have Apul, Peve, Ptuh
+  dplyr::inner_join(brh_Peve_Ptuh, by = c("Peve", "Ptuh"))
+
+## 3) All lnc IDs per species from lnc_df ------------------------------
+
+apul_all <- lnc_df %>%
+  dplyr::filter(species == "Apul") %>%
+  dplyr::pull(lnc_id) %>% unique()
+
+peve_all <- lnc_df %>%
+  dplyr::filter(species == "Peve") %>%
+  dplyr::pull(lnc_id) %>% unique()
+
+ptuh_all <- lnc_df %>%
+  dplyr::filter(species == "Ptuh") %>%
+  dplyr::pull(lnc_id) %>% unique()
+
+## 4) Species-specific category assignment -----------------------------
+## Each lncRNA gets exactly one category per species
+
+# Apul: Apul_only, Apul_Peve, Apul_Ptuh, Apul_Peve_Ptuh
+apul_membership <- tibble::tibble(
+  species = "Apul",
+  lnc_id  = apul_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1$Apul,
+    in_APEVE  = lnc_id %in% brh_Apul_Peve$Apul,
+    in_APPT   = lnc_id %in% brh_Apul_Ptuh$Apul,
+    category  = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APEVE & !in_triplet ~ "Apul_Peve",
+      in_APPT  & !in_triplet ~ "Apul_Ptuh",
+      TRUE                   ~ "Apul_only"
+    )
+  )
+
+# Peve: Peve_only, Apul_Peve, Peve_Ptuh, Apul_Peve_Ptuh
+peve_membership <- tibble::tibble(
+  species = "Peve",
+  lnc_id  = peve_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1$Peve,
+    in_APEVE  = lnc_id %in% brh_Apul_Peve$Peve,
+    in_PEVPT  = lnc_id %in% brh_Peve_Ptuh$Peve,
+    category  = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APEVE & !in_triplet ~ "Apul_Peve",
+      in_PEVPT & !in_triplet ~ "Peve_Ptuh",
+      TRUE                   ~ "Peve_only"
+    )
+  )
+
+# Ptuh: Ptuh_only, Apul_Ptuh, Peve_Ptuh, Apul_Peve_Ptuh
+ptuh_membership <- tibble::tibble(
+  species = "Ptuh",
+  lnc_id  = ptuh_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1$Ptuh,
+    in_APPT   = lnc_id %in% brh_Apul_Ptuh$Ptuh,
+    in_PEVPT  = lnc_id %in% brh_Peve_Ptuh$Ptuh,
+    category  = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APPT  & !in_triplet ~ "Apul_Ptuh",
+      in_PEVPT & !in_triplet ~ "Peve_Ptuh",
+      TRUE                   ~ "Ptuh_only"
+    )
+  )
+
+# Combined membership table
+membership_all <- dplyr::bind_rows(
+  apul_membership,
+  peve_membership,
+  ptuh_membership
+) %>%
+  dplyr::select(species, lnc_id, category)
+
+# Optional sanity check: category counts sum to FASTA totals per species
+membership_all %>%
+  dplyr::count(species, category, name = "n_lncRNAs") %>%
+  dplyr::group_by(species) %>%
+  dplyr::mutate(species_total = sum(n_lncRNAs)) %>%
+  dplyr::ungroup()
+
+# Join categories back into lnc_df -------------------------------------
+
+lnc_df <- lnc_df %>%
+  dplyr::left_join(membership_all, by = c("species", "lnc_id")) %>%
+  dplyr::mutate(
+    sharing_simple = dplyr::case_when(
+      grepl("only$", category)      ~ "species_only",
+      category == "Apul_Peve_Ptuh"  ~ "all_three",
+      TRUE                          ~ "pairwise"
+    )
+  )
+
+```
+
+# Plots: length and expression
+
+```{r}
+lnc_df_plot <- lnc_df %>%
+  dplyr::mutate(
+    species_facet = dplyr::case_when(
+      species == "Apul" ~ "italic('A. pulchra')",
+      species == "Peve" ~ "italic('P. evermanni')",
+      species == "Ptuh" ~ "italic('P. tuahiniensis')",
+      TRUE ~ species
+    ),
+    sharing_simple = factor(
+      sharing_simple,
+      levels = c("species_only", "pairwise", "all_three"),
+      labels = c("Species-only", "Pairwise", "All three")
+    )
+  )
+
+base_theme <- theme_bw() +
+  theme(
+    panel.grid        = element_blank(),
+    strip.background  = element_blank(),
+    strip.text.x      = element_text(face = "plain"),
+    strip.text.y      = element_text(face = "bold"),
+    plot.title        = element_text(face = "bold"),
+    legend.background = element_blank(),
+    legend.key        = element_blank()
+  )
+
+## 1) Histogram of lncRNA length by sharing pattern
+p_hist <- ggplot(lnc_df_plot, aes(x = length_nt)) +
+  geom_histogram(bins = 40, fill = "grey80", color = "grey40") +
+  scale_x_log10() +
+  facet_grid(
+    sharing_simple ~ species_facet,
+    labeller = labeller(
+      species_facet  = label_parsed,
+      sharing_simple = label_value
+    )
+  ) +
+  labs(
+    x = "lncRNA length (nt, log10 scale)",
+    y = "Count",
+    title = "lncRNA length distributions by species and sharing pattern"
+  ) +
+  base_theme
+
+p_hist
+
+ggsave(
+  filename = file.path(plot_dir, "lncRNA_length_histograms_by_sharing_pattern.png"),
+  plot     = p_hist,
+  width    = 10,
+  height   = 6,
+  dpi      = 300
+)
+
+## 2) Scatterplot: length vs expression, colored by sharing pattern
+p_scatter <- ggplot(
+  dplyr::filter(lnc_df_plot, !is.na(log10_mean_expr)),
+  aes(x = length_nt, y = log10_mean_expr, color = sharing_simple)
+) +
+  geom_point(aes(alpha = sharing_simple), size = 0.7) +
+  scale_alpha_manual(
+    values = c("Species-only" = 0.25,
+               "Pairwise"     = 0.6,
+               "All three"    = 1),
+    guide  = "none"
+  ) +
+  scale_x_log10() +
+  facet_wrap(
+    ~ species_facet,
+    labeller = labeller(species_facet = label_parsed)
+  ) +
+  scale_color_manual(
+    values = c(
+      "Species-only" = "grey60",
+      "Pairwise"     = "#4575B4",
+      "All three"    = "#D73027"
+    )
+  ) +
+  labs(
+    x     = "lncRNA length (nt, log10 scale)",
+    y     = "log10(mean expression + 1)",
+    color = "Sharing pattern",
+    title = "lncRNA length vs expression by species",
+    subtitle = "Species-only, pairwise-shared, and shared across all three species"
+  ) +
+  base_theme
+
+p_scatter
+```
+
+# LESS STRICT Reduces stringency of filtering criteria to be more appropriate for lncRNA
+
+# Define relaxed parameters
+
+```{r}
+
+## ============================================================
+## RELAXED lncRNA homology re-analysis (post hoc)
+## ============================================================
+
+PIDENT_MIN_RELAXED <- 50
+QCOV_MIN_RELAXED   <- 0.3
+EVALUE_MAX_RELAXED <- 1e-5
+```
+
+# Wrapper to reuse existing BLAST TSVs with new thresholds
+
+```{r}
+read_blast_best_hits_relaxed <- function(path) {
+  read_blast_best_hits(
+    path,
+    pident_min = PIDENT_MIN_RELAXED,
+    qcov_min   = QCOV_MIN_RELAXED,
+    evalue_max = EVALUE_MAX_RELAXED
+  )
+}
+
+```
+
+# Rebuild BRHs using relaxed criteria
+
+```{r}
+## Pairwise BRHs (relaxed)
+
+apul_vs_peve_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Apul_vs_Peve.blastn.tsv"))
+peve_vs_apul_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Peve_vs_Apul.blastn.tsv"))
+
+apul_vs_ptuh_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Apul_vs_Ptuh.blastn.tsv"))
+ptuh_vs_apul_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Ptuh_vs_Apul.blastn.tsv"))
+
+peve_vs_ptuh_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Peve_vs_Ptuh.blastn.tsv"))
+ptuh_vs_peve_r <- read_blast_best_hits_relaxed(file.path(blast_dir, "Ptuh_vs_Peve.blastn.tsv"))
+
+brh_Apul_Peve_r <- get_brh_pairs(apul_vs_peve_r, peve_vs_apul_r, "Apul", "Peve")
+brh_Apul_Ptuh_r <- get_brh_pairs(apul_vs_ptuh_r, ptuh_vs_apul_r, "Apul", "Ptuh")
+brh_Peve_Ptuh_r <- get_brh_pairs(peve_vs_ptuh_r, ptuh_vs_peve_r, "Peve", "Ptuh")
+```
+
+# Rebuild relaxed 1:1:1
+
+```{r}
+triplets_1to1to1_relaxed <- brh_Apul_Peve_r %>%
+  inner_join(brh_Apul_Ptuh_r, by = "Apul") %>%
+  inner_join(brh_Peve_Ptuh_r, by = c("Peve", "Ptuh"))
+```
+
+# Reassign relaxed categories
+
+```{r}
+
+## 4) Species-specific category assignment (RELAXED) -------------------
+## Each lncRNA gets exactly one category per species
+
+# Apul: Apul_only, Apul_Peve, Apul_Ptuh, Apul_Peve_Ptuh
+apul_membership_relaxed <- tibble::tibble(
+  species = "Apul",
+  lnc_id  = apul_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1_relaxed$Apul,
+    in_APEVE  = lnc_id %in% brh_Apul_Peve_r$Apul,
+    in_APPT   = lnc_id %in% brh_Apul_Ptuh_r$Apul,
+    category_relaxed = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APEVE & !in_triplet ~ "Apul_Peve",
+      in_APPT  & !in_triplet ~ "Apul_Ptuh",
+      TRUE                   ~ "Apul_only"
+    )
+  )
+
+# Peve: Peve_only, Apul_Peve, Peve_Ptuh, Apul_Peve_Ptuh
+peve_membership_relaxed <- tibble::tibble(
+  species = "Peve",
+  lnc_id  = peve_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1_relaxed$Peve,
+    in_APEVE  = lnc_id %in% brh_Apul_Peve_r$Peve,
+    in_PEVPT  = lnc_id %in% brh_Peve_Ptuh_r$Peve,
+    category_relaxed = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APEVE & !in_triplet ~ "Apul_Peve",
+      in_PEVPT & !in_triplet ~ "Peve_Ptuh",
+      TRUE                   ~ "Peve_only"
+    )
+  )
+
+# Ptuh: Ptuh_only, Apul_Ptuh, Peve_Ptuh, Apul_Peve_Ptuh
+ptuh_membership_relaxed <- tibble::tibble(
+  species = "Ptuh",
+  lnc_id  = ptuh_all
+) %>%
+  dplyr::mutate(
+    in_triplet = lnc_id %in% triplets_1to1to1_relaxed$Ptuh,
+    in_APPT   = lnc_id %in% brh_Apul_Ptuh_r$Ptuh,
+    in_PEVPT  = lnc_id %in% brh_Peve_Ptuh_r$Ptuh,
+    category_relaxed = dplyr::case_when(
+      in_triplet             ~ "Apul_Peve_Ptuh",
+      in_APPT  & !in_triplet ~ "Apul_Ptuh",
+      in_PEVPT & !in_triplet ~ "Peve_Ptuh",
+      TRUE                   ~ "Ptuh_only"
+    )
+  )
+
+# Combined relaxed membership table
+membership_relaxed <- dplyr::bind_rows(
+  apul_membership_relaxed,
+  peve_membership_relaxed,
+  ptuh_membership_relaxed
+) %>%
+  dplyr::select(species, lnc_id, category_relaxed)
+
+```
+
+# Sanity Check
+
+```{r}
+
+membership_relaxed %>%
+  dplyr::count(species, category_relaxed, name = "n_lncRNAs") %>%
+  dplyr::group_by(species) %>%
+  dplyr::mutate(species_total = sum(n_lncRNAs)) %>%
+  dplyr::ungroup()
+```
+
+# Join relaxed labels back to lnc_df
+
+```{r}
+
+lnc_df_relaxed <- lnc_df %>%
+  left_join(
+    membership_relaxed %>% select(species, lnc_id, category_relaxed),
+    by = c("species", "lnc_id")
+  )
+```
+
+# Inspect relaxed table
+
+```{r}
+
+# View a few rows
+lnc_df_relaxed %>% 
+  select(species, lnc_id, category_relaxed, length_nt, log10_mean_expr) %>%
+  arrange(species, category_relaxed) %>%
+  head()
+```
+
+# Plot results
+
+```{r}
+
+lnc_df_plot_relaxed <- lnc_df_relaxed %>%
+  dplyr::mutate(
+    species_facet = dplyr::case_when(
+      species == "Apul" ~ "italic('A. pulchra')",
+      species == "Peve" ~ "italic('P. evermanni')",
+      species == "Ptuh" ~ "italic('P. tuahiniensis')",
+      TRUE ~ species
+    ),
+    sharing_simple_relaxed = dplyr::case_when(
+      grepl("only$", category_relaxed)     ~ "Species-only",
+      category_relaxed == "Apul_Peve_Ptuh" ~ "All three",
+      TRUE                                 ~ "Pairwise"
+    )
+  )
+
+lnc_df_plot_relaxed
+```
+
+# lncRNA length by relaxed sharing pattern
+
+```{r}
+
+p_hist_relaxed <- ggplot(lnc_df_plot_relaxed, aes(x = length_nt)) +
+  geom_histogram(bins = 40, fill = "grey80", color = "grey40") +
+  scale_x_log10() +
+  facet_grid(
+    sharing_simple_relaxed ~ species_facet,
+    labeller = labeller(
+      species_facet          = label_parsed,
+      sharing_simple_relaxed = label_value
+    )
+  ) +
+  labs(
+    x = "lncRNA length (nt, log10 scale)",
+    y = "Count",
+    title = "lncRNA length distributions by species and relaxed sharing pattern"
+  ) +
+  base_theme
+
+p_hist_relaxed
+```
+
+# length vs expression scatterplot
+
+```{r}
+
+p_scatter_relaxed <- ggplot(
+  dplyr::filter(lnc_df_plot_relaxed, !is.na(log10_mean_expr)),
+  aes(x = length_nt, y = log10_mean_expr, color = sharing_simple_relaxed)
+) +
+  geom_point(aes(alpha = sharing_simple_relaxed), size = 0.7) +
+  scale_alpha_manual(
+    values = c(
+      "Species-only" = 0.25,
+      "Pairwise"     = 0.6,
+      "All three"    = 1
+    ),
+    guide = "none"
+  ) +
+  scale_x_log10() +
+  facet_wrap(
+    ~ species_facet,
+    labeller = labeller(species_facet = label_parsed)
+  ) +
+  scale_color_manual(
+    values = c(
+      "Species-only" = "grey60",
+      "Pairwise"     = "#4575B4",
+      "All three"    = "#D73027"
+    )
+  ) +
+  labs(
+    x     = "lncRNA length (nt, log10 scale)",
+    y     = "log10(mean expression + 1)",
+    color = "Sharing pattern",
+    title = "lncRNA length vs expression by species (relaxed homology)",
+    subtitle = "Species-only, pairwise-shared, and shared across all three species"
+  ) +
+  base_theme
+
+p_scatter_relaxed
+```
+
+
+
+
+
+
