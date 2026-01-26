@@ -742,7 +742,149 @@ p_scatter_relaxed <- ggplot(
 p_scatter_relaxed
 ```
 
+# FASTAs of conserved sequences
 
+```{r}
+## ============================================================
+## RELAXED: write 4 combined FASTAs for homologous lncRNAs
+##   - Apul–Peve BRHs
+##   - Apul–Ptuh BRHs
+##   - Peve–Ptuh BRHs
+##   - Apul–Peve–Ptuh 1:1:1 triplets
+## ============================================================
+
+library(Biostrings)
+library(dplyr)
+
+# Output directory for relaxed homologous-sequence FASTAs
+homolog_fasta_dir <- "~/github/deep-dive-expression/M-multi-species/output/13.1-lncRNA-cross-species/homologous_fastas_relaxed"
+dir.create(homolog_fasta_dir, showWarnings = FALSE, recursive = TRUE)
+
+# Get FASTA paths from species_meta
+apul_fasta_path <- species_meta %>% filter(species == "Apul") %>% pull(fasta)
+peve_fasta_path <- species_meta %>% filter(species == "Peve") %>% pull(fasta)
+ptuh_fasta_path <- species_meta %>% filter(species == "Ptuh") %>% pull(fasta)
+
+# Use your existing helper to read FASTAs with cleaned IDs (lncRNA_0001, etc.)
+apul_dna <- read_lnc_fasta_clean(apul_fasta_path)
+peve_dna <- read_lnc_fasta_clean(peve_fasta_path)
+ptuh_dna <- read_lnc_fasta_clean(ptuh_fasta_path)
+
+## Helper: add species prefix back to headers so there are no ID collisions
+add_prefix <- function(x, prefix) {
+  x2 <- x
+  names(x2) <- paste0(prefix, "_", names(x2))
+  x2
+}
+
+## -------------------------------
+## 1) Apul–Peve BRHs (RELAXED)
+## -------------------------------
+
+apul_ids_APEVE_r <- unique(brh_Apul_Peve_r$Apul)
+peve_ids_APEVE_r <- unique(brh_Apul_Peve_r$Peve)
+
+length(apul_ids_APEVE_r); length(peve_ids_APEVE_r)  # should match for 1:1 BRHs
+
+apul_APEVE_seqs <- add_prefix(apul_dna[apul_ids_APEVE_r], "Apul")
+peve_APEVE_seqs <- add_prefix(peve_dna[peve_ids_APEVE_r], "Peve")
+
+apeve_all <- c(apul_APEVE_seqs, peve_APEVE_seqs)
+
+Biostrings::writeXStringSet(
+  apeve_all,
+  file.path(homolog_fasta_dir, "Apul_Peve_BRH_RELAXED.fasta")
+)
+
+## -------------------------------
+## 2) Apul–Ptuh BRHs (RELAXED)
+## -------------------------------
+
+apul_ids_APPT_r <- unique(brh_Apul_Ptuh_r$Apul)
+ptuh_ids_APPT_r <- unique(brh_Apul_Ptuh_r$Ptuh)
+
+length(apul_ids_APPT_r); length(ptuh_ids_APPT_r)
+
+apul_APPT_seqs <- add_prefix(apul_dna[apul_ids_APPT_r], "Apul")
+ptuh_APPT_seqs <- add_prefix(ptuh_dna[ptuh_ids_APPT_r], "Ptuh")
+
+appt_all <- c(apul_APPT_seqs, ptuh_APPT_seqs)
+
+Biostrings::writeXStringSet(
+  appt_all,
+  file.path(homolog_fasta_dir, "Apul_Ptuh_BRH_RELAXED.fasta")
+)
+
+## -------------------------------
+## 3) Peve–Ptuh BRHs (RELAXED)
+## -------------------------------
+
+peve_ids_PEVPT_r <- unique(brh_Peve_Ptuh_r$Peve)
+ptuh_ids_PEVPT_r <- unique(brh_Peve_Ptuh_r$Ptuh)
+
+length(peve_ids_PEVPT_r); length(ptuh_ids_PEVPT_r)
+
+peve_PEVPT_seqs <- add_prefix(peve_dna[peve_ids_PEVPT_r], "Peve")
+ptuh_PEVPT_seqs <- add_prefix(ptuh_dna[ptuh_ids_PEVPT_r], "Ptuh")
+
+pevpt_all <- c(peve_PEVPT_seqs, ptuh_PEVPT_seqs)
+
+Biostrings::writeXStringSet(
+  pevpt_all,
+  file.path(homolog_fasta_dir, "Peve_Ptuh_BRH_RELAXED.fasta")
+)
+
+## -----------------------------------------
+## 4) Apul–Peve–Ptuh 1:1:1 triplets (RELAXED)
+## -----------------------------------------
+
+apul_ids_trip_r <- unique(triplets_1to1to1_relaxed$Apul)
+peve_ids_trip_r <- unique(triplets_1to1to1_relaxed$Peve)
+ptuh_ids_trip_r <- unique(triplets_1to1to1_relaxed$Ptuh)
+
+length(apul_ids_trip_r); length(peve_ids_trip_r); length(ptuh_ids_trip_r)
+
+apul_trip_seqs <- add_prefix(apul_dna[apul_ids_trip_r], "Apul")
+peve_trip_seqs <- add_prefix(peve_dna[peve_ids_trip_r], "Peve")
+ptuh_trip_seqs <- add_prefix(ptuh_dna[ptuh_ids_trip_r], "Ptuh")
+
+trip_all <- c(apul_trip_seqs, peve_trip_seqs, ptuh_trip_seqs)
+
+Biostrings::writeXStringSet(
+  trip_all,
+  file.path(homolog_fasta_dir, "Apul_Peve_Ptuh_triplets_RELAXED.fasta")
+)
+
+
+```
+
+```{r}
+## -----------------------------------------
+## Apul–Peve–Ptuh 1:1:1 triplets (RELAXED)
+## -----------------------------------------
+
+apul_ids_trip_r <- unique(triplets_1to1to1_relaxed$Apul)
+peve_ids_trip_r <- unique(triplets_1to1to1_relaxed$Peve)
+ptuh_ids_trip_r <- unique(triplets_1to1to1_relaxed$Ptuh)
+
+length(apul_ids_trip_r); length(peve_ids_trip_r); length(ptuh_ids_trip_r)
+
+Biostrings::writeXStringSet(
+  apul_dna[apul_ids_trip_r],
+  file.path(homolog_fasta_dir, "Apul_Peve_Ptuh_Apul_triplets_RELAXED.fasta")
+)
+
+Biostrings::writeXStringSet(
+  peve_dna[peve_ids_trip_r],
+  file.path(homolog_fasta_dir, "Apul_Peve_Ptuh_Peve_triplets_RELAXED.fasta")
+)
+
+Biostrings::writeXStringSet(
+  ptuh_dna[ptuh_ids_trip_r],
+  file.path(homolog_fasta_dir, "Apul_Peve_Ptuh_Ptuh_triplets_RELAXED.fasta")
+)
+
+```
 
 
 
