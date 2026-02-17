@@ -321,110 +321,85 @@ lnc_df %>% head()
 library(dplyr)
 library(tidyr)
 library(purrr)
-library(igraph)
-library(ggvenn)
 
-# 1) Build an undirected graph of best-hit relationships ------------------
+# 1) Long table of BLAST best hits at the transcript level ----------------
+# Each row = one best-hit link between a query lncRNA and a subject species.
 
-edges <- blast_pairs %>%
+blast_hits_long <- blast_pairs %>%
   select(query, subject, hits_best) %>%
-  tidyr::unnest(hits_best) %>%
-  transmute(
-    node_query   = paste(query,  qseqid, sep = "::"),  # e.g. "Apul::Apul_lncRNA_00001"
-    node_subject = paste(subject, sseqid, sep = "::")  # e.g. "Peve::Peve_lncRNA_01234"
+  unnest(hits_best) %>%
+  mutate(
+    # Clean IDs to match lnc_df convention:
+    # "Apul_lncRNA_00001" -> "lncRNA_00001"
+    query_lnc = sub("^[^_]+_", "", qseqid)
   ) %>%
+  select(query, query_lnc, subject) %>%
   distinct()
 
-if (nrow(edges) == 0) {
-  stop("No BLAST best-hit edges found; cannot build conservation Venn diagram.")
-}
+# 2) Wider table: for each (query species, lnc_id), which other species does it hit?
 
-g <- igraph::graph_from_data_frame(edges, directed = FALSE)
-
-# 2) Connected components = orthogroups ----------------------------------
-
-comp <- igraph::components(g)
-
-nodes_df <- tibble(
-  node  = names(comp$membership),
-  group = comp$membership
-) %>%
-  tidyr::separate(node, into = c("species", "lnc_raw"), sep = "::", remove = FALSE)
-
-group_species <- nodes_df %>%
-  group_by(group) %>%
-  summarise(species = list(unique(species)), .groups = "drop")
-
-# 3) Venn sets: which orthogroups contain each species -------------------
-
-get_groups_for_species <- function(sp, group_species) {
-  group_species$group[vapply(group_species$species, function(x) sp %in% x, logical(1))]
-}
-
-venn_groups <- list(
-  Apul = get_groups_for_species("Apul", group_species),
-  Peve = get_groups_for_species("Peve", group_species),
-  Ptuh = get_groups_for_species("Ptuh", group_species)
-)
-
-# 4) Count lncRNAs unique to each species --------------------------------
-# "Unique" = found only in orthogroups that contain a single species.
-
-single_species_groups <- group_species %>%
-  mutate(n_species = lengths(species)) %>%
-  filter(n_species == 1) %>%
-  mutate(species = map_chr(species, ~ .x[1]))
-
-# lncRNAs in those single-species groups
-unique_lnc_counts <- nodes_df %>%
-  semi_join(single_species_groups, by = "group") %>%
-  count(species, name = "n_unique_lnc") %>%
-  tibble::deframe()
-
-# Ensure all species present in the vector
-for (sp in c("Apul", "Peve", "Ptuh")) {
-  if (is.na(unique_lnc_counts[sp])) unique_lnc_counts[sp] <- 0L
-}
-
-# Build nicer labels for the Venn sets
-label_vec <- c(
-  Apul = sprintf("A. pulchra"),
-  Peve = sprintf("P. evermanni"),
-  Ptuh = sprintf("P. tuahiniensis")
-)
-
-names(venn_groups) <- label_vec
-
-# Optional: print unique counts as a table
-tibble(
-  species = c("Apul", "Peve", "Ptuh"),
-  n_unique_lnc = as.integer(unique_lnc_counts[c("Apul", "Peve", "Ptuh")])
-) %>% print()
-
-# 5) Plot the Venn diagram -----------------------------------------------
-
-ggvenn(
-  venn_groups,
-  show_percentage = FALSE,
-  fill_color = c("#8da0cb", "#66c2a5", "#fc8d62"),
-  stroke_size = 0.5,
-  set_name_size = 4
-)
-```
-
-```{r lncRNA_summary_stats}
-lncRNA_summary <- lnc_df %>%
-  dplyr::group_by(species) %>%
-  dplyr::summarise(
-    n_lncRNAs = dplyr::n(),
-    mean_length_bp = round(mean(length_nt, na.rm = TRUE), 0),
-    median_length_bp = round(median(length_nt, na.rm = TRUE), 0),
-    mean_expression = round(mean(mean_expr, na.rm = TRUE), 1),
-    median_expression = round(median(mean_expr, na.rm = TRUE), 1),
-    .groups = "drop"
+lnc_hits_flags <- blast_hits_long %>%
+  mutate(hit_flag = TRUE) %>%
+  tidyr::pivot_wider(
+    id_cols      = c(query, query_lnc),
+    names_from   = subject,
+    values_from  = hit_flag,
+    values_fill  = FALSE
   )
 
-lncRNA_summary
+# 3) Start from ALL lncRNAs per species so that categories sum to totals ---
+
+lnc_all <- lnc_df %>%
+  distinct(species, lnc_id)
+
+lnc_conservation_all <- lnc_all %>%
+  left_join(
+    lnc_hits_flags,
+    by = c("species" = "query", "lnc_id" = "query_lnc")
+  ) %>%
+  # Replace missing flags (no hits) with FALSE
+  mutate(
+    Apul = tidyr::replace_na(Apul, FALSE),
+    Peve = tidyr::replace_na(Peve, FALSE),
+    Ptuh = tidyr::replace_na(Ptuh, FALSE)
+  ) %>%
+  rowwise() %>%
+  mutate(
+    # Category is defined from the point of view of the focal species
+    category_focal = case_when(
+      # A. pulchra focal
+      species == "Apul" & !Peve & !Ptuh ~ "Apul_only",
+      species == "Apul" &  Peve & !Ptuh ~ "Apul_Peve",
+      species == "Apul" & !Peve &  Ptuh ~ "Apul_Ptuh",
+      species == "Apul" &  Peve &  Ptuh ~ "Apul_all3",
+
+      # P. evermanni focal
+      species == "Peve" & !Apul & !Ptuh ~ "Peve_only",
+      species == "Peve" &  Apul & !Ptuh ~ "Peve_Apul",
+      species == "Peve" & !Apul &  Ptuh ~ "Peve_Ptuh",
+      species == "Peve" &  Apul &  Ptuh ~ "Peve_all3",
+
+      # P. tuahiniensis focal
+      species == "Ptuh" & !Apul & !Peve ~ "Ptuh_only",
+      species == "Ptuh" &  Apul & !Peve ~ "Ptuh_Apul",
+      species == "Ptuh" & !Apul &  Peve ~ "Ptuh_Peve",
+      species == "Ptuh" &  Apul &  Peve ~ "Ptuh_all3",
+
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  ungroup()
+
+# 4) Summaries: per-species counts in those focal categories --------------
+
+per_species_category_counts <- lnc_conservation_all %>%
+  count(species, category_focal, name = "n_lncRNAs") %>%
+  group_by(species) %>%
+  mutate(species_total = sum(n_lncRNAs)) %>%
+  ungroup()
+
+per_species_category_counts
+
 
 ```
 

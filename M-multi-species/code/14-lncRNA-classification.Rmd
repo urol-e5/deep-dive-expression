@@ -1,0 +1,868 @@
+---
+title: "14-lncRNA-classification"
+author: "Zach Bengtsson"
+date: "2026-01-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, warning = TRUE)
+```
+
+### Libraries
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(purrr)
+
+```
+
+### Setup
+
+```{r}
+# Species to process
+species <- c("Apul", "Peve", "Ptuh")
+
+# Base directory for GTFs
+BASE_GTF_DIR <- "~/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/GTFs"
+
+# Base directory for classification outputs (BED + annotation tables)
+OUT_BASE <- "~/github/deep-dive-expression/M-multi-species/output/14-lncRNA-classification/coral_lnc_classification"
+
+# Base directory for expression matrices
+# Expecting files:
+#   <species>_lnc_expr.tsv
+#   <species>_gene_expr.tsv
+EXPR_BASE <- "~/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/expression_matrices"
+
+# Tier 1 parameters
+cis_window_bp <- 10000   # e.g. ±10 kb around nearest gene
+cor_threshold <- 0.6     # |r| >= 0.6 to call cis
+
+```
+
+### Download GTFs and expression matrices to the correct places
+
+```{bash}
+# =========================
+# GTF downloads
+# =========================
+
+# These must match the R paths above
+BASE_GTF_DIR=$HOME/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/GTFs
+
+mkdir -p "${BASE_GTF_DIR}"
+
+# ---- Apul ----
+curl -L \
+  https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/data/Apulchra-genome.gtf \
+  -o "${BASE_GTF_DIR}/Apul_genes.gtf"
+
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/D-Apul/output/31-Apul-lncRNA/Apul-lncRNA.gtf \
+  -o "${BASE_GTF_DIR}/Apul-lncRNA.gtf"
+
+
+# ---- Peve ----
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/b0290e08af4eaeed30d74a758965debef6111801/E-Peve/data/Porites_evermanni_validated.gtf \
+  -o "${BASE_GTF_DIR}/Peve_genes.gtf"
+
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.gtf \
+  -o "${BASE_GTF_DIR}/Peve-lncRNA.gtf"
+
+
+# ---- Ptuh ----
+curl -L \
+  https://github.com/urol-e5/deep-dive-expression/raw/f62c6d01e04ef0007f2f53af84181481d64d29c1/F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gtf \
+  -o "${BASE_GTF_DIR}/Ptuh_genes.gtf"
+
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/refs/heads/main/F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf \
+  -o "${BASE_GTF_DIR}/Ptuh-lncRNA.gtf"
+
+echo "GTFs downloaded to ${BASE_GTF_DIR}"
+
+```
+
+lncRNA expression matrices are txt and gene matrices are CSV, kept file names as TSV for references later in the code, but read them in using correct functions.
+```{bash}
+# =========================
+# Expression matrices
+# =========================
+
+EXPR_BASE=$HOME/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/expression_matrices
+
+# ---- Apul ----
+# lncRNA counts: tab-delimited .txt
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/M-multi-species/output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt \
+  -o "${EXPR_BASE}/Apul_lnc_expr.tsv"
+
+# gene counts: CSV
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv \
+  -o "${EXPR_BASE}/Apul_gene_expr.tsv"
+
+
+# ---- Peve ----
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/M-multi-species/output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt \
+  -o "${EXPR_BASE}/Peve_lnc_expr.tsv"
+
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv \
+  -o "${EXPR_BASE}/Peve_gene_expr.tsv"
+
+
+# ---- Ptuh ----
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/M-multi-species/output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt \
+  -o "${EXPR_BASE}/Ptuh_lnc_expr.tsv"
+
+curl -L \
+  https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv \
+  -o "${EXPR_BASE}/Ptuh_gene_expr.tsv"
+
+echo "Expression matrices downloaded to ${EXPR_BASE}"
+
+```
+
+```{bash}
+set -e
+
+BASE_GTF_DIR=$HOME/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/GTFs
+
+echo "BASE_GTF_DIR = ${BASE_GTF_DIR}"
+echo
+echo "Files in BASE_GTF_DIR:"
+ls -l "${BASE_GTF_DIR}"
+
+echo
+echo "=== Apul_genes.gtf feature counts ==="
+awk 'BEGIN{ex=0; tx=0; gene=0}
+     !/^#/ {
+       if ($3=="exon") ex++
+       else if ($3=="transcript") tx++
+       else if ($3=="gene") gene++
+     }
+     END{
+       print "exon:", ex;
+       print "transcript:", tx;
+       print "gene:", gene;
+     }' "${BASE_GTF_DIR}/Apul_genes.gtf"
+
+echo
+echo "=== Apul-lncRNA.gtf feature counts ==="
+awk 'BEGIN{lnc=0}
+     !/^#/ {
+       if ($3=="lncRNA") lnc++
+     }
+     END{
+       print "lncRNA:", lnc;
+     }' "${BASE_GTF_DIR}/Apul-lncRNA.gtf"
+
+echo
+echo "=== Peve_genes.gtf feature counts ==="
+awk 'BEGIN{ex=0; tx=0; gene=0}
+     !/^#/ {
+       if ($3=="exon") ex++
+       else if ($3=="transcript") tx++
+       else if ($3=="gene") gene++
+     }
+     END{
+       print "exon:", ex;
+       print "transcript:", tx;
+       print "gene:", gene;
+     }' "${BASE_GTF_DIR}/Peve_genes.gtf"
+
+echo
+echo "=== Peve-lncRNA.gtf feature counts ==="
+awk 'BEGIN{lnc=0}
+     !/^#/ {
+       if ($3=="lncRNA") lnc++
+     }
+     END{
+       print "lncRNA:", lnc;
+     }' "${BASE_GTF_DIR}/Peve-lncRNA.gtf"
+
+echo
+echo "=== Ptuh_genes.gtf feature counts ==="
+awk 'BEGIN{ex=0; tx=0; gene=0}
+     !/^#/ {
+       if ($3=="exon") ex++
+       else if ($3=="transcript") tx++
+       else if ($3=="gene") gene++
+     }
+     END{
+       print "exon:", ex;
+       print "transcript:", tx;
+       print "gene:", gene;
+     }' "${BASE_GTF_DIR}/Ptuh_genes.gtf"
+
+echo
+echo "=== Ptuh-lncRNA.gtf feature counts ==="
+awk 'BEGIN{lnc=0}
+     !/^#/ {
+       if ($3=="lncRNA") lnc++
+     }
+     END{
+       print "lncRNA:", lnc;
+     }' "${BASE_GTF_DIR}/Ptuh-lncRNA.gtf"
+
+```
+
+
+### Generate Bed and overlap files
+
+```{bash}
+set -euo pipefail
+
+species=("Apul" "Peve" "Ptuh")
+
+BASE_GTF_DIR=$HOME/github/deep-dive-expression/M-multi-species/data/14-lncRNA-classification/GTFs
+OUT_BASE=$HOME/github/deep-dive-expression/M-multi-species/output/14-lncRNA-classification/coral_lnc_classification
+
+# Explicit bedtools path
+BEDTOOLS="/home/shared/bedtools-v2.30.0/bin/bedtools"
+
+if [[ ! -x "${BEDTOOLS}" ]]; then
+  echo "ERROR: bedtools not executable at ${BEDTOOLS}" >&2
+  exit 1
+fi
+
+echo "Using bedtools at: ${BEDTOOLS}"
+"${BEDTOOLS}" --version
+echo
+
+make_beds_for_species () {
+  local sp="$1"
+  echo ">>> Processing species (bedtools step): ${sp}"
+
+  local GENE_GTF="${BASE_GTF_DIR}/${sp}_genes.gtf"
+  local LNC_GTF="${BASE_GTF_DIR}/${sp}-lncRNA.gtf"
+
+  if [[ ! -f "${GENE_GTF}" ]]; then
+    echo "ERROR: Missing gene GTF for ${sp}: ${GENE_GTF}" >&2
+    exit 1
+  fi
+  if [[ ! -f "${LNC_GTF}" ]]; then
+    echo "ERROR: Missing lncRNA GTF for ${sp}: ${LNC_GTF}" >&2
+    exit 1
+  fi
+
+  local OUTDIR="${OUT_BASE}/${sp}"
+  mkdir -p "${OUTDIR}"
+  cd "${OUTDIR}"
+
+  echo "  - Creating BED files for ${sp}"
+
+  # 1) gene_exons.bed  (all species have exon features)
+  awk 'BEGIN{FS=OFS="\t"}
+       !/^#/ && $3=="exon" {
+         attr = $9
+         id   = attr
+         sub(/.*gene_id "/, "", id)
+         sub(/".*/, "", id)
+         if (id != "") {
+           print $1, $4-1, $5, id, ".", $7
+         }
+       }' "${GENE_GTF}" \
+    | sort -k1,1 -k2,2n -k3,3n -k6,6 \
+    > gene_exons.bed
+
+  echo "    gene_exons.bed lines: $(wc -l < gene_exons.bed)"
+
+  # 2) gene_body.bed  (Apul & Ptuh: transcripts only; Peve: genes + transcripts)
+  awk 'BEGIN{FS=OFS="\t"}
+       !/^#/ && ($3=="gene" || $3=="transcript") {
+         attr = $9
+         id   = ""
+         if (index(attr, "gene_id ") > 0) {
+           id = attr
+           sub(/.*gene_id "/, "", id)
+         } else if (index(attr, "transcript_id ") > 0) {
+           id = attr
+           sub(/.*transcript_id "/, "", id)
+         }
+         sub(/".*/, "", id)
+         if (id != "") {
+           print $1, $4-1, $5, id, ".", $7
+         }
+       }' "${GENE_GTF}" \
+    | sort -k1,1 -k2,2n -k3,3n -k6,6 \
+    > gene_body.bed
+
+  echo "    gene_body.bed lines: $(wc -l < gene_body.bed)"
+
+  # 3) lnc_tx.bed from lncRNA GTF (all three use feature 'lncRNA' w/ gene_id)
+  awk 'BEGIN{FS=OFS="\t"}
+       !/^#/ && $3=="lncRNA" {
+         attr = $9
+         id   = attr
+         sub(/.*gene_id "/, "", id)
+         sub(/".*/, "", id)
+         if (id != "") {
+           print $1, $4-1, $5, id, ".", $7
+         }
+       }' "${LNC_GTF}" \
+    | sort -k1,1 -k2,2n -k3,3n -k6,6 \
+    > lnc_tx.bed
+
+  echo "    lnc_tx.bed lines: $(wc -l < lnc_tx.bed)"
+
+  echo "  - Running bedtools for ${sp}"
+
+  "${BEDTOOLS}" intersect \
+    -s -wa -wb \
+    -a lnc_tx.bed -b gene_exons.bed \
+    > lnc_vs_geneExons_sense.bed
+
+  "${BEDTOOLS}" intersect \
+    -S -wa -wb \
+    -a lnc_tx.bed -b gene_exons.bed \
+    > lnc_vs_geneExons_antisense.bed
+
+ "${BEDTOOLS}" intersect \
+  -s -wa -wb \
+  -f 1.0 \
+  -a lnc_tx.bed -b gene_body.bed \
+  > lnc_vs_geneBody_intronicCandidates.bed
+
+  "${BEDTOOLS}" closest \
+    -d \
+    -a lnc_tx.bed -b gene_body.bed \
+    > lnc_nearestGene.bed
+
+  echo "    sense exonic:      $(wc -l < lnc_vs_geneExons_sense.bed)"
+  echo "    antisense exonic:  $(wc -l < lnc_vs_geneExons_antisense.bed)"
+  echo "    intronic:          $(wc -l < lnc_vs_geneBody_intronicCandidates.bed)"
+  echo "    nearestGene:       $(wc -l < lnc_nearestGene.bed)"
+
+  echo ">>> Finished bedtools step for ${sp}"
+  cd - >/dev/null
+}
+
+for sp in "${species[@]}"; do
+  make_beds_for_species "${sp}"
+done
+
+echo "All species processed with bedtools. Outputs in ${OUT_BASE}/{Apul,Peve,Ptuh}"
+
+
+```
+```{r}
+for (sp in species) {
+  sp_dir <- file.path(OUT_BASE, sp)
+  cat("\n====", sp, "====\n")
+  files <- c("lnc_tx.bed",
+             "gene_exons.bed",
+             "gene_body.bed",
+             "lnc_vs_geneExons_sense.bed",
+             "lnc_vs_geneExons_antisense.bed",
+             "lnc_vs_geneBody_intronicCandidates.bed",
+             "lnc_nearestGene.bed")
+  for (f in files) {
+    path <- file.path(sp_dir, f)
+    if (!file.exists(path)) {
+      cat("  ", f, " -> MISSING\n")
+    } else {
+      n_lines <- length(readr::read_lines(path))
+      cat("  ", f, " ->", n_lines, "lines\n")
+    }
+  }
+}
+
+```
+
+### Tier 1 classifications (genomic class and cis_trans_class)
+
+```{r}
+safe_cor <- function(x, y) {
+  if (all(is.na(x)) | all(is.na(y))) return(NA_real_)
+  suppressWarnings(cor(x, y, use = "pairwise.complete.obs"))
+}
+
+```
+
+```{r}
+process_species <- function(sp,
+                            bed_base = OUT_BASE,
+                            expr_base = EXPR_BASE) {
+  message(">>> Tier 1 classification for species: ", sp)
+
+  sp_dir <- file.path(bed_base, sp)
+
+  # BED / overlap files (from bash chunk)
+  sense_file     <- file.path(sp_dir, "lnc_vs_geneExons_sense.bed")
+  antisense_file <- file.path(sp_dir, "lnc_vs_geneExons_antisense.bed")
+  intronic_file  <- file.path(sp_dir, "lnc_vs_geneBody_intronicCandidates.bed")
+  nearest_file   <- file.path(sp_dir, "lnc_nearestGene.bed")
+  lnc_tx_file    <- file.path(sp_dir, "lnc_tx.bed")
+
+  # Expression matrices
+  lnc_expr_file  <- file.path(expr_base, paste0(sp, "_lnc_expr.tsv"))
+  gene_expr_file <- file.path(expr_base, paste0(sp, "_gene_expr.tsv"))
+
+  # Sanity check
+  files_to_check <- c(sense_file, antisense_file, intronic_file,
+                      nearest_file, lnc_tx_file,
+                      lnc_expr_file, gene_expr_file)
+  missing <- files_to_check[!file.exists(files_to_check)]
+  if (length(missing) > 0) {
+    stop("Missing files for species ", sp, ":\n",
+         paste(missing, collapse = "\n"))
+  }
+
+  #---------------------------
+  # Load BED / overlap files
+  #---------------------------
+  sense <- readr::read_tsv(
+    sense_file,
+    col_names = c("lnc_chr","lnc_start","lnc_end","lnc_id","lnc_score","lnc_strand",
+                  "gene_chr","gene_start","gene_end","gene_id","gene_score","gene_strand"),
+    show_col_types = FALSE
+  )
+
+  antisense <- readr::read_tsv(
+    antisense_file,
+    col_names = c("lnc_chr","lnc_start","lnc_end","lnc_id","lnc_score","lnc_strand",
+                  "gene_chr","gene_start","gene_end","gene_id","gene_score","gene_strand"),
+    show_col_types = FALSE
+  )
+
+  intronic <- readr::read_tsv(
+    intronic_file,
+    col_names = c("lnc_chr","lnc_start","lnc_end","lnc_id","lnc_score","lnc_strand",
+                  "gene_chr","gene_start","gene_end","gene_id","gene_score","gene_strand"),
+    show_col_types = FALSE
+  )
+
+  nearest <- readr::read_tsv(
+    nearest_file,
+    col_names = c("lnc_chr","lnc_start","lnc_end","lnc_id","lnc_score","lnc_strand",
+                  "gene_chr","gene_start","gene_end","gene_id","gene_score","gene_strand",
+                  "distance_bp"),
+    show_col_types = FALSE
+  )
+
+  # All lncRNAs
+  lnc_all <- readr::read_tsv(
+    lnc_tx_file,
+    col_names = c("lnc_chr","lnc_start","lnc_end","lnc_id","lnc_score","lnc_strand"),
+    show_col_types = FALSE
+  ) %>%
+    dplyr::distinct(lnc_id, .keep_all = TRUE)
+
+  #---------------------------
+  # Genomic class
+  #---------------------------
+  sense_ids     <- unique(sense$lnc_id)
+  antisense_ids <- unique(antisense$lnc_id)
+  intronic_ids  <- unique(intronic$lnc_id)
+
+  genomic_class_df <- lnc_all %>%
+    dplyr::mutate(
+      genomic_class = dplyr::case_when(
+        lnc_id %in% sense_ids ~ "sense_exonic",
+        lnc_id %in% antisense_ids ~ "antisense_exonic",
+        lnc_id %in% intronic_ids &
+          !lnc_id %in% c(sense_ids, antisense_ids) ~ "intronic",
+        TRUE ~ "intergenic"
+      )
+    )
+
+  #---------------------------
+  # Nearest gene info
+  #---------------------------
+  nearest_slim <- nearest %>%
+    dplyr::select(lnc_id, nearest_gene_id = gene_id, distance_bp)
+
+  lnc_annot <- genomic_class_df %>%
+    dplyr::left_join(nearest_slim, by = "lnc_id")
+
+  #---------------------------
+  # Expression matrices
+  #---------------------------
+  # lncRNA: tab-delimited (filtered lncRNA counts)
+  lnc_expr <- readr::read_tsv(lnc_expr_file, show_col_types = FALSE)
+
+  # gene: comma-delimited (featureCounts gene_count_matrix.csv)
+  gene_expr <- readr::read_csv(gene_expr_file, show_col_types = FALSE)
+
+  # IDs in first column
+  lnc_ids  <- lnc_expr[[1]]
+  gene_ids <- gene_expr[[1]]
+
+  # Clean up lnc sample columns
+  lnc_data <- lnc_expr[, -1]  # everything except ID
+  meta_cols <- c("Chr", "Start", "End", "Strand", "Length")
+  lnc_data <- dplyr::select(lnc_data, -dplyr::any_of(meta_cols))
+
+  lnc_sample_names <- colnames(lnc_data)
+
+ lnc_sample_names_clean <- vapply(
+    lnc_sample_names,
+    function(n) {
+      # Extract patterns like RNA.ACR.140 or RNA.POR.71
+      extracted <- sub(".*(RNA[._-][A-Z]{3}[._-][0-9]+).*", "\\1", n)
+      if (identical(extracted, n)) {
+        # Pattern not found; leave as-is
+        return(n)
+      } else {
+        # Normalize to RNA-XXX-NNN
+        return(gsub("[._]", "-", extracted))
+      }
+    },
+    character(1)
+  )
+
+  colnames(lnc_data) <- lnc_sample_names_clean
+
+  # Clean up gene sample columns
+  gene_data <- gene_expr[, -1]
+  gene_sample_names <- colnames(gene_data)
+
+  gene_sample_names_clean <- gene_sample_names
+  gene_sample_names_clean <- sub("^transcript_counts\\.", "", gene_sample_names_clean)
+  gene_sample_names_clean <- sub("^transcript.counts\\.", "", gene_sample_names_clean)
+  gene_sample_names_clean <- sub("^counts\\.", "", gene_sample_names_clean)
+
+  colnames(gene_data) <- gene_sample_names_clean
+
+  # Align sample sets
+  lnc_samples  <- colnames(lnc_data)
+  gene_samples <- colnames(gene_data)
+
+  common_samples <- intersect(lnc_samples, gene_samples)
+
+  if (length(common_samples) < 2) {
+    stop(
+      "Too few overlapping samples between lnc and gene matrices for ", sp, ".\n",
+      "lnc samples (cleaned): ", paste(lnc_samples, collapse = ", "), "\n",
+      "gene samples (cleaned): ", paste(gene_samples, collapse = ", ")
+    )
+  }
+
+  # Subset matrices to common samples in the same order
+  lnc_mat <- as.matrix(lnc_data[, common_samples])
+  rownames(lnc_mat) <- lnc_ids
+
+  gene_mat <- as.matrix(gene_data[, common_samples])
+  rownames(gene_mat) <- gene_ids
+
+  # Sanity check: column names now must match
+  stopifnot(identical(colnames(lnc_mat), colnames(gene_mat)))
+
+  #---------------------------
+  # cis vs non-cis
+  #---------------------------
+  lnc_cis_df <- lnc_annot %>%
+    dplyr::mutate(
+      in_cis_window = !is.na(distance_bp) & distance_bp <= cis_window_bp,
+      nearest_gene_cor = purrr::pmap_dbl(
+        list(lnc_id, nearest_gene_id, in_cis_window),
+        function(lnc_id_i, gene_id_i, in_window) {
+          if (is.na(gene_id_i) ||
+              !lnc_id_i %in% rownames(lnc_mat) ||
+              !gene_id_i %in% rownames(gene_mat)) {
+            return(NA_real_)
+          }
+          safe_cor(lnc_mat[lnc_id_i, ], gene_mat[gene_id_i, ])
+        }
+      ),
+      cis_flag = in_cis_window &
+        !is.na(nearest_gene_cor) &
+        abs(nearest_gene_cor) >= cor_threshold,
+      cis_trans_class = dplyr::case_when(
+        cis_flag ~ "cis",
+        TRUE ~ "non_cis_or_unknown"
+      )
+    )
+
+  #---------------------------
+  # Final table for this species
+  #---------------------------
+  lnc_final <- lnc_cis_df %>%
+    dplyr::mutate(species = sp) %>%
+    dplyr::select(
+      species,
+      lnc_id,
+      lnc_chr, lnc_start, lnc_end, lnc_strand,
+      genomic_class,
+      cis_trans_class,
+      nearest_gene_id,
+      distance_bp,
+      nearest_gene_cor
+    )
+
+  # Write to disk
+  out_file <- file.path(sp_dir, paste0(sp, "_lnc_Tier1_annotation.tsv"))
+  readr::write_tsv(lnc_final, out_file)
+  message("  - Written: ", out_file)
+
+  lnc_final
+}
+```
+
+Test just Apul
+```{r}
+tmp_Apul <- process_species("Apul")
+head(tmp_Apul)
+```
+
+### Summary table and sanity check
+
+```{r}
+all_results <- purrr::map_df(species, process_species)
+
+combined_out <- file.path(OUT_BASE, "AllSpecies_lnc_Tier1_annotation.tsv")
+readr::write_tsv(all_results, combined_out)
+message(">>> Combined Tier1 table written: ", combined_out)
+```
+
+```{r}
+# Reload the combined table from disk (works even in a fresh session)
+tier1_path <- file.path(
+  OUT_BASE,
+  "AllSpecies_lnc_Tier1_annotation.tsv"
+)
+
+all_results <- readr::read_tsv(tier1_path, show_col_types = FALSE)
+
+# Peek at the structure and first few rows
+print(dim(all_results))
+print(head(all_results))
+
+
+```
+
+## Summary Figures
+
+Setup
+```{r}
+library(tidyverse)
+
+tier1_path <- "~/github/deep-dive-expression/M-multi-species/output/14-lncRNA-classification/coral_lnc_classification/AllSpecies_lnc_Tier1_annotation.tsv"
+
+lnc_tier1 <- readr::read_tsv(tier1_path, show_col_types = FALSE) %>%
+  mutate(
+    species = factor(species, levels = c("Apul", "Peve", "Ptuh")),
+    genomic_class = factor(
+      genomic_class,
+      levels = c("intergenic", "intronic", "antisense_exonic", "sense_exonic")
+    ),
+    cis_trans_class = factor(
+      cis_trans_class,
+      levels = c("cis", "non_cis_or_unknown")
+    )
+  )
+
+```
+
+### Figure 1A – Counts by genomic class and species
+
+How many lncRNAs fall into each genomic class per species?
+
+```{r}
+fig1a_counts <- lnc_tier1 %>%
+  count(species, genomic_class) %>%
+  ggplot(aes(x = species, y = n, fill = genomic_class)) +
+  geom_col(color = "black", linewidth = 0.2) +
+  labs(
+    x = "Species",
+    y = "Number of lncRNAs",
+    fill = "Genomic class"
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "right",
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
+
+fig1a_counts
+# ggsave("fig1a_genomic_class_counts.png", fig1a_counts, width = 5, height = 4, dpi = 300)
+
+```
+
+### Figure 1B – Proportions by genomic class and species
+
+What fraction of lncRNAs in each species are intergenic/intronic/exonic?
+
+```{r}
+fig1b_props <- lnc_tier1 %>%
+  count(species, genomic_class) %>%
+  group_by(species) %>%
+  mutate(prop = n / sum(n)) %>%
+  ggplot(aes(x = species, y = prop, fill = genomic_class)) +
+  geom_col(color = "black", linewidth = 0.2) +
+  labs(
+    x = "Species",
+    y = "Proportion of lncRNAs",
+    fill = "Genomic class"
+  ) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_classic(base_size = 12) +
+  theme(
+    legend.position = "right",
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
+
+fig1b_props
+# ggsave("fig1b_genomic_class_proportions.png", fig1b_props, width = 5, height = 4, dpi = 300)
+
+```
+
+### Figure 2 – Cis vs non-cis by genomic class (faceted)
+
+Within each genomic class, how many lncRNAs are cis vs non-cis?
+
+```{r}
+fig2_cis_by_class <- lnc_tier1 %>%
+  count(species, genomic_class, cis_trans_class) %>%
+  group_by(species, genomic_class) %>%
+  mutate(prop = n / sum(n)) %>%
+  ungroup() %>%
+  ggplot(aes(x = species, y = prop, fill = cis_trans_class)) +
+  geom_col(color = "black", linewidth = 0.2, position = "fill") +
+  facet_wrap(~ genomic_class, nrow = 1) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = "Species",
+    y = "Proportion within genomic class",
+    fill = "Regulatory class"
+  ) +
+  scale_fill_brewer(palette = "Pastel1",
+                    labels = c("cis", "non-cis or unknown")) +
+  theme_classic(base_size = 12) +
+  theme(
+    strip.background = element_rect(fill = "grey90", color = NA),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 0, hjust = 0.5)
+  )
+
+fig2_cis_by_class
+# ggsave("fig2_cis_by_genomic_class.png", fig2_cis_by_class, width = 9, height = 4, dpi = 300)
+
+```
+
+### Figure 3 – Distance to nearest gene (log scale)
+
+How far are lncRNAs from their nearest gene, and does that differ by class and species?
+
+```{r}
+fig3_dist_violin <- lnc_dist %>%
+  ggplot(aes(x = genomic_class, y = log10_distance, fill = genomic_class)) +
+  geom_violin(trim = TRUE) +
+  facet_wrap(~ species, nrow = 1) +
+  labs(
+    x = "Genomic class",
+    y = expression(log[10]~"(distance to nearest gene + 1, bp)"),
+    fill = "Genomic class"
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  theme_classic(base_size = 12) +
+  theme(
+    strip.background = element_rect(fill = "grey90", color = NA),
+    strip.text = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  )
+
+fig3_dist_violin
+# ggsave("fig3_distance_violin.png", fig3_dist_violin, width = 9, height = 4, dpi = 300)
+
+
+```
+
+### Figure 4 – Correlation strength for cis lncRNAs
+
+When we call something cis, how strong is its correlation with the nearest gene?
+
+```{r}
+lnc_cis_only <- lnc_tier1 %>%
+  filter(cis_trans_class == "cis") %>%
+  filter(!is.na(nearest_gene_cor))
+
+fig4_cis_cor <- lnc_cis_only %>%
+  ggplot(aes(x = nearest_gene_cor, fill = species)) +
+  geom_density(alpha = 0.4) +
+  geom_vline(xintercept = c(-0.6, 0.6),
+             linetype = "dashed", linewidth = 0.4) +
+  labs(
+    x = "Pearson correlation with nearest gene",
+    y = "Density",
+    fill = "Species"
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  theme_classic(base_size = 12)
+
+fig4_cis_cor
+# ggsave("fig4_cis_correlation_density.png", fig4_cis_cor, width = 6, height = 4, dpi = 300)
+
+```
+
+By genomic class
+```{r}
+fig4_cis_cor_facet <- lnc_cis_only %>%
+  ggplot(aes(x = nearest_gene_cor, fill = species)) +
+  geom_density(alpha = 0.4) +
+  geom_vline(xintercept = c(-0.6, 0.6),
+             linetype = "dashed", linewidth = 0.4) +
+  facet_wrap(~ genomic_class, nrow = 2) +
+  labs(
+    x = "Pearson correlation with nearest gene",
+    y = "Density",
+    fill = "Species"
+  ) +
+  scale_fill_brewer(palette = "Dark2") +
+  theme_classic(base_size = 12) +
+  theme(
+    strip.background = element_rect(fill = "grey90", color = NA),
+    strip.text = element_text(face = "bold")
+  )
+
+fig4_cis_cor_facet
+# ggsave("fig4_cis_correlation_by_class.png", fig4_cis_cor_facet, width = 8, height = 6, dpi = 300)
+
+```
+
+### Summary Tables
+
+Table 1
+```{r}
+table_genomic_class <- lnc_tier1 %>%
+  count(species, genomic_class, name = "n_lnc") %>%
+  group_by(species) %>%
+  mutate(
+    total_lnc = sum(n_lnc),
+    prop = n_lnc / total_lnc
+  ) %>%
+  ungroup()
+
+table_genomic_class
+
+```
+
+Table 2
+```{r}
+table_cis <- lnc_tier1 %>%
+  count(species, genomic_class, cis_trans_class, name = "n_lnc") %>%
+  group_by(species, genomic_class) %>%
+  mutate(
+    total_in_class = sum(n_lnc),
+    prop_in_class = n_lnc / total_in_class
+  ) %>%
+  ungroup()
+
+table_cis
+
+```
+
+
+
+
+
+
