@@ -1,0 +1,162 @@
+---
+title: "12-miRNA-epimachinery"
+author: "Kathleen Durkin"
+date: "2026-04-08"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+We've previously looked for instances of miRNA putatively binding to ncRNA and methylation machinery (a.g. AGO transcripts), but this search seemed to miss hits. Perhaps more importantly, the reference used was not comprehensive, because it didn't include hits for other epigenetic machinery, such as those involved in histone modifications. Let's redo and expand the epimachinery analysis.
+
+Load packages
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+library(purrr)
+library(GSEABase)
+library(GO.db)
+library(knitr)
+library(tidyverse)
+```
+
+Load and format miRNA target FA tables
+
+(I could probably just use the miRanda outputs, instead of the full miRNA target FA tables, but I'm interested to see whether Steven's epimachinery BLAST hits match my BLAST outputs)
+```{r}
+# Apul
+apul_FA <- read.csv("../../D-Apul/output/09.13-Apul-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(miRNA, mRNA, PCC.cor, p_value, Protein.names) %>% distinct()
+
+# Peve
+peve_FA <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(miRNA, mRNA, PCC.cor, p_value, Protein.names) %>% distinct()
+
+# Ptuh
+ptuh_FA <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(miRNA, mRNA, PCC.cor, p_value, Protein.names) %>% distinct()
+```
+
+
+## Epimachinery 
+
+Load Steven's epimachinery BLAST hits to the three coral genomes
+```{r}
+#Load
+apul_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/D-Apul/output/25-Apul-epimods-blast/Mach-blastp-Apul_out.tab") %>% dplyr::select(V1,V2)
+# Remove transcript # suffixes ("-T1")
+apul_epi$V2 <- gsub("-T[0-9]+$", "", apul_epi$V2)
+
+#Load
+peve_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/E-Peve/output/06-Peve-epimods-blast/Mach-blastp-Peve_out.tab") %>% dplyr::select(V1,V2)
+
+#Load
+ptuh_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/F-Ptua/output/03-Ptua-epimods-blast/Mach-blastp-Ptua_out.tab") %>% dplyr::select(V1,V2)
+```
+
+
+### Apul
+
+```{r}
+# Bind to annotate putative miRNA targets with epimachinery matches
+apul_epi_miRNA <- left_join(apul_epi, apul_FA, by = c("V2" = "mRNA"))
+
+# Filter to retain only putative miRNA targets that are significantly coexpressed 
+apul_epi_miRNA <- apul_epi_miRNA %>% filter(p_value < 0.05)
+
+# Summary
+cat("\n# unique miRNAs:", apul_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
+cat("# unique mRNAs:", apul_epi_miRNA$V2 %>% unique() %>% length(), "\n")
+cat("# unique epimachinery proteins:", apul_epi_miRNA$V1 %>% unique() %>% length(), "\n")
+```
+In *A. pulchra*, 23 of the 39 miRNAs putatively bind to a total of 33 unique epigenetic protein machinery transcripts, based on both predicted binding and significant. These transcripts match 46 epimachinery annotations. Note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein (e.g., FUN_001354, which matches both Parp5a-Tnks-201 and Parp5b-Tnks2-201)
+
+Collapse to unique miRNA-mRNA pairs
+```{r}
+apul_epi_miRNA_collapsed <- apul_epi_miRNA %>%
+  group_by(V2, miRNA) %>%
+  mutate(epimachinery = paste(unique(V1), collapse = "; ")) %>%
+  distinct(V2, miRNA, .keep_all = TRUE) %>%
+  ungroup() %>%
+  dplyr::select(-V1)
+```
+
+
+### Peve
+
+```{r}
+# Bind to annotate putative miRNA targets with epimachinery matches
+peve_epi_miRNA <- left_join(peve_epi, peve_FA, by = c("V2" = "mRNA"))
+
+# Filter to retain only putative miRNA targets that are significantly coexpressed 
+peve_epi_miRNA <- peve_epi_miRNA %>% filter(p_value < 0.05)
+
+
+# Summary
+cat("\n# unique miRNAs:", peve_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
+cat("# unique mRNAs:", peve_epi_miRNA$V2 %>% unique() %>% length(), "\n")
+cat("# unique epimachinery proteins:", peve_epi_miRNA$V1 %>% unique() %>% length(), "\n")
+```
+In *P. evermanni*, 7 of the 45 miRNAs putatively bind to a total of 11 unique epigenetic protein machinery transcripts, based on both predicted binding and significant. These transcripts match 14 epimachinery annotations. Again, note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein.
+
+Collapse to unique miRNA-mRNA pairs
+```{r}
+peve_epi_miRNA_collapsed <- peve_epi_miRNA %>%
+  group_by(V2, miRNA) %>%
+  mutate(epimachinery = paste(unique(V1), collapse = "; ")) %>%
+  distinct(V2, miRNA, .keep_all = TRUE) %>%
+  ungroup() %>%
+  dplyr::select(-V1)
+```
+
+
+### Ptuh
+
+```{r}
+# Bind to annotate putative miRNA targets with epimachinery matches
+ptuh_epi_miRNA <- left_join(ptuh_epi, ptuh_FA, by = c("V2" = "mRNA"))
+
+# Filter to retain only putative miRNA targets that are significantly coexpressed 
+ptuh_epi_miRNA <- ptuh_epi_miRNA %>% filter(p_value < 0.05)
+
+
+# Summary
+cat("\n# unique miRNAs:", ptuh_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
+cat("# unique mRNAs:", ptuh_epi_miRNA$V2 %>% unique() %>% length(), "\n")
+cat("# unique epimachinery proteins:", ptuh_epi_miRNA$V1 %>% unique() %>% length(), "\n")
+```
+
+In *P. tuahiniensis*, 10 of the 37 miRNAs putatively bind to a total of 11 unique epigenetic protein machinery transcripts, based on both predicted binding and significant. These transcripts match 15 epimachinery annotations. Again, note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein.
+
+Collapse to unique miRNA-mRNA pairs
+```{r}
+ptuh_epi_miRNA_collapsed <- ptuh_epi_miRNA %>%
+  group_by(V2, miRNA) %>%
+  mutate(epimachinery = paste(unique(V1), collapse = "; ")) %>%
+  distinct(V2, miRNA, .keep_all = TRUE) %>%
+  ungroup() %>%
+  dplyr::select(-V1)
+```
+
+
+## Updated ncRNA machiery analysis
+
+Think I may need to personally curate an ncRNA machinery list? Will look into this tomorrow
+
