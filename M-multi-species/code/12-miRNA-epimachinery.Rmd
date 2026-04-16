@@ -5,7 +5,7 @@ date: "2026-04-08"
 output: 
   github_document:
     toc: true
-    number_sections: true
+    number_sections: false
   bookdown::html_document2:
     theme: cosmo
     toc: true

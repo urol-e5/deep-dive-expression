@@ -3,23 +3,22 @@
 Kathleen Durkin
 2026-04-08
 
-- [0.1 Epimachinery](#01-epimachinery)
-  - [0.1.1 Apul](#011-apul)
-  - [0.1.2 Peve](#012-peve)
-  - [0.1.3 Ptuh](#013-ptuh)
-- [0.2 Updated ncRNA machinery
-  analysis](#02-updated-ncrna-machinery-analysis)
-  - [0.2.1 Apul](#021-apul)
-  - [0.2.2 Peve](#022-peve)
-  - [0.2.3 Ptuh](#023-ptuh)
-- [0.3 Combine epimachinery and ncRNA machinery outputs to single
-  results table for each
-  species](#03-combine-epimachinery-and-ncrna-machinery-outputs-to-single-results-table-for-each-species)
-  - [0.3.1 Apul](#031-apul)
-  - [0.3.2 Peve](#032-peve)
-  - [0.3.3 Ptuh](#033-ptuh)
-- [0.4 Summary](#04-summary)
-  - [0.4.1 Plot](#041-plot)
+- [Epimachinery](#epimachinery)
+  - [Apul](#apul)
+  - [Peve](#peve)
+  - [Ptuh](#ptuh)
+- [Updated ncRNA machinery analysis](#updated-ncrna-machinery-analysis)
+  - [Apul](#apul-1)
+  - [Peve](#peve-1)
+  - [Ptuh](#ptuh-1)
+- [Combine epimachinery and ncRNA machinery outputs to single results
+  table for each
+  species](#combine-epimachinery-and-ncrna-machinery-outputs-to-single-results-table-for-each-species)
+  - [Apul](#apul-2)
+  - [Peve](#peve-2)
+  - [Ptuh](#ptuh-2)
+- [Summary](#summary)
+  - [Plot](#plot)
 
 We’ve previously looked for instances of miRNA putatively binding to
 ncRNA and methylation machinery (a.g. AGO transcripts), but this search
@@ -211,7 +210,7 @@ peve_FA_annot <- left_join(peve_FA, peve_names, by = c("miRNA" = "Name"))
 ptuh_FA_annot <- left_join(ptuh_FA, ptuh_names, by = c("miRNA" = "Name"))
 ```
 
-## 0.1 Epimachinery
+## Epimachinery
 
 Load Steven’s epimachinery BLAST hits to the three coral genomes
 
@@ -245,7 +244,7 @@ ptuh_epi$target <- ptuh_epi$V2
 ptuh_epi <- ptuh_epi %>% dplyr::select(-V1, -V2)
 ```
 
-### 0.1.1 Apul
+### Apul
 
 ``` r
 # Bind to annotate putative miRNA targets with epimachinery matches
@@ -300,7 +299,7 @@ apul_epi_miRNA_collapsed <- apul_epi_miRNA %>%
   dplyr::select(-gene_name, -miRNA)
 ```
 
-### 0.1.2 Peve
+### Peve
 
 ``` r
 # Bind to annotate putative miRNA targets with epimachinery matches
@@ -355,7 +354,7 @@ peve_epi_miRNA_collapsed <- peve_epi_miRNA %>%
   dplyr::select(-gene_name, -miRNA)
 ```
 
-### 0.1.3 Ptuh
+### Ptuh
 
 ``` r
 # Bind to annotate putative miRNA targets with epimachinery matches
@@ -410,7 +409,7 @@ ptuh_epi_miRNA_collapsed <- ptuh_epi_miRNA %>%
   dplyr::select(-gene_name, -miRNA)
 ```
 
-## 0.2 Updated ncRNA machinery analysis
+## Updated ncRNA machinery analysis
 
 I manually curated a db of fasta sequences for protein machinery
 important to miRNA and lncRNA biogenesis and function (details in
@@ -435,7 +434,7 @@ peve_ncRNA <- read.csv("../../E-Peve/output/32-Peve-ncRNA-machinery-BLAST/ncRNAm
 ptuh_ncRNA <- read.csv("../../F-Ptuh/output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_annotated_reduced.csv") 
 ```
 
-### 0.2.1 Apul
+### Apul
 
 ``` r
 # Bind to annotate putative miRNA targets with ncRNA machinery matches
@@ -490,7 +489,7 @@ apul_ncRNA_miRNA_collapsed <- apul_ncRNA_miRNA %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
 
-### 0.2.2 Peve
+### Peve
 
 ``` r
 # Bind to annotate putative miRNA targets with ncRNA machinery matches
@@ -545,7 +544,7 @@ peve_ncRNA_miRNA_collapsed <- peve_ncRNA_miRNA %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
 
-### 0.2.3 Ptuh
+### Ptuh
 
 ``` r
 # Bind to annotate putative miRNA targets with ncRNA machinery matches
@@ -601,9 +600,9 @@ ptuh_ncRNA_miRNA_collapsed <- ptuh_ncRNA_miRNA %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
 
-## 0.3 Combine epimachinery and ncRNA machinery outputs to single results table for each species
+## Combine epimachinery and ncRNA machinery outputs to single results table for each species
 
-### 0.3.1 Apul
+### Apul
 
 ``` r
 # Label with source
@@ -624,7 +623,7 @@ apul_results <- rbind(apul_epi_miRNA_collapsed, apul_ncRNA_miRNA_collapsed)
 write.csv(apul_results, "../output/12-miRNA-epimachinery/Apul_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
-### 0.3.2 Peve
+### Peve
 
 ``` r
 # Label with source
@@ -645,7 +644,7 @@ peve_results <- rbind(peve_epi_miRNA_collapsed, peve_ncRNA_miRNA_collapsed)
 write.csv(peve_results, "../output/12-miRNA-epimachinery/Peve_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
-### 0.3.3 Ptuh
+### Ptuh
 
 ``` r
 # Label with source
@@ -666,52 +665,52 @@ ptuh_results <- rbind(ptuh_epi_miRNA_collapsed, ptuh_ncRNA_miRNA_collapsed)
 write.csv(ptuh_results, "../output/12-miRNA-epimachinery/Ptuh_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
-## 0.4 Summary
+## Summary
 
 Generally, the protein machinery that are putatively targeted by our
 coral miRNAs is extremely diverse, covering all major “branches” of
 epigenetic regulation:
 
-#### 0.4.0.1 Histone Methylation
+#### Histone Methylation
 
 Covering demethylases (KDM3, KDM6, RIOX1), methyltransferases (KMT5A,
 KMT2E), acetyltransferases (KAT6A/B, KAT14, KAT2A/B), and deacetylases
 (HDAC4/5/7/9, SIRT7), plus arginine methylation (PRMT7)
 
-#### 0.4.0.2 DNA Methylation & Reading
+#### DNA Methylation & Reading
 
 DNMT1 (maintenance methyltransferase), TET3 (active demethylation),
 MBD1/2/3 (methylation readers/NuRD recruitment), and PRDM14
 (pluripotency-associated methylation regulator)
 
-#### 0.4.0.3 ADP-Ribosylation (form of chromatin regulation)
+#### ADP-Ribosylation (form of chromatin regulation)
 
 Tankyrases (PARP5a/b), PARP7/TIPARP, macro-PARPs (PARP9/14/15), and the
 eraser ARH1
 
-#### 0.4.0.4 Ubiquitin Signaling (form of protien modification)
+#### Ubiquitin Signaling (form of protien modification)
 
 Deubiquitinases (USPs, PSMD14, BAP1), E2/E3 ligases (UBE2D, UBE3A,
 CUL4A, DDB1, UBR2, RNF8, BRCA1)
 
-#### 0.4.0.5 RNA Modification (Epitranscriptomics)
+#### RNA Modification (Epitranscriptomics)
 
 tRNA modifiers (TRMT1, TRMT61A/B, PUS7L, DUS1L), demethylases (ALKBH3),
 m6A reader (HNRNPA2B1), and ADAR (A-to-I editing)
 
-#### 0.4.0.6 ncRNA Biogenesis & Silencing
+#### ncRNA Biogenesis & Silencing
 
 Core RISC silencing complex (AGO1/2, TNRC6), biogenesis regulators
 (LIN28A, KHSRP, SRRT), Integrator complex (INTS1/4/6), RNA decay
 machinery (exosome, EDC4, CCR4-NOT, SMG1, PAN2), and
 chromatin/structural components (RBBP4, STAG1/2, SMARCA2/4, RDRP)
 
-#### 0.4.0.7 Other Regulators
+#### Other Regulators
 
 Signaling kinases (PKN1, MAP3K12, MAP2K1, Chuk/IKKα), phosphatases
 (PP1), and protein quality control (COPS6, Hspbap1)
 
-### 0.4.1 Plot
+### Plot
 
 ``` r
 library(tidyverse)
