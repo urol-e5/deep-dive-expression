@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "Apul-proteins",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../data/Apulchra-genome.pep.faa",
+  "number-of-letters": 17404678,
+  "number-of-sequences": 40521,
+  "last-updated": "2026-04-15T11:05:00",
+  "number-of-volumes": 1,
+  "bytes-total": 22028173,
+  "bytes-to-cache": 17769488,
+  "files": [
+    "Apul-proteins.pdb",
+    "Apul-proteins.phr",
+    "Apul-proteins.pin",
+    "Apul-proteins.pot",
+    "Apul-proteins.psq",
+    "Apul-proteins.ptf",
+    "Apul-proteins.pto"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "Peve-proteins",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../data/Porites_evermanni_v1.annot.pep.fa",
+  "number-of-letters": 18006979,
+  "number-of-sequences": 40389,
+  "last-updated": "2026-04-15T11:36:00",
+  "number-of-volumes": 1,
+  "bytes-total": 22736601,
+  "bytes-to-cache": 18370609,
+  "files": [
+    "Peve-proteins.pdb",
+    "Peve-proteins.phr",
+    "Peve-proteins.pin",
+    "Peve-proteins.pot",
+    "Peve-proteins.psq",
+    "Peve-proteins.ptf",
+    "Peve-proteins.pto"
+  ]
+}

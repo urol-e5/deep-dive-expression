@@ -1,0 +1,22 @@
+{
+  "version": "1.2",
+  "dbname": "Ptuh-proteins",
+  "dbtype": "Protein",
+  "db-version": 5,
+  "description": "../data/Pocillopora_meandrina_HIv1.genes.pep.faa",
+  "number-of-letters": 14582489,
+  "number-of-sequences": 31840,
+  "last-updated": "2026-04-15T13:50:00",
+  "number-of-volumes": 1,
+  "bytes-total": 18852209,
+  "bytes-to-cache": 14869186,
+  "files": [
+    "Ptuh-proteins.pdb",
+    "Ptuh-proteins.phr",
+    "Ptuh-proteins.pin",
+    "Ptuh-proteins.pot",
+    "Ptuh-proteins.psq",
+    "Ptuh-proteins.ptf",
+    "Ptuh-proteins.pto"
+  ]
+}

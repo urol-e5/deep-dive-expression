@@ -1,0 +1,932 @@
+"target","protein_name","gene_name","std_gene_name","species","accession","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore"
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","RF11_00163","NCBP1","Thelohanellus kitauei","A0A0C2N1X6",20.798,827,556,23,10,762,5,806,4.15e-43,167
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","ncbp1","NCBP1","Stylophora pistillata","A0A2B4SX82",95.161,806,39,0,1,806,1,806,0,1602
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","LOC116306115","NCBP1","Actinia tenebrosa","A0A6P8J329",65.675,807,271,6,1,802,1,806,0,1139
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","PACLA_8A083348","NCBP1","Paramuricea clavata","A0A6S7G2D7",52.847,808,370,5,1,799,1,806,0,915
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","NCBP1 OS=Clytia hemisphaerica OX=252671","NCBP1","Clytia hemisphaerica","A0A7M5V3C0",50.428,817,393,5,1,816,1,806,0,876
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","NCBP1 OS=Exaiptasia diaphana OX=2652724","NCBP1","Exaiptasia diaphana","A0A913XIF0",64.764,806,279,4,1,801,1,806,0,1129
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","NCBP1","NCBP1","Desmophyllum pertusum","A0A9W9ZWX6",83.643,807,131,1,1,807,1,806,0,1429
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","P5673_011848","NCBP1","Acropora cervicornis","A0AAD9QN77",73.908,824,159,2,1,788,1,804,0,1268
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","PMEA_00011059","NCBP1","Pocillopora meandrina","A0AAU9VQE5",100,806,0,0,1,806,1,806,0,1671
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1-like","LOC136089457","NCBP1","Hydra vulgaris","A0ABM4DB04",50.86,814,390,6,1,812,1,806,0,865
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1 isoform X2","LOC101235711","NCBP1","Hydra vulgaris","A0ABM4DDG6",50.86,814,390,6,1,812,1,806,0,864
+"Pocillopora_meandrina_HIv1___RNAseq.g6540.t1","Nuclear cap-binding protein subunit 1","NEMVEDRAFT_v1g193215","NCBP1","Nematostella vectensis","A7ST09",63.782,809,285,5,1,804,1,806,0,1124
+"Pocillopora_meandrina_HIv1___RNAseq.g17898.t1","Heat shock protein 90","hsp90","HSP90","Acropora tenuis","A0A224ASV7",90.041,733,72,1,1,732,1,733,0,1265
+"Pocillopora_meandrina_HIv1___RNAseq.g17898.t1","Heat shock protein 90","hsp90 gene","HSP90","Dendronephthya klunzingeri","Q967E1",79.155,734,142,4,5,733,6,733,0,1106
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","pdam_00024393","SMARCC2","Pocillopora damicornis","A0A3M6U8K5",99.722,1080,1,1,1,1078,1,1080,0,2213
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2-like","LOC116287162","SMARCC2","Actinia tenebrosa","A0A6P8H2M2",69.85,932,252,13,1,920,1,915,0,1191
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Clytia hemisphaerica OX=252671","SMARCC2","Clytia hemisphaerica","A0A7M5UZN6",53.425,949,346,22,1,898,1,904,0,868
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Clytia hemisphaerica OX=252671","SMARCC2","Clytia hemisphaerica","A0A7M5V808",53.425,949,346,21,1,898,1,904,0,872
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Exaiptasia diaphana OX=2652724","SMARCC2","Exaiptasia diaphana","A0A913YAN3",63.725,1122,344,19,1,1101,1,1080,0,1226
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","P5673_030563","SMARCC2","Acropora cervicornis","A0AAD9UTI2",81.742,1079,166,6,1,1053,1,1074,0,1624
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","PMEA_00012531","SMARCC2","Pocillopora meandrina","A0AAU9WW55",93.75,1136,11,3,1,1132,1,1080,0,2156
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","SMARCC2","SMARCC2","Hydra vulgaris","T2M958",54.158,914,357,20,1,862,1,904,0,861
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2 isoform X3","LOC100210696","SMARCC2","Hydra vulgaris","A0ABM4CXJ3",53.821,916,347,18,1,852,1,904,0,860
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","PLOB_00037414","SMARCC2","Porites lobata","A0ABN8P5H7",87.016,878,110,3,1,875,1,877,0,1461
+"Pocillopora_meandrina_HIv1___RNAseq.g4513.t1","SWI/SNF complex subunit SMARCC2","PEVE_00006460","SMARCC2","Porites evermanni","A0ABN8QPG7",82.532,1082,169,5,1,1064,1,1080,0,1650
+"Pocillopora_meandrina_HIv1___RNAseq.g15102.t1","RNA helicase","DDX6","DDX6","Desmophyllum pertusum","A0A9X0A445",88.804,393,44,0,1,393,1,393,0,743
+"Pocillopora_meandrina_HIv1___RNAseq.g15102.t1","RNA helicase","DDX6","DDX6","Hydra vulgaris","T2MGZ3",77.099,393,89,1,1,392,1,393,0,645
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1B","Dcp1b","DCP1B","Stylophora pistillata","A0A2B4RFS2",81.982,444,75,2,1,442,1,441,0,669
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","pdam_00001455","DCP1","Pocillopora damicornis","A0A3M6V3U0",96.599,441,12,2,1,438,1,441,0,858
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1B-like","LOC116298742","DCP1B","Actinia tenebrosa","A0A6P8ID16",46.224,437,182,12,17,405,10,441,9.76e-93,285
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1A","PACLA_8A033275","DCP1A","Paramuricea clavata","A0A6S7GS75",44.767,172,71,3,16,164,10,180,1.81e-41,150
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","DCP1 OS=Clytia hemisphaerica OX=252671","DCP1","Clytia hemisphaerica","A0A7M5UW04",39.894,188,102,3,18,197,10,194,1.25e-36,141
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","DCP1 OS=Exaiptasia diaphana OX=2652724","DCP1","Exaiptasia diaphana","A0A913XFQ4",41.898,432,177,9,16,373,10,441,2.73e-87,270
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1B","DCP1B_1","DCP1B","Desmophyllum pertusum","A0A9W9YCJ7",66.444,450,135,8,1,443,1,441,0,539
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1B","P5673_030896","DCP1B","Acropora cervicornis","A0AAD9UT92",53.135,303,126,6,1,294,1,296,4.21e-94,287
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","PMEA_00004724","DCP1","Pocillopora meandrina","A0AAU9WFN7",97.732,441,10,0,1,441,1,441,0,877
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme 1A isoform X3","LOC100205078","DCP1A","Hydra vulgaris","A0ABM4C5V2",37.019,208,95,4,11,199,10,200,4.81e-32,127
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","PLOB_00041966","DCP1","Porites lobata","A0ABN8PDU0",59.251,454,166,8,1,448,1,441,1.05e-157,453
+"Pocillopora_meandrina_HIv1___RNAseq.g25665.t2","mRNA-decapping enzyme C-terminal domain-containing protein","PEVE_00033504","DCP1","Porites evermanni","A0ABN8T0K5",59.471,454,165,8,1,448,1,441,6.54e-160,459
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",98.851,1218,13,1,1,1218,1,1217,0,2494
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",98.851,1218,13,1,1,1218,1,1217,0,2494
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.888,917,336,12,174,1061,288,1192,0,1061
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.888,917,336,12,174,1061,288,1192,0,1061
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",52.867,872,349,9,208,1060,263,1091,0,903
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",52.867,872,349,9,208,1060,263,1091,0,903
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",58.675,830,313,9,145,950,279,1102,0,994
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",58.675,830,313,9,145,950,279,1102,0,994
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",58.675,830,313,9,111,916,279,1102,0,993
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",58.675,830,313,9,111,916,279,1102,0,993
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",66.842,953,265,9,454,1394,296,1209,0,1293
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",66.842,953,265,9,454,1394,296,1209,0,1293
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",45.479,730,330,8,17,686,304,1025,0,635
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",45.479,730,330,8,17,686,304,1025,0,635
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",77.921,1241,204,7,1,1195,1,1217,0,1898
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",77.921,1241,204,7,1,1195,1,1217,0,1898
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",60.367,926,271,19,3,850,1,908,0,984
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",60.367,926,271,19,3,850,1,908,0,984
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",43.59,780,365,11,17,732,304,1072,0,634
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",43.59,780,365,11,17,732,304,1072,0,634
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",63.547,1218,349,22,31,1182,27,1215,0,1456
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",63.547,1218,349,22,31,1182,27,1215,0,1456
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding protein EWS","EWSR1","EWSR1","Stylophora pistillata","A0A2B4SRT0",78.733,442,86,3,1,434,1,442,2.57e-137,400
+"Pocillopora_meandrina_HIv1___TS.g13502.t1","Double-stranded RNA-specific adenosine deaminase","ADAR","ADAR","Homo sapiens","P55265",43.59,507,248,10,723,1221,634,1110,1.15e-122,406
+"Pocillopora_meandrina_HIv1___RNAseq.26310_t","Double-stranded RNA-specific editase 1","ADARB1","ADARB1","Homo sapiens","P78563",45.414,676,277,16,80,740,94,692,0,538
+"Pocillopora_meandrina_HIv1___RNAseq.26310_t","Double-stranded RNA-specific editase 1","Adarb1","ADARB1","Mus musculus","Q91ZS8",47.196,642,285,16,80,710,94,692,0,548
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 4","brd4","BRD4","Danio rerio","F1R5H6",46.083,434,165,10,43,467,89,462,1.11e-111,380
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 4","BRD4","BRD4","Homo sapiens","O60885",48.121,692,283,17,6,681,52,683,1.35e-169,536
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 4","Brd4","BRD4","Mus musculus","Q9ESU6",47.399,692,289,14,6,682,52,683,1.72e-169,537
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 4A","brd4-a","BRD4","Xenopus laevis","Q08D75",45.518,714,293,17,6,706,52,682,8.92e-159,507
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 4B","brd4-b","BRD4","Xenopus laevis","Q6DFF2",45.341,719,288,15,6,706,52,683,2.4e-161,514
+"Pocillopora_meandrina_HIv1___RNAseq.g3225.t1","Transcriptional repressor CTCF","CTCF","CTCF","Homo sapiens","P49711",39.286,308,178,6,266,573,93,391,2.07e-58,204
+"Pocillopora_meandrina_HIv1___RNAseq.g3225.t1","Transcriptional repressor CTCF","Ctcf","CTCF","Mus musculus","Q61164",39.286,308,178,6,266,573,93,391,1.94e-58,204
+"Pocillopora_meandrina_HIv1___RNAseq.g3225.t1","Transcriptional repressor CTCF","Ctcf","CTCF","Rattus norvegicus","Q9R1D1",39.286,308,178,6,266,573,93,391,2.28e-58,204
+"Pocillopora_meandrina_HIv1___RNAseq.g3225.t1","Transcriptional repressor CTCF","CTCF","CTCF","Gallus gallus","Q08705",39.286,308,178,6,266,573,93,391,1.06e-58,205
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like-A","dazl-a","DAZL","Xenopus laevis","O57437",41.935,93,52,2,19,109,1,93,1e-16,75.1
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","Dazl","DAZL","Mus musculus","Q64368",37.815,119,68,4,32,148,7,121,5.26e-19,81.6
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","DAZL","DAZL","Homo sapiens","Q92904",41.758,91,51,2,32,120,7,97,4.95e-17,76.3
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","dazl","DAZL","Danio rerio","Q9YGW7",34.906,106,62,2,46,144,15,120,4.19e-16,72.4
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","dazl","DAZL","Xenopus tropicalis","Q76CY5",40.187,107,61,2,28,133,14,118,1.68e-17,77.4
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","DAZL","DAZL","Macaca fascicularis","Q95192",41.758,91,51,2,32,120,7,97,4.33e-17,76.3
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","DAZL","DAZL","Callithrix jacchus","Q9BGN8",41.758,91,51,2,32,120,7,97,7.62e-17,75.9
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like-B","dazl-b","DAZL","Xenopus laevis","Q4V7Y4",41.935,93,52,2,19,109,1,93,1.55e-16,74.7
+"Pocillopora_meandrina_HIv1___RNAseq.g4430.t1","Deleted in azoospermia-like","DAZL","DAZL","Gallus gallus","Q804A9",41.573,89,50,2,28,114,7,95,2.25e-15,71.6
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3A","Dnmt3a","DNMT3A","Mus musculus","O88508",48.233,651,294,7,286,905,78,716,0,621
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3A","Dnmt3a","DNMT3A","Rattus norvegicus","Q1LZ53",48.233,651,294,7,286,905,78,716,0,621
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3A","DNMT3A","DNMT3A","Gallus gallus","Q4W5Z4",47.016,687,312,8,223,874,47,716,0,625
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3A","DNMT3A","DNMT3A","Homo sapiens","Q9Y6K1",47.939,655,290,7,290,909,78,716,0,620
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3B","Dnmt3b","DNMT3B","Mus musculus","O88509",43.838,714,322,11,181,856,44,716,0,599
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5)-methyltransferase 3B","DNMT3B","DNMT3B","Homo sapiens","Q9UBC3",44.282,682,313,9,209,850,62,716,0,593
+"Pocillopora_meandrina_HIv1___RNAseq.g18860.t1","Exosome complex component RRP45","Exosc9","EXOSC9","Stylophora pistillata","A0A2B4RAA2",92.929,198,14,0,33,230,51,248,1.98e-134,391
+"Pocillopora_meandrina_HIv1___RNAseq.g18051.t1","Exosome complex component RRP46","Exosc5","EXOSC5","Stylophora pistillata","A0A2B4RF23",92.275,233,18,0,1,233,1,233,1.35e-161,446
+"Pocillopora_meandrina_HIv1___RNAseq.g7373.t1","Exosome complex component RRP4","Exosc2","EXOSC2","Stylophora pistillata","A0A2B4S5V0",94.295,298,17,0,1,298,1,298,0,577
+"Pocillopora_meandrina_HIv1___RNAseq.g18860.t1","Exosome complex component RRP45","EXOSC9","EXOSC9","Desmophyllum pertusum","A0A9W9YLS2",82.398,392,66,2,1,392,1,389,0,655
+"Pocillopora_meandrina_HIv1___RNAseq.g7373.t1","Exosome complex component RRP4","EXOSC2","EXOSC2","Desmophyllum pertusum","A0A9X0CGQ7",92,225,18,0,1,225,1,225,5.4e-153,427
+"Pocillopora_meandrina_HIv1___RNAseq.g13822.t1","Exosome complex component 10 homolog","EXOSC10","EXOSC10","Hydra vulgaris","T2ME73",39.627,858,408,18,1,756,5,854,0,574
+"Pocillopora_meandrina_HIv1___RNAseq.g24666.t1","Exosome complex component MTR3","exosc6","EXOSC6","Stylophora pistillata","A0A2B4RYW7",62.963,270,27,3,1,199,1,268,5.2e-109,313
+"Pocillopora_meandrina_HIv1___RNAseq.g3155.t1","Putative exosome complex component RRP41","Exosc4","EXOSC4","Stylophora pistillata","A0A2B4S0L2",95.349,215,10,0,1,215,29,243,5.04e-153,434
+"Pocillopora_meandrina_HIv1___RNAseq.g28146.t1","Ribosomal RNA-processing protein 42","EXOSC7","EXOSC7","Stylophora pistillata","A0A2B4S9F0",90.941,287,26,0,1,287,1,287,0,545
+"Pocillopora_meandrina_HIv1___RNAseq.g16792.t1","Exosome complex component RRP40","exosc3","EXOSC3","Stylophora pistillata","A0A2B4SR58",86.885,244,30,1,1,244,1,242,5.75e-161,445
+"Pocillopora_meandrina_HIv1___RNAseq.g18660.t1","Ribosomal RNA-processing protein 43","EXOSC8","EXOSC8","Stylophora pistillata","A0A2B4T141",91.636,275,23,0,1,275,50,324,0,501
+"Pocillopora_meandrina_HIv1___RNAseq.g3155.t1","Exosome complex component RRP41","EXOSC4","EXOSC4","Desmophyllum pertusum","A0A9W9YAL0",97.6,125,3,0,1,125,1,125,9.77e-89,260
+"Pocillopora_meandrina_HIv1___RNAseq.g18660.t1","Ribosomal RNA-processing protein 43","EXOSC8","EXOSC8","Desmophyllum pertusum","A0A9W9YM72",90.545,275,26,0,1,275,50,324,0,499
+"Pocillopora_meandrina_HIv1___RNAseq.g28146.t1","Ribosomal RNA-processing protein 42","EXOSC7","EXOSC7","Desmophyllum pertusum","A0A9W9YRF8",86.411,287,39,0,1,287,1,287,0,516
+"Pocillopora_meandrina_HIv1___RNAseq.g18051.t1","Exosome component 5","EXOSC5_2","EXOSC5","Desmophyllum pertusum","A0A9W9ZG60",67.391,92,13,1,1,75,20,111,4.86e-38,126
+"Pocillopora_meandrina_HIv1___RNAseq.g24666.t1","Exosome complex component MTR3","EXOSC6","EXOSC6","Desmophyllum pertusum","A0A9X0CUG7",77.632,76,17,0,1,76,1,76,6.57e-38,127
+"Pocillopora_meandrina_HIv1___RNAseq.g16792.t1","Exosome complex component RRP40","EXOSC3","EXOSC3","Hydra vulgaris","T2M4E6",52.361,233,106,4,11,240,10,240,2.42e-79,238
+"Pocillopora_meandrina_HIv1___RNAseq.g18051.t1","Exosome complex component RRP46","EXOSC5","EXOSC5","Hydra vulgaris","T2M4V1",37.674,215,134,0,1,215,17,231,1.86e-61,192
+"Pocillopora_meandrina_HIv1___RNAseq.g7373.t1","Exosome complex component RRP4","EXOSC2","EXOSC2","Hydra vulgaris","T2ME10",61.538,299,106,2,1,291,1,298,1.61e-134,382
+"Pocillopora_meandrina_HIv1___RNAseq.g18860.t1","Exosome complex component RRP45","EXOSC9","EXOSC9","Hydra vulgaris","T2ME23",47.711,415,184,5,1,387,1,410,9.27e-131,385
+"Pocillopora_meandrina_HIv1___RNAseq.g17818.t1","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",55.191,183,80,2,8,189,9,190,1e-69,210
+"Pocillopora_meandrina_HIv1___RNAseq.g17818.t1","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",55.191,183,80,2,8,189,9,190,1e-69,210
+"Pocillopora_meandrina_HIv1___RNAseq.g17818.t1","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",55.191,183,80,2,8,189,9,190,1e-69,210
+"Pocillopora_meandrina_HIv1___RNAseq.g17818.t1","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",55.191,183,80,2,8,189,9,190,1e-69,210
+"Pocillopora_meandrina_HIv1___RNAseq.g25259.t1","Histone-lysine N-methyltransferase EZH1","Ezh1","EZH1","Mus musculus","P70351",50.811,740,309,9,16,745,14,708,0,717
+"Pocillopora_meandrina_HIv1___RNAseq.g25259.t1","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Homo sapiens","Q92800",50.811,740,309,9,16,745,14,708,0,722
+"Pocillopora_meandrina_HIv1___RNAseq.g25259.t1","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Bos taurus","A7E2Z2",50.811,740,309,9,16,745,14,708,0,722
+"Pocillopora_meandrina_HIv1___RNAseq.g25259.t1","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Pongo abelii","Q5RDS6",50.676,740,310,9,16,745,14,708,0,718
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding protein FUS-like isoform X1","LOC116288841","FUS","Actinia tenebrosa","A0A6P8H599",61.57,242,89,3,187,425,202,442,1.07e-59,201
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding protein FUS","PMEA_00003736","FUS","Pocillopora meandrina","A0AAU9WDG7",96.84,443,9,3,1,439,1,442,0,769
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding protein FUS","FUS","FUS","Hydra vulgaris","T2MGK7",48.101,158,72,1,183,330,219,376,2.03e-37,139
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding FUS-like isoform X1","PACLA_8A053281","FUS","Paramuricea clavata","A0A6S7FTL3",64.641,181,57,3,253,430,202,378,4.9e-53,185
+"Pocillopora_meandrina_HIv1___RNAseq.g21270.t1","RNA-binding protein FUS","PEVE_00001166","FUS","Porites evermanni","A0ABN8Q272",71.255,247,68,3,179,424,198,442,7.2e-80,253
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",70.345,580,140,8,1,570,1,558,0,806
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",70.345,580,140,8,1,570,1,558,0,806
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",95.928,614,25,0,1,614,1,614,0,1233
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",95.928,614,25,0,1,614,1,614,0,1233
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",91.115,619,49,6,1,618,1,614,0,1107
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",91.115,619,49,6,1,618,1,614,0,1107
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",73.07,531,131,4,1,521,1,529,0,802
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",73.07,531,131,4,1,521,1,529,0,802
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","Hnrnpa1","HNRNPA1","Rattus norvegicus","P04256",42.308,208,108,4,2,207,12,209,3.76e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Homo sapiens","P09651",42.308,208,108,4,2,207,12,209,2.83e-48,169
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Bos taurus","P09867",42.308,208,108,4,2,207,12,209,1.82e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","Hnrnpa1","HNRNPA1","Mus musculus","P49312",42.308,208,108,4,2,207,12,209,1.82e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Pan troglodytes","A5A6H4",42.308,208,108,4,2,207,12,209,1.82e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Macaca mulatta","Q28521",41.827,208,109,4,2,207,12,209,9.46e-48,166
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A1 homolog","hnrnpa1","HNRNPA1","Xenopus laevis","P17130",42.932,191,100,3,3,191,13,196,5.04e-50,173
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","Hnrnpa2b1","HNRNPA2B1","Rattus norvegicus","A7VJC2",42.308,208,111,4,22,229,22,220,2.1e-48,168
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","Hnrnpa2b1","HNRNPA2B1","Mus musculus","O88569",42.935,184,102,2,22,205,22,202,1.22e-48,169
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Homo sapiens","P22626",42.308,208,111,4,22,229,22,220,1.05e-48,169
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Bos taurus","Q2HJ60",42.308,208,111,4,10,217,22,220,5.42e-49,169
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Pongo abelii","Q5RBU8",42.308,208,111,4,22,229,22,220,4.96e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g21765.t1","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Saguinus oedipus","Q9TTV2",41.827,208,112,4,10,217,22,220,2.64e-48,167
+"Pocillopora_meandrina_HIv1___RNAseq.g8004.t1","Integrator complex subunit 5","omd","INTS5","Drosophila melanogaster","Q9VFS6",27.317,205,128,6,772,970,788,977,3.55e-14,77.4
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9 homolog","ints9","INTS9","Nematostella vectensis","A7SBF0",69.265,667,198,1,1,660,1,667,0,990
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9 homolog","ints9","INTS9","Dictyostelium discoideum","Q54SH0",31.908,655,377,13,1,634,1,607,4.36e-115,361
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","ints9","INTS9","Xenopus laevis","Q6DFF4",54.328,670,291,5,1,658,1,667,0,741
+"Pocillopora_meandrina_HIv1___RNAseq.g27830.t1","Integrator complex subunit 8","ints8","INTS8","Xenopus laevis","Q4V847",31.86,1086,596,34,12,991,5,1052,2.09e-139,444
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","ints7","INTS7","Danio rerio","Q8JGR7",43.584,943,480,12,21,938,26,941,0,748
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7 homolog","ints7","INTS7","Dictyostelium discoideum","Q54PL2",35.294,374,235,3,107,479,9,376,6.69e-61,225
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6","ints6l","INTS6","Danio rerio","Q7SYD9",48.325,418,200,9,265,672,352,763,6.54e-119,386
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6-B","ints6-b","INTS6","Xenopus laevis","Q5U4W6",37.791,688,335,20,255,873,346,1009,4.89e-125,402
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6-A","ints6-a","INTS6","Xenopus laevis","Q2TAF4",47.073,427,192,11,255,671,346,748,1.23e-116,380
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6 homolog","ints6","INTS6","Dictyostelium discoideum","Q54Z23",47.843,255,122,3,1,252,2,248,1.04e-69,253
+"Pocillopora_meandrina_HIv1___RNAseq.g15623.t1a","Integrator complex subunit 4 homolog","ints4","INTS4","Dictyostelium discoideum","Q54LH5",33.942,548,309,11,169,702,97,605,2.8e-84,296
+"Pocillopora_meandrina_HIv1___RNAseq.g15623.t1a","Integrator complex subunit 4","ints4","INTS4","Xenopus laevis","Q68F70",41.874,1003,520,24,14,968,10,997,0,681
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3","ints3","INTS3","Danio rerio","Q1LXC9",30.962,520,311,15,520,1017,558,1051,6.02e-56,211
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","ints3","INTS3","Dictyostelium discoideum","Q55EZ4",39.059,489,265,10,34,515,11,473,7.68e-96,334
+"Pocillopora_meandrina_HIv1___RNAseq.g20910.t1","Integrator complex subunit 2 homolog","ints2","INTS2","Dictyostelium discoideum","Q55CB6",24.329,1229,688,35,102,1232,70,1154,1.21e-80,291
+"Pocillopora_meandrina_HIv1___RNAseq.g23383.t1","Integrator complex subunit 15","ints15","INTS15","Danio rerio","Q7ZTY6",32.031,384,197,11,48,383,70,437,7.52e-46,165
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","ints14","INTS14","Xenopus tropicalis","Q66KD9",44.088,499,259,7,1,489,1,489,4.35e-143,421
+"Pocillopora_meandrina_HIv1___TS.g28157.t1","Integrator complex subunit 13","ints13","INTS13","Xenopus laevis","Q6GLY5",40.594,707,373,17,9,695,12,691,7.04e-170,506
+"Pocillopora_meandrina_HIv1___TS.g28157.t1","Integrator complex subunit 13","ints13","INTS13","Xenopus tropicalis","Q6DIK0",42.09,708,353,19,9,687,12,691,3.79e-178,528
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","ints12","INTS12","Danio rerio","Q6IQU7",33.607,244,121,7,6,222,7,236,1.01e-33,130
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","ints12","INTS12","Xenopus tropicalis","Q0V9U1",34.459,296,148,13,1,259,1,287,1.44e-32,126
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","ints12","INTS12","Xenopus laevis","Q6DJM6",34.173,278,147,13,1,246,1,274,3.28e-32,125
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11 homolog","ints11","INTS11","Dictyostelium discoideum","Q54YL3",71.789,475,122,3,3,477,4,466,0,756
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","ints10","INTS10","Danio rerio","Q6TNU3",32.648,778,412,17,8,711,16,755,4.14e-117,369
+"Pocillopora_meandrina_HIv1___RNAseq.g1061.t1","Integrator complex subunit 1 homolog","ints1","INTS1","Dictyostelium discoideum","Q54NC8",24.472,899,557,26,197,1018,165,1018,2.29e-60,231
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","defl","INTS7","Drosophila melanogaster","Q9VT41",31.814,987,586,23,18,984,21,940,2.9e-145,457
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","cpsf3l","INTS11","Danio rerio","Q503E1",72.937,606,150,5,1,593,1,605,0,931
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","Ints9","INTS9","Mus musculus","Q8K114",53.423,672,294,6,1,658,1,667,0,731
+"Pocillopora_meandrina_HIv1___RNAseq.g27830.t1","Integrator complex subunit 8","Ints8","INTS8","Mus musculus","Q80V86",31.806,1091,594,35,12,995,5,1052,9.78e-144,456
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","Ints7","INTS7","Mus musculus","Q7TQK1",44.03,938,483,11,21,938,26,941,0,766
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6-like","Ints6l","INTS6L","Mus musculus","Q8BND4",64.435,239,84,1,1,239,1,238,1.71e-96,325
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6","Ints6","INTS6","Mus musculus","Q6PCM2",50.121,413,184,11,258,657,349,752,1.92e-121,392
+"Pocillopora_meandrina_HIv1___RNAseq.g8004.t1","Integrator complex subunit 5","Ints5","INTS5","Mus musculus","Q8CHT3",27.988,1004,624,25,28,999,34,970,1.24e-100,338
+"Pocillopora_meandrina_HIv1___RNAseq.g15623.t1a","Integrator complex subunit 4","Ints4","INTS4","Mus musculus","Q8CIM8",42.22,964,511,14,37,963,43,997,0,697
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3","Ints3","INTS3","Mus musculus","Q7TPD0",42.658,1076,530,18,25,1041,4,1051,0,814
+"Pocillopora_meandrina_HIv1___RNAseq.g20910.t1","Integrator complex subunit 2","Ints2","INTS2","Mus musculus","Q80UK8",45.589,1281,548,21,15,1195,11,1242,0,1022
+"Pocillopora_meandrina_HIv1___RNAseq.g23383.t1","Integrator complex subunit 15","Ints15","INTS15","Mus musculus","Q8BGA7",31.378,392,196,12,46,388,70,437,9.58e-44,159
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","Ints14","INTS14","Rattus norvegicus","Q66H58",45.155,516,253,9,1,502,1,500,1.02e-147,432
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","Ints14","INTS14","Mus musculus","Q8R3P6",45.309,501,250,7,1,489,1,489,1.66e-147,432
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","Ints12","INTS12","Rattus norvegicus","Q68FR3",56.338,71,30,1,150,219,166,236,1.05e-25,107
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","Ints12","INTS12","Mus musculus","Q9D168",32.245,245,131,7,1,219,1,236,6.46e-32,125
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","Ints11","INTS11","Rattus norvegicus","Q3MHC2",71.122,606,162,3,1,593,1,606,0,922
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","Ints11","INTS11","Mus musculus","Q9CWS4",71.122,606,162,3,1,593,1,606,0,922
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","Ints10","INTS10","Mus musculus","Q8K2A7",32.987,770,415,19,8,706,16,755,5.9e-120,376
+"Pocillopora_meandrina_HIv1___RNAseq.g1061.t1","Integrator complex subunit 1","Ints1","INTS1","Mus musculus","Q6P4S8",40.334,2338,1185,52,1,2191,1,2275,0,1568
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","IntS9","INTS9","Drosophila melanogaster","Q95TS5",46.338,669,342,5,1,654,1,667,0,632
+"Pocillopora_meandrina_HIv1___RNAseq.g27830.t1","Integrator complex subunit 8","IntS8","INTS8","Drosophila melanogaster","A1ZAK1",29.888,445,277,10,589,1006,616,1052,4.03e-48,186
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6","IntS6","INTS6","Drosophila melanogaster","Q9W485",52.917,240,110,1,1,240,1,237,1.56e-75,272
+"Pocillopora_meandrina_HIv1___RNAseq.g15623.t1a","Integrator complex subunit 4","IntS4","INTS4","Drosophila melanogaster","Q9W3E1",35.132,945,527,22,102,1006,54,952,6.16e-154,482
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila sechellia","B4IMI7",52.092,478,228,1,4,480,3,480,3.15e-171,530
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila willistoni","B4NP05",52.878,469,220,1,13,480,10,478,3.99e-174,538
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila virilis","B4LQY8",52.331,472,224,1,13,483,12,483,1.81e-171,531
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila mojavensis","B4KJ11",36.914,1024,590,15,10,1008,9,1001,0,657
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila grimshawi","B4JPR2",52.311,476,226,1,18,492,12,487,4.65e-174,538
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila erecta","B3N449",52.51,478,226,1,4,480,3,480,1.21e-173,537
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila yakuba","B4ISV0",26.198,313,209,5,696,1003,706,1001,4.83e-34,141
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3","IntS3","INTS3","Drosophila melanogaster","Q7PLS8",26.225,347,232,6,660,999,672,1001,1.5e-34,143
+"Pocillopora_meandrina_HIv1___RNAseq.g20910.t1","Integrator complex subunit 2","IntS2","INTS2","Drosophila melanogaster","Q9VX31",35.579,1158,623,24,9,1051,8,1157,0,643
+"Pocillopora_meandrina_HIv1___RNAseq.g23383.t1","Integrator complex subunit 15","IntS15","INTS15","Drosophila melanogaster","Q9VPF9",27.479,353,198,10,76,370,87,439,3.57e-23,100
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","IntS14","INTS14","Drosophila melanogaster","Q9VPY0",32.653,588,288,16,1,566,1,502,2.08e-82,267
+"Pocillopora_meandrina_HIv1___TS.g28157.t1","Integrator complex subunit 13","IntS13","INTS13","Mus musculus","Q8QZV7",41.379,725,383,17,9,710,12,717,2.06e-179,532
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","IntS12","INTS12","Drosophila melanogaster","Q9VBB3",31.148,61,41,1,125,185,172,231,1.05e-06,49.7
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","IntS11","INTS11","Drosophila melanogaster","Q9VAH9",66.118,608,191,4,1,595,1,606,0,855
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","IntS10","INTS10","Drosophila melanogaster","Q9VZM7",34.555,191,105,7,2,180,14,196,5.09e-21,97.8
+"Pocillopora_meandrina_HIv1___RNAseq.g1061.t1","Integrator complex subunit 1","IntS1","INTS1","Drosophila melanogaster","Q9W1C5",29.683,2338,1282,60,5,2047,3,2273,0,904
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","INTS9","INTS9","Gallus gallus","Q5ZKK2",54.315,672,288,6,1,658,1,667,0,728
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","INTS9","INTS9","Homo sapiens","Q9NV88",53.869,672,291,6,1,658,1,667,0,739
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","INTS9","INTS9","Macaca fascicularis","Q4R5Z4",51.935,672,283,6,1,637,1,667,0,711
+"Pocillopora_meandrina_HIv1___RNAseq.g20120.t2","Integrator complex subunit 9","INTS9","INTS9","Bos taurus","Q2KJA6",53.571,672,293,6,1,658,1,667,0,733
+"Pocillopora_meandrina_HIv1___RNAseq.g27830.t1","Integrator complex subunit 8","INTS8","INTS8","Homo sapiens","Q75QN2",32.447,1091,587,35,12,995,5,1052,7.41e-146,461
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","INTS7","INTS7","Gallus gallus","Q5ZL91",45.144,937,474,11,20,937,26,941,0,783
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","INTS7","INTS7","Homo sapiens","Q9NVH2",44.03,938,483,11,21,938,26,941,0,771
+"Pocillopora_meandrina_HIv1___RNAseq.g5380.t1","Integrator complex subunit 7","INTS7","INTS7","Bos taurus","Q1RMS6",44.136,938,482,11,21,938,26,941,0,770
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6-like","INTS6L","INTS6L","Homo sapiens","Q5JSJ4",35.766,685,315,25,259,846,346,1002,2.09e-104,346
+"Pocillopora_meandrina_HIv1___RNAseq.g15809.t1","Integrator complex subunit 6","INTS6","INTS6","Homo sapiens","Q9UL03",39.291,677,338,18,258,877,349,1009,4.33e-133,424
+"Pocillopora_meandrina_HIv1___RNAseq.g8004.t1","Integrator complex subunit 5","INTS5","INTS5","Homo sapiens","Q6P9B9",27.418,1003,632,23,28,1000,34,970,2.1e-98,333
+"Pocillopora_meandrina_HIv1___RNAseq.g15623.t1a","Integrator complex subunit 4","INTS4","INTS4","Homo sapiens","Q96HW7",42.012,964,513,14,36,962,43,997,0,698
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3","INTS3","INTS3","Homo sapiens","Q68E01",42.897,1077,527,19,26,1043,4,1051,0,814
+"Pocillopora_meandrina_HIv1___RNAseq.g6554.t1","Integrator complex subunit 3","INTS3","INTS3","Pongo abelii","Q5RE70",42.844,1076,528,18,27,1043,4,1051,0,818
+"Pocillopora_meandrina_HIv1___RNAseq.g20910.t1","Integrator complex subunit 2","INTS2","INTS2","Gallus gallus","Q5ZKU4",44.984,1276,564,18,11,1189,8,1242,0,1003
+"Pocillopora_meandrina_HIv1___RNAseq.g20910.t1","Integrator complex subunit 2","INTS2","INTS2","Homo sapiens","Q9H0H0",45.661,1279,549,22,14,1193,11,1242,0,1016
+"Pocillopora_meandrina_HIv1___RNAseq.g23383.t1","Integrator complex subunit 15","INTS15","INTS15","Homo sapiens","Q96N11",30.867,392,199,11,46,389,70,437,9.01e-44,159
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","INTS14","INTS14","Gallus gallus","Q5ZK21",45.219,502,249,7,1,489,1,489,1.5e-148,435
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","INTS14","INTS14","Bos taurus","Q5EA76",45.129,503,248,7,1,489,1,489,1.76e-146,429
+"Pocillopora_meandrina_HIv1___RNAseq.g7781.t1","Integrator complex subunit 14","INTS14","INTS14","Homo sapiens","Q96SY0",44.93,503,249,7,1,489,1,489,4.48e-147,431
+"Pocillopora_meandrina_HIv1___TS.g28157.t1","Integrator complex subunit 13","INTS13","INTS13","Homo sapiens","Q9NVM9",41.317,714,378,14,9,703,12,703,0,537
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","INTS12","INTS12","Homo sapiens","Q96CB8",32.099,243,135,6,1,220,1,236,1.98e-30,120
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","INTS12","INTS12","Macaca fascicularis","Q8WNV2",32.099,243,135,6,1,220,1,236,8.26e-31,122
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","INTS12","INTS12","Bos taurus","Q32LL5",32.51,243,134,6,1,220,1,236,1.71e-31,124
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","Integrator complex subunit 12","INTS12","INTS12","Pongo abelii","Q5RCV7",32.099,243,135,6,1,220,1,236,2.08e-30,120
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","INTS11","INTS11","Gallus gallus","Q5ZIH0",73.554,605,147,3,1,592,1,605,0,943
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","INTS11","INTS11","Homo sapiens","Q5TA45",71.074,605,162,3,1,592,1,605,0,915
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","INTS11","INTS11","Bos taurus","Q2YDM2",70.909,605,163,3,1,592,1,605,0,916
+"Pocillopora_meandrina_HIv1___RNAseq.g12965.t1","Integrator complex subunit 11","INTS11","INTS11","Pongo abelii","Q5NVE6",71.074,605,162,3,1,592,1,605,0,915
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","INTS10","INTS10","Gallus gallus","Q5ZLS8",32.682,768,420,17,8,706,16,755,2.83e-118,372
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","INTS10","INTS10","Macaca fascicularis","Q4R7B1",31.818,770,413,18,8,695,16,755,4.46e-115,363
+"Pocillopora_meandrina_HIv1___TS.g10511.t2","Integrator complex subunit 10","INTS10","INTS10","Homo sapiens","Q9NVR2",32.468,770,419,18,8,706,16,755,1.67e-119,375
+"Pocillopora_meandrina_HIv1___RNAseq.g1061.t1","Integrator complex subunit 1","INTS1","INTS1","Homo sapiens","Q8N201",40.493,2351,1158,58,1,2186,1,2275,0,1565
+"Pocillopora_meandrina_HIv1___RNAseq.g27354.t1","Protein Jumonji","Jarid2","JARID2","Mus musculus","Q62315",35.872,407,251,5,792,1194,1376,1776,1.17e-73,270
+"Pocillopora_meandrina_HIv1___RNAseq.g27354.t1","Protein Jumonji","JARID2","JARID2","Homo sapiens","Q92833",36.855,407,247,6,794,1196,1376,1776,5.86e-75,274
+"Pocillopora_meandrina_HIv1___RNAseq.g27354.t1","Jumonji, AT rich interactive domain protein 2","Jarid2","JARID2","Drosophila melanogaster","Q9VT00",36.748,615,332,13,1740,2342,1211,1780,4.21e-114,404
+"Pocillopora_meandrina_HIv1___RNAseq.g27354.t1","Protein Jumonji","JARID2","JARID2","Gallus gallus","Q5F363",38.542,384,228,5,805,1185,1398,1776,2.36e-76,278
+"Pocillopora_meandrina_HIv1___RNAseq.g7872.t2","Far upstream element-binding protein 2","Khsrp","KHSRP","Mus musculus","Q3U0V1",36.831,486,228,13,62,498,11,466,4.63e-73,251
+"Pocillopora_meandrina_HIv1___RNAseq.g7872.t2","Far upstream element-binding protein 2","KHSRP","KHSRP","Gallus gallus","Q8UVD9",35.872,499,235,13,89,558,23,465,1.04e-68,239
+"Pocillopora_meandrina_HIv1___RNAseq.g7872.t2","Far upstream element-binding protein 2","KHSRP","KHSRP","Homo sapiens","Q92945",37.037,486,227,13,61,497,11,466,1.77e-73,251
+"Pocillopora_meandrina_HIv1___RNAseq.g7872.t2","Far upstream element-binding protein 2","Khsrp","KHSRP","Rattus norvegicus","Q99PF5",36.831,486,228,13,62,498,11,466,1.46e-73,251
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Protein Loquacious","loqs","LOQS","Drosophila melanogaster","Q9VJY9",28.49,351,220,7,134,462,21,362,2.03e-20,92.4
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","NFX1","NFX1","Stylophora pistillata","A0A2B4S8E0",76.339,1120,222,10,1,1092,3,1107,0,1661
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","NFX1","NFX1","Desmophyllum pertusum","A0A9W9ZIJ8",64.546,959,283,16,67,977,114,1063,0,1189
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","P5673_012838","NFX1","Acropora cervicornis","A0AAD9QM30",56.345,985,376,13,152,1092,155,1129,0,1061
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","NEMVEDRAFT_v1g240231","NFX1","Nematostella vectensis","A7RRR1",48.268,895,368,13,233,1038,241,1129,0,836
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1 isoform X2","LOC100203326","NFX1","Hydra vulgaris","A0ABM4CYS0",44.9,853,409,15,520,1319,281,1125,0,724
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","PEVE_00012249","NFX1","Porites evermanni","A0ABN8LDI2",52.419,1116,442,17,11,1088,22,1086,0,1092
+"Pocillopora_meandrina_HIv1___RNAseq.g18595.t1","NF-X1-type domain-containing protein","PLOB_00042824","NFX1","Porites lobata","A0ABN8MZE6",76.757,740,171,1,151,890,5,743,0,1098
+"Pocillopora_meandrina_HIv1___TS.g17921.t4","Transcriptional repressor NF-X1","PLOB_00028393","NFX1","Porites lobata","A0ABN8NSY9",52.594,1118,437,17,11,1088,22,1086,0,1093
+"Pocillopora_meandrina_HIv1___RNAseq.g18595.t1","NF-X1-type domain-containing protein","PEVE_00020237","NFX1","Porites evermanni","A0ABN8SHN6",76.216,740,175,1,151,890,5,743,0,1100
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Non-POU domain-containing octamer-binding protein","NONO","NONO","Homo sapiens","Q15233",49.057,318,147,3,64,368,79,394,5.03e-91,286
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Non-POU domain-containing octamer-binding protein","Nono","NONO","Rattus norvegicus","Q5FVM4",49.057,318,147,3,69,373,79,394,6.73e-91,286
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Non-POU domain-containing octamer-binding protein","NONO","NONO","Pongo abelii","Q5RFL9",49.057,318,147,3,64,368,79,394,5.03e-91,286
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Non-POU domain-containing octamer-binding protein","Nono","NONO","Mus musculus","Q99K48",49.057,318,147,3,66,370,79,394,6.28e-91,286
+"Pocillopora_meandrina_HIv1___RNAseq.g3752.t1","Nucleolar protein 56","NOP56","NOP56","Stylophora pistillata","A0A2B4S0V2",97.153,562,16,0,1,562,1,562,0,1115
+"Pocillopora_meandrina_HIv1___RNAseq.g3752.t1","Nucleolar protein 56","NOP56_1","NOP56","Desmophyllum pertusum","A0A9X0CKQ5",94.66,206,11,0,1,206,1,206,2.13e-144,413
+"Pocillopora_meandrina_HIv1___RNAseq.g9720.t1","Nucleolar protein 58","NOP58","NOP58","Stylophora pistillata","A0A2B4RV90",75.197,508,51,6,1,471,1,470,0,676
+"Pocillopora_meandrina_HIv1___RNAseq.g9720.t1","Nucleolar protein 58","NOP58","NOP58","Hydra vulgaris","T2M3D0",67.975,484,141,3,1,480,1,474,0,613
+"Pocillopora_meandrina_HIv1___RNAseq.g9720.t1","Nucleolar protein 58","NOP58_3","NOP58","Desmophyllum pertusum","A0A9X0DAY2",92.578,256,8,2,1,246,136,390,2.73e-172,485
+"Pocillopora_meandrina_HIv1___RNAseq.g11644.t1","PHD finger protein 1","PHF1","PHF1","Homo sapiens","O43189",28.916,166,109,6,186,347,18,178,3.51e-09,59.7
+"Pocillopora_meandrina_HIv1___RNAseq.g1586.t1","SWM histone demethylase complex subunit phf1","phf1","PHF1","Schizosaccharomyces pombe (strain 972 / ATCC 24843)","P87233",39.344,61,36,1,187,246,171,231,4.25e-09,58.2
+"Pocillopora_meandrina_HIv1___RNAseq.g11644.t1","PHD finger protein 1","Phf1","PHF1","Mus musculus","Q9Z1B8",29.586,169,110,6,186,350,18,181,9.13e-10,61.6
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A homolog A","prkra-a","PRKRA","Xenopus laevis","Q7ZYA5",33.684,190,91,5,27,187,18,201,2.51e-15,75.5
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A homolog B","prkra-b","PRKRA","Xenopus laevis","Q91836",33.158,190,92,5,16,176,18,201,1.65e-14,73.2
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A","Prkra","PRKRA","Rattus norvegicus","Q4V8C7",28.986,345,176,7,32,309,20,362,1.63e-25,104
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A","Prkra","PRKRA","Mus musculus","Q9WTX2",28.696,345,177,7,32,309,20,362,1.86e-24,101
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A","PRKRA","PRKRA","Homo sapiens","O75569",28.986,345,176,7,32,309,20,362,3.78e-25,103
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A homolog","prkra","PRKRA","Danio rerio","B0V3F8",29.942,344,169,10,9,280,21,364,3.31e-23,97.4
+"Pocillopora_meandrina_HIv1___RNAseq.g25906.t1","Interferon-inducible double-stranded RNA-dependent protein kinase activator A","PRKRA","PRKRA","Bos taurus","Q2HJ92",28.986,345,176,7,32,309,20,362,1.19e-25,105
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","ran","RAN","Stylophora pistillata","A0A2B4S4I9",96.789,218,7,0,50,267,1,218,2.18e-161,446
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","pdam_00006618","RAN","Pocillopora damicornis","A0A3M6T8V8",99.541,218,1,0,1,218,1,218,8.06e-166,455
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","LOC116289667","RAN","Actinia tenebrosa","A0A6P8HA70",87.619,210,26,0,11,220,9,218,1.25e-139,389
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","PACLA_8A046140","RAN","Paramuricea clavata","A0A6S7FIA6",82.87,216,37,0,1,216,1,216,5.17e-137,382
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","PACLA_8A066255","RAN","Paramuricea clavata","A0A6S7GP59",82.547,212,37,0,3,214,7,218,2.74e-133,373
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","RAN OS=Clytia hemisphaerica OX=252671","RAN","Clytia hemisphaerica","A0A7M5VCA2",82.297,209,37,0,9,217,10,218,3.41e-133,373
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","RAN OS=Exaiptasia diaphana OX=2652724","RAN","Exaiptasia diaphana","A0A913Y4H3",89.151,212,23,0,8,219,7,218,2.43e-143,399
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","RAN1","RAN","Desmophyllum pertusum","A0A9W9Z9F5",92.697,178,13,0,1,178,41,218,5.85e-125,350
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","P5673_000489","RAN","Acropora cervicornis","A0AAD9VHU7",89.623,212,22,0,10,221,7,218,2.65e-145,404
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","PMEA_00025316","RAN","Pocillopora meandrina","A0AAU9XP26",99.541,218,1,0,1,218,1,218,8.06e-166,455
+"Pocillopora_meandrina_HIv1___RNAseq.g22610.t1","GTP-binding nuclear protein","PMEA_00025319","RAN","Pocillopora meandrina","A0AAU9XP45",77.512,209,47,0,1,209,1,209,3.53e-122,344
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","NEMVEDRAFT_v1g170199","RAN","Nematostella vectensis","A7SG05",85.581,215,31,0,3,217,4,218,3.32e-142,395
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","RAN","RAN","Hydra vulgaris","T2ME54",84.906,212,32,0,6,217,5,216,7.92e-139,387
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","LOC100211661","RAN","Hydra vulgaris","A0ABM4CR17",84.186,215,34,0,3,217,2,216,3.44e-139,388
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","PLOB_00011295","RAN","Porites lobata","A0ABN8NFA2",88.837,215,24,0,12,226,4,218,2.47e-146,406
+"Pocillopora_meandrina_HIv1___RNAseq.g22614.t1","GTP-binding nuclear protein","PEVE_00044383","RAN","Porites evermanni","A0ABN8PTG3",89.767,215,22,0,12,226,4,218,4.56e-147,408
+"Pocillopora_meandrina_HIv1___RNAseq.g1376.t1","RNA-binding protein 3","Rbm3","RBM3","Mus musculus","O89086",54.688,64,29,0,7,70,9,72,8.61e-19,81.3
+"Pocillopora_meandrina_HIv1___RNAseq.g1374.t1","RNA-binding protein 3","RBM3","RBM3","Homo sapiens","P98179",46.341,82,44,0,2,83,4,85,2.15e-18,77.8
+"Pocillopora_meandrina_HIv1___RNAseq.g1376.t1","RNA-binding protein 3","Rbm3","RBM3","Rattus norvegicus","Q925G0",53.125,64,30,0,7,70,9,72,3.78e-18,79.7
+"Pocillopora_meandrina_HIv1___RNAseq.g1376.t1","RNA-binding protein 3","RBM3","RBM3","Capra hircus","W8E7I1",54.688,64,29,0,7,70,9,72,1.79e-18,80.9
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Splicing factor, proline- and glutamine-rich","SFPQ","SFPQ","Homo sapiens","P23246",48.943,331,155,4,287,605,79,407,5.23e-96,306
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Splicing factor, proline- and glutamine-rich","Sfpq","SFPQ","Mus musculus","Q8VIJ6",48.943,331,155,4,279,597,79,407,4.16e-96,307
+"Pocillopora_meandrina_HIv1___RNAseq.g17209.t1","SWI/SNF-related matrix-associated actin-dependent regulator of chromatin subfamily A member 2","SMARCA2","SMARCA2","Homo sapiens","P51531",55.71,1585,538,20,57,1544,1,1518,0,1618
+"Pocillopora_meandrina_HIv1___RNAseq.g17209.t1","SWI/SNF-related matrix-associated actin-dependent regulator of chromatin subfamily A member 2","Smarca2","SMARCA2","Mus musculus","Q6DIC0",55.283,1628,568,23,57,1577,1,1575,0,1628
+"Pocillopora_meandrina_HIv1___TS.g24094.t1","Exportin-1","Xpo1","XPO1","Stylophora pistillata","A0A2B4SJU6",90.476,273,4,1,1,273,1,251,1.41e-167,505
+"Pocillopora_meandrina_HIv1___TS.g24094.t1","Exportin-1","XPO1","XPO1","Desmophyllum pertusum","A0A9W9ZZP8",96.348,1068,38,1,1,1068,5,1071,0,2150
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Nuclease-sensitive element-binding protein 1","YBX1","YBX1","Hydra vulgaris","T2MEH8",76.923,91,21,0,27,117,15,105,5.88e-47,159
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","ybx1","YBX1","Danio rerio","B5DE31",85.227,88,13,0,32,119,17,104,3.62e-50,168
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","ybx1","YBX1","Xenopus laevis","P21573",85.227,88,13,0,30,117,17,104,1.67e-50,169
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","Ybx1","YBX1","Mus musculus","P62960",85.227,88,13,0,50,137,17,104,9.04e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","Ybx1","YBX1","Rattus norvegicus","P62961",85.227,88,13,0,50,137,17,104,9.04e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","YBX1","YBX1","Bos taurus","P67808",85.227,88,13,0,52,139,17,104,9.88e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","YBX1","YBX1","Homo sapiens","P67809",85.227,88,13,0,52,139,17,104,9.88e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","YBX1","YBX1","Gallus gallus","Q06066",85.227,88,13,0,49,136,17,104,8.97e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g22939.t1","Y-box-binding protein 1","YBX1","YBX1","Oryctolagus cuniculus","Q28618",85.227,88,13,0,52,139,17,104,9.67e-50,167
+"Pocillopora_meandrina_HIv1___RNAseq.g11551.t1","Terminal uridylyltransferase 4","Tut4","TUT4","Mus musculus","B2RX14",39.683,1008,481,17,324,1326,106,991,0,695
+"Pocillopora_meandrina_HIv1___RNAseq.g11551.t1","Terminal uridylyltransferase 4","TUT4","TUT4","Homo sapiens","Q5TAX3",39.921,1012,476,20,304,1309,106,991,0,694
+"Pocillopora_meandrina_HIv1___RNAseq.g11551.t1","Terminal uridylyltransferase 7","Tut7","TUT7","Mus musculus","Q5BLK4",51.185,422,202,3,939,1360,577,994,4.99e-135,462
+"Pocillopora_meandrina_HIv1___RNAseq.g11551.t1","Terminal uridylyltransferase 7","TUT7","TUT7","Homo sapiens","Q5VYS8",51.887,424,200,3,941,1364,575,994,1.12e-137,470
+"Pocillopora_meandrina_HIv1___RNAseq.g23590.t1","Protein lin-28-like A","lin28a","LIN28A","Stylophora pistillata","A0A2B4R5W7",85.556,180,26,0,1,180,1,180,7.56e-116,326
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","RF11_13932","NCBP2","Thelohanellus kitauei","A0A0C2M9F6",54.545,132,60,0,8,139,7,138,4.06e-47,150
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","Cbp20","NCBP2","Stylophora pistillata","A0A2B4STT0",94.904,157,8,0,1,157,1,157,2.03e-111,313
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","pdam_00001828","NCBP2","Pocillopora damicornis","A0A3M6TNP0",100,157,0,0,1,157,1,157,8.75e-116,323
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","NCBP2 OS=Henneguya salminicola OX=69463","NCBP2","Henneguya salminicola","A0A6G3MKY9",57.576,132,56,0,9,140,7,138,4.24e-52,162
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","LOC116302279","NCBP2","Actinia tenebrosa","A0A6P8IKU3",79.618,157,29,1,1,154,1,157,1.87e-91,262
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","PACLA_8A061461","NCBP2","Paramuricea clavata","A0A6S7FT41",74.194,155,39,1,1,154,1,155,1.03e-80,235
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","NCBP2 OS=Clytia hemisphaerica OX=252671","NCBP2","Clytia hemisphaerica","A0A7M5X3V4",73.427,143,38,0,3,145,2,144,1.01e-76,225
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","NCBP2 OS=Exaiptasia diaphana OX=2652724","NCBP2","Exaiptasia diaphana","A0A913XWC7",81.529,157,26,1,1,154,1,157,1.14e-93,268
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","NCBP2","NCBP2","Desmophyllum pertusum","A0A9W9YC25",85.35,157,23,0,18,174,1,157,1.73e-102,291
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","P5673_009535","NCBP2","Acropora cervicornis","A0AAD9QSS1",81.013,158,29,1,1,158,1,157,8.44e-97,276
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","PMEA_00008434","NCBP2","Pocillopora meandrina","A0AAU9WMU5",97.452,157,4,0,1,157,1,157,1.39e-114,321
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","NEMVEDRAFT_v1g167764","NCBP2","Nematostella vectensis","A7S8K1",82.166,157,28,0,1,157,1,157,4.2e-95,271
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","LOC100214121","NCBP2","Hydra vulgaris","A0ABM4D9X7",79.286,140,29,0,3,142,2,141,2.72e-82,239
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","LOC100203423","NCBP2","Hydra vulgaris","A0ABM4DD37",77.305,141,32,0,3,143,2,142,6.75e-82,238
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","PEVE_00004891","NCBP2","Porites evermanni","A0ABN8QGP8",83.75,160,23,1,1,160,1,157,1.27e-99,283
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","PLOB_00012832","NCBP2","Porites lobata","A0ABN8R0C7",85.625,160,20,1,1,160,1,157,1.03e-100,286
+"Pocillopora_meandrina_HIv1___RNAseq.g15581.t1","Nuclear cap-binding protein subunit 2","PEVE_00026158","NCBP2","Porites evermanni","A0ABN8SQ08",83.125,160,24,1,1,160,1,157,4.63e-99,281
+"Pocillopora_meandrina_HIv1___RNAseq.g5074.t2","polyribonucleotide nucleotidyltransferase","PNPT1","PNPT1","Stylophora pistillata","A0A2B4S717",87.854,741,82,1,1,733,50,790,0,1347
+"Pocillopora_meandrina_HIv1___RNAseq.g29445.t1","Zinc finger protein AEBP2","aebp2","AEBP2","Stylophora pistillata","A0A2B4SRM6",92.798,361,26,0,1,361,1,361,0,672
+"Pocillopora_meandrina_HIv1___RNAseq.g29445.t1","Zinc finger protein aebp2-like","LOC116289439","AEBP2","Actinia tenebrosa","A0A6P8H9M8",57.769,251,103,2,122,369,111,361,8.88e-105,312
+"Pocillopora_meandrina_HIv1___RNAseq.g29445.t1","Zinc finger protein aebp2","AEBP2","AEBP2","Desmophyllum pertusum","A0A9W9ZCQ2",78.393,361,73,2,1,356,1,361,0,550
+"Pocillopora_meandrina_HIv1___RNAseq.g29445.t1","Zinc finger protein AEBP2","P5673_012961","AEBP2","Acropora cervicornis","A0AAD9V7U4",68.371,313,95,3,1,309,1,313,5.1e-145,412
+"Pocillopora_meandrina_HIv1___RNAseq.g29445.t1","Zinc finger protein AEBP2","AEBP2","AEBP2","Hydra vulgaris","T2MBM4",31.325,249,142,6,238,484,117,338,4.71e-27,112
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-1","LOC116293197","AGO1","Actinia tenebrosa","A0A6P8HV34",75.176,854,210,2,1,852,1,854,0,1384
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-1","AGO1 OS=Exaiptasia diaphana OX=2652724","AGO1","Exaiptasia diaphana","A0A913WVM7",72.632,855,231,3,1,853,1,854,0,1333
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-1","NEMVEDRAFT_v1g180719","AGO1","Nematostella vectensis","A7RQ46",76.896,857,192,4,1,854,1,854,0,1381
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-1","AGO1 OS=Nematostella vectensis OX=45351","AGO1","Nematostella vectensis","U3MIG1",76.959,855,193,3,1,852,1,854,0,1385
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4R957",69.671,943,203,4,214,1079,102,1038,0,1307
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T0T4",83.262,705,116,2,29,733,31,733,0,1203
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T345",80.297,1010,191,3,27,1030,31,1038,0,1668
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Putative argonaute-2","AGO2 OS=Actinia equina OX=6106","AGO2","Actinia equina","A0A2S1PRW9",51.512,959,414,21,103,1050,120,1038,0,936
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2-like","LOC116293154","AGO2","Actinia tenebrosa","A0A6P8HJ48",54.322,856,352,17,227,1074,214,1038,0,924
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Argonaute-2 isoform X1","PACLA_8A050538","AGO2","Paramuricea clavata","A0A6S7HZC7",44.386,757,341,16,1,706,90,817,0,587
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Argonaute-2 isoform X1","PACLA_8A073078","AGO2","Paramuricea clavata","A0A6S7I8S6",44.379,854,432,14,96,921,16,854,0,713
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Argonaute 2","PACLA_8A058506","AGO2","Paramuricea clavata","A0A6S7ILJ3",46.119,876,411,18,275,1126,16,854,0,720
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Argonaute-2 isoform X2","PACLA_8A031707","AGO2","Paramuricea clavata","A0A6S7IZ23",47.972,863,413,14,244,1090,12,854,0,787
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Argonaute-2-like isoform X2","PACLA_8A010163","AGO2","Paramuricea clavata","A0A7D9HG59",48.081,886,415,18,46,901,140,1010,0,810
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Argonaute-2-like isoform X1","PACLA_8A023353","AGO2","Paramuricea clavata","A0A7D9IPU3",64.738,726,246,3,1,718,131,854,0,989
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2","P5673_017394","AGO2","Acropora cervicornis","A0AAD9QEE9",79.859,854,105,2,1,787,1,854,0,1409
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","P5673_017544","AGO2","Acropora cervicornis","A0AAD9QER2",61.547,905,313,12,23,918,72,950,0,1115
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","P5673_017353","AGO2","Acropora cervicornis","A0AAD9V3D6",61.667,660,200,9,123,731,381,1038,0,811
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Protein argonaute-2","P5673_017352","AGO2","Acropora cervicornis","A0AAD9V3F0",57.046,589,205,8,178,720,358,944,0,664
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2 isoform X6","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G4",46.021,867,429,15,138,989,11,853,0,770
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2 isoform X3","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G9",46.305,866,428,14,150,1001,11,853,0,778
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2 isoform X4","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H4",46.305,866,428,14,149,1000,11,853,0,778
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2 isoform X5","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H5",46.021,867,429,15,139,990,11,853,0,770
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2","PEVE_00006288","AGO2","Porites evermanni","A0ABN8QPB6",86.659,847,113,0,386,1232,8,854,0,1565
+"Pocillopora_meandrina_HIv1___RNAseq.g29941.t1","Protein argonaute-2","EIF2C2","AGO2","Hydra vulgaris","T2M321",47.017,838,409,14,163,987,11,826,0,766
+"Pocillopora_meandrina_HIv1___RNAseq.g29883.t1","Argonaute 2","AGO2 OS=Nematostella vectensis OX=45351","AGO2","Nematostella vectensis","U3MH35",52.361,932,385,21,174,1070,110,1017,0,926
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","SERRATE/Ars2 C-terminal domain-containing protein","SRRT OS=Exaiptasia diaphana OX=2652724","SRRT","Exaiptasia diaphana","A0A913WYP4",54,850,306,25,162,940,417,1252,0,717
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","Serrate RNA effector molecule-like","srrt","SRRT","Stylophora pistillata","A0A2B4SB72",88.051,1088,91,5,1,1060,1,1077,0,1536
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","SERRATE/Ars2 N-terminal domain-containing protein","pdam_00022040","SRRT","Pocillopora damicornis","A0A3M6ULZ9",99.766,855,2,0,1,855,222,1076,0,1726
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","SERRATE/Ars2 C-terminal domain-containing protein","OS493_007886","SRRT","Desmophyllum pertusum","A0A9W9YEP4",85.217,115,17,0,3,117,963,1077,4.28e-62,204
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","SERRATE/Ars2 C-terminal domain-containing protein","OS493_007887","SRRT","Desmophyllum pertusum","A0A9W9YGB8",87.571,177,20,2,29,204,1077,1252,2.43e-108,337
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","Ars2/serrate-like protein","NEMVEDRAFT_v1g239938","SRRT","Nematostella vectensis","A7RQB5",52.005,848,347,22,371,1173,417,1249,0,678
+"Pocillopora_meandrina_HIv1___RNAseq.g24969.t3","Serrate RNA effector molecule homolog","SRRT","SRRT","Hydra vulgaris","T2M6C4",41.8,500,238,11,334,803,776,1252,2.48e-107,357
+"Pocillopora_meandrina_HIv1___RNAseq.g7264.t1","Bromodomain-containing protein 3","BRD3","BRD3","Hydra vulgaris","T2MD51",44.134,1074,480,29,11,1003,89,1123,0,620
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","Cnot3","CNOT3","Stylophora pistillata","A0A2B4SMQ4",90.595,840,66,4,1,830,1,837,0,1479
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","PACLA_8A032947","CNOT3","Paramuricea clavata","A0A7D9DNQ7",49.535,860,324,18,1,773,1,837,0,714
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","CNOT3","CNOT3","Desmophyllum pertusum","A0A9W9YT29",79.094,861,138,8,1,843,1,837,0,1297
+"Pocillopora_meandrina_HIv1___RNAseq.g26779.t1","CCR4-NOT transcription complex subunit 4","CNOT4","CNOT4","Hydra vulgaris","T2MHP8",46.224,437,195,10,8,439,7,408,3.05e-115,374
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","rqcd1","CNOT9","Stylophora pistillata","A0A2B4RKW2",99.673,306,1,0,1,306,1,306,0,630
+"Pocillopora_meandrina_HIv1___RNAseq.g26710.t1","CCR4-NOT transcription complex subunit 11","CNOT11","CNOT11","Stylophora pistillata","A0A2B4RRB6",83.598,1195,186,4,784,1974,40,1228,0,2082
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Stylophora pistillata","A0A2B4SHE3",95.833,648,12,1,11,643,64,711,0,1243
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","CNOT10","CNOT10","Stylophora pistillata","A0A2B4SVK1",92.742,744,54,0,128,871,1,744,0,1423
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","pdam_00019776","CNOT1","Pocillopora damicornis","A0A3M6T4M6",97.91,2488,16,4,1,2488,1,2452,0,5002
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","pdam_00020045","CNOT10","Pocillopora damicornis","A0A3M6T706",99.661,295,1,0,8,302,450,744,0,599
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","pdam_00006627","CNOT2","Pocillopora damicornis","A0A3M6TKM6",93.624,643,14,2,1,616,69,711,0,1186
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","pdam_00015197","CNOT9","Pocillopora damicornis","A0A3M6U436",99.333,300,2,0,15,314,7,306,0,614
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","pdam_00013845","CNOT3","Pocillopora damicornis","A0A3M6UWL4",97.055,849,3,2,1,839,1,837,0,1684
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HR61",71.882,2518,582,25,5,2467,6,2452,0,3638
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HSB4",72.089,2508,584,24,5,2457,6,2452,0,3641
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HZN0",71.832,2517,584,24,5,2466,6,2452,0,3642
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","LOC116300631","CNOT10","Actinia tenebrosa","A0A6P8IF94",54.058,727,316,8,19,730,21,744,0,764
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","LOC116300631","CNOT10","Actinia tenebrosa","A0A6P8IF97",54.195,727,315,8,19,730,21,744,0,764
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","LOC116301398","CNOT11","Actinia tenebrosa","A0A6P8IIE4",70.776,438,125,1,1,438,1,435,0,612
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","LOC116302054","CNOT3","Actinia tenebrosa","A0A6P8IJM8",56.314,879,290,23,1,827,1,837,0,840
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","LOC116303814","CNOT9","Actinia tenebrosa","A0A6P8IQU3",91.776,304,23,1,1,304,1,302,0,579
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","PACLA_8A032947","CNOT3","Paramuricea clavata","A0A6S7GFH2",45.408,773,312,18,1,686,88,837,0,553
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1 isoform X5","PACLA_8A070647","CNOT1","Paramuricea clavata","A0A6S7GFJ7",65.492,2469,728,24,6,2377,5,2446,0,3187
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1 isoform X5","PACLA_8A070647","CNOT1","Paramuricea clavata","A0A6S7GKM9",63.022,2250,708,24,6,2158,5,2227,0,2759
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","PACLA_8A041319","CNOT10","Paramuricea clavata","A0A6S7HXS9",62.667,75,25,2,1,75,369,440,3.51e-25,97.1
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","PACLA_8A073124","CNOT10","Paramuricea clavata","A0A7D9HL35",49.482,386,187,3,22,399,28,413,7.81e-132,395
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","CNOT11 OS=Clytia hemisphaerica OX=252671","CNOT11","Clytia hemisphaerica","A0A7M5UWH2",58.099,463,173,9,1,453,1,452,1.46e-169,484
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Clytia hemisphaerica OX=252671","CNOT1","Clytia hemisphaerica","A0A7M5VGD3",64.17,1669,484,16,6,1631,852,2449,0,2182
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Clytia hemisphaerica OX=252671","CNOT1","Clytia hemisphaerica","A0A7M5WMI6",61.313,1812,553,22,818,2579,736,2449,0,2189
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","CNOT9 OS=Clytia hemisphaerica OX=252671","CNOT9","Clytia hemisphaerica","A0A7M5WRU6",80.064,311,43,3,1,310,1,293,2.36e-179,498
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","CNOT10 OS=Clytia hemisphaerica OX=252671","CNOT10","Clytia hemisphaerica","A0A7M5WXZ1",35.269,706,401,13,19,671,26,728,1.07e-141,432
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","CNOT10 OS=Exaiptasia diaphana OX=2652724","CNOT10","Exaiptasia diaphana","A0A913WQI1",49.693,163,79,1,5,164,8,170,7.09e-49,169
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","CNOT10 OS=Exaiptasia diaphana OX=2652724","CNOT10","Exaiptasia diaphana","A0A913X2C4",56.169,543,215,9,8,535,210,744,0,584
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","CNOT9 OS=Exaiptasia diaphana OX=2652724","CNOT9","Exaiptasia diaphana","A0A913X8I0",92.079,303,22,1,1,303,2,302,0,577
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Exaiptasia diaphana OX=2652724","CNOT1","Exaiptasia diaphana","A0A913YFB7",72.445,2221,490,23,1,2159,292,2452,0,3234
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","CNOT3 OS=Exaiptasia diaphana OX=2652724","CNOT3","Exaiptasia diaphana","A0A913YPT4",56.351,866,275,22,1,792,1,837,0,849
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","CNOT10","CNOT10","Desmophyllum pertusum","A0A9W9Y9T5",85.31,742,104,3,1,740,6,744,0,1300
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Desmophyllum pertusum","A0A9W9YDV2",88.433,683,71,3,1,680,34,711,0,1158
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","RQCD1","CNOT9","Desmophyllum pertusum","A0A9W9YNI7",98.689,305,4,0,1,305,2,306,0,625
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","CNOT11","CNOT11","Desmophyllum pertusum","A0A9W9ZAE8",93.878,441,26,1,1,441,1,440,0,812
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","CNOT1_4","CNOT1","Desmophyllum pertusum","A0A9W9ZK46",90.438,1621,116,7,34,1638,855,2452,0,2964
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","P5673_028803","CNOT1","Acropora cervicornis","A0AAD9PWP5",81.351,2472,252,23,1,2283,1,2452,0,3945
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","P5673_024743","CNOT9","Acropora cervicornis","A0AAD9Q331",97.712,306,7,0,88,393,1,306,0,623
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","P5673_012182","CNOT10","Acropora cervicornis","A0AAD9QNN7",71.875,416,68,5,206,584,341,744,0,586
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","P5673_003441","CNOT3","Acropora cervicornis","A0AAD9VF17",69.808,626,154,10,1,604,1,613,0,769
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","P5673_001653","CNOT2","Acropora cervicornis","A0AAD9VG55",83.752,677,106,1,1,673,34,710,0,1095
+"Pocillopora_meandrina_HIv1___RNAseq.g26710.t1","CCR4-NOT transcription complex subunit 11","PMEA_00000182","CNOT11","Pocillopora meandrina","A0AAU9VKE6",98.654,1189,16,0,411,1599,40,1228,0,2460
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","PMEA_00000675","CNOT1","Pocillopora meandrina","A0AAU9VNN9",99.064,2458,17,2,1,2458,1,2452,0,5018
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","PMEA_00029226","CNOT10","Pocillopora meandrina","A0AAU9VYU0",98.241,739,13,0,1,739,6,744,0,1498
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","PMEA_00031289","CNOT9","Pocillopora meandrina","A0AAU9W496",100,306,0,0,1,306,1,306,0,632
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","PMEA_00002098","CNOT3","Pocillopora meandrina","A0AAU9W8K4",98.327,837,4,1,1,827,1,837,0,1692
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","PMEA_00034257","CNOT2","Pocillopora meandrina","A0AAU9XZ66",100,678,0,0,1,678,34,711,0,1362
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","NEMVEDRAFT_v1g90783","CNOT1","Nematostella vectensis","A7RRG5",72.819,2465,543,23,1,2356,1,2447,0,3620
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","NEMVEDRAFT_v1g229512","CNOT2","Nematostella vectensis","A7S6D9",89.119,193,21,0,50,242,519,711,6.77e-126,372
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","NEMVEDRAFT_v1g173618","CNOT9","Nematostella vectensis","A7SRS9",92.131,305,22,1,1,305,1,303,0,579
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","RQCD1","CNOT9","Hydra vulgaris","T2M7T1",83.117,308,49,1,1,308,2,306,0,524
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","CNOT3","CNOT3","Hydra vulgaris","T2MIQ3",51.829,328,135,4,1,307,1,326,2.81e-101,328
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","pdam_00012166","CNOT11","Pocillopora damicornis","A0A3M6UDZ7",99.317,439,3,0,1,439,1,439,0,892
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2-like","LOC116300739","CNOT2","Actinia tenebrosa","A0A6P8IFI8",70.588,357,78,6,33,367,360,711,8.45e-170,490
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","CNOT11 OS=Exaiptasia diaphana OX=2652724","CNOT11","Exaiptasia diaphana","A0A913X1U9",71.854,437,118,2,1,434,1,435,0,612
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","P5673_009985","CNOT11","Acropora cervicornis","A0AAD9VA66",85.874,446,52,2,1,446,1,435,0,744
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3 isoform X4","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF37",51.829,328,135,4,1,307,1,326,2.7e-101,329
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3 isoform X6","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF56",48.476,328,123,5,1,284,1,326,1e-88,295
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3 isoform X5","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF63",51.524,328,135,5,1,306,1,326,1.78e-98,321
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","LOC100207934","CNOT9","Hydra vulgaris","A0ABM4CIM4",83.442,308,48,1,1,308,2,306,0,526
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 2 isoform X5","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6N2",38.636,88,51,2,583,669,749,834,6.42e-11,65.9
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2 isoform X6","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6N8",55.467,375,99,8,345,677,363,711,3.77e-127,393
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 2 isoform X7","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6P1",38.636,88,51,2,575,661,749,834,7.04e-11,65.5
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2 isoform X8","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6Q4",54.133,375,96,9,345,669,363,711,4.11e-120,374
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","LOC100204834","CNOT10","Hydra vulgaris","A0ABM4DNB8",38.366,722,384,12,18,686,24,737,1.54e-160,483
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","LOC136072046","CNOT11","Hydra vulgaris","A0ABM4DNI1",57.366,448,175,7,1,437,1,443,1.35e-166,476
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1-like isoform X2","LOC136072151","CNOT1","Hydra vulgaris","A0ABM4DQI0",58.284,2553,882,36,7,2484,5,2449,0,2865
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1-like isoform X1","LOC136072151","CNOT1","Hydra vulgaris","A0ABM4DQI2",58.301,2554,881,37,7,2485,5,2449,0,2863
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","PEVE_00043609","CNOT9","Porites evermanni","A0ABN8LBB0",97.712,306,7,0,1,306,1,306,0,623
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","PEVE_00002139","CNOT11","Porites evermanni","A0ABN8LU57",96.203,237,9,0,378,614,203,439,5.22e-164,476
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","PEVE_00005781","CNOT1","Porites evermanni","A0ABN8LU70",95.136,1254,61,0,1,1254,1197,2450,0,2496
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","PEVE_00025667","CNOT10","Porites evermanni","A0ABN8M6V9",72.477,109,30,0,12,120,40,148,1.6e-47,163
+"Pocillopora_meandrina_HIv1___RNAseq.g27144.t1","CCR4-NOT transcription complex subunit 1","PLOB_00037094","CNOT1","Porites lobata","A0ABN8P512",90.012,2463,227,10,1,2457,1,2450,0,4466
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","PLOB_00038235","CNOT11","Porites lobata","A0ABN8PAS4",95,240,12,0,354,593,200,439,9.45e-160,464
+"Pocillopora_meandrina_HIv1___RNAseq.g6176.t1","CCR4-NOT transcription complex subunit 9","PLOB_00008760","CNOT9","Porites lobata","A0ABN8QRL4",98.039,306,6,0,1,306,1,306,0,624
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","PLOB_00010202","CNOT3","Porites lobata","A0ABN8QRZ0",78.81,840,158,8,1,823,1,837,0,1237
+"Pocillopora_meandrina_HIv1___RNAseq.g27964.t1b","CCR4-NOT transcription complex subunit 10","PLOB_00009696","CNOT10","Porites lobata","A0ABN8QTF3",78.983,747,147,7,1,745,6,744,0,1188
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-NOT transcription complex subunit 3","PEVE_00013932","CNOT3","Porites evermanni","A0ABN8RR53",79.405,840,153,8,1,823,1,837,0,1243
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","NEMVEDRAFT_v1g161349","CNOT11","Nematostella vectensis","A7RPS5",72.398,442,116,3,1,440,1,438,0,617
+"Pocillopora_meandrina_HIv1___RNAseq.g26435.t1","CCR4-Not complex component Not N-terminal domain-containing protein","NEMVEDRAFT_v1g122610","CNOT","Nematostella vectensis","A7SLB4",84.242,165,26,0,1,165,1,165,7.16e-86,268
+"Pocillopora_meandrina_HIv1___RNAseq.g26711.t1","CCR4-NOT transcription complex subunit 11","NEMVEDRAFT_v1g223683","CNOT11","Nematostella vectensis","A7T876",76.19,84,20,0,129,212,215,298,1.6e-38,138
+"Pocillopora_meandrina_HIv1___RNAseq.g2096.t1","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Hydra vulgaris","T2M3N6",55.467,375,99,8,344,676,363,711,4.63e-127,392
+"Pocillopora_meandrina_HIv1___RNAseq.g1186.t1","RNA helicase","DDX17","DDX17","Desmophyllum pertusum","A0A9W9ZQW3",85.533,553,77,2,62,611,38,590,0,944
+"Pocillopora_meandrina_HIv1___RNAseq.g1186.t1","RNA helicase","DDX17","DDX17","Hydra vulgaris","T2M8E4",63.931,463,163,1,49,507,46,508,0,645
+"Pocillopora_meandrina_HIv1___RNAseq.g22731.t1","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",41.856,485,239,10,86,559,121,573,2.89e-114,352
+"Pocillopora_meandrina_HIv1___TS.g20979.t1","Dicer-like protein 1","PMEA_00031583","DICER1","Pocillopora meandrina","A0AAU9W1B1",89.316,1535,158,4,1,1533,35,1565,0,2749
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Dicer-like protein 1","PMEA_00031589","DICER1","Pocillopora meandrina","A0AAU9W1F6",96.667,1530,38,1,1,1517,1,1530,0,3068
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Dicer-like protein 1","PMEA_00031590","DICER1","Pocillopora meandrina","A0AAU9W1F7",95.556,1530,67,1,1,1529,1,1530,0,3045
+"Pocillopora_meandrina_HIv1___TS.g20979.t1","Dicer-like protein 1","PMEA_00031593","DICER1","Pocillopora meandrina","A0AAU9W2N8",88.598,1526,163,4,1,1517,35,1558,0,2697
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Dicer-like protein 1","PMEA_00031580","DICER1","Pocillopora meandrina","A0AAU9W623",93.707,1319,81,2,1,1318,1,1318,0,2482
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer","dicer1","DICER1","Stylophora pistillata","A0A2B4SEC2",81.991,894,99,5,1,893,1,833,0,1431
+"Pocillopora_meandrina_HIv1___TS.g20979.t1","Endoribonuclease Dicer-like","LOC116294837","DICER1","Actinia tenebrosa","A0A6P8HSF4",46.396,1554,730,32,27,1516,46,1560,0,1205
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer-like","PACLA_8A073209","DICER1","Paramuricea clavata","A0A6S7HW35",37.584,1631,843,43,21,1591,4,1519,0,898
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A6S7J182",38.854,1431,749,37,12,1382,17,1381,0,829
+"Pocillopora_meandrina_HIv1___RNAseq.g30183.t1","Endoribonuclease Dicer","PACLA_8A060218","DICER1","Paramuricea clavata","A0A6S7K0D5",36.97,330,174,6,524,824,1462,1786,1.21e-54,206
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A7D9ICQ4",39.556,1575,819,39,12,1522,17,1522,0,949
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer","DICER1_2","DICER1","Desmophyllum pertusum","A0A9W9ZLJ7",66.504,1024,261,12,3,966,2,1003,0,1311
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer","DICER1_1","DICER1","Desmophyllum pertusum","A0A9W9ZMA9",62.87,439,106,5,3,402,2,422,1.47e-173,524
+"Pocillopora_meandrina_HIv1___RNAseq.g30183.t1","Dicer 2","DICER2 OS=Nematostella vectensis OX=45351","DICER2","Nematostella vectensis","U3MG90",30.488,902,559,29,4,856,10,892,4.51e-93,336
+"Pocillopora_meandrina_HIv1___TS.g20979.t1","Dicer 1","DICER1 OS=Nematostella vectensis OX=45351","DICER1","Nematostella vectensis","U3MHS9",44.812,1542,772,31,1,1496,31,1539,0,1189
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer isoform X3","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG80",32.867,1573,849,51,8,1444,16,1517,0,668
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer isoform X5","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG82",33.797,1580,867,49,18,1496,16,1517,0,694
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer isoform X6","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG84",33.797,1580,867,49,8,1486,16,1517,0,694
+"Pocillopora_meandrina_HIv1___TS.g20979.t1","Endoribonuclease Dicer isoform X4","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG86",31.77,1514,849,43,5,1407,47,1487,0,633
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer isoform X2","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG87",32.516,1590,861,52,8,1473,16,1517,0,660
+"Pocillopora_meandrina_HIv1___RNAseq.g17990.t1","Endoribonuclease Dicer isoform X3","LOC100204990","DICER1","Hydra vulgaris","A0ABM4CGA2",34.074,1576,867,42,8,1485,16,1517,0,693
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",98.851,1218,13,1,1,1218,1,1217,0,2494
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",98.851,1218,13,1,1,1218,1,1217,0,2494
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.888,917,336,12,174,1061,288,1192,0,1061
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.888,917,336,12,174,1061,288,1192,0,1061
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",52.867,872,349,9,208,1060,263,1091,0,903
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",52.867,872,349,9,208,1060,263,1091,0,903
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",58.675,830,313,9,145,950,279,1102,0,994
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",58.675,830,313,9,145,950,279,1102,0,994
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",58.675,830,313,9,111,916,279,1102,0,993
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",58.675,830,313,9,111,916,279,1102,0,993
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",66.842,953,265,9,454,1394,296,1209,0,1293
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",66.842,953,265,9,454,1394,296,1209,0,1293
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",45.479,730,330,8,17,686,304,1025,0,635
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",45.479,730,330,8,17,686,304,1025,0,635
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",84.03,1052,98,5,1,982,1,1052,0,1773
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",84.03,1052,98,5,1,982,1,1052,0,1773
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","Dis3","DIS3","Stylophora pistillata","A0A2B4S3E4",90.586,956,65,2,1,932,1,955,0,1783
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",77.921,1241,204,7,1,1195,1,1217,0,1898
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",77.921,1241,204,7,1,1195,1,1217,0,1898
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","pdam_00009030","DIS3L","Pocillopora damicornis","A0A3M6T9B7",94.492,1053,55,2,165,1217,5,1054,0,2016
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","LOC116305674","DIS3L","Actinia tenebrosa","A0A6P8IWP8",64.589,1059,361,7,1,1052,1,1052,0,1429
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","LOC116307709","DIS3","Actinia tenebrosa","A0A6P8J2S5",68.405,959,290,6,1,951,1,954,0,1377
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","DIS3 OS=Clytia hemisphaerica OX=252671","DIS3","Clytia hemisphaerica","A0A7M5V7R7",55.694,966,400,9,1,951,1,953,0,1118
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","DIS3L OS=Clytia hemisphaerica OX=252671","DIS3L","Clytia hemisphaerica","A0A7M5X8U0",47.266,1079,522,16,2,1060,1,1052,0,999
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","DIS3L OS=Exaiptasia diaphana OX=2652724","DIS3L","Exaiptasia diaphana","A0A913XIF9",64.745,1058,363,6,1,1053,1,1053,0,1436
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","DIS3 OS=Exaiptasia diaphana OX=2652724","DIS3","Exaiptasia diaphana","A0A913YVQ7",68.913,846,252,5,1,836,1,845,0,1246
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",60.367,926,271,19,3,850,1,908,0,984
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",60.367,926,271,19,3,850,1,908,0,984
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","DIS3","DIS3","Desmophyllum pertusum","A0A9X0CVG2",73.427,1001,163,9,1,962,1,937,0,1464
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","P5673_013589","DIS3","Acropora cervicornis","A0AAD9QKZ4",80.511,939,175,3,1,933,1,937,0,1583
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","P5673_007777","DIS3L","Acropora cervicornis","A0AAD9VBE9",60.626,1054,219,12,1,860,1,1052,0,1224
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","PMEA_00010508","DIS3L","Pocillopora meandrina","A0AAU9VML6",98.482,1054,16,0,1,1054,1,1054,0,2162
+"Pocillopora_meandrina_HIv1___RNAseq.g20537.t1","Protein DIS3 homolog","PMEA_00033300","DIS3","Pocillopora meandrina","A0AAU9W398",99.162,955,8,0,1,955,1,955,0,1971
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",43.59,780,365,11,17,732,304,1072,0,634
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",43.59,780,365,11,17,732,304,1072,0,634
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","PEVE_00005079","DIS3L","Porites evermanni","A0ABN8LRU0",80.418,1052,203,2,1,1049,1,1052,0,1763
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",63.547,1218,349,22,31,1182,27,1215,0,1456
+"Pocillopora_meandrina_HIv1___RNAseq.g9675.t1","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",63.547,1218,349,22,31,1182,27,1215,0,1456
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","PLOB_00003894","DIS3L","Porites lobata","A0ABN8QAU6",80.228,1052,205,2,1,1049,1,1052,0,1758
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","NEMVEDRAFT_v1g107726","DIS3L","Nematostella vectensis","A7S7H2",61.706,1055,392,7,1,1047,1,1051,0,1333
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3 mitotic control","DIS3L_3","DIS3L","Desmophyllum pertusum","A0A9X0D7A5",79.167,72,15,0,5,76,363,434,3.03e-35,125
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3 mitotic control","DIS3L_3","DIS3L","Desmophyllum pertusum","A0A9X0D7A5",79.167,72,15,0,5,76,363,434,3.03e-35,125
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","LOC100204348","DIS3L","Hydra vulgaris","A0ABM4DE52",47.719,1052,524,11,1,1029,1,1049,0,979
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",84.03,1052,98,5,1,982,1,1052,0,1773
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",84.03,1052,98,5,1,982,1,1052,0,1773
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3 mitotic control","DIS3L_3","DIS3L","Desmophyllum pertusum","A0A9X0D7A5",79.167,72,15,0,5,76,363,434,3.03e-35,125
+"Pocillopora_meandrina_HIv1___RNAseq.g8807.t1","DIS3 mitotic control","DIS3L_3","DIS3L","Desmophyllum pertusum","A0A9X0D7A5",79.167,72,15,0,5,76,363,434,3.03e-35,125
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","DNMT1","DNMT1","Stylophora pistillata","A0A2B4SZP1",87.736,1590,141,4,1,1590,1,1536,0,2796
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","pdam_00005872","DNMT1","Pocillopora damicornis","A0A3M6TBL6",94.144,1588,38,4,1,1585,1,1536,0,3086
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","LOC116296182","DNMT1","Actinia tenebrosa","A0A6P8HX88",61.364,1540,541,12,52,1561,15,1530,0,1867
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","DNMT1 OS=Clytia hemisphaerica OX=252671","DNMT1","Clytia hemisphaerica","A0A7M5WVQ1",54.247,1401,591,16,3,1376,154,1531,0,1509
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","DNMT1 OS=Exaiptasia diaphana OX=2652724","DNMT1","Exaiptasia diaphana","A0A913XJJ0",58.663,1541,552,22,45,1521,7,1526,0,1774
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","P5673_008755","DNMT1","Acropora cervicornis","A0AAD9VAJ8",71.848,1531,365,17,51,1534,15,1526,0,2170
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","pdam_00007070","DNMT1","Pocillopora damicornis","A0A3M6T916",94.99,479,1,1,1,456,239,717,0,945
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","LOC116306918","DNMT1","Actinia tenebrosa","A0A6P8IZG3",58.087,711,281,6,36,743,21,717,0,854
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","DNMT1 OS=Clytia hemisphaerica OX=252671","DNMT1","Clytia hemisphaerica","A0A7M5WTF5",48.318,654,284,10,476,1090,80,718,0,642
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5-)-methyltransferase","DNMT1_3","DNMT1","Desmophyllum pertusum","A0A9W9YGD1",91.915,235,19,0,1,235,1023,1257,1.17e-136,418
+"Pocillopora_meandrina_HIv1___TS.g25286.t1","DNA (Cytosine-5)-methyltransferase 1","DNMT1_1","DNMT1","Desmophyllum pertusum","A0A9X0DBG0",29.329,283,166,10,19,295,26,280,2.6e-26,108
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","PMEA_00011214","DNMT1","Pocillopora meandrina","A0AAU9WSG6",99.303,717,5,0,1,717,1,717,0,1484
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","LOC100202736","DNMT1","Hydra vulgaris","A0ABM4BEM5",57.357,1332,526,14,24,1322,204,1526,0,1544
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","PEVE_00023930","DNMT1","Porites evermanni","A0ABN8M8F3",72.175,708,187,5,11,713,15,717,0,1066
+"Pocillopora_meandrina_HIv1___RNAseq.g8948.t1","DNA (cytosine-5)-methyltransferase","PLOB_00018878","DNMT1","Porites lobata","A0ABN8NMG9",73.515,1582,355,11,1,1568,1,1532,0,2307
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","PLOB_00048927","DNMT1","Porites lobata","A0ABN8PW75",72.175,708,187,5,11,713,15,717,0,1070
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","LOC100209870","DNMT1","Hydra vulgaris","A0ABM4BY06",46.015,665,318,4,607,1230,54,718,0,651
+"Pocillopora_meandrina_HIv1___RNAseq.g2960.t2","DNA (cytosine-5-)-methyltransferase","LOC100209870","DNMT1","Hydra vulgaris","A0ABM4BY25",46.015,665,318,4,325,948,54,718,0,649
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Ribonuclease 3","DROSHA","DROSHA","Stylophora pistillata","A0A2B4S762",80.142,1551,239,7,1,1518,1,1515,0,2454
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Ribonuclease 3","pdam_00017463","DROSHA","Pocillopora damicornis","A0A3M6UR52",93.914,1528,30,4,1,1478,1,1515,0,2930
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Ribonuclease 3","LOC116294948","DROSHA","Actinia tenebrosa","A0A6P8HTE4",57.26,1095,426,11,590,1663,422,1495,0,1272
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Ribonuclease 3","DROSHA OS=Exaiptasia diaphana OX=2652724","DROSHA","Exaiptasia diaphana","A0A913YT85",55.16,1095,437,12,377,1432,416,1495,0,1222
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Ribonuclease 3","PMEA_00022263","DROSHA","Pocillopora meandrina","A0AAU9VVD7",99.076,1515,14,0,1,1515,1,1515,0,3117
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Drosha","PLOB_00001028","DROSHA","Porites lobata","A0ABN8N3W6",57.568,1612,525,32,112,1667,1,1509,0,1678
+"Pocillopora_meandrina_HIv1___RNAseq.g7105.t1","Drosha","DROSHA OS=Nematostella vectensis OX=45351","DROSHA","Nematostella vectensis","U3MMT8",56.28,1043,358,13,284,1252,449,1467,0,1182
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",31.151,504,294,8,722,1225,947,1397,1.67e-70,259
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",31.151,504,294,8,722,1225,947,1397,1.67e-70,259
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.485,792,326,23,2,775,3,730,0,662
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.485,792,326,23,2,775,3,730,0,662
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",77.589,1410,283,11,1,1389,1,1398,0,2118
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",77.589,1410,283,11,1,1389,1,1398,0,2118
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",70.301,1330,365,16,1,1312,81,1398,0,1788
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",70.301,1330,365,16,1,1312,81,1398,0,1788
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",98.641,1398,17,1,1,1396,1,1398,0,2837
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",98.641,1398,17,1,1,1396,1,1398,0,2837
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",73.234,1416,345,14,1,1400,1,1398,0,2020
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",73.234,1416,345,14,1,1400,1,1398,0,2020
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",73.465,1417,340,15,1,1400,1,1398,0,2017
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",73.465,1417,340,15,1,1400,1,1398,0,2017
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",89.986,1398,137,2,1,1396,1,1397,0,2501
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",89.986,1398,137,2,1,1396,1,1397,0,2501
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",51.837,490,229,4,862,1347,912,1398,9.5e-145,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",51.837,490,229,4,862,1347,912,1398,9.5e-145,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",51.837,490,229,4,860,1345,912,1398,1.28e-144,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",51.837,490,229,4,860,1345,912,1398,1.28e-144,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",42.825,446,222,11,9,434,9,441,1.87e-106,343
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",42.825,446,222,11,9,434,9,441,1.87e-106,343
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.557,463,272,11,9,457,83,528,9.54e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.557,463,272,11,9,457,83,528,9.54e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",32.981,473,279,10,9,453,83,545,9.04e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",32.981,473,279,10,9,453,83,545,9.04e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",31.151,504,294,8,722,1225,947,1397,1.67e-70,259
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",31.151,504,294,8,722,1225,947,1397,1.67e-70,259
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.485,792,326,23,2,775,3,730,0,662
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.485,792,326,23,2,775,3,730,0,662
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",77.589,1410,283,11,1,1389,1,1398,0,2118
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",77.589,1410,283,11,1,1389,1,1398,0,2118
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",70.301,1330,365,16,1,1312,81,1398,0,1788
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",70.301,1330,365,16,1,1312,81,1398,0,1788
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",98.641,1398,17,1,1,1396,1,1398,0,2837
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",98.641,1398,17,1,1,1396,1,1398,0,2837
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",73.234,1416,345,14,1,1400,1,1398,0,2020
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",73.234,1416,345,14,1,1400,1,1398,0,2020
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",73.465,1417,340,15,1,1400,1,1398,0,2017
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",73.465,1417,340,15,1,1400,1,1398,0,2017
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",89.986,1398,137,2,1,1396,1,1397,0,2501
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",89.986,1398,137,2,1,1396,1,1397,0,2501
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",51.837,490,229,4,862,1347,912,1398,9.5e-145,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",51.837,490,229,4,862,1347,912,1398,9.5e-145,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",51.837,490,229,4,860,1345,912,1398,1.28e-144,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",51.837,490,229,4,860,1345,912,1398,1.28e-144,476
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",42.825,446,222,11,9,434,9,441,1.87e-106,343
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",42.825,446,222,11,9,434,9,441,1.87e-106,343
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.557,463,272,11,9,457,83,528,9.54e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.557,463,272,11,9,457,83,528,9.54e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",32.981,473,279,10,9,453,83,545,9.04e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g11904.t1","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",32.981,473,279,10,9,453,83,545,9.04e-77,276
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED","pdam_00020892","EED","Pocillopora damicornis","A0A3M6TND6",100,437,0,0,1,437,1,437,0,914
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED","EED OS=Clytia hemisphaerica OX=252671","EED","Clytia hemisphaerica","A0A7M6DQP6",53.316,377,175,1,58,434,60,435,5.45e-160,458
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein eed-A","eed-a","EED","Stylophora pistillata","A0A2B4T083",83.488,430,33,3,1,395,1,427,0,722
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED-like","LOC116286987","EED","Actinia tenebrosa","A0A6P8H1B1",74.144,263,68,0,1,263,175,437,1.32e-150,427
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED","EED OS=Exaiptasia diaphana OX=2652724","EED","Exaiptasia diaphana","A0A913XDB0",64.47,349,110,6,31,369,27,371,2.63e-156,446
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein eed","P5673_019672","EED","Acropora cervicornis","A0AAD9QB72",81.343,402,72,1,1,402,1,399,0,681
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein eed-A isoform X3","LOC100208672","EED","Hydra vulgaris","A0ABM4BLL0",51.412,354,149,2,54,407,70,400,3.66e-133,390
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein eed-A isoform X2","LOC100208672","EED","Hydra vulgaris","A0ABM4BLL2",51.414,389,166,2,54,442,70,435,6.48e-152,438
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED","PEVE_00010916","EED","Porites evermanni","A0ABN8RBZ3",84.842,442,62,2,1,442,1,437,0,769
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Embryonic ectoderm development","LOC100208672","EED","Hydra vulgaris","Q69DT2",54.768,367,163,2,54,418,70,435,1.27e-156,449
+"Pocillopora_meandrina_HIv1___RNAseq.g24000.t1","Polycomb protein EED","EED","EED","Hydra vulgaris","T2MI39",51.816,413,185,4,8,418,35,435,8.15e-158,452
+"Pocillopora_meandrina_HIv1___TS.g24628.t2","Exportin-5-like","LOC116291099","XPO5","Actinia tenebrosa","A0A6P8HN45",47.592,1246,591,15,19,1219,14,1242,0,1170
+"Pocillopora_meandrina_HIv1___TS.g24628.t2","Exportin-5","P5673_015327","XPO5","Acropora cervicornis","A0AAD9V5E8",65.054,372,110,3,16,370,11,379,4.48e-164,491
+"Pocillopora_meandrina_HIv1___TS.g24628.t2","Exportin 5","PLOB_00047317","XPO5","Porites lobata","A0ABN8PT06",67.685,1244,349,9,1,1195,1,1240,0,1756
+"Pocillopora_meandrina_HIv1___RNAseq.g25259.t1","[histone H3]-lysine(27) N-trimethyltransferase","EZH2","EZH2","Hydra vulgaris","T2MD94",48.373,707,337,8,23,711,13,709,0,696
+"Pocillopora_meandrina_HIv1___RNAseq.g1120.t1","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",46.408,1698,689,55,1,1521,1,1654,0,893
+"Pocillopora_meandrina_HIv1___RNAseq.g1120.t1","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",46.408,1698,689,55,1,1521,1,1654,0,893
+"Pocillopora_meandrina_HIv1___RNAseq.g1120.t1","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",46.408,1698,689,55,1,1521,1,1654,0,893
+"Pocillopora_meandrina_HIv1___RNAseq.g1120.t1","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",46.408,1698,689,55,1,1521,1,1654,0,893
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","pdam_00017517","HDAC","Pocillopora damicornis","A0A3M6TCC1",99.74,384,1,0,1,384,1,384,0,797
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","Histone deacetylase","LOC116288571","HDAC","Actinia tenebrosa","A0A6P8H4F9",55.477,1132,381,23,93,1132,99,1199,0,1080
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","Histone deacetylase","LOC116288571","HDAC","Actinia tenebrosa","A0A6P8H7E5",55.477,1132,381,23,113,1152,99,1199,0,1080
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","LOC116295809","HDAC","Actinia tenebrosa","A0A6P8I495",61.035,367,137,2,17,379,20,384,2.64e-172,485
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XZK0",61.141,368,137,2,15,378,18,383,2.49e-173,488
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913YBR8",51.217,1109,381,26,111,1074,108,1201,0,934
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","PMEA_00017417","HDAC","Pocillopora meandrina","A0AAU9VQL9",99.471,378,2,0,1,378,1,378,0,786
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","Histone deacetylase","PMEA_00011307","HDAC","Pocillopora meandrina","A0AAU9WSZ1",97.903,1192,7,1,1,1192,32,1205,0,2378
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","NEMVEDRAFT_v1g247517","HDAC","Nematostella vectensis","A7SUP8",64.785,372,126,3,13,383,16,383,0,512
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",70.345,580,140,8,1,570,1,558,0,806
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",70.345,580,140,8,1,570,1,558,0,806
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","Hdac3","HDAC3","Hydractinia echinata","A0A1P8KZZ3",67.371,426,133,5,1,425,1,421,0,602
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",95.928,614,25,0,1,614,1,614,0,1233
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",95.928,614,25,0,1,614,1,614,0,1233
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","hdac3","HDAC3","Stylophora pistillata","A0A2B4SUT8",98.826,426,5,0,1,426,1,426,0,880
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","pdam_00003714","HDAC","Pocillopora damicornis","A0A3M6UEF8",100,559,0,0,2,560,56,614,0,1160
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","LOC116291036","HDAC","Actinia tenebrosa","A0A6P8HC63",79.021,429,87,3,1,429,1,426,0,719
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","LOC116288839","HDAC","Actinia tenebrosa","A0A6P8HG31",75.601,582,127,9,12,589,1,571,0,885
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase 3","LOC116295200","HDAC3","Actinia tenebrosa","A0A6P8HTQ8",85.024,207,30,1,1,207,1,206,6.06e-129,370
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","histone deacetylase","PACLA_8A079896","HDAC","Paramuricea clavata","A0A6S7G8G8",49.265,136,66,2,6,140,20,153,1.44e-43,150
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","PACLA_8A071132","HDAC","Paramuricea clavata","A0A6S7IAP1",71.239,452,129,1,264,714,749,1200,0,719
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5VA08",67.603,605,163,8,1,597,1,580,0,819
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5WWG2",66.588,425,139,3,1,425,1,422,0,603
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5WWX1",66.204,432,139,2,713,1138,772,1202,0,623
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913X9C4",75.462,595,128,9,1,586,1,586,0,889
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XE38",79.953,429,83,3,1,429,1,426,0,732
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XPM0",80.447,537,91,7,1,528,1,532,0,874
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",91.115,619,49,6,1,618,1,614,0,1107
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",91.115,619,49,6,1,618,1,614,0,1107
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","P5673_015674","HDAC","Acropora cervicornis","A0AAD9QH29",65.571,1156,236,29,23,1066,97,1202,0,1262
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","P5673_005401","HDAC","Acropora cervicornis","A0AAD9QY34",81.702,470,42,3,1,470,1,426,0,783
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","PMEA_00025341","HDAC","Pocillopora meandrina","A0AAU9XMR4",99.675,615,1,1,1,615,1,614,0,1276
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","PMEA_00029708","HDAC","Pocillopora meandrina","A0AAU9XT39",100,426,0,0,1,426,1,426,0,891
+"Pocillopora_meandrina_HIv1___RNAseq.g23171.t1","Histone deacetylase","LOC100213777","HDAC","Hydra vulgaris","A0ABM4C432",44.882,381,199,1,2,382,15,384,1.88e-120,354
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","Histone deacetylase","LOC100199910","HDAC","Hydra vulgaris","A0ABM4D6B6",73.358,533,132,4,1,528,1,528,0,804
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","LOC100200676","HDAC","Hydra vulgaris","A0ABM4DES7",67.689,424,134,3,1,424,1,421,0,604
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","PEVE_00003957","HDAC","Porites evermanni","A0ABN8LT24",93.911,427,25,1,1,427,1,426,0,845
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","Histone deacetylase","PEVE_00037296","HDAC","Porites evermanni","A0ABN8MRB7",89.888,534,44,5,1,526,1,532,0,974
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","PLOB_00020977","HDAC","Porites lobata","A0ABN8RKN7",93.443,427,27,1,1,427,1,426,0,843
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","NEMVEDRAFT_v1g111922","HDAC","Nematostella vectensis","A7SB64",80.742,431,78,2,1,431,1,426,0,743
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","NEMVEDRAFT_v1g190860","HDAC","Nematostella vectensis","A7SKN6",81.579,418,76,1,1,417,784,1201,0,736
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",73.07,531,131,4,1,521,1,529,0,802
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",73.07,531,131,4,1,521,1,529,0,802
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","HDAC3","HDAC3","Hydra vulgaris","T2MIU4",67.217,424,136,3,1,424,1,421,0,605
+"Pocillopora_meandrina_HIv1___TS.g29561.t3a","histone deacetylase","LOC100214986","HDAC","Hydra vulgaris","A0ABM4CTQ5",36.29,372,201,9,1,355,6,358,7.59e-78,245
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY83",63.702,416,143,4,582,990,776,1190,0,590
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY87",63.702,416,143,4,489,897,776,1190,0,587
+"Pocillopora_meandrina_HIv1___RNAseq.g3032.t1","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY92",63.702,416,143,4,594,1002,776,1190,0,590
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","LOC100199910","HDAC","Hydra vulgaris","A0ABM4D6C3",73.446,531,127,4,1,519,1,529,0,805
+"Pocillopora_meandrina_HIv1___RNAseq.g12636.t1","Histone deacetylase","LOC100200676","HDAC","Hydra vulgaris","A0ABM4DES8",70.529,397,115,2,1,397,1,395,0,597
+"Pocillopora_meandrina_HIv1___RNAseq.g22810.t1","histone deacetylase","PLOB_00017705","HDAC","Porites lobata","A0ABN8NHY8",86.565,588,68,6,1,579,1,586,0,1024
+"Pocillopora_meandrina_HIv1___RNAseq.g8225.t1","Heterogeneous nuclear ribonucleoprotein K","HNRNPK","HNRNPK","Hydra vulgaris","T2MER6",47.549,204,88,4,5,198,47,241,4.31e-55,186
+"Pocillopora_meandrina_HIv1___RNAseq.g6627.t2","HYL1-like a protein","HYL1 OS=Nematostella vectensis OX=45351","HYL1","Nematostella vectensis","U3MH39",34.943,973,499,30,20,944,6,892,3.85e-140,441
+"Pocillopora_meandrina_HIv1___RNAseq.g17125.t1","Exosome RNA helicase MTR4","LOC116289174","MTREX","Actinia tenebrosa","A0A6P8HH67",80.483,1035,190,2,1,1035,1,1023,0,1756
+"Pocillopora_meandrina_HIv1___RNAseq.g17125.t1","Exosome RNA helicase MTR4","MTREX OS=Clytia hemisphaerica OX=252671","MTREX","Clytia hemisphaerica","A0A7M5V3C9",70.184,1033,289,6,2,1032,8,1023,0,1521
+"Pocillopora_meandrina_HIv1___RNAseq.g17125.t1","Exosome RNA helicase MTR4","P5673_029372","MTREX","Acropora cervicornis","A0AAD9PVY0",84.241,1028,156,3,1,1027,1,1023,0,1812
+"Pocillopora_meandrina_HIv1___RNAseq.g17125.t1","Exosome RNA helicase MTR4","PMEA_00006451","MTREX","Pocillopora meandrina","A0AAU9WK47",97.471,1028,21,2,1,1028,1,1023,0,2060
+"Pocillopora_meandrina_HIv1___RNAseq.g17125.t1","Exosome RNA helicase MTR4","NEMVEDRAFT_v1g234599","MTREX","Nematostella vectensis","A7RX65",81.571,1031,182,4,1,1031,1,1023,0,1768
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","pdam_00018319","PABPC1","Pocillopora damicornis","A0A3M6U9U0",99.372,637,4,0,1,637,1,637,0,1308
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","LOC116287372","PABPC1","Actinia tenebrosa","A0A6P8H2S9",70.173,637,160,8,1,614,1,630,0,858
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PACLA_8A028635","PABPC1","Paramuricea clavata","A0A6S7GHA5",56.15,561,211,13,1,533,75,628,0,570
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PACLA_8A013212","PABPC1","Paramuricea clavata","A0A6S7GI61",61.792,636,208,13,2,609,4,632,0,733
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PABPC1 OS=Clytia hemisphaerica OX=252671","PABPC1","Clytia hemisphaerica","A0A7M5WMY6",59.055,635,238,11,12,632,10,636,0,702
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PABPC1 OS=Exaiptasia diaphana OX=2652724","PABPC1","Exaiptasia diaphana","A0A913XXZ3",69.764,635,169,10,3,622,4,630,0,850
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","P5673_017499","PABPC1","Acropora cervicornis","A0AAD9V3J1",84.038,639,96,5,1,635,1,637,0,1065
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PMEA_00020655","PABPC1","Pocillopora meandrina","A0AAU9XCX9",99.529,637,3,0,1,637,1,637,0,1313
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","NEMVEDRAFT_v1g230864","PABPC1","Nematostella vectensis","A7SSV8",66.352,636,150,8,1,575,1,633,0,814
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PABPC1","PABPC1","Hydra vulgaris","T2MGJ0",58.669,646,216,10,7,624,10,632,0,717
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","P5673_017503","PABPC1","Acropora cervicornis","A0AAD9QES5",72.99,622,140,5,1,595,1,621,0,906
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","P5673_017502","PABPC1","Acropora cervicornis","A0AAD9QFC8",78.936,451,79,3,1,435,1,451,0,698
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PEVE_00029921","PABPC1","Porites evermanni","A0ABN8MB85",84.507,639,93,6,1,635,1,637,0,1070
+"Pocillopora_meandrina_HIv1___RNAseq.g29873.t1","Polyadenylate-binding protein","PLOB_00007626","PABPC1","Porites lobata","A0ABN8QLE7",84.507,639,93,6,1,635,1,637,0,1071
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","pan3","PAN3","Stylophora pistillata","A0A2B4RYW2",87.12,691,27,3,1,638,1,682,0,1224
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Stylophora pistillata","A0A2B4SP99",95.07,1136,56,0,23,1158,1,1136,0,2273
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Pocillopora damicornis","A0A3M6U2E5",93.134,1136,6,2,1,1064,1,1136,0,2173
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Pocillopora damicornis","A0A3M6UPW7",100,682,0,0,1,682,1,682,0,1424
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","LOC116290611","PAN3","Actinia tenebrosa","A0A6P8HD12",68.857,700,189,10,1,689,1,682,0,959
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","LOC116298623","PAN2","Actinia tenebrosa","A0A6P8I525",63.86,1140,391,10,4,1132,3,1132,0,1531
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Exaiptasia diaphana","A0A913XWF5",67.677,693,200,11,1,680,1,682,0,933
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Acropora cervicornis","A0AAD9R4E1",80.739,1137,212,6,1,1136,1,1131,0,1942
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Pocillopora meandrina","A0AAU9XB94",99.208,1136,9,0,1,1136,1,1136,0,2350
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","LOC116290611","PAN3","Actinia tenebrosa","A0A6P8HLM1",69.744,585,160,6,37,616,110,682,0,816
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Clytia hemisphaerica","A0A7M5V787",54.095,464,207,5,127,587,220,680,2.26e-180,525
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Clytia hemisphaerica","A0A7M6DRJ3",54.095,464,207,5,191,651,220,680,5.57e-180,527
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Pocillopora meandrina","A0AAU9W1L8",96.586,703,3,1,1,703,1,682,0,1405
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","LOC100197638","PAN2","Hydra vulgaris","A0ABM4BGL0",48.205,1170,558,16,1,1159,1,1133,0,1110
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","LOC100204958","PAN3","Hydra vulgaris","A0ABM4D2W2",56.667,450,187,5,166,612,232,676,0,546
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Porites evermanni","A0ABN8M7Q8",84.697,1137,168,5,1,1135,1,1133,0,2030
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Porites lobata","A0ABN8NP08",82.902,696,103,4,1,695,1,681,0,1202
+"Pocillopora_meandrina_HIv1___RNAseq.g3607.t1","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Porites lobata","A0ABN8RSZ8",84.345,1137,172,5,1,1135,1,1133,0,2022
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Porites evermanni","A0ABN8SUZ2",82.808,698,102,4,1,697,1,681,0,1202
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Nematostella vectensis","A7SCD7",77.019,483,104,4,1,482,206,682,0,791
+"Pocillopora_meandrina_HIv1___RNAseq.g20491.t1","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Hydra vulgaris","T2MCQ9",56.222,450,189,5,166,612,232,676,0,544
+"Pocillopora_meandrina_HIv1___RNAseq.g11902.t1","polynucleotide adenylyltransferase","PAPD5","PAPD5","Stylophora pistillata","A0A2B4RTD2",88.473,668,73,1,6,669,1,668,0,1179
+"Pocillopora_meandrina_HIv1___RNAseq.g11902.t1","polynucleotide adenylyltransferase","PAPD5","PAPD5","Desmophyllum pertusum","A0A9W9ZQL1",79.398,665,129,5,6,670,1,657,0,1050
+"Pocillopora_meandrina_HIv1___RNAseq.g11902.t1","polynucleotide adenylyltransferase","PAPD5","PAPD5","Hydra vulgaris","T2M9S9",45.279,466,206,11,3,450,2,436,8.67e-124,384
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PARN","PARN","Stylophora pistillata","A0A2B4RXG8",84.909,603,60,2,1,573,1,602,0,1055
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","pdam_00011591","PARN","Pocillopora damicornis","A0A3M6TI40",99.668,602,2,0,1,602,1,602,0,1243
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","OS493_029854","PARN","Desmophyllum pertusum","A0A9W9YNB5",81.457,604,109,3,1,603,1,602,0,1027
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","P5673_026320","PARN","Acropora cervicornis","A0AAD9Q0W3",73.92,602,151,2,1,596,1,602,0,942
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PMEA_00014470","PARN","Pocillopora meandrina","A0AAU9X039",99.003,602,6,0,1,602,1,602,0,1233
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN-like","LOC116288105","PARN","Actinia tenebrosa","A0A6P8H2T4",59.806,617,218,10,1,602,1,602,0,729
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN-like","PACLA_8A063003","PARN","Paramuricea clavata","A0A7D9JIL0",42.222,450,232,6,1,424,1,448,5.69e-119,362
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PACLA_8A044474","PARN","Paramuricea clavata","A0A7D9JTI4",44.944,623,306,12,1,607,1,602,1.69e-173,505
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PARN OS=Clytia hemisphaerica OX=252671","PARN","Clytia hemisphaerica","A0A7M5V2D9",30.894,615,397,10,1,600,1,602,2.53e-103,325
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PLOB_00033694","PARN","Porites lobata","A0ABN8NZW9",77.944,603,132,1,1,603,1,602,0,981
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PEVE_00007312","PARN","Porites evermanni","A0ABN8QUG4",77.944,603,132,1,1,603,1,602,0,986
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","PARN","PARN","Hydra vulgaris","T2MHQ0",33.407,455,282,6,1,444,1,445,2.33e-89,285
+"Pocillopora_meandrina_HIv1___RNAseq.g10181.t1","Poly(A)-specific ribonuclease PARN","LOC100200659","PARN","Hydra vulgaris","A0ABM4BD57",33.408,449,290,3,1,444,1,445,6.71e-91,289
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PHAX","PHAX","Stylophora pistillata","A0A2B4SMA7",76.031,388,88,2,1,383,1,388,0,562
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","pdam_00021771","PHAX","Pocillopora damicornis","A0A3M6UFP9",98.454,388,6,0,1,388,1,388,0,780
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","LOC116290186","PHAX","Actinia tenebrosa","A0A6P8HK33",31.903,373,218,14,14,352,15,385,6.6e-33,126
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PACLA_8A019277","PHAX","Paramuricea clavata","A0A7D9EF16",46.457,127,63,2,137,263,247,368,1.44e-20,91.3
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PHAX OS=Clytia hemisphaerica OX=252671","PHAX","Clytia hemisphaerica","A0A7M5U7M1",46.667,120,63,1,146,265,257,375,4.18e-25,102
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PHAX OS=Exaiptasia diaphana OX=2652724","PHAX","Exaiptasia diaphana","A0A913XXU5",29.504,383,224,9,4,345,8,385,4.39e-35,132
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","OS493_013539","PHAX","Desmophyllum pertusum","A0A9X0A2B7",52.121,330,144,4,6,328,9,331,6.97e-98,294
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","P5673_009805","PHAX","Acropora cervicornis","A0AAD9V9K1",44.304,395,172,9,3,368,13,388,7.02e-80,250
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PMEA_00000120","PHAX","Pocillopora meandrina","A0AAU9VPS6",97.938,388,8,0,1,388,1,388,0,773
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","NEMVEDRAFT_v1g247256","PHAX","Nematostella vectensis","A7ST76",53.465,101,46,1,205,305,252,351,2.02e-26,107
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","LOC136071648","PHAX","Hydra vulgaris","A0ABM4CC41",34.211,114,74,1,90,203,254,366,1.07e-15,74.7
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PEVE_00004734","PHAX","Porites evermanni","A0ABN8LH44",46.212,396,180,8,13,392,10,388,6.46e-98,296
+"Pocillopora_meandrina_HIv1___RNAseq.g26677.t1","Phosphorylated adapter RNA export protein","PLOB_00006469","PHAX","Porites lobata","A0ABN8N8S2",45.96,396,181,7,13,392,10,388,6.12e-98,297
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21-like","rad21","RAD21","Stylophora pistillata","A0A2B4RZR3",96.141,596,23,0,1,596,1,596,0,1158
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Rad21/Rec8-like protein N-terminal domain-containing protein","pdam_00017150","RAD21","Pocillopora damicornis","A0A3M6UAH0",99.832,596,1,0,1,596,1,596,0,1212
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Putative double-strand-break repair protein rad21","Rad21","RAD21","Actinia equina","A0A6C0WWI0",61.983,605,201,10,1,585,1,596,0,691
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21 homolog","LOC116301533","RAD21","Actinia tenebrosa","A0A6P8IIB6",62.252,604,200,9,1,584,1,596,0,693
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair rad21 homolog","PACLA_8A005820","RAD21","Paramuricea clavata","A0A7D9DY23",50.479,626,258,16,1,605,1,595,1.66e-176,513
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21 homolog","RAD21 OS=Exaiptasia diaphana OX=2652724","RAD21","Exaiptasia diaphana","A0A913X8D1",59.599,599,215,7,1,575,1,596,0,657
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21","PMEA_00032273","RAD21","Pocillopora meandrina","A0AAU9XWT2",95.185,623,3,1,1,623,1,596,0,1194
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21 homolog","NEMVEDRAFT_v1g169110","RAD21","Nematostella vectensis","A7SCY1",58.251,606,197,13,1,560,1,596,0,608
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21-like protein","P5673_027697","RAD21","Acropora cervicornis","A0AAD9UVS7",74.709,601,128,9,1,582,1,596,0,846
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21 homolog isoform X2","LOC100197122","RAD21","Hydra vulgaris","A0ABM4BS89",38.437,627,321,21,1,597,1,592,4.57e-105,329
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21-like protein","PEVE_00043354","RAD21","Porites evermanni","A0ABN8PL43",77.87,601,121,9,1,594,1,596,0,883
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21-like protein","PLOB_00043749","RAD21","Porites lobata","A0ABN8PLE5",78.037,601,120,9,1,594,1,596,0,884
+"Pocillopora_meandrina_HIv1___RNAseq.g14471.t1","Double-strand-break repair protein rad21 homolog","RAD21","RAD21","Hydra vulgaris","T2MIH8",38.057,628,322,21,1,597,1,592,4.66e-103,324
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","NEMVEDRAFT_v1g165676","RBBP4","Nematostella vectensis","A7S2K4",90.196,408,39,1,1,408,19,425,0,778
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","pdam_00004021","RBBP4","Pocillopora damicornis","A0A3M6TE27",100,429,0,0,1,429,1,429,0,890
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","RBBP4 OS=Clytia hemisphaerica OX=252671","RBBP4","Clytia hemisphaerica","A0A7M5V8C8",83.294,425,69,1,1,423,1,425,0,756
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","RBBP4 OS=Exaiptasia diaphana OX=2652724","RBBP4","Exaiptasia diaphana","A0A913XGH7",88.112,429,51,0,1,429,1,429,0,800
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PMEA_00009157","RBBP4","Pocillopora meandrina","A0AAU9WPJ5",99.767,429,1,0,1,429,1,429,0,889
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PLOB_00000008","RBBP4","Porites lobata","A0ABN8MST7",94.639,429,23,0,1,429,1,429,0,848
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PEVE_00040999","RBBP4","Porites evermanni","A0ABN8N828",94.872,429,22,0,1,429,1,429,0,849
+"Pocillopora_meandrina_HIv1___RNAseq.g23862.t1","Histone-binding protein RBBP4","RBBP4","RBBP4","Hydra vulgaris","T2MDF0",84.075,427,66,1,1,427,1,425,0,768
+"Pocillopora_meandrina_HIv1___TS.g11651.t1b","RNA-binding protein 7","RBM7","RBM7","Hydra vulgaris","T2M261",36.207,174,103,3,1,166,11,184,5.27e-27,105
+"Pocillopora_meandrina_HIv1___RNAseq.g25528.t1","RNA-dependent RNA polymerase","RDR2","RDRP","Stylophora pistillata","A0A2B4RIR9",78.947,950,173,4,2,928,1600,2545,0,1499
+"Pocillopora_meandrina_HIv1___RNAseq.g21499.t1","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S0A1",69.501,682,180,3,543,1196,2,683,0,960
+"Pocillopora_meandrina_HIv1___RNAseq.g21499.t1","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S2K3",71.014,690,170,3,1,660,1,690,0,984
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S3Y0",42.733,688,318,16,67,730,1,636,3.13e-161,480
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S6D8",88.797,607,68,0,11,617,37,643,0,1132
+"Pocillopora_meandrina_HIv1___RNAseq.g21506.t1","RNA-dependent RNA polymerase","RDR2","RDRP","Stylophora pistillata","A0A2B4S6H5",72.249,209,52,3,787,991,300,506,4.56e-95,316
+"Pocillopora_meandrina_HIv1___RNAseq.g2974.t1","RNA-dependent RNA polymerase","pdam_00007094","RDRP","Pocillopora damicornis","A0A3M6T9A9",99.054,1268,12,0,1,1268,1,1268,0,2601
+"Pocillopora_meandrina_HIv1___RNAseq.g21501.t1","RNA-dependent RNA polymerase","pdam_00009604","RDRP","Pocillopora damicornis","A0A3M6U019",97.068,648,19,0,1,648,1,648,0,1310
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","pdam_00009608","RDRP","Pocillopora damicornis","A0A3M6U066",98.758,644,8,0,1,644,1,644,0,1313
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","pdam_00009601","RDRP","Pocillopora damicornis","A0A3M6U087",99.393,659,4,0,1,659,1,659,0,1371
+"Pocillopora_meandrina_HIv1___RNAseq.g4088.t1","RNA-dependent RNA polymerase","pdam_00009609","RDRP","Pocillopora damicornis","A0A3M6U0C1",98.263,691,12,0,1,691,1,691,0,1412
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","LOC116288465","RDRP","Actinia tenebrosa","A0A6P8H437",39.43,667,372,15,4,651,3,656,6.96e-159,473
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","LOC116288436","RDRP","Actinia tenebrosa","A0A6P8H6G5",40.212,659,381,10,4,653,3,657,1.94e-171,506
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","LOC116288463","RDRP","Actinia tenebrosa","A0A6P8H6Z9",40.455,660,376,12,4,654,3,654,1.64e-157,469
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","LOC116288452","RDRP","Actinia tenebrosa","A0A6P8HEP7",49,700,306,12,722,1415,4,658,0,646
+"Pocillopora_meandrina_HIv1___RNAseq.g25501.t1","RNA-dependent RNA polymerase","PACLA_8A076861","RDRP","Paramuricea clavata","A0A6S7FT68",36.217,1179,666,28,1,1164,1676,2783,0,658
+"Pocillopora_meandrina_HIv1___RNAseq.g25529.t1","RNA-dependent RNA polymerase","PACLA_8A061743","RDRP","Paramuricea clavata","A0A6S7FU92",59.752,323,125,3,159,479,1275,1594,1.11e-120,389
+"Pocillopora_meandrina_HIv1___RNAseq.g2974.t1","RNA-dependent RNA polymerase","RDRP OS=Clytia hemisphaerica OX=252671","RDRP","Clytia hemisphaerica","A0A7M5UQ26",28.897,526,320,17,87,589,72,566,1.33e-46,183
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913Y425",45.455,693,333,10,6,693,4,656,0,582
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913Y4S8",38.998,659,388,8,4,655,3,654,6.12e-151,452
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913YWT7",36.707,662,396,12,4,646,3,660,9e-152,454
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913YXY8",40.271,663,375,13,4,653,3,657,5.8e-162,481
+"Pocillopora_meandrina_HIv1___RNAseq.g25501.t1","RNA-dependent RNA polymerase","OS493_020020","RDRP","Desmophyllum pertusum","A0A9W9YBD9",76.166,1372,316,9,1,1367,1,1366,0,2090
+"Pocillopora_meandrina_HIv1___RNAseq.g25501.t1","RNA-dependent RNA polymerase","OS493_020019","RDRP","Desmophyllum pertusum","A0A9W9YEV0",82.235,1396,244,1,13,1408,1397,2788,0,2359
+"Pocillopora_meandrina_HIv1___RNAseq.g2974.t1","RNA-dependent RNA polymerase","OS493_006716","RDRP","Desmophyllum pertusum","A0A9W9ZSK9",76.591,440,98,4,1,436,1,439,0,688
+"Pocillopora_meandrina_HIv1___RNAseq.g21497.t1","RNA-dependent RNA polymerase","OS493_000813","RDRP","Desmophyllum pertusum","A0A9W9ZT61",73.626,364,96,0,13,376,49,412,0,566
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","OS493_000817","RDRP","Desmophyllum pertusum","A0A9W9ZTA1",60.204,588,223,5,1,584,20,600,0,737
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","OS493_000816","RDRP","Desmophyllum pertusum","A0A9W9ZTC8",54.73,296,124,4,1,295,318,604,1.98e-107,325
+"Pocillopora_meandrina_HIv1___RNAseq.g21496.t1","RNA-dependent RNA polymerase","OS493_000812","RDRP","Desmophyllum pertusum","A0A9W9ZTK4",72.727,253,65,1,1,253,412,660,1.33e-133,391
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","OS493_000815","RDRP","Desmophyllum pertusum","A0A9W9ZU19",55.42,655,206,7,1,608,20,635,0,716
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","OS493_000820","RDRP","Desmophyllum pertusum","A0A9W9ZU40",50.485,309,141,6,1,305,1,301,1.6e-95,295
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","OS493_000814","RDRP","Desmophyllum pertusum","A0A9W9ZUN1",58.935,582,190,7,1,541,20,593,0,687
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","OS493_000818","RDRP","Desmophyllum pertusum","A0A9W9ZUT4",59.169,698,205,9,1,694,20,641,0,800
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","OS493_000819","RDRP","Desmophyllum pertusum","A0A9W9ZWW6",45.76,625,268,13,1,561,1,618,3.05e-171,501
+"Pocillopora_meandrina_HIv1___RNAseq.g28916.t1","RNA-dependent RNA polymerase","OS493_003322","RDRP","Desmophyllum pertusum","A0A9X0A574",62.162,148,55,1,1,148,702,848,3.12e-54,183
+"Pocillopora_meandrina_HIv1___RNAseq.g28916.t1","RNA-dependent RNA polymerase","OS493_003323","RDRP","Desmophyllum pertusum","A0A9X0A5B4",62.621,206,76,1,18,223,140,344,4.64e-87,285
+"Pocillopora_meandrina_HIv1___RNAseq.g28916.t1","RNA-dependent RNA polymerase","OS493_003289","RDRP","Desmophyllum pertusum","A0A9X0A6E6",86.864,236,31,0,1,236,695,930,1.37e-142,439
+"Pocillopora_meandrina_HIv1___RNAseq.g7847.t2","ATP-dependent RNA helicase A","DHX9_1","DHX9","Desmophyllum pertusum","A0A9X0CGN6",93.45,626,41,0,1,626,572,1197,0,1204
+"Pocillopora_meandrina_HIv1___RNAseq.g4088.t1","RNA-dependent RNA polymerase","DBR1_1","RDRP","Desmophyllum pertusum","A0A9X0D5D4",68.644,118,37,0,1,118,113,230,2.67e-52,174
+"Pocillopora_meandrina_HIv1___RNAseq.g21504.t1","RNA-dependent RNA polymerase","OS493_000821","RDRP","Desmophyllum pertusum","A0A9X0D5Q4",46.396,222,94,5,20,235,400,602,1.19e-50,174
+"Pocillopora_meandrina_HIv1___RNAseq.g21506.t1","RNA-dependent RNA polymerase","OS493_000824","RDRP","Desmophyllum pertusum","A0A9X0D791",58.237,431,136,8,1,398,235,654,9.29e-164,475
+"Pocillopora_meandrina_HIv1___RNAseq.g4088.t1","RNA-dependent RNA polymerase","P5673_024942","RDRP","Acropora cervicornis","A0AAD9UXL8",51.567,702,321,7,1,696,1,689,0,730
+"Pocillopora_meandrina_HIv1___RNAseq.g21501.t1","RNA-dependent RNA polymerase","P5673_024940","RDRP","Acropora cervicornis","A0AAD9UXP1",42.857,581,283,18,3,551,5,568,2.44e-136,412
+"Pocillopora_meandrina_HIv1___RNAseq.g21501.t1","RNA-dependent RNA polymerase","P5673_024941","RDRP","Acropora cervicornis","A0AAD9UXU1",40.311,578,298,19,3,549,5,566,1.2e-119,369
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","PMEA_00004263","RDRP","Pocillopora meandrina","A0AAU9WAH1",82.126,649,110,4,52,700,1,643,0,1059
+"Pocillopora_meandrina_HIv1___RNAseq.g21500.t1","RNA-dependent RNA polymerase","PMEA_00004267","RDRP","Pocillopora meandrina","A0AAU9WCN3",97.147,666,18,1,1,665,30,695,0,1353
+"Pocillopora_meandrina_HIv1___RNAseq.g21506.t1","RNA-dependent RNA polymerase","PMEA_00004259","RDRP","Pocillopora meandrina","A0AAU9WFE4",97.829,691,15,0,1,691,1,691,0,1407
+"Pocillopora_meandrina_HIv1___RNAseq.g4089.t1","RNA-dependent RNA polymerase","PMEA_00004260","RDRP","Pocillopora meandrina","A0AAU9WFH3",96.273,644,24,0,1,644,1,644,0,1277
+"Pocillopora_meandrina_HIv1___RNAseq.g21504.t1","RNA-dependent RNA polymerase","OS493_000823","RDRP","Desmophyllum pertusum","A0A9X0D6J0",45.923,233,112,6,2,227,352,577,1.63e-51,176
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","PEVE_00032720","RDRP","Porites evermanni","A0ABN8LI71",50.077,649,292,8,7,653,22,640,0,634
+"Pocillopora_meandrina_HIv1___RNAseq.g21497.t1","RNA-dependent RNA polymerase","PEVE_00032712","RDRP","Porites evermanni","A0ABN8LIB1",66.319,671,217,4,1,670,54,716,0,924
+"Pocillopora_meandrina_HIv1___RNAseq.g21501.t1","RNA-dependent RNA polymerase","PEVE_00032709","RDRP","Porites evermanni","A0ABN8LMP5",40.473,677,344,18,1,654,1,641,6.55e-150,449
+"Pocillopora_meandrina_HIv1___RNAseq.g21497.t1","RNA-dependent RNA polymerase","PLOB_00018126","RDRP","Porites lobata","A0ABN8RBN7",65.723,671,221,4,1,670,54,716,0,912
+"Pocillopora_meandrina_HIv1___RNAseq.g21501.t1","RNA-dependent RNA polymerase","PLOB_00018123","RDRP","Porites lobata","A0ABN8RES1",40.653,674,347,18,1,654,1,641,6.01e-147,441
+"Pocillopora_meandrina_HIv1___RNAseq.g21498.t1","RNA-dependent RNA polymerase","PLOB_00018147","RDRP","Porites lobata","A0ABN8RET6",48.998,649,299,7,7,653,22,640,0,623
+"Pocillopora_meandrina_HIv1___RNAseq.g25528.t1","RNA-dependent RNA polymerase","PEVE_00026319","RDRP","Porites evermanni","A0ABN8SQE6",56.362,1446,548,14,25,1449,1380,2763,0,1553
+"Pocillopora_meandrina_HIv1___RNAseq.g25529.t1","RNA-dependent RNA polymerase","PEVE_00026320","RDRP","Porites evermanni","A0ABN8SSZ0",53.655,725,301,9,5,705,562,1275,0,766
+"Pocillopora_meandrina_HIv1___RNAseq.g26255.t1","Ribonuclease P protein subunit p20","pdam_00005430","POP7","Pocillopora damicornis","A0A3M6U448",100,131,0,0,1,131,1,131,1.32e-95,271
+"Pocillopora_meandrina_HIv1___RNAseq.g26255.t1","Ribonuclease P protein subunit p20","PACLA_8A085575","POP7","Paramuricea clavata","A0A6S7GLN4",57.258,124,46,3,1,124,1,117,1.33e-44,142
+"Pocillopora_meandrina_HIv1___RNAseq.g26255.t1","Ribonuclease P protein subunit p20","POP7 OS=Exaiptasia diaphana OX=2652724","POP7","Exaiptasia diaphana","A0A913X7F3",68.333,120,37,1,1,119,1,120,1.09e-59,180
+"Pocillopora_meandrina_HIv1___RNAseq.g26255.t1","Ribonuclease P protein subunit p20","POP7","POP7","Desmophyllum pertusum","A0A9X0CR56",82.576,132,22,1,1,132,1,131,3.99e-77,224
+"Pocillopora_meandrina_HIv1___RNAseq.g26255.t1","Ribonuclease P protein subunit p20","PEVE_00021254","POP7","Porites evermanni","A0ABN8SHN3",80.833,120,23,0,4,123,7,126,1.69e-70,207
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-1","STAG1","STAG1","Stylophora pistillata","A0A2B4RH27",88.261,1397,104,6,1,1342,1,1392,0,2263
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-1","Scc3","STAG1","Actinia equina","A0A6C0WVZ5",49.846,975,410,12,1,920,373,1323,0,927
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-1","P5673_020265","STAG1","Acropora cervicornis","A0AAD9QAA6",64.434,821,245,12,1,797,580,1377,0,989
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2-like","LOC116292354","STAG2","Actinia tenebrosa","A0A6P8HS38",52.276,1406,569,21,9,1348,8,1377,0,1339
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2","STAG2","STAG2","Desmophyllum pertusum","A0A9W9YFK1",80.766,1383,243,11,117,1485,4,1377,0,2118
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2 isoform X8","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6R7",44.297,982,528,10,197,1162,158,1136,0,863
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2 isoform X7","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6R9",44.297,982,528,10,197,1162,158,1136,0,863
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2 isoform X6","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6S0",44.297,982,528,10,197,1162,158,1136,0,863
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2 isoform X9","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6S1",44.297,982,528,10,197,1162,158,1136,0,862
+"Pocillopora_meandrina_HIv1___RNAseq.g14104.t1","Cohesin subunit SA-2 isoform X5","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6T0",44.297,982,528,10,197,1162,158,1136,0,863
+"Pocillopora_meandrina_HIv1___RNAseq.g17209.t1","Transcription activator BRG1","SMARCA4","SMARCA4","Hydra vulgaris","T2MFA5",60.338,1243,426,12,244,1442,288,1507,0,1451
+"Pocillopora_meandrina_HIv1___TS.g25350.t1","Structural maintenance of chromosomes protein","Smc3","SMC3","Actinia equina","A0A6C0WWF7",68.693,1201,359,2,6,1206,66,1249,0,1676
+"Pocillopora_meandrina_HIv1___TS.g25350.t1","Structural maintenance of chromosomes protein","SMC3","SMC3","Desmophyllum pertusum","A0A9W9ZPQ9",88.471,1197,125,1,6,1202,66,1249,0,2145
+"Pocillopora_meandrina_HIv1___RNAseq.g28186.t1","non-specific serine/threonine protein kinase","Smg1","SMG1","Stylophora pistillata","A0A2B4RMD7",92.115,3703,257,5,1,3671,1,3700,0,6900
+"Pocillopora_meandrina_HIv1___RNAseq.g8175.t1","Protein SMG5","SMG5","SMG5","Hydra vulgaris","T2M3Q0",36.706,425,249,7,7,417,3,421,2.69e-69,249
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein suz12","suz12","SUZ12","Stylophora pistillata","A0A2B4SEC9",90.523,707,31,2,1,672,1,706,0,1325
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein SUZ12-like","LOC116306056","SUZ12","Actinia tenebrosa","A0A6P8J1D4",54.494,712,269,10,8,674,3,704,0,743
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein suz12","SUZ12","SUZ12","Desmophyllum pertusum","A0A9W9ZLP3",84.236,628,62,3,1,593,81,706,0,1063
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein suz12","P5673_020665","SUZ12","Acropora cervicornis","A0AAD9Q9H2",76.901,710,116,4,1,672,1,700,0,1096
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein suz12 isoform X2","LOC100203032","SUZ12","Hydra vulgaris","A0ABM4CDL0",37.553,703,340,23,1,620,1,687,5.03e-135,411
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein SUZ12","PLOB_00035319","SUZ12","Porites lobata","A0ABN8N0M7",78.076,707,115,5,1,669,1,705,0,1107
+"Pocillopora_meandrina_HIv1___RNAseq.g26550.t1","Polycomb protein SUZ12","PEVE_00024876","SUZ12","Porites evermanni","A0ABN8SQM5",79.462,706,106,4,1,668,1,705,0,1131
+"Pocillopora_meandrina_HIv1___RNAseq.g22958.t1","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",46.269,268,111,8,16,277,4,244,7.77e-69,220
+"Pocillopora_meandrina_HIv1___RNAseq.g22958.t1","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",46.269,268,111,8,16,277,4,244,7.77e-69,220
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","pdam_00001143","TARBP1","Pocillopora damicornis","A0A3M6V206",99.577,1653,7,0,1,1653,1,1653,0,3395
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","LOC116305432","TARBP1","Actinia tenebrosa","A0A6P8IV81",36.375,1666,973,31,16,1622,16,1653,0,1006
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","PACLA_8A022609","TARBP1","Paramuricea clavata","A0A7D9JTJ5",31.326,1478,874,31,3,1372,204,1648,0,687
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1 OS=Clytia hemisphaerica OX=252671","TARBP1","Clytia hemisphaerica","A0A7M6DQR0",31.725,684,392,20,703,1321,978,1651,1.06e-84,305
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1 OS=Exaiptasia diaphana OX=2652724","TARBP1","Exaiptasia diaphana","A0A913XH91",34.648,1674,1000,27,1,1604,1,1650,0,960
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1_4","TARBP1","Desmophyllum pertusum","A0A9X0A618",65.866,583,161,10,2,561,1083,1650,0,753
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","P5673_018073","TARBP1","Acropora cervicornis","A0AAD9QDU1",60.084,1666,637,14,1,1651,1,1653,0,2020
+"Pocillopora_meandrina_HIv1___RNAseq.g2618.t1","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","NEMVEDRAFT_v1g92540","TARBP1","Nematostella vectensis","A7RT83",67.925,159,51,0,4,162,1491,1649,6.78e-72,234
+"Pocillopora_meandrina_HIv1___RNAseq.g22958.t1","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",46.269,268,111,8,16,277,4,244,7.77e-69,220
+"Pocillopora_meandrina_HIv1___RNAseq.g22958.t1","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",46.269,268,111,8,16,277,4,244,7.77e-69,220
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","Regulator of nonsense transcripts 1","UPF1","UPF1","Stylophora pistillata","A0A2B4STC9",99.19,864,7,0,22,885,265,1128,0,1786
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","Upf1 domain-containing protein","pdam_00004771","UPF1","Pocillopora damicornis","A0A3M6UEA3",98.138,1128,0,1,1,1107,1,1128,0,2303
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","Upf1 domain-containing protein","UPF1 OS=Clytia hemisphaerica OX=252671","UPF1","Clytia hemisphaerica","A0A7M5UR79",74.106,1174,243,14,1,1159,1,1128,0,1739
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","ATP-dependent helicase NAM7","UPF1_1","UPF1","Desmophyllum pertusum","A0A9W9ZGW1",97.619,714,17,0,1,714,1,714,0,1466
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","Upf1 domain-containing protein","PMEA_00018481","UPF1","Pocillopora meandrina","A0AAU9X6X4",100,1128,0,0,1,1128,1,1128,0,2360
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","ATP-dependent helicase NAM7","UPF1_2","UPF1","Desmophyllum pertusum","A0A9W9ZHT8",98.814,253,3,0,1,253,741,993,1.93e-180,526
+"Pocillopora_meandrina_HIv1___RNAseq.g8348.t1","Upf1 domain-containing protein","PLOB_00018750","UPF1","Porites lobata","A0ABN8NHJ3",96.277,1128,42,0,1,1128,1,1128,0,2288
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M6DN67",81.176,340,58,1,13,346,81,420,0,579
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Exaiptasia diaphana OX=2652724","WDR5","Exaiptasia diaphana","A0A913YAB2",86.957,345,45,0,1,345,76,420,0,619
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","PMEA_00010590","WDR5","Pocillopora meandrina","A0AAU9VP41",96.243,346,12,1,1,346,76,420,0,671
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","NEMVEDRAFT_v1g237480","WDR5","Nematostella vectensis","A7SSL6",89.342,319,34,0,36,354,102,420,0,592
+"Pocillopora_meandrina_HIv1___TS.15901_t","WD repeat-containing protein 5","Wdr5","WDR5","Stylophora pistillata","A0A2B4RB25",98.551,345,5,0,1,345,76,420,0,692
+"Pocillopora_meandrina_HIv1___TS.15901_t","WD repeat-containing protein 5","LOC116298230","WDR5","Actinia tenebrosa","A0A6P8I1S3",86.04,351,42,2,1,350,76,420,0,606
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X3M9",88.449,303,35,0,38,340,118,420,0,569
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X3Z2",88.119,303,36,0,38,340,118,420,0,565
+"Pocillopora_meandrina_HIv1___TS.15901_t","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X5X0",88.779,303,34,0,38,340,118,420,0,569
+"Pocillopora_meandrina_HIv1___TS.15901_t","WD repeat-containing protein 5","WDR5_2","WDR5","Desmophyllum pertusum","A0A9X0CD26",93.333,345,23,0,1,345,76,420,0,664
+"Pocillopora_meandrina_HIv1___TS.15901_t","WD repeat-containing protein 5","WDR5","WDR5","Hydra vulgaris","T2MET8",90.164,305,30,0,27,331,116,420,0,580
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","pdam_00000477","XRN1","Pocillopora damicornis","A0A3M6UJ11",95.561,1712,35,6,1,1676,1,1707,0,3339
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","Xrn1 helical domain-containing protein","pdam_00023034","XRN1","Pocillopora damicornis","A0A3M6UJK3",98.548,551,8,0,1,551,430,980,0,1130
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","LOC116306759","XRN","Actinia tenebrosa","A0A6P8IZS9",67.095,1012,281,10,1,992,1,980,0,1341
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1-like","LOC116305788","XRN1","Actinia tenebrosa","A0A6P8J1E8",52.986,1591,626,24,1,1534,1,1526,0,1608
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","PACLA_8A068368","XRN","Paramuricea clavata","A0A6S7HB48",63.34,982,299,9,1,925,1,978,0,1203
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","PACLA_8A041910","XRN1","Paramuricea clavata","A0A6S7HH58",54.935,1236,492,15,1,1204,1,1203,0,1344
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","XRN OS=Clytia hemisphaerica OX=252671","XRN","Clytia hemisphaerica","A0A7M5X172",60.583,926,337,10,1,909,1,915,0,1056
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","XRN OS=Exaiptasia diaphana OX=2652724","XRN","Exaiptasia diaphana","A0A913XLV4",67.236,995,303,11,1,987,1,980,0,1327
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","XRN1","XRN1","Desmophyllum pertusum","A0A9X0DBQ1",70.92,1740,436,15,1,1703,1,1707,0,2441
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","P5673_025679","XRN1","Acropora cervicornis","A0AAD9Q1S9",57.629,1763,532,26,1,1604,1,1707,0,1898
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","P5673_016712","XRN","Acropora cervicornis","A0AAD9QG87",66.189,976,190,9,1,856,1,956,0,1226
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","PMEA_00016946","XRN1","Pocillopora meandrina","A0AAU9VQJ5",98.243,1707,10,1,1,1687,1,1707,0,3461
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","PMEA_00015679","XRN","Pocillopora meandrina","A0AAU9X1X8",99.184,980,4,1,1,976,1,980,0,2014
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","PMEA_00006268","XRN","Pocillopora meandrina","A0AAU9Y3J8",99.286,980,7,0,1,980,1,980,0,2024
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","LOC100205936","XRN","Hydra vulgaris","A0ABM4C2P4",56.42,1028,349,18,1,998,1,959,0,1069
+"Pocillopora_meandrina_HIv1___RNAseq.g9750.t1","5'-3' exoribonuclease","PLOB_00003734","XRN","Porites lobata","A0ABN8Q9X2",81.052,1008,163,6,1,1008,1,980,0,1646
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","XRN1","XRN1","Stylophora pistillata","A0A2B4S4P0",88.506,783,70,1,258,1020,210,992,0,1391
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","LOC101240070","XRN1","Hydra vulgaris","A0ABM4C0W8",45.64,1376,676,19,1,1330,1,1350,0,1209
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","LOC100204338","XRN1","Hydra vulgaris","A0ABM4C1P3",44.237,1232,616,19,1,1169,1,1224,0,1028
+"Pocillopora_meandrina_HIv1___RNAseq.g13092.t2","5'-3' exoribonuclease 1","PLOB_00039470","XRN1","Porites lobata","A0ABN8N0X0",65.082,1767,504,22,1,1714,1,1707,0,2237
+"Pocillopora_meandrina_HIv1___RNAseq.g23400.t1","Ribonuclease ZC3H12A","Zc3h12a","ZC3H12A","Stylophora pistillata","A0A2B4SWH1",88.346,798,85,3,1,791,1,797,0,1382
+"Pocillopora_meandrina_HIv1___RNAseq.g29707.t1","Endoribonuclease ZC3H12A-like","LOC116286475","ZC3H12A","Actinia tenebrosa","A0A6P8GZC0",44.387,579,209,13,1,505,1,540,6.07e-151,448
+"Pocillopora_meandrina_HIv1___RNAseq.g23400.t1","Endoribonuclease ZC3H12A-like isoform X1","LOC116286294","ZC3H12A","Actinia tenebrosa","A0A6P8H847",39.974,768,334,26,184,869,76,798,7.17e-148,455
+"Pocillopora_meandrina_HIv1___RNAseq.g1960.t1","Endoribonuclease ZC3H12A-like","LOC116298674","ZC3H12A","Actinia tenebrosa","A0A6P8I3D1",39.394,495,238,13,1,455,98,570,1.22e-106,338
+"Pocillopora_meandrina_HIv1___RNAseq.g1960.t1","Endoribonuclease ZC3H12A","P5673_002241","ZC3H12A","Acropora cervicornis","A0AAD9R5F4",42.78,741,354,22,3,722,105,796,5.41e-167,500
+"Pocillopora_meandrina_HIv1___RNAseq.g29390.t1","Zinc finger C3H1 domain-containing protein","ZFC3H1","ZFC3H1","Hydra vulgaris","T2MHZ7",32.846,889,520,23,155,990,1303,2167,5e-114,388
+"Pocillopora_meandrina_HIv1___TS.g16639.t1","Paraspeckle component 1","PSPC1","PSPC1","Hydra vulgaris","T2M8M4",46.617,266,141,1,111,376,82,346,1.33e-76,251
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","Henmt1","HENMT1","Stylophora pistillata","A0A2B4RT85",80.885,497,86,3,22,516,35,524,0,828
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","pdam_00007839","HENMT1","Pocillopora damicornis","A0A3M6TXM5",98.473,524,8,0,1,524,1,524,0,1068
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","LOC116297700","HENMT1","Actinia tenebrosa","A0A6P8IAV1",47.071,495,218,12,34,497,32,513,1.55e-138,410
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","PACLA_8A072682","HENMT1","Paramuricea clavata","A0A7D9I5P4",46.849,365,158,5,12,341,32,395,2.19e-103,316
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1 OS=Clytia hemisphaerica OX=252671","HENMT1","Clytia hemisphaerica","A0A7M5V1U7",39.583,96,51,3,79,169,35,128,2.86e-13,67.4
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1 OS=Clytia hemisphaerica OX=252671","HENMT1","Clytia hemisphaerica","A0A7M5XM45",37.5,104,61,2,1,102,188,289,7.95e-16,75.5
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1 OS=Exaiptasia diaphana OX=2652724","HENMT1","Exaiptasia diaphana","A0A913XH97",54.154,325,127,5,30,332,35,359,1.31e-116,347
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1 OS=Exaiptasia diaphana OX=2652724","HENMT1","Exaiptasia diaphana","A0A913YLG0",53.846,325,128,5,30,332,35,359,3.24e-117,348
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1","HENMT1","Desmophyllum pertusum","A0A9X0CGH9",64.99,517,165,6,20,531,15,520,0,665
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","P5673_025398","HENMT1","Acropora cervicornis","A0AAD9UXC1",53.106,499,220,5,34,527,24,513,0,525
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","PMEA_00021362","HENMT1","Pocillopora meandrina","A0AAU9VS69",97.328,524,13,1,1,523,1,524,0,1053
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","PEVE_00023282","HENMT1","Porites evermanni","A0ABN8M7S2",73.401,297,78,1,25,320,17,313,1.48e-162,472
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","PLOB_00047865","HENMT1","Porites lobata","A0ABN8N2R2",73.22,295,77,1,27,319,19,313,9.89e-159,466
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1","HENMT1","Hydra vulgaris","T2MC08",45.933,209,110,2,9,214,35,243,1.7e-63,213
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","HENMT1 OS=Nematostella vectensis OX=45351","HENMT1","Nematostella vectensis","U3MHT1",49.761,418,160,7,17,384,32,449,1.23e-131,392
+"Pocillopora_meandrina_HIv1___RNAseq.g7234.t1","Small RNA 2'-O-methyltransferase","LOC100200697","HENMT1","Hydra vulgaris","A0ABM4CR37",44.976,209,112,2,9,214,35,243,1.56e-62,210

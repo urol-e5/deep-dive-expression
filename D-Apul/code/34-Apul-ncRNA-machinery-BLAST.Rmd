@@ -1,0 +1,183 @@
+---
+title: "34-Apul-ncRNA-machinery-BLAST"
+author: "Kathleen Durkin"
+date: "2026-04-14"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: false 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Using Steven's code from doing this in `timeseries`: https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/34-Apul-ncRNA-machinery-BLAST.qmd
+ 
+
+# Proteins 
+
+Will be using A. pulchra protein sequences here:
+
+https://raw.githubusercontent.com/urol-e5/deep-dive-expression/main/D-Apul/data/Apulchra-genome.pep.faa
+
+```{bash}
+head ../data/Apulchra-genome.pep.faa
+```
+
+# Make BLAST db
+
+```{bash}
+
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in ../data/Apulchra-genome.pep.faa \
+-dbtype prot \
+-out ../output/34-Apul-ncRNA-machinery-BLAST/Apul-proteins
+```
+
+```{bash}
+head ../../data/ncRNA_machinery.fasta
+```
+
+# BLASTp
+
+```{bash}
+fasta="../../data/ncRNA_machinery.fasta"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/34-Apul-ncRNA-machinery-BLAST/Apul-proteins \
+-out ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab \
+-evalue 1E-05 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{r, engine='bash', eval=TRUE}       
+wc -l ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
+```
+
+```{r, engine='bash', eval=TRUE}        
+head ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
+```
+
+# Parse and annotate
+
+This .tab file associates A. pulchra proteins with ncRNA machinery proteins found in the reference db. However, the names are just taken straight from the fasta headers, which ends up being mostly just the Uniprot accession number. Let's parse this into a more interpretable db.
+
+parse the reference ncRNA machinery fasta headers
+
+```{r, engine='bash'}
+cd ../../data/
+  
+grep "^>" ncRNA_machinery.fasta | \
+sed 's/^>//' | \
+awk -F'|' '{
+  # Get accession
+  acc = $2
+  
+  # Everything after the third pipe
+  rest = $3
+  
+  # Strip entry_name (first token before space)
+  sub(/^[^ ]+ /, "", rest)
+  
+  # Parse fields using OS=, OX=, GN=, CGN=, PE=
+  protein = rest; sub(/ CGN=.*/, "", protein); sub(/ OS=.*/, "", protein)
+  
+  species = rest; sub(/.*OS=/, "", species); sub(/ OX=.*/, "", species)
+  
+  if (rest ~ /GN=/) {
+    gene = rest; sub(/.*GN=/, "", gene); sub(/ PE=.*/, "", gene)
+  } else {
+    gene = "NA"
+  }
+  
+  if (rest ~ /CGN=/) {
+    cgn = rest; sub(/.*CGN=/, "", cgn); sub(/ OS=.*/, "", cgn)
+  } else {
+    cgn = "NA"
+  }
+  
+  # Quote protein and species in case of commas
+  gsub(/"/, "\"\"", protein)
+  gsub(/"/, "\"\"", species)
+  
+  print acc "," "\"" protein "\"" "," gene "," cgn "," "\"" species "\""
+}' | \
+sed '1i accession,protein_name,gene_name,std_gene_name,species' \
+> ncRNA_machinery_reference_table.csv
+```
+
+Now parse blastp output rows to reduce to accession numbers
+
+```{bash}
+cd ../output/34-Apul-ncRNA-machinery-BLAST
+
+awk -F'\t' 'BEGIN{OFS="\t"} {split($1,a,"|"); $1=a[2]; print}' ncRNAmach-blastp-Apul_out.tab > ncRNAmach-blastp-Apul_parsed.tab
+```
+
+Now read in and match with reference db, so that blast results are associated with protein/gene names (not just accession numbers)
+
+(Note that I can't rely on just the gene names, because most of the Uniprot entries used non-standard gene names)
+
+```{r}
+library(dplyr)
+
+# Read reference table
+ref <- read.csv("../../data/ncRNA_machinery_reference_table.csv", stringsAsFactors = FALSE)
+
+# Read parsed BLAST output
+blast <- read.delim("../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_parsed.tab", header = FALSE,
+                    col.names = c("accession", "target", "pident", "length",
+                                  "mismatch", "gapopen", "qstart", "qend",
+                                  "sstart", "send", "evalue", "bitscore"))
+
+# Join
+blast_annotated <- blast %>%
+  left_join(ref, by = "accession") %>%
+  dplyr::select(target, protein_name, gene_name, std_gene_name, species, accession, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore)
+
+write.csv(blast_annotated, "../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_annotated.csv", row.names = FALSE)
+```
+
+Finally, let's reduce this to unique associations. In the ncNRA machinery db I compiled, I sometimes included multiple sequences of a given protein sequenced in different species. This was partly due to convenience, but also because (a) I wanted "backups" in case one of the sequences was mis-annotated or had other problems (these are all unreviewed entries), and (b) in case a protein is highly divergent, and only a subset of its entries matched our species. 
+
+Now that I've done the blast, though, I only really need to know the [apulchra mRNA] - [standardized gene name] association. Let's make this reduced db.
+
+```{r}
+blast_reduc <- blast_annotated %>% dplyr::select(target, std_gene_name) %>% distinct()
+
+write.csv(blast_reduc, "../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_annotated_reduced.csv", row.names = FALSE)
+```
+
