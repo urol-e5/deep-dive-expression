@@ -353,3 +353,148 @@ ptuh_results <- rbind(ptuh_epi_miRNA_collapsed, ptuh_ncRNA_miRNA_collapsed)
 # Save
 write.csv(ptuh_results, "../output/12-miRNA-epimachinery/Ptuh_miRNAtargets_mach.csv", row.names = FALSE)
 ```
+
+
+## Summary
+
+Generally, the protein machinery that are putatively targeted by our coral miRNAs is extremely diverse, covering all major "branches" of epigenetic regulation:
+
+#### Histone Methylation
+
+Covering demethylases (KDM3, KDM6, RIOX1), methyltransferases (KMT5A, KMT2E), acetyltransferases (KAT6A/B, KAT14, KAT2A/B), and deacetylases (HDAC4/5/7/9, SIRT7), plus arginine methylation (PRMT7)
+
+#### DNA Methylation & Reading
+
+DNMT1 (maintenance methyltransferase), TET3 (active demethylation), MBD1/2/3 (methylation readers/NuRD recruitment), and PRDM14 (pluripotency-associated methylation regulator)
+
+#### ADP-Ribosylation (form of chromatin regulation)
+
+Tankyrases (PARP5a/b), PARP7/TIPARP, macro-PARPs (PARP9/14/15), and the eraser ARH1
+
+#### Ubiquitin Signaling (form of protien modification)
+
+Deubiquitinases (USPs, PSMD14, BAP1), E2/E3 ligases (UBE2D, UBE3A, CUL4A, DDB1, UBR2, RNF8, BRCA1)
+
+#### RNA Modification (Epitranscriptomics)
+
+tRNA modifiers (TRMT1, TRMT61A/B, PUS7L, DUS1L), demethylases (ALKBH3), m6A reader (HNRNPA2B1), and ADAR (A-to-I editing)
+
+#### ncRNA Biogenesis & Silencing
+
+Core RISC silencing complex (AGO1/2, TNRC6), biogenesis regulators (LIN28A, KHSRP, SRRT), Integrator complex (INTS1/4/6), RNA decay machinery (exosome, EDC4, CCR4-NOT, SMG1, PAN2), and chromatin/structural components (RBBP4, STAG1/2, SMARCA2/4, RDRP)
+
+#### Other Regulators
+
+Signaling kinases (PKN1, MAP3K12, MAP2K1, Chuk/IKKα), phosphatases (PP1), and protein quality control (COPS6, Hspbap1)
+
+
+### Plot
+
+```{r}
+library(tidyverse)
+apul_results_spec <- apul_results
+apul_results_spec$species <- "A. pulchra"
+peve_results_spec <- peve_results
+peve_results_spec$species <- "P. evermanni"
+ptuh_results_spec <- ptuh_results
+ptuh_results_spec$species <- "P. tuahiniensis"
+
+all_data <- bind_rows(apul_results_spec, peve_results_spec, ptuh_results_spec)
+
+# function to classify genes into broad "type" of regulation
+classify_gene <- function(gene_str) {
+  gene <- toupper(gene_str)
+  # Histone modification (methylation, acetylation, deacetylation, phosphorylation)
+  histone_mod <- c("KDM3", "KDM6", "KMT5", "KMT2", "SETD8", "RIOX1", "KAT6", "KAT14", "KAT2", "HDAC", "SIRT7", "PRMT7", "PKN1", "HSPBAP1", "COPS6")
+  # DNA methylation & reading
+  dna_meth <- c("DNMT1", "TET3", "MBD1", "MBD2", "MBD3", "PRDM14", "MCM3AP")
+  # ADP-ribosylation
+  adprib <- c("PARP", "TNKS", "TIPARP", "ARH1", "ADPRH")
+  # Ubiquitin signaling
+  ubiquitin <- c("USP", "PSMD14", "BAP1", "UBE2D", "UBE3A", "UBE4A", "CUL4", "DDB1", "UBR2", "RNF8", "BRCA1", "VCPIP1", "JOSD")
+  # RNA modification (epitranscriptomics)
+  rna_mod <- c("TRMT1", "TRMT61", "ALKBH3", "PUS7L", "DUS1L", "HNRNPA2B1", "HNRNPA1", "ADAR", "RBMX")
+  # ncRNA biogenesis & silencing
+  ncrna <- c("AGO1", "AGO2", "TNRC6", "LIN28", "KHSRP", "SRRT", "RBBP4", "INTS", "SMARCA", "SMG1", "EXOSC", "EDC4", "DIS3L", "CNOT11", "EWSR1", "FUS(?!E)", "PAN2", "RDRP", "STAG1", "STAG2", "MTREX", "ZFC3H1")
+  # Chromatin signaling
+  signaling <- c("MAP3K12", "MAP2K1", "CHUK", "PPP1CB", "PPP1R7")
+
+  categories <- list(
+    "Histone modification" = histone_mod,
+    "Chromatin signaling" = signaling,
+    "DNA methylation & reading" = dna_meth,
+    "ncRNA biogenesis & silencing" = ncrna,
+    "RNA modification" = rna_mod,
+    "ADP-ribosylation" = adprib,
+    "Ubiquitin signaling" = ubiquitin
+  )
+
+  matched <- c()
+  for (cat_name in names(categories)) {
+    for (kw in categories[[cat_name]]) {
+      if (grepl(kw, gene, perl = TRUE)) {
+        matched <- c(matched, cat_name)
+        break
+      }
+    }
+  }
+  if (length(matched) == 0) {
+    return("Unclassified")
+  }
+  # return the first matched category
+  return(matched[1])
+}
+
+# classify targets
+all_data <- all_data %>% rowwise() %>% mutate(category = classify_gene(gene)) %>% ungroup()
+
+# summarize
+category_counts <- all_data %>% count(species, category, name = "n_targets")
+
+# Set factor levels
+cat_order <- c("Histone modification",
+               "Chromatin signaling",
+               "DNA methylation & reading",
+               "ncRNA biogenesis & silencing",
+               "RNA modification",
+               "ADP-ribosylation",
+               "Ubiquitin signaling")
+
+species_order <- c("A. pulchra", "P. evermanni", "P. tuahiniensis")
+
+category_counts <- category_counts %>%
+  mutate(category = factor(category, levels = rev(cat_order)),
+         species  = factor(species, levels = rev(species_order))
+         )
+
+# set colors
+cat_colors <- c(
+  "Histone modification" = "#378ADD",
+  "Chromatin signaling" = "#888780",
+  "DNA methylation & reading" = "#D4537E",
+  "ncRNA biogenesis & silencing" = "#534AB7",
+  "RNA modification" = "#D85A30",
+  "ADP-ribosylation" = "#BA7517",
+  "Ubiquitin signaling" = "#1D9E75"
+)
+
+# plot!
+p <- ggplot(category_counts, aes(x = n_targets, y = species, fill = category)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.65) +
+  scale_fill_manual(
+    values = cat_colors,
+    breaks = cat_order,
+    name   = NULL
+  ) +
+  labs(
+    x = "Number of miRNA target interactions",
+    y = NULL
+  ) +
+  theme_minimal()
+
+p
+```
+save
+```{r}
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", p, width = 9, height = 4.5, dpi = 300)
+```
