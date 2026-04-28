@@ -8,6 +8,10 @@ Kathleen Durkin
 - [3 BLASTp](#3-blastp)
 - [4 Parse and annotate](#4-parse-and-annotate)
 
+NOTE: Instead of using Steven’s e-value threshold of 1e-05, I’ll use the
+more stringent threshold used in Ashey et al. 2025 in Jill’s check for
+the existence of ncRNA machinery, to maintain consistency: **1e-40**
+
 # 1 Proteins
 
 Will be using P. meandrina protein sequences here:
@@ -47,7 +51,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 -query $fasta \
 -db ../output/32-Ptuh-ncRNA-machinery-BLAST/Ptuh-proteins \
 -out ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab \
--evalue 1E-05 \
+-evalue 1E-40 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \
@@ -58,13 +62,12 @@ fasta="../../data/ncRNA_machinery.fasta"
 wc -l ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab
 ```
 
-    865 ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab
+    801 ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab
 
 ``` bash
 head ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab
 ```
 
-    tr|A0A0C2N1X6|A0A0C2N1X6_THEKT  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    20.798  827 556 23  10  762 5   806 4.15e-43    167
     tr|A0A2B4SX82|A0A2B4SX82_STYPI  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    95.161  806 39  0   1   806 1   806 0.0 1602
     tr|A0A6P8J329|A0A6P8J329_ACTTE  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    65.675  807 271 6   1   802 1   806 0.0 1139
     tr|A0A6S7G2D7|A0A6S7G2D7_PARCT  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    52.847  808 370 5   1   799 1   806 0.0 915
@@ -74,6 +77,7 @@ head ../output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_out.tab
     tr|A0AAD9QN77|A0AAD9QN77_ACRCE  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    73.908  824 159 2   1   788 1   804 0.0 1268
     tr|A0AAU9VQE5|A0AAU9VQE5_9CNID  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    100.000 806 0   0   1   806 1   806 0.0 1671
     tr|A0ABM4DB04|A0ABM4DB04_HYDVU  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    50.860  814 390 6   1   812 1   806 0.0 865
+    tr|A0ABM4DDG6|A0ABM4DDG6_HYDVU  Pocillopora_meandrina_HIv1___RNAseq.g6540.t1    50.860  814 390 6   1   812 1   806 0.0 864
 
 # 4 Parse and annotate
 

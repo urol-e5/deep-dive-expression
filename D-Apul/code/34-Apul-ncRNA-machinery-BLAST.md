@@ -9,7 +9,11 @@ Kathleen Durkin
 - [4 Parse and annotate](#4-parse-and-annotate)
 
 Using Steven’s code from doing this in `timeseries`:
-<https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/34-Apul-ncRNA-machinery-BLAST.qmd>
+<https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/25-Apul-epimods-blast.qmd>
+
+NOTE: Instead of using Steven’s e-value threshold of 1e-05, I’ll use the
+more stringent threshold used in Ashey et al. 2025 in Jill’s check for
+the existence of ncRNA machinery, for consistency: **1e-40**
 
 # 1 Proteins
 
@@ -44,7 +48,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 -query $fasta \
 -db ../output/34-Apul-ncRNA-machinery-BLAST/Apul-proteins \
 -out ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab \
--evalue 1E-05 \
+-evalue 1E-40 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \
@@ -55,13 +59,12 @@ fasta="../../data/ncRNA_machinery.fasta"
 wc -l ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
 ```
 
-    865 ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
+    792 ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
 
 ``` bash
 head ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
 ```
 
-    tr|A0A0C2N1X6|A0A0C2N1X6_THEKT  FUN_045726-T1   22.805  820 544 20  10  760 5   804 6.50e-50    188
     tr|A0A2B4SX82|A0A2B4SX82_STYPI  FUN_045726-T1   77.861  804 178 0   1   804 1   804 0.0 1334
     tr|A0A6P8J329|A0A6P8J329_ACTTE  FUN_045726-T1   64.144  806 281 8   1   800 1   804 0.0 1103
     tr|A0A6S7G2D7|A0A6S7G2D7_PARCT  FUN_045726-T1   50.435  805 392 4   1   798 1   805 0.0 886
@@ -71,6 +74,7 @@ head ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab
     tr|A0AAD9QN77|A0AAD9QN77_ACRCE  FUN_045726-T1   92.485  825 6   2   1   789 1   805 0.0 1563
     tr|A0AAU9VQE5|A0AAU9VQE5_9CNID  FUN_045726-T1   78.856  804 170 0   1   804 1   804 0.0 1348
     tr|A0ABM4DB04|A0ABM4DB04_HYDVU  FUN_045726-T1   51.870  802 373 7   14  810 11  804 0.0 868
+    tr|A0ABM4DDG6|A0ABM4DDG6_HYDVU  FUN_045726-T1   51.870  802 373 7   14  810 11  804 0.0 868
 
 # 4 Parse and annotate
 

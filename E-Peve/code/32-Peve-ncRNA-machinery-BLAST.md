@@ -8,6 +8,10 @@ Kathleen Durkin
 - [3 BLASTp](#3-blastp)
 - [4 Parse and annotate](#4-parse-and-annotate)
 
+NOTE: Instead of using Steven’s e-value threshold of 1e-05, I’ll use the
+more stringent threshold used in Ashey et al. 2025 in Jill’s check for
+the existence of ncRNA machinery, for consistency: **1e-40**
+
 # 1 Proteins
 
 Will be using A. pulchra protein sequences here:
@@ -48,7 +52,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 -query $fasta \
 -db ../output/32-Peve-ncRNA-machinery-BLAST/Peve-proteins \
 -out ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab \
--evalue 1E-05 \
+-evalue 1E-40 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \
@@ -59,7 +63,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 wc -l ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab
 ```
 
-    850 ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab
+    772 ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab
 
 ``` bash
 head ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab
@@ -68,7 +72,7 @@ head ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab
     tr|A0A224ASV7|A0A224ASV7_ACRTE  Peve_00019588   92.350  732 52  2   1   732 1   728 0.0 1276
     tr|Q967E1|Q967E1_DENKL  Peve_00019588   82.273  220 39  0   5   224 6   225 2.11e-124   388
     tr|A0A3M6U8K5|A0A3M6U8K5_POCDA  Peve_00006460   82.440  1082    168 6   1   1078    1   1064    0.0 1604
-    tr|A0A6P8H2M2|A0A6P8H2M2_ACTTE  Peve_00006460   62.066  1152    337 22  1   1140    1   1064    0.0 1195
+    tr|A0A6P8H2M2|A0A6P8H2M2_ACTTE  Peve_00006460   58.420  1152    379 22  1   1140    1   1064    0.0 1095
     tr|A0A7M5UZN6|A0A7M5UZN6_9CNID  Peve_00006460   52.361  953 348 19  1   898 1   902 0.0 850
     tr|A0A7M5V808|A0A7M5V808_9CNID  Peve_00006460   52.466  953 347 19  1   898 1   902 0.0 855
     tr|A0A913YAN3|A0A913YAN3_EXADI  Peve_00006460   63.417  1118    338 18  1   1101    1   1064    0.0 1197

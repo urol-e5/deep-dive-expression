@@ -40,6 +40,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+NOTE: Instead of using Steven's e-value threshold of 1e-05, I'll use the more stringent threshold used in Ashey et al. 2025 in Jill's check for the existence of ncRNA machinery, for consistency: **1e-40**
+
 # Proteins 
 
 Will be using A. pulchra protein sequences here:
@@ -80,7 +82,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 -query $fasta \
 -db ../output/32-Peve-ncRNA-machinery-BLAST/Peve-proteins \
 -out ../output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_out.tab \
--evalue 1E-05 \
+-evalue 1E-40 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \

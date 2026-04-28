@@ -1,0 +1,88 @@
+---
+title: "35-Apul-epi-machinery-BLAST"
+author: "Kathleen Durkin"
+date: "2026-04-28"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+library(DT)
+library(Biostrings)
+library(tm)
+knitr::opts_chunk$set(
+  echo = TRUE,         # Display code chunks
+  eval = FALSE,         # Evaluate code chunks
+  warning = FALSE,     # Hide warnings
+  message = FALSE,     # Hide messages
+  fig.width = 6,       # Set plot width in inches
+  fig.height = 4,      # Set plot height in inches
+  fig.align = "center", # Align plots to the center
+  comment = ""         # Prevents appending '##' to beginning of lines in code output
+)
+```
+
+Using Steven's code from doing this in `timeseries`: https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/25-Apul-epimods-blast.qmd
+ 
+NOTE: Instead of using Steven's e-value threshold of 1e-05, I'll use the more stringent threshold used in Ashey et al. 2025 in Jill's check for the existence of ncRNA machinery, for consistency: **1e-40**
+
+Will use the protien database already generated in 34-Apul-ncRNA-machinery-BLAST
+
+
+Epimachinery fasta provided by Hollie, obtain from timeseries repo:
+
+https://raw.githubusercontent.com/urol-e5/timeseries_molecular/dada661a07a45bf80b42953c4f8f8b7dad6824db/D-Apul/data/Machinery.fasta
+
+```{bash}
+cd ../../data
+curl -o Machinery.fasta https://raw.githubusercontent.com/urol-e5/timeseries_molecular/dada661a07a45bf80b42953c4f8f8b7dad6824db/D-Apul/data/Machinery.fasta
+
+```
+
+
+```{bash}
+head ../../data/Machinery.fasta
+```
+
+## BLASTp
+
+```{bash}
+fasta="../../data/Machinery.fasta"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastp \
+-query $fasta \
+-db ../output/34-Apul-ncRNA-machinery-BLAST/Apul-proteins \
+-out ../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab \
+-evalue 1E-40 \
+-num_threads 48 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{r, engine='bash', eval=TRUE}       
+wc -l ../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab
+```
+
+This blast search using a 1e-40 evlaue threshold produces 397 hits, compared to the 446 hits produced in [Steven's `timeseries` code](https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/25-Apul-epimods-blast.qmd) using 1e-05
+
+```{r, engine='bash', eval=TRUE}        
+head ../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab
+```

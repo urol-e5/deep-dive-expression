@@ -212,11 +212,11 @@ ptuh_FA_annot <- left_join(ptuh_FA, ptuh_names, by = c("miRNA" = "Name"))
 
 ## Epimachinery
 
-Load Steven’s epimachinery BLAST hits to the three coral genomes
+Load epimachinery BLAST hits to the three coral genomes
 
 ``` r
 #Load
-apul_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/D-Apul/output/25-Apul-epimods-blast/Mach-blastp-Apul_out.tab") %>% dplyr::select(V1,V2)
+apul_epi <- read.table("../../D-Apul/output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab") %>% dplyr::select(V1,V2)
 # Remove transcript # suffixes ("-T1")
 apul_epi$V2 <- gsub("-T[0-9]+$", "", apul_epi$V2)
 
@@ -227,7 +227,7 @@ apul_epi <- apul_epi %>% dplyr::select(-V1, -V2)
 
 
 #Load
-peve_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/E-Peve/output/06-Peve-epimods-blast/Mach-blastp-Peve_out.tab") %>% dplyr::select(V1,V2)
+peve_epi <- read.table("../../E-Peve/output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_out.tab") %>% dplyr::select(V1,V2)
 
 # Rename columns
 peve_epi$gene_name <- peve_epi$V1
@@ -236,7 +236,7 @@ peve_epi <- peve_epi %>% dplyr::select(-V1, -V2)
 
 
 #Load
-ptuh_epi <- read.table("https://raw.githubusercontent.com/urol-e5/timeseries_molecular/refs/heads/main/F-Ptua/output/03-Ptua-epimods-blast/Mach-blastp-Ptua_out.tab") %>% dplyr::select(V1,V2)
+ptuh_epi <- read.table("../../F-Ptuh/output/33-Ptuh-epi-machinery-BLAST/Mach-blastp-Ptuh_out.tab") %>% dplyr::select(V1,V2)
 
 # Rename columns
 ptuh_epi$gene_name <- ptuh_epi$V1
@@ -266,27 +266,27 @@ cat("\n# unique miRNAs:", apul_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
 ```
 
     ## 
-    ## # unique miRNAs: 23
+    ## # unique miRNAs: 22
 
 ``` r
 cat("# unique mRNAs:", apul_epi_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 33
+    ## # unique mRNAs: 29
 
 ``` r
 cat("# unique epimachinery proteins:", apul_epi_miRNA$gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique epimachinery proteins: 46
+    ## # unique epimachinery proteins: 38
 
-In *A. pulchra*, 23 of the 39 miRNAs putatively bind to a total of 33
+In *A. pulchra*, 22 of the 39 miRNAs putatively bind to a total of 29
 unique epigenetic protein machinery transcripts, based on both predicted
-binding and significant. These transcripts match 46 epimachinery
-annotations. Note that the \# of unique transcripts is higher than the
-\# of unique annotations because some of the coral genes match multiple
-variants of a single protein (e.g., FUN_001354, which matches both
-Parp5a-Tnks-201 and Parp5b-Tnks2-201)
+binding and significant coexpression. These transcripts match 38
+epimachinery annotations. Note that the \# of unique transcripts is
+higher than the \# of unique annotations because some of the coral genes
+match multiple variants of a single protein (e.g., FUN_001354, which
+matches both Parp5a-Tnks-201 and Parp5b-Tnks2-201)
 
 Collapse to unique miRNA-mRNA pairs
 
@@ -377,23 +377,23 @@ cat("\n# unique miRNAs:", ptuh_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
 ```
 
     ## 
-    ## # unique miRNAs: 10
+    ## # unique miRNAs: 9
 
 ``` r
 cat("# unique mRNAs:", ptuh_epi_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 11
+    ## # unique mRNAs: 10
 
 ``` r
 cat("# unique epimachinery proteins:", ptuh_epi_miRNA$gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique epimachinery proteins: 15
+    ## # unique epimachinery proteins: 14
 
-In *P. tuahiniensis*, 10 of the 37 miRNAs putatively bind to a total of
-11 unique epigenetic protein machinery transcripts, based on both
-predicted binding and significant. These transcripts match 15
+In *P. tuahiniensis*, 9 of the 37 miRNAs putatively bind to a total of
+10 unique epigenetic protein machinery transcripts, based on both
+predicted binding and significant. These transcripts match 14
 epimachinery annotations. Again, note that the \# of unique transcripts
 is higher than the \# of unique annotations because some of the coral
 genes match multiple variants of a single protein.
@@ -456,23 +456,23 @@ cat("\n# unique miRNAs:", apul_ncRNA_miRNA$miRNA %>% unique() %>% length(), "\n"
 ```
 
     ## 
-    ## # unique miRNAs: 9
+    ## # unique miRNAs: 8
 
 ``` r
 cat("# unique mRNAs:", apul_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 9
+    ## # unique mRNAs: 8
 
 ``` r
 cat("# unique ncRNA machinery genes:", apul_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique ncRNA machinery genes: 13
+    ## # unique ncRNA machinery genes: 12
 
-In *A. pulchra*, 9 of the 39 miRNAs putatively bind to a total of 9
+In *A. pulchra*, 8 of the 39 miRNAs putatively bind to a total of 8
 unique ncRNA protein machinery transcripts, based on both predicted
-binding and significant coexpression. These transcripts match 13 ncRNA
+binding and significant coexpression. These transcripts match 12 ncRNA
 machinery annotations. Note that the \# of unique annotations is higher
 than the \# of unique transcripts because some of the coral genes match
 multiple similar proteins (e.g., FUN_032699, which matched both AGO1 and

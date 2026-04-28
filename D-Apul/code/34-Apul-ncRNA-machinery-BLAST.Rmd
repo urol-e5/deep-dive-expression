@@ -40,8 +40,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-Using Steven's code from doing this in `timeseries`: https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/34-Apul-ncRNA-machinery-BLAST.qmd
+Using Steven's code from doing this in `timeseries`: https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/25-Apul-epimods-blast.qmd
  
+NOTE: Instead of using Steven's e-value threshold of 1e-05, I'll use the more stringent threshold used in Ashey et al. 2025 in Jill's check for the existence of ncRNA machinery, for consistency: **1e-40**
 
 # Proteins 
 
@@ -76,7 +77,7 @@ fasta="../../data/ncRNA_machinery.fasta"
 -query $fasta \
 -db ../output/34-Apul-ncRNA-machinery-BLAST/Apul-proteins \
 -out ../output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_out.tab \
--evalue 1E-05 \
+-evalue 1E-40 \
 -num_threads 48 \
 -max_target_seqs 1 \
 -max_hsps 1 \
