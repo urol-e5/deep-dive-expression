@@ -1,0 +1,416 @@
+---
+title: "09.1-epimachinery-ncRNA-protein-expression"
+author: "Kathleen Durkin"
+date: "2026-04-28"
+output: 
+  github_document:
+    toc: true
+    number_sections: false
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(purrr)
+```
+
+Read in ncRNA/epimachinery protein related info 
+```{r}
+Apul_ncRNA_df <- read.csv("../../D-Apul/output/34-Apul-ncRNA-machinery-BLAST/ncRNAmach-blastp-Apul_annotated_reduced.csv")
+Apul_ncRNA_df$Species <- "Apul"
+Peve_ncRNA_df <- read.csv("../../E-Peve/output/32-Peve-ncRNA-machinery-BLAST/ncRNAmach-blastp-Peve_annotated_reduced.csv")
+Peve_ncRNA_df$Species <- "Peve"
+Ptuh_ncRNA_df <- read.csv("../../F-Ptuh/output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAmach-blastp-Ptuh_annotated_reduced.csv")
+Ptuh_ncRNA_df$Species <- "Ptuh"
+
+ncRNA_df <- rbind(Apul_ncRNA_df, Peve_ncRNA_df, Ptuh_ncRNA_df)
+ncRNA_df$gene_name <- ncRNA_df$std_gene_name
+ncRNA_df <- ncRNA_df %>% dplyr::select(-std_gene_name)
+
+Apul_epi_df <- read.csv("../../D-Apul/output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_reduced.csv")
+Apul_epi_df$Species <- "Apul"
+Peve_epi_df <- read.csv("../../E-Peve/output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_reduced.csv")
+Peve_epi_df$Species <- "Peve"
+Ptuh_epi_df <- read.csv("../../F-Ptuh/output/33-Ptuh-epi-machinery-BLAST/Mach-blastp-Ptuh_reduced.csv")
+Ptuh_epi_df$Species <- "Ptuh"
+
+epi_df <- rbind(Apul_epi_df, Peve_epi_df, Ptuh_epi_df)
+# The epimachinery proteins originally sourced form Hollie's set are not always fully capitalized (e.g., Dnmt1 instead of DNMT1). To appropriately match my curated ncRNA machinery gene names, capitalize everything
+epi_df$gene_name <- toupper(epi_df$gene_name)
+
+prot_df <- rbind(ncRNA_df, epi_df) %>% distinct() # some epimachinery was present in both curated sets
+# Rename
+prot_df$Protein_ID <- prot_df$target
+prot_df$Protein_of_interest <- prot_df$gene_name
+prot_df <- prot_df %>% dplyr::select(-target, -gene_name)
+
+
+# Remove -T* from Apul protein names 
+prot_df <- prot_df %>%
+  mutate(Protein_ID = if_else(
+    Species == "Apul",
+    sub("-T\\d+$", "", Protein_ID),
+    Protein_ID
+  ))
+```
+
+## Clean up machinery list
+
+There are a few instances of single coral genes matching more than one ncRNA/epimachinery gene. Let's clean that up before proceeding
+
+```{r}
+# Collapse rows where one Protein_ID maps to multiple genes (within a species)
+prot_df <- prot_df %>%
+  group_by(Species, Protein_ID) %>%
+  summarise(
+    Protein_of_interest = paste(sort(unique(Protein_of_interest)), collapse = "; "),
+    .groups = "drop"
+  )
+```
+
+Also want a single, more "generic" epimachinery name for instances of multiple matches (e.g., if a gene matches DICER1 and DICER2, assign it the name DICER)
+
+```{r}
+
+# Manual lookup for biologically meaningful collapses that don't share a clean prefix
+manual_lookup <- c(
+  "NONO; PSPC1; SFPQ"                              = "DBHS family",
+  "KMT3B-NSD1; WHSC1-NSD2; WHSC1L-NSD3"            = "NSD",
+  "KMT1C-EHMT2; KMT1D-EHMT1"                       = "EHMT",
+  "KMT2H-ASH1L; KMT3A-SETD2"                       = "H3K36 KMT (ASH1L/SETD2)",
+  "HDAC; HDAC4; HDAC5; HDAC7; HDAC9"               = "HDAC class IIa",
+  "HDAC; HDAC10; HDAC6"                            = "HDAC class IIb",
+  "MAPK8; MAPK8B; MAPK9"                           = "MAPK8/9 (JNK)",
+  "EZH1; EZH2; KMT6-EZH2"                          = "EZH",
+  # histone lysine methyltransferases
+  "BAZ1B; SUV39H1-KMT1A; SUV39H2-KMT1B"            = "H3K9 KMT (SUV39H)",
+  "KMT2H-ASH1L; KMT3A-SETD2; WHSC1-NSD2"           = "H3K36 KMT",
+  "KMT3B-NSD1; WHSC1L-NSD3"                        = "NSD",
+  "KMT3C-SMYD2; SMYD3"                             = "SMYD",
+  "KMT3C-SMYD2; SMYD1; SMYD3"                      = "SMYD",
+  "KMT2E; SETD5"                                   = "SETD5/KMT2E",
+  # Histone demethylases
+  "KDM6A; UTY"                                     = "KDM6A/UTY",
+  "KDM6A; KDM6B; UTY"                              = "KDM6",
+  "KDM7A; PHF2; PHF8"                              = "KDM7",
+  # PRDM family (zinc-finger H3K methyltransferases)
+  "CTCF; PRDM15; PRDM4; PRDM9"                     = "PRDM (+CTCF)",
+  "CTCF; PRDM5; PRDM9"                             = "PRDM (+CTCF)",
+  
+  "EWSR1; FUS"                                     = "FET family",
+  # Histone variants
+  "H1-2; MACROH2A1"                                = "Histone variants",
+  "H1-2; H2AJ; H2AW; MACROH2A1"                    = "Histone variants",
+  "H2AX; HDAC1; HDAC2"                             = "FLAG: H2AX+HDAC1/2 (review)",
+  # Chromatin readers
+  "BAZ2B; MBD6"                                    = "BAZ2B/MBD6",
+  # Mixed / potentially artifactual
+  "H2AX; HDAC; HDAC1; HDAC2"                       = "FLAG: H2AX+HDAC1/2 (review)",
+  "ALG13; OTUD4"                                   = "FLAG: ALG13+OTUD4 (review)",
+  "DNMT3L; USP9Y"                                  = "FLAG: DNMT3L+USP9Y (review)"
+  )
+
+
+# Helper: longest common alphabetical prefix
+common_prefix <- function(x) {
+  if (length(x) <= 1) return(x[1] %||% "")
+  splits <- strsplit(x, "")
+  min_len <- min(lengths(splits))
+  if (min_len == 0) return("")
+  out <- character(0)
+  for (i in seq_len(min_len)) {
+    chars <- map_chr(splits, i)
+    if (length(unique(chars)) == 1) out <- c(out, chars[1]) else break
+  }
+  paste(out, collapse = "")
+}
+
+# Main simplifier
+simplify_genes <- function(gene_str, lookup = manual_lookup, min_prefix = 3) {
+  # Normalize the input string for lookup matching
+  genes <- str_split(gene_str, "\\s*;\\s*")[[1]] |> unique() |> sort()
+  norm_str <- paste(genes, collapse = "; ")
+  # Manual lookup wins
+  if (norm_str %in% names(lookup)) return(unname(lookup[norm_str]))
+  # Single gene: return as-is
+  if (length(genes) == 1) return(genes)
+  # Drop generic placeholder if a paralog of it is present
+  #    (e.g., "HDAC" alongside "HDAC4" → drop the bare "HDAC")
+  is_generic <- str_detect(genes, "^[A-Z]+$")
+  if (any(is_generic)) {
+    keep <- map_lgl(genes, function(g) {
+      if (!str_detect(g, "^[A-Z]+$")) return(TRUE)
+      !any(str_detect(setdiff(genes, g), paste0("^", g, "\\d")))
+    })
+    genes <- genes[keep]
+    if (length(genes) == 1) return(genes)
+  }
+  # Try common prefix — keep trailing letters OR digits, only strip non-alphanumerics
+  prefix <- common_prefix(genes) |> str_remove("[^A-Z0-9]+$")
+  if (nchar(prefix) >= min_prefix) return(prefix)
+  # Fall back to the (cleaned) semicolon list
+  paste(genes, collapse = "; ")
+}
+
+prot_df <- prot_df %>%
+  mutate(Protein_of_interest_simplified = map_chr(Protein_of_interest, simplify_genes))
+
+# Check
+head(prot_df)
+```
+
+Save master table, in case want to use it in the future
+```{r}
+write.csv(prot_df, "../output/09.1-epimachinery-ncRNA-protein-expression/ncRNAepimachinery_gene_db_spec.csv", row.names = FALSE)
+```
+
+Read in Apul, Peve and Ptua mRNA counts 
+```{r}
+peve <- read.csv("../../E-Peve/output/06.2-Peve-Hisat/Peve-gene_count_matrix.csv")
+peve$gene_id <- gsub("^gene-", "", peve$gene_id)
+
+ptua <- read.csv("../../F-Ptuh/output/06.2-Ptuh-Hisat/Ptuh-gene_count_matrix.csv")
+ptua$gene_id <- gsub("^gene-", "", ptua$gene_id)
+
+apul <- read.csv("../../D-Apul/output/07-Apul-Hisat/Apul-gene_count_matrix.csv")
+```
+
+### Apul
+
+Join prot_df with Peve counts matrix 
+```{r}
+apul_prots <- prot_df %>%
+  inner_join(apul, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- apul_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+apul_prots_rpm <- apul_prots %>%
+  select(Species, Protein_of_interest_simplified, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Apul 
+```{r}
+apul_summary_stats <- apul_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest_simplified) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(apul_summary_stats, "../output/09.1-epimachinery-ncRNA-protein-expression/apul_epi_ncRNA_protein_transcript_rpm.csv")
+```
+
+### Peve 
+
+Join prot_df with Peve counts matrix 
+```{r}
+peve_prots <- prot_df %>%
+  inner_join(peve, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- peve_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+peve_prots_rpm <- peve_prots %>%
+  select(Species, Protein_of_interest_simplified, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Peve 
+```{r}
+peve_summary_stats <- peve_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest_simplified) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(peve_summary_stats, "../output/09.1-epimachinery-ncRNA-protein-expression/peve_epi_ncRNA_protein_transcript_rpm.csv")
+```
+
+### Ptua
+
+Join prot_df with Ptua counts matrix 
+```{r}
+ptua_prots <- prot_df %>%
+  inner_join(ptua, by = c("Protein_ID" = "gene_id"))
+```
+
+Normalize counts 
+```{r}
+# Function to normalize counts (simple RPM normalization)
+normalize_counts <- function(counts) {
+  rpm <- t(t(counts) / colSums(counts)) * 1e6
+  return(rpm)
+}
+
+# Get only the RNA count columns
+counts <- ptua_prots %>% select(starts_with("RNA."))
+
+# Normalize to RPM
+rpm <- normalize_counts(counts)
+
+# Add the normalized RPM back to the original dataframe
+ptua_prots_rpm <- ptua_prots %>%
+  select(Species, Protein_of_interest_simplified, Protein_ID) %>%
+  bind_cols(rpm)
+```
+
+Summarize for Ptua 
+```{r}
+ptua_summary_stats <- ptua_prots_rpm %>%
+  rowwise() %>%
+  mutate(mean_rpm = mean(c_across(starts_with("RNA."))),
+         sd_rpm   = sd(c_across(starts_with("RNA.")))) %>%
+  ungroup() %>%
+  group_by(Species, Protein_of_interest_simplified) %>%
+  summarise(avg_rpm = mean(mean_rpm),
+            std_rpm = mean(sd_rpm),
+            n = n_distinct(Protein_ID),
+            .groups = "drop")
+
+write.csv(ptua_summary_stats, "../output/09.1-epimachinery-ncRNA-protein-expression/ptuh_epi_ncRNA_protein_transcript_rpm.csv")
+```
+
+### All species 
+
+```{r}
+all_spp <- rbind(apul_summary_stats, peve_summary_stats, ptua_summary_stats)
+```
+
+
+## Plot 
+
+```{r}
+species_labels <- c(
+  Apul = expression(italic("Acropora pulchra")),
+  Peve = expression(italic("Porites evermanni")),
+  Ptuh = expression(italic("Pocillopora tuahiniensis"))
+)
+
+# Plotting function
+plot_set <- function(set){
+  
+  df <- all_spp %>% filter(Protein_of_interest_simplified %in% set)
+  
+  ggplot(df, aes(x = Species, y = avg_rpm, fill = Species)) +
+    geom_col(color = "black", width = 0.7, size = 1.5) +
+    geom_errorbar(aes(ymin = avg_rpm - std_rpm, ymax = avg_rpm + std_rpm),
+                  width = 0.2, color = "black", size = 1.2) +
+    facet_wrap(~ Protein_of_interest_simplified, scales = "free_y") +
+    scale_fill_manual(
+      values = c("Apul" = "#408EC6", "Peve" = "#1E2761", "Ptuh" = "#7A2048"),
+      labels = species_labels
+    ) +
+    scale_x_discrete(labels = species_labels) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+    labs(x = "", y = "Average RPM", fill = "Species") +
+    theme_bw() +
+    theme(
+      axis.title = element_text(size = 36, face = "bold"),        # Y-axis title
+      axis.text = element_text(size = 34, colour = "black"),      # Axis text
+      axis.text.x = element_text(angle = 45, hjust = 1),          # X-axis angle
+      legend.title = element_text(size = 34, face = "bold"),      # Legend title
+      legend.position = "top",
+      legend.text = element_text(size = 32),                      # Legend labels
+      strip.text = element_text(size = 34, face = "bold"),        # Facet labels
+      strip.background = element_rect(fill = "lightgray", color = "black", size = 1.5),  # Facet background
+      panel.border = element_rect(color = "black", size = 1.2),   # Panel border
+      panel.grid.major = element_line(size = 0.5, color = "gray"),# Internal grid lines
+      panel.grid.minor = element_blank(),
+      panel.spacing = unit(1, "lines"),
+      axis.line = element_line(size = 1, colour = "black"),       # Axis lines
+      axis.ticks = element_line(size = 1),                        # Axis ticks
+      strip.placement = "outside"
+    )
+}
+```
+
+```{r}
+ncrna_biogen <- c("DROSHA", "DGCR8", "DICER1", "AGO2", "AGO", "XPO5", "TARBP1", "INTS11", "NCBP1", "SRRT")
+methyl <- c("DNMT1", "DNMT3A", "DNMT3B", "DNMT", "DNMT3", "UHRF1", "UHRF", "TET1", "TET2", "TET3", "TET", "MBD2")
+hist_actyl <- c("KAT", "KAT1", "KAT1-HAT1", "KAT2", "KAT2A", "KAT2B", "KAT3", "KAT3A-CREBBP", "KAT3B-EP300", "KAT4", "KAT5", "KAT6", "KAT6A", "KAT7", "KAT8", "KAT9", "KAT9-ELP3")
+hist_deactyl <- c("HDAC1", "HDAC2", "HDAC3", "HDAC6", "HDAC8", "HDAC", "SIRT1", "SIRT2", "SIRT3", "SIRT4", "SIRT5", "SIRT6", "SIRT7")
+hist_methyl <- c("EZH2", "EZH", "KMT", "KMT2", "KMT2A", "KMT2D", "KMT4-DOT1L", "KMT3A-SETD2", "KMT5", "KMT1E-SETDB1", "SUV39H1-KMT1A", "PRMT5", "KMT5A-SETD8")
+hist_demethyl <- c("KDM1A", "KDM1B", "KDM2", "KDM3", "KDM4", "KDM5", "KDM6", "KDM7", "KDM8", "KDM4A", "KDM5A", "KDM5B", "KDM6A", "KDM6B", "KDM2A", "KDM3A", "JMJD6")
+chrom <- c("SMARCA2", "SMARCA4", "SMARCC2", "SMARCA", "ARID1A", "ARID1B", "ARID", "BRD4", "BRD3", "BRD", "HIRA", "BAZ1B")
+hist_ubq <- c("RNF20", "RNF40", "RNF", "RNF168", "BAP1", "MYSM1", "UBE2A", "USP16", "USP22", "USP44")
+rna_mod <- c("METTL14", "METTL16", "WTAP", "ALKBH5", "YTHDC1", "YTHDF2", "NSUN2", "DKC1", "PUS7")
+```
+
+```{r}
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_ncrna_biogen.png", plot_set(ncrna_biogen), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_methyl.png", plot_set(methyl), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_hist_actyl.png", plot_set(hist_actyl), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_hist_deactyl.png", plot_set(hist_deactyl), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_hist_methyl.png", plot_set(hist_methyl), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_hist_demethyl.png", plot_set(hist_demethyl), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_chrom.png", plot_set(chrom), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_hist_ubq.png", plot_set(hist_ubq), width = 31, height = 20)
+
+ggsave(filename = "../output/09.1-epimachinery-ncRNA-protein-expression/transcript_rpm_by_spp_rna_mod.png", plot_set(rna_mod), width = 31, height = 20)
+```
+
