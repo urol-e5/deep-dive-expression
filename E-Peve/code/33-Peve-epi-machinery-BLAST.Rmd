@@ -85,3 +85,21 @@ This blast search using a 1e-40 evlaue threshold produces 398 hits, compared to 
 ```{r, engine='bash', eval=TRUE}        
 head ../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_out.tab
 ```
+
+## Reduce
+
+Let's also make sure we have an easy-to-use csv associating each protein with any matches.
+
+```{r}
+raw <- read.table("../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_out.tab")
+
+formatted <- raw  %>% dplyr::select(V1, V2)
+formatted$target <- raw$V2
+formatted$gene_name <- raw$V1
+formatted <- formatted %>% dplyr::select(-V1, -V2)
+
+# Remove trailing ##s after the target gene names (artifact of Ensembl)
+formatted$gene_name <- sub("-2[0-9]{2}$", "", formatted$gene_name)
+
+write.csv(formatted, "../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_reduced.csv", row.names = FALSE)
+```

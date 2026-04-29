@@ -4,6 +4,7 @@ Kathleen Durkin
 2026-04-28
 
 - [0.1 BLASTp](#01-blastp)
+- [0.2 Reduce](#02-reduce)
 
 Using Steven’s code from doing this in `timeseries`:
 <https://github.com/urol-e5/timeseries_molecular/blob/dada661a07a45bf80b42953c4f8f8b7dad6824db/F-Ptua/code/03-Ptua-epimods-blast.qmd>
@@ -70,3 +71,22 @@ head ../output/33-Ptuh-epi-machinery-BLAST/Mach-blastp-Ptuh_out.tab
     USP12-201   Pocillopora_meandrina_HIv1___RNAseq.g18898.t1   74.255  369 78  3   16  369 1   367 0.0 563
     USP14-201   Pocillopora_meandrina_HIv1___RNAseq.g22603.t1   62.805  492 168 4   1   487 1   482 0.0 646
     USP15-201   Pocillopora_meandrina_HIv1___RNAseq.g19447.t1   53.340  943 387 15  5   934 13  915 0.0 954
+
+## 0.2 Reduce
+
+Let’s also make sure we have an easy-to-use csv associating each protein
+with any matches.
+
+``` r
+raw <- read.table("../output/33-Ptuh-epi-machinery-BLAST/Mach-blastp-Ptuh_out.tab")
+
+formatted <- raw  %>% dplyr::select(V1, V2)
+formatted$target <- raw$V2
+formatted$gene_name <- raw$V1
+formatted <- formatted %>% dplyr::select(-V1, -V2)
+
+# Remove trailing ##s after the target gene names (artifact of Ensembl)
+formatted$gene_name <- sub("-2[0-9]{2}$", "", formatted$gene_name)
+
+write.csv(formatted, "../output/33-Ptuh-epi-machinery-BLAST/Mach-blastp-Ptuh_reduced.csv", row.names = FALSE)
+```

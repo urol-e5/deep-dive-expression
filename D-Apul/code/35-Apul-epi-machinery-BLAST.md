@@ -4,6 +4,7 @@ Kathleen Durkin
 2026-04-28
 
 - [0.1 BLASTp](#01-blastp)
+- [0.2 Reduce](#02-reduce)
 
 Using Steven’s code from doing this in `timeseries`:
 <https://github.com/urol-e5/timeseries_molecular/blob/main/D-Apul/code/25-Apul-epimods-blast.qmd>
@@ -69,3 +70,22 @@ head ../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab
     USP12-201   FUN_024199-T1   76.152  369 73  2   16  369 1   369 0.0 578
     USP14-201   FUN_014539-T1   61.122  499 173 4   1   487 1   490 0.0 635
     USP15-201   FUN_005808-T1   53.961  934 377 13  8   935 22  908 0.0 973
+
+## 0.2 Reduce
+
+Let’s also make sure we have an easy-to-use csv associating each protein
+with any matches.
+
+``` r
+raw <- read.table("../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab")
+
+formatted <- raw  %>% dplyr::select(V1, V2)
+formatted$target <- raw$V2
+formatted$gene_name <- raw$V1
+formatted <- formatted %>% dplyr::select(-V1, -V2)
+
+# Remove trailing ##s after the target gene names (artifact of Ensembl)
+formatted$gene_name <- sub("-2[0-9]{2}$", "", formatted$gene_name)
+
+write.csv(formatted, "../output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_reduced.csv", row.names = FALSE)
+```

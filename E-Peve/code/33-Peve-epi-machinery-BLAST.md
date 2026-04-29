@@ -4,6 +4,7 @@ Kathleen Durkin
 2026-04-28
 
 - [0.1 BLASTp](#01-blastp)
+- [0.2 Reduce](#02-reduce)
 
 Using Steven’s code from doing this in `timeseries`:
 <https://github.com/urol-e5/timeseries_molecular/blob/dada661a07a45bf80b42953c4f8f8b7dad6824db/E-Peve/code/06-Peve-epimods-blast.qmd>
@@ -70,3 +71,22 @@ head ../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_out.tab
     USP12-201   Peve_00031882   76.630  368 71  2   17  369 1   368 0.0 591
     USP14-201   Peve_00036006   62.288  472 163 5   5   470 1   463 0.0 602
     USP15-201   Peve_00004975   58.245  661 244 11  286 934 283 923 0.0 734
+
+## 0.2 Reduce
+
+Let’s also make sure we have an easy-to-use csv associating each protein
+with any matches.
+
+``` r
+raw <- read.table("../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_out.tab")
+
+formatted <- raw  %>% dplyr::select(V1, V2)
+formatted$target <- raw$V2
+formatted$gene_name <- raw$V1
+formatted <- formatted %>% dplyr::select(-V1, -V2)
+
+# Remove trailing ##s after the target gene names (artifact of Ensembl)
+formatted$gene_name <- sub("-2[0-9]{2}$", "", formatted$gene_name)
+
+write.csv(formatted, "../output/33-Peve-epi-machinery-BLAST/Mach-blastp-Peve_reduced.csv", row.names = FALSE)
+```
