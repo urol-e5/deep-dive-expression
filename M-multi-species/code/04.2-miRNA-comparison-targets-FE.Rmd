@@ -1252,6 +1252,113 @@ Within-species comparisons show that, in Ptuh, target coexpression direction and
 
 This is a notable difference from the preliminary chisq test used above, which showed Ptuh CDS targets were more likely to to have *negative correlation*. Tests based on miRNAs' positive proportions show the exact opposite! This difference is likely because the Chisq test, which used raw correlation counts instead of miRNA-level proportions, was dominated by a few miRNA with many many largely-negative targets (e.g., miR-100). We should **discard that Chisq test's results** in favor of this more robust approach.
 
+## Plot
+
+```{r}
+# Make sure species is a factor with the desired order
+mir_props <- mir_props %>%
+  mutate(species = factor(species, levels = c("Apul","Peve","Ptuh")))
+
+# Set colors
+species_pal    <- c(Apul = "#408EC6", Peve = "#1E2761", Ptuh = "#7A2048")
+species_labels <- c(Apul = "A. pulchra",
+                    Peve = "P. evermanni",
+                    Ptuh = "P. tuahiniensis")
+
+# ============================================================================
+# FIGURE 1 — Region distribution across species (per-miRNA proportion in CDS)
+# ============================================================================
+
+fig1 <- ggplot(mir_props, aes(species, prop_CDS, fill = species)) +
+  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
+               linewidth = 0.4) +
+  geom_jitter(aes(colour = species),
+              width = 0.18, height = 0, size = 1.6, alpha = 0.7) +
+  scale_fill_manual(values = species_pal)  +
+  scale_colour_manual(values = species_pal) +
+  scale_x_discrete(labels = species_labels) +
+  scale_y_continuous(limits = c(0, 1.02),
+                     breaks = seq(0, 1, 0.25),
+                     labels = scales::percent_format(accuracy = 1)) +
+  labs(x = NULL, y = "Per-miRNA proportion of sites in CDS",
+       title = "Region distribution: CDS vs UTR") +
+  theme(axis.text.x = element_text(face = "italic"))
+
+ggsave("../output/04.2-miRNA-comparison-targets-FE/region_distribution.png",
+       fig1, width = 4.5, height = 4, dpi = 300, bg = "white")
+
+# ============================================================================
+# FIGURE 2 — Coexpression direction across species
+# ============================================================================
+
+fig2 <- ggplot(mir_props, aes(species, prop_pos, fill = species)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed",
+             colour = "grey55", linewidth = 0.4) +
+  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
+               linewidth = 0.4) +
+  geom_jitter(aes(colour = species),
+              width = 0.18, height = 0, size = 1.6, alpha = 0.7) +
+  scale_fill_manual(values = species_pal)  +
+  scale_colour_manual(values = species_pal) +
+  scale_x_discrete(labels = species_labels) +
+  scale_y_continuous(limits = c(0, 1.02),
+                     breaks = seq(0, 1, 0.25),
+                     labels = scales::percent_format(accuracy = 1)) +
+  labs(x = NULL, y = "Per-miRNA proportion of positively-coexpressed sites",
+       title = "Coexpression direction across species") +
+  theme(axis.text.x = element_text(face = "italic"))
+
+ggsave("../output/04.2-miRNA-comparison-targets-FE/direction.png",
+       fig2, width = 4.5, height = 4, dpi = 300, bg = "white")
+
+# ============================================================================
+# FIGURE 3 — Within-species paired CDS vs UTR comparison
+# Build paired data from all_spec; restrict to miRNAs with >= 5 sites in BOTH
+# CDS and UTR-collapsed regions (matches the Wilcoxon paired test exactly).
+# ============================================================================
+
+paired_data <- all_spec %>%
+  mutate(region2 = ifelse(region == "CDS", "CDS", "UTR")) %>%
+  group_by(species, given_miRNA_name, region2) %>%
+  summarise(n        = n(),
+            n_pos    = sum(PCC.dir_bin),
+            prop_pos = n_pos / n,
+            .groups  = "drop") %>%
+  filter(n >= 5) %>%
+  pivot_wider(names_from  = region2,
+              values_from = c(n, n_pos, prop_pos)) %>%
+  filter(!is.na(prop_pos_UTR) & !is.na(prop_pos_CDS)) %>%
+  pivot_longer(cols      = c(prop_pos_UTR, prop_pos_CDS),
+               names_to  = "region",
+               values_to = "prop_pos") %>%
+  mutate(region  = factor(sub("prop_pos_", "", region), levels = c("UTR","CDS")),
+         species = factor(species, levels = c("Apul","Peve","Ptuh")))
+
+fig3 <- ggplot(paired_data,
+               aes(region, prop_pos, group = given_miRNA_name, colour = species)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed",
+             colour = "grey55", linewidth = 0.4) +
+  geom_line(alpha = 0.55, linewidth = 0.6) +
+  geom_point(size = 1.7, alpha = 0.85) +
+  facet_wrap(~ species, labeller = labeller(species = species_labels)) +
+  scale_colour_manual(values = species_pal) +
+  scale_y_continuous(limits = c(0, 1.02),
+                     breaks = seq(0, 1, 0.25),
+                     labels = scales::percent_format(accuracy = 1)) +
+  labs(x = NULL, y = "Per-miRNA proportion of positively-coexpressed sites",
+       title    = "Within-species CDS vs UTR comparison",
+       subtitle = "Each line is one miRNA targeting both regions (\u22655 sites each)") +
+  theme(plot.subtitle = element_text(size = 9, colour = "grey30"))
+
+ggsave("../output/04.2-miRNA-comparison-targets-FE/paired_CDS_vs_UTR.png",
+       fig3, width = 7.5, height = 3.8, dpi = 300, bg = "white")
+
+fig1
+fig2
+fig3
+
+```
+
 # Save files
 
 ```{r}
