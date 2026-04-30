@@ -1084,6 +1084,8 @@ There's no apparent relationship between number of binding sites and magnitude o
 
 # Is correlation direction related to binding region?
 
+##  Chisq -- IGNORE
+
 ```{r}
 cat("A.pulchra:", "\n")
 # Create table of binding region vs. correlation direction
@@ -1114,6 +1116,146 @@ print(Ptuh_cont_table)
 chisq.test(Ptuh_cont_table)
 chisq.test(Ptuh_cont_table)$stdres
 ```
+
+However, while the above test is a good indication there may be a relationship between correlation direction and species, our data doesn't meet the assumptions for a Chisq test of independence. The test assumes observations are independent. However, a single miRNA may bind to multiple mRNA, a single mRNA may be targeted by multiple miRNA, and a single miRNA may even target multiple sites within the same *region* of the same mRNA. Additionally, since the test uses raw counts, it's potentially skewed/dominated by the small number of miRNA with a very high number of targets (e.g., miR-100). Because of these, we should try another approach.
+
+
+## miRNA-level proportion tests
+
+Data prep
+```{r}
+# Format df
+prep <- function(df, sp) {
+  df %>%
+    dplyr::select(given_miRNA_name, mRNA, PCC.cor, region, subject_start_end , total_bp_shared) %>%
+    mutate(species   = factor(sp, levels = c("Apul","Peve","Ptuh")),
+              PCC.dir = factor(ifelse(PCC.cor > 0, "positive","negative"),
+                         levels = c("negative","positive")),
+              PCC.dir_bin = as.integer(PCC.dir == "positive"))
+}
+
+all_spec <- bind_rows(
+  prep(Apul_FA_df, "Apul"),
+  prep(Peve_FA_df, "Peve"),
+  prep(Ptuh_FA_df, "Ptuh")
+)
+
+# Compute per-miRNA proportions for each species
+mir_props <- all_spec %>%
+  group_by(species, given_miRNA_name) %>%
+  summarise(
+    n_sites             = n(),
+    n_CDS               = sum(region == "CDS"),
+    n_UTR               = sum(region != "CDS"),
+    n_3UTR              = sum(region == "3UTR"),
+    n_5UTR              = sum(region == "5UTR"),
+    n_pos               = sum(PCC.dir_bin),
+    prop_CDS            = n_CDS / n_sites,
+    prop_3UTR_among_UTR = ifelse(n_UTR > 0, n_3UTR / n_UTR, NA_real_),
+    prop_pos            = n_pos / n_sites,
+    .groups             = "drop"
+  )
+
+# Per-species descriptive summaries
+mir_props %>%
+  group_by(species) %>%
+  summarise(
+    n_miRNAs            = n(),
+    mean_prop_CDS       = mean(prop_CDS),
+    median_prop_CDS     = median(prop_CDS),
+    mean_prop_3UTR_UTR  = mean(prop_3UTR_among_UTR, na.rm = TRUE),
+    median_prop_3UTR_UTR = median(prop_3UTR_among_UTR, na.rm = TRUE),
+    mean_prop_pos       = mean(prop_pos),
+    median_prop_pos     = median(prop_pos)
+  )
+
+```
+
+Across-species comparisons via Kruskal-Wallis + pairwise Wilcoxon
+```{r}
+
+cat("\n--- Does CDS vs UTR distribution differ across species? ---\n")
+kw_CDS <- kruskal.test(prop_CDS ~ species, data = mir_props)
+print(kw_CDS)
+pw_CDS <- pairwise.wilcox.test(mir_props$prop_CDS, mir_props$species,
+                               p.adjust.method = "fdr")
+print(pw_CDS)
+
+
+cat("\n--- Among UTR sites, does 3UTR vs 5UTR differ across species? ---\n")
+mir_utr_only <- mir_props %>% filter(!is.na(prop_3UTR_among_UTR))
+kw_UTR <- kruskal.test(prop_3UTR_among_UTR ~ species, data = mir_utr_only)
+print(kw_UTR)
+pw_UTR <- pairwise.wilcox.test(mir_utr_only$prop_3UTR_among_UTR,
+                               mir_utr_only$species,
+                               p.adjust.method = "fdr")
+print(pw_UTR)
+
+cat("\n--- FDR adjustment across the two region tests ---\n")
+print(p.adjust(c(CDS_vs_UTR = kw_CDS$p.value,
+                 U3_vs_U5    = kw_UTR$p.value),
+               method = "fdr"))
+
+
+cat("\n--- Does coexpression direction differ across species? ---\n")
+kw_pos <- kruskal.test(prop_pos ~ species, data = mir_props)
+print(kw_pos)
+pw_pos <- pairwise.wilcox.test(mir_props$prop_pos, mir_props$species,
+                               p.adjust.method = "fdr")
+print(pw_pos)
+```
+
+So there IS a significant difference in miRNA proportion of positive target correlations between the CDS and UTR binding regions (Kruskal-Wallis, FDR-adjusted p = 2.395488e-08). **CDS regions are enriched for positively coexpressed targets**, compared to the UTRs. There is not, however, a difference between the two UTR regions (3UTR v 5 UTR) (Kruskal-Wallis, FDR-adjusted p = 3.184918e-01).
+
+There is also an indication that coexpression direction may differ across species (Kruskal-Wasllis, p = 0.038), with Apul miRNAs showing more positive target coexpression, but the trend does not reach significance in FDR-corrected pairwise tests (Wilcoxon rank sum test with cont. correction. Apul-Peve: FDR p = 0.059; Apul-Ptuh: FDR p = 0.056; Peve-Ptuh: FDR p = 0.670). 
+
+
+Within-species paired Wilcoxon
+
+Does direction depend on region (CDS vs collapsed-UTR), within each species?
+```{r}
+# Build per-miRNA, per-region-class proportions (CDS vs UTR-collapsed)
+# Restrict to miRNAs with >= 5 sites in EACH region class for stable proportions
+
+within_species_paired <- function(sp, min_n = 5) {
+  d <- all_spec %>%
+    filter(species == sp) %>%
+    mutate(region2 = ifelse(region == "CDS", "CDS", "UTR")) %>%
+    group_by(given_miRNA_name, region2) %>%
+    summarise(n        = n(),
+              n_pos    = sum(PCC.dir_bin),
+              prop_pos = n_pos / n,
+              .groups  = "drop") %>%
+    filter(n >= min_n) %>%
+    pivot_wider(names_from  = region2,
+                values_from = c(n, n_pos, prop_pos)) %>%
+    filter(!is.na(prop_pos_UTR) & !is.na(prop_pos_CDS))
+
+  if (nrow(d) < 4) {
+    cat(sp, ": too few miRNAs target both regions (n =", nrow(d), ")\n")
+    return(invisible(NULL))
+  }
+
+  cat("\n---", sp, "---\n")
+  cat("n miRNAs targeting both regions:", nrow(d), "\n")
+  cat("CDS > UTR:", sum(d$prop_pos_CDS > d$prop_pos_UTR),
+      " | UTR > CDS:", sum(d$prop_pos_UTR > d$prop_pos_CDS),
+      " | tied:", sum(d$prop_pos_CDS == d$prop_pos_UTR), "\n")
+  cat("Mean prop_pos in CDS:", round(mean(d$prop_pos_CDS), 3),
+      " | Mean prop_pos in UTR:", round(mean(d$prop_pos_UTR), 3), "\n")
+  print(wilcox.test(d$prop_pos_CDS, d$prop_pos_UTR, paired = TRUE))
+  invisible(d)
+}
+
+cat("Within-species paired CDS vs UTR comparisons\n")
+within_species_paired("Apul")
+within_species_paired("Peve")
+within_species_paired("Ptuh")
+```
+
+Within-species comparisons show that, in Ptuh, target coexpression direction and target binding region are significantly related (paired Wilcoxon, p = 0.0039). In all Ptuh miRNAs that target both CDS and UTR regions, the CDS targets are significantly more frequently *positively* coexpressed. There is no such relationship for Apul (p = 0.745) or Peve (p = 0.641). 
+
+This is a notable difference from the preliminary chisq test used above, which showed Ptuh CDS targets were more likely to to have *negative correlation*. Tests based on miRNAs' positive proportions show the exact opposite! This difference is likely because the Chisq test, which used raw correlation counts instead of miRNA-level proportions, was dominated by a few miRNA with many many largely-negative targets (e.g., miR-100). We should **discard that Chisq test's results** in favor of this more robust approach.
 
 # Save files
 
