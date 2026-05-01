@@ -493,38 +493,54 @@ cat_order <- c("ADP-ribosylation",
                "ncRNA biogenesis & silencing",
                "Ubiquitin signaling")
 species_order <- c("A. pulchra", "P. evermanni", "P. tuahiniensis")
-
-category_counts <- all_data %>%
-  count(species, category, name = "n_targets") %>%
-  # Fill in zero rows so absent categories show up explicitly
-  complete(species = species_order,
-           category = cat_order,
-           fill = list(n_targets = 0)) %>%
-  filter(category %in% cat_order) %>%   # drop any "Unclassified" from the plot
-  mutate(category = factor(category, levels = cat_order),
-         species  = factor(species,  levels = rev(species_order)))
+```
 
 
-cat_colors <- c("ADP-ribosylation"             = "#D55E00",  # vermillion
-                "RNA modification"             = "#F0E442",  # yellow
-                "Chromatin signaling"          = "#56B4E9",  # sky blue
-                "Histone modification"         = "#CC79A7",  # reddish purple
-                "DNA methylation & reading"    = "#009E73",  # bluish green
-                "ncRNA biogenesis & silencing" = "#E69F00",  # orange
-                "Ubiquitin signaling"          = "#0072B2")  # blue
+Plot all targets
+```{r}
+targets_plot <- function(df){
+  category_counts <- df %>%
+    count(species, category, name = "n_targets") %>%
+    # Fill in zero rows so absent categories show up explicitly
+    complete(species = species_order,
+             category = cat_order,
+             fill = list(n_targets = 0)) %>%
+    filter(category %in% cat_order) %>%   # drop any "Unclassified" from the plot
+    mutate(category = factor(category, levels = cat_order),
+           species  = factor(species,  levels = rev(species_order)))
+  
+  
+  cat_colors <- c("ADP-ribosylation"             = "#D55E00",  # vermillion
+                  "RNA modification"             = "#F0E442",  # yellow
+                  "Chromatin signaling"          = "#56B4E9",  # sky blue
+                  "Histone modification"         = "#CC79A7",  # reddish purple
+                  "DNA methylation & reading"    = "#009E73",  # bluish green
+                  "ncRNA biogenesis & silencing" = "#E69F00",  # orange
+                  "Ubiquitin signaling"          = "#0072B2")  # blue
 
-p <- ggplot(category_counts,
+ggplot(category_counts,
             aes(x = n_targets, y = species, fill = category)) +
   geom_bar(stat = "identity", position = "stack", width = 0.65) +
   scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
   labs(x = "Number of miRNA target interactions", y = NULL) +
   theme_minimal()
+}
 
-p
+targets_plot(all_data)
 ```
 
 save
 
 ```{r}
-ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", p, width = 9, height = 4.5, dpi = 300)
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", targets_plot(all_data), width = 9, height = 4.5, dpi = 300)
+```
+
+
+negative correlations only
+```{r}
+neg_data <- all_data %>% filter(PCC.cor < 0)
+
+targets_plot(neg_data)
+
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_negPCC.png", targets_plot(neg_data), width = 9, height = 4.5, dpi = 300)
 ```
