@@ -1,691 +1,260 @@
 "target","protein_name","gene_name","std_gene_name","species","accession","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore"
-"Peve_00019588","Heat shock protein 90","hsp90","HSP90","Acropora tenuis","A0A224ASV7",92.35,732,52,2,1,732,1,728,0,1276
-"Peve_00019588","Heat shock protein 90","hsp90 gene","HSP90","Dendronephthya klunzingeri","Q967E1",82.273,220,39,0,5,224,6,225,2.11e-124,388
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","pdam_00024393","SMARCC2","Pocillopora damicornis","A0A3M6U8K5",82.44,1082,168,6,1,1078,1,1064,0,1604
-"Peve_00006460","SWI/SNF complex subunit SMARCC2-like","LOC116287162","SMARCC2","Actinia tenebrosa","A0A6P8H2M2",58.42,1152,379,22,1,1140,1,1064,0,1095
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Clytia hemisphaerica OX=252671","SMARCC2","Clytia hemisphaerica","A0A7M5UZN6",52.361,953,348,19,1,898,1,902,0,850
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Clytia hemisphaerica OX=252671","SMARCC2","Clytia hemisphaerica","A0A7M5V808",52.466,953,347,19,1,898,1,902,0,855
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","SMARCC2 OS=Exaiptasia diaphana OX=2652724","SMARCC2","Exaiptasia diaphana","A0A913YAN3",63.417,1118,338,18,1,1101,1,1064,0,1197
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","P5673_030563","SMARCC2","Acropora cervicornis","A0AAD9UTI2",80.863,1066,183,9,1,1053,1,1058,0,1558
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","PMEA_00012531","SMARCC2","Pocillopora meandrina","A0AAU9WW55",78.295,1138,167,9,1,1132,1,1064,0,1551
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","SMARCC2","SMARCC2","Hydra vulgaris","T2M958",53.611,914,360,18,1,862,1,902,0,843
-"Peve_00006460","SWI/SNF complex subunit SMARCC2 isoform X3","LOC100210696","SMARCC2","Hydra vulgaris","A0ABM4CXJ3",54.116,911,350,18,1,852,1,902,0,846
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","PLOB_00037414","SMARCC2","Porites lobata","A0ABN8P5H7",99.429,875,5,0,1,875,1,875,0,1602
-"Peve_00006460","SWI/SNF complex subunit SMARCC2","PEVE_00006460","SMARCC2","Porites evermanni","A0ABN8QPG7",100,1064,0,0,1,1064,1,1064,0,2192
-"Peve_00041567","RNA helicase","DDX6","DDX6","Desmophyllum pertusum","A0A9X0A445",89.583,432,45,0,1,432,1,432,0,806
-"Peve_00041567","RNA helicase","DDX6","DDX6","Hydra vulgaris","T2MGZ3",75.751,433,103,2,1,432,1,432,0,681
-"Peve_00033504","mRNA-decapping enzyme 1B","Dcp1b","DCP1B","Stylophora pistillata","A0A2B4RFS2",61.842,456,152,9,1,442,1,448,1.96e-168,481
-"Peve_00033504","mRNA-decapping enzyme C-terminal domain-containing protein","pdam_00001455","DCP1","Pocillopora damicornis","A0A3M6V3U0",60.927,453,157,11,1,438,1,448,8.38e-159,456
-"Peve_00033504","mRNA-decapping enzyme 1B-like","LOC116298742","DCP1B","Actinia tenebrosa","A0A6P8ID16",48.073,441,175,10,15,405,12,448,5.68e-102,310
-"Peve_00033504","mRNA-decapping enzyme 1A","PACLA_8A033275","DCP1A","Paramuricea clavata","A0A6S7GS75",45.699,186,80,4,14,180,12,195,2.56e-47,167
-"Peve_00033504","mRNA-decapping enzyme C-terminal domain-containing protein","DCP1 OS=Exaiptasia diaphana OX=2652724","DCP1","Exaiptasia diaphana","A0A913XFQ4",43.439,442,163,14,14,373,12,448,1.95e-85,266
-"Peve_00033504","mRNA-decapping enzyme 1B","DCP1B_1","DCP1B","Desmophyllum pertusum","A0A9W9YCJ7",65.934,455,136,11,1,443,1,448,0,512
-"Peve_00033504","mRNA-decapping enzyme 1B","P5673_030896","DCP1B","Acropora cervicornis","A0AAD9UT92",56.209,306,118,5,1,297,1,299,1.44e-93,286
-"Peve_00033504","mRNA-decapping enzyme C-terminal domain-containing protein","PMEA_00004724","DCP1","Pocillopora meandrina","A0AAU9WFN7",60.48,458,154,10,1,441,1,448,2.25e-161,462
-"Peve_00033504","mRNA-decapping enzyme C-terminal domain-containing protein","PLOB_00041966","DCP1","Porites lobata","A0ABN8PDU0",98.214,448,8,0,1,448,1,448,0,892
-"Peve_00033504","mRNA-decapping enzyme C-terminal domain-containing protein","PEVE_00033504","DCP1","Porites evermanni","A0ABN8T0K5",100,448,0,0,1,448,1,448,0,910
-"Peve_00004333","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",63.383,1218,352,22,27,1216,31,1182,0,1452
-"Peve_00004333","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",63.383,1218,352,22,27,1216,31,1182,0,1452
-"Peve_00004333","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.564,905,319,11,199,1060,287,1178,0,1057
-"Peve_00004333","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.564,905,319,11,199,1060,287,1178,0,1057
-"Peve_00004333","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",55.324,817,318,8,263,1071,281,1058,0,916
-"Peve_00004333","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",55.324,817,318,8,263,1071,281,1058,0,916
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",59.553,806,305,9,182,973,287,1085,0,989
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",59.553,806,305,9,182,973,287,1085,0,989
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",59.553,806,305,9,148,939,287,1085,0,987
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",59.553,806,305,9,148,939,287,1085,0,987
-"Peve_00004333","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",68.051,939,249,7,465,1394,280,1176,0,1326
-"Peve_00004333","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",68.051,939,249,7,465,1394,280,1176,0,1326
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",46.942,703,322,7,29,686,287,983,0,634
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",46.942,703,322,7,29,686,287,983,0,634
-"Peve_00004333","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",61.014,1144,345,15,97,1193,93,1182,0,1342
-"Peve_00004333","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",61.014,1144,345,15,97,1193,93,1182,0,1342
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",58.734,916,262,20,1,850,1,866,0,918
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",58.734,916,262,20,1,850,1,866,0,918
-"Peve_00004333","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",46.942,703,322,8,29,686,287,983,0,632
-"Peve_00004333","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",46.942,703,322,8,29,686,287,983,0,632
-"Peve_00004333","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",100,1184,0,0,1,1184,1,1184,0,2449
-"Peve_00004333","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",100,1184,0,0,1,1184,1,1184,0,2449
-"Peve_00001166","RNA-binding protein EWS","EWSR1","EWSR1","Stylophora pistillata","A0A2B4SRT0",78.804,184,36,2,192,373,178,360,2.43e-81,257
-"Peve_00006197","Double-stranded RNA-specific adenosine deaminase","ADAR","ADAR","Homo sapiens","P55265",44.094,508,245,11,723,1221,792,1269,7.21e-125,416
-"Peve_00040609","Double-stranded RNA-specific editase 1","ADARB1","ADARB1","Homo sapiens","P78563",45,680,284,14,79,740,84,691,2.5e-173,513
-"Peve_00040609","Double-stranded RNA-specific editase 1","Adarb1","ADARB1","Mus musculus","Q91ZS8",47.214,646,289,14,79,710,84,691,4.87e-179,527
-"Peve_00007263","Bromodomain-containing protein 4","brd4","BRD4","Danio rerio","F1R5H6",44.286,700,274,17,43,729,253,849,1.07e-147,484
-"Peve_00007263","Bromodomain-containing protein 4","BRD4","BRD4","Homo sapiens","O60885",48.991,694,284,15,6,685,216,853,6.1e-167,534
-"Peve_00007263","Bromodomain-containing protein 4","Brd4","BRD4","Mus musculus","Q9ESU6",47.117,711,273,15,6,686,216,853,2.89e-164,528
-"Peve_00007263","Bromodomain-containing protein 4A","brd4-a","BRD4","Xenopus laevis","Q08D75",46.676,722,296,18,1,710,208,852,2.11e-155,503
-"Peve_00007263","Bromodomain-containing protein 4B","brd4-b","BRD4","Xenopus laevis","Q6DFF2",47.257,711,294,19,6,709,216,852,3.01e-158,511
-"Peve_00030471","Transcriptional repressor CTCF","CTCF","CTCF","Homo sapiens","P49711",35.976,328,197,6,246,573,480,794,4.13e-61,221
-"Peve_00030471","Transcriptional repressor CTCF","Ctcf","CTCF","Mus musculus","Q61164",35.976,328,197,6,246,573,480,794,5.17e-61,221
-"Peve_00030471","Transcriptional repressor CTCF","Ctcf","CTCF","Rattus norvegicus","Q9R1D1",35.976,328,197,6,246,573,480,794,6.74e-61,221
-"Peve_00030471","Transcriptional repressor CTCF","CTCF","CTCF","Gallus gallus","Q08705",35.629,334,202,6,246,579,480,800,3.67e-61,221
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3A","Dnmt3a","DNMT3A","Mus musculus","O88508",47.329,674,314,10,264,907,52,714,0,618
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3A","Dnmt3a","DNMT3A","Rattus norvegicus","Q1LZ53",46.884,674,317,8,264,907,52,714,0,619
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3A","DNMT3A","DNMT3A","Gallus gallus","Q4W5Z4",47.626,674,312,9,233,876,52,714,0,626
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3A","DNMT3A","DNMT3A","Homo sapiens","Q9Y6K1",47.181,674,315,9,268,911,52,714,0,617
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3B","Dnmt3b","DNMT3B","Mus musculus","O88509",45.306,671,305,10,228,859,68,715,0,587
-"Peve_00023930","DNA (cytosine-5)-methyltransferase 3B","DNMT3B","DNMT3B","Homo sapiens","Q9UBC3",44.173,695,318,11,203,853,47,715,0,585
+"Peve_00005079","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",73.739,1051,205,5,1,982,1,1049,0,1551
+"Peve_00005079","DIS3-like exonuclease 1","pdam_00009030","DIS3L","Pocillopora damicornis","A0A3M6T9B7",76.213,1051,244,4,165,1215,5,1049,0,1620
+"Peve_00005079","DIS3-like exonuclease 1","LOC116305674","DIS3L","Actinia tenebrosa","A0A6P8IWP8",64.434,1060,358,8,1,1052,1,1049,0,1394
+"Peve_00005079","DIS3-like exonuclease 1","DIS3L OS=Clytia hemisphaerica OX=252671","DIS3L","Clytia hemisphaerica","A0A7M5X8U0",47.981,1065,523,13,2,1054,1,1046,0,977
+"Peve_00005079","DIS3-like exonuclease 1","DIS3L OS=Exaiptasia diaphana OX=2652724","DIS3L","Exaiptasia diaphana","A0A913XIF9",64.929,1055,361,4,1,1052,1,1049,0,1412
+"Peve_00005079","DIS3-like exonuclease 1","P5673_007777","DIS3L","Acropora cervicornis","A0AAD9VBE9",63.438,1053,188,12,1,860,1,1049,0,1274
+"Peve_00005079","DIS3-like exonuclease 1","PMEA_00010508","DIS3L","Pocillopora meandrina","A0AAU9VML6",80.323,1052,204,2,1,1052,1,1049,0,1746
+"Peve_00005079","DIS3-like exonuclease 1","NEMVEDRAFT_v1g107726","DIS3L","Nematostella vectensis","A7S7H2",60.985,1056,395,8,1,1047,1,1048,0,1310
+"Peve_00027383","Exosome complex component 10","pdam_00003117","EXOSC10","Pocillopora damicornis","A0A3M6T9L7",66.019,515,158,5,360,869,1,503,0,670
+"Peve_00027383","Exosome complex component 10","LOC116289250","EXOSC10","Actinia tenebrosa","A0A6P8H6I1",44.762,525,250,6,221,727,1,503,3.3e-153,454
+"Peve_00024359","Exosome complex component 10","LOC116303017","EXOSC10","Actinia tenebrosa","A0A6P8IPB7",59.057,403,145,8,1,385,1,401,1.45e-161,475
+"Peve_00027383","Exosome complex component 10","PACLA_8A054231","EXOSC10","Paramuricea clavata","A0A6S7JXZ3",45.472,519,226,14,353,841,1,492,8.63e-133,405
+"Peve_00027383","Exosome complex component 10","EXOSC10 OS=Clytia hemisphaerica OX=252671","EXOSC10","Clytia hemisphaerica","A0A7M5X161",39.25,507,225,10,350,792,1,488,7.3e-112,350
+"Peve_00027383","Exosome complex component 10","EXOSC10 OS=Clytia hemisphaerica OX=252671","EXOSC10","Clytia hemisphaerica","A0A7M5X1L0",39.096,509,225,11,350,794,1,488,2.3e-110,346
+"Peve_00027383","Exosome complex component 10","EXOSC10 OS=Exaiptasia diaphana OX=2652724","EXOSC10","Exaiptasia diaphana","A0A913YD70",51.733,404,175,8,162,553,1,396,3.93e-136,405
+"Peve_00027383","Exosome complex component 10","PMEA_00016072","EXOSC10","Pocillopora meandrina","A0AAU9X394",66.602,515,155,5,360,869,1,503,0,681
+"Peve_00027383","Exosome complex component 10 homolog","EXOSC10","EXOSC10","Hydra vulgaris","T2ME73",39.841,502,218,14,324,756,2,488,2.49e-103,327
+"Peve_00027383","Exosome complex component 10 isoform X2","LOC100209380","EXOSC10","Hydra vulgaris","A0ABM4CIG1",40.719,501,215,14,690,1122,2,488,8.67e-101,328
+"Peve_00027825","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",54.645,183,81,2,8,189,9,190,5.11e-69,209
+"Peve_00020046","Exosome complex component MTR3","exosc6","EXOSC6","Stylophora pistillata","A0A2B4RYW7",52.06,267,55,3,1,196,1,265,8.86e-83,246
+"Peve_00020046","Exosome complex component MTR3","LOC116290412","EXOSC6","Actinia tenebrosa","A0A6P8HE33",58.582,268,111,0,3,270,2,269,9.5e-121,346
+"Peve_00020083","Exosome complex component MTR3-like","PACLA_8A000183","EXOSC6","Paramuricea clavata","A0A6S7GJ09",50.725,138,66,1,1,138,1,136,3.19e-46,147
+"Peve_00020046","Exosome complex component MTR3","EXOSC6 OS=Exaiptasia diaphana OX=2652724","EXOSC6","Exaiptasia diaphana","A0A913WZJ6",58.491,265,110,0,3,267,2,266,4.53e-115,332
+"Peve_00020046","Exosome complex component MTR3","P5673_017063","EXOSC6","Acropora cervicornis","A0AAD9V3T6",55.484,155,47,1,1,133,45,199,1.03e-54,173
+"Peve_00020046","Exosome complex component MTR3","PMEA_00019616","EXOSC6","Pocillopora meandrina","A0AAU9X9S1",79.623,265,54,0,1,265,1,265,1.59e-162,451
+"Peve_00020046","Exosome complex component MTR3 isoform X2","LOC100207150","EXOSC6","Hydra vulgaris","A0ABM4C6I8",45.977,261,131,6,1,256,1,256,7.29e-75,229
+"Peve_00020046","Exosome complex component MTR3","NEMVEDRAFT_v1g180736","EXOSC6","Nematostella vectensis","A7RQ94",66.795,259,86,0,1,259,1,259,8.33e-131,371
 "Peve_00023222","Exosome complex component RRP45","Exosc9","EXOSC9","Stylophora pistillata","A0A2B4RAA2",85.354,198,29,0,33,230,74,271,6.44e-125,368
 "Peve_00009801","Exosome complex component RRP46","Exosc5","EXOSC5","Stylophora pistillata","A0A2B4RF23",81.545,233,43,0,1,233,1,233,3.25e-142,397
 "Peve_00004940","Exosome complex component RRP4","Exosc2","EXOSC2","Stylophora pistillata","A0A2B4S5V0",92.727,165,12,0,1,165,1,165,3.27e-109,313
+"Peve_00008062","Exosome complex component RRP40","exosc3","EXOSC3","Stylophora pistillata","A0A2B4SR58",81.967,244,42,1,1,244,1,242,2.33e-152,424
+"Peve_00023222","Exosome complex component RRP45","pdam_00009552","EXOSC9","Pocillopora damicornis","A0A3M6UQC0",72.406,453,119,4,1,447,24,476,0,663
+"Peve_00004940","Exosome complex component RRP4","pdam_00007007","EXOSC2","Pocillopora damicornis","A0A3M6UUQ1",93.939,165,10,0,1,165,1,165,2.61e-112,322
+"Peve_00009801","Exosome complex component RRP46","pdam_00007805","EXOSC5","Pocillopora damicornis","A0A3M6V4C8",83.262,233,39,0,1,233,1,233,1.54e-146,408
+"Peve_00023222","Exosome complex component RRP45","LOC116300293","EXOSC9","Actinia tenebrosa","A0A6P8IEZ0",75.98,204,49,0,1,204,24,227,1.83e-120,350
+"Peve_00004940","Exosome complex component RRP4","LOC116303449","EXOSC2","Actinia tenebrosa","A0A6P8IPQ4",83.03,165,28,0,1,165,1,165,1.02e-98,287
+"Peve_00008062","Exosome complex component RRP40","LOC116304424","EXOSC3","Actinia tenebrosa","A0A6P8IV31",68.936,235,72,1,3,237,7,240,6.69e-127,359
+"Peve_00009801","Exosome complex component RRP46","LOC116306362","EXOSC5","Actinia tenebrosa","A0A6P8J3V5",62.222,225,85,0,2,226,7,231,1.9e-109,314
+"Peve_00008062","Exosome complex component RRP40","PACLA_8A022679","EXOSC3","Paramuricea clavata","A0A6S7G1C4",55.372,242,107,1,1,242,1,241,5.08e-94,276
+"Peve_00021343","Exosome complex component RRP43","PACLA_8A023843","EXOSC2","Paramuricea clavata","A0A6S7HA05",57.143,112,48,0,1,112,135,246,9.79e-42,147
+"Peve_00004940","Exosome complex component RRP4","PACLA_8A071563","EXOSC2","Paramuricea clavata","A0A6S7J9K2",72.024,168,43,2,3,170,2,165,2.37e-81,240
+"Peve_00009801","Exosome complex component RRP46","PACLA_8A074450","EXOSC5","Paramuricea clavata","A0A6S7JNA3",57.273,220,94,0,9,228,14,233,3.65e-91,268
+"Peve_00021343","Exosome complex component RRP43, partial","PACLA_8A023843","EXOSC2","Paramuricea clavata","A0A7D9I466",58.333,132,55,0,2,133,115,246,1.63e-51,176
+"Peve_00021343","Exosome complex component RRP43","PACLA_8A023843","EXOSC2","Paramuricea clavata","A0A7D9I844",58.678,121,50,0,2,122,115,235,3.13e-48,166
+"Peve_00023222","Exosome complex component RRP45","PACLA_8A072350","EXOSC9","Paramuricea clavata","A0A7D9L738",67.266,278,91,0,1,278,24,301,5.15e-141,406
+"Peve_00023222","Exosome complex component RRP45","EXOSC9 OS=Clytia hemisphaerica OX=252671","EXOSC9","Clytia hemisphaerica","A0A7M5WMX1",44.037,436,214,5,1,416,24,449,6.63e-127,377
+"Peve_00009801","Exosome complex component RRP46","EXOSC5 OS=Exaiptasia diaphana OX=2652724","EXOSC5","Exaiptasia diaphana","A0A913XB37",63.208,212,78,0,10,221,16,227,9.11e-105,302
+"Peve_00004940","Exosome complex component RRP4","EXOSC2 OS=Exaiptasia diaphana OX=2652724","EXOSC2","Exaiptasia diaphana","A0A913XN19",81.818,165,30,0,1,165,1,165,3.74e-98,285
+"Peve_00023222","Exosome complex component RRP45","EXOSC9 OS=Exaiptasia diaphana OX=2652724","EXOSC9","Exaiptasia diaphana","A0A913Y5G0",62.67,442,149,6,7,432,24,465,0,556
+"Peve_00008062","Exosome complex component RRP40","EXOSC3 OS=Exaiptasia diaphana OX=2652724","EXOSC3","Exaiptasia diaphana","A0A913Y852",67.249,229,75,0,9,237,12,240,2.01e-123,350
+"Peve_00023222","Exosome complex component RRP45","EXOSC9 OS=Exaiptasia diaphana OX=2652724","EXOSC9","Exaiptasia diaphana","A0A913YV10",62.162,444,151,6,7,435,24,465,0,554
+"Peve_00027941","Exosome complex component RRP41","EXOSC4","EXOSC4","Desmophyllum pertusum","A0A9W9YAL0",96,125,5,0,1,125,1,125,1.86e-87,257
 "Peve_00023222","Exosome complex component RRP45","EXOSC9","EXOSC9","Desmophyllum pertusum","A0A9W9YLS2",83.586,396,59,4,1,392,24,417,0,676
 "Peve_00004940","Exosome complex component RRP4","EXOSC2","EXOSC2","Desmophyllum pertusum","A0A9X0CGQ7",92.121,165,13,0,1,165,1,165,7.96e-110,312
-"Peve_00027383","Exosome complex component 10 homolog","EXOSC10","EXOSC10","Hydra vulgaris","T2ME73",39.841,502,218,14,324,756,2,488,2.49e-103,327
-"Peve_00020046","Exosome complex component MTR3","exosc6","EXOSC6","Stylophora pistillata","A0A2B4RYW7",52.06,267,55,3,1,196,1,265,8.86e-83,246
-"Peve_00027941","Putative exosome complex component RRP41","Exosc4","EXOSC4","Stylophora pistillata","A0A2B4S0L2",93.458,214,14,0,1,214,29,242,1.36e-148,422
-"Peve_00025446","Ribosomal RNA-processing protein 42","EXOSC7","EXOSC7","Stylophora pistillata","A0A2B4S9F0",83.505,291,48,0,1,291,1,291,0,511
-"Peve_00008062","Exosome complex component RRP40","exosc3","EXOSC3","Stylophora pistillata","A0A2B4SR58",81.967,244,42,1,1,244,1,242,2.33e-152,424
-"Peve_00021343","Ribosomal RNA-processing protein 43","EXOSC8","EXOSC8","Stylophora pistillata","A0A2B4T141",86.905,252,33,0,5,256,1,252,7.03e-158,463
-"Peve_00027941","Exosome complex component RRP41","EXOSC4","EXOSC4","Desmophyllum pertusum","A0A9W9YAL0",96,125,5,0,1,125,1,125,1.86e-87,257
-"Peve_00021343","Ribosomal RNA-processing protein 43","EXOSC8","EXOSC8","Desmophyllum pertusum","A0A9W9YM72",87.698,252,31,0,5,256,1,252,3.34e-161,472
-"Peve_00025446","Ribosomal RNA-processing protein 42","EXOSC7","EXOSC7","Desmophyllum pertusum","A0A9W9YRF8",83.972,287,46,0,1,287,1,287,0,508
+"Peve_00023222","Exosome complex component RRP45","P5673_013236","EXOSC9","Acropora cervicornis","A0AAD9QLH6",86.275,204,28,0,1,204,24,227,1.2e-133,384
+"Peve_00008062","Exosome complex component RRP40","P5673_005421","EXOSC3","Acropora cervicornis","A0AAD9QY03",81.25,240,45,0,1,240,1,240,4.83e-146,407
+"Peve_00004940","Exosome complex component RRP4","P5673_022786","EXOSC2","Acropora cervicornis","A0AAD9UZC1",79.787,188,12,2,1,185,1,165,1.86e-99,290
+"Peve_00004940","Exosome complex component RRP4","PMEA_00021516","EXOSC2","Pocillopora meandrina","A0AAU9VU96",94.545,165,9,0,1,165,1,165,2.07e-112,322
+"Peve_00009801","Exosome complex component RRP46","PMEA_00031659","EXOSC5","Pocillopora meandrina","A0AAU9VZK7",83.262,233,39,0,1,233,1,233,1.25e-146,408
+"Peve_00023222","Exosome complex component RRP45","PMEA_00012340","EXOSC9","Pocillopora meandrina","A0AAU9WU01",69.979,473,119,6,377,843,21,476,0,650
+"Peve_00008062","Exosome complex component RRP40","PMEA_00013752","EXOSC3","Pocillopora meandrina","A0AAU9WXP4",81.405,242,45,0,1,242,1,242,7.77e-153,425
+"Peve_00027941","Exosome complex component RRP41","LOC100202311","EXOSC4","Hydra vulgaris","A0ABM4BSR1",63.485,241,87,1,1,241,1,240,3.62e-118,337
+"Peve_00009801","Exosome complex component RRP46-like","LOC136084887","EXOSC5","Hydra vulgaris","A0ABM4CKD3",41.395,215,126,0,1,215,17,231,4.83e-62,193
+"Peve_00023222","Exosome complex component RRP45","LOC100212566","EXOSC9","Hydra vulgaris","A0ABM4D7J1",50,358,163,4,1,346,24,377,6.35e-123,366
+"Peve_00023222","Exosome complex component RRP45","PLOB_00043031","EXOSC9","Porites lobata","A0ABN8N3W7",98.196,499,8,1,1,498,1,499,0,999
+"Peve_00009801","Exosome complex component RRP46","PEVE_00009801","EXOSC5","Porites evermanni","A0ABN8R6C4",100,233,0,0,1,233,1,233,1.14e-173,476
+"Peve_00023222","Exosome complex component RRP45","PEVE_00023222","EXOSC9","Porites evermanni","A0ABN8SQP2",100,499,0,0,1,499,1,499,0,1026
+"Peve_00009801","Exosome complex component RRP46","NEMVEDRAFT_v1g99151","EXOSC5","Nematostella vectensis","A7RZV7",62.273,220,83,0,2,221,4,223,9.83e-106,305
+"Peve_00008062","Exosome complex component RRP40","NEMVEDRAFT_v1g120763","EXOSC3","Nematostella vectensis","A7SJP6",67.811,233,74,1,7,239,9,240,2.69e-121,345
 "Peve_00024390","Exosome complex component RRP40","EXOSC3","EXOSC3","Hydra vulgaris","T2M4E6",55.365,233,99,4,11,240,10,240,8.46e-85,253
 "Peve_00009801","Exosome complex component RRP46","EXOSC5","EXOSC5","Hydra vulgaris","T2M4V1",41.395,215,126,0,1,215,17,231,5.87e-62,193
 "Peve_00004940","Exosome complex component RRP4","EXOSC2","EXOSC2","Hydra vulgaris","T2ME10",69.277,166,50,1,1,166,1,165,1.71e-82,246
 "Peve_00023222","Exosome complex component RRP45","EXOSC9","EXOSC9","Hydra vulgaris","T2ME23",49.721,358,164,4,1,346,24,377,6.22e-123,366
-"Peve_00027825","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",54.645,183,81,2,8,189,9,190,5.11e-69,209
-"Peve_00027825","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",54.645,183,81,2,8,189,9,190,5.11e-69,209
-"Peve_00027825","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",54.645,183,81,2,8,189,9,190,5.11e-69,209
-"Peve_00027825","Exosome complex component CSL4","EXOSC1","EXOSC1","Hydra vulgaris","T2M320",54.645,183,81,2,8,189,9,190,5.11e-69,209
-"Peve_00015726","Histone-lysine N-methyltransferase EZH1","Ezh1","EZH1","Mus musculus","P70351",49.933,745,316,16,16,747,6,706,0,691
-"Peve_00015726","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Homo sapiens","Q92800",49.866,746,315,16,16,747,6,706,0,697
-"Peve_00015726","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Bos taurus","A7E2Z2",49.799,747,314,16,16,747,6,706,0,698
-"Peve_00015726","Histone-lysine N-methyltransferase EZH1","EZH1","EZH1","Pongo abelii","Q5RDS6",49.732,746,316,16,16,747,6,706,0,693
-"Peve_00001166","RNA-binding protein FUS-like isoform X1","LOC116288841","FUS","Actinia tenebrosa","A0A6P8H599",57.085,247,103,2,182,425,178,424,4.12e-57,194
-"Peve_00001166","RNA-binding protein FUS","PMEA_00003736","FUS","Pocillopora meandrina","A0AAU9WDG7",77.174,184,40,2,194,376,178,360,3.41e-86,270
-"Peve_00001166","RNA-binding FUS-like isoform X1","PACLA_8A053281","FUS","Paramuricea clavata","A0A6S7FTL3",61.585,164,61,1,269,430,196,359,4.55e-51,179
-"Peve_00001166","RNA-binding protein FUS","PEVE_00001166","FUS","Porites evermanni","A0ABN8Q272",100,424,0,0,1,424,1,424,0,790
-"Peve_00037296","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",75.34,515,114,4,1,512,1,505,0,786
-"Peve_00037296","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",75.34,515,114,4,1,512,1,505,0,786
-"Peve_00037296","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",88.951,534,49,5,1,532,1,526,0,942
-"Peve_00037296","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",88.951,534,49,5,1,532,1,526,0,942
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",88.268,537,50,7,1,535,1,526,0,933
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",88.268,537,50,7,1,535,1,526,0,933
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",74.708,514,122,2,1,512,1,508,0,796
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",74.708,514,122,2,1,512,1,508,0,796
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","Hnrnpa1","HNRNPA1","Rattus norvegicus","P04256",35.192,287,151,5,15,269,22,305,2.18e-48,167
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Homo sapiens","P09651",42.529,174,98,1,15,188,22,193,1.29e-46,164
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Bos taurus","P09867",35.192,287,151,5,15,269,22,305,1.6e-48,167
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","Hnrnpa1","HNRNPA1","Mus musculus","P49312",35.192,287,151,5,15,269,22,305,1.6e-48,167
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Pan troglodytes","A5A6H4",35.192,287,151,5,15,269,22,305,1.6e-48,167
-"Peve_00001862","Heterogeneous nuclear ribonucleoprotein A1","HNRNPA1","HNRNPA1","Macaca mulatta","Q28521",34.843,287,152,5,15,269,22,305,8.94e-48,165
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A1 homolog","hnrnpa1","HNRNPA1","Xenopus laevis","P17130",41.714,175,100,1,15,189,22,194,2.72e-47,165
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","Hnrnpa2b1","HNRNPA2B1","Rattus norvegicus","A7VJC2",43.182,176,98,1,22,197,22,195,1.95e-48,168
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","Hnrnpa2b1","HNRNPA2B1","Mus musculus","O88569",43.182,176,98,1,22,197,22,195,8.4e-49,169
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Homo sapiens","P22626",43.182,176,98,1,22,197,22,195,8.31e-49,169
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Bos taurus","Q2HJ60",43.182,176,98,1,10,185,22,195,4.31e-49,169
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Pongo abelii","Q5RBU8",43.182,176,98,1,22,197,22,195,3.74e-48,167
-"Peve_00001862","Heterogeneous nuclear ribonucleoproteins A2/B1","HNRNPA2B1","HNRNPA2B1","Saguinus oedipus","Q9TTV2",42.614,176,99,1,10,185,22,195,2.4e-48,167
+"Peve_00021642","Exosome complex exonuclease RRP44 isoform X2","LOC100215214","DIS3","Hydra vulgaris","A0ABM4D387",55.567,970,399,8,1,951,1,957,0,1120
+"Peve_00009801","Exosome complex exonuclease RRP46","PLOB_00045787","EXOSC5","Porites lobata","A0ABN8N0P1",97.425,233,6,0,1,233,1,233,6.3e-169,464
+"Peve_00021642","Exosome complex exonuclease RRP44","PLOB_00046581","DIS3","Porites lobata","A0ABN8PS90",97.701,957,22,0,1,957,1,957,0,1958
+"Peve_00027941","Exosome complex exonuclease RRP41","PLOB_00014067","EXOSC4","Porites lobata","A0ABN8R256",97.959,245,5,0,1,245,1,245,0,503
+"Peve_00021642","Exosome complex exonuclease RRP44","PEVE_00021642","DIS3","Porites evermanni","A0ABN8SLK5",100,957,0,0,1,957,1,957,0,1996
+"Peve_00027941","Exosome component 4","PEVE_00027941","EXOSC4","Porites evermanni","A0ABN8M8W7",100,245,0,0,1,245,1,245,0,511
+"Peve_00025446","Exosome component 7","PMEA_00028419","EXOSC7","Pocillopora meandrina","A0AAU9VXB3",84.192,291,46,0,1,291,1,291,0,516
+"Peve_00002243","C3H1-type domain-containing protein","pdam_00023615","ZFC3H1","Pocillopora damicornis","A0A3M6TF63",50.559,2775,1163,53,465,3184,451,3071,0,2546
+"Peve_00014570","C3H1-type domain-containing protein","pdam_00013354","ZFC3H1","Pocillopora damicornis","A0A3M6U709",69.378,627,145,14,1,592,1,615,0,844
+"Peve_00002241","C3H1-type domain-containing protein","pdam_00003006","ZFC3H1","Pocillopora damicornis","A0A3M6U800",47.872,1504,674,29,1936,3405,17,1444,0,1258
+"Peve_00007700","C3H1-type domain-containing protein","pdam_00006329","ZFC3H1","Pocillopora damicornis","A0A3M6UU55",63.275,403,68,9,13,336,2,403,4.32e-155,441
+"Peve_00024196","C3H1-type domain-containing protein","pdam_00020642","ZFC3H1","Pocillopora damicornis","A0A3M6UXL4",86.006,343,45,3,82,424,1,340,0,520
+"Peve_00026757","C3H1-type domain-containing protein","pdam_00006425","ZFC3H1","Pocillopora damicornis","A0A3M6UXZ5",66.438,292,74,7,1,289,3,273,3.71e-124,366
+"Peve_00018839","C3H1-type domain-containing protein","pdam_00007335","ZFC3H1","Pocillopora damicornis","A0A3M6V1Q8",55.249,762,269,24,60,795,78,793,0,745
+"Peve_00033123","C3H1-type domain-containing protein","pdam_00014534","ZFC3H1","Pocillopora damicornis","A0A3M6V413",97.143,140,4,0,1,140,1,140,1.48e-99,292
+"Peve_00024196","C3H1-type domain-containing protein","ZFC3H1 OS=Clytia hemisphaerica OX=252671","ZFC3H1","Clytia hemisphaerica","A0A7M5UU27",50.289,346,147,9,76,402,1,340,2.53e-90,277
+"Peve_00014570","C3H1-type domain-containing protein","ZFC3H1 OS=Clytia hemisphaerica OX=252671","ZFC3H1","Clytia hemisphaerica","A0A7M5UY71",51.982,227,108,1,209,434,333,559,2.63e-83,277
+"Peve_00018839","C3H1-type domain-containing protein","ZFC3H1 OS=Clytia hemisphaerica OX=252671","ZFC3H1","Clytia hemisphaerica","A0A7M5WRS8",47.134,314,119,7,232,517,210,504,2.71e-84,285
+"Peve_00024196","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913WR49",71.091,339,83,3,82,405,2,340,2.89e-151,432
+"Peve_00026757","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913WTR0",50.671,298,112,9,6,295,3,273,1.79e-81,256
+"Peve_00014570","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913XAL5",43.328,607,233,16,1,529,1,574,1.83e-145,436
+"Peve_00007700","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913XEY4",66.667,297,69,9,1,276,23,310,2.62e-126,369
+"Peve_00007700","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913XEZ4",68.333,300,74,10,1,291,23,310,8.12e-132,383
+"Peve_00007700","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913XF03",68.333,300,74,10,1,291,23,310,6.21e-132,384
+"Peve_00018839","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913Y3U2",49.836,608,223,19,289,842,211,790,2.84e-167,505
+"Peve_00023685","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913Y7Z7",49.364,472,197,11,486,923,514,977,4.77e-136,435
+"Peve_00018839","C3H1-type domain-containing protein","ZFC3H1 OS=Exaiptasia diaphana OX=2652724","ZFC3H1","Exaiptasia diaphana","A0A913YXN3",49.836,608,223,19,150,703,211,790,6.04e-169,504
+"Peve_00007224","C3H1-type domain-containing protein","OS493_013117","ZFC3H1","Desmophyllum pertusum","A0A9W9YT36",89.451,711,70,2,1,706,23,733,0,1214
+"Peve_00026757","C3H1-type domain-containing protein","OS493_017776","ZFC3H1","Desmophyllum pertusum","A0A9W9ZCL1",73.333,120,27,3,1,120,3,117,2.26e-54,178
+"Peve_00018839","C3H1-type domain-containing protein","OS493_000086","ZFC3H1","Desmophyllum pertusum","A0A9X0AA07",66.176,408,112,8,94,494,161,549,0,530
+"Peve_00014570","C3H1-type domain-containing protein","OS493_007929","ZFC3H1","Desmophyllum pertusum","A0A9X0CI06",71.955,624,150,8,40,647,1,615,0,904
+"Peve_00018839","C3H1-type domain-containing protein","PMEA_00016502","ZFC3H1","Pocillopora meandrina","A0AAU9VPY1",55.701,763,266,24,60,797,78,793,0,751
+"Peve_00002243","C3H1-type domain-containing protein","PMEA_00025418","ZFC3H1","Pocillopora meandrina","A0AAU9VUI3",36.442,2917,1554,68,681,3456,561,3318,0,1621
+"Peve_00009218","C3H1-type domain-containing protein","PMEA_00006800","ZFC3H1","Pocillopora meandrina","A0AAU9WJL5",45.224,984,422,29,167,1069,142,1089,0,691
+"Peve_00007700","C3H1-type domain-containing protein","PMEA_00008538","ZFC3H1","Pocillopora meandrina","A0AAU9WNB9",79.331,329,48,3,13,322,2,329,4.26e-173,489
+"Peve_00024196","C3H1-type domain-containing protein","PMEA_00026845","ZFC3H1","Pocillopora meandrina","A0AAU9XMA9",86.006,343,45,3,82,424,1,340,0,520
+"Peve_00014570","C3H1-type domain-containing protein","PMEA_00034110","ZFC3H1","Pocillopora meandrina","A0AAU9XYX6",69.378,627,145,14,1,592,1,615,0,845
+"Peve_00014570","C3H1-type domain-containing protein","PEVE_00014570","ZFC3H1","Porites evermanni","A0ABN8LDS2",100,615,0,0,1,615,1,615,0,1278
+"Peve_00018839","C3H1-type domain-containing protein","PEVE_00018839","ZFC3H1","Porites evermanni","A0ABN8M174",100,796,0,0,1,796,1,796,0,1648
+"Peve_00024196","C3H1-type domain-containing protein","PEVE_00024196","ZFC3H1","Porites evermanni","A0ABN8M8L2",100,356,0,0,1,356,1,356,0,725
+"Peve_00024197","C3H1-type domain-containing protein","PEVE_00024197","ZFC3H1","Porites evermanni","A0ABN8MAN4",100,189,0,0,1,189,1,189,6.52e-140,387
+"Peve_00028020","C3H1-type domain-containing protein","PLOB_00030861","ZFC3H1","Porites lobata","A0ABN8MV42",93.191,470,21,2,1,470,1,459,0,870
+"Peve_00002243","C3H1-type domain-containing protein","PLOB_00035750","ZFC3H1","Porites lobata","A0ABN8MVQ5",83.198,3321,470,13,1,3242,7,3318,0,5617
+"Peve_00026757","C3H1-type domain-containing protein","PLOB_00002629","ZFC3H1","Porites lobata","A0ABN8N7E6",99.267,273,2,0,1,273,1,273,0,561
+"Peve_00024196","C3H1-type domain-containing protein","PLOB_00022053","ZFC3H1","Porites lobata","A0ABN8NLF5",98.876,356,4,0,82,437,1,356,0,722
+"Peve_00018839","C3H1-type domain-containing protein","PLOB_00049275","ZFC3H1","Porites lobata","A0ABN8PWR5",98.331,719,12,0,60,778,78,796,0,1471
+"Peve_00014570","C3H1-type domain-containing protein","PLOB_00027635","ZFC3H1","Porites lobata","A0ABN8RUA0",97.724,615,7,1,1,608,1,615,0,1244
+"Peve_00028906","C3H1-type domain-containing protein","PEVE_00028906","ZFC3H1","Porites evermanni","A0ABN8STI4",100,581,0,0,1,581,1,581,0,1221
+"Peve_00028020","C3H1-type domain-containing protein","PEVE_00028020","ZFC3H1","Porites evermanni","A0ABN8SXS4",100,459,0,0,1,459,1,459,0,953
+"Peve_00033986","C3H1-type domain-containing protein","PEVE_00033986","ZFC3H1","Porites evermanni","A0ABN8T119",100,432,0,0,1,432,1,432,0,895
+"Peve_00026757","C3H1-type domain-containing protein","NEMVEDRAFT_v1g242949","ZFC3H1","Nematostella vectensis","A7S573",52.595,289,90,8,16,283,11,273,1.01e-83,263
+"Peve_00007700","C3H1-type domain-containing protein","NEMVEDRAFT_v1g210446","ZFC3H1","Nematostella vectensis","A7SD65",77.578,223,46,3,1,221,28,248,7.25e-120,349
+"Peve_00023310","Integrator complex subunit 10","INTS10","INTS10","Stylophora pistillata","A0A2B4RL22",74.834,751,183,3,1,749,1,747,0,1177
+"Peve_00023310","Integrator complex subunit 10","pdam_00020400","INTS10","Pocillopora damicornis","A0A3M6UR45",74.738,764,164,5,1,752,1,747,0,1184
+"Peve_00023310","Integrator complex subunit 10","LOC116301585","INTS10","Actinia tenebrosa","A0A6P8IIL6",52.807,748,336,8,17,760,13,747,0,791
+"Peve_00023310","Integrator complex subunit 10","PACLA_8A028259","INTS10","Paramuricea clavata","A0A7D9DCJ8",38.865,687,371,15,1,653,75,746,1.06e-159,477
+"Peve_00023310","Integrator complex subunit 10","INTS10 OS=Exaiptasia diaphana OX=2652724","INTS10","Exaiptasia diaphana","A0A913XFC5",48.163,762,305,18,2,692,5,747,0,671
+"Peve_00023310","Integrator complex subunit 10","INTS10","INTS10","Desmophyllum pertusum","A0A9W9Y953",81.481,351,64,1,301,651,398,747,0,598
+"Peve_00023310","Integrator complex subunit 10","P5673_001020","INTS10","Acropora cervicornis","A0AAD9R5R9",63.974,755,227,7,6,727,5,747,0,957
+"Peve_00023310","Integrator complex subunit 10","PMEA_00008300","INTS10","Pocillopora meandrina","A0AAU9WMN8",76.995,752,167,3,1,751,1,747,0,1217
+"Peve_00023310","Integrator complex subunit 10","LOC100204300","INTS10","Hydra vulgaris","A0ABM4B4R9",30.47,745,440,16,4,677,9,746,1.12e-107,343
+"Peve_00023310","Integrator complex subunit 10","PLOB_00012379","INTS10","Porites lobata","A0ABN8NDJ1",94.385,748,41,1,1,748,1,747,0,1467
+"Peve_00006447","Integrator complex subunit 10","PEVE_00006447","INTS10","Porites evermanni","A0ABN8QUE3",100,751,0,0,1,751,1,751,0,1562
+"Peve_00023310","Integrator complex subunit 10","PEVE_00023310","INTS10","Porites evermanni","A0ABN8SKW7",100,747,0,0,1,747,1,747,0,1560
+"Peve_00035005","Integrator complex subunit 10","NEMVEDRAFT_v1g212612","INTS10","Nematostella vectensis","A7SI39",34.109,387,201,12,158,499,319,696,6.44e-53,191
+"Peve_00023310","Integrator complex subunit 10","NEMVEDRAFT_v1g139223","INTS10","Nematostella vectensis","A7SZL1",60.811,148,58,0,8,155,13,160,2.65e-61,201
+"Peve_00009358","Integrator complex subunit 11","pdam_00006394","INTS11","Pocillopora damicornis","A0A3M6TQM9",88.298,282,31,2,338,619,300,579,2.22e-173,506
+"Peve_00009358","Integrator complex subunit 11","INTS11 OS=Clytia hemisphaerica OX=252671","INTS11","Clytia hemisphaerica","A0A7M5XBL5",69.138,580,173,3,14,590,3,579,0,866
+"Peve_00009358","Integrator complex subunit 11","INTS11 OS=Exaiptasia diaphana OX=2652724","INTS11","Exaiptasia diaphana","A0A913YHP1",82.979,564,93,2,1,564,19,579,0,1004
+"Peve_00009358","Integrator complex subunit 11","INTS11 OS=Exaiptasia diaphana OX=2652724","INTS11","Exaiptasia diaphana","A0A913YME0",91.977,349,28,0,1,349,19,367,0,700
+"Peve_00009358","Integrator complex subunit 11","PMEA_00016861","INTS11","Pocillopora meandrina","A0AAU9VQD5",93.448,580,36,2,9,588,2,579,0,1142
+"Peve_00009358","Integrator complex subunit 11","LOC100202570","INTS11","Hydra vulgaris","A0ABM4DI96",71.773,581,159,3,14,593,3,579,0,890
+"Peve_00009358","Integrator complex subunit 11","NEMVEDRAFT_v1g179209","INTS11","Nematostella vectensis","A7RL47",84.762,525,71,1,1,516,19,543,0,952
+"Peve_00009358","Integrator complex subunit 11","CPSF3L","INTS11","Stylophora pistillata","A0A2B4STP1",92.919,579,39,2,14,592,3,579,0,1136
+"Peve_00009358","Integrator complex subunit 11","LOC116291394","INTS11","Actinia tenebrosa","A0A6P8HHK7",82.788,581,96,1,14,594,3,579,0,1040
+"Peve_00009358","Integrator complex subunit 11","INTS11 OS=Exaiptasia diaphana OX=2652724","INTS11","Exaiptasia diaphana","A0A913X120",83.103,580,95,2,14,593,3,579,0,1035
+"Peve_00009358","Integrator complex subunit 11","INTS11 OS=Exaiptasia diaphana OX=2652724","INTS11","Exaiptasia diaphana","A0A913XJX1",91.781,365,30,0,14,378,3,367,0,731
+"Peve_00009358","Integrator complex subunit 11","CPSF3L","INTS11","Desmophyllum pertusum","A0A9X0A702",92.388,578,43,1,14,591,3,579,0,1134
+"Peve_00035301","Integrator complex subunit 12","INTS12","INTS12","Stylophora pistillata","A0A2B4S4P7",72.113,355,92,4,1,350,1,353,3.38e-160,452
+"Peve_00035301","Integrator complex subunit 12","LOC116301812","INTS12","Actinia tenebrosa","A0A6P8IJ32",45.429,361,181,9,1,353,1,353,9.17e-79,245
+"Peve_00035301","Integrator complex subunit 12","INTS12 OS=Exaiptasia diaphana OX=2652724","INTS12","Exaiptasia diaphana","A0A913YKG6",42.818,362,182,8,13,361,4,353,5.92e-74,233
+"Peve_00035301","Integrator complex subunit 12","INTS12","INTS12","Desmophyllum pertusum","A0A9X0CZE9",67.204,372,98,5,1,367,1,353,6.17e-148,422
+"Peve_00035301","Integrator complex subunit 12","P5673_007265","INTS12","Acropora cervicornis","A0AAD9VBW7",73.151,365,83,7,1,362,1,353,1.91e-158,448
+"Peve_00035301","Integrator complex subunit 12","PMEA_00007650","INTS12","Pocillopora meandrina","A0AAU9WL65",72.394,355,91,4,18,367,1,353,2.69e-160,453
+"Peve_00035301","Integrator complex subunit 12","PEVE_00035301","INTS12","Porites evermanni","A0ABN8MNQ2",100,353,0,0,1,353,1,353,0,723
+"Peve_00035301","Integrator complex subunit 12","PLOB_00038393","INTS12","Porites lobata","A0ABN8P772",98.3,353,6,0,1,353,1,353,0,709
+"Peve_00026086","Integrator complex subunit 13","P5673_029862","INTS13","Acropora cervicornis","A0AAD9PVE8",65.522,670,149,8,1,595,1,663,0,843
+"Peve_00026086","Integrator complex subunit 13 isoform X2","LOC100197579","INTS13","Hydra vulgaris","A0ABM4D3E2",38.781,722,362,15,10,685,11,698,4.28e-150,452
+"Peve_00026086","Integrator complex subunit 13-like","LOC116304359","INTS13","Actinia tenebrosa","A0A6P8ISJ1",56.745,719,285,10,8,718,6,706,0,791
+"Peve_00018572","Integrator complex subunit 14","Vwa9","INTS14","Stylophora pistillata","A0A2B4RU54",85.487,503,72,1,1,503,1,502,0,904
+"Peve_00018572","Integrator complex subunit 14","pdam_00021401","INTS14","Pocillopora damicornis","A0A3M6TMP7",86.083,503,69,1,1,503,1,502,0,911
+"Peve_00018572","Integrator complex subunit 14","LOC116296789","INTS14","Actinia tenebrosa","A0A6P8HZA0",65.157,508,169,4,1,506,1,502,0,687
+"Peve_00018572","Integrator complex subunit 14","PACLA_8A013253","INTS14","Paramuricea clavata","A0A7D9HDV6",52.079,505,224,7,1,491,1,501,0,523
+"Peve_00018572","Integrator complex subunit 14","PACLA_8A013253","INTS14","Paramuricea clavata","A0A7D9HGI7",52.143,420,183,7,1,406,1,416,8.27e-148,430
+"Peve_00018572","Integrator complex subunit 14","INTS14 OS=Exaiptasia diaphana OX=2652724","INTS14","Exaiptasia diaphana","A0A913XHD1",64.103,507,172,4,1,502,1,502,0,676
+"Peve_00018572","Integrator complex subunit 14","P5673_018352","INTS14","Acropora cervicornis","A0AAD9QDB0",80.159,504,98,1,1,504,1,502,0,853
+"Peve_00018572","Integrator complex subunit 14","PMEA_00022021","INTS14","Pocillopora meandrina","A0AAU9VXZ3",85.885,503,70,1,1,503,1,502,0,909
+"Peve_00018572","Integrator complex subunit 14","LOC100214249","INTS14","Hydra vulgaris","A0ABM4DE75",44.99,509,261,6,1,498,1,501,5.38e-152,443
+"Peve_00018572","Integrator complex subunit 14","PLOB_00000868","INTS14","Porites lobata","A0ABN8N3G7",99.004,502,5,0,1,502,1,502,0,1030
+"Peve_00018572","Integrator complex subunit 14","PEVE_00018572","INTS14","Porites evermanni","A0ABN8S9T9",100,502,0,0,1,502,1,502,0,1037
+"Peve_00018572","Integrator complex subunit 14","NEMVEDRAFT_v1g91640","INTS14","Nematostella vectensis","A7RS47",63.78,508,163,5,1,493,1,502,0,664
+"Peve_00018572","Integrator complex subunit 14","C15orf44","INTS14","Hydra vulgaris","T2M6U5",44.99,509,261,6,1,498,1,501,6e-152,443
+"Peve_00006524","Integrator complex subunit 2","Ints2","INTS2","Stylophora pistillata","A0A2B4RZX0",77.947,1179,231,8,61,1232,1,1157,0,1799
+"Peve_00006524","Integrator complex subunit 2","PACLA_8A002718","INTS2","Paramuricea clavata","A0A7D9EB17",45.178,1182,594,14,60,1216,1,1153,0,958
+"Peve_00006524","Integrator complex subunit 2","INTS2 OS=Clytia hemisphaerica OX=252671","INTS2","Clytia hemisphaerica","A0A7M5XJY8",35.649,1094,570,23,7,1016,115,1158,0,632
+"Peve_00006524","Integrator complex subunit 2","INTS2 OS=Clytia hemisphaerica OX=252671","INTS2","Clytia hemisphaerica","A0A7M5XL71",35.649,1094,570,23,7,1016,115,1158,0,632
+"Peve_00006524","Integrator complex subunit 2","INTS2 OS=Exaiptasia diaphana OX=2652724","INTS2","Exaiptasia diaphana","A0A913YQZ2",57.335,668,232,9,62,693,1,651,0,726
+"Peve_00006524","Integrator complex subunit 2","INTS2","INTS2","Desmophyllum pertusum","A0A9W9Z2H4",80.186,1181,203,9,58,1231,1,1157,0,1850
+"Peve_00006524","Integrator complex subunit 2","P5673_014622","INTS2","Acropora cervicornis","A0AAD9QJD2",66.921,1179,238,16,61,1108,1,1158,0,1445
+"Peve_00006524","Integrator complex subunit 2","PMEA_00004074","INTS2","Pocillopora meandrina","A0AAU9WE25",78.693,1178,226,7,61,1234,1,1157,0,1813
+"Peve_00006524","Integrator complex subunit 2","PLOB_00004120","INTS2","Porites lobata","A0ABN8QA75",91.334,1177,83,5,61,1237,1,1158,0,2110
+"Peve_00006524","Integrator complex subunit 2","INTS2","INTS2","Hydra vulgaris","T2M685",38.628,1108,555,17,61,1078,2,1074,0,718
+"Peve_00006524","Integrator complex subunit 2 isoform X2","PACLA_8A002718","INTS2","Paramuricea clavata","A0A6S7HPA4",45.224,1183,593,15,60,1217,1,1153,0,956
+"Peve_00006524","Integrator complex subunit 2 isoform X3","LOC100197044","INTS2","Hydra vulgaris","A0ABM4CN83",38.357,1108,542,17,61,1062,2,1074,0,705
+"Peve_00006524","Integrator complex subunit 2-like isoform X1","LOC116292634","INTS2","Actinia tenebrosa","A0A6P8HHG5",57.518,1217,420,18,66,1244,1,1158,0,1301
+"Peve_00006524","Integrator complex subunit 2-like isoform X2","LOC116292634","INTS2","Actinia tenebrosa","A0A6P8HT36",57.626,1213,421,17,66,1240,1,1158,0,1305
+"Peve_00002298","Integrator complex subunit 3","INTS3","INTS3","Stylophora pistillata","A0A2B4SYZ2",85.35,1058,147,3,1,1052,1,1056,0,1858
+"Peve_00002298","Integrator complex subunit 3","INTS3_1","INTS3","Desmophyllum pertusum","A0A9X0CMQ2",82.989,629,98,3,9,630,171,797,0,1093
+"Peve_00002298","Integrator complex subunit 3","P5673_012134","INTS3","Acropora cervicornis","A0AAD9QNR4",85.493,903,120,4,2,897,38,936,0,1593
+"Peve_00002298","Integrator complex subunit 3 isoform X3","LOC100198887","INTS3","Hydra vulgaris","A0ABM4DDK5",44.423,1031,507,17,17,1011,11,1011,0,840
+"Peve_00002298","Integrator complex subunit 3-like","LOC116300098","INTS3","Actinia tenebrosa","A0A6P8IET8",66.635,1061,321,7,6,1044,7,1056,0,1419
+"Peve_00007872","Integrator complex subunit 4","P5673_000957","INTS4","Acropora cervicornis","A0AAD9R5A2",73.621,997,217,3,239,1190,1,996,0,1498
+"Peve_00039124","Integrator complex subunit 6","INTS6","INTS6","Hydra vulgaris","T2M317",44.289,429,208,11,255,673,345,752,5.92e-104,345
+"Peve_00030238","Integrator complex subunit 7","INTS7","INTS7","Stylophora pistillata","A0A2B4SKH7",62.848,611,121,7,1,507,1,609,0,722
+"Peve_00030238","Integrator complex subunit 7","pdam_00013450","INTS7","Pocillopora damicornis","A0A3M6TF56",77.754,953,203,6,1,946,1,951,0,1472
+"Peve_00030238","Integrator complex subunit 7","LOC116297721","INTS7","Actinia tenebrosa","A0A6P8IB01",59.414,956,368,12,1,948,1,944,0,1098
+"Peve_00030238","Integrator complex subunit 7","PACLA_8A019079","INTS7","Paramuricea clavata","A0A6S7K8T1",45.195,947,503,7,3,938,6,947,0,802
+"Peve_00030238","Integrator complex subunit 7","INTS7 OS=Clytia hemisphaerica OX=252671","INTS7","Clytia hemisphaerica","A0A7M5V2S3",36.547,944,572,12,17,946,17,947,0,593
+"Peve_00030238","Integrator complex subunit 7","INTS7 OS=Exaiptasia diaphana OX=2652724","INTS7","Exaiptasia diaphana","A0A913XT38",55.346,954,408,9,1,946,1,944,0,1023
+"Peve_00030238","Integrator complex subunit 7","INTS7_3","INTS7","Desmophyllum pertusum","A0A9X0A0N1",77.869,488,72,4,1,452,1,488,0,742
+"Peve_00030238","Integrator complex subunit 7","P5673_015977","INTS7","Acropora cervicornis","A0AAD9QH64",76.886,411,83,3,1,399,1,411,0,640
+"Peve_00030238","Integrator complex subunit 7","PMEA_00013352","INTS7","Pocillopora meandrina","A0AAU9WW72",77.859,953,202,6,1,946,1,951,0,1474
+"Peve_00030238","Integrator complex subunit 7","LOC100204041","INTS7","Hydra vulgaris","A0ABM4C892",33.048,935,566,18,9,899,26,944,9.09e-156,482
+"Peve_00030238","Integrator complex subunit 7","LOC100204041","INTS7","Hydra vulgaris","A0ABM4C899",33.048,935,566,18,9,899,26,944,9.9e-156,482
+"Peve_00030238","Integrator complex subunit 7","PEVE_00030238","INTS7","Porites evermanni","A0ABN8MIA7",100,951,0,0,1,951,1,951,0,1959
+"Peve_00030238","Integrator complex subunit 7","PLOB_00029393","INTS7","Porites lobata","A0ABN8NUA4",97.792,951,21,0,1,951,1,951,0,1916
+"Peve_00030238","Integrator complex subunit 7","INTS7","INTS7","Hydra vulgaris","T2M4N5",49.117,283,144,0,9,291,26,308,3.16e-95,308
+"Peve_00018032","Integrator complex subunit 8","INTS8","INTS8","Stylophora pistillata","A0A2B4RVR6",57.414,1106,300,17,3,1002,10,1050,0,1197
+"Peve_00018032","Integrator complex subunit 8","INTS8","INTS8","Desmophyllum pertusum","A0A9X0CV07",68.555,1059,272,12,1,1013,7,1050,0,1444
+"Peve_00018032","Integrator complex subunit 8","P5673_029480","INTS8","Acropora cervicornis","A0AAD9UU49",55.822,919,293,17,1,819,145,1050,0,943
+"Peve_00018032","Integrator complex subunit 8 isoform X2","LOC101235764","INTS8","Hydra vulgaris","A0ABM4DNE3",27.898,1061,653,27,7,985,19,1049,8.59e-122,397
+"Peve_00018032","Integrator complex subunit 8-like","LOC116294367","INTS8","Actinia tenebrosa","A0A6P8HN80",44.371,1057,496,24,8,1000,22,1050,0,828
+"Peve_00001498","Integrator complex subunit 9 homolog","LOC116307679","INTS9","Actinia tenebrosa","A0A6P8JAI2",67.424,660,189,4,25,658,1,660,0,939
 "Peve_00001498","Integrator complex subunit 9 homolog","ints9","INTS9","Nematostella vectensis","A7SBF0",64.394,660,211,2,25,660,1,660,0,899
-"Peve_00001498","Integrator complex subunit 9 homolog","ints9","INTS9","Dictyostelium discoideum","Q54SH0",30.781,653,358,17,25,635,1,601,5.51e-96,311
-"Peve_00001498","Integrator complex subunit 9","ints9","INTS9","Xenopus laevis","Q6DFF4",49.547,662,304,6,25,658,1,660,0,657
-"Peve_00018032","Integrator complex subunit 8","ints8","INTS8","Xenopus laevis","Q4V847",31.982,1085,605,29,4,991,2,1050,1.44e-145,461
-"Peve_00030238","Integrator complex subunit 7","ints7","INTS7","Danio rerio","Q8JGR7",42.931,969,497,16,3,938,1,946,0,719
-"Peve_00030238","Integrator complex subunit 7 homolog","ints7","INTS7","Dictyostelium discoideum","Q54PL2",36.164,365,227,3,116,479,19,378,9.69e-61,225
-"Peve_00039124","Integrator complex subunit 6","ints6l","INTS6","Danio rerio","Q7SYD9",45.025,402,194,11,259,647,342,729,1e-96,326
-"Peve_00039124","Integrator complex subunit 6-B","ints6-b","INTS6","Xenopus laevis","Q5U4W6",35.894,677,357,21,254,873,341,997,1.21e-108,358
-"Peve_00039124","Integrator complex subunit 6-A","ints6-a","INTS6","Xenopus laevis","Q2TAF4",34.582,694,347,22,254,875,341,999,1.38e-106,353
-"Peve_00039124","Integrator complex subunit 6 homolog","ints6","INTS6","Dictyostelium discoideum","Q54Z23",47.257,237,121,2,1,234,10,245,1.28e-65,241
-"Peve_00007872","Integrator complex subunit 4 homolog","ints4","INTS4","Dictyostelium discoideum","Q54LH5",32.79,552,309,10,169,702,97,604,8.4e-81,287
-"Peve_00007872","Integrator complex subunit 4","ints4","INTS4","Xenopus laevis","Q68F70",42.023,959,523,14,38,968,43,996,0,681
-"Peve_00002298","Integrator complex subunit 3","ints3","INTS3","Danio rerio","Q1LXC9",41.682,1070,537,18,11,1017,10,1055,0,797
-"Peve_00002298","Integrator complex subunit 3 homolog","ints3","INTS3","Dictyostelium discoideum","Q55EZ4",39.783,460,258,6,33,492,9,449,1.63e-96,336
-"Peve_00006524","Integrator complex subunit 2 homolog","ints2","INTS2","Dictyostelium discoideum","Q55CB6",39.669,242,129,4,991,1232,840,1064,1.77e-47,186
-"Peve_00013464","Integrator complex subunit 15","ints15","INTS15","Danio rerio","Q7ZTY6",33.246,382,193,13,48,382,661,1027,9.64e-43,162
-"Peve_00018572","Integrator complex subunit 14","ints14","INTS14","Xenopus tropicalis","Q66KD9",44.378,498,254,10,1,487,1,486,2.73e-142,419
-"Peve_00026086","Integrator complex subunit 13","ints13","INTS13","Xenopus laevis","Q6GLY5",40.284,705,377,16,9,695,12,690,4.5e-167,497
-"Peve_00026086","Integrator complex subunit 13","ints13","INTS13","Xenopus tropicalis","Q6DIK0",40.909,704,366,18,9,687,12,690,1.1e-171,509
-"Peve_00009358","Integrator complex subunit 11 homolog","ints11","INTS11","Dictyostelium discoideum","Q54YL3",71.552,464,120,3,13,476,3,454,0,739
-"Peve_00023310","Integrator complex subunit 10","ints10","INTS10","Danio rerio","Q6TNU3",31.99,769,420,13,9,712,17,747,8.25e-119,373
-"Peve_00000108","Integrator complex subunit 1 homolog","ints1","INTS1","Dictyostelium discoideum","Q54NC8",25.692,903,546,30,179,1001,145,1002,6.93e-61,233
-"Peve_00030238","Integrator complex subunit 7","defl","INTS7","Drosophila melanogaster","Q9VT41",31.717,990,585,24,19,984,23,945,2.31e-136,434
-"Peve_00009358","Integrator complex subunit 11","cpsf3l","INTS11","Danio rerio","Q503E1",72.491,578,147,3,14,580,3,579,0,895
-"Peve_00001498","Integrator complex subunit 9","Ints9","INTS9","Mus musculus","Q8K114",50,662,301,5,25,658,1,660,0,653
-"Peve_00018032","Integrator complex subunit 8","Ints8","INTS8","Mus musculus","Q80V86",32.202,1090,600,29,4,995,2,1050,2.27e-150,473
-"Peve_00030238","Integrator complex subunit 7","Ints7","INTS7","Mus musculus","Q7TQK1",44.352,965,485,16,5,938,3,946,0,743
-"Peve_00039124","Integrator complex subunit 6-like","Ints6l","INTS6L","Mus musculus","Q8BND4",66.946,239,78,1,1,239,9,246,7.43e-101,337
-"Peve_00039124","Integrator complex subunit 6","Ints6","INTS6","Mus musculus","Q6PCM2",47.215,413,189,12,258,657,345,741,3.48e-104,346
-"Peve_00009530","Integrator complex subunit 5","Ints5","INTS5","Mus musculus","Q8CHT3",26.494,1004,623,25,28,999,9,929,3.16e-80,287
-"Peve_00007872","Integrator complex subunit 4","Ints4","INTS4","Mus musculus","Q8CIM8",40.999,961,526,14,37,963,43,996,0,684
-"Peve_00002298","Integrator complex subunit 3","Ints3","INTS3","Mus musculus","Q7TPD0",42.83,1067,528,17,34,1041,12,1055,0,831
-"Peve_00006524","Integrator complex subunit 2","Ints2","INTS2","Mus musculus","Q80UK8",42.362,1211,555,20,66,1195,2,1150,0,848
-"Peve_00018572","Integrator complex subunit 14","Ints14","INTS14","Rattus norvegicus","Q66H58",44.509,519,255,10,1,504,1,501,1.2e-146,430
-"Peve_00018572","Integrator complex subunit 14","Ints14","INTS14","Mus musculus","Q8R3P6",44.8,500,249,8,1,487,1,486,1.35e-145,427
-"Peve_00009358","Integrator complex subunit 11","Ints11","INTS11","Rattus norvegicus","Q3MHC2",71.626,578,151,3,14,579,3,579,0,885
-"Peve_00009358","Integrator complex subunit 11","Ints11","INTS11","Mus musculus","Q9CWS4",71.799,578,150,3,14,579,3,579,0,887
-"Peve_00023310","Integrator complex subunit 10","Ints10","INTS10","Mus musculus","Q8K2A7",31.208,753,422,15,9,697,17,737,2e-114,362
-"Peve_00000108","Integrator complex subunit 1","Ints1","INTS1","Mus musculus","Q6P4S8",40.112,2316,1183,41,26,2191,23,2284,0,1565
-"Peve_00001498","Integrator complex subunit 9","IntS9","INTS9","Drosophila melanogaster","Q95TS5",43.419,661,342,6,25,654,1,660,0,563
-"Peve_00018032","Integrator complex subunit 8","IntS8","INTS8","Drosophila melanogaster","A1ZAK1",24.661,811,510,27,267,1006,270,1050,3e-52,199
-"Peve_00039124","Integrator complex subunit 6","IntS6","INTS6","Drosophila melanogaster","Q9W485",57.438,242,96,3,1,240,9,245,1.85e-79,284
-"Peve_00007872","Integrator complex subunit 4","IntS4","INTS4","Drosophila melanogaster","Q9W3E1",34.274,992,529,24,102,1019,54,996,6.39e-153,479
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila sechellia","B4IMI7",36.089,1028,601,16,4,999,2,1005,0,647
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila willistoni","B4NP05",37.524,1034,588,18,8,1015,4,1005,0,660
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila virilis","B4LQY8",37.716,1042,578,19,1,1008,1,1005,0,665
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila mojavensis","B4KJ11",37.344,1039,586,19,1,1008,1,1005,0,666
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila grimshawi","B4JPR2",37.439,1031,579,17,15,1012,8,1005,0,671
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila erecta","B3N449",36.302,1033,596,15,4,1003,2,1005,0,657
-"Peve_00002298","Integrator complex subunit 3 homolog","IntS3","INTS3","Drosophila yakuba","B4ISV0",36.012,1033,599,16,4,1003,2,1005,0,648
-"Peve_00002298","Integrator complex subunit 3","IntS3","INTS3","Drosophila melanogaster","Q7PLS8",36.012,1033,595,16,4,999,2,1005,0,648
-"Peve_00006524","Integrator complex subunit 2","IntS2","INTS2","Drosophila melanogaster","Q9VX31",35.286,768,453,15,314,1060,334,1078,3.26e-132,431
-"Peve_00018572","Integrator complex subunit 14","IntS14","INTS14","Drosophila melanogaster","Q9VPY0",32.821,585,292,16,1,567,1,502,3.59e-83,269
-"Peve_00026086","Integrator complex subunit 13","IntS13","INTS13","Mus musculus","Q8QZV7",41.501,706,358,20,9,686,12,690,4.95e-172,510
-"Peve_00009358","Integrator complex subunit 11","IntS11","INTS11","Drosophila melanogaster","Q9VAH9",68.394,579,170,4,14,581,3,579,0,832
-"Peve_00000108","Integrator complex subunit 1","IntS1","INTS1","Drosophila melanogaster","Q9W1C5",34.717,1397,753,31,42,1312,63,1426,0,779
-"Peve_00001498","Integrator complex subunit 9","INTS9","INTS9","Gallus gallus","Q5ZKK2",49.774,665,298,7,25,658,1,660,0,644
-"Peve_00001498","Integrator complex subunit 9","INTS9","INTS9","Homo sapiens","Q9NV88",50,662,301,5,25,658,1,660,0,659
-"Peve_00001498","Integrator complex subunit 9","INTS9","INTS9","Macaca fascicularis","Q4R5Z4",48.338,662,291,5,25,637,1,660,0,631
-"Peve_00001498","Integrator complex subunit 9","INTS9","INTS9","Bos taurus","Q2KJA6",49.698,662,303,5,25,658,1,660,0,653
-"Peve_00018032","Integrator complex subunit 8","INTS8","INTS8","Homo sapiens","Q75QN2",32.32,1086,604,29,4,995,2,1050,6.03e-150,472
-"Peve_00030238","Integrator complex subunit 7","INTS7","INTS7","Gallus gallus","Q5ZL91",45.238,966,477,17,3,937,2,946,0,755
-"Peve_00030238","Integrator complex subunit 7","INTS7","INTS7","Homo sapiens","Q9NVH2",44.548,963,486,16,5,938,3,946,0,749
-"Peve_00030238","Integrator complex subunit 7","INTS7","INTS7","Bos taurus","Q1RMS6",44.86,963,483,16,5,938,3,946,0,749
-"Peve_00039124","Integrator complex subunit 6-like","INTS6L","INTS6L","Homo sapiens","Q5JSJ4",67.364,239,77,1,1,239,9,246,1.35e-101,338
-"Peve_00039124","Integrator complex subunit 6","INTS6","INTS6","Homo sapiens","Q9UL03",36.944,674,350,19,258,877,345,997,3.24e-115,376
-"Peve_00009530","Integrator complex subunit 5","INTS5","INTS5","Homo sapiens","Q6P9B9",26.379,997,634,23,28,1000,9,929,5.02e-79,283
-"Peve_00007872","Integrator complex subunit 4","INTS4","INTS4","Homo sapiens","Q96HW7",40.583,961,530,14,36,962,43,996,0,683
-"Peve_00002298","Integrator complex subunit 3","INTS3","INTS3","Homo sapiens","Q68E01",43.071,1068,525,18,35,1043,12,1055,0,826
-"Peve_00002298","Integrator complex subunit 3","INTS3","INTS3","Pongo abelii","Q5RE70",43.018,1067,526,17,36,1043,12,1055,0,830
-"Peve_00006524","Integrator complex subunit 2","INTS2","INTS2","Gallus gallus","Q5ZKU4",42.763,1209,548,24,65,1189,2,1150,0,841
-"Peve_00006524","Integrator complex subunit 2","INTS2","INTS2","Homo sapiens","Q9H0H0",42.81,1210,550,21,65,1193,2,1150,0,852
-"Peve_00018572","Integrator complex subunit 14","INTS14","INTS14","Gallus gallus","Q5ZK21",44.89,499,254,7,1,489,1,488,7.33e-147,431
-"Peve_00018572","Integrator complex subunit 14","INTS14","INTS14","Bos taurus","Q5EA76",44.038,520,259,9,1,507,1,501,1.8e-145,427
-"Peve_00018572","Integrator complex subunit 14","INTS14","INTS14","Homo sapiens","Q96SY0",45,500,248,8,1,487,1,486,2.55e-146,429
-"Peve_00026086","Integrator complex subunit 13","INTS13","INTS13","Homo sapiens","Q9NVM9",41.702,705,358,19,9,686,12,690,4.63e-175,517
-"Peve_00009358","Integrator complex subunit 11","INTS11","INTS11","Gallus gallus","Q5ZIH0",73.31,577,143,2,14,579,3,579,0,905
-"Peve_00009358","Integrator complex subunit 11","INTS11","INTS11","Homo sapiens","Q5TA45",71.799,578,150,3,14,579,3,579,0,885
-"Peve_00009358","Integrator complex subunit 11","INTS11","INTS11","Bos taurus","Q2YDM2",71.453,578,152,3,14,579,3,579,0,882
-"Peve_00009358","Integrator complex subunit 11","INTS11","INTS11","Pongo abelii","Q5NVE6",71.799,578,150,3,14,579,3,579,0,885
-"Peve_00023310","Integrator complex subunit 10","INTS10","INTS10","Gallus gallus","Q5ZLS8",31.076,753,423,17,9,697,17,737,4.78e-117,369
-"Peve_00023310","Integrator complex subunit 10","INTS10","INTS10","Macaca fascicularis","Q4R7B1",30.4,750,421,15,9,686,17,737,1.82e-109,348
-"Peve_00023310","Integrator complex subunit 10","INTS10","INTS10","Homo sapiens","Q9NVR2",30.677,753,426,15,9,697,17,737,1.71e-113,359
-"Peve_00000108","Integrator complex subunit 1","INTS1","INTS1","Homo sapiens","Q8N201",40,2315,1182,41,26,2186,23,2284,0,1559
-"Peve_00038733","Protein Jumonji","Jarid2","JARID2","Mus musculus","Q62315",36.434,387,238,4,814,1198,1457,1837,4.65e-73,268
-"Peve_00038733","Protein Jumonji","JARID2","JARID2","Homo sapiens","Q92833",36.951,387,236,4,816,1200,1457,1837,2.91e-74,272
-"Peve_00038733","Jumonji, AT rich interactive domain protein 2","Jarid2","JARID2","Drosophila melanogaster","Q9VT00",35.61,615,337,13,1740,2342,1270,1837,6.61e-107,382
-"Peve_00038733","Protein Jumonji","JARID2","JARID2","Gallus gallus","Q5F363",37.692,390,229,5,805,1189,1457,1837,8.84e-74,271
-"Peve_00012249","Transcriptional repressor NF-X1","NFX1","NFX1","Stylophora pistillata","A0A2B4S8E0",55.437,1122,446,16,21,1096,1,1114,0,1176
-"Peve_00012249","Transcriptional repressor NF-X1","NFX1","NFX1","Desmophyllum pertusum","A0A9W9ZIJ8",58.614,1010,361,20,10,983,83,1071,0,1132
-"Peve_00012249","Transcriptional repressor NF-X1","P5673_012838","NFX1","Acropora cervicornis","A0AAD9QM30",55.556,1089,404,18,11,1063,60,1104,0,1164
-"Peve_00012249","Transcriptional repressor NF-X1","NEMVEDRAFT_v1g240231","NFX1","Nematostella vectensis","A7RRR1",50.589,933,384,15,146,1013,192,1112,0,899
-"Peve_00012249","Transcriptional repressor NF-X1 isoform X2","LOC100203326","NFX1","Hydra vulgaris","A0ABM4CYS0",44.062,960,467,19,364,1289,170,1093,0,787
-"Peve_00012249","Transcriptional repressor NF-X1","PEVE_00012249","NFX1","Porites evermanni","A0ABN8LDI2",100,1116,0,0,1,1116,1,1116,0,2292
-"Peve_00020237","NF-X1-type domain-containing protein","PLOB_00042824","NFX1","Porites lobata","A0ABN8MZE6",97.419,891,23,0,1,891,1,891,0,1753
-"Peve_00012249","Transcriptional repressor NF-X1","PLOB_00028393","NFX1","Porites lobata","A0ABN8NSY9",96.838,1107,35,0,1,1107,1,1107,0,2197
-"Peve_00020237","NF-X1-type domain-containing protein","PEVE_00020237","NFX1","Porites evermanni","A0ABN8SHN6",100,891,0,0,1,891,1,891,0,1793
-"Peve_00038608","Non-POU domain-containing octamer-binding protein","NONO","NONO","Homo sapiens","Q15233",44.382,356,169,4,34,370,82,427,2.2e-88,282
-"Peve_00038608","Non-POU domain-containing octamer-binding protein","Nono","NONO","Rattus norvegicus","Q5FVM4",46.809,329,154,3,66,375,101,427,1.54e-87,280
-"Peve_00038608","Non-POU domain-containing octamer-binding protein","NONO","NONO","Pongo abelii","Q5RFL9",44.382,356,169,4,34,370,82,427,2.2e-88,282
-"Peve_00038608","Non-POU domain-containing octamer-binding protein","Nono","NONO","Mus musculus","Q99K48",46.809,329,154,3,63,372,101,427,1.87e-87,280
-"Peve_00043402","Nucleolar protein 56","NOP56","NOP56","Stylophora pistillata","A0A2B4S0V2",90.229,481,45,1,2,480,1,481,0,868
-"Peve_00043402","Nucleolar protein 56","NOP56_1","NOP56","Desmophyllum pertusum","A0A9X0CKQ5",92.683,205,15,0,2,206,1,205,4.36e-141,404
-"Peve_00016812","Nucleolar protein 58","NOP58","NOP58","Stylophora pistillata","A0A2B4RV90",69.54,522,74,7,1,475,1,484,0,655
-"Peve_00016812","Nucleolar protein 58","NOP58","NOP58","Hydra vulgaris","T2M3D0",73.246,456,120,2,1,455,1,455,0,656
-"Peve_00016812","Nucleolar protein 58","NOP58_3","NOP58","Desmophyllum pertusum","A0A9X0DAY2",90.625,256,13,2,1,246,136,390,9.39e-168,474
-"Peve_00044383","GTP-binding nuclear protein","ran","RAN","Stylophora pistillata","A0A2B4S4I9",91.163,215,19,0,53,267,12,226,4.36e-150,418
-"Peve_00044383","GTP-binding nuclear protein","pdam_00006618","RAN","Pocillopora damicornis","A0A3M6T8V8",89.767,215,22,0,4,218,12,226,4.09e-147,409
-"Peve_00044383","GTP-binding nuclear protein","LOC116289667","RAN","Actinia tenebrosa","A0A6P8HA70",89.048,210,23,0,11,220,17,226,5.72e-144,400
-"Peve_00044383","GTP-binding nuclear protein","PACLA_8A046140","RAN","Paramuricea clavata","A0A6S7FIA6",83.178,214,36,0,3,216,11,224,2.97e-134,376
-"Peve_00044383","GTP-binding nuclear protein","PACLA_8A066255","RAN","Paramuricea clavata","A0A6S7GP59",84.507,213,33,0,2,214,14,226,2.52e-137,384
-"Peve_00044383","GTP-binding nuclear protein","RAN OS=Clytia hemisphaerica OX=252671","RAN","Clytia hemisphaerica","A0A7M5VCA2",80.841,214,40,1,4,217,14,226,3.35e-133,373
-"Peve_00044383","GTP-binding nuclear protein","RAN OS=Exaiptasia diaphana OX=2652724","RAN","Exaiptasia diaphana","A0A913Y4H3",88.584,219,25,0,1,219,8,226,1.64e-148,412
-"Peve_00044383","GTP-binding nuclear protein","RAN1","RAN","Desmophyllum pertusum","A0A9W9Z9F5",90.449,178,17,0,1,178,49,226,6.61e-122,343
-"Peve_00044383","GTP-binding nuclear protein","P5673_000489","RAN","Acropora cervicornis","A0AAD9VHU7",86.818,220,29,0,2,221,7,226,1.51e-146,407
-"Peve_00044383","GTP-binding nuclear protein","PMEA_00025316","RAN","Pocillopora meandrina","A0AAU9XP26",89.767,215,22,0,4,218,12,226,4.09e-147,409
-"Peve_00044383","GTP-binding nuclear protein","PMEA_00025319","RAN","Pocillopora meandrina","A0AAU9XP45",71.845,206,58,0,4,209,12,217,5.43e-108,309
-"Peve_00044383","GTP-binding nuclear protein","NEMVEDRAFT_v1g170199","RAN","Nematostella vectensis","A7SG05",87.963,216,26,0,2,217,11,226,2.51e-147,409
-"Peve_00044383","GTP-binding nuclear protein","RAN","RAN","Hydra vulgaris","T2ME54",85.253,217,32,0,1,217,8,224,1.83e-142,397
-"Peve_00044383","GTP-binding nuclear protein","LOC100211661","RAN","Hydra vulgaris","A0ABM4CR17",84.793,217,33,0,1,217,8,224,8.69e-142,395
-"Peve_00044383","GTP-binding nuclear protein","PLOB_00011295","RAN","Porites lobata","A0ABN8NFA2",98.673,226,3,0,1,226,1,226,2.49e-171,470
-"Peve_00044383","GTP-binding nuclear protein","PEVE_00044383","RAN","Porites evermanni","A0ABN8PTG3",100,226,0,0,1,226,1,226,2.18e-173,475
-"Peve_00038608","Splicing factor, proline- and glutamine-rich","SFPQ","SFPQ","Homo sapiens","P23246",47.647,340,153,5,277,600,93,423,2.79e-95,307
-"Peve_00038608","Splicing factor, proline- and glutamine-rich","Sfpq","SFPQ","Mus musculus","Q8VIJ6",47.647,340,153,5,269,592,93,423,3.84e-95,307
-"Peve_00038764","SWI/SNF-related matrix-associated actin-dependent regulator of chromatin subfamily A member 2","SMARCA2","SMARCA2","Homo sapiens","P51531",65.554,929,265,8,698,1590,634,1543,0,1214
-"Peve_00038764","SWI/SNF-related matrix-associated actin-dependent regulator of chromatin subfamily A member 2","Smarca2","SMARCA2","Mus musculus","Q6DIC0",66.557,912,266,8,703,1577,634,1543,0,1218
-"Peve_00030232","Exportin-1","Xpo1","XPO1","Stylophora pistillata","A0A2B4SJU6",86.081,273,16,1,1,273,1,251,1.04e-158,482
-"Peve_00030232","Exportin-1","XPO1","XPO1","Desmophyllum pertusum","A0A9W9ZZP8",94.85,1068,54,1,1,1068,5,1071,0,2117
-"Peve_00028081","Nuclease-sensitive element-binding protein 1","YBX1","YBX1","Hydra vulgaris","T2MEH8",77.895,95,19,1,26,118,12,106,1.28e-47,162
-"Peve_00028081","Y-box-binding protein 1","ybx1","YBX1","Danio rerio","B5DE31",83.516,91,15,0,31,121,16,106,9.68e-50,167
-"Peve_00028081","Y-box-binding protein 1","ybx1","YBX1","Xenopus laevis","P21573",83.516,91,15,0,29,119,16,106,3.73e-50,168
-"Peve_00028081","Y-box-binding protein 1","Ybx1","YBX1","Mus musculus","P62960",83.516,91,15,0,49,139,16,106,1.99e-49,167
-"Peve_00028081","Y-box-binding protein 1","Ybx1","YBX1","Rattus norvegicus","P62961",83.516,91,15,0,49,139,16,106,1.99e-49,167
-"Peve_00028081","Y-box-binding protein 1","YBX1","YBX1","Bos taurus","P67808",83.516,91,15,0,51,141,16,106,2.2e-49,167
-"Peve_00028081","Y-box-binding protein 1","YBX1","YBX1","Homo sapiens","P67809",83.516,91,15,0,51,141,16,106,2.2e-49,167
-"Peve_00028081","Y-box-binding protein 1","YBX1","YBX1","Gallus gallus","Q06066",83.516,91,15,0,48,138,16,106,2.64e-49,167
-"Peve_00028081","Y-box-binding protein 1","YBX1","YBX1","Oryctolagus cuniculus","Q28618",83.516,91,15,0,51,141,16,106,2.87e-49,167
-"Peve_00008963","Terminal uridylyltransferase 4","Tut4","TUT4","Mus musculus","B2RX14",52.745,419,194,4,912,1329,585,1000,1.39e-118,415
-"Peve_00008963","Terminal uridylyltransferase 4","TUT4","TUT4","Homo sapiens","Q5TAX3",41.894,697,353,10,623,1313,351,1001,3.83e-142,485
-"Peve_00008963","Terminal uridylyltransferase 7","Tut7","TUT7","Mus musculus","Q5BLK4",45.489,532,234,12,830,1357,518,997,2.04e-118,412
-"Peve_00008963","Terminal uridylyltransferase 7","TUT7","TUT7","Homo sapiens","Q5VYS8",46.559,494,252,6,869,1361,515,997,1.93e-120,418
-"Peve_00004891","Nuclear cap-binding protein subunit 2","RF11_13932","NCBP2","Thelohanellus kitauei","A0A0C2M9F6",54.545,132,60,0,8,139,7,138,5.53e-48,152
-"Peve_00004891","Nuclear cap-binding protein subunit 2","Cbp20","NCBP2","Stylophora pistillata","A0A2B4STT0",84.375,160,22,1,1,157,1,160,2.09e-100,285
-"Peve_00004891","Nuclear cap-binding protein subunit 2","pdam_00001828","NCBP2","Pocillopora damicornis","A0A3M6TNP0",83.75,160,23,1,1,157,1,160,1.59e-99,283
-"Peve_00026158","Nuclear cap-binding protein subunit 2","NCBP2 OS=Henneguya salminicola OX=69463","NCBP2","Henneguya salminicola","A0A6G3MKY9",59.701,134,54,0,9,142,7,140,8.39e-55,169
-"Peve_00026158","Nuclear cap-binding protein subunit 2","LOC116302279","NCBP2","Actinia tenebrosa","A0A6P8IKU3",77.5,160,30,1,1,154,1,160,2.2e-91,262
-"Peve_00004891","Nuclear cap-binding protein subunit 2","PACLA_8A061461","NCBP2","Paramuricea clavata","A0A6S7FT41",72.152,158,40,1,1,154,1,158,9.46e-81,236
-"Peve_00026158","Nuclear cap-binding protein subunit 2","NCBP2 OS=Clytia hemisphaerica OX=252671","NCBP2","Clytia hemisphaerica","A0A7M5X3V4",73.103,145,39,0,3,147,2,146,3.32e-77,226
-"Peve_00004891","Nuclear cap-binding protein subunit 2","NCBP2 OS=Exaiptasia diaphana OX=2652724","NCBP2","Exaiptasia diaphana","A0A913XWC7",78.125,160,29,1,1,154,1,160,1.31e-91,263
-"Peve_00004891","Nuclear cap-binding protein subunit 2","NCBP2","NCBP2","Desmophyllum pertusum","A0A9W9YC25",85,160,21,1,18,174,1,160,1.28e-100,286
-"Peve_00004891","Nuclear cap-binding protein subunit 2","P5673_009535","NCBP2","Acropora cervicornis","A0AAD9QSS1",85,160,22,1,1,158,1,160,1.27e-98,281
-"Peve_00004891","Nuclear cap-binding protein subunit 2","PMEA_00008434","NCBP2","Pocillopora meandrina","A0AAU9WMU5",83.75,160,23,1,1,157,1,160,4.61e-99,282
-"Peve_00004891","Nuclear cap-binding protein subunit 2","NEMVEDRAFT_v1g167764","NCBP2","Nematostella vectensis","A7S8K1",79.375,160,30,1,1,157,1,160,4.94e-93,266
-"Peve_00026158","Nuclear cap-binding protein subunit 2","LOC100214121","NCBP2","Hydra vulgaris","A0ABM4D9X7",79.167,144,30,0,3,146,2,145,1.58e-83,243
-"Peve_00004891","Nuclear cap-binding protein subunit 2","LOC100203423","NCBP2","Hydra vulgaris","A0ABM4DD37",79.861,144,29,0,3,146,2,145,2.17e-83,242
-"Peve_00004891","Nuclear cap-binding protein subunit 2","PEVE_00004891","NCBP2","Porites evermanni","A0ABN8QGP8",100,160,0,0,1,160,1,160,1.21e-117,329
-"Peve_00004891","Nuclear cap-binding protein subunit 2","PLOB_00012832","NCBP2","Porites lobata","A0ABN8R0C7",96.25,160,6,0,1,160,1,160,6.53e-115,322
-"Peve_00026158","Nuclear cap-binding protein subunit 2","PEVE_00026158","NCBP2","Porites evermanni","A0ABN8SQ08",100,160,0,0,1,160,1,160,1.43e-117,329
-"Peve_00025442","polyribonucleotide nucleotidyltransferase","PNPT1","PNPT1","Stylophora pistillata","A0A2B4S717",65.778,713,234,5,1,711,49,753,0,967
-"Peve_00026759","Zinc finger protein AEBP2","aebp2","AEBP2","Stylophora pistillata","A0A2B4SRM6",71.745,361,101,1,1,361,1,360,0,506
-"Peve_00026759","Zinc finger protein aebp2-like","LOC116289439","AEBP2","Actinia tenebrosa","A0A6P8H9M8",61.885,244,91,1,128,369,117,360,5.87e-114,336
-"Peve_00026759","Zinc finger protein aebp2","AEBP2","AEBP2","Desmophyllum pertusum","A0A9W9ZCQ2",78.056,360,75,1,1,356,1,360,0,550
-"Peve_00026759","Zinc finger protein AEBP2","P5673_012961","AEBP2","Acropora cervicornis","A0AAD9V7U4",69.329,313,91,4,1,309,1,312,7.88e-151,427
-"Peve_00006288","Protein argonaute-1","LOC116293197","AGO1","Actinia tenebrosa","A0A6P8HV34",73.908,847,219,2,8,852,386,1232,0,1345
-"Peve_00006288","Protein argonaute-1","AGO1 OS=Exaiptasia diaphana OX=2652724","AGO1","Exaiptasia diaphana","A0A913WVM7",73.341,844,223,2,12,853,389,1232,0,1328
-"Peve_00006288","Protein argonaute-1","NEMVEDRAFT_v1g180719","AGO1","Nematostella vectensis","A7RQ46",76.09,849,199,3,8,854,386,1232,0,1358
-"Peve_00006288","Protein argonaute-1","AGO1 OS=Nematostella vectensis OX=45351","AGO1","Nematostella vectensis","U3MIG1",75.915,847,202,2,8,852,386,1232,0,1360
-"Peve_00006280","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4R957",61.998,871,254,6,284,1079,166,1034,0,1096
-"Peve_00042882","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T0T4",58.518,769,245,15,1,739,1,725,0,836
-"Peve_00006280","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T345",65.118,1055,322,20,1,1030,1,1034,0,1306
-"Peve_00006280","Putative argonaute-2","AGO2 OS=Actinia equina OX=6106","AGO2","Actinia equina","A0A2S1PRW9",51.863,966,395,19,133,1050,91,1034,0,958
-"Peve_00006280","Protein argonaute-2-like","LOC116293154","AGO2","Actinia tenebrosa","A0A6P8HJ48",51.569,956,409,19,147,1074,105,1034,0,950
-"Peve_00006288","Argonaute-2 isoform X1","PACLA_8A050538","AGO2","Paramuricea clavata","A0A6S7HZC7",43.717,748,344,13,1,698,468,1188,0,587
-"Peve_00006288","Argonaute-2 isoform X1","PACLA_8A073078","AGO2","Paramuricea clavata","A0A6S7I8S6",44.276,856,430,15,96,921,394,1232,0,701
-"Peve_00006288","Argonaute 2","PACLA_8A058506","AGO2","Paramuricea clavata","A0A6S7ILJ3",45.361,873,422,17,275,1126,394,1232,0,701
-"Peve_00006288","Argonaute-2 isoform X2","PACLA_8A031707","AGO2","Paramuricea clavata","A0A6S7IZ23",47.079,873,424,15,235,1090,381,1232,0,775
-"Peve_00006280","Argonaute-2-like isoform X2","PACLA_8A010163","AGO2","Paramuricea clavata","A0A7D9HG59",46.542,853,427,12,99,939,199,1034,0,789
-"Peve_00006288","Argonaute-2-like isoform X1","PACLA_8A023353","AGO2","Paramuricea clavata","A0A7D9IPU3",64.463,726,248,3,1,718,509,1232,0,989
-"Peve_00006288","Protein argonaute-2","P5673_017394","AGO2","Acropora cervicornis","A0AAD9QEE9",80.165,847,101,2,8,787,386,1232,0,1389
-"Peve_00006280","Protein argonaute-2","P5673_017544","AGO2","Acropora cervicornis","A0AAD9QER2",69.56,795,234,6,131,918,147,940,0,1162
-"Peve_00006280","Protein argonaute-2","P5673_017353","AGO2","Acropora cervicornis","A0AAD9V3D6",65.385,676,177,9,112,731,360,1034,0,878
-"Peve_00006280","Protein argonaute-2","P5673_017352","AGO2","Acropora cervicornis","A0AAD9V3F0",60.068,591,185,9,178,720,347,934,0,693
-"Peve_00006288","Protein argonaute-2 isoform X6","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G4",45.098,867,439,13,138,990,389,1232,0,764
-"Peve_00006288","Protein argonaute-2 isoform X3","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G9",45.559,867,435,13,150,1002,389,1232,0,776
-"Peve_00006288","Protein argonaute-2 isoform X4","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H4",45.559,867,435,13,149,1001,389,1232,0,776
-"Peve_00006288","Protein argonaute-2 isoform X5","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H5",45.098,867,439,13,139,991,389,1232,0,764
-"Peve_00006288","Protein argonaute-2","PEVE_00006288","AGO2","Porites evermanni","A0ABN8QPB6",100,1232,0,0,1,1232,1,1232,0,2577
-"Peve_00006288","Protein argonaute-2","EIF2C2","AGO2","Hydra vulgaris","T2M321",46.554,827,406,13,163,976,389,1192,0,775
-"Peve_00006280","Argonaute 2","AGO2 OS=Nematostella vectensis OX=45351","AGO2","Nematostella vectensis","U3MH35",50.772,971,430,19,141,1096,96,1033,0,910
-"Peve_00014560","SERRATE/Ars2 C-terminal domain-containing protein","SRRT OS=Exaiptasia diaphana OX=2652724","SRRT","Exaiptasia diaphana","A0A913WYP4",58.355,766,241,21,204,901,447,1202,0,691
-"Peve_00014560","Serrate RNA effector molecule-like","srrt","SRRT","Stylophora pistillata","A0A2B4SB72",68.95,1095,274,24,1,1059,1,1065,0,1036
-"Peve_00014560","SERRATE/Ars2 N-terminal domain-containing protein","pdam_00022040","SRRT","Pocillopora damicornis","A0A3M6ULZ9",67.914,882,237,16,2,855,202,1065,0,822
-"Peve_00014560","SERRATE/Ars2 C-terminal domain-containing protein","OS493_007886","SRRT","Desmophyllum pertusum","A0A9W9YEP4",84.685,111,17,0,6,116,955,1065,2.38e-53,179
-"Peve_00014560","SERRATE/Ars2 C-terminal domain-containing protein","OS493_007887","SRRT","Desmophyllum pertusum","A0A9W9YGB8",86.232,138,17,2,28,164,1066,1202,6.46e-79,256
-"Peve_00014560","Ars2/serrate-like protein","NEMVEDRAFT_v1g239938","SRRT","Nematostella vectensis","A7RQB5",56.147,789,280,19,399,1137,430,1202,0,662
-"Peve_00014560","Serrate RNA effector molecule homolog","SRRT","SRRT","Hydra vulgaris","T2M6C4",41.432,461,226,9,334,774,765,1201,4.93e-92,317
-"Peve_00007263","Bromodomain-containing protein 3","BRD3","BRD3","Hydra vulgaris","T2MD51",50.144,696,275,18,8,661,250,915,0,582
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","Cnot3","CNOT3","Stylophora pistillata","A0A2B4SMQ4",78.151,833,169,9,1,830,1,823,0,1164
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","PACLA_8A032947","CNOT3","Paramuricea clavata","A0A7D9DNQ7",51.023,831,341,15,1,773,1,823,0,710
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","CNOT3","CNOT3","Desmophyllum pertusum","A0A9W9YT29",83.294,850,108,9,1,843,1,823,0,1239
-"Peve_00018396","CCR4-NOT transcription complex subunit 4","CNOT4","CNOT4","Hydra vulgaris","T2MHP8",46.818,440,176,12,8,436,7,399,2.01e-119,384
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","rqcd1","CNOT9","Stylophora pistillata","A0A2B4RKW2",97.386,306,8,0,1,306,1,306,0,620
-"Peve_00002136","CCR4-NOT transcription complex subunit 11","CNOT11","CNOT11","Stylophora pistillata","A0A2B4RRB6",54.81,1237,428,22,752,1966,9,1136,0,1289
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Stylophora pistillata","A0A2B4SHE3",84.802,658,80,5,3,643,23,677,0,1059
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","pdam_00019776","CNOT1","Pocillopora damicornis","A0A3M6T4M6",92.991,1284,60,2,1203,2486,1,1254,0,2478
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","pdam_00006627","CNOT2","Pocillopora damicornis","A0A3M6TKM6",81.085,645,90,6,1,616,36,677,0,989
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","pdam_00015197","CNOT9","Pocillopora damicornis","A0A3M6U436",97.651,298,7,0,17,314,9,306,0,605
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","pdam_00013845","CNOT3","Pocillopora damicornis","A0A3M6UWL4",77.672,842,166,8,1,839,1,823,0,1179
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HR61",80.184,1302,200,8,1174,2465,1,1254,0,2154
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HSB4",80.65,1292,202,7,1174,2455,1,1254,0,2157
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","LOC116294578","CNOT1","Actinia tenebrosa","A0A6P8HZN0",80.184,1302,200,8,1173,2464,1,1254,0,2154
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","LOC116301398","CNOT11","Actinia tenebrosa","A0A6P8IIE4",82.158,241,43,0,203,443,375,615,1.21e-134,400
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","LOC116302054","CNOT3","Actinia tenebrosa","A0A6P8IJM8",55.954,865,301,18,1,827,1,823,0,826
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","LOC116303814","CNOT9","Actinia tenebrosa","A0A6P8IQU3",93.092,304,19,1,1,304,1,302,0,585
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","PACLA_8A032947","CNOT3","Paramuricea clavata","A0A6S7GFH2",46.247,746,331,16,1,686,88,823,0,545
-"Peve_00005781","CCR4-NOT transcription complex subunit 1 isoform X5","PACLA_8A070647","CNOT1","Paramuricea clavata","A0A6S7GFJ7",74.602,1256,282,6,1157,2379,1,1252,0,1913
-"Peve_00005781","CCR4-NOT transcription complex subunit 1 isoform X5","PACLA_8A070647","CNOT1","Paramuricea clavata","A0A6S7GKM9",70.725,1035,266,6,1157,2158,1,1031,0,1481
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","CNOT11 OS=Clytia hemisphaerica OX=252671","CNOT11","Clytia hemisphaerica","A0A7M5UWH2",73.276,232,61,1,206,437,384,614,3.46e-110,338
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Clytia hemisphaerica OX=252671","CNOT1","Clytia hemisphaerica","A0A7M5VGD3",65.98,1311,357,11,352,1631,1,1253,0,1766
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Clytia hemisphaerica OX=252671","CNOT1","Clytia hemisphaerica","A0A7M5WMI6",65.98,1311,357,11,1300,2579,1,1253,0,1769
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","CNOT9 OS=Clytia hemisphaerica OX=252671","CNOT9","Clytia hemisphaerica","A0A7M5WRU6",79.743,311,44,3,1,310,1,293,1.11e-179,499
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","CNOT9 OS=Exaiptasia diaphana OX=2652724","CNOT9","Exaiptasia diaphana","A0A913X8I0",92.739,303,20,1,1,303,2,302,0,580
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","CNOT1 OS=Exaiptasia diaphana OX=2652724","CNOT1","Exaiptasia diaphana","A0A913YFB7",81.45,1283,196,7,883,2154,1,1252,0,2154
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","CNOT3 OS=Exaiptasia diaphana OX=2652724","CNOT3","Exaiptasia diaphana","A0A913YPT4",56.741,853,278,17,1,792,1,823,0,813
-"Peve_00025667","CCR4-NOT transcription complex subunit 10","CNOT10","CNOT10","Desmophyllum pertusum","A0A9W9Y9T5",80.682,88,17,0,55,142,33,120,1.11e-45,160
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Desmophyllum pertusum","A0A9W9YDV2",87.994,683,73,6,1,680,1,677,0,1133
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","RQCD1","CNOT9","Desmophyllum pertusum","A0A9W9YNI7",99.016,305,3,0,1,305,2,306,0,624
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","CNOT11","CNOT11","Desmophyllum pertusum","A0A9W9ZAE8",95.378,238,11,0,204,441,378,615,5.09e-156,455
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","CNOT1_4","CNOT1","Desmophyllum pertusum","A0A9W9ZK46",91.83,1273,69,6,380,1636,1,1254,0,2341
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","P5673_028803","CNOT1","Acropora cervicornis","A0AAD9PWP5",90.112,1254,77,5,1075,2281,1,1254,0,2275
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","P5673_024743","CNOT9","Acropora cervicornis","A0AAD9Q331",98.366,306,5,0,88,393,1,306,0,625
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","P5673_003441","CNOT3","Acropora cervicornis","A0AAD9VF17",71.778,613,151,7,1,604,1,600,0,756
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","P5673_001653","CNOT2","Acropora cervicornis","A0AAD9VG55",84.536,679,96,5,1,673,1,676,0,1094
-"Peve_00002136","CCR4-NOT transcription complex subunit 11","PMEA_00000182","CNOT11","Pocillopora meandrina","A0AAU9VKE6",54.797,1230,426,23,379,1585,9,1131,0,1283
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","PMEA_00000675","CNOT1","Pocillopora meandrina","A0AAU9VNN9",95.056,1254,62,0,1203,2456,1,1254,0,2438
-"Peve_00025667","CCR4-NOT transcription complex subunit 10","PMEA_00029226","CNOT10","Pocillopora meandrina","A0AAU9VYU0",76.768,99,23,0,45,143,22,120,9.12e-41,146
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","PMEA_00031289","CNOT9","Pocillopora meandrina","A0AAU9W496",97.712,306,7,0,1,306,1,306,0,623
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","PMEA_00002098","CNOT3","Pocillopora meandrina","A0AAU9W8K4",80.241,830,154,7,1,827,1,823,0,1188
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","PMEA_00034257","CNOT2","Pocillopora meandrina","A0AAU9XZ66",86.364,682,84,5,1,678,1,677,0,1123
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","NEMVEDRAFT_v1g90783","CNOT1","Nematostella vectensis","A7RRG5",83.85,1257,179,8,1118,2356,1,1251,0,2161
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","NEMVEDRAFT_v1g229512","CNOT2","Nematostella vectensis","A7S6D9",88.601,193,22,0,50,242,485,677,7.74e-127,374
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","NEMVEDRAFT_v1g173618","CNOT9","Nematostella vectensis","A7SRS9",93.115,305,19,1,1,305,1,303,0,584
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","RQCD1","CNOT9","Hydra vulgaris","T2M7T1",83.442,308,48,1,1,308,2,306,0,527
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","CNOT3","CNOT3","Hydra vulgaris","T2MIQ3",60.526,266,98,2,1,261,1,264,1.6e-101,329
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","pdam_00012166","CNOT11","Pocillopora damicornis","A0A3M6UDZ7",96.218,238,9,0,203,440,378,615,2.47e-165,479
-"Peve_00008743","CCR4-NOT transcription complex subunit 2-like","LOC116300739","CNOT2","Actinia tenebrosa","A0A6P8IFI8",71.512,344,71,5,45,367,340,677,2.4e-168,486
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","CNOT11 OS=Exaiptasia diaphana OX=2652724","CNOT11","Exaiptasia diaphana","A0A913X1U9",81.513,238,44,0,202,439,378,615,5e-133,396
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","P5673_009985","CNOT11","Acropora cervicornis","A0AAD9VA66",90.987,233,21,0,211,443,375,607,2.11e-144,426
-"Peve_00013932","CCR4-NOT transcription complex subunit 3 isoform X4","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF37",60.526,266,98,2,1,261,1,264,1.75e-101,329
-"Peve_00013932","CCR4-NOT transcription complex subunit 3 isoform X6","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF56",56.015,266,87,3,1,238,1,264,5.05e-89,295
-"Peve_00013932","CCR4-NOT transcription complex subunit 3 isoform X5","LOC100215888","CNOT3","Hydra vulgaris","A0ABM4CF63",60.15,266,98,3,1,260,1,264,1.09e-98,322
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","LOC100207934","CNOT9","Hydra vulgaris","A0ABM4CIM4",83.442,308,48,1,1,308,2,306,0,528
-"Peve_00008743","CCR4-NOT transcription complex subunit 2 isoform X5","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6N2",56.749,363,90,8,358,678,340,677,7.06e-127,391
-"Peve_00008743","CCR4-NOT transcription complex subunit 2 isoform X6","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6N8",56.749,363,90,8,357,677,340,677,6.16e-127,391
-"Peve_00008743","CCR4-NOT transcription complex subunit 2 isoform X7","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6P1",55.372,363,87,9,358,670,340,677,7.29e-120,373
-"Peve_00008743","CCR4-NOT transcription complex subunit 2 isoform X8","LOC100214909","CNOT2","Hydra vulgaris","A0ABM4D6Q4",55.372,363,87,9,357,669,340,677,6.24e-120,373
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","LOC136072046","CNOT11","Hydra vulgaris","A0ABM4DNI1",72.103,233,64,1,199,431,380,611,1.4e-108,333
-"Peve_00005781","CCR4-NOT transcription complex subunit 1-like isoform X2","LOC136072151","CNOT1","Hydra vulgaris","A0ABM4DQI0",68.031,1270,361,9,1243,2484,1,1253,0,1776
-"Peve_00005781","CCR4-NOT transcription complex subunit 1-like isoform X1","LOC136072151","CNOT1","Hydra vulgaris","A0ABM4DQI2",68.031,1270,361,9,1244,2485,1,1253,0,1776
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","PEVE_00043609","CNOT9","Porites evermanni","A0ABN8LBB0",100,306,0,0,1,306,1,306,0,632
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","PEVE_00002139","CNOT11","Porites evermanni","A0ABN8LU57",100,615,0,0,1,615,1,615,0,1265
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","PEVE_00005781","CNOT1","Porites evermanni","A0ABN8LU70",100,1254,0,0,1,1254,1,1254,0,2596
-"Peve_00025667","CCR4-NOT transcription complex subunit 10","PEVE_00025667","CNOT10","Porites evermanni","A0ABN8M6V9",100,151,0,0,1,151,1,151,8.54e-112,313
-"Peve_00005781","CCR4-NOT transcription complex subunit 1","PLOB_00037094","CNOT1","Porites lobata","A0ABN8P512",99.442,1254,7,0,1204,2457,1,1254,0,2589
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","PLOB_00038235","CNOT11","Porites lobata","A0ABN8PAS4",79.048,630,81,8,1,594,1,615,0,907
-"Peve_00043609","CCR4-NOT transcription complex subunit 9","PLOB_00008760","CNOT9","Porites lobata","A0ABN8QRL4",99.673,306,1,0,1,306,1,306,0,630
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","PLOB_00010202","CNOT3","Porites lobata","A0ABN8QRZ0",98.542,823,12,0,1,823,1,823,0,1672
-"Peve_00025667","CCR4-NOT transcription complex subunit 10","PLOB_00009696","CNOT10","Porites lobata","A0ABN8QTF3",92.661,109,8,0,36,144,12,120,6.72e-64,209
-"Peve_00013932","CCR4-NOT transcription complex subunit 3","PEVE_00013932","CNOT3","Porites evermanni","A0ABN8RR53",100,823,0,0,1,823,1,823,0,1694
-"Peve_00002139","CCR4-NOT transcription complex subunit 11","NEMVEDRAFT_v1g161349","CNOT11","Nematostella vectensis","A7RPS5",86.076,237,32,1,205,441,378,613,7.12e-139,411
-"Peve_00013932","CCR4-Not complex component Not N-terminal domain-containing protein","NEMVEDRAFT_v1g122610","CNOT","Nematostella vectensis","A7SLB4",87.879,165,20,0,1,165,1,165,6.56e-89,276
-"Peve_00008743","CCR4-NOT transcription complex subunit 2","CNOT2","CNOT2","Hydra vulgaris","T2M3N6",56.749,363,90,8,356,676,340,677,6.25e-127,391
-"Peve_00000006","RNA helicase","DDX17","DDX17","Desmophyllum pertusum","A0A9W9ZQW3",79.34,697,108,6,1,694,1,664,0,1009
-"Peve_00000006","RNA helicase","DDX17","DDX17","Hydra vulgaris","T2M8E4",65.659,463,157,1,49,509,64,526,0,663
-"Peve_00011853","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",44.758,496,236,9,86,546,52,544,2.08e-135,406
-"Peve_00022943","Dicer-like protein 1","PMEA_00031583","DICER1","Pocillopora meandrina","A0AAU9W1B1",60.666,1561,545,19,4,1528,12,1539,0,1842
-"Peve_00022943","Dicer-like protein 1","PMEA_00031589","DICER1","Pocillopora meandrina","A0AAU9W1F6",62.879,1549,515,18,2,1509,8,1537,0,1906
-"Peve_00022943","Dicer-like protein 1","PMEA_00031590","DICER1","Pocillopora meandrina","A0AAU9W1F7",63.124,1562,496,21,2,1518,8,1534,0,1929
-"Peve_00022943","Dicer-like protein 1","PMEA_00031593","DICER1","Pocillopora meandrina","A0AAU9W2N8",61.573,1564,519,19,2,1517,8,1537,0,1869
-"Peve_00022943","Dicer-like protein 1","PMEA_00031580","DICER1","Pocillopora meandrina","A0AAU9W623",62.077,1358,442,20,4,1318,12,1339,0,1613
-"Peve_00022943","Endoribonuclease Dicer","dicer1","DICER1","Stylophora pistillata","A0A2B4SEC2",60.639,907,271,13,4,893,12,849,0,1040
-"Peve_00022943","Endoribonuclease Dicer-like","LOC116294837","DICER1","Actinia tenebrosa","A0A6P8HSF4",46.07,1565,751,33,4,1509,2,1532,0,1276
-"Peve_00022943","Endoribonuclease Dicer-like","PACLA_8A073209","DICER1","Paramuricea clavata","A0A6S7HW35",37.809,1616,843,46,27,1591,30,1534,0,894
-"Peve_00022943","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A6S7J182",38.227,1444,767,37,12,1391,30,1412,0,808
-"Peve_00005268","Endoribonuclease Dicer","PACLA_8A060218","DICER1","Paramuricea clavata","A0A6S7K0D5",37.538,333,181,7,511,819,2365,2694,3.2e-56,211
-"Peve_00022943","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A7D9ICQ4",38.984,1575,830,39,12,1522,30,1537,0,927
-"Peve_00022943","Endoribonuclease Dicer","DICER1_2","DICER1","Desmophyllum pertusum","A0A9W9ZLJ7",63.786,1030,301,11,2,969,5,1024,0,1248
-"Peve_00001954","Endoribonuclease Dicer","DICER1_1","DICER1","Desmophyllum pertusum","A0A9W9ZMA9",63.889,396,126,4,24,402,1,396,2.95e-174,494
-"Peve_00005268","Dicer 2","DICER2 OS=Nematostella vectensis OX=45351","DICER2","Nematostella vectensis","U3MG90",39.342,638,343,12,1265,1881,2089,2703,1.5e-111,397
-"Peve_00022943","Dicer 1","DICER1 OS=Nematostella vectensis OX=45351","DICER1","Nematostella vectensis","U3MHS9",45.876,1552,770,31,6,1512,8,1534,0,1260
-"Peve_00022943","Endoribonuclease Dicer isoform X3","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG80",31.757,1565,877,40,9,1444,30,1532,0,649
-"Peve_00022943","Endoribonuclease Dicer isoform X5","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG82",32.828,1584,877,42,19,1496,30,1532,0,687
-"Peve_00022943","Endoribonuclease Dicer isoform X6","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG84",32.828,1584,877,42,9,1486,30,1532,0,686
-"Peve_00022943","Endoribonuclease Dicer isoform X4","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG86",31.238,1511,853,36,9,1407,30,1466,0,616
-"Peve_00022943","Endoribonuclease Dicer isoform X2","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG87",31.376,1584,887,40,9,1473,30,1532,0,642
-"Peve_00022943","Endoribonuclease Dicer isoform X3","LOC100204990","DICER1","Hydra vulgaris","A0ABM4CGA2",32.557,1588,877,38,9,1486,30,1533,0,687
-"Peve_00004333","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",63.383,1218,352,22,27,1216,31,1182,0,1452
-"Peve_00004333","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",63.383,1218,352,22,27,1216,31,1182,0,1452
-"Peve_00004333","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.564,905,319,11,199,1060,287,1178,0,1057
-"Peve_00004333","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.564,905,319,11,199,1060,287,1178,0,1057
-"Peve_00004333","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",55.324,817,318,8,263,1071,281,1058,0,916
-"Peve_00004333","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",55.324,817,318,8,263,1071,281,1058,0,916
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",59.553,806,305,9,182,973,287,1085,0,989
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",59.553,806,305,9,182,973,287,1085,0,989
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",59.553,806,305,9,148,939,287,1085,0,987
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",59.553,806,305,9,148,939,287,1085,0,987
-"Peve_00004333","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",68.051,939,249,7,465,1394,280,1176,0,1326
-"Peve_00004333","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",68.051,939,249,7,465,1394,280,1176,0,1326
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",46.942,703,322,7,29,686,287,983,0,634
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",46.942,703,322,7,29,686,287,983,0,634
-"Peve_00005079","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",73.739,1051,205,5,1,982,1,1049,0,1551
-"Peve_00005079","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",73.739,1051,205,5,1,982,1,1049,0,1551
-"Peve_00021642","Protein DIS3 homolog","Dis3","DIS3","Stylophora pistillata","A0A2B4S3E4",80.48,958,158,4,1,931,1,956,0,1595
-"Peve_00004333","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",61.014,1144,345,15,97,1193,93,1182,0,1342
-"Peve_00004333","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",61.014,1144,345,15,97,1193,93,1182,0,1342
-"Peve_00005079","DIS3-like exonuclease 1","pdam_00009030","DIS3L","Pocillopora damicornis","A0A3M6T9B7",76.213,1051,244,4,165,1215,5,1049,0,1620
-"Peve_00005079","DIS3-like exonuclease 1","LOC116305674","DIS3L","Actinia tenebrosa","A0A6P8IWP8",64.434,1060,358,8,1,1052,1,1049,0,1394
-"Peve_00021642","Protein DIS3 homolog","LOC116307709","DIS3","Actinia tenebrosa","A0A6P8J2S5",69.062,960,284,4,1,951,1,956,0,1407
-"Peve_00021642","Protein DIS3 homolog","DIS3 OS=Clytia hemisphaerica OX=252671","DIS3","Clytia hemisphaerica","A0A7M5V7R7",56.204,959,396,9,1,941,1,953,0,1130
-"Peve_00005079","DIS3-like exonuclease 1","DIS3L OS=Clytia hemisphaerica OX=252671","DIS3L","Clytia hemisphaerica","A0A7M5X8U0",47.981,1065,523,13,2,1054,1,1046,0,977
-"Peve_00005079","DIS3-like exonuclease 1","DIS3L OS=Exaiptasia diaphana OX=2652724","DIS3L","Exaiptasia diaphana","A0A913XIF9",64.929,1055,361,4,1,1052,1,1049,0,1412
-"Peve_00021642","Protein DIS3 homolog","DIS3 OS=Exaiptasia diaphana OX=2652724","DIS3","Exaiptasia diaphana","A0A913YVQ7",69.376,849,246,4,1,836,1,848,0,1271
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",58.734,916,262,20,1,850,1,866,0,918
-"Peve_00004333","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",58.734,916,262,20,1,850,1,866,0,918
-"Peve_00021642","Protein DIS3 homolog","DIS3","DIS3","Desmophyllum pertusum","A0A9X0CVG2",80.919,718,100,3,1,681,1,718,0,1221
-"Peve_00021642","Protein DIS3 homolog","P5673_013589","DIS3","Acropora cervicornis","A0AAD9QKZ4",81.953,942,158,4,1,933,1,939,0,1626
-"Peve_00005079","DIS3-like exonuclease 1","P5673_007777","DIS3L","Acropora cervicornis","A0AAD9VBE9",63.438,1053,188,12,1,860,1,1049,0,1274
-"Peve_00005079","DIS3-like exonuclease 1","PMEA_00010508","DIS3L","Pocillopora meandrina","A0AAU9VML6",80.323,1052,204,2,1,1052,1,1049,0,1746
-"Peve_00021642","Protein DIS3 homolog","PMEA_00033300","DIS3","Pocillopora meandrina","A0AAU9W398",82.341,957,165,2,1,954,1,956,0,1652
-"Peve_00004333","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",46.942,703,322,8,29,686,287,983,0,632
-"Peve_00004333","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",46.942,703,322,8,29,686,287,983,0,632
-"Peve_00005079","DIS3-like exonuclease 1","PEVE_00005079","DIS3L","Porites evermanni","A0ABN8LRU0",100,1054,0,0,1,1054,1,1054,0,2192
-"Peve_00004333","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",100,1184,0,0,1,1184,1,1184,0,2449
-"Peve_00004333","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",100,1184,0,0,1,1184,1,1184,0,2449
-"Peve_00005079","DIS3-like exonuclease 1","PLOB_00003894","DIS3L","Porites lobata","A0ABN8QAU6",97.059,1054,31,0,1,1054,1,1054,0,2138
-"Peve_00005079","DIS3-like exonuclease 1","NEMVEDRAFT_v1g107726","DIS3L","Nematostella vectensis","A7S7H2",60.985,1056,395,8,1,1047,1,1048,0,1310
-"Peve_00005079","DIS3-like exonuclease 1","LOC100204348","DIS3L","Hydra vulgaris","A0ABM4DE52",48.618,1049,516,11,1,1029,1,1046,0,987
-"Peve_00005079","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",73.739,1051,205,5,1,982,1,1049,0,1551
-"Peve_00005079","DIS3-like exonuclease 1","Dis3l","DIS3L","Stylophora pistillata","A0A2B4RZH6",73.739,1051,205,5,1,982,1,1049,0,1551
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","DNMT1","DNMT1","Stylophora pistillata","A0A2B4SZP1",72.91,1543,354,9,1,1520,41,1542,0,2243
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","pdam_00005872","DNMT1","Pocillopora damicornis","A0A3M6TBL6",74.196,1523,364,10,1,1515,41,1542,0,2259
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","LOC116296182","DNMT1","Actinia tenebrosa","A0A6P8HX88",59.646,1524,566,14,1,1497,41,1542,0,1764
-"Peve_00018051","DNA (cytosine-5)-methyltransferase","DNMT1 OS=Clytia hemisphaerica OX=252671","DNMT1","Clytia hemisphaerica","A0A7M5WVQ1",53.596,1321,585,16,9,1311,153,1463,0,1407
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","DNMT1 OS=Exaiptasia diaphana OX=2652724","DNMT1","Exaiptasia diaphana","A0A913XJJ0",57.493,1508,574,16,7,1461,49,1542,0,1693
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","P5673_008755","DNMT1","Acropora cervicornis","A0AAD9VAJ8",72.805,1515,345,13,7,1474,48,1542,0,2170
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","pdam_00007070","DNMT1","Pocillopora damicornis","A0A3M6T916",79.274,468,74,1,15,459,249,716,0,785
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","LOC116306918","DNMT1","Actinia tenebrosa","A0A6P8IZG3",57.858,719,290,5,28,745,9,715,0,879
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","DNMT1 OS=Clytia hemisphaerica OX=252671","DNMT1","Clytia hemisphaerica","A0A7M5WTF5",48.193,664,302,6,461,1089,57,713,0,647
-"Peve_00018051","DNA (cytosine-5-)-methyltransferase","DNMT1_3","DNMT1","Desmophyllum pertusum","A0A9W9YGD1",92.766,235,17,0,1,235,1020,1254,1.74e-139,425
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","PMEA_00011214","DNMT1","Pocillopora meandrina","A0AAU9WSG6",71.809,713,187,5,15,720,11,716,0,1079
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","LOC100202736","DNMT1","Hydra vulgaris","A0ABM4BEM5",57.544,1246,490,13,51,1262,302,1542,0,1436
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","PEVE_00023930","DNMT1","Porites evermanni","A0ABN8M8F3",100,716,0,0,1,716,1,716,0,1487
-"Peve_00007510","DNA (cytosine-5)-methyltransferase","PLOB_00018878","DNMT1","Porites lobata","A0ABN8NMG9",96.937,1502,46,0,1,1502,41,1542,0,3038
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","PLOB_00048927","DNMT1","Porites lobata","A0ABN8PW75",98.464,716,11,0,1,716,1,716,0,1466
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","LOC100209870","DNMT1","Hydra vulgaris","A0ABM4BY06",47.442,645,294,4,630,1229,69,713,0,645
-"Peve_00023930","DNA (cytosine-5-)-methyltransferase","LOC100209870","DNMT1","Hydra vulgaris","A0ABM4BY25",47.664,642,291,4,351,947,72,713,0,642
-"Peve_00039041","Ribonuclease 3","DROSHA","DROSHA","Stylophora pistillata","A0A2B4S762",60.512,1484,469,27,67,1512,263,1667,0,1640
-"Peve_00039041","Ribonuclease 3","pdam_00017463","DROSHA","Pocillopora damicornis","A0A3M6UR52",57.856,1483,497,30,65,1472,238,1667,0,1511
-"Peve_00039041","Ribonuclease 3","LOC116294948","DROSHA","Actinia tenebrosa","A0A6P8HTE4",54.879,1117,464,10,564,1663,560,1653,0,1257
-"Peve_00039041","Ribonuclease 3","DROSHA OS=Exaiptasia diaphana OX=2652724","DROSHA","Exaiptasia diaphana","A0A913YT85",57.273,1100,413,15,369,1432,575,1653,0,1246
-"Peve_00039041","Ribonuclease 3","PMEA_00022263","DROSHA","Pocillopora meandrina","A0AAU9VVD7",62.213,1437,471,22,97,1509,279,1667,0,1654
-"Peve_00039041","Drosha","PLOB_00001028","DROSHA","Porites lobata","A0ABN8N3W6",93.582,1901,101,4,1,1881,1,1900,0,3499
-"Peve_00039041","Drosha","DROSHA OS=Nematostella vectensis OX=45351","DROSHA","Nematostella vectensis","U3MMT8",54.545,1100,392,15,239,1258,562,1633,0,1166
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",30.924,498,308,7,728,1225,938,1399,2.04e-70,259
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",30.924,498,308,7,728,1225,938,1399,2.04e-70,259
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.35,788,327,22,2,770,3,729,0,619
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.35,788,327,22,2,770,3,729,0,619
-"Peve_00017724","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",78.085,1410,278,10,1,1389,1,1400,0,2105
-"Peve_00017724","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",78.085,1410,278,10,1,1389,1,1400,0,2105
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",71.558,1322,354,10,1,1312,91,1400,0,1791
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",71.558,1322,354,10,1,1312,91,1400,0,1791
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",72.9,1417,346,16,1,1396,1,1400,0,1979
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",72.9,1417,346,16,1,1396,1,1400,0,1979
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",97.429,1400,36,0,1,1400,1,1400,0,2796
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",97.429,1400,36,0,1,1400,1,1400,0,2796
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",100,1400,0,0,1,1400,1,1400,0,2871
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",100,1400,0,0,1,1400,1,1400,0,2871
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",73.234,1416,342,15,1,1396,1,1399,0,1986
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",73.234,1416,342,15,1,1396,1,1399,0,1986
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",46.798,1421,656,29,3,1347,4,1400,0,1115
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",46.798,1421,656,29,3,1347,4,1400,0,1115
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",46.728,1421,655,29,3,1345,4,1400,0,1114
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",46.728,1421,655,29,3,1345,4,1400,0,1114
-"Peve_00017724","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",45.455,374,181,8,69,434,91,449,3.18e-101,329
-"Peve_00017724","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",45.455,374,181,8,69,434,91,449,3.18e-101,329
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.755,469,274,10,9,454,93,552,5.43e-78,280
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.755,469,274,10,9,454,93,552,5.43e-78,280
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",34.542,469,275,9,9,454,93,552,1.49e-77,279
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",34.542,469,275,9,9,454,93,552,1.49e-77,279
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",30.924,498,308,7,728,1225,938,1399,2.04e-70,259
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 WD40 repeat region domain-containing protein","EDC4 OS=Clytia hemisphaerica OX=252671","EDC4","Clytia hemisphaerica","A0A7M5WQI7",30.924,498,308,7,728,1225,938,1399,2.04e-70,259
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.35,788,327,22,2,770,3,729,0,619
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4 OS=Exaiptasia diaphana OX=2652724","EDC4","Exaiptasia diaphana","A0A913YNN4",48.35,788,327,22,2,770,3,729,0,619
-"Peve_00017724","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",78.085,1410,278,10,1,1389,1,1400,0,2105
-"Peve_00017724","Enhancer of mRNA decapping 4","EDC4","EDC4","Desmophyllum pertusum","A0A9W9ZNU7",78.085,1410,278,10,1,1389,1,1400,0,2105
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",71.558,1322,354,10,1,1312,91,1400,0,1791
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","P5673_023711","EDC4","Acropora cervicornis","A0AAD9UYL2",71.558,1322,354,10,1,1312,91,1400,0,1791
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",72.9,1417,346,16,1,1396,1,1400,0,1979
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PMEA_00028537","EDC4","Pocillopora meandrina","A0AAU9VZL5",72.9,1417,346,16,1,1396,1,1400,0,1979
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",97.429,1400,36,0,1,1400,1,1400,0,2796
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PLOB_00028650","EDC4","Porites lobata","A0ABN8RVR2",97.429,1400,36,0,1,1400,1,1400,0,2796
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",100,1400,0,0,1,1400,1,1400,0,2871
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","PEVE_00017724","EDC4","Porites evermanni","A0ABN8S704",100,1400,0,0,1,1400,1,1400,0,2871
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",73.234,1416,342,15,1,1396,1,1399,0,1986
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","edc4","EDC4","Stylophora pistillata","A0A2B4RUA0",73.234,1416,342,15,1,1396,1,1399,0,1986
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",46.798,1421,656,29,3,1347,4,1400,0,1115
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X1","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H813",46.798,1421,656,29,3,1347,4,1400,0,1115
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",46.728,1421,655,29,3,1345,4,1400,0,1114
-"Peve_00017724","Enhancer of mRNA-decapping protein 4-like isoform X2","LOC116289775","EDC4","Actinia tenebrosa","A0A6P8H818",46.728,1421,655,29,3,1345,4,1400,0,1114
-"Peve_00017724","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",45.455,374,181,8,69,434,91,449,3.18e-101,329
-"Peve_00017724","Enhancer of mRNA-decapping 4-like, partial","PACLA_8A023564","EDC4","Paramuricea clavata","A0A6S7GPJ7",45.455,374,181,8,69,434,91,449,3.18e-101,329
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.755,469,274,10,9,454,93,552,5.43e-78,280
-"Peve_00017724","Enhancer of mRNA-decapping protein 4 isoform X2","LOC100206712","EDC4","Hydra vulgaris","A0ABM4DK98",34.755,469,274,10,9,454,93,552,5.43e-78,280
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",34.542,469,275,9,9,454,93,552,1.49e-77,279
-"Peve_00017724","Enhancer of mRNA-decapping protein 4","EDC4","EDC4","Hydra vulgaris","T2MBE8",34.542,469,275,9,9,454,93,552,1.49e-77,279
-"Peve_00010916","Polycomb protein EED","pdam_00020892","EED","Pocillopora damicornis","A0A3M6TND6",84.842,442,62,2,1,437,1,442,0,769
-"Peve_00010916","Polycomb protein EED","EED OS=Clytia hemisphaerica OX=252671","EED","Clytia hemisphaerica","A0A7M6DQP6",53.281,381,173,2,58,434,61,440,1.22e-158,455
-"Peve_00010916","Polycomb protein eed-A","eed-a","EED","Stylophora pistillata","A0A2B4T083",72.685,432,81,4,1,395,1,432,0,617
-"Peve_00010916","Polycomb protein EED-like","LOC116286987","EED","Actinia tenebrosa","A0A6P8H1B1",74.131,259,67,0,5,263,184,442,9.83e-149,423
-"Peve_00010916","Polycomb protein EED","EED OS=Exaiptasia diaphana OX=2652724","EED","Exaiptasia diaphana","A0A913XDB0",59.269,383,135,8,1,369,1,376,4.59e-152,436
-"Peve_00010916","Polycomb protein eed","P5673_019672","EED","Acropora cervicornis","A0AAD9QB72",79.259,405,78,2,1,401,1,403,0,655
-"Peve_00010916","Polycomb protein eed-A isoform X3","LOC100208672","EED","Hydra vulgaris","A0ABM4BLL0",48.649,407,166,6,8,407,35,405,1.98e-132,389
-"Peve_00010916","Polycomb protein eed-A isoform X2","LOC100208672","EED","Hydra vulgaris","A0ABM4BLL2",48.643,442,184,6,8,442,35,440,2.85e-151,437
-"Peve_00010916","Polycomb protein EED","PEVE_00010916","EED","Porites evermanni","A0ABN8RBZ3",100,442,0,0,1,442,1,442,0,922
-"Peve_00010916","Embryonic ectoderm development","LOC100208672","EED","Hydra vulgaris","Q69DT2",51.435,418,184,5,8,418,35,440,1.58e-156,449
-"Peve_00010916","Polycomb protein EED","EED","EED","Hydra vulgaris","T2MI39",51.914,418,182,5,8,418,35,440,6.79e-159,455
-"Peve_00032268","Exportin-5-like","LOC116291099","XPO5","Actinia tenebrosa","A0A6P8HN45",43.43,1073,574,14,158,1217,1,1053,0,878
-"Peve_00032268","Exportin-5","P5673_015327","XPO5","Acropora cervicornis","A0AAD9V5E8",70.968,217,46,2,158,357,1,217,1.12e-94,305
-"Peve_00032268","Exportin 5","PLOB_00047317","XPO5","Porites lobata","A0ABN8PT06",95.825,1054,30,2,155,1195,1,1053,0,2085
-"Peve_00015726","[histone H3]-lysine(27) N-trimethyltransferase","EZH2","EZH2","Hydra vulgaris","T2MD94",48.918,693,320,11,23,694,5,684,0,681
-"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
-"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
-"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
-"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
-"Peve_00010989","Histone deacetylase","pdam_00017517","HDAC","Pocillopora damicornis","A0A3M6TCC1",77.165,381,83,4,1,379,12,390,0,614
-"Peve_00012697","Histone deacetylase","LOC116288571","HDAC","Actinia tenebrosa","A0A6P8H4F9",57.009,1070,356,23,129,1125,138,1176,0,1066
-"Peve_00012697","Histone deacetylase","LOC116288571","HDAC","Actinia tenebrosa","A0A6P8H7E5",57.009,1070,356,23,149,1145,138,1176,0,1067
-"Peve_00010989","Histone deacetylase","LOC116295809","HDAC","Actinia tenebrosa","A0A6P8I495",61.308,367,135,2,13,374,26,390,8.24e-172,484
-"Peve_00010989","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XZK0",63.361,363,126,2,17,374,30,390,1.06e-174,492
-"Peve_00012697","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913YBR8",54.952,1050,338,31,133,1062,139,1173,0,957
-"Peve_00010989","Histone deacetylase","PMEA_00017417","HDAC","Pocillopora meandrina","A0AAU9VQL9",76.579,380,85,4,1,378,12,389,0,610
-"Peve_00012697","Histone deacetylase","PMEA_00011307","HDAC","Pocillopora meandrina","A0AAU9WSZ1",73.556,1195,250,22,2,1179,31,1176,0,1529
-"Peve_00010989","Histone deacetylase","NEMVEDRAFT_v1g247517","HDAC","Nematostella vectensis","A7SUP8",64.088,362,128,1,17,378,30,389,0,508
-"Peve_00037296","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",75.34,515,114,4,1,512,1,505,0,786
-"Peve_00037296","histone deacetylase","Hdac2","HDAC2","Hydractinia echinata","A0A1P8KZZ1",75.34,515,114,4,1,512,1,505,0,786
-"Peve_00003957","Histone deacetylase","Hdac3","HDAC3","Hydractinia echinata","A0A1P8KZZ3",67.136,426,135,4,1,425,1,422,0,606
-"Peve_00037296","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",88.951,534,49,5,1,532,1,526,0,942
-"Peve_00037296","histone deacetylase","HDAC1","HDAC1","Stylophora pistillata","A0A2B4SH89",88.951,534,49,5,1,532,1,526,0,942
-"Peve_00003957","Histone deacetylase","hdac3","HDAC3","Stylophora pistillata","A0A2B4SUT8",92.974,427,29,1,1,426,1,427,0,839
-"Peve_00037296","histone deacetylase","pdam_00003714","HDAC","Pocillopora damicornis","A0A3M6UEF8",89.144,479,42,5,2,478,56,526,0,837
-"Peve_00003957","Histone deacetylase","LOC116291036","HDAC","Actinia tenebrosa","A0A6P8HC63",79.953,429,84,2,1,429,1,427,0,724
-"Peve_00037296","histone deacetylase","LOC116288839","HDAC","Actinia tenebrosa","A0A6P8HG31",80.464,517,89,5,12,525,1,508,0,848
-"Peve_00003957","Histone deacetylase 3","LOC116295200","HDAC3","Actinia tenebrosa","A0A6P8HTQ8",85.024,207,31,0,1,207,1,207,4.01e-128,368
-"Peve_00010989","histone deacetylase","PACLA_8A079896","HDAC","Paramuricea clavata","A0A6S7G8G8",54.015,137,59,3,6,140,30,164,1.36e-44,153
-"Peve_00012697","histone deacetylase","PACLA_8A071132","HDAC","Paramuricea clavata","A0A6S7IAP1",72.018,436,121,1,266,700,735,1170,0,714
-"Peve_00037296","histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5VA08",79.317,498,97,5,1,495,1,495,0,812
-"Peve_00003957","Histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5WWG2",65.882,425,143,2,1,425,1,423,0,605
-"Peve_00012697","histone deacetylase","HDAC OS=Clytia hemisphaerica OX=252671","HDAC","Clytia hemisphaerica","A0A7M5WWX1",67.943,418,127,2,717,1128,760,1176,0,627
-"Peve_00037296","histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913X9C4",80.226,531,97,5,1,528,1,526,0,850
-"Peve_00003957","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XE38",79.72,429,85,2,1,429,1,427,0,728
-"Peve_00037296","Histone deacetylase","HDAC OS=Exaiptasia diaphana OX=2652724","HDAC","Exaiptasia diaphana","A0A913XPM0",80.226,531,97,5,1,528,1,526,0,845
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",88.268,537,50,7,1,535,1,526,0,933
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Desmophyllum pertusum","A0A9X0CEI1",88.268,537,50,7,1,535,1,526,0,933
-"Peve_00012697","histone deacetylase","P5673_015674","HDAC","Acropora cervicornis","A0AAD9QH29",67.986,1137,223,21,8,1056,93,1176,0,1335
-"Peve_00003957","Histone deacetylase","P5673_005401","HDAC","Acropora cervicornis","A0AAD9QY34",83.191,470,36,3,1,470,1,427,0,794
-"Peve_00037296","histone deacetylase","PMEA_00025341","HDAC","Pocillopora meandrina","A0AAU9XMR4",89.72,535,44,6,1,533,1,526,0,948
-"Peve_00003957","Histone deacetylase","PMEA_00029708","HDAC","Pocillopora meandrina","A0AAU9XT39",93.911,427,25,1,1,426,1,427,0,845
-"Peve_00010989","Histone deacetylase","LOC100213777","HDAC","Hydra vulgaris","A0ABM4C432",44.652,374,195,4,5,377,28,390,3.07e-114,338
-"Peve_00037296","Histone deacetylase","LOC100199910","HDAC","Hydra vulgaris","A0ABM4D6B6",76.143,503,114,2,1,501,1,499,0,793
-"Peve_00003957","Histone deacetylase","LOC100200676","HDAC","Hydra vulgaris","A0ABM4DES7",67.689,424,135,2,1,424,1,422,0,607
-"Peve_00003957","Histone deacetylase","PEVE_00003957","HDAC","Porites evermanni","A0ABN8LT24",100,427,0,0,1,427,1,427,0,891
-"Peve_00037296","Histone deacetylase","PEVE_00037296","HDAC","Porites evermanni","A0ABN8MRB7",100,527,0,0,1,527,1,527,0,1105
-"Peve_00003957","Histone deacetylase","PLOB_00020977","HDAC","Porites lobata","A0ABN8RKN7",99.063,427,4,0,1,427,1,427,0,886
-"Peve_00003957","Histone deacetylase","NEMVEDRAFT_v1g111922","HDAC","Nematostella vectensis","A7SB64",81.671,431,75,2,1,431,1,427,0,746
-"Peve_00012697","histone deacetylase","NEMVEDRAFT_v1g190860","HDAC","Nematostella vectensis","A7SKN6",82.064,407,73,0,1,407,768,1174,0,739
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",74.708,514,122,2,1,512,1,508,0,796
-"Peve_00037296","histone deacetylase","HDAC2","HDAC2","Hydra vulgaris","T2M8M1",74.708,514,122,2,1,512,1,508,0,796
-"Peve_00003957","Histone deacetylase","HDAC3","HDAC3","Hydra vulgaris","T2MIU4",67.217,424,137,2,1,424,1,422,0,608
-"Peve_00017138","histone deacetylase","LOC100214986","HDAC","Hydra vulgaris","A0ABM4CTQ5",38.841,345,185,7,4,341,55,380,1.98e-76,246
-"Peve_00012697","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY83",64.734,414,138,4,582,988,760,1172,0,598
-"Peve_00012697","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY87",64.734,414,138,4,489,895,760,1172,0,596
-"Peve_00012697","histone deacetylase","LOC100215123","HDAC","Hydra vulgaris","A0ABM4CY92",64.734,414,138,4,594,1000,760,1172,0,599
-"Peve_00037296","histone deacetylase","LOC100199910","HDAC","Hydra vulgaris","A0ABM4D6C3",75,512,122,2,1,510,1,508,0,795
-"Peve_00003957","Histone deacetylase","LOC100200676","HDAC","Hydra vulgaris","A0ABM4DES8",70.781,397,115,1,1,397,1,396,0,602
-"Peve_00037296","histone deacetylase","PLOB_00017705","HDAC","Porites lobata","A0ABN8NHY8",99.43,526,3,0,1,526,1,526,0,1108
-"Peve_00002044","HYL1-like a protein","HYL1 OS=Nematostella vectensis OX=45351","HYL1","Nematostella vectensis","U3MH39",33.834,999,519,28,20,943,6,937,7.04e-133,423
-"Peve_00018038","Exosome RNA helicase MTR4","LOC116289174","MTREX","Actinia tenebrosa","A0A6P8HH67",84.91,782,118,0,206,987,1,782,0,1432
-"Peve_00018038","Exosome RNA helicase MTR4","MTREX OS=Clytia hemisphaerica OX=252671","MTREX","Clytia hemisphaerica","A0A7M5V3C9",73.604,788,202,3,197,984,1,782,0,1252
-"Peve_00018038","Exosome RNA helicase MTR4","P5673_029372","MTREX","Acropora cervicornis","A0AAD9PVY0",88.496,791,88,1,198,985,1,791,0,1472
-"Peve_00018038","Exosome RNA helicase MTR4","PMEA_00006451","MTREX","Pocillopora meandrina","A0AAU9WK47",87.802,787,91,2,194,980,1,782,0,1456
-"Peve_00018038","Exosome RNA helicase MTR4","NEMVEDRAFT_v1g234599","MTREX","Nematostella vectensis","A7RX65",86.189,782,108,0,202,983,1,782,0,1447
-"Peve_00029921","Polyadenylate-binding protein","pdam_00018319","PABPC1","Pocillopora damicornis","A0A3M6U9U0",84.82,639,91,6,1,637,1,635,0,1040
-"Peve_00029921","Polyadenylate-binding protein","LOC116287372","PABPC1","Actinia tenebrosa","A0A6P8H2S9",70.111,629,172,6,1,614,1,628,0,843
-"Peve_00029921","Polyadenylate-binding protein","PACLA_8A028635","PABPC1","Paramuricea clavata","A0A6S7GHA5",53.534,566,231,11,1,540,74,633,0,548
-"Peve_00029921","Polyadenylate-binding protein","PACLA_8A013212","PABPC1","Paramuricea clavata","A0A6S7GI61",59.438,641,200,12,8,608,9,629,0,706
-"Peve_00029921","Polyadenylate-binding protein","PABPC1 OS=Clytia hemisphaerica OX=252671","PABPC1","Clytia hemisphaerica","A0A7M5WMY6",59.04,625,241,8,12,626,9,628,0,701
-"Peve_00029921","Polyadenylate-binding protein","PABPC1 OS=Exaiptasia diaphana OX=2652724","PABPC1","Exaiptasia diaphana","A0A913XXZ3",68.372,645,164,12,1,622,1,628,0,837
-"Peve_00029921","Polyadenylate-binding protein","P5673_017499","PABPC1","Acropora cervicornis","A0AAD9V3J1",83.386,638,100,5,1,635,1,635,0,1042
-"Peve_00029921","Polyadenylate-binding protein","PMEA_00020655","PABPC1","Pocillopora meandrina","A0AAU9XCX9",84.977,639,90,6,1,637,1,635,0,1041
-"Peve_00029921","Polyadenylate-binding protein","NEMVEDRAFT_v1g230864","PABPC1","Nematostella vectensis","A7SSV8",65.463,637,146,11,1,572,1,628,0,790
-"Peve_00029921","Polyadenylate-binding protein","PABPC1","PABPC1","Hydra vulgaris","T2MGJ0",59.657,642,215,14,7,624,9,630,0,705
-"Peve_00029921","Polyadenylate-binding protein","P5673_017503","PABPC1","Acropora cervicornis","A0AAD9QES5",74.074,621,133,5,1,595,1,619,0,874
-"Peve_00029921","Polyadenylate-binding protein","P5673_017502","PABPC1","Acropora cervicornis","A0AAD9QFC8",82.423,421,63,1,1,410,1,421,0,714
-"Peve_00029921","Polyadenylate-binding protein","PEVE_00029921","PABPC1","Porites evermanni","A0ABN8MB85",100,635,0,0,1,635,1,635,0,1316
-"Peve_00029921","Polyadenylate-binding protein","PLOB_00007626","PABPC1","Porites lobata","A0ABN8QLE7",99.055,635,6,0,1,635,1,635,0,1304
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","pan3","PAN3","Stylophora pistillata","A0A2B4RYW2",74.965,707,97,7,1,637,1,697,0,1058
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Stylophora pistillata","A0A2B4SP99",84.534,1138,168,7,23,1155,1,1135,0,2004
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Pocillopora damicornis","A0A3M6U2E5",78.892,1137,162,7,1,1061,1,1135,0,1830
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Pocillopora damicornis","A0A3M6UPW7",82.808,698,102,4,1,681,1,697,0,1202
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","LOC116290611","PAN3","Actinia tenebrosa","A0A6P8HD12",67.465,710,198,13,1,689,1,698,0,952
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","LOC116298623","PAN2","Actinia tenebrosa","A0A6P8I525",64.267,1139,388,12,4,1131,3,1133,0,1513
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Exaiptasia diaphana","A0A913XWF5",66.525,705,204,9,1,680,1,698,0,947
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Acropora cervicornis","A0AAD9R4E1",84.049,1141,179,3,1,1141,1,1138,0,2008
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Pocillopora meandrina","A0AAU9XB94",84.609,1137,169,5,1,1133,1,1135,0,2004
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","LOC116290611","PAN3","Actinia tenebrosa","A0A6P8HLM1",76.218,513,115,4,107,616,190,698,0,815
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Clytia hemisphaerica","A0A7M5V787",54.741,464,204,5,127,587,236,696,0,529
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Clytia hemisphaerica","A0A7M6DRJ3",54.741,464,204,5,191,651,236,696,0,531
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Pocillopora meandrina","A0AAU9W1L8",82.228,709,109,7,1,703,1,698,0,1198
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","LOC100197638","PAN2","Hydra vulgaris","A0ABM4BGL0",47.445,1174,563,15,1,1159,1,1135,0,1090
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","LOC100204958","PAN3","Hydra vulgaris","A0ABM4D2W2",56.889,450,186,5,166,612,248,692,0,546
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Porites evermanni","A0ABN8M7Q8",100,1140,0,0,1,1140,1,1140,0,2383
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Porites lobata","A0ABN8NP08",98.711,698,7,1,1,696,1,698,0,1428
-"Peve_00025604","PAN2-PAN3 deadenylation complex catalytic subunit PAN2","PAN2","PAN2","Porites lobata","A0ABN8RSZ8",98.596,1140,16,0,1,1140,1,1140,0,2355
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Porites evermanni","A0ABN8SUZ2",100,698,0,0,1,698,1,698,0,1452
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Nematostella vectensis","A7SCD7",76.605,483,106,4,1,482,222,698,0,787
-"Peve_00029309","PAN2-PAN3 deadenylation complex subunit PAN3","PAN3","PAN3","Hydra vulgaris","T2MCQ9",56.444,450,188,5,166,612,248,692,0,544
-"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Stylophora pistillata","A0A2B4RTD2",64.194,620,182,13,2,608,1,593,0,740
-"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Desmophyllum pertusum","A0A9W9ZQL1",66.319,671,178,18,5,659,4,642,0,816
-"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Hydra vulgaris","T2M9S9",43.656,465,213,15,1,459,4,425,1.54e-114,363
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PARN","PARN","Stylophora pistillata","A0A2B4RXG8",73.51,604,128,4,1,573,1,603,0,911
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","pdam_00011591","PARN","Pocillopora damicornis","A0A3M6TI40",77.944,603,132,1,1,602,1,603,0,986
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","OS493_029854","PARN","Desmophyllum pertusum","A0A9W9YNB5",82.119,604,106,2,1,603,1,603,0,1027
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","P5673_026320","PARN","Acropora cervicornis","A0AAD9Q0W3",77.28,603,130,2,1,596,1,603,0,975
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PMEA_00014470","PARN","Pocillopora meandrina","A0AAU9X039",77.446,603,135,1,1,602,1,603,0,978
-"Peve_00007312","Poly(A)-specific ribonuclease PARN-like","LOC116288105","PARN","Actinia tenebrosa","A0A6P8H2T4",59.772,614,224,8,1,602,1,603,0,727
-"Peve_00007312","Poly(A)-specific ribonuclease PARN-like","PACLA_8A063003","PARN","Paramuricea clavata","A0A7D9JIL0",44.17,446,221,6,1,420,1,444,3.94e-120,365
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PACLA_8A044474","PARN","Paramuricea clavata","A0A7D9JTI4",44.833,629,299,11,1,607,1,603,3e-174,508
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PARN OS=Clytia hemisphaerica OX=252671","PARN","Clytia hemisphaerica","A0A7M5V2D9",31.84,625,379,9,1,600,1,603,8.05e-103,323
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PLOB_00033694","PARN","Porites lobata","A0ABN8NZW9",98.342,603,10,0,1,603,1,603,0,1231
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PEVE_00007312","PARN","Porites evermanni","A0ABN8QUG4",100,603,0,0,1,603,1,603,0,1250
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","PARN","PARN","Hydra vulgaris","T2MHQ0",33.703,451,286,3,1,444,1,445,1.8e-88,283
-"Peve_00007312","Poly(A)-specific ribonuclease PARN","LOC100200659","PARN","Hydra vulgaris","A0ABM4BD57",34.146,451,284,3,1,444,1,445,7.68e-90,286
-"Peve_00004734","Phosphorylated adapter RNA export protein","PHAX","PHAX","Stylophora pistillata","A0A2B4SMA7",49.746,394,166,10,9,383,12,392,2.03e-100,303
-"Peve_00004734","Phosphorylated adapter RNA export protein","pdam_00021771","PHAX","Pocillopora damicornis","A0A3M6UFP9",49.231,390,177,9,10,388,13,392,4.29e-103,310
-"Peve_00004734","Phosphorylated adapter RNA export protein","OS493_013539","PHAX","Desmophyllum pertusum","A0A9X0A2B7",47.041,338,159,9,1,328,8,335,1.19e-76,240
-"Peve_00004734","Phosphorylated adapter RNA export protein","P5673_009805","PHAX","Acropora cervicornis","A0AAD9V9K1",48.549,379,174,8,6,368,19,392,1.42e-91,280
-"Peve_00004734","Phosphorylated adapter RNA export protein","PMEA_00000120","PHAX","Pocillopora meandrina","A0AAU9VPS6",48.312,385,188,7,10,388,13,392,4.02e-101,305
-"Peve_00004734","Phosphorylated adapter RNA export protein","PEVE_00004734","PHAX","Porites evermanni","A0ABN8LH44",100,395,0,0,1,395,1,395,0,801
-"Peve_00004734","Phosphorylated adapter RNA export protein","PLOB_00006469","PHAX","Porites lobata","A0ABN8N8S2",97.975,395,8,0,1,395,1,395,0,783
-"Peve_00043354","Double-strand-break repair protein rad21-like","rad21","RAD21","Stylophora pistillata","A0A2B4RZR3",77.87,601,121,9,1,596,1,594,0,860
-"Peve_00043354","Rad21/Rec8-like protein N-terminal domain-containing protein","pdam_00017150","RAD21","Pocillopora damicornis","A0A3M6UAH0",77.537,601,123,9,1,596,1,594,0,865
-"Peve_00043354","Putative double-strand-break repair protein rad21","Rad21","RAD21","Actinia equina","A0A6C0WWI0",60.099,604,212,11,1,585,1,594,0,665
-"Peve_00043354","Double-strand-break repair protein rad21 homolog","LOC116301533","RAD21","Actinia tenebrosa","A0A6P8IIB6",60.099,604,211,10,1,584,1,594,0,671
-"Peve_00043354","Double-strand-break repair rad21 homolog","PACLA_8A005820","RAD21","Paramuricea clavata","A0A7D9DY23",48.397,624,272,13,1,605,1,593,1.92e-162,477
-"Peve_00043354","Double-strand-break repair protein rad21 homolog","RAD21 OS=Exaiptasia diaphana OX=2652724","RAD21","Exaiptasia diaphana","A0A913X8D1",58.167,600,220,8,1,575,1,594,0,640
-"Peve_00043354","Double-strand-break repair protein rad21","PMEA_00032273","RAD21","Pocillopora meandrina","A0AAU9XWT2",74.204,628,123,10,1,623,1,594,0,851
-"Peve_00043354","Double-strand-break repair protein rad21 homolog","NEMVEDRAFT_v1g169110","RAD21","Nematostella vectensis","A7SCY1",56.908,608,200,14,1,560,1,594,0,605
-"Peve_00043354","Double-strand-break repair protein rad21-like protein","P5673_027697","RAD21","Acropora cervicornis","A0AAD9UVS7",79.496,595,108,3,1,582,1,594,0,898
-"Peve_00043354","Double-strand-break repair protein rad21 homolog isoform X2","LOC100197122","RAD21","Hydra vulgaris","A0ABM4BS89",38.437,627,319,21,1,597,1,590,3.64e-101,319
-"Peve_00043354","Double-strand-break repair protein rad21-like protein","PEVE_00043354","RAD21","Porites evermanni","A0ABN8PL43",100,594,0,0,1,594,1,594,0,1203
-"Peve_00043354","Double-strand-break repair protein rad21-like protein","PLOB_00043749","RAD21","Porites lobata","A0ABN8PLE5",96.801,594,19,0,1,594,1,594,0,1160
-"Peve_00043354","Double-strand-break repair protein rad21 homolog","RAD21","RAD21","Hydra vulgaris","T2MIH8",37.959,627,322,21,1,597,1,590,3.4e-100,317
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","NEMVEDRAFT_v1g165676","RBBP4","Nematostella vectensis","A7S2K4",90.931,408,36,1,1,408,19,425,0,787
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","pdam_00004021","RBBP4","Pocillopora damicornis","A0A3M6TE27",94.872,429,22,0,1,429,1,429,0,849
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","RBBP4 OS=Clytia hemisphaerica OX=252671","RBBP4","Clytia hemisphaerica","A0A7M5V8C8",85.211,426,61,1,1,424,1,426,0,773
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","RBBP4 OS=Exaiptasia diaphana OX=2652724","RBBP4","Exaiptasia diaphana","A0A913XGH7",88.345,429,50,0,1,429,1,429,0,805
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PMEA_00009157","RBBP4","Pocillopora meandrina","A0AAU9WPJ5",95.105,429,21,0,1,429,1,429,0,851
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PLOB_00000008","RBBP4","Porites lobata","A0ABN8MST7",99.767,429,1,0,1,429,1,429,0,889
-"Peve_00040999","Histone-binding protein RBBP4-like N-terminal domain-containing protein","PEVE_00040999","RBBP4","Porites evermanni","A0ABN8N828",100,429,0,0,1,429,1,429,0,890
-"Peve_00040999","Histone-binding protein RBBP4","RBBP4","RBBP4","Hydra vulgaris","T2MDF0",84.397,423,66,0,6,428,4,426,0,769
+"Peve_00001498","Integrator complex subunit 9-like","ints9","INTS9","Stylophora pistillata","A0A2B4SQU2",84.789,355,53,1,238,591,306,660,0,632
+"Peve_00012543","RNA-directed RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4R985",58.449,1586,610,16,1,1575,28,1575,0,1833
+"Peve_00035858","RNA-directed RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4RG40",55.47,2331,933,23,775,3044,1,2287,0,2536
+"Peve_00002451","RNA-directed RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S0N5",50.231,1083,405,25,686,1650,872,1938,0,989
+"Peve_00002451","RNA-directed RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S0P5",61.271,1872,653,25,159,1978,87,1938,0,2303
+"Peve_00029318","RNA-directed RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4SJ07",70.863,2804,781,17,2,2787,3,2788,0,4072
+"Peve_00029318","RNA-directed RNA polymerase","pdam_00014003","RDRP","Pocillopora damicornis","A0A3M6V1C2",71.748,1253,334,5,1343,2586,1547,2788,0,1877
+"Peve_00002451","RNA-directed RNA polymerase","pdam_00010540","RDRP","Pocillopora damicornis","A0A3M6V665",62.544,1973,675,30,1,1944,1,1938,0,2420
+"Peve_00002451","RNA-directed RNA polymerase","LOC116291599","RDRP","Actinia tenebrosa","A0A6P8HFQ5",42.357,1943,963,49,78,1945,72,1932,0,1387
+"Peve_00002451","RNA-directed RNA polymerase","LOC116292984","RDRP","Actinia tenebrosa","A0A6P8HMH6",46.523,1898,909,39,99,1939,87,1935,0,1583
+"Peve_00031204","RNA-directed RNA polymerase","LOC116296651","RDRP","Actinia tenebrosa","A0A6P8HVX5",41.915,2882,1485,50,1,2783,15,2806,0,2170
+"Peve_00031204","RNA-directed RNA polymerase","PACLA_8A003058","RDRP","Paramuricea clavata","A0A6S7H8I7",38.04,2592,1380,56,9,2504,340,2801,0,1618
+"Peve_00029318","RNA-directed RNA polymerase","RDRP OS=Clytia hemisphaerica OX=252671","RDRP","Clytia hemisphaerica","A0A7M5VA30",26.381,1376,831,44,1034,2312,1214,2504,9.77e-108,387
+"Peve_00002451","RNA-directed RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913WPD6",43.867,1867,948,40,84,1888,67,1895,0,1446
+"Peve_00029318","RNA-directed RNA polymerase","RDRP OS=Exaiptasia diaphana OX=2652724","RDRP","Exaiptasia diaphana","A0A913WY18",41.185,2836,1492,49,6,2720,7,2787,0,2103
+"Peve_00035858","RNA-directed RNA polymerase","OS493_030834","RDRP","Desmophyllum pertusum","A0A9W9YJP7",62.621,1656,492,13,147,1740,697,2287,0,2073
+"Peve_00035858","RNA-directed RNA polymerase","OS493_030827","RDRP","Desmophyllum pertusum","A0A9W9YJV2",62.422,1759,588,15,44,1749,22,1760,0,2191
+"Peve_00002451","RNA-directed RNA polymerase","P5673_011346","RDRP","Acropora cervicornis","A0AAD9QPZ2",59.391,1970,713,28,1,1914,1,1939,0,2300
+"Peve_00002451","RNA-directed RNA polymerase","P5673_011149","RDRP","Acropora cervicornis","A0AAD9QQ14",59.135,1965,731,26,1,1919,1,1939,0,2254
+"Peve_00035858","RNA-directed RNA polymerase","P5673_003890","RDRP","Acropora cervicornis","A0AAD9VEU7",58.431,2295,882,20,155,2385,1,2287,0,2673
+"Peve_00002451","RNA-directed RNA polymerase","PMEA_00035380","RDRP","Pocillopora meandrina","A0AAU9WAN4",62.494,1973,675,30,1,1943,1,1938,0,2417
+"Peve_00035858","RNA-directed RNA polymerase","PMEA_00004556","RDRP","Pocillopora meandrina","A0AAU9WCT6",63.211,1476,490,9,517,1952,825,2287,0,1887
+"Peve_00029318","RNA-directed RNA polymerase","PMEA_00005181","RDRP","Pocillopora meandrina","A0AAU9WHC0",70.608,2698,757,16,2,2681,3,2682,0,3921
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846434","RDRP","Hydra vulgaris","A0ABM4BJV4",26.78,1292,758,47,982,2159,1180,2397,3.47e-101,365
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846434","RDRP","Hydra vulgaris","A0ABM4BJW1",26.703,1292,759,47,982,2159,1180,2397,3.88e-101,365
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846402","RDRP","Hydra vulgaris","A0ABM4BJW6",25.708,1412,838,48,981,2272,1180,2500,6.68e-104,374
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846402","RDRP","Hydra vulgaris","A0ABM4BJW7",25.708,1412,838,48,981,2272,1180,2500,7.79e-104,374
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846434","RDRP","Hydra vulgaris","A0ABM4BJX0",26.78,1292,758,47,982,2159,1180,2397,2.51e-101,366
+"Peve_00029318","RNA-directed RNA polymerase","LOC100214913","RDRP","Hydra vulgaris","A0ABM4BJX3",25.992,1412,828,52,990,2275,1180,2500,2.44e-106,382
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846434","RDRP","Hydra vulgaris","A0ABM4BJX5",26.703,1292,759,47,982,2159,1180,2397,3.71e-101,365
+"Peve_00031204","RNA-directed RNA polymerase","LOC100214913","RDRP","Hydra vulgaris","A0ABM4BJY6",26.023,1368,811,49,1073,2320,1232,2518,4.76e-106,382
+"Peve_00029318","RNA-directed RNA polymerase","LOC105846402","RDRP","Hydra vulgaris","A0ABM4BK03",25.708,1412,838,48,981,2272,1180,2500,7.91e-104,374
+"Peve_00002451","RNA-directed RNA polymerase","PLOB_00050157","RDRP","Porites lobata","A0ABN8Q0K4",94.365,1952,92,7,1,1944,1,1942,0,3796
+"Peve_00002451","RNA-directed RNA polymerase","PEVE_00002451","RDRP","Porites evermanni","A0ABN8Q4R5",100,1942,0,0,1,1942,1,1942,0,4049
+"Peve_00029318","RNA-directed RNA polymerase","PLOB_00010549","RDRP","Porites lobata","A0ABN8QWY6",96.737,2789,90,1,1,2789,1,2788,0,5603
+"Peve_00012543","RNA-directed RNA polymerase","PLOB_00012103","RDRP","Porites lobata","A0ABN8QXB4",87.591,2200,263,3,1,2196,1,2194,0,3969
+"Peve_00035858","RNA-directed RNA polymerase","PLOB_00012120","RDRP","Porites lobata","A0ABN8R2J4",94.053,2287,136,0,146,2432,1,2287,0,4484
+"Peve_00029318","RNA-directed RNA polymerase","PEVE_00029318","RDRP","Porites evermanni","A0ABN8SV96",100,2788,0,0,1,2788,1,2788,0,5793
+"Peve_00035858","RNA-directed RNA polymerase","PEVE_00035858","RDRP","Porites evermanni","A0ABN8T2Q2",100,2291,0,0,1,2291,1,2291,0,4772
 "Peve_00026319","RNA-dependent RNA polymerase","RDR2","RDRP","Stylophora pistillata","A0A2B4RIR9",55.556,981,373,8,5,929,239,1212,0,1048
 "Peve_00032720","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S0A1",48.154,650,309,8,556,1196,19,649,0,610
 "Peve_00032720","RNA-dependent RNA polymerase","RDR1","RDRP","Stylophora pistillata","A0A2B4S2K3",49.096,664,318,7,3,660,7,656,0,636
@@ -720,7 +289,6 @@
 "Peve_00032712","RNA-dependent RNA polymerase","OS493_000819","RDRP","Desmophyllum pertusum","A0A9W9ZWW6",29.199,637,334,21,4,546,3,616,2.77e-54,196
 "Peve_00002451","RNA-dependent RNA polymerase","OS493_003323","RDRP","Desmophyllum pertusum","A0A9X0A5B4",62.054,224,82,3,21,243,142,363,1.86e-85,281
 "Peve_00002451","RNA-dependent RNA polymerase","OS493_003289","RDRP","Desmophyllum pertusum","A0A9X0A6E6",60.082,243,81,6,1,236,693,926,2.42e-80,262
-"Peve_00005574","ATP-dependent RNA helicase A","DHX9_1","DHX9","Desmophyllum pertusum","A0A9X0CGN6",91.069,627,54,2,1,626,553,1178,0,1180
 "Peve_00032712","RNA-dependent RNA polymerase","OS493_000824","RDRP","Desmophyllum pertusum","A0A9X0D791",30.072,419,225,10,1,378,235,626,2.86e-56,196
 "Peve_00032712","RNA-dependent RNA polymerase","P5673_024942","RDRP","Acropora cervicornis","A0AAD9UXL8",31.978,713,411,18,4,693,3,664,1.17e-114,360
 "Peve_00032709","RNA-dependent RNA polymerase","P5673_024940","RDRP","Acropora cervicornis","A0AAD9UXP1",46.06,571,274,12,3,549,5,565,8.36e-157,465
@@ -737,101 +305,145 @@
 "Peve_00032720","RNA-dependent RNA polymerase","PLOB_00018147","RDRP","Porites lobata","A0ABN8RET6",95.884,656,27,0,1,656,1,656,0,1314
 "Peve_00026319","RNA-dependent RNA polymerase","PEVE_00026319","RDRP","Porites evermanni","A0ABN8SQE6",100,1450,0,0,1,1450,1,1450,0,3019
 "Peve_00026320","RNA-dependent RNA polymerase","PEVE_00026320","RDRP","Porites evermanni","A0ABN8SSZ0",100,705,0,0,1,705,1,705,0,1466
-"Peve_00021254","Ribonuclease P protein subunit p20","pdam_00005430","POP7","Pocillopora damicornis","A0A3M6U448",80.833,120,23,0,7,126,4,123,2.17e-70,207
-"Peve_00004457","Ribonuclease P protein subunit p20","PACLA_8A085575","POP7","Paramuricea clavata","A0A6S7GLN4",58.559,111,45,1,14,124,3,112,3.13e-43,139
-"Peve_00021254","Ribonuclease P protein subunit p20","POP7 OS=Exaiptasia diaphana OX=2652724","POP7","Exaiptasia diaphana","A0A913X7F3",73.684,114,30,0,8,121,6,119,4.98e-60,181
-"Peve_00021254","Ribonuclease P protein subunit p20","POP7","POP7","Desmophyllum pertusum","A0A9X0CR56",83.594,128,21,0,7,134,3,130,7.98e-77,223
-"Peve_00021254","Ribonuclease P protein subunit p20","PEVE_00021254","POP7","Porites evermanni","A0ABN8SHN3",100,130,0,0,1,130,1,130,2.23e-94,268
-"Peve_00008113","Cohesin subunit SA-1","STAG1","STAG1","Stylophora pistillata","A0A2B4RH27",70.739,1408,318,16,1,1342,2,1381,0,1838
-"Peve_00008113","Cohesin subunit SA-1","Scc3","STAG1","Actinia equina","A0A6C0WVZ5",51.455,962,410,12,1,924,375,1317,0,908
-"Peve_00008113","Cohesin subunit SA-1","P5673_020265","STAG1","Acropora cervicornis","A0AAD9QAA6",67.766,819,238,11,1,812,582,1381,0,1028
-"Peve_00008113","Cohesin subunit SA-2-like","LOC116292354","STAG2","Actinia tenebrosa","A0A6P8HS38",53.824,1412,565,21,1,1360,2,1378,0,1354
-"Peve_00008113","Cohesin subunit SA-2","STAG2","STAG2","Desmophyllum pertusum","A0A9W9YFK1",77.96,1402,270,15,115,1500,3,1381,0,2065
-"Peve_00008113","Cohesin subunit SA-2 isoform X8","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6R7",43.635,1029,556,10,184,1191,149,1174,0,868
-"Peve_00008113","Cohesin subunit SA-2 isoform X7","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6R9",43.635,1029,556,10,184,1191,149,1174,0,868
-"Peve_00008113","Cohesin subunit SA-2 isoform X6","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6S0",43.635,1029,556,10,184,1191,149,1174,0,868
-"Peve_00008113","Cohesin subunit SA-2 isoform X9","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6S1",43.635,1029,556,10,184,1191,149,1174,0,868
-"Peve_00008113","Cohesin subunit SA-2 isoform X5","LOC100200525","STAG2","Hydra vulgaris","A0ABM4B6T0",43.635,1029,556,10,184,1191,149,1174,0,868
-"Peve_00038764","Transcription activator BRG1","SMARCA4","SMARCA4","Hydra vulgaris","T2MFA5",67.679,823,244,6,571,1392,632,1433,0,1132
-"Peve_00009976","Structural maintenance of chromosomes protein","Smc3","SMC3","Actinia equina","A0A6C0WWF7",66.722,1205,391,4,6,1206,207,1405,0,1605
-"Peve_00009976","Structural maintenance of chromosomes protein","SMC3","SMC3","Desmophyllum pertusum","A0A9W9ZPQ9",79.667,1200,240,3,6,1202,207,1405,0,1924
-"Peve_00041750","non-specific serine/threonine protein kinase","Smg1","SMG1","Stylophora pistillata","A0A2B4RMD7",78.438,2523,503,11,1,2485,1,2520,0,4036
-"Peve_00003311","Protein SMG5","SMG5","SMG5","Hydra vulgaris","T2M3Q0",31.346,1040,573,30,7,942,1,1003,1.19e-138,440
-"Peve_00024876","Polycomb protein suz12","suz12","SUZ12","Stylophora pistillata","A0A2B4SEC9",82.857,665,110,3,1,664,1,662,0,1127
-"Peve_00024876","Polycomb protein SUZ12-like","LOC116306056","SUZ12","Actinia tenebrosa","A0A6P8J1D4",56.741,675,276,8,8,674,3,669,0,761
-"Peve_00024876","Polycomb protein suz12","SUZ12","SUZ12","Desmophyllum pertusum","A0A9W9ZLP3",85.349,587,81,3,1,586,80,662,0,1018
-"Peve_00024876","Polycomb protein suz12","P5673_020665","SUZ12","Acropora cervicornis","A0AAD9Q9H2",83.185,672,102,3,1,671,1,662,0,1135
-"Peve_00024876","Polycomb protein suz12 isoform X2","LOC100203032","SUZ12","Hydra vulgaris","A0ABM4CDL0",39.124,685,338,25,1,632,1,659,2.99e-138,419
-"Peve_00024876","Polycomb protein SUZ12","PLOB_00035319","SUZ12","Porites lobata","A0ABN8N0M7",96.866,670,20,1,1,670,1,669,0,1350
-"Peve_00024876","Polycomb protein SUZ12","PEVE_00024876","SUZ12","Porites evermanni","A0ABN8SQM5",100,669,0,0,1,669,1,669,0,1397
-"Peve_00038571","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",48.507,268,130,7,16,277,4,269,2.12e-82,254
-"Peve_00038571","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",48.507,268,130,7,16,277,4,269,2.12e-82,254
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","pdam_00001143","TARBP1","Pocillopora damicornis","A0A3M6V206",63.752,1658,582,9,1,1653,1,1644,0,2153
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","LOC116305432","TARBP1","Actinia tenebrosa","A0A6P8IV81",35.534,1666,974,28,16,1620,16,1642,0,993
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","PACLA_8A022609","TARBP1","Paramuricea clavata","A0A7D9JTJ5",30.226,1459,911,24,3,1372,199,1639,0,647
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1 OS=Clytia hemisphaerica OX=252671","TARBP1","Clytia hemisphaerica","A0A7M6DQR0",30.454,683,414,16,694,1319,962,1640,2.21e-85,308
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1 OS=Exaiptasia diaphana OX=2652724","TARBP1","Exaiptasia diaphana","A0A913XH91",33.533,1670,1017,24,1,1605,1,1642,0,908
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","TARBP1_4","TARBP1","Desmophyllum pertusum","A0A9X0A618",62.199,582,182,9,1,560,1075,1640,0,716
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","P5673_018073","TARBP1","Acropora cervicornis","A0AAD9QDU1",59.988,1667,628,14,1,1651,1,1644,0,2034
-"Peve_00006788","tRNA (guanosine(18)-2'-O)-methyltransferase TARBP1","NEMVEDRAFT_v1g92540","TARBP1","Nematostella vectensis","A7RT83",67.284,162,53,0,1,162,1479,1640,2.62e-73,239
-"Peve_00038571","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",48.507,268,130,7,16,277,4,269,2.12e-82,254
-"Peve_00038571","TAR DNA-binding protein 43","TARDBP","TARDBP","Hydra vulgaris","T2ME43",48.507,268,130,7,16,277,4,269,2.12e-82,254
-"Peve_00044502","Regulator of nonsense transcripts 1","UPF1","UPF1","Stylophora pistillata","A0A2B4STC9",89.749,878,65,4,22,885,265,1131,0,1595
-"Peve_00044502","Upf1 domain-containing protein","pdam_00004771","UPF1","Pocillopora damicornis","A0A3M6UEA3",89.771,1134,86,5,1,1107,1,1131,0,2053
-"Peve_00044502","Upf1 domain-containing protein","UPF1 OS=Clytia hemisphaerica OX=252671","UPF1","Clytia hemisphaerica","A0A7M5UR79",69.966,1182,281,18,1,1159,1,1131,0,1604
-"Peve_00044502","ATP-dependent helicase NAM7","UPF1_1","UPF1","Desmophyllum pertusum","A0A9W9ZGW1",89.306,720,68,4,1,714,1,717,0,1295
-"Peve_00044502","Upf1 domain-containing protein","PMEA_00018481","UPF1","Pocillopora meandrina","A0AAU9X6X4",91.534,1134,87,4,1,1128,1,1131,0,2109
-"Peve_00044502","ATP-dependent helicase NAM7","UPF1_2","UPF1","Desmophyllum pertusum","A0A9W9ZHT8",94.862,253,13,0,1,253,744,996,1.27e-162,480
-"Peve_00044502","Upf1 domain-containing protein","PLOB_00018750","UPF1","Porites lobata","A0ABN8NHJ3",93.706,1144,43,4,1,1128,1,1131,0,2162
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M6DN67",79.769,346,70,0,1,346,1,346,0,580
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Exaiptasia diaphana OX=2652724","WDR5","Exaiptasia diaphana","A0A913YAB2",86.994,346,44,1,1,345,1,346,0,619
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","PMEA_00010590","WDR5","Pocillopora meandrina","A0AAU9VP41",91.354,347,28,2,1,346,1,346,0,638
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","NEMVEDRAFT_v1g237480","WDR5","Nematostella vectensis","A7SSL6",86.269,335,43,1,23,354,12,346,0,597
-"Peve_00037278","WD repeat-containing protein 5","Wdr5","WDR5","Stylophora pistillata","A0A2B4RB25",93.931,346,20,1,1,345,1,346,0,664
-"Peve_00037278","WD repeat-containing protein 5","LOC116298230","WDR5","Actinia tenebrosa","A0A6P8I1S3",86.04,351,43,2,1,350,1,346,0,610
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X3M9",83.183,333,50,3,9,340,19,346,0,576
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X3Z2",82.883,333,51,3,9,340,19,346,0,571
-"Peve_00037278","WDR5-like beta-propeller domain-containing protein","WDR5 OS=Clytia hemisphaerica OX=252671","WDR5","Clytia hemisphaerica","A0A7M5X5X0",83.483,333,49,3,9,340,19,346,0,575
-"Peve_00037278","WD repeat-containing protein 5","WDR5_2","WDR5","Desmophyllum pertusum","A0A9X0CD26",93.642,346,21,1,1,345,1,346,0,661
-"Peve_00037278","WD repeat-containing protein 5","WDR5","WDR5","Hydra vulgaris","T2MET8",87.5,320,39,1,12,331,28,346,0,585
-"Peve_00027392","5'-3' exoribonuclease 1","pdam_00000477","XRN1","Pocillopora damicornis","A0A3M6UJ11",53.502,1185,439,19,568,1676,22,1170,0,1155
-"Peve_00019685","Xrn1 helical domain-containing protein","pdam_00023034","XRN1","Pocillopora damicornis","A0A3M6UJK3",70.736,516,126,4,61,551,1,516,0,702
-"Peve_00032367","5'-3' exoribonuclease","LOC116306759","XRN","Actinia tenebrosa","A0A6P8IZS9",50.549,728,269,21,338,992,1,710,0,604
-"Peve_00027392","5'-3' exoribonuclease 1-like","LOC116305788","XRN1","Actinia tenebrosa","A0A6P8J1E8",39.931,1162,525,32,553,1632,6,1076,0,756
-"Peve_00022929","5'-3' exoribonuclease","PACLA_8A068368","XRN","Paramuricea clavata","A0A6S7HB48",85.764,288,41,0,1,288,1,288,0,529
-"Peve_00027392","5'-3' exoribonuclease 1","PACLA_8A041910","XRN1","Paramuricea clavata","A0A6S7HH58",43.372,777,391,16,597,1341,24,783,0,601
-"Peve_00022929","5'-3' exoribonuclease","XRN OS=Clytia hemisphaerica OX=252671","XRN","Clytia hemisphaerica","A0A7M5X172",83.275,287,48,0,1,287,1,287,5.64e-172,502
-"Peve_00022929","5'-3' exoribonuclease","XRN OS=Exaiptasia diaphana OX=2652724","XRN","Exaiptasia diaphana","A0A913XLV4",90.625,288,27,0,1,288,1,288,0,560
-"Peve_00027392","5'-3' exoribonuclease 1","XRN1","XRN1","Desmophyllum pertusum","A0A9X0DBQ1",67.406,1172,325,21,566,1703,22,1170,0,1544
-"Peve_00027392","5'-3' exoribonuclease 1","P5673_025679","XRN1","Acropora cervicornis","A0AAD9Q1S9",54.899,1184,378,21,542,1604,22,1170,0,1181
-"Peve_00019685","5'-3' exoribonuclease","P5673_016712","XRN","Acropora cervicornis","A0AAD9QG87",58.893,506,115,8,449,868,1,499,4.85e-171,508
-"Peve_00027392","5'-3' exoribonuclease 1","PMEA_00016946","XRN1","Pocillopora meandrina","A0AAU9VQJ5",55.518,1187,423,21,568,1687,22,1170,0,1217
-"Peve_00032367","5'-3' exoribonuclease","PMEA_00015679","XRN","Pocillopora meandrina","A0AAU9X1X8",62.921,712,189,13,338,976,1,710,0,808
-"Peve_00032367","5'-3' exoribonuclease","PMEA_00006268","XRN","Pocillopora meandrina","A0AAU9Y3J8",63.764,712,187,12,338,980,1,710,0,823
-"Peve_00022929","5'-3' exoribonuclease","LOC100205936","XRN","Hydra vulgaris","A0ABM4C2P4",84.266,286,45,0,1,286,1,286,2.85e-175,512
-"Peve_00032367","5'-3' exoribonuclease","PLOB_00003734","XRN","Porites lobata","A0ABN8Q9X2",88.889,711,38,3,338,1008,1,710,0,1278
-"Peve_00027392","5'-3' exoribonuclease 1","XRN1","XRN1","Stylophora pistillata","A0A2B4S4P0",72.18,399,111,0,616,1014,22,420,0,627
-"Peve_00027392","5'-3' exoribonuclease 1","LOC101240070","XRN1","Hydra vulgaris","A0ABM4C0W8",35.05,796,435,18,584,1321,24,795,2.72e-140,463
-"Peve_00027392","5'-3' exoribonuclease 1","LOC100204338","XRN1","Hydra vulgaris","A0ABM4C1P3",34.528,614,371,15,550,1142,22,625,2.09e-105,360
-"Peve_00027392","5'-3' exoribonuclease 1","PLOB_00039470","XRN1","Porites lobata","A0ABN8N0X0",96.258,1149,43,0,566,1714,22,1170,0,2278
-"Peve_00018839","Ribonuclease ZC3H12A","Zc3h12a","ZC3H12A","Stylophora pistillata","A0A2B4SWH1",54.894,756,276,24,60,790,78,793,0,719
-"Peve_00014570","Endoribonuclease ZC3H12A-like","LOC116286475","ZC3H12A","Actinia tenebrosa","A0A6P8GZC0",41.565,575,253,15,1,505,1,562,7.27e-133,402
-"Peve_00018839","Endoribonuclease ZC3H12A-like isoform X1","LOC116286294","ZC3H12A","Actinia tenebrosa","A0A6P8H847",43.644,708,305,23,207,865,129,791,4.57e-156,477
-"Peve_00027102","Endoribonuclease ZC3H12A-like","LOC116298674","ZC3H12A","Actinia tenebrosa","A0A6P8I3D1",40.083,484,230,12,11,456,113,574,1.08e-105,337
-"Peve_00027102","Endoribonuclease ZC3H12A","P5673_002241","ZC3H12A","Acropora cervicornis","A0AAD9R5F4",48.755,763,320,24,6,722,109,846,0,622
-"Peve_00038393","Zinc finger C3H1 domain-containing protein","ZFC3H1","ZFC3H1","Hydra vulgaris","T2MHZ7",32.251,893,530,22,155,992,1415,2287,1.15e-110,379
-"Peve_00038608","Paraspeckle component 1","PSPC1","PSPC1","Hydra vulgaris","T2M8M4",47.328,262,137,1,111,372,106,366,1.68e-77,256
+"Peve_00012867","Heat shock cognate 71 kDa protein","HSPA8","HSPA8","Stylophora pistillata","A0A2B4RHJ7",73.295,176,47,0,34,209,442,617,8.85e-89,273
+"Peve_00041488","Heat shock cognate 71 kDa protein","HSPA8","HSPA8","Stylophora pistillata","A0A2B4S326",84.511,665,92,5,1,665,16,669,0,1068
+"Peve_00029908","Heat shock cognate 71 kDa protein","Hspa8","HSPA8","Stylophora pistillata","A0A2B4S907",88.462,650,70,2,1,648,1,647,0,1173
+"Peve_00041488","Heat shock cognate 71 kDa protein","HSPA8_1","HSPA8","Desmophyllum pertusum","A0A9W9YVY7",84.557,531,79,2,1,530,141,669,0,850
+"Peve_00041488","Heat shock cognate 71 kDa protein","HSPA8_2","HSPA8","Desmophyllum pertusum","A0A9W9YWL9",76.923,169,36,2,3,170,503,669,6.95e-69,221
+"Peve_00017115","Heat shock cognate 71 kDa protein","HSPA8_3","HSPA8","Desmophyllum pertusum","A0A9W9ZC74",55.936,497,106,5,4,434,6,455,0,519
+"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Stylophora pistillata","A0A2B4RTD2",64.194,620,182,13,2,608,1,593,0,740
+"Peve_00017722","polynucleotide adenylyltransferase","pdam_00004683","PAPD5","Pocillopora damicornis","A0A3M6UCE9",62.439,615,181,12,2,588,1,593,0,711
+"Peve_00017722","polynucleotide adenylyltransferase","PACLA_8A053671","PAPD5","Paramuricea clavata","A0A6S7G8E9",43.451,481,208,14,6,459,12,455,1.52e-111,352
+"Peve_00017722","polynucleotide adenylyltransferase","PACLA_8A053671","PAPD5","Paramuricea clavata","A0A7D9HLS9",43.451,481,208,14,6,459,12,455,1.13e-111,352
+"Peve_00017722","polynucleotide adenylyltransferase","PAPD5 OS=Clytia hemisphaerica OX=252671","PAPD5","Clytia hemisphaerica","A0A7M5UZ02",44.395,446,217,10,1,442,4,422,2.87e-109,352
+"Peve_00017722","polynucleotide adenylyltransferase","PAPD5 OS=Exaiptasia diaphana OX=2652724","PAPD5","Exaiptasia diaphana","A0A913XMN7",52.987,519,197,14,5,505,4,493,1.44e-166,498
+"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Desmophyllum pertusum","A0A9W9ZQL1",66.319,671,178,18,5,659,4,642,0,816
+"Peve_00017722","polynucleotide adenylyltransferase","P5673_023715","PAPD5","Acropora cervicornis","A0AAD9Q4S4",46.403,834,284,23,4,755,3,755,0,574
+"Peve_00017722","polynucleotide adenylyltransferase","PMEA_00028535","PAPD5","Pocillopora meandrina","A0AAU9VXM2",65.428,619,176,13,2,608,1,593,0,760
+"Peve_00017722","polynucleotide adenylyltransferase","PAPD5","PAPD5","Hydra vulgaris","T2M9S9",43.656,465,213,15,1,459,4,425,1.54e-114,363
+"Peve_00020669","E3 ubiquitin-protein ligase DZIP3","Dzip3","DZIP3","Stylophora pistillata","A0A2B4RV28",47.463,335,157,7,7,325,10,341,7.47e-91,290
+"Peve_00005515","E3 ubiquitin-protein ligase DZIP3","PLOB_00047728","DZIP3","Porites lobata","A0ABN8PTV2",86.334,622,74,5,385,997,12,631,0,1027
+"Peve_00039041","Ribonuclease 3","DROSHA","DROSHA","Stylophora pistillata","A0A2B4S762",60.512,1484,469,27,67,1512,263,1667,0,1640
+"Peve_00039041","Ribonuclease 3","pdam_00017463","DROSHA","Pocillopora damicornis","A0A3M6UR52",57.856,1483,497,30,65,1472,238,1667,0,1511
+"Peve_00039041","Ribonuclease 3","LOC116294948","DROSHA","Actinia tenebrosa","A0A6P8HTE4",54.879,1117,464,10,564,1663,560,1653,0,1257
+"Peve_00039041","Ribonuclease 3","DROSHA OS=Exaiptasia diaphana OX=2652724","DROSHA","Exaiptasia diaphana","A0A913YT85",57.273,1100,413,15,369,1432,575,1653,0,1246
+"Peve_00039041","Ribonuclease 3","PMEA_00022263","DROSHA","Pocillopora meandrina","A0AAU9VVD7",62.213,1437,471,22,97,1509,279,1667,0,1654
+"Peve_00039041","Drosha","PLOB_00001028","DROSHA","Porites lobata","A0ABN8N3W6",93.582,1901,101,4,1,1881,1,1900,0,3499
+"Peve_00039041","Drosha","DROSHA OS=Nematostella vectensis OX=45351","DROSHA","Nematostella vectensis","U3MMT8",54.545,1100,392,15,239,1258,562,1633,0,1166
+"Peve_00014560","Serrate RNA effector molecule-like","srrt","SRRT","Stylophora pistillata","A0A2B4SB72",68.95,1095,274,24,1,1059,1,1065,0,1036
+"Peve_00014560","Serrate RNA effector molecule homolog","SRRT","SRRT","Hydra vulgaris","T2M6C4",41.432,461,226,9,334,774,765,1201,4.93e-92,317
+"Peve_00000006","RNA helicase","Ddx5","DDX5","Stylophora pistillata","A0A2B4SLQ2",77.778,693,118,8,1,678,1,672,0,983
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00018038","Exosome RNA helicase MTR4","LOC116289174","MTREX","Actinia tenebrosa","A0A6P8HH67",84.91,782,118,0,206,987,1,782,0,1432
+"Peve_00018038","Exosome RNA helicase MTR4","P5673_029372","MTREX","Acropora cervicornis","A0AAD9PVY0",88.496,791,88,1,198,985,1,791,0,1472
+"Peve_00018038","Exosome RNA helicase MTR4","PMEA_00006451","MTREX","Pocillopora meandrina","A0AAU9WK47",87.802,787,91,2,194,980,1,782,0,1456
+"Peve_00018038","Exosome RNA helicase MTR4","NEMVEDRAFT_v1g234599","MTREX","Nematostella vectensis","A7RX65",86.189,782,108,0,202,983,1,782,0,1447
+"Peve_00032268","Exportin-5-like","LOC116291099","XPO5","Actinia tenebrosa","A0A6P8HN45",43.43,1073,574,14,158,1217,1,1053,0,878
+"Peve_00032268","Exportin 5","PLOB_00047317","XPO5","Porites lobata","A0ABN8PT06",95.825,1054,30,2,155,1195,1,1053,0,2085
+"Peve_00011853","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",44.758,496,236,9,86,546,52,544,2.08e-135,406
+"Peve_00011853","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",44.758,496,236,9,86,546,52,544,2.08e-135,406
+"Peve_00004756","Protein argonaute-3","AGO3","AGO3","Drosophila melanogaster","Q7PLK0",43.857,757,413,5,122,867,273,1028,0,692
+"Peve_00006288","Protein argonaute-3","ago3","AGO3","Danio rerio","A3KPK0",65.412,850,281,5,15,860,392,1232,0,1154
+"Peve_00006288","Protein argonaute-3","AGO3","AGO3","Gallus gallus","Q5ZLG4",65.407,847,280,5,18,860,395,1232,0,1146
+"Peve_00006288","Protein argonaute-3","AGO3","AGO3","Bos taurus","Q6T5B7",64.858,848,284,6,18,861,395,1232,0,1134
+"Peve_00006288","Protein argonaute-3","Ago3","AGO3","Mus musculus","Q8CJF9",65.765,850,278,5,15,860,392,1232,0,1152
+"Peve_00006288","Protein argonaute-3","AGO3","AGO3","Homo sapiens","Q9H9G7",65.643,847,278,5,18,860,395,1232,0,1151
+"Peve_00008963","Terminal uridylyltransferase 7","Tut7","TUT7","Mus musculus","Q5BLK4",45.489,532,234,12,830,1357,518,997,2.04e-118,412
+"Peve_00008963","Terminal uridylyltransferase 7","TUT7","TUT7","Homo sapiens","Q5VYS8",46.559,494,252,6,869,1361,515,997,1.93e-120,418
+"Peve_00008963","Terminal uridylyltransferase 4","Tut4","TUT4","Mus musculus","B2RX14",52.745,419,194,4,912,1329,585,1000,1.39e-118,415
+"Peve_00008963","Terminal uridylyltransferase 4","TUT4","TUT4","Homo sapiens","Q5TAX3",41.894,697,353,10,623,1313,351,1001,3.83e-142,485
+"Peve_00038608","Splicing factor, proline- and glutamine-rich","SFPQ","SFPQ","Homo sapiens","P23246",47.647,340,153,5,277,600,93,423,2.79e-95,307
+"Peve_00038608","Splicing factor, proline- and glutamine-rich","Sfpq","SFPQ","Mus musculus","Q8VIJ6",47.647,340,153,5,269,592,93,423,3.84e-95,307
+"Peve_00044383","GTP-binding nuclear protein Ran","RAN","RAN","Canis lupus familiaris","P62825",88.571,210,24,0,6,215,15,224,3.66e-143,399
+"Peve_00044383","GTP-binding nuclear protein Ran","RAN","RAN","Homo sapiens","P62826",88.571,210,24,0,6,215,15,224,3.66e-143,399
+"Peve_00038608","Non-POU domain-containing octamer-binding protein","NONO","NONO","Homo sapiens","Q15233",44.382,356,169,4,34,370,82,427,2.2e-88,282
+"Peve_00038608","Non-POU domain-containing octamer-binding protein","Nono","NONO","Rattus norvegicus","Q5FVM4",46.809,329,154,3,66,375,101,427,1.54e-87,280
+"Peve_00038608","Non-POU domain-containing octamer-binding protein","NONO","NONO","Pongo abelii","Q5RFL9",44.382,356,169,4,34,370,82,427,2.2e-88,282
+"Peve_00038608","Non-POU domain-containing octamer-binding protein","Nono","NONO","Mus musculus","Q99K48",46.809,329,154,3,63,372,101,427,1.87e-87,280
+"Peve_00006288","Protein argonaute-4","ago4","AGO4","Xenopus laevis","Q4KLV6",64.52,854,285,7,36,884,392,1232,0,1140
+"Peve_00006288","Protein argonaute-4","AGO4","AGO4","Gallus gallus","Q5ZMW0",65.278,792,258,6,8,794,453,1232,0,1073
+"Peve_00006288","Protein argonaute-4","Ago4","AGO4","Mus musculus","Q8CJF8",63.817,854,291,7,13,861,392,1232,0,1134
+"Peve_00006288","Protein argonaute-4","AGO4","AGO4","Homo sapiens","Q9HCK5",64.52,854,285,7,13,861,392,1232,0,1140
+"Peve_00019588","Heat shock protein HSP 90-alpha","HSP90AA1","HSP90AA1","Hydra vulgaris","T2MHT5",75.895,726,164,6,1,722,10,728,0,1046
+"Peve_00011853","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",44.758,496,236,9,86,546,52,544,2.08e-135,406
+"Peve_00011853","Pasha/DGCR8","DGCR8 OS=Nematostella vectensis OX=45351","DGCR8","Nematostella vectensis","U3MIG6",44.758,496,236,9,86,546,52,544,2.08e-135,406
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00035853","GW182/TNRC6-like protein","TNRC6 OS=Nematostella vectensis OX=45351","TNRC6","Nematostella vectensis","U3MIH3",41.456,948,388,41,691,1521,54,951,5.38e-115,392
+"Peve_00004333","DIS3-like exonuclease 2","pdam_00009227","DIS3L2","Pocillopora damicornis","A0A3M6UA93",63.383,1218,352,22,27,1216,31,1182,0,1452
+"Peve_00004333","DIS3-like exonuclease 2","LOC116297931","DIS3L2","Actinia tenebrosa","A0A6P8IBF1",58.564,905,319,11,199,1060,287,1178,0,1057
+"Peve_00004333","DIS3-like exonuclease 2","PACLA_8A015944","DIS3L2","Paramuricea clavata","A0A6S7HY99",55.324,817,318,8,263,1071,281,1058,0,916
+"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913XKY9",59.553,806,305,9,182,973,287,1085,0,989
+"Peve_00004333","DIS3-like exonuclease 2","DIS3L2 OS=Exaiptasia diaphana OX=2652724","DIS3L2","Exaiptasia diaphana","A0A913YMU4",59.553,806,305,9,148,939,287,1085,0,987
+"Peve_00004333","DIS3-like exonuclease 2","P5673_016780","DIS3L2","Acropora cervicornis","A0AAD9QGC6",68.051,939,249,7,465,1394,280,1176,0,1326
+"Peve_00004333","DIS3-like exonuclease 2","DIS3L2","DIS3L2","Hydra vulgaris","T2M9C5",46.942,703,322,7,29,686,287,983,0,634
+"Peve_00004333","DIS3-like exonuclease 2","Dis3l2","DIS3L2","Stylophora pistillata","A0A2B4SIN6",61.014,1144,345,15,97,1193,93,1182,0,1342
+"Peve_00004333","DIS3-like exonuclease 2","DIS3L2_2","DIS3L2","Desmophyllum pertusum","A0A9W9YJY0",58.734,916,262,20,1,850,1,866,0,918
+"Peve_00004333","DIS3-like exonuclease 2","LOC100211666","DIS3L2","Hydra vulgaris","A0ABM4CVR5",46.942,703,322,8,29,686,287,983,0,632
+"Peve_00004333","DIS3-like exonuclease 2","PEVE_00004333","DIS3L2","Porites evermanni","A0ABN8LW62",100,1184,0,0,1,1184,1,1184,0,2449
+"Peve_00006288","Protein argonaute-1","LOC116293197","AGO1","Actinia tenebrosa","A0A6P8HV34",73.908,847,219,2,8,852,386,1232,0,1345
+"Peve_00006288","Protein argonaute-1","AGO1 OS=Exaiptasia diaphana OX=2652724","AGO1","Exaiptasia diaphana","A0A913WVM7",73.341,844,223,2,12,853,389,1232,0,1328
+"Peve_00006288","Protein argonaute-1","NEMVEDRAFT_v1g180719","AGO1","Nematostella vectensis","A7RQ46",76.09,849,199,3,8,854,386,1232,0,1358
+"Peve_00006288","Protein argonaute-1","AGO1 OS=Nematostella vectensis OX=45351","AGO1","Nematostella vectensis","U3MIG1",75.915,847,202,2,8,852,386,1232,0,1360
+"Peve_00006280","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4R957",61.998,871,254,6,284,1079,166,1034,0,1096
+"Peve_00042882","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T0T4",58.518,769,245,15,1,739,1,725,0,836
+"Peve_00006280","Protein argonaute-2","Ago2","AGO2","Stylophora pistillata","A0A2B4T345",65.118,1055,322,20,1,1030,1,1034,0,1306
+"Peve_00006280","Putative argonaute-2","AGO2 OS=Actinia equina OX=6106","AGO2","Actinia equina","A0A2S1PRW9",51.863,966,395,19,133,1050,91,1034,0,958
+"Peve_00006280","Protein argonaute-2-like","LOC116293154","AGO2","Actinia tenebrosa","A0A6P8HJ48",51.569,956,409,19,147,1074,105,1034,0,950
+"Peve_00006288","Argonaute-2 isoform X1","PACLA_8A050538","AGO2","Paramuricea clavata","A0A6S7HZC7",43.717,748,344,13,1,698,468,1188,0,587
+"Peve_00006288","Argonaute-2 isoform X1","PACLA_8A073078","AGO2","Paramuricea clavata","A0A6S7I8S6",44.276,856,430,15,96,921,394,1232,0,701
+"Peve_00006288","Argonaute 2","PACLA_8A058506","AGO2","Paramuricea clavata","A0A6S7ILJ3",45.361,873,422,17,275,1126,394,1232,0,701
+"Peve_00006288","Argonaute-2 isoform X2","PACLA_8A031707","AGO2","Paramuricea clavata","A0A6S7IZ23",47.079,873,424,15,235,1090,381,1232,0,775
+"Peve_00006280","Argonaute-2-like isoform X2","PACLA_8A010163","AGO2","Paramuricea clavata","A0A7D9HG59",46.542,853,427,12,99,939,199,1034,0,789
+"Peve_00006288","Argonaute-2-like isoform X1","PACLA_8A023353","AGO2","Paramuricea clavata","A0A7D9IPU3",64.463,726,248,3,1,718,509,1232,0,989
+"Peve_00006288","Protein argonaute-2","P5673_017394","AGO2","Acropora cervicornis","A0AAD9QEE9",80.165,847,101,2,8,787,386,1232,0,1389
+"Peve_00006280","Protein argonaute-2","P5673_017544","AGO2","Acropora cervicornis","A0AAD9QER2",69.56,795,234,6,131,918,147,940,0,1162
+"Peve_00006280","Protein argonaute-2","P5673_017353","AGO2","Acropora cervicornis","A0AAD9V3D6",65.385,676,177,9,112,731,360,1034,0,878
+"Peve_00006280","Protein argonaute-2","P5673_017352","AGO2","Acropora cervicornis","A0AAD9V3F0",60.068,591,185,9,178,720,347,934,0,693
+"Peve_00006288","Protein argonaute-2 isoform X6","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G4",45.098,867,439,13,138,990,389,1232,0,764
+"Peve_00006288","Protein argonaute-2 isoform X3","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6G9",45.559,867,435,13,150,1002,389,1232,0,776
+"Peve_00006288","Protein argonaute-2 isoform X4","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H4",45.559,867,435,13,149,1001,389,1232,0,776
+"Peve_00006288","Protein argonaute-2 isoform X5","LOC100197980","AGO2","Hydra vulgaris","A0ABM4B6H5",45.098,867,439,13,139,991,389,1232,0,764
+"Peve_00006288","Protein argonaute-2","PEVE_00006288","AGO2","Porites evermanni","A0ABN8QPB6",100,1232,0,0,1,1232,1,1232,0,2577
+"Peve_00006288","Protein argonaute-2","EIF2C2","AGO2","Hydra vulgaris","T2M321",46.554,827,406,13,163,976,389,1192,0,775
+"Peve_00006280","Argonaute 2","AGO2 OS=Nematostella vectensis OX=45351","AGO2","Nematostella vectensis","U3MH35",50.772,971,430,19,141,1096,96,1033,0,910
+"Peve_00000006","RNA helicase","DDX17","DDX17","Desmophyllum pertusum","A0A9W9ZQW3",79.34,697,108,6,1,694,1,664,0,1009
+"Peve_00000006","RNA helicase","DDX17","DDX17","Hydra vulgaris","T2M8E4",65.659,463,157,1,49,509,64,526,0,663
+"Peve_00023969","ribonuclease III","Dicer1","DICER1","Stylophora pistillata","A0A2B4SDP6",51.295,1390,507,32,1,1274,42,1377,0,1192
+"Peve_00022943","Dicer-like protein 1","PMEA_00031583","DICER1","Pocillopora meandrina","A0AAU9W1B1",60.666,1561,545,19,4,1528,12,1539,0,1842
+"Peve_00022943","Dicer-like protein 1","PMEA_00031589","DICER1","Pocillopora meandrina","A0AAU9W1F6",62.879,1549,515,18,2,1509,8,1537,0,1906
+"Peve_00022943","Dicer-like protein 1","PMEA_00031590","DICER1","Pocillopora meandrina","A0AAU9W1F7",63.124,1562,496,21,2,1518,8,1534,0,1929
+"Peve_00022943","Dicer-like protein 1","PMEA_00031593","DICER1","Pocillopora meandrina","A0AAU9W2N8",61.573,1564,519,19,2,1517,8,1537,0,1869
+"Peve_00022943","Dicer-like protein 1","PMEA_00031580","DICER1","Pocillopora meandrina","A0AAU9W623",62.077,1358,442,20,4,1318,12,1339,0,1613
+"Peve_00022943","Endoribonuclease Dicer","dicer1","DICER1","Stylophora pistillata","A0A2B4SEC2",60.639,907,271,13,4,893,12,849,0,1040
+"Peve_00022943","Endoribonuclease Dicer-like","LOC116294837","DICER1","Actinia tenebrosa","A0A6P8HSF4",46.07,1565,751,33,4,1509,2,1532,0,1276
+"Peve_00022943","Endoribonuclease Dicer-like","PACLA_8A073209","DICER1","Paramuricea clavata","A0A6S7HW35",37.809,1616,843,46,27,1591,30,1534,0,894
+"Peve_00022943","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A6S7J182",38.227,1444,767,37,12,1391,30,1412,0,808
+"Peve_00005268","Endoribonuclease Dicer","PACLA_8A060218","DICER1","Paramuricea clavata","A0A6S7K0D5",37.538,333,181,7,511,819,2365,2694,3.2e-56,211
+"Peve_00022943","Endoribonuclease Dicer","PACLA_8A004317","DICER1","Paramuricea clavata","A0A7D9ICQ4",38.984,1575,830,39,12,1522,30,1537,0,927
+"Peve_00022943","Endoribonuclease dicer","DICER1 OS=Calyptrophora lyra OX=2864141","DICER1","Calyptrophora lyra","A0A977XUP0",39.155,1586,818,40,10,1526,29,1536,0,972
+"Peve_00022943","Endoribonuclease Dicer","DICER1_2","DICER1","Desmophyllum pertusum","A0A9W9ZLJ7",63.786,1030,301,11,2,969,5,1024,0,1248
+"Peve_00001954","Endoribonuclease Dicer","DICER1_1","DICER1","Desmophyllum pertusum","A0A9W9ZMA9",63.889,396,126,4,24,402,1,396,2.95e-174,494
+"Peve_00005268","Dicer 2","DICER2 OS=Nematostella vectensis OX=45351","DICER2","Nematostella vectensis","U3MG90",39.342,638,343,12,1265,1881,2089,2703,1.5e-111,397
+"Peve_00022943","Dicer 1","DICER1 OS=Nematostella vectensis OX=45351","DICER1","Nematostella vectensis","U3MHS9",45.876,1552,770,31,6,1512,8,1534,0,1260
+"Peve_00022943","Endoribonuclease Dicer isoform X3","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG80",31.757,1565,877,40,9,1444,30,1532,0,649
+"Peve_00022943","Endoribonuclease Dicer isoform X5","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG82",32.828,1584,877,42,19,1496,30,1532,0,687
+"Peve_00022943","Endoribonuclease Dicer isoform X6","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG84",32.828,1584,877,42,9,1486,30,1532,0,686
+"Peve_00022943","Endoribonuclease Dicer isoform X4","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG86",31.238,1511,853,36,9,1407,30,1466,0,616
+"Peve_00022943","Endoribonuclease Dicer isoform X2","LOC100206464","DICER1","Hydra vulgaris","A0ABM4CG87",31.376,1584,887,40,9,1473,30,1532,0,642
+"Peve_00022943","Endoribonuclease Dicer isoform X3","LOC100204990","DICER1","Hydra vulgaris","A0ABM4CGA2",32.557,1588,877,38,9,1486,30,1533,0,687
 "Peve_00023282","Small RNA 2'-O-methyltransferase","Henmt1","HENMT1","Stylophora pistillata","A0A2B4RT85",75.581,258,62,1,22,278,43,300,1.98e-145,428
-"Peve_00023282","Small RNA 2'-O-methyltransferase","pdam_00007839","HENMT1","Pocillopora damicornis","A0A3M6TXM5",75,276,69,0,17,292,25,300,8.53e-157,457
-"Peve_00023282","Small RNA 2'-O-methyltransferase","LOC116297700","HENMT1","Actinia tenebrosa","A0A6P8IAV1",57.854,261,108,1,34,292,40,300,1.39e-109,336
-"Peve_00023282","Small RNA 2'-O-methyltransferase","PACLA_8A072682","HENMT1","Paramuricea clavata","A0A7D9I5P4",53.817,262,116,3,12,269,40,300,4.99e-90,282
-"Peve_00023282","Small RNA 2'-O-methyltransferase","HENMT1 OS=Exaiptasia diaphana OX=2652724","HENMT1","Exaiptasia diaphana","A0A913XH97",57.303,267,110,3,22,285,35,300,1.12e-108,327
-"Peve_00023282","Small RNA 2'-O-methyltransferase","HENMT1 OS=Exaiptasia diaphana OX=2652724","HENMT1","Exaiptasia diaphana","A0A913YLG0",57.143,266,112,2,22,285,35,300,1.03e-107,325
 "Peve_00023282","Small RNA 2'-O-methyltransferase","HENMT1","HENMT1","Desmophyllum pertusum","A0A9X0CGH9",72.333,300,80,2,1,297,1,300,2.5e-162,472
-"Peve_00023282","Small RNA 2'-O-methyltransferase","P5673_025398","HENMT1","Acropora cervicornis","A0AAD9UXC1",69.759,291,85,2,12,299,10,300,1.23e-147,435
-"Peve_00023282","Small RNA 2'-O-methyltransferase","PMEA_00021362","HENMT1","Pocillopora meandrina","A0AAU9VS69",75.362,276,68,0,17,292,25,300,6.56e-157,458
-"Peve_00023282","Small RNA 2'-O-methyltransferase","PEVE_00023282","HENMT1","Porites evermanni","A0ABN8M7S2",100,538,0,0,1,538,1,538,0,1102
-"Peve_00023282","Small RNA 2'-O-methyltransferase","PLOB_00047865","HENMT1","Porites lobata","A0ABN8N2R2",84.601,539,21,3,1,478,1,538,0,909
 "Peve_00023282","Small RNA 2'-O-methyltransferase","HENMT1","HENMT1","Hydra vulgaris","T2MC08",46.009,213,112,2,5,214,39,251,5.69e-65,217
-"Peve_00023282","Small RNA 2'-O-methyltransferase","HENMT1 OS=Nematostella vectensis OX=45351","HENMT1","Nematostella vectensis","U3MHT1",59.041,271,104,4,10,274,31,300,9.52e-114,347
-"Peve_00023282","Small RNA 2'-O-methyltransferase","LOC100200697","HENMT1","Hydra vulgaris","A0ABM4CR37",43.439,221,122,2,5,222,39,259,1.17e-63,214
+"Peve_00002044","HYL1-like a protein","HYL1 OS=Nematostella vectensis OX=45351","HYL1","Nematostella vectensis","U3MH39",33.834,999,519,28,20,943,6,937,7.04e-133,423
+"Peve_00028081","Nuclease-sensitive element-binding protein 1","YBX1","YBX1","Hydra vulgaris","T2MEH8",77.895,95,19,1,26,118,12,106,1.28e-47,162
+"Peve_00004734","Phosphorylated adapter RNA export protein","PHAX","PHAX","Stylophora pistillata","A0A2B4SMA7",49.746,394,166,10,9,383,12,392,2.03e-100,303
+"Peve_00030232","Exportin-1","Xpo1","XPO1","Stylophora pistillata","A0A2B4SJU6",86.081,273,16,1,1,273,1,251,1.04e-158,482
+"Peve_00030232","Exportin-1","XPO1","XPO1","Desmophyllum pertusum","A0A9W9ZZP8",94.85,1068,54,1,1,1068,5,1071,0,2117
+"Peve_00044713","Polyglutamine-binding protein 1","PQBP1","PQBP1","Hydra vulgaris","T2MIU0",40.741,243,90,6,1,197,1,235,1.7e-51,166
+"Peve_00038608","Paraspeckle component 1","PSPC1","PSPC1","Hydra vulgaris","T2M8M4",47.328,262,137,1,111,372,106,366,1.68e-77,256

@@ -25,9 +25,15 @@ editor_options:
     wrap: 72
 ---
 
-We've previously looked for instances of miRNA putatively binding to ncRNA and methylation machinery (a.g. AGO transcripts), but this search seemed to miss hits. Perhaps more importantly, the reference used was not comprehensive, because it didn't include hits for other epigenetic machinery, such as those involved in histone modifications. Let's redo and expand the epimachinery analysis.
+We've previously looked for instances of miRNA putatively binding to
+ncRNA and methylation machinery (a.g. AGO transcripts), but this search
+seemed to miss hits. Perhaps more importantly, the reference used was
+not comprehensive, because it didn't include hits for other epigenetic
+machinery, such as those involved in histone modifications. Let's redo
+and expand the epimachinery analysis.
 
 Load packages
+
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -53,8 +59,9 @@ peve_FA <- read.csv("../../E-Peve/output/10.14-Peve-mRNA-miRNA-interactions-FE-p
 ptuh_FA <- read.csv("../../F-Ptuh/output/11.14-Ptuh-mRNA-miRNA-interactions-FE-pooled/miRNA_pooled_targets_FA.csv") %>% dplyr::select(miRNA, mRNA, PCC.cor, p_value) %>% distinct()
 ```
 
+Load miRNA assigned names (e.g., "miR-100") to annotate, instead of
+using ShortStack's Cluster labels
 
-Load miRNA assigned names (e.g., "miR-100") to annotate, instead of using ShortStack's Cluster labels
 ```{r}
 # Load
 ## Apul
@@ -68,16 +75,17 @@ ptuh_names <- read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortS
 ```
 
 Combine with miRNA annotated target+coexpression tables
+
 ```{r}
 apul_FA_annot <- left_join(apul_FA, apul_names, by = c("miRNA" = "Name"))
 peve_FA_annot <- left_join(peve_FA, peve_names, by = c("miRNA" = "Name"))
 ptuh_FA_annot <- left_join(ptuh_FA, ptuh_names, by = c("miRNA" = "Name"))
 ```
 
-
-## Epimachinery 
+## Epimachinery
 
 Load epimachinery BLAST hits to the three coral genomes
+
 ```{r}
 #Load
 apul_epi <- read.table("../../D-Apul/output/35-Apul-epi-machinery-BLAST/Mach-blastp-Apul_out.tab") %>% dplyr::select(V1,V2)
@@ -109,7 +117,6 @@ ptuh_epi <- ptuh_epi %>% dplyr::select(-V1, -V2)
 
 ```
 
-
 ### Apul
 
 ```{r}
@@ -124,9 +131,17 @@ cat("\n# unique miRNAs:", apul_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
 cat("# unique mRNAs:", apul_epi_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique epimachinery proteins:", apul_epi_miRNA$gene_name %>% unique() %>% length(), "\n")
 ```
-In *A. pulchra*, 22 of the 39 miRNAs putatively bind to a total of 29 unique epigenetic protein machinery transcripts, based on both predicted binding and significant coexpression. These transcripts match 38 epimachinery annotations. Note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein (e.g., FUN_001354, which matches both Parp5a-Tnks-201 and Parp5b-Tnks2-201)
+
+In *A. pulchra*, 22 of the 39 miRNAs putatively bind to a total of 29
+unique epigenetic protein machinery transcripts, based on both predicted
+binding and significant coexpression. These transcripts match 38
+epimachinery annotations. Note that the \# of unique transcripts is
+higher than the \# of unique annotations because some of the coral genes
+match multiple variants of a single protein (e.g., FUN_001354, which
+matches both Parp5a-Tnks-201 and Parp5b-Tnks2-201)
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 apul_epi_miRNA_collapsed <- apul_epi_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -135,7 +150,6 @@ apul_epi_miRNA_collapsed <- apul_epi_miRNA %>%
   ungroup() %>%
   dplyr::select(-gene_name, -miRNA)
 ```
-
 
 ### Peve
 
@@ -152,9 +166,16 @@ cat("\n# unique miRNAs:", peve_epi_miRNA$miRNA %>% unique() %>% length(), "\n")
 cat("# unique mRNAs:", peve_epi_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique epimachinery proteins:", peve_epi_miRNA$gene_name %>% unique() %>% length(), "\n")
 ```
-In *P. evermanni*, 7 of the 45 miRNAs putatively bind to a total of 11 unique epigenetic protein machinery transcripts, based on both predicted binding and significant. These transcripts match 14 epimachinery annotations. Again, note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein.
+
+In *P. evermanni*, 7 of the 45 miRNAs putatively bind to a total of 11
+unique epigenetic protein machinery transcripts, based on both predicted
+binding and significant. These transcripts match 14 epimachinery
+annotations. Again, note that the \# of unique transcripts is higher
+than the \# of unique annotations because some of the coral genes match
+multiple variants of a single protein.
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 peve_epi_miRNA_collapsed <- peve_epi_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -163,7 +184,6 @@ peve_epi_miRNA_collapsed <- peve_epi_miRNA %>%
   ungroup() %>%
   dplyr::select(-gene_name, -miRNA)
 ```
-
 
 ### Ptuh
 
@@ -181,9 +201,15 @@ cat("# unique mRNAs:", ptuh_epi_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique epimachinery proteins:", ptuh_epi_miRNA$gene_name %>% unique() %>% length(), "\n")
 ```
 
-In *P. tuahiniensis*, 9 of the 37 miRNAs putatively bind to a total of 10 unique epigenetic protein machinery transcripts, based on both predicted binding and significant. These transcripts match 14 epimachinery annotations. Again, note that the # of unique transcripts is higher than the # of unique annotations because some of the coral genes match multiple variants of a single protein.
+In *P. tuahiniensis*, 9 of the 37 miRNAs putatively bind to a total of
+10 unique epigenetic protein machinery transcripts, based on both
+predicted binding and significant. These transcripts match 14
+epimachinery annotations. Again, note that the \# of unique transcripts
+is higher than the \# of unique annotations because some of the coral
+genes match multiple variants of a single protein.
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 ptuh_epi_miRNA_collapsed <- ptuh_epi_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -193,10 +219,14 @@ ptuh_epi_miRNA_collapsed <- ptuh_epi_miRNA %>%
   dplyr::select(-gene_name, -miRNA)
 ```
 
-
 ## Updated ncRNA machinery analysis
 
-I manually curated a db of fasta sequences for protein machinery important to miRNA and lncRNA biogenesis and function (details in notebook, [here](https://shedurkin.github.io/Roberts-LabNotebook/posts/projects/E5_coral/2026_04_10_DDE_ncRNA_machinery.html) and [here](https://shedurkin.github.io/Roberts-LabNotebook/posts/projects/E5_coral/2026_04_13_DDE_ncRNA_machinery_fastas.html))
+I manually curated a db of fasta sequences for protein machinery
+important to miRNA and lncRNA biogenesis and function (details in
+notebook,
+[here](https://shedurkin.github.io/Roberts-LabNotebook/posts/projects/E5_coral/2026_04_10_DDE_ncRNA_machinery.html)
+and
+[here](https://shedurkin.github.io/Roberts-LabNotebook/posts/projects/E5_coral/2026_04_13_DDE_ncRNA_machinery_fastas.html))
 
 load BLAST hits for this ncRNA machinery set
 
@@ -215,7 +245,6 @@ ptuh_ncRNA <- read.csv("../../F-Ptuh/output/32-Ptuh-ncRNA-machinery-BLAST/ncRNAm
 
 ```
 
-
 ### Apul
 
 ```{r}
@@ -231,9 +260,15 @@ cat("# unique mRNAs:", apul_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique ncRNA machinery genes:", apul_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-In *A. pulchra*, 8 of the 39 miRNAs putatively bind to a total of 8 unique ncRNA protein machinery transcripts, based on both predicted binding and significant coexpression. These transcripts match 12 ncRNA machinery annotations. Note that the # of unique annotations is higher than the # of unique transcripts because some of the coral genes match multiple similar proteins (e.g., FUN_032699, which matched both AGO1 and AGO2 in the original BLASTp search)
+In *A. pulchra*, 5 of the 39 miRNAs putatively bind to a total of 5
+unique ncRNA protein machinery transcripts, based on both predicted
+binding and significant coexpression. These transcripts match 8 ncRNA
+machinery annotations. Note that the \# of unique annotations is higher
+than the \# of unique transcripts because some of the coral genes match
+multiple similar proteins.
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 apul_ncRNA_miRNA_collapsed <- apul_ncRNA_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -242,7 +277,6 @@ apul_ncRNA_miRNA_collapsed <- apul_ncRNA_miRNA %>%
   ungroup() %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
-
 
 ### Peve
 
@@ -259,9 +293,13 @@ cat("# unique mRNAs:", peve_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique ncRNA machinery genes:", peve_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-In *P.evermanni*, 6 of the 45 miRNAs putatively bind to a total of 8 unique ncRNA protein machinery transcripts, based on both predicted binding and significant coexpression. These transcripts match 9 ncRNA machinery annotations. Note that the # of unique annotations is higher than the # of unique transcripts because one of the coral genes matched multiple similar proteins (Peve_00038764, which matched both SARCA2 and SARCA4 in the original BLASTp search)
+In *P.evermanni*, 2 of the 45 miRNAs putatively bind to a total of 3
+unique ncRNA protein machinery transcripts, based on both predicted
+binding and significant coexpression. These transcripts match 3 ncRNA
+machinery annotations.
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 peve_ncRNA_miRNA_collapsed <- peve_ncRNA_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -270,7 +308,6 @@ peve_ncRNA_miRNA_collapsed <- peve_ncRNA_miRNA %>%
   ungroup() %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
-
 
 ### Ptuh
 
@@ -287,10 +324,15 @@ cat("# unique mRNAs:", ptuh_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 cat("# unique ncRNA machinery genes:", ptuh_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-In *P.tuahiniensis*, 8 of the 37 miRNAs putatively bind to a total of 12 unique ncRNA protein machinery transcripts, based on both predicted binding and significant coexpression. These transcripts match 16 ncRNA machinery annotations. Note that the # of unique annotations is higher than the # of unique transcripts because some of the coral genes matched multiple similar proteins (e.g., 	
-Pocillopora_meandrina_HIv1___RNAseq.g14104.t1, which matched both STAG1 and STAG2 in the original BLASTp search)
+In *P.tuahiniensis*, 5 of the 37 miRNAs putatively bind to a total of 6
+unique ncRNA protein machinery transcripts, based on both predicted
+binding and significant coexpression. These transcripts match 9 ncRNA
+machinery annotations. Note that the \# of unique annotations is higher
+than the \# of unique transcripts because some of the coral genes
+matched multiple similar proteins
 
 Collapse to unique miRNA-mRNA pairs
+
 ```{r}
 ptuh_ncRNA_miRNA_collapsed <- ptuh_ncRNA_miRNA %>%
   group_by(target, given_miRNA_name) %>%
@@ -299,7 +341,6 @@ ptuh_ncRNA_miRNA_collapsed <- ptuh_ncRNA_miRNA %>%
   ungroup() %>%
   dplyr::select(-std_gene_name, -miRNA)
 ```
-
 
 ## Combine epimachinery and ncRNA machinery outputs to single results table for each species
 
@@ -354,39 +395,49 @@ ptuh_results <- rbind(ptuh_epi_miRNA_collapsed, ptuh_ncRNA_miRNA_collapsed)
 write.csv(ptuh_results, "../output/12-miRNA-epimachinery/Ptuh_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
-
 ## Summary
 
-Generally, the protein machinery that are putatively targeted by our coral miRNAs is extremely diverse, covering all major "branches" of epigenetic regulation:
+Generally, the protein machinery that are putatively targeted by our
+coral miRNAs is extremely diverse, covering all major "branches" of
+epigenetic regulation:
 
-#### Histone Methylation
+Counts per category
 
-Covering demethylases (KDM3, KDM6, RIOX1), methyltransferases (KMT5A, KMT2E), acetyltransferases (KAT6A/B, KAT14, KAT2A/B), and deacetylases (HDAC4/5/7/9, SIRT7), plus arginine methylation (PRMT7)
+| Category                     | Apul | Peve | Ptuh | Total |
+|------------------------------|------|------|------|-------|
+| Histone modification         | 5    | 3    | 4    | 12    |
+| Chromatin signaling          | 4    | 1    | 1    | 6     |
+| DNA methylation & reading    | 2    | 0    | 0    | 2     |
+| ncRNA biogenesis & silencing | 6    | 5    | 7    | 18    |
+| RNA modification             | 6    | 0    | 1    | 7     |
+| ADP-ribosylation             | 4    | 0    | 0    | 4     |
+| Ubiquitin signaling          | 8    | 6    | 3    | 17    |
+| Total                        | 35   | 15   | 16   | 66    |
 
-#### DNA Methylation & Reading
+**Cross-species top-level patterns**
 
-DNMT1 (maintenance methyltransferase), TET3 (active demethylation), MBD1/2/3 (methylation readers/NuRD recruitment), and PRDM14 (pluripotency-associated methylation regulator)
+Apul covers all seven categories; Peve covers four; Ptuh covers five.
+Category breadth correlates roughly with absolute interaction count, but
+the shape of each species' profile is qualitatively different, not just
+a scaled version of the others.
 
-#### ADP-Ribosylation (form of chromatin regulation)
+Apul is the most evenly distributed, with no single category exceeding
+25% of the species' total and meaningful representation across
+post-translational (ubiquitin, ADP-ribosylation), RNA-level (RNA
+modification, ncRNA), and chromatin-level (histone, DNA methylation)
+machinery. Peve is concentrated in two categories --- ubiquitin
+signaling (40%) and ncRNA biogenesis (33%) together account for \~73% of
+all hits. Peve has zero RNA-modification, ADP-ribosylation, and
+DNA-methylation hits.
 
-Tankyrases (PARP5a/b), PARP7/TIPARP, macro-PARPs (PARP9/14/15), and the eraser ARH1
+Ptuh is ncRNA-dominated, with ncRNA biogenesis & silencing alone
+accounting for 44% of hits --- the highest fractional concentration in
+any single category across any species.
 
-#### Ubiquitin Signaling (form of protien modification)
-
-Deubiquitinases (USPs, PSMD14, BAP1), E2/E3 ligases (UBE2D, UBE3A, CUL4A, DDB1, UBR2, RNF8, BRCA1)
-
-#### RNA Modification (Epitranscriptomics)
-
-tRNA modifiers (TRMT1, TRMT61A/B, PUS7L, DUS1L), demethylases (ALKBH3), m6A reader (HNRNPA2B1), and ADAR (A-to-I editing)
-
-#### ncRNA Biogenesis & Silencing
-
-Core RISC silencing complex (AGO1/2, TNRC6), biogenesis regulators (LIN28A, KHSRP, SRRT), Integrator complex (INTS1/4/6), RNA decay machinery (exosome, EDC4, CCR4-NOT, SMG1, PAN2), and chromatin/structural components (RBBP4, STAG1/2, SMARCA2/4, RDRP)
-
-#### Other Regulators
-
-Signaling kinases (PKN1, MAP3K12, MAP2K1, Chuk/IKKα), phosphatases (PP1), and protein quality control (COPS6, Hspbap1)
-
+The input miRNA pool size still differs across species (caveat repeated
+from earlier turns: more miRNAs called → more potential targets), so
+absolute differences are partly a sampling effect. The relative
+proportions within species are the stronger comparison.
 
 ### Plot
 
@@ -494,7 +545,9 @@ p <- ggplot(category_counts, aes(x = n_targets, y = species, fill = category)) +
 
 p
 ```
+
 save
+
 ```{r}
 ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", p, width = 9, height = 4.5, dpi = 300)
 ```

@@ -442,8 +442,8 @@ apul_ncRNA_miRNA <- left_join(apul_ncRNA, apul_FA_annot, by = c("target" = "mRNA
 ```
 
     ## Warning in left_join(apul_ncRNA, apul_FA_annot, by = c(target = "mRNA")): Detected an unexpected many-to-many relationship between `x` and `y`.
-    ## ℹ Row 3 of `x` matches multiple rows in `y`.
-    ## ℹ Row 35171 of `y` matches multiple rows in `x`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 5772 of `y` matches multiple rows in `x`.
     ## ℹ If a many-to-many relationship is expected, set `relationship =
     ##   "many-to-many"` to silence this warning.
 
@@ -456,27 +456,26 @@ cat("\n# unique miRNAs:", apul_ncRNA_miRNA$miRNA %>% unique() %>% length(), "\n"
 ```
 
     ## 
-    ## # unique miRNAs: 8
+    ## # unique miRNAs: 5
 
 ``` r
 cat("# unique mRNAs:", apul_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 8
+    ## # unique mRNAs: 5
 
 ``` r
 cat("# unique ncRNA machinery genes:", apul_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique ncRNA machinery genes: 12
+    ## # unique ncRNA machinery genes: 8
 
-In *A. pulchra*, 8 of the 39 miRNAs putatively bind to a total of 8
+In *A. pulchra*, 5 of the 39 miRNAs putatively bind to a total of 5
 unique ncRNA protein machinery transcripts, based on both predicted
-binding and significant coexpression. These transcripts match 12 ncRNA
+binding and significant coexpression. These transcripts match 8 ncRNA
 machinery annotations. Note that the \# of unique annotations is higher
 than the \# of unique transcripts because some of the coral genes match
-multiple similar proteins (e.g., FUN_032699, which matched both AGO1 and
-AGO2 in the original BLASTp search)
+multiple similar proteins.
 
 Collapse to unique miRNA-mRNA pairs
 
@@ -497,8 +496,8 @@ peve_ncRNA_miRNA <- left_join(peve_ncRNA, peve_FA_annot, by = c("target" = "mRNA
 ```
 
     ## Warning in left_join(peve_ncRNA, peve_FA_annot, by = c(target = "mRNA")): Detected an unexpected many-to-many relationship between `x` and `y`.
-    ## ℹ Row 2 of `x` matches multiple rows in `y`.
-    ## ℹ Row 11414 of `y` matches multiple rows in `x`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 832 of `y` matches multiple rows in `x`.
     ## ℹ If a many-to-many relationship is expected, set `relationship =
     ##   "many-to-many"` to silence this warning.
 
@@ -511,27 +510,24 @@ cat("\n# unique miRNAs:", peve_ncRNA_miRNA$miRNA %>% unique() %>% length(), "\n"
 ```
 
     ## 
-    ## # unique miRNAs: 6
+    ## # unique miRNAs: 2
 
 ``` r
 cat("# unique mRNAs:", peve_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 8
+    ## # unique mRNAs: 3
 
 ``` r
 cat("# unique ncRNA machinery genes:", peve_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique ncRNA machinery genes: 9
+    ## # unique ncRNA machinery genes: 3
 
-In *P.evermanni*, 6 of the 45 miRNAs putatively bind to a total of 8
+In *P.evermanni*, 2 of the 45 miRNAs putatively bind to a total of 3
 unique ncRNA protein machinery transcripts, based on both predicted
-binding and significant coexpression. These transcripts match 9 ncRNA
-machinery annotations. Note that the \# of unique annotations is higher
-than the \# of unique transcripts because one of the coral genes matched
-multiple similar proteins (Peve_00038764, which matched both SARCA2 and
-SARCA4 in the original BLASTp search)
+binding and significant coexpression. These transcripts match 3 ncRNA
+machinery annotations.
 
 Collapse to unique miRNA-mRNA pairs
 
@@ -552,8 +548,8 @@ ptuh_ncRNA_miRNA <- left_join(ptuh_ncRNA, ptuh_FA_annot, by = c("target" = "mRNA
 ```
 
     ## Warning in left_join(ptuh_ncRNA, ptuh_FA_annot, by = c(target = "mRNA")): Detected an unexpected many-to-many relationship between `x` and `y`.
-    ## ℹ Row 2 of `x` matches multiple rows in `y`.
-    ## ℹ Row 4489 of `y` matches multiple rows in `x`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 11358 of `y` matches multiple rows in `x`.
     ## ℹ If a many-to-many relationship is expected, set `relationship =
     ##   "many-to-many"` to silence this warning.
 
@@ -566,28 +562,26 @@ cat("\n# unique miRNAs:", ptuh_ncRNA_miRNA$miRNA %>% unique() %>% length(), "\n"
 ```
 
     ## 
-    ## # unique miRNAs: 8
+    ## # unique miRNAs: 5
 
 ``` r
 cat("# unique mRNAs:", ptuh_ncRNA_miRNA$target %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique mRNAs: 12
+    ## # unique mRNAs: 6
 
 ``` r
 cat("# unique ncRNA machinery genes:", ptuh_ncRNA_miRNA$std_gene_name %>% unique() %>% length(), "\n")
 ```
 
-    ## # unique ncRNA machinery genes: 16
+    ## # unique ncRNA machinery genes: 9
 
-In *P.tuahiniensis*, 8 of the 37 miRNAs putatively bind to a total of 12
+In *P.tuahiniensis*, 5 of the 37 miRNAs putatively bind to a total of 6
 unique ncRNA protein machinery transcripts, based on both predicted
-binding and significant coexpression. These transcripts match 16 ncRNA
+binding and significant coexpression. These transcripts match 9 ncRNA
 machinery annotations. Note that the \# of unique annotations is higher
 than the \# of unique transcripts because some of the coral genes
-matched multiple similar proteins (e.g.,  
-Pocillopora_meandrina_HIv1\_\_\_RNAseq.g14104.t1, which matched both
-STAG1 and STAG2 in the original BLASTp search)
+matched multiple similar proteins
 
 Collapse to unique miRNA-mRNA pairs
 
@@ -671,44 +665,43 @@ Generally, the protein machinery that are putatively targeted by our
 coral miRNAs is extremely diverse, covering all major “branches” of
 epigenetic regulation:
 
-#### Histone Methylation
+Counts per category
 
-Covering demethylases (KDM3, KDM6, RIOX1), methyltransferases (KMT5A,
-KMT2E), acetyltransferases (KAT6A/B, KAT14, KAT2A/B), and deacetylases
-(HDAC4/5/7/9, SIRT7), plus arginine methylation (PRMT7)
+| Category                     | Apul | Peve | Ptuh | Total |
+|------------------------------|------|------|------|-------|
+| Histone modification         | 5    | 3    | 4    | 12    |
+| Chromatin signaling          | 4    | 1    | 1    | 6     |
+| DNA methylation & reading    | 2    | 0    | 0    | 2     |
+| ncRNA biogenesis & silencing | 6    | 5    | 7    | 18    |
+| RNA modification             | 6    | 0    | 1    | 7     |
+| ADP-ribosylation             | 4    | 0    | 0    | 4     |
+| Ubiquitin signaling          | 8    | 6    | 3    | 17    |
+| Total                        | 35   | 15   | 16   | 66    |
 
-#### DNA Methylation & Reading
+**Cross-species top-level patterns**
 
-DNMT1 (maintenance methyltransferase), TET3 (active demethylation),
-MBD1/2/3 (methylation readers/NuRD recruitment), and PRDM14
-(pluripotency-associated methylation regulator)
+Apul covers all seven categories; Peve covers four; Ptuh covers five.
+Category breadth correlates roughly with absolute interaction count, but
+the shape of each species’ profile is qualitatively different, not just
+a scaled version of the others.
 
-#### ADP-Ribosylation (form of chromatin regulation)
+Apul is the most evenly distributed, with no single category exceeding
+25% of the species’ total and meaningful representation across
+post-translational (ubiquitin, ADP-ribosylation), RNA-level (RNA
+modification, ncRNA), and chromatin-level (histone, DNA methylation)
+machinery. Peve is concentrated in two categories — ubiquitin signaling
+(40%) and ncRNA biogenesis (33%) together account for ~73% of all hits.
+Peve has zero RNA-modification, ADP-ribosylation, and DNA-methylation
+hits.
 
-Tankyrases (PARP5a/b), PARP7/TIPARP, macro-PARPs (PARP9/14/15), and the
-eraser ARH1
+Ptuh is ncRNA-dominated, with ncRNA biogenesis & silencing alone
+accounting for 44% of hits — the highest fractional concentration in any
+single category across any species.
 
-#### Ubiquitin Signaling (form of protien modification)
-
-Deubiquitinases (USPs, PSMD14, BAP1), E2/E3 ligases (UBE2D, UBE3A,
-CUL4A, DDB1, UBR2, RNF8, BRCA1)
-
-#### RNA Modification (Epitranscriptomics)
-
-tRNA modifiers (TRMT1, TRMT61A/B, PUS7L, DUS1L), demethylases (ALKBH3),
-m6A reader (HNRNPA2B1), and ADAR (A-to-I editing)
-
-#### ncRNA Biogenesis & Silencing
-
-Core RISC silencing complex (AGO1/2, TNRC6), biogenesis regulators
-(LIN28A, KHSRP, SRRT), Integrator complex (INTS1/4/6), RNA decay
-machinery (exosome, EDC4, CCR4-NOT, SMG1, PAN2), and
-chromatin/structural components (RBBP4, STAG1/2, SMARCA2/4, RDRP)
-
-#### Other Regulators
-
-Signaling kinases (PKN1, MAP3K12, MAP2K1, Chuk/IKKα), phosphatases
-(PP1), and protein quality control (COPS6, Hspbap1)
+The input miRNA pool size still differs across species (caveat repeated
+from earlier turns: more miRNAs called → more potential targets), so
+absolute differences are partly a sampling effect. The relative
+proportions within species are the stronger comparison.
 
 ### Plot
 
@@ -818,6 +811,7 @@ p
 ```
 
 ![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
 save
 
 ``` r

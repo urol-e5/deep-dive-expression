@@ -103,6 +103,7 @@ manual_lookup <- c(
   "HDAC; HDAC10; HDAC6"                            = "HDAC class IIb",
   "MAPK8; MAPK8B; MAPK9"                           = "MAPK8/9 (JNK)",
   "EZH1; EZH2; KMT6-EZH2"                          = "EZH",
+  "EZH1; KMT6-EZH2"                                = "EZH",
   # histone lysine methyltransferases
   "BAZ1B; SUV39H1-KMT1A; SUV39H2-KMT1B"            = "H3K9 KMT (SUV39H)",
   "KMT2H-ASH1L; KMT3A-SETD2; WHSC1-NSD2"           = "H3K36 KMT",
@@ -128,7 +129,11 @@ manual_lookup <- c(
   # Mixed / potentially artifactual
   "H2AX; HDAC; HDAC1; HDAC2"                       = "FLAG: H2AX+HDAC1/2 (review)",
   "ALG13; OTUD4"                                   = "FLAG: ALG13+OTUD4 (review)",
-  "DNMT3L; USP9Y"                                  = "FLAG: DNMT3L+USP9Y (review)"
+  "DNMT3L; USP9Y"                                  = "FLAG: DNMT3L+USP9Y (review)",
+  
+  "ZC3H12A; ZC3H12B; ZC3H12C; ZC3H12D; ZFC3H1"     = "ZC3H12",
+  "ZC3H12B; ZC3H12C; ZC3H12D; ZFC3H1"              = "ZC3H12",
+  "ZC3H12A; ZFC3H1"                                = "ZC3H12"
   )
 
 
