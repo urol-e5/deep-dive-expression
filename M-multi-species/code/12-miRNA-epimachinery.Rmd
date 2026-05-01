@@ -401,43 +401,7 @@ Generally, the protein machinery that are putatively targeted by our
 coral miRNAs is extremely diverse, covering all major "branches" of
 epigenetic regulation:
 
-Counts per category
 
-| Category                     | Apul | Peve | Ptuh | Total |
-|------------------------------|------|------|------|-------|
-| Histone modification         | 5    | 3    | 4    | 12    |
-| Chromatin signaling          | 4    | 1    | 1    | 6     |
-| DNA methylation & reading    | 2    | 0    | 0    | 2     |
-| ncRNA biogenesis & silencing | 6    | 5    | 7    | 18    |
-| RNA modification             | 6    | 0    | 1    | 7     |
-| ADP-ribosylation             | 4    | 0    | 0    | 4     |
-| Ubiquitin signaling          | 8    | 6    | 3    | 17    |
-| Total                        | 35   | 15   | 16   | 66    |
-
-**Cross-species top-level patterns**
-
-Apul covers all seven categories; Peve covers four; Ptuh covers five.
-Category breadth correlates roughly with absolute interaction count, but
-the shape of each species' profile is qualitatively different, not just
-a scaled version of the others.
-
-Apul is the most evenly distributed, with no single category exceeding
-25% of the species' total and meaningful representation across
-post-translational (ubiquitin, ADP-ribosylation), RNA-level (RNA
-modification, ncRNA), and chromatin-level (histone, DNA methylation)
-machinery. Peve is concentrated in two categories --- ubiquitin
-signaling (40%) and ncRNA biogenesis (33%) together account for \~73% of
-all hits. Peve has zero RNA-modification, ADP-ribosylation, and
-DNA-methylation hits.
-
-Ptuh is ncRNA-dominated, with ncRNA biogenesis & silencing alone
-accounting for 44% of hits --- the highest fractional concentration in
-any single category across any species.
-
-The input miRNA pool size still differs across species (caveat repeated
-from earlier turns: more miRNAs called → more potential targets), so
-absolute differences are partly a sampling effect. The relative
-proportions within species are the stronger comparison.
 
 ### Plot
 
@@ -452,95 +416,108 @@ ptuh_results_spec$species <- "P. tuahiniensis"
 
 all_data <- bind_rows(apul_results_spec, peve_results_spec, ptuh_results_spec)
 
-# function to classify genes into broad "type" of regulation
 classify_gene <- function(gene_str) {
-  gene <- toupper(gene_str)
-  # Histone modification (methylation, acetylation, deacetylation, phosphorylation)
-  histone_mod <- c("KDM3", "KDM6", "KMT5", "KMT2", "SETD8", "RIOX1", "KAT6", "KAT14", "KAT2", "HDAC", "SIRT7", "PRMT7", "PKN1", "HSPBAP1", "COPS6")
-  # DNA methylation & reading
-  dna_meth <- c("DNMT1", "TET3", "MBD1", "MBD2", "MBD3", "PRDM14", "MCM3AP")
-  # ADP-ribosylation
-  adprib <- c("PARP", "TNKS", "TIPARP", "ARH1", "ADPRH")
-  # Ubiquitin signaling
-  ubiquitin <- c("USP", "PSMD14", "BAP1", "UBE2D", "UBE3A", "UBE4A", "CUL4", "DDB1", "UBR2", "RNF8", "BRCA1", "VCPIP1", "JOSD")
-  # RNA modification (epitranscriptomics)
-  rna_mod <- c("TRMT1", "TRMT61", "ALKBH3", "PUS7L", "DUS1L", "HNRNPA2B1", "HNRNPA1", "ADAR", "RBMX")
-  # ncRNA biogenesis & silencing
-  ncrna <- c("AGO1", "AGO2", "TNRC6", "LIN28", "KHSRP", "SRRT", "RBBP4", "INTS", "SMARCA", "SMG1", "EXOSC", "EDC4", "DIS3L", "CNOT11", "EWSR1", "FUS(?!E)", "PAN2", "RDRP", "STAG1", "STAG2", "MTREX", "ZFC3H1")
-  # Chromatin signaling
-  signaling <- c("MAP3K12", "MAP2K1", "CHUK", "PPP1CB", "PPP1R7")
+  if (is.na(gene_str) || gene_str == "") return("Unclassified")
+  # Split on ";" to handle multi-gene annotations, strip transcript
+  # suffixes (-201, -202, ..., or em-dash variants), and uppercase.
+  symbols <- strsplit(gene_str, "\\s*;\\s*")[[1]]
+  symbols <- sub("[-\u2014\u2013].*$", "", symbols)   # hyphen / em-dash / en-dash
+  symbols <- toupper(trimws(symbols))
+  symbols <- symbols[nzchar(symbols)]
 
-  categories <- list(
-    "Histone modification" = histone_mod,
-    "Chromatin signaling" = signaling,
-    "DNA methylation & reading" = dna_meth,
-    "ncRNA biogenesis & silencing" = ncrna,
-    "RNA modification" = rna_mod,
-    "ADP-ribosylation" = adprib,
-    "Ubiquitin signaling" = ubiquitin
+  #   prefix   : symbol starts with one of these (catches family members)
+  #   exact    : symbol matches one of these exactly
+  cats <- list(
+    "ADP-ribosylation" = list(
+      prefix = c("PARP", "TNKS", "TARG", "MACROD", "OARD", "ADPRH", "ARH", "TIPARP"),
+      exact  = c("PARG", "ARTD1")),
+    "DNA methylation & reading" = list(
+      prefix = c("DNMT", "TET", "MBD", "UHRF", "MECP"),
+      exact  = c("TRDMT1", "MCM3AP", "PRDM14")),
+    "RNA modification" = list(
+      prefix = c("METTL", "YTHDF", "YTHDC", "ALKBH", "WTAP", "VIRMA", "ZC3H13", 
+                 "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR", "APOBEC", 
+                 "DUS", "HNRNPC", "HNRNPA2B1", "HNRNPA1"),
+      exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
+                 "RBMX")),
+    "ncRNA biogenesis & silencing" = list(
+      prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN", 
+                 "TARBP", "PRKRA", "LIN28", "KHSRP", "ZCCHC", "DIS3", "INTS", "EXOSC", 
+                 "PAN2", "PAN3", "DDX5", "DDX17", "DDX6", "EDC", "DCP", "XRN", "CNOT", 
+                 "UPF", "SMG", "TUT", "MOV10", "FMR", "PUM", "STAU", "NCBP", "PHAX", 
+                 "RBM7"),
+      exact  = c("RDRP", "MTREX", "SKIV2L2", "MTR4", "ZFC3H1", "SRRT", "ARS2", "XPO5", 
+                 "XPO1", "CRM1", "RAN", "EWSR1", "FUS", "TARDBP", "HNRNPK", "PARN", 
+                 "PABPC1", "PAPD5", "TRIM25", "DZIP3", "MEX3B", "NONO", "SFPQ", "PSPC1", 
+                 "YBX1", "HSPA8", "HSP90AA1", "HSP90AB1", "PQBP1")),
+    "Histone modification" = list(
+      prefix = c("KMT", "KDM", "SETD", "EZH", "SUV", "EHMT", "MLL", "ASH1", "DOT1", 
+                 "JMJD", "HDAC", "SIRT", "KAT", "PRMT", "CARM", "NSD", "WHSC", "SMYD", 
+                 "CDYL", "RIOX", "MINA", "NO66"),
+      exact  = c("CREBBP", "EP300", "HAT1", "ELP3", "PHF8", "PHF2", "JARID2", "PKN1", 
+                 "HSPBAP1")),
+    "Ubiquitin signaling" = list(
+      prefix = c("USP", "UBE", "UBR", "UBA", "UCHL", "UCH", "RNF", "TRIM", "HUWE", 
+                 "HERC", "MARCH", "RBX", "CUL", "FBX", "SKP", "SOCS", "OTU", "UBQLN", 
+                 "PSMD", "JOSD", "DDB", "MIB"),
+      exact  = c("VCPIP1", "BAP1", "ATXN3", "COPS6", "COPS5", "JAMM", "PARK2", 
+                 "PARK7", "ZRANB1")),
+    "Chromatin signaling" = list(
+      # NOTE: this bin is signaling kinases/phosphatases that act on
+      # chromatin substrates, NOT chromatin-remodeling complexes.
+      prefix = c("MAP3K", "MAP2K", "MAPK"),
+      exact  = c("CHUK", "IKBKB", "IKBKG", "PPP1CB", "PPP1CA", "PPP1CC", "PPP1R7", 
+                 "PPP2CA", "AURKB", "MSK1", "MSK2", "RPS6KA4", "RPS6KA5")
+    )
   )
 
-  matched <- c()
-  for (cat_name in names(categories)) {
-    for (kw in categories[[cat_name]]) {
-      if (grepl(kw, gene, perl = TRUE)) {
-        matched <- c(matched, cat_name)
-        break
-      }
+  for (cat in names(cats)) {
+    pats <- cats[[cat]]
+    for (s in symbols) {
+      if (s %in% pats$exact) return(cat)
+      if (any(startsWith(s, pats$prefix))) return(cat)
     }
   }
-  if (length(matched) == 0) {
-    return("Unclassified")
-  }
-  # return the first matched category
-  return(matched[1])
+  return("Unclassified")
 }
 
-# classify targets
-all_data <- all_data %>% rowwise() %>% mutate(category = classify_gene(gene)) %>% ungroup()
 
-# summarize
-category_counts <- all_data %>% count(species, category, name = "n_targets")
+all_data <- all_data %>%
+  mutate(category = vapply(gene, classify_gene, character(1)))
 
-# Set factor levels
-cat_order <- c("Histone modification",
+cat_order <- c("ADP-ribosylation",
+               "RNA modification",
                "Chromatin signaling",
+               "Histone modification",
                "DNA methylation & reading",
                "ncRNA biogenesis & silencing",
-               "RNA modification",
-               "ADP-ribosylation",
                "Ubiquitin signaling")
-
 species_order <- c("A. pulchra", "P. evermanni", "P. tuahiniensis")
 
-category_counts <- category_counts %>%
-  mutate(category = factor(category, levels = rev(cat_order)),
-         species  = factor(species, levels = rev(species_order))
-         )
+category_counts <- all_data %>%
+  count(species, category, name = "n_targets") %>%
+  # Fill in zero rows so absent categories show up explicitly
+  complete(species = species_order,
+           category = cat_order,
+           fill = list(n_targets = 0)) %>%
+  filter(category %in% cat_order) %>%   # drop any "Unclassified" from the plot
+  mutate(category = factor(category, levels = cat_order),
+         species  = factor(species,  levels = rev(species_order)))
 
-# set colors
-cat_colors <- c(
-  "Histone modification" = "#378ADD",
-  "Chromatin signaling" = "#888780",
-  "DNA methylation & reading" = "#D4537E",
-  "ncRNA biogenesis & silencing" = "#534AB7",
-  "RNA modification" = "#D85A30",
-  "ADP-ribosylation" = "#BA7517",
-  "Ubiquitin signaling" = "#1D9E75"
-)
 
-# plot!
-p <- ggplot(category_counts, aes(x = n_targets, y = species, fill = category)) +
+cat_colors <- c("ADP-ribosylation"             = "#D55E00",  # vermillion
+                "RNA modification"             = "#F0E442",  # yellow
+                "Chromatin signaling"          = "#56B4E9",  # sky blue
+                "Histone modification"         = "#CC79A7",  # reddish purple
+                "DNA methylation & reading"    = "#009E73",  # bluish green
+                "ncRNA biogenesis & silencing" = "#E69F00",  # orange
+                "Ubiquitin signaling"          = "#0072B2")  # blue
+
+p <- ggplot(category_counts,
+            aes(x = n_targets, y = species, fill = category)) +
   geom_bar(stat = "identity", position = "stack", width = 0.65) +
-  scale_fill_manual(
-    values = cat_colors,
-    breaks = cat_order,
-    name   = NULL
-  ) +
-  labs(
-    x = "Number of miRNA target interactions",
-    y = NULL
-  ) +
+  scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
+  labs(x = "Number of miRNA target interactions", y = NULL) +
   theme_minimal()
 
 p
