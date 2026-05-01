@@ -358,7 +358,7 @@ colnames(apul_epi_miRNA_collapsed) == colnames(apul_ncRNA_miRNA_collapsed)
 apul_results <- rbind(apul_epi_miRNA_collapsed, apul_ncRNA_miRNA_collapsed)
 
 # Save
-write.csv(apul_results, "../output/12-miRNA-epimachinery/Apul_miRNAtargets_mach.csv", row.names = FALSE)
+# write.csv(apul_results, "../output/12-miRNA-epimachinery/Apul_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
 ### Peve
@@ -375,7 +375,7 @@ colnames(peve_epi_miRNA_collapsed) == colnames(peve_ncRNA_miRNA_collapsed)
 peve_results <- rbind(peve_epi_miRNA_collapsed, peve_ncRNA_miRNA_collapsed)
 
 # Save
-write.csv(peve_results, "../output/12-miRNA-epimachinery/Peve_miRNAtargets_mach.csv", row.names = FALSE)
+# write.csv(peve_results, "../output/12-miRNA-epimachinery/Peve_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
 ### Ptuh
@@ -392,7 +392,7 @@ colnames(ptuh_epi_miRNA_collapsed) == colnames(ptuh_ncRNA_miRNA_collapsed)
 ptuh_results <- rbind(ptuh_epi_miRNA_collapsed, ptuh_ncRNA_miRNA_collapsed)
 
 # Save
-write.csv(ptuh_results, "../output/12-miRNA-epimachinery/Ptuh_miRNAtargets_mach.csv", row.names = FALSE)
+# write.csv(ptuh_results, "../output/12-miRNA-epimachinery/Ptuh_miRNAtargets_mach.csv", row.names = FALSE)
 ```
 
 ## Summary
@@ -544,3 +544,9 @@ targets_plot(neg_data)
 
 ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_negPCC.png", targets_plot(neg_data), width = 9, height = 4.5, dpi = 300)
 ```
+
+Save
+```{r}
+write.csv(all_data, "../output/12-miRNA-epimachinery/miRNAtargets_mach.csv", row.names = FALSE)
+```
+
