@@ -760,32 +760,61 @@ species_order <- c("A. pulchra", "P. evermanni", "P. tuahiniensis")
 Plot all targets
 
 ``` r
-targets_plot <- function(df){
-  category_counts <- df %>%
-    count(species, category, name = "n_targets") %>%
-    # Fill in zero rows so absent categories show up explicitly
-    complete(species = species_order,
-             category = cat_order,
-             fill = list(n_targets = 0)) %>%
-    filter(category %in% cat_order) %>%   # drop any "Unclassified" from the plot
-    mutate(category = factor(category, levels = cat_order),
-           species  = factor(species,  levels = rev(species_order)))
+targets_plot <- function(df, split_by_sign = FALSE){
   
+  if (split_by_sign) {
+    category_counts <- df %>%
+      mutate(direction = ifelse(PCC.cor >= 0, "Positive", "Negative")) %>%
+      count(species, category, direction, name = "n_targets") %>%
+      complete(species   = species_order,
+               category  = cat_order,
+               direction = c("Negative", "Positive"),
+               fill = list(n_targets = 0)) %>%
+      filter(category %in% cat_order) %>%
+      mutate(category  = factor(category, levels = cat_order),
+             species   = factor(species,  levels = rev(species_order)),
+             direction = factor(direction, levels = c("Negative", "Positive")),
+             n_signed  = ifelse(direction == "Negative", -n_targets, n_targets))
+  } else {
+    category_counts <- df %>%
+      count(species, category, name = "n_targets") %>%
+      complete(species  = species_order,
+               category = cat_order,
+               fill = list(n_targets = 0)) %>%
+      filter(category %in% cat_order) %>%
+      mutate(category = factor(category, levels = cat_order),
+             species  = factor(species,  levels = rev(species_order)))
+  }
   
-  cat_colors <- c("ADP-ribosylation"             = "#D55E00",  # vermillion
-                  "RNA modification"             = "#F0E442",  # yellow
-                  "Chromatin signaling"          = "#56B4E9",  # sky blue
-                  "Histone modification"         = "#CC79A7",  # reddish purple
-                  "DNA methylation & reading"    = "#009E73",  # bluish green
-                  "ncRNA biogenesis & silencing" = "#E69F00",  # orange
-                  "Ubiquitin signaling"          = "#0072B2")  # blue
-
-ggplot(category_counts,
-            aes(x = n_targets, y = species, fill = category)) +
-  geom_bar(stat = "identity", position = "stack", width = 0.65) +
-  scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
-  labs(x = "Number of miRNA target interactions", y = NULL) +
-  theme_minimal()
+  cat_colors <- c("ADP-ribosylation"             = "#D55E00",
+                  "RNA modification"             = "#F0E442",
+                  "Chromatin signaling"          = "#56B4E9",
+                  "Histone modification"         = "#CC79A7",
+                  "DNA methylation & reading"    = "#009E73",
+                  "ncRNA biogenesis & silencing" = "#E69F00",
+                  "Ubiquitin signaling"          = "#0072B2")
+  
+  p <- ggplot(category_counts, aes(y = species, fill = category)) +
+    scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
+    labs(y = NULL) +
+    theme_minimal()
+  
+  if (split_by_sign) {
+    p +
+      geom_bar(aes(x = n_signed, alpha = direction),
+               stat = "identity", position = "stack", width = 0.65) +
+      geom_vline(xintercept = 0, linewidth = 0.4, colour = "grey30") +
+      scale_alpha_manual(values = c(Negative = 0.7, Positive = 1),
+                         name = "PCC sign",
+                         guide = guide_legend(override.aes = list(fill = "grey30"))) +
+      scale_x_continuous(labels = function(x) abs(x)) +
+      labs(x = "Number of miRNA target interactions  (← negative PCC | positive PCC →)")
+  } else {
+    p +
+      geom_bar(aes(x = n_targets),
+               stat = "identity", position = "stack", width = 0.65) +
+      labs(x = "Number of miRNA target interactions")
+  }
 }
 
 targets_plot(all_data)
@@ -793,24 +822,17 @@ targets_plot(all_data)
 
 ![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
-save
+``` r
+targets_plot(all_data, split_by_sign = TRUE)
+```
+
+![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
+
+save plots
 
 ``` r
 ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", targets_plot(all_data), width = 9, height = 4.5, dpi = 300)
-```
-
-negative correlations only
-
-``` r
-neg_data <- all_data %>% filter(PCC.cor < 0)
-
-targets_plot(neg_data)
-```
-
-![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
-
-``` r
-ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_negPCC.png", targets_plot(neg_data), width = 9, height = 4.5, dpi = 300)
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_corsplit.png", targets_plot(all_data, split_by_sign = TRUE), width = 9, height = 4.5, dpi = 300)
 ```
 
 Save
