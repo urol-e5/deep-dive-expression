@@ -427,49 +427,75 @@ classify_gene <- function(gene_str) {
 
   #   prefix   : symbol starts with one of these (catches family members)
   #   exact    : symbol matches one of these exactly
-  cats <- list(
-    "ADP-ribosylation" = list(
-      prefix = c("PARP", "TNKS", "TARG", "MACROD", "OARD", "ADPRH", "ARH", "TIPARP"),
-      exact  = c("PARG", "ARTD1")),
-    "DNA methylation & reading" = list(
-      prefix = c("DNMT", "TET", "MBD", "UHRF", "MECP"),
-      exact  = c("TRDMT1", "MCM3AP", "PRDM14")),
-    "RNA modification" = list(
-      prefix = c("METTL", "YTHDF", "YTHDC", "ALKBH", "WTAP", "VIRMA", "ZC3H13", 
-                 "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR", "APOBEC", 
-                 "DUS", "HNRNPC", "HNRNPA2B1", "HNRNPA1"),
-      exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
-                 "RBMX")),
-    "ncRNA biogenesis & silencing" = list(
-      prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN", 
-                 "TARBP", "PRKRA", "LIN28", "KHSRP", "ZCCHC", "DIS3", "INTS", "EXOSC", 
-                 "PAN2", "PAN3", "DDX5", "DDX17", "DDX6", "EDC", "DCP", "XRN", "CNOT", 
-                 "UPF", "SMG", "TUT", "MOV10", "FMR", "PUM", "STAU", "NCBP", "PHAX", 
-                 "RBM7"),
-      exact  = c("RDRP", "MTREX", "SKIV2L2", "MTR4", "ZFC3H1", "SRRT", "ARS2", "XPO5", 
-                 "XPO1", "CRM1", "RAN", "EWSR1", "FUS", "TARDBP", "HNRNPK", "PARN", 
-                 "PABPC1", "PAPD5", "TRIM25", "DZIP3", "MEX3B", "NONO", "SFPQ", "PSPC1", 
-                 "YBX1", "HSPA8", "HSP90AA1", "HSP90AB1", "PQBP1")),
-    "Histone modification" = list(
-      prefix = c("KMT", "KDM", "SETD", "EZH", "SUV", "EHMT", "MLL", "ASH1", "DOT1", 
-                 "JMJD", "HDAC", "SIRT", "KAT", "PRMT", "CARM", "NSD", "WHSC", "SMYD", 
-                 "CDYL", "RIOX", "MINA", "NO66"),
-      exact  = c("CREBBP", "EP300", "HAT1", "ELP3", "PHF8", "PHF2", "JARID2", "PKN1", 
-                 "HSPBAP1")),
-    "Ubiquitin signaling" = list(
-      prefix = c("USP", "UBE", "UBR", "UBA", "UCHL", "UCH", "RNF", "TRIM", "HUWE", 
-                 "HERC", "MARCH", "RBX", "CUL", "FBX", "SKP", "SOCS", "OTU", "UBQLN", 
-                 "PSMD", "JOSD", "DDB", "MIB"),
-      exact  = c("VCPIP1", "BAP1", "ATXN3", "COPS6", "COPS5", "JAMM", "PARK2", 
-                 "PARK7", "ZRANB1")),
-    "Chromatin signaling" = list(
-      # NOTE: this bin is signaling kinases/phosphatases that act on
-      # chromatin substrates, NOT chromatin-remodeling complexes.
-      prefix = c("MAP3K", "MAP2K", "MAPK"),
-      exact  = c("CHUK", "IKBKB", "IKBKG", "PPP1CB", "PPP1CA", "PPP1CC", "PPP1R7", 
-                 "PPP2CA", "AURKB", "MSK1", "MSK2", "RPS6KA4", "RPS6KA5")
-    )
+  # I don't want to modify Steven/Hollie's epimachinery set (Machinery.fasta), but there are
+# some inclusions that are "edge cases" as to their epigenetic relevance/categorization. I'll
+# keep them in (to avoid a mis-match with other workflows using the Machinery.fasta file),
+# but I do want to note the discrepancy:
+# 
+#   - MCM3AP
+#       GANP/MCM3AP is the scaffold of the mammalian TREX-2 mRNA export
+#       complex; the MCM3-acetyltransferase activity is not a histone/DNA
+#       modification (Wickramasinghe et al. 2010 Curr Biol; Umlauf et al. 2013 NAR).
+#
+#   - PARK7 
+#       PARK7/DJ-1 is a glyoxalase/deglycase. It doesn't fit neatly anywhere, but its
+#       most chromatin-relevant roles are as a redox-sensitive transcriptional
+#       coactivator and DDR factor (DSB repair, Nrf2 stabilization, NONO/SFPQ
+#       interaction).
+ 
+cats <- list(
+  "ADP-ribosylation" = list(
+    prefix = c("PARP", "TNKS", "TARG", "MACROD", "OARD", "ADPRH", "ARH", "TIPARP"),
+    exact  = c("PARG", "ARTD1")  # ARTD1 is redundant with PARP prefix (= PARP1)
+  ),
+  "DNA methylation & reading" = list(
+    prefix = c("DNMT", "TET", "MBD", "UHRF", "MECP"),
+    exact  = c("PRDM14")
+  ),
+  "RNA modification" = list(
+    prefix = c("METTL", "YTHDF", "YTHDC", "ALKBH", "WTAP", "VIRMA", "ZC3H13",
+               "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR", "APOBEC",
+               "DUS", "HNRNPC", "HNRNPA2B1", "HNRNPA1"),
+    exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
+               "RBMX", "TRDMT1")
+  ),
+  "ncRNA biogenesis & silencing" = list(
+    prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN",
+               "TARBP", "PRKRA", "LIN28", "KHSRP", "ZCCHC", "DIS3", "INTS", "EXOSC",
+               "PAN2", "PAN3", "DDX5", "DDX17", "DDX6", "EDC", "DCP", "XRN", "CNOT",
+               "UPF", "SMG", "TUT", "MOV10", "FMR", "PUM", "STAU", "NCBP", "PHAX",
+               "RBM7"),
+    exact  = c("RDRP", "MTREX", "SKIV2L2", "MTR4", "ZFC3H1", "SRRT", "ARS2", "XPO5",
+               "XPO1", "CRM1", "RAN", "EWSR1", "FUS", "TARDBP", "HNRNPK", "PARN",
+               "PABPC1", "PAPD5", "DZIP3", "NONO", "SFPQ", "PSPC1",
+               "YBX1", "HSPA8", "HSP90AA1", "HSP90AB1", "PQBP1",
+               "MCM3AP") # NOTE: DZIP3 is also E3 ubiquitin ligases
+  ),
+  "Histone modification" = list(
+    prefix = c("KMT", "KDM", "SETD", "EZH", "SUV", "EHMT", "MLL", "ASH1", "DOT1",
+               "JMJD", "HDAC", "SIRT", "KAT", "PRMT", "CARM", "NSD", "WHSC", "SMYD",
+               "CDYL", "RIOX", "MINA", "NO66"),
+    exact  = c("CREBBP", "EP300", "HAT1", "ELP3", "PHF8", "PHF2", "JARID2", "PKN1",
+               "HSPBAP1")
+  ),
+  "Ubiquitin signaling" = list(
+    prefix = c("USP", "UBE", "UBR", "UBA", "UCHL", "UCH", "RNF", "TRIM", "HUWE",
+               "HERC", "MARCH", "RBX", "CUL", "FBX", "SKP", "SOCS", "OTU", "UBQLN",
+               "PSMD", "JOSD", "DDB", "MIB"),
+    exact  = c("VCPIP1", "BAP1", "ATXN3", "COPS6", "COPS5", "PARK2",
+               "ZRANB1")
+  ),
+  "Chromatin signaling" = list(
+    # NOTE: this bin is signaling proteins (kinases, phosphatases, and
+    # redox-sensitive nuclear factors) that act on chromatin substrates or
+    # chromatin-associated transcription factors, NOT chromatin-remodeling
+    # complexes.
+    prefix = c("MAP3K", "MAP2K", "MAPK"),
+    exact  = c("CHUK", "IKBKB", "IKBKG", "PPP1CB", "PPP1CA", "PPP1CC", "PPP1R7",
+               "PPP2CA", "AURKB", "MSK1", "MSK2", "RPS6KA4", "RPS6KA5",
+               "PARK7")
   )
+)
 
   for (cat in names(cats)) {
     pats <- cats[[cat]]
