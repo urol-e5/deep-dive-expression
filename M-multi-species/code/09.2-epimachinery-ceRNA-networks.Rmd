@@ -1,0 +1,120 @@
+---
+title: "09.2-epimachinery-ceRNA-network"
+author: "Kathleen Durkin"
+date: "2026-05-07"
+output: 
+  github_document:
+    toc: true
+    number_sections: false
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+For all 3 species, we have putative ceRNA modules, involving lncRNAs which putatively sequester miRNAs from repressing their mRNA targets. As an added layer of complexity, these de-repressed mRNA targets may encode protein machinery relevant to other epigenetic processes! This is what we'll check for in this script.
+
+Load libraries
+```{r}
+library(dplyr)
+```
+
+
+Load data
+```{r}
+Apul_ceRNA <- read.delim("../../D-Apul/output/33.1-Apul-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+
+Peve_ceRNA <- read.delim("../../E-Peve/output/31.1-Peve-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+
+Ptuh_ceRNA <- read.delim("../../F-Ptuh/output/31.1-Ptuh-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+
+# Since any ceRNA network requires the miRNA to also be putatively targeting the 
+# derepressed mRNA, can just use the miRNA-epimachinery targeting results, instead 
+# of the full set of epimachinery transcripts across all species. This is nicer, bc 
+# the miRNA-epimachinery targeting results already include functional categorization 
+# of the epimachinery proteins.
+
+epi_targeting <- read.csv("../output/12-miRNA-epimachinery/miRNAtargets_mach.csv")
+```
+
+
+## Apul
+
+bind to identify ceRNA sets involving epimachinery transcripts
+```{r}
+Apul_epi <- left_join(Apul_ceRNA, epi_targeting, by = c("mRNA" = "target"))
+Apul_epi <- Apul_epi %>% filter(!is.na(category))
+
+cat("# distinct epimachinery transcripts involved in the ceRNA network:", length(unique(Apul_epi$mRNA)))
+cat("\nFunctional categories represented:", unique(Apul_epi$category))
+```
+
+Summarize
+```{r}
+Apul_epi %>%
+  group_by(miRNA, mRNA, gene, type, category) %>%
+  summarise(
+    n_lncRNA_sponges   = n_distinct(lncRNA),
+    .groups = "drop"
+  ) %>%
+  dplyr::select(-type, -mRNA) %>%
+  arrange(desc(n_lncRNA_sponges))
+
+```
+
+
+## Peve
+
+bind to identify ceRNA sets involving epimachinery transcripts
+```{r}
+# Need to remove the "gene-" prefix that's currently appended in front of the mRNA names
+Peve_ceRNA$mRNA <- sub("gene-", "", Peve_ceRNA$mRNA)
+
+Peve_epi <- left_join(Peve_ceRNA, epi_targeting, by = c("mRNA" = "target"))
+Peve_epi <- Peve_epi %>% filter(!is.na(category))
+
+cat("# distinct epimachinery transcripts involved in the ceRNA network:", length(unique(Peve_epi$mRNA)))
+cat("\nFunctional categories represented:", unique(Peve_epi$category))
+```
+
+Summarize
+```{r}
+Peve_epi %>%
+  group_by(miRNA, mRNA, gene, type, category) %>%
+  summarise(
+    n_lncRNA_sponges   = n_distinct(lncRNA),
+    .groups = "drop"
+  ) %>%
+  dplyr::select(-type, -mRNA) %>%
+  arrange(desc(n_lncRNA_sponges))
+
+```
+
+
+## Ptuh
+
+bind to identify ceRNA sets involving epimachinery transcripts
+```{r}
+# Need to remove the "gene-" prefix that's currently appended in front of the mRNA names
+Ptuh_ceRNA$mRNA <- sub("gene-", "", Ptuh_ceRNA$mRNA)
+
+Ptuh_epi <- left_join(Ptuh_ceRNA, epi_targeting, by = c("mRNA" = "target"))
+Ptuh_epi <- Ptuh_epi %>% filter(!is.na(category))
+
+cat("# distinct epimachinery transcripts involved in the ceRNA network:", length(unique(Ptuh_epi$mRNA)))
+cat("\nFunctional categories represented:", unique(Ptuh_epi$category))
+```
+
