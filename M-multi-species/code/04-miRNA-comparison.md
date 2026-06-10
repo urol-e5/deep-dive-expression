@@ -3,56 +3,39 @@
 Kathleen Durkin
 2025-05-05
 
-- <a href="#1-prep-data" id="toc-1-prep-data">1 Prep data</a>
-  - <a href="#11-isolate-mature-mirna-sequences"
-    id="toc-11-isolate-mature-mirna-sequences">1.1 Isolate mature miRNA
-    sequences</a>
-- <a href="#2-annotate-with-asigned-mirna-names"
-  id="toc-2-annotate-with-asigned-mirna-names">2 Annotate with asigned
-  miRNA names</a>
-  - <a href="#21-check-mirna-length-distributions"
-    id="toc-21-check-mirna-length-distributions">2.1 Check miRNA length
-    distributions</a>
-- <a href="#3-blasts" id="toc-3-blasts">3 BLASTs</a>
-  - <a href="#31-merge-the-three-mature-mirna-fastas"
-    id="toc-31-merge-the-three-mature-mirna-fastas">3.1 Merge the three
-    mature miRNA FASTAs</a>
-  - <a href="#32-make-database-for-each-species"
-    id="toc-32-make-database-for-each-species">3.2 Make database for each
-    species:</a>
-  - <a href="#33-run-blastn" id="toc-33-run-blastn">3.3 Run Blastn</a>
-  - <a href="#34-join-blast-tables" id="toc-34-join-blast-tables">3.4 Join
-    BLAST tables</a>
-- <a href="#4-identify-conserved-mirnas"
-  id="toc-4-identify-conserved-mirnas">4 Identify conserved miRNAs</a>
-  - <a href="#41-conserved-across-all-three-species-apul-peve-and-ptuh"
-    id="toc-41-conserved-across-all-three-species-apul-peve-and-ptuh">4.1
-    Conserved across all three species (Apul, Peve, and Ptuh)</a>
-  - <a href="#42-conserved-among-subsets-of-the-three-species"
-    id="toc-42-conserved-among-subsets-of-the-three-species">4.2 Conserved
-    among subsets of the three species</a>
-    - <a href="#421-apul-and-peve" id="toc-421-apul-and-peve">4.2.1 Apul and
-      Peve</a>
-    - <a href="#422-apul-and-ptuh" id="toc-422-apul-and-ptuh">4.2.2 Apul and
-      Ptuh</a>
-    - <a href="#423-peve-and-ptuh" id="toc-423-peve-and-ptuh">4.2.3 Peve and
-      Ptuh</a>
-  - <a href="#43-visualize" id="toc-43-visualize">4.3 Visualize</a>
-    - <a href="#431-data-munging-of-the-results"
-      id="toc-431-data-munging-of-the-results">4.3.1 Data munging of the
-      results</a>
-    - <a href="#432-venn-diagram" id="toc-432-venn-diagram">4.3.2 Venn
-      diagram</a>
-- <a href="#5-identify-mirnas-with-identical-mature-mirnas"
-  id="toc-5-identify-mirnas-with-identical-mature-mirnas">5 Identify
-  miRNAs with identical mature miRNAs</a>
-  - <a href="#51-apul" id="toc-51-apul">5.1 Apul</a>
-  - <a href="#52-peve" id="toc-52-peve">5.2 Peve</a>
-  - <a href="#53-ptuh" id="toc-53-ptuh">5.3 Ptuh</a>
-- <a href="#6-look-at-the-database-matches"
-  id="toc-6-look-at-the-database-matches">6 Look at the database
-  matches</a>
-  - <a href="#61-table" id="toc-61-table">6.1 Table</a>
+- [1 Prep data](#1-prep-data)
+  - [1.1 Isolate mature miRNA
+    sequences](#11-isolate-mature-mirna-sequences)
+- [2 Annotate with asigned miRNA
+  names](#2-annotate-with-asigned-mirna-names)
+  - [2.1 Check miRNA length
+    distributions](#21-check-mirna-length-distributions)
+- [3 BLASTs](#3-blasts)
+  - [3.1 Merge the three mature miRNA
+    FASTAs](#31-merge-the-three-mature-mirna-fastas)
+  - [3.2 Make database for each
+    species:](#32-make-database-for-each-species)
+  - [3.3 Run Blastn](#33-run-blastn)
+  - [3.4 Join BLAST tables](#34-join-blast-tables)
+- [4 Identify conserved miRNAs](#4-identify-conserved-mirnas)
+  - [4.1 Conserved across all three species (Apul, Peve, and
+    Ptuh)](#41-conserved-across-all-three-species-apul-peve-and-ptuh)
+  - [4.2 Conserved among subsets of the three
+    species](#42-conserved-among-subsets-of-the-three-species)
+    - [4.2.1 Apul and Peve](#421-apul-and-peve)
+    - [4.2.2 Apul and Ptuh](#422-apul-and-ptuh)
+    - [4.2.3 Peve and Ptuh](#423-peve-and-ptuh)
+  - [4.3 Visualize](#43-visualize)
+    - [4.3.1 Data munging of the
+      results](#431-data-munging-of-the-results)
+    - [4.3.2 Venn diagram](#432-venn-diagram)
+- [5 Identify miRNAs with identical mature
+  miRNAs](#5-identify-mirnas-with-identical-mature-mirnas)
+  - [5.1 Apul](#51-apul)
+  - [5.2 Peve](#52-peve)
+  - [5.3 Ptuh](#53-ptuh)
+- [6 Look at the database matches](#6-look-at-the-database-matches)
+  - [6.1 Table](#61-table)
 
 I want to find miRNAs that are conserved among either a subset of or all
 three species of interest (*A.pulchra*, *P.evermanni*, and
@@ -372,14 +355,14 @@ Apul
 -out ../output/04-miRNA-comparison/blasts/Apul-db/Apul_ShortStack_mature
 ```
 
-    Building a new DB, current time: 05/06/2025 19:28:15
+    Building a new DB, current time: 05/20/2026 00:00:14
     New DB name:   /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Apul-db/Apul_ShortStack_mature
     New DB title:  ../output/04-miRNA-comparison/Apul_ShortStack_mature.fasta
     Sequence type: Nucleotide
     Deleted existing Nucleotide BLAST database named /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Apul-db/Apul_ShortStack_mature
     Keep MBits: T
     Maximum file size: 1000000000B
-    Adding sequences from FASTA; added 39 sequences in 0.00327086 seconds.
+    Adding sequences from FASTA; added 39 sequences in 0.004879 seconds.
 
 Peve
 
@@ -390,14 +373,14 @@ Peve
 -out ../output/04-miRNA-comparison/blasts/Peve-db/Peve_ShortStack_mature
 ```
 
-    Building a new DB, current time: 05/06/2025 19:28:17
+    Building a new DB, current time: 05/20/2026 00:00:15
     New DB name:   /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Peve-db/Peve_ShortStack_mature
     New DB title:  ../output/04-miRNA-comparison/Peve_ShortStack_mature.fasta
     Sequence type: Nucleotide
     Deleted existing Nucleotide BLAST database named /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Peve-db/Peve_ShortStack_mature
     Keep MBits: T
     Maximum file size: 1000000000B
-    Adding sequences from FASTA; added 45 sequences in 0.00182319 seconds.
+    Adding sequences from FASTA; added 45 sequences in 0.00223303 seconds.
 
 Ptuh
 
@@ -408,14 +391,14 @@ Ptuh
 -out ../output/04-miRNA-comparison/blasts/Ptuh-db/Ptuh_ShortStack_mature
 ```
 
-    Building a new DB, current time: 05/06/2025 19:28:18
+    Building a new DB, current time: 05/20/2026 00:00:15
     New DB name:   /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Ptuh-db/Ptuh_ShortStack_mature
     New DB title:  ../output/04-miRNA-comparison/Ptuh_ShortStack_mature.fasta
     Sequence type: Nucleotide
     Deleted existing Nucleotide BLAST database named /home/shared/8TB_HDD_02/shedurkin/deep-dive-expression/M-multi-species/output/04-miRNA-comparison/blasts/Ptuh-db/Ptuh_ShortStack_mature
     Keep MBits: T
     Maximum file size: 1000000000B
-    Adding sequences from FASTA; added 37 sequences in 0.00179005 seconds.
+    Adding sequences from FASTA; added 37 sequences in 0.00194001 seconds.
 
 ## 3.3 Run Blastn
 
