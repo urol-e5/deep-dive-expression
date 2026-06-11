@@ -1,0 +1,204 @@
+---
+title: "01.63-lncRNA-pipeline-getFastas"
+author: "Kathleen Durkin"
+date: "2026-06-10"
+always_allow_html: true
+output: 
+  github_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    html_preview: true 
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+bibliography: ../../references.bib
+link-citations: true
+---
+
+When Zach re-did the lncRNA pipeline there doesn't seem to have been .fasta output files produced (just the expression matrices, .bed, and .gtf files). I need lncRNA fastas for all three species for other analyses, so let's generate those real quick using `bedtools`. 
+
+## GTF/BED formatting problem
+
+```{bash, eval=FALSE}
+/home/shared/bedtools2/bin/bedtools getfasta -fi ../../D-Apul/data/Apulchra-genome.fa -bed ../output/01.6-lncRNA-pipeline/lncRNA.gtf -fo ../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.fasta -fullHeader
+```
+
+aaaannnnd it turns out there are formatting issues with the gtf and bed files. The gtf has several instances of a "-1" starting position (in gtf format, which is 1-start, a 1 starting position would represent the first nucleotide of a strand -- -1 is impossible).
+
+```{bash}
+awk '$4 == "-1"' ../output/01.6-lncRNA-pipeline/lncRNA.gtf
+```
+Let's check the other two species' lncRNA gtf files:
+
+Peve
+```{bash}
+awk '$4 == "-1"' ../output/01.61-lncRNA-pipeline/lncRNA.gtf | head
+```
+
+Ptuh
+```{bash}
+awk '$4 == "-1"' ../output/01.62-lncRNA-pipeline/lncRNA.gtf
+```
+
+yeah, the problem is present in all three gtf files. This suggests there's a formatting issue in the lncRNA pipeline itself (`./01.6-lncRNA-pipeline`). My best guess is that there's an issue in accounting for a BED-based 0-start position? There are apparently also problems with the BED file formats, though, so the correction must have been mistakenly applied before gtf conversion. This would mean that either the entire "start" column OR both the "start" *and* "end" columns of each file are shifted down by 2 (so, e.g., the "-1" should be "1", a "123" should actually be a "125", etc.)
+
+I'm going to have Claude Opus 4.8 look through Zach's pipeline code to see if it can identify the problem.
+
+Claude response:
+
+> Let `T` = the true 1-based start of a candidate transcript in `lncRNA_candidates.gtf` (this is correct, coming straight from gffcompare/StringTie).
+`bedtools getfasta -name` writes headers like transcript::chrom:start-end. In bedtools ≥2.27, the appended chrom:start-end is the 0-based interval, even when the input is a 1-based GTF (bedtools normalizes everything to 0-based BED internally). So the header start is `T − 1`.
+The `while` read loop (and the equivalent Python block) then does start=$((start - 1)) with the comment "Convert the start position to 0-based by subtracting 1." But the header value is already 0-based. So this subtracts a second time → BED start = `T − 2`.
+`renamegtf` chunk builds lncRNA.gtf with printf ... %d ... $2, $3 — it writes the BED start ($2) straight into the GTF start column with no +1. Result: GTF start = `T − 2`.
+
+I confirmed this by manually reading through the code (and confirmed that our bedtools version, `/home/shared/bedtools2/bin/bedtools` is >=2.27). Yes, it seems like there is a double-correction in converting a gtf (1-start) candidate file to a bed (0-start) final file, *and* that bed final file was not appropriately converted into the final gtf file. This means that both the final `lncRNA.bed` and `lncRNA.gtf` file have inaccurate start positions -- **the `lncRNA.bed` starts are off by 1 position, and the `lncRNA.gtf` starts are off by 2**. Importantly, since .bed and .gtf end up having the same end positions, the end columns didn't undergo any conversions and should still be correct in all files.
+
+Since the `./01.6-lncRNA-pipeline` code is Zach's I want to leave it to him to confirm the problem and fix, since he's much more familiar with the code structure. For now, I'll manually correct the gtf files, under the assumption they need to be start-shifted up by 2 positions, so that I can generate fasta files
+
+
+## Manual GTF and BED correction
+GTF: add 2 to all start positions (e.g., so that -1 becomes 1); leave all end positions unchanged
+BED: add 1 to all start positions (e.g., so that -1 becomes 0); leave all end positions unchanged
+
+### Apul
+
+```{r, engine='bash'}
+awk 'BEGIN{FS=OFS="\t"} /^#/ {print; next} {$4=$4+2} 1' \
+  "../output/01.6-lncRNA-pipeline/lncRNA.gtf" > "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.gtf"
+  
+awk 'BEGIN{FS=OFS="\t"} /^#/ || /^track/ || /^browser/ {print; next} {$2=$2+1} 1' \
+  "../output/01.6-lncRNA-pipeline/lncRNA.bed" > "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.bed"
+
+# Verify
+# GTF: no illegal starts, start <= end everywhere
+echo "verify GTF"
+awk -F'\t' '!/^#/ && $4<1'  "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.gtf" | wc -l   # expect 0
+awk -F'\t' '!/^#/ && $4>$5' "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.gtf"           # expect nothing
+
+# BED: no negative starts, start < end everywhere (BED is half-open)
+echo "verify BED"
+awk -F'\t' '!/^#/ && $2<0'   "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.bed" | wc -l  # expect 0
+awk -F'\t' '!/^#/ && $2>=$3' "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.bed"          # expect nothing
+
+# Confirm the shift actually applied (compare a few rows side by side)
+echo "confirm shift"
+paste <(cut -f4 "../output/01.6-lncRNA-pipeline/lncRNA.gtf" | grep -v '^#') \
+      <(cut -f4 "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.gtf" | grep -v '^#') | head -3
+```
+
+while we're here, let's also make a bed file that contains the lncRNA IDs -- ours currently only contains genomic coordinates
+```{bash}
+awk 'BEGIN{FS=OFS="\t"} !/^#/ {
+    match($9, /gene_id "[^"]+"/)
+    name = substr($9, RSTART+9, RLENGTH-10)   # strip leading: gene_id "  and trailing: "
+    print $1, $4-1, $5, name, ".", $7          # $4-1 = 1-based -> 0-based start
+}' "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.gtf" \
+> "../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.named.bed"
+```
+
+### Peve
+
+```{r, engine='bash'}
+awk 'BEGIN{FS=OFS="\t"} /^#/ {print; next} {$4=$4+2} 1' \
+  "../output/01.61-lncRNA-pipeline/lncRNA.gtf" > "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.gtf"
+  
+awk 'BEGIN{FS=OFS="\t"} /^#/ || /^track/ || /^browser/ {print; next} {$2=$2+1} 1' \
+  "../output/01.61-lncRNA-pipeline/lncRNA.bed" > "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.bed"
+
+# Verify
+# GTF: no illegal starts, start <= end everywhere
+echo "verify GTF"
+awk -F'\t' '!/^#/ && $4<1'  "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.gtf" | wc -l   # expect 0
+awk -F'\t' '!/^#/ && $4>$5' "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.gtf"           # expect nothing
+
+# BED: no negative starts, start < end everywhere (BED is half-open)
+echo "verify BED"
+awk -F'\t' '!/^#/ && $2<0'   "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.bed" | wc -l  # expect 0
+awk -F'\t' '!/^#/ && $2>=$3' "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.bed"          # expect nothing
+
+# Confirm the shift actually applied (compare a few rows side by side)
+echo "confirm shift"
+paste <(cut -f4 "../output/01.61-lncRNA-pipeline/lncRNA.gtf" | grep -v '^#') \
+      <(cut -f4 "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.gtf" | grep -v '^#') | head -3
+```
+
+while we're here, let's also make a bed file that contains the lncRNA IDs -- ours currently only contains genomic coordinates
+```{bash}
+awk 'BEGIN{FS=OFS="\t"} !/^#/ {
+    match($9, /gene_id "[^"]+"/)
+    name = substr($9, RSTART+9, RLENGTH-10)   # strip leading: gene_id "  and trailing: "
+    print $1, $4-1, $5, name, ".", $7          # $4-1 = 1-based -> 0-based start
+}' "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.gtf" \
+> "../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.named.bed"
+```
+
+### Ptuh
+
+```{r, engine='bash'}
+awk 'BEGIN{FS=OFS="\t"} /^#/ {print; next} {$4=$4+2} 1' \
+  "../output/01.62-lncRNA-pipeline/lncRNA.gtf" > "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.gtf"
+  
+awk 'BEGIN{FS=OFS="\t"} /^#/ || /^track/ || /^browser/ {print; next} {$2=$2+1} 1' \
+  "../output/01.62-lncRNA-pipeline/lncRNA.bed" > "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.bed"
+
+# Verify
+# GTF: no illegal starts, start <= end everywhere
+echo "verify GTF"
+awk -F'\t' '!/^#/ && $4<1'  "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.gtf" | wc -l   # expect 0
+awk -F'\t' '!/^#/ && $4>$5' "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.gtf"           # expect nothing
+
+# BED: no negative starts, start < end everywhere (BED is half-open)
+echo "verify BED"
+awk -F'\t' '!/^#/ && $2<0'   "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.bed" | wc -l  # expect 0
+awk -F'\t' '!/^#/ && $2>=$3' "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.bed"          # expect nothing
+
+# Confirm the shift actually applied (compare a few rows side by side)
+echo "confirm shift"
+paste <(cut -f4 "../output/01.62-lncRNA-pipeline/lncRNA.gtf" | grep -v '^#') \
+      <(cut -f4 "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.gtf" | grep -v '^#') | head -3
+```
+
+while we're here, let's also make a bed file that contains the lncRNA IDs -- ours currently only contains genomic coordinates
+```{bash}
+awk 'BEGIN{FS=OFS="\t"} !/^#/ {
+    match($9, /gene_id "[^"]+"/)
+    name = substr($9, RSTART+9, RLENGTH-10)   # strip leading: gene_id "  and trailing: "
+    print $1, $4-1, $5, name, ".", $7          # $4-1 = 1-based -> 0-based start
+}' "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.gtf" \
+> "../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.named.bed"
+```
+
+## Convert corrected BED to FASTA
+
+### Apul
+```{bash}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi ../../D-Apul/data/Apulchra-genome.fa \
+-bed ../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.start_corrected.named.bed \
+-s -nameOnly \
+-fo ../output/01.63-lncRNA-pipeline-getFastas/Apul_lncRNA.fasta
+```
+
+### Peve
+```{bash}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi ../../E-Peve/data/Porites_evermanni_v1.fa \
+-bed ../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.start_corrected.named.bed \
+-s -nameOnly \
+-fo ../output/01.63-lncRNA-pipeline-getFastas/Peve_lncRNA.fasta
+```
+
+### Ptuh
+```{bash}
+/home/shared/bedtools2/bin/bedtools getfasta \
+-fi ../../F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fa \
+-bed ../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.start_corrected.named.bed \
+-s -nameOnly \
+-fo ../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.fasta
+```
+
