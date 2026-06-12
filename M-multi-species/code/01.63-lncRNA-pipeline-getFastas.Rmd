@@ -56,13 +56,14 @@ Claude response:
 The `while` read loop (and the equivalent Python block) then does start=$((start - 1)) with the comment "Convert the start position to 0-based by subtracting 1." But the header value is already 0-based. So this subtracts a second time → BED start = `T − 2`.
 `renamegtf` chunk builds lncRNA.gtf with printf ... %d ... $2, $3 — it writes the BED start ($2) straight into the GTF start column with no +1. Result: GTF start = `T − 2`.
 
-I confirmed this by manually reading through the code (and confirmed that our bedtools version, `/home/shared/bedtools2/bin/bedtools` is >=2.27). Yes, it seems like there is a double-correction in converting a gtf (1-start) candidate file to a bed (0-start) final file, *and* that bed final file was not appropriately converted into the final gtf file. This means that both the final `lncRNA.bed` and `lncRNA.gtf` file have inaccurate start positions -- **the `lncRNA.bed` starts are off by 1 position, and the `lncRNA.gtf` starts are off by 2**. Importantly, since .bed and .gtf end up having the same end positions, the end columns didn't undergo any conversions and should still be correct in all files.
+I confirmed this by manually reading through the code (and confirmed that our bedtools version, `/home/shared/bedtools2/bin/bedtools` is >=2.27). Yes, it seems like there is a double-correction in converting a gtf (1-start) candidate file to a bed (0-start) final file, *and* that bed final file was not appropriately converted into the final gtf file. This means that both the final `lncRNA.bed` and `lncRNA.gtf` file have inaccurate start positions -- **the `lncRNA.bed` starts are off by 1 position, and the `lncRNA.gtf` starts are off by 2**. Importantly, since .bed and .gtf end up having the same end positions, **the end columns didn't undergo any conversions and should still be correct in all files**.
 
 Since the `./01.6-lncRNA-pipeline` code is Zach's I want to leave it to him to confirm the problem and fix, since he's much more familiar with the code structure. For now, I'll manually correct the gtf files, under the assumption they need to be start-shifted up by 2 positions, so that I can generate fasta files
 
 
 ## Manual GTF and BED correction
 GTF: add 2 to all start positions (e.g., so that -1 becomes 1); leave all end positions unchanged
+
 BED: add 1 to all start positions (e.g., so that -1 becomes 0); leave all end positions unchanged
 
 ### Apul
@@ -202,3 +203,6 @@ awk 'BEGIN{FS=OFS="\t"} !/^#/ {
 -fo ../output/01.63-lncRNA-pipeline-getFastas/Ptuh_lncRNA.fasta
 ```
 
+The output lncRNA fasta files are too large to be stored on Github, so they'll be available in large-file storage on Gannet:
+
+()[https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression/M-multi-species/output/01.63-lncRNA-pipeline-getFastas/]
