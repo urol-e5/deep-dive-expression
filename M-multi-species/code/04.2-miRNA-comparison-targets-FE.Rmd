@@ -1270,7 +1270,12 @@ species_labels <- c(Apul = "A. pulchra",
 # FIGURE 1 — Region distribution across species (per-miRNA proportion in CDS)
 # ============================================================================
 
-fig1 <- ggplot(mir_props, aes(species, prop_CDS, fill = species)) +
+# Filter out any miRNA with fewer than 5 predicted target sites. A low total # of sites
+# may by chance have 0 CDS sites -> 0% CDS sites, could artificially deflate the proportion 
+# comparison. Essentially, trying to reduce weighting by site #.
+mir_props_filt <- mir_props %>% filter(n_sites >=5)
+
+fig1 <- ggplot(mir_props_filt, aes(species, prop_CDS, fill = species)) +
   geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
                linewidth = 0.4) +
   geom_jitter(aes(colour = species),
@@ -1387,7 +1392,7 @@ get_pw <- function(mat, a, b) {
 
 # Cross-species omnibus + pairwise tests
 kw_CDS <- kruskal.test(prop_CDS ~ species, data = mir_props)
-pw_CDS <- pairwise.wilcox.test(mir_props$prop_CDS, mir_props$species,
+pw_CDS <- pairwise.wilcox.test(mir_props_filt$prop_CDS, mir_props_filt$species,
                                p.adjust.method = "BH")$p.value
 
 kw_pos <- kruskal.test(prop_pos ~ species, data = mir_props)
@@ -1400,7 +1405,7 @@ comps <- list(c("Apul", "Peve"), c("Apul", "Ptuh"), c("Peve", "Ptuh"))
 
 # ---- PLOT 1 ----
 
-fig1_fancy <- ggplot(mir_props, aes(species, prop_CDS, fill = species)) +
+fig1_fancy <- ggplot(mir_props_filt, aes(species, prop_CDS, fill = species)) +
   geom_hline(yintercept = 0.5, linetype = "dashed",
              colour = "grey55", linewidth = 0.4) +
   geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
