@@ -1,123 +1,123 @@
-given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor,Protein.names
-apul-mir-100,FUN_004759,2,0,0,2,-0.887528192405241,Transposon Tf2-9 polyprotein (Retrotransposable element Tf2 155 kDa protein)
-apul-mir-100,FUN_007047,2,0,0,2,-0.905801351593038,NA
-apul-mir-100,FUN_014449,74,0,0,74,-0.937787808748089,NA
-apul-mir-100,FUN_015202,2,0,0,2,-0.958719638413883,Collagen triple helix repeat-containing protein 1
-apul-mir-100,FUN_016425,2,0,1,1,-0.967850986195505,NA
-apul-mir-100,FUN_024153,2,0,0,2,-0.903891593618089,NA
-apul-mir-100,FUN_024599,2,0,0,2,-0.891613622943961,NA
-apul-mir-100,FUN_027960,4,0,0,4,-0.915068825026582,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-apul-mir-100,FUN_031424,2,0,0,2,-0.894880616202545,NLR family CARD domain-containing protein 3 (CARD15-like protein) (Caterpiller protein 16.2) (CLR16.2) (NACHT, LRR and CARD domains-containing protein 3) (Nucleotide-binding oligomerization domain protein 3)
-apul-mir-100,FUN_031670,2,0,0,2,0.92448632039116,NA
-apul-mir-100,FUN_031887,2,0,0,2,-0.94454906845918,NA
-apul-mir-2022,FUN_002026,2,0,2,0,-0.885378883105539,NA
-apul-mir-2023,FUN_002339,5,0,0,5,0.927003883326743,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-apul-mir-2023,FUN_002342,2,1,0,1,0.973893925144242,NA
-apul-mir-2025,FUN_004759,2,0,0,2,0.983047003339369,Transposon Tf2-9 polyprotein (Retrotransposable element Tf2 155 kDa protein)
-apul-mir-2030,FUN_010926,2,0,0,2,-0.882427289799813,Peroxidasin (EC 1.11.2.-) [Cleaved into: PXDN active fragment]
-apul-mir-2050,FUN_007025,2,0,0,2,-0.970929604231871,Transposon TX1 uncharacterized 149 kDa protein (ORF 2)
-apul-mir-2050,FUN_009459,2,0,0,2,0.929494205450124,Transposon TX1 uncharacterized 149 kDa protein (ORF 2)
-apul-mir-2050,FUN_027755,2,0,0,2,0.93140186433902,Low-density lipoprotein receptor-related protein 4 (LRP-4) (Multiple epidermal growth factor-like domains 7)
-apul-mir-2050,FUN_028435,2,0,0,2,0.988550865761384,NA
-apul-mir-2050,FUN_035803,2,0,0,2,0.951924411700295,NA
-apul-mir-2050,FUN_037363,2,0,0,2,0.882479011012201,NA
-apul-mir-9425,FUN_034055,2,0,0,2,0.889105472146644,MAP kinase-activating death domain protein (Rab3 GDP/GTP exchange factor) (RabGEF) (Rab3 GDP/GTP exchange protein) (RabGEP)
-apul-mir-novel-10,FUN_003896,2,0,0,2,0.951773329003986,ATP-dependent RNA helicase DDX4 (EC 3.6.4.13) (DEAD box protein 4) (Mvh) (Vasa homolog)
-apul-mir-novel-10,FUN_006562,3,0,0,3,-0.879644448173872,NLR family CARD domain-containing protein 3 (CARD15-like protein) (Caterpiller protein 16.2) (CLR16.2) (NACHT, LRR and CARD domains-containing protein 3) (Nucleotide-binding oligomerization domain protein 3)
-apul-mir-novel-10,FUN_009172,2,0,0,2,-0.88200894083422,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-apul-mir-novel-10,FUN_017909,2,0,1,1,0.89831940025494,NA
-apul-mir-novel-10,FUN_023915,2,0,1,1,0.898029169702219,NA
-apul-mir-novel-10,FUN_035131,2,0,0,2,-0.907585361277286,NACHT domain- and WD repeat-containing protein 1
-apul-mir-novel-10,FUN_038573,2,0,0,2,-0.924334706034226,NA
-apul-mir-novel-10,FUN_040988,2,0,0,2,0.911475448982055,NA
-apul-mir-novel-13,FUN_024519,3,0,0,3,0.900419840155212,G-protein coupled receptor GRL101
-apul-mir-novel-14,FUN_005951,2,1,0,1,-0.911459476837608,NA
-apul-mir-novel-14,FUN_008019,2,0,0,2,-0.886676439517907,NA
-apul-mir-novel-15,FUN_001948,2,0,0,2,0.979680269937281,Inositol hexakisphosphate and diphosphoinositol-pentakisphosphate kinase 2 (EC 2.7.4.24) (Diphosphoinositol pentakisphosphate kinase 2) (Histidine acid phosphatase domain-containing protein 1) (InsP6 and PP-IP5 kinase 2) (VIP1 homolog 2) (mmVIP2)
-apul-mir-novel-15,FUN_007037,6,0,0,6,0.978255057697467,Putative nuclease HARBI1 (EC 3.1.-.-) (Harbinger transposase-derived nuclease)
-apul-mir-novel-15,FUN_010663,2,0,0,2,0.92846445119371,Tudor domain-containing protein 1
-apul-mir-novel-15,FUN_012231,2,0,1,1,0.978580789954302,NA
-apul-mir-novel-15,FUN_037695,2,0,0,2,0.92866319443109,Melanopsin (Opsin-4)
-apul-mir-novel-17,FUN_035024,7,0,0,7,0.955321507397864,Tachykinin-like peptides receptor 86C (NKD)
-apul-mir-novel-17,FUN_040029,2,0,0,2,0.913195885033744,Protein mono-ADP-ribosyltransferase TIPARP (EC 2.4.2.-) (ADP-ribosyltransferase diphtheria toxin-like 14) (ARTD14) (TCDD-inducible poly [ADP-ribose] polymerase)
-apul-mir-novel-19,FUN_001185,2,0,0,2,0.947441765072564,Retrovirus-related Pol polyprotein from transposon 17.6 [Includes: Protease (EC 3.4.23.-); Reverse transcriptase (EC 2.7.7.49); Endonuclease]
-apul-mir-novel-19,FUN_001418,2,0,0,2,0.941191037598357,NA
-apul-mir-novel-19,FUN_005177,2,0,0,2,0.891580507217157,DENN domain-containing protein 4C
-apul-mir-novel-19,FUN_006857,3,0,0,3,0.883283100714254,NA
-apul-mir-novel-19,FUN_012307,2,0,0,2,0.899780966932787,NA
-apul-mir-novel-19,FUN_016428,2,0,0,2,0.882166651390684,NA
-apul-mir-novel-19,FUN_023423,2,0,0,2,0.900490670169858,Catenin alpha-2 (Alpha N-catenin)
-apul-mir-novel-19,FUN_024557,2,0,0,2,0.948083383398634,NA
-apul-mir-novel-19,FUN_027831,2,0,0,2,0.886589108732733,NA
-apul-mir-novel-19,FUN_028314,3,0,0,3,0.912162856809335,NA
-apul-mir-novel-19,FUN_029891,2,0,0,2,0.969669625255797,Transposon Ty3-I Gag-Pol polyprotein (Gag3-Pol3) (Transposon Ty3-2 TYA-TYB polyprotein) [Cleaved into: Capsid protein (CA) (p24); Spacer peptide p3; Nucleocapsid protein p11 (NC); Ty3 protease (PR) (EC 3.4.23.-) (p16); Spacer peptide J; Reverse transcriptase/ribonuclease H (RT) (RT-RH) (EC 2.7.7.49) (EC 2.7.7.7) (EC 3.1.26.4) (p55); Integrase p52 (IN); Integrase p49 (IN)]
-apul-mir-novel-19,FUN_037232,2,0,0,2,0.963084685587107,Cleavage and polyadenylation specificity factor subunit 3 (EC 3.1.27.-) (Cleavage and polyadenylation specificity factor 73 kDa subunit) (CPSF 73 kDa subunit) (mRNA 3'-end-processing endonuclease CPSF-73)
-apul-mir-novel-19,FUN_039268,2,0,0,2,0.932842487610503,NA
-apul-mir-novel-19,FUN_043151,2,0,0,2,0.885331840248247,NA
-apul-mir-novel-19,FUN_043322,2,0,0,2,0.942022860322325,Epithelial discoidin domain-containing receptor 1 (Epithelial discoidin domain receptor 1) (EC 2.7.10.1) (CD167 antigen-like family member A) (Cell adhesion kinase) (Discoidin receptor tyrosine kinase) (Protein-tyrosine kinase MPK-6) (Tyrosine kinase DDR) (Tyrosine-protein kinase CAK) (CD antigen CD167a)
-apul-mir-novel-19,FUN_043384,2,0,0,2,0.930976849870283,NA
-apul-mir-novel-20,FUN_001497,2,0,0,2,0.89619642187486,NA
-apul-mir-novel-20,FUN_004824,3,1,0,2,0.892231247691693,NA
-apul-mir-novel-20,FUN_005153,2,0,0,2,0.945841619954846,NA
-apul-mir-novel-20,FUN_042901,2,0,0,2,0.922362079938142,NA
-apul-mir-novel-21,FUN_022527,2,0,0,2,0.911914697945463,NA
-apul-mir-novel-22,FUN_005858,2,0,0,2,0.926368402957091,NA
-apul-mir-novel-22,FUN_006425,2,1,0,1,0.905658990907276,NA
-apul-mir-novel-22,FUN_013639,2,1,0,1,0.908718443748873,Metabotropic glutamate receptor 4 (mGluR4)
-apul-mir-novel-22,FUN_043151,2,0,0,2,0.918775095795482,NA
-apul-mir-novel-23,FUN_001354,2,1,0,1,0.900622422690111,NA
-apul-mir-novel-23,FUN_002584,2,0,0,2,0.905320740525534,Probable RNA-directed DNA polymerase from transposon BS (EC 2.7.7.49) (Reverse transcriptase)
-apul-mir-novel-23,FUN_008592,2,0,0,2,0.907322942527948,VWFA and cache domain-containing protein 1 (Cache domain-containing protein 1)
-apul-mir-novel-23,FUN_014589,2,0,0,2,0.899205605678966,Small G protein signaling modulator 1 (RUN and TBC1 domain-containing protein 2)
-apul-mir-novel-23,FUN_024907,2,0,0,2,0.919731010207787,NA
-apul-mir-novel-23,FUN_032452,2,0,0,2,0.931945751786733,ATP-binding cassette sub-family C member 4 (EC 7.6.2.-) (EC 7.6.2.2) (EC 7.6.2.3) (Multidrug resistance-associated protein 4)
-apul-mir-novel-26,FUN_031305,2,0,0,2,0.987524147414034,Sodium channel protein 60E (Drosophila ion channel 60) (Drosophila sodium channel 1) (Protein smell-impaired 60E) (Sodium channel 2) (DmNav2)
-apul-mir-novel-26,FUN_035176,2,0,0,2,0.916721414644943,NA
-apul-mir-novel-26,FUN_042308,2,0,0,2,-0.927017989649479,NA
-apul-mir-novel-26,FUN_043121,2,0,2,0,-0.917000522106645,Ankyrin repeat domain-containing protein 50
-apul-mir-novel-28,FUN_022357,2,0,0,2,0.893849856993434,Solute carrier family 12 member 2 (Na-K-Cl cotransporter 1)
-apul-mir-novel-28,FUN_026989,2,0,0,2,0.923046614464299,NA
-apul-mir-novel-28,FUN_038971,2,0,1,1,0.932592016097603,NA
-apul-mir-novel-28,FUN_040981,2,0,0,2,0.888310868864341,NA
-apul-mir-novel-28,FUN_040988,2,0,0,2,0.88271635722133,NA
-apul-mir-novel-28,FUN_042878,2,0,0,2,0.950856245405613,NA
-apul-mir-novel-29,FUN_004413,2,1,0,1,-0.882535200357958,NA
-apul-mir-novel-29,FUN_007849,2,0,0,2,0.951138295736382,NA
-apul-mir-novel-29,FUN_022249,2,0,1,1,0.882410312215033,NA
-apul-mir-novel-29,FUN_029470,2,0,0,2,-0.939406674705487,Transposon Tf2-9 polyprotein (Retrotransposable element Tf2 155 kDa protein)
-apul-mir-novel-29,FUN_033784,2,2,0,0,-0.91626070905909,NA
-apul-mir-novel-30,FUN_030189,2,0,0,2,0.921759799787973,NA
-apul-mir-novel-31,FUN_002424,2,0,0,2,0.969798651205925,Uncharacterized protein K02A2.6
-apul-mir-novel-31,FUN_013620,2,0,0,2,0.919355350015113,Urease subunit alpha (EC 3.5.1.5) (Urea amidohydrolase subunit alpha)
-apul-mir-novel-31,FUN_027984,2,0,0,2,-0.912680206273256,NA
-apul-mir-novel-31,FUN_028180,2,1,0,1,-0.891629842244459,Steroid 17-alpha-hydroxylase/17,20 lyase (EC 1.14.14.19) (EC 1.14.14.32) (17-alpha-hydroxyprogesterone aldolase) (CYPXVII) (Cytochrome P450 17A1) (Cytochrome P450-C17) (Cytochrome P450c17)
-apul-mir-novel-33,FUN_031531,2,0,0,2,-0.883153002529799,NA
-apul-mir-novel-33,FUN_032276,2,0,0,2,-0.886769275023297,NA
-apul-mir-novel-33,FUN_040054,2,0,0,2,0.881691263483533,NA
-apul-mir-novel-34,FUN_023158,2,0,0,2,0.899341108466048,Dipeptidyl peptidase 1 (EC 3.4.14.1) (Cathepsin C) (Cathepsin J) (Dipeptidyl peptidase I) (DPP-I) (DPPI) (Dipeptidyl transferase) [Cleaved into: Dipeptidyl peptidase 1 exclusion domain chain (Dipeptidyl peptidase I exclusion domain chain); Dipeptidyl peptidase 1 heavy chain 1 (Dipeptidyl peptidase I heavy chain 1); Dipeptidyl peptidase 1 heavy chain 2 (Dipeptidyl peptidase I heavy chain 2); Dipeptidyl peptidase 1 heavy chain 3 (Dipeptidyl peptidase I heavy chain 3); Dipeptidyl peptidase 1 heavy chain 4 (Dipeptidyl peptidase I heavy chain 4); Dipeptidyl peptidase 1 light chain (Dipeptidyl peptidase I light chain)]
-apul-mir-novel-34,FUN_029339,2,0,0,2,0.923271160227114,Tyrosine-protein kinase transmembrane receptor Ror (dRor) (EC 2.7.10.1)
-apul-mir-novel-34,FUN_034301,2,0,0,2,0.936916088539382,NA
-apul-mir-novel-4,FUN_009685,2,0,0,2,0.890439789585319,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-apul-mir-novel-5,FUN_004759,2,0,0,2,0.878428897099984,Transposon Tf2-9 polyprotein (Retrotransposable element Tf2 155 kDa protein)
-apul-mir-novel-5,FUN_006864,2,0,0,2,0.918976245520854,Transposon TX1 uncharacterized 149 kDa protein (ORF 2)
-apul-mir-novel-5,FUN_010161,2,0,0,2,0.988178474116269,NA
-apul-mir-novel-5,FUN_010991,2,0,0,2,0.995693532787135,NA
-apul-mir-novel-5,FUN_012812,2,0,0,2,0.989762260503557,NA
-apul-mir-novel-5,FUN_024599,3,0,0,3,0.962256878566466,NA
-apul-mir-novel-5,FUN_029348,2,0,1,1,0.950505266748552,NA
-apul-mir-novel-5,FUN_037230,2,1,0,1,0.938426896439605,NA
-apul-mir-novel-6,FUN_032460,2,0,0,2,-0.9304022712408,Adenylate kinase 2, mitochondrial (AK 2) (EC 2.7.4.3) (ATP-AMP transphosphorylase 2) (ATP:AMP phosphotransferase) (Adenylate monophosphate kinase)
-apul-mir-novel-7,FUN_024769,4,0,0,4,0.90231701138244,Transposon Ty3-G Gag-Pol polyprotein (Gag3-Pol3) (Transposon Ty3-1 TYA-TYB polyprotein) [Cleaved into: Capsid protein (CA) (p24); Spacer peptide p3; Nucleocapsid protein p11 (NC); Ty3 protease (PR) (EC 3.4.23.-) (p16); Spacer peptide J; Reverse transcriptase/ribonuclease H (RT) (RT-RH) (EC 2.7.7.49) (EC 2.7.7.7) (EC 3.1.26.4) (p55); Integrase p61 (IN); Integrase p58 (IN)]
-apul-mir-novel-8a; apul-mir-novel-8b,FUN_005153,3,0,0,3,0.905051533132397,NA
-apul-mir-novel-8a; apul-mir-novel-8b,FUN_011836,7,0,0,7,-0.937561540332355,NACHT, LRR and PYD domains-containing protein 12 (Monarch-1) (PYRIN-containing APAF1-like protein 7) (Regulated by nitric oxide)
-apul-mir-novel-8a; apul-mir-novel-8b,FUN_025990,8,0,0,8,0.910397640063203,NLR family CARD domain-containing protein 3 (CARD15-like protein) (Caterpiller protein 16.2) (CLR16.2) (NACHT, LRR and CARD domains-containing protein 3) (Nucleotide-binding oligomerization domain protein 3)
-apul-mir-novel-9,FUN_001091,2,0,1,1,-0.94919046502068,RNA-directed DNA polymerase from mobile element jockey (EC 2.7.7.49) (Reverse transcriptase)
-apul-mir-novel-9,FUN_001274,3,0,0,3,0.935219822938851,Transposon TX1 uncharacterized 149 kDa protein (ORF 2)
-apul-mir-novel-9,FUN_004114,2,0,0,2,0.925379950037016,Phosphoglucomutase, cytoplasmic 1 (PGM 1) (EC 5.4.2.2) (Glucose phosphomutase 1)
-apul-mir-novel-9,FUN_016408,2,0,1,1,0.882503662335206,NA
-apul-mir-novel-9,FUN_018057,2,1,0,1,0.900789662401113,NA
-apul-mir-novel-9,FUN_024769,2,0,0,2,0.955549922452847,Transposon Ty3-G Gag-Pol polyprotein (Gag3-Pol3) (Transposon Ty3-1 TYA-TYB polyprotein) [Cleaved into: Capsid protein (CA) (p24); Spacer peptide p3; Nucleocapsid protein p11 (NC); Ty3 protease (PR) (EC 3.4.23.-) (p16); Spacer peptide J; Reverse transcriptase/ribonuclease H (RT) (RT-RH) (EC 2.7.7.49) (EC 2.7.7.7) (EC 3.1.26.4) (p55); Integrase p61 (IN); Integrase p58 (IN)]
-apul-mir-novel-9,FUN_027960,2,0,0,2,0.884927834636633,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-apul-mir-novel-9,FUN_031424,3,0,0,3,0.886871063013224,NLR family CARD domain-containing protein 3 (CARD15-like protein) (Caterpiller protein 16.2) (CLR16.2) (NACHT, LRR and CARD domains-containing protein 3) (Nucleotide-binding oligomerization domain protein 3)
-apul-mir-novel-9,FUN_035079,2,0,0,2,0.980615340927995,E3 ubiquitin-protein ligase TRIM71 (EC 2.3.2.27) (Protein lin-41 homolog) (RING-type E3 ubiquitin transferase TRIM71) (Tripartite motif-containing protein 71)
-apul-mir-novel-9,FUN_040039,2,0,0,2,0.973226279932002,NA
+given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor
+apul-mir-100,FUN_004759,2,0,0,2,-0.887528192405241
+apul-mir-100,FUN_007047,2,0,0,2,-0.905801351593038
+apul-mir-100,FUN_014449,74,0,0,74,-0.937787808748089
+apul-mir-100,FUN_015202,2,0,0,2,-0.958719638413883
+apul-mir-100,FUN_016425,2,0,1,1,-0.967850986195505
+apul-mir-100,FUN_024153,2,0,0,2,-0.903891593618089
+apul-mir-100,FUN_024599,2,0,0,2,-0.891613622943961
+apul-mir-100,FUN_027960,4,0,0,4,-0.915068825026582
+apul-mir-100,FUN_031424,2,0,0,2,-0.894880616202545
+apul-mir-100,FUN_031670,2,0,0,2,0.92448632039116
+apul-mir-100,FUN_031887,2,0,0,2,-0.94454906845918
+apul-mir-2022,FUN_002026,2,0,2,0,-0.885378883105539
+apul-mir-2023,FUN_002339,5,0,0,5,0.927003883326743
+apul-mir-2023,FUN_002342,2,1,0,1,0.973893925144242
+apul-mir-2025,FUN_004759,2,0,0,2,0.983047003339369
+apul-mir-2030,FUN_010926,2,0,0,2,-0.882427289799813
+apul-mir-2050,FUN_007025,2,0,0,2,-0.970929604231871
+apul-mir-2050,FUN_009459,2,0,0,2,0.929494205450124
+apul-mir-2050,FUN_027755,2,0,0,2,0.93140186433902
+apul-mir-2050,FUN_028435,2,0,0,2,0.988550865761384
+apul-mir-2050,FUN_035803,2,0,0,2,0.951924411700295
+apul-mir-2050,FUN_037363,2,0,0,2,0.882479011012201
+apul-mir-9425,FUN_034055,2,0,0,2,0.889105472146644
+apul-mir-novel-10,FUN_003896,2,0,0,2,0.951773329003986
+apul-mir-novel-10,FUN_006562,3,0,0,3,-0.879644448173872
+apul-mir-novel-10,FUN_009172,2,0,0,2,-0.88200894083422
+apul-mir-novel-10,FUN_017909,2,0,1,1,0.89831940025494
+apul-mir-novel-10,FUN_023915,2,0,1,1,0.898029169702219
+apul-mir-novel-10,FUN_035131,2,0,0,2,-0.907585361277286
+apul-mir-novel-10,FUN_038573,2,0,0,2,-0.924334706034226
+apul-mir-novel-10,FUN_040988,2,0,0,2,0.911475448982055
+apul-mir-novel-13,FUN_024519,3,0,0,3,0.900419840155212
+apul-mir-novel-14,FUN_005951,2,1,0,1,-0.911459476837608
+apul-mir-novel-14,FUN_008019,2,0,0,2,-0.886676439517907
+apul-mir-novel-15,FUN_001948,2,0,0,2,0.979680269937281
+apul-mir-novel-15,FUN_007037,6,0,0,6,0.978255057697467
+apul-mir-novel-15,FUN_010663,2,0,0,2,0.92846445119371
+apul-mir-novel-15,FUN_012231,2,0,1,1,0.978580789954302
+apul-mir-novel-15,FUN_037695,2,0,0,2,0.92866319443109
+apul-mir-novel-17,FUN_035024,7,0,0,7,0.955321507397864
+apul-mir-novel-17,FUN_040029,2,0,0,2,0.913195885033744
+apul-mir-novel-19,FUN_001185,2,0,0,2,0.947441765072564
+apul-mir-novel-19,FUN_001418,2,0,0,2,0.941191037598357
+apul-mir-novel-19,FUN_005177,2,0,0,2,0.891580507217157
+apul-mir-novel-19,FUN_006857,3,0,0,3,0.883283100714254
+apul-mir-novel-19,FUN_012307,2,0,0,2,0.899780966932787
+apul-mir-novel-19,FUN_016428,2,0,0,2,0.882166651390684
+apul-mir-novel-19,FUN_023423,2,0,0,2,0.900490670169858
+apul-mir-novel-19,FUN_024557,2,0,0,2,0.948083383398634
+apul-mir-novel-19,FUN_027831,2,0,0,2,0.886589108732733
+apul-mir-novel-19,FUN_028314,3,0,0,3,0.912162856809335
+apul-mir-novel-19,FUN_029891,2,0,0,2,0.969669625255797
+apul-mir-novel-19,FUN_037232,2,0,0,2,0.963084685587107
+apul-mir-novel-19,FUN_039268,2,0,0,2,0.932842487610503
+apul-mir-novel-19,FUN_043151,2,0,0,2,0.885331840248247
+apul-mir-novel-19,FUN_043322,2,0,0,2,0.942022860322325
+apul-mir-novel-19,FUN_043384,2,0,0,2,0.930976849870283
+apul-mir-novel-20,FUN_001497,2,0,0,2,0.89619642187486
+apul-mir-novel-20,FUN_004824,3,1,0,2,0.892231247691693
+apul-mir-novel-20,FUN_005153,2,0,0,2,0.945841619954846
+apul-mir-novel-20,FUN_042901,2,0,0,2,0.922362079938142
+apul-mir-novel-21,FUN_022527,2,0,0,2,0.911914697945463
+apul-mir-novel-22,FUN_005858,2,0,0,2,0.926368402957091
+apul-mir-novel-22,FUN_006425,2,1,0,1,0.905658990907276
+apul-mir-novel-22,FUN_013639,2,1,0,1,0.908718443748873
+apul-mir-novel-22,FUN_043151,2,0,0,2,0.918775095795482
+apul-mir-novel-23,FUN_001354,2,1,0,1,0.900622422690111
+apul-mir-novel-23,FUN_002584,2,0,0,2,0.905320740525534
+apul-mir-novel-23,FUN_008592,2,0,0,2,0.907322942527948
+apul-mir-novel-23,FUN_014589,2,0,0,2,0.899205605678966
+apul-mir-novel-23,FUN_024907,2,0,0,2,0.919731010207787
+apul-mir-novel-23,FUN_032452,2,0,0,2,0.931945751786733
+apul-mir-novel-26,FUN_031305,2,0,0,2,0.987524147414034
+apul-mir-novel-26,FUN_035176,2,0,0,2,0.916721414644943
+apul-mir-novel-26,FUN_042308,2,0,0,2,-0.927017989649479
+apul-mir-novel-26,FUN_043121,2,0,2,0,-0.917000522106645
+apul-mir-novel-28,FUN_022357,2,0,0,2,0.893849856993434
+apul-mir-novel-28,FUN_026989,2,0,0,2,0.923046614464299
+apul-mir-novel-28,FUN_038971,2,0,1,1,0.932592016097603
+apul-mir-novel-28,FUN_040981,2,0,0,2,0.888310868864341
+apul-mir-novel-28,FUN_040988,2,0,0,2,0.88271635722133
+apul-mir-novel-28,FUN_042878,2,0,0,2,0.950856245405613
+apul-mir-novel-29,FUN_004413,2,1,0,1,-0.882535200357958
+apul-mir-novel-29,FUN_007849,2,0,0,2,0.951138295736382
+apul-mir-novel-29,FUN_022249,2,0,1,1,0.882410312215033
+apul-mir-novel-29,FUN_029470,2,0,0,2,-0.939406674705487
+apul-mir-novel-29,FUN_033784,2,2,0,0,-0.91626070905909
+apul-mir-novel-30,FUN_030189,2,0,0,2,0.921759799787973
+apul-mir-novel-31,FUN_002424,2,0,0,2,0.969798651205925
+apul-mir-novel-31,FUN_013620,2,0,0,2,0.919355350015113
+apul-mir-novel-31,FUN_027984,2,0,0,2,-0.912680206273256
+apul-mir-novel-31,FUN_028180,2,1,0,1,-0.891629842244459
+apul-mir-novel-33,FUN_031531,2,0,0,2,-0.883153002529799
+apul-mir-novel-33,FUN_032276,2,0,0,2,-0.886769275023297
+apul-mir-novel-33,FUN_040054,2,0,0,2,0.881691263483533
+apul-mir-novel-34,FUN_023158,2,0,0,2,0.899341108466048
+apul-mir-novel-34,FUN_029339,2,0,0,2,0.923271160227114
+apul-mir-novel-34,FUN_034301,2,0,0,2,0.936916088539382
+apul-mir-novel-4,FUN_009685,2,0,0,2,0.890439789585319
+apul-mir-novel-5,FUN_004759,2,0,0,2,0.878428897099984
+apul-mir-novel-5,FUN_006864,2,0,0,2,0.918976245520854
+apul-mir-novel-5,FUN_010161,2,0,0,2,0.988178474116269
+apul-mir-novel-5,FUN_010991,2,0,0,2,0.995693532787135
+apul-mir-novel-5,FUN_012812,2,0,0,2,0.989762260503557
+apul-mir-novel-5,FUN_024599,3,0,0,3,0.962256878566466
+apul-mir-novel-5,FUN_029348,2,0,1,1,0.950505266748552
+apul-mir-novel-5,FUN_037230,2,1,0,1,0.938426896439605
+apul-mir-novel-6,FUN_032460,2,0,0,2,-0.9304022712408
+apul-mir-novel-7,FUN_024769,4,0,0,4,0.90231701138244
+apul-mir-novel-8a; apul-mir-novel-8b,FUN_005153,3,0,0,3,0.905051533132397
+apul-mir-novel-8a; apul-mir-novel-8b,FUN_011836,7,0,0,7,-0.937561540332355
+apul-mir-novel-8a; apul-mir-novel-8b,FUN_025990,8,0,0,8,0.910397640063203
+apul-mir-novel-9,FUN_001091,2,0,1,1,-0.94919046502068
+apul-mir-novel-9,FUN_001274,3,0,0,3,0.935219822938851
+apul-mir-novel-9,FUN_004114,2,0,0,2,0.925379950037016
+apul-mir-novel-9,FUN_016408,2,0,1,1,0.882503662335206
+apul-mir-novel-9,FUN_018057,2,1,0,1,0.900789662401113
+apul-mir-novel-9,FUN_024769,2,0,0,2,0.955549922452847
+apul-mir-novel-9,FUN_027960,2,0,0,2,0.884927834636633
+apul-mir-novel-9,FUN_031424,3,0,0,3,0.886871063013224
+apul-mir-novel-9,FUN_035079,2,0,0,2,0.980615340927995
+apul-mir-novel-9,FUN_040039,2,0,0,2,0.973226279932002

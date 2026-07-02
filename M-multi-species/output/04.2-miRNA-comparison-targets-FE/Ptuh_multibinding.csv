@@ -1,47 +1,47 @@
-given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor,Protein.names
-ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g15450.t1,3,0,0,3,-0.981612358153677,NA
-ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g5445.t1a,2,0,0,2,-0.952695499588314,Neutral alpha-glucosidase AB (EC 3.2.1.207) (Alpha-glucosidase 2) (Glucosidase II subunit alpha)
-ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g9502.t1,2,0,0,2,0.904573732966723,NA
-ptuh-mir-2036,Pocillopora_meandrina_HIv1___RNAseq.g29244.t2,2,0,0,2,0.962949589407058,Leucine-rich repeat-containing protein 71
-ptuh-mir-novel-16,Pocillopora_meandrina_HIv1___RNAseq.g23266.t1,3,3,0,0,-0.987634431609457,NA
-ptuh-mir-novel-22,Pocillopora_meandrina_HIv1___RNAseq.g26224.t1,2,2,0,0,-0.933590304879149,Phospholipid-transporting ATPase ABCA3 (EC 7.6.2.1) (ATP-binding cassette sub-family A member 3) (Xenobiotic-transporting ATPase ABCA3) (EC 7.6.2.2) [Cleaved into: 150 Kda mature form]
-ptuh-mir-novel-23,Pocillopora_meandrina_HIv1___TS.g821.t1,7,7,0,0,0.947557351451081,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-ptuh-mir-novel-31,Pocillopora_meandrina_HIv1___RNAseq.g8464.t2,2,2,0,0,0.90899480722513,Rab-like protein 6 (GTP-binding protein Parf) (Rab-like protein 1) (RBEL1)
-ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g17323.t1,2,0,0,2,-0.912487028541966,Rho GTPase-activating protein 29 (Rho-type GTPase-activating protein 29)
-ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g4288.t1,2,0,0,2,0.925822181441937,NA
-ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g5062.t1,2,0,0,2,-0.965765832341069,Phosphofurin acidic cluster sorting protein 2 (PACS-2) (PACS1-like protein)
-ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g18.t1,2,0,0,2,0.945154349417137,F-box only protein 7
-ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g21104.t1,2,0,0,2,-0.898122333545707,ATPase MORC2A (EC 3.6.1.-) (MORC family CW-type zinc finger protein 2A) (Zinc finger CW-type coiled-coil domain protein 1)
-ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g3779.t1,2,0,0,2,0.913339324161283,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g11321.t1,2,0,1,1,-0.946406867222498,Disintegrin and metalloproteinase domain-containing protein 9 (ADAM 9) (EC 3.4.24.-) (Cellular disintegrin-related protein) (Meltrin-gamma) (Metalloprotease/disintegrin/cysteine-rich protein 9) (Myeloma cell metalloproteinase)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g1228.t1,2,0,0,2,-0.931929555088538,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g14104.t1,2,0,0,2,-0.900120340519663,Cohesin subunit SA-1 (SCC3 homolog 1) (Stromal antigen 1)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g16347.t1,2,0,1,1,-0.916779953336722,Tyrosine kinase receptor Cad96Ca (EC 2.7.10.1) (Cadherin-96Ca) (Tyrosine kinase receptor HD-14)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g19109.t1,2,0,0,2,-0.899123558460303,Lysosomal Pro-X carboxypeptidase (EC 3.4.16.2) (Proline carboxypeptidase) (Prolylcarboxypeptidase) (PRCP)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g19147.t1,2,0,0,2,-0.947726573395244,Hephaestin-like protein (EC 1.-.-.-)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g20426.t1,2,0,0,2,-0.936262991788477,Protocadherin Fat 4 (FAT tumor suppressor homolog 4) (Fat-like cadherin protein FAT-J)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g21859.t1,2,0,0,2,-0.937625413787328,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g22048.t1a,2,1,1,0,-0.931929555088538,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g22662.t1,2,0,0,2,-0.883488998547963,Two pore channel protein 1 (Two pore calcium channel protein 1) (Voltage-dependent calcium channel protein TPC1)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g23195.t2,2,0,0,2,-0.957807026049241,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g24423.t1,2,0,0,2,-0.888893388066227,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g24535.t1,2,0,0,2,-0.942569509480439,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g26411.t1,2,0,0,2,-0.989174225617707,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g28251.t1,2,0,0,2,-0.933055830369369,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g347.t1,2,0,0,2,-0.940660293722588,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g3897.t1,2,0,0,2,-0.979113761956082,Structural maintenance of chromosomes flexible hinge domain-containing protein 1 (SMC hinge domain-containing protein 1) (EC 3.6.1.-)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6001.t1,2,0,0,2,-0.926526303400896,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6027.t1,2,0,0,2,-0.91444594922797,Zinc finger FYVE domain-containing protein 26
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6326.t1,2,0,0,2,-0.890729487318791,Mediator of RNA polymerase II transcription subunit 1 (Mediator complex subunit 1)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6887.t1,2,0,0,2,-0.920559068455179,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g8656.t1,4,0,0,4,-0.917939287277614,Tetratricopeptide repeat protein 37 (TPR repeat protein 37) (Thespin homolog)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g14548.t1,2,0,0,2,-0.910699283809506,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g25577.t1,2,0,0,2,-0.889696863916552,Neurobeachin-like protein 1 (Amyotrophic lateral sclerosis 2 chromosomal region candidate gene 16 protein) (Amyotrophic lateral sclerosis 2 chromosomal region candidate gene 17 protein)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g26041.t1,2,0,0,2,-0.924330478977847,Endoplasmic reticulum aminopeptidase 1 (EC 3.4.11.-) (ARTS-1) (Adipocyte-derived leucine aminopeptidase) (A-LAP) (Aminopeptidase PILS) (Puromycin-insensitive leucyl-specific aminopeptidase) (PILS-AP) (Type 1 tumor necrosis factor receptor shedding aminopeptidase regulator)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g26927.t1,2,0,0,2,-0.950066990442225,Fibropellin-3 (Epidermal growth factor-related protein 3) (Fibropellin III) (Fibropellin-c) (SpEGF III)
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g3093.t1,2,0,0,2,-0.917068904096319,NA
-ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g7439.t1,2,0,1,1,-0.944571525282684,Disintegrin and metalloproteinase domain-containing protein 9 (ADAM 9) (EC 3.4.24.-) (Cellular disintegrin-related protein) (Meltrin-gamma) (Metalloprotease/disintegrin/cysteine-rich protein 9) (Myeloma cell metalloproteinase)
-ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g12666.t1,2,0,0,2,0.9506399926994,Low-density lipoprotein receptor-related protein 6 (LRP-6)
-ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g3050.t1,2,0,0,2,0.921436950922347,Coadhesin
-ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g8413.t1,2,0,0,2,0.938779898628061,NA
-ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___TS.g25657.t1,3,0,0,3,0.983300399040843,Titin (EC 2.7.11.1) (Connectin) (Rhabdomyosarcoma antigen MU-RMS-40.14)
+given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor
+ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g15450.t1,3,0,0,3,-0.981612358153677
+ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g5445.t1a,2,0,0,2,-0.952695499588314
+ptuh-mir-100,Pocillopora_meandrina_HIv1___RNAseq.g9502.t1,2,0,0,2,0.904573732966723
+ptuh-mir-2036,Pocillopora_meandrina_HIv1___RNAseq.g29244.t2,2,0,0,2,0.962949589407058
+ptuh-mir-novel-16,Pocillopora_meandrina_HIv1___RNAseq.g23266.t1,3,3,0,0,-0.987634431609457
+ptuh-mir-novel-22,Pocillopora_meandrina_HIv1___RNAseq.g26224.t1,2,2,0,0,-0.933590304879149
+ptuh-mir-novel-23,Pocillopora_meandrina_HIv1___TS.g821.t1,7,7,0,0,0.947557351451081
+ptuh-mir-novel-31,Pocillopora_meandrina_HIv1___RNAseq.g8464.t2,2,2,0,0,0.90899480722513
+ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g17323.t1,2,0,0,2,-0.912487028541966
+ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g4288.t1,2,0,0,2,0.925822181441937
+ptuh-mir-novel-33,Pocillopora_meandrina_HIv1___RNAseq.g5062.t1,2,0,0,2,-0.965765832341069
+ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g18.t1,2,0,0,2,0.945154349417137
+ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g21104.t1,2,0,0,2,-0.898122333545707
+ptuh-mir-novel-5,Pocillopora_meandrina_HIv1___RNAseq.g3779.t1,2,0,0,2,0.913339324161283
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g11321.t1,2,0,1,1,-0.946406867222498
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g1228.t1,2,0,0,2,-0.931929555088538
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g14104.t1,2,0,0,2,-0.900120340519663
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g16347.t1,2,0,1,1,-0.916779953336722
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g19109.t1,2,0,0,2,-0.899123558460303
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g19147.t1,2,0,0,2,-0.947726573395244
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g20426.t1,2,0,0,2,-0.936262991788477
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g21859.t1,2,0,0,2,-0.937625413787328
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g22048.t1a,2,1,1,0,-0.931929555088538
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g22662.t1,2,0,0,2,-0.883488998547963
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g23195.t2,2,0,0,2,-0.957807026049241
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g24423.t1,2,0,0,2,-0.888893388066227
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g24535.t1,2,0,0,2,-0.942569509480439
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g26411.t1,2,0,0,2,-0.989174225617707
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g28251.t1,2,0,0,2,-0.933055830369369
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g347.t1,2,0,0,2,-0.940660293722588
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g3897.t1,2,0,0,2,-0.979113761956082
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6001.t1,2,0,0,2,-0.926526303400896
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6027.t1,2,0,0,2,-0.91444594922797
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6326.t1,2,0,0,2,-0.890729487318791
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g6887.t1,2,0,0,2,-0.920559068455179
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___RNAseq.g8656.t1,4,0,0,4,-0.917939287277614
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g14548.t1,2,0,0,2,-0.910699283809506
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g25577.t1,2,0,0,2,-0.889696863916552
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g26041.t1,2,0,0,2,-0.924330478977847
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g26927.t1,2,0,0,2,-0.950066990442225
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g3093.t1,2,0,0,2,-0.917068904096319
+ptuh-mir-novel-6,Pocillopora_meandrina_HIv1___TS.g7439.t1,2,0,1,1,-0.944571525282684
+ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g12666.t1,2,0,0,2,0.9506399926994
+ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g3050.t1,2,0,0,2,0.921436950922347
+ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___RNAseq.g8413.t1,2,0,0,2,0.938779898628061
+ptuh-mir-novel-7,Pocillopora_meandrina_HIv1___TS.g25657.t1,3,0,0,3,0.983300399040843

@@ -1,103 +1,103 @@
-given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor,Protein.names
-peve-mir-100,Peve_00000776,2,0,0,2,0.998287142619543,NA
-peve-mir-100,Peve_00001544,2,0,1,1,0.999909726776791,EGF-like repeat and discoidin I-like domain-containing protein 3 (Developmentally-regulated endothelial cell locus 1 protein) (Integrin-binding protein DEL1)
-peve-mir-100,Peve_00003388,2,0,0,2,0.999335236615113,NA
-peve-mir-100,Peve_00005214,2,0,0,2,0.999909726776791,Fibroblast growth factor receptor 1 (FGFR-1) (bFGF-R-1) (EC 2.7.10.1) (Basic fibroblast growth factor receptor 1) (Tyrosine kinase receptor CEK1)
-peve-mir-100,Peve_00005937,2,0,0,2,0.998112144659499,DNA polymerase eta (EC 2.7.7.7) (RAD30 homolog A) (Xeroderma pigmentosum variant type protein)
-peve-mir-100,Peve_00008800,2,0,0,2,0.997722603479927,Probable helicase senataxin (EC 3.6.4.-) (Amyotrophic lateral sclerosis 4 protein) (SEN1 homolog) (Senataxin)
-peve-mir-100,Peve_00011528,2,0,0,2,0.999909726776791,Protein sidekick-2
-peve-mir-100,Peve_00011810,3,0,0,3,0.997092796096673,Nucleoprotein TPR (Megator) (NPC-associated intranuclear protein) (Translocated promoter region protein)
-peve-mir-100,Peve_00012138,2,0,0,2,0.998405703354998,ATP-dependent RNA helicase DEAH12, chloroplastic (EC 3.6.4.13)
-peve-mir-100,Peve_00016327,2,0,0,2,0.999909726776791,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-peve-mir-100,Peve_00017537,2,0,0,2,0.99996273202871,Krueppel-like factor 10 (EGR-alpha) (Transforming growth factor-beta-inducible early growth response protein 1) (TGFB-inducible early growth response protein 1) (TIEG-1)
-peve-mir-100,Peve_00017626,2,0,1,1,0.999909726776791,Serine/threonine-protein kinase TNNI3K (EC 2.7.11.1) (Cardiac ankyrin repeat kinase) (TNNI3-interacting kinase)
-peve-mir-100,Peve_00018177,2,0,2,0,0.999909726776791,NA
-peve-mir-100,Peve_00019304,3,0,0,3,0.999909726776791,NA
-peve-mir-100,Peve_00021718,2,0,2,0,0.999909726776791,NA
-peve-mir-100,Peve_00021789,2,0,0,2,0.999909726776791,NA
-peve-mir-100,Peve_00022430,3,0,0,3,0.999909726776791,Endothelin-converting enzyme 1 (ECE-1) (EC 3.4.24.71)
-peve-mir-100,Peve_00027965,2,1,0,1,0.999909726776791,Tetratricopeptide repeat protein 28 (TPR repeat protein 28) (TPR repeat-containing big gene cloned at Keio)
-peve-mir-100,Peve_00031172,2,0,0,2,0.999909726776791,Phosphatidylinositol phosphatase PTPRQ (EC 3.1.3.-) (Receptor-type tyrosine-protein phosphatase Q) (PTP-RQ) (R-PTP-Q) (EC 3.1.3.48)
-peve-mir-100,Peve_00033720,2,0,0,2,0.999143976900459,NA
-peve-mir-100,Peve_00034282,2,0,0,2,0.998864167162046,NA
-peve-mir-100,Peve_00036304,2,0,0,2,0.998004045644015,Probable E3 ubiquitin-protein ligase HERC4 (EC 2.3.2.26) (HECT domain and RCC1-like domain-containing protein 4) (HECT-type E3 ubiquitin transferase HERC4)
-peve-mir-100,Peve_00036508,2,0,0,2,0.999909726776791,Low-density lipoprotein receptor-related protein 4 (LRP-4) (LDLR dan)
-peve-mir-100,Peve_00037343,2,0,1,1,0.999909726776791,NA
-peve-mir-100,Peve_00043299,2,0,0,2,0.99767924235131,Zinc finger CCCH domain-containing protein 11A
-peve-mir-100,Peve_00045265,2,0,0,2,0.998095362879249,Ubiquitin-protein ligase E3A (EC 2.3.2.26) (HECT-type ubiquitin transferase E3A) (Oncogenic protein-associated protein E6-AP)
-peve-mir-novel-1,Peve_00012313,2,0,0,2,-0.997746845316925,Hydrocephalus-inducing protein homolog
-peve-mir-novel-10,Peve_00011858,2,2,0,0,-0.999998482798634,Small G protein signaling modulator 2 (RUN and TBC1 domain-containing protein 1)
-peve-mir-novel-2,Peve_00002096,2,0,0,2,-0.998981183536662,Long-chain-fatty-acid--CoA ligase 1 (EC 6.2.1.3) (Arachidonate--CoA ligase) (EC 6.2.1.15) (Long-chain acyl-CoA synthetase 1) (LACS 1) (Palmitoyl-CoA ligase) (Phytanate--CoA ligase) (EC 6.2.1.24)
-peve-mir-novel-2,Peve_00010789,2,0,0,2,-0.999232776560249,NA
-peve-mir-novel-2,Peve_00013326,4,0,0,4,-0.999852555868755,tRNA(Glu)-specific nuclease WapA (EC 3.1.-.-) (Cell wall-associated protein) (RNase WapA) (Toxin WapA)
-peve-mir-novel-2,Peve_00013835,3,0,0,3,-0.999640099755155,NA
-peve-mir-novel-2,Peve_00014560,2,0,0,2,-0.997728095293297,PR domain zinc finger protein 14 (EC 2.1.1.-) (PR domain-containing protein 14)
-peve-mir-novel-2,Peve_00020859,2,0,0,2,-0.996961236510919,NA
-peve-mir-novel-2,Peve_00028312,2,0,0,2,-0.999574579742918,SCO-spondin (SCO-spondin pseudogene)
-peve-mir-novel-2,Peve_00028439,3,0,0,3,0.998146330451858,Dynein axonemal heavy chain 3 (Axonemal beta dynein heavy chain 3) (HsADHC3) (Ciliary dynein heavy chain 3) (Dnahc3-b)
-peve-mir-novel-2,Peve_00031401,2,0,0,2,0.998108703054888,Cleavage and polyadenylation specificity factor subunit 1 (Cleavage and polyadenylation specific factor 1)
-peve-mir-novel-2,Peve_00035839,2,0,1,1,-0.999999999503679,Merlin (Moesin-ezrin-radixin-like protein) (Neurofibromin-2) (Schwannomin)
-peve-mir-novel-2,Peve_00036365,2,0,0,2,-0.998965392859537,Type II inositol 1,4,5-trisphosphate 5-phosphatase (EC 3.1.3.36) (Inositol polyphosphate-5-phosphatase B) (Phosphoinositide 5-phosphatase) (5PTase)
-peve-mir-novel-2,Peve_00037142,2,0,0,2,-0.997740919047806,NA
-peve-mir-novel-2,Peve_00037538,3,0,0,3,-0.998807256137127,Contactin-associated protein 1 (Caspr) (Caspr1) (MHDNIV) (NCP1) (Neurexin IV) (Neurexin-4) (Paranodin)
-peve-mir-novel-2,Peve_00038545,2,0,0,2,-0.999984274571916,NA
-peve-mir-novel-2,Peve_00041178,2,0,0,2,0.998539575899744,NA
-peve-mir-novel-2,Peve_00042937,2,0,0,2,-0.999999785578752,NA
-peve-mir-novel-20,Peve_00026145,2,1,1,0,0.997253647308052,NA
-peve-mir-novel-24,Peve_00026617,2,0,2,0,1,NA
-peve-mir-novel-3,Peve_00001819,2,0,0,2,0.998906823578492,NFX1-type zinc finger-containing protein 1
-peve-mir-novel-3,Peve_00003302,2,0,0,2,0.998226961786262,Centrosomal protein of 120 kDa (Cep120) (Coiled-coil domain-containing protein 100)
-peve-mir-novel-3,Peve_00007538,2,0,0,2,0.997223297346734,Alanine--tRNA ligase (EC 6.1.1.7) (Alanyl-tRNA synthetase) (AlaRS)
-peve-mir-novel-3,Peve_00013835,2,0,0,2,0.99796247257867,NA
-peve-mir-novel-3,Peve_00021264,2,0,0,2,0.997162801221593,TPR and ankyrin repeat-containing protein 1 (Lupus brain antigen 1 homolog)
-peve-mir-novel-3,Peve_00031940,2,1,0,1,-0.999663016871668,ATP-dependent RNA helicase DDX1 (EC 3.6.4.13) (DEAD box protein 1)
-peve-mir-novel-3,Peve_00033364,2,1,0,1,0.999260034938896,9,11-endoperoxide prostaglandin H2 reductase (EC 1.1.1.-) (Prostaglandin F2-alpha synthase)
-peve-mir-novel-3,Peve_00036728,2,0,0,2,0.997360080379969,E3 ubiquitin-protein ligase RNF123 (EC 2.3.2.27) (Kip1 ubiquitination-promoting complex protein 1) (RING finger protein 123) (RING-type E3 ubiquitin transferase RNF123)
-peve-mir-novel-3,Peve_00036964,2,0,1,1,0.997077513398696,Neuron navigator 3 (Pore membrane and/or filament-interacting-like protein 1)
-peve-mir-novel-3,Peve_00037461,11,0,0,11,0.999848047205772,Leucine-rich repeat protein lrrA
-peve-mir-novel-3,Peve_00037776,2,0,0,2,0.999479239377096,BTB/POZ domain-containing protein 6
-peve-mir-novel-3,Peve_00038927,3,1,0,2,0.999994129428633,Metabotropic glutamate receptor 3 (mGluR3)
-peve-mir-novel-3,Peve_00041750,2,0,0,2,0.99983472343522,Serine/threonine-protein kinase SMG1 (SMG-1) (EC 2.7.11.1) (Lambda/iota protein kinase C-interacting protein) (Lambda-interacting protein) (Nonsense mediated mRNA decay-associated PI3K-related kinase SMG1)
-peve-mir-novel-3,Peve_00044304,2,0,0,2,0.999409654250644,NA
-peve-mir-novel-39,Peve_00001847,2,0,0,2,0.99919831613102,ADP-ribosylation factor-like protein 6-interacting protein 4 (ARL-6-interacting protein 4) (Aip-4)
-peve-mir-novel-39,Peve_00002221,2,0,0,2,0.999980672456975,Dehydrogenase/reductase SDR family member 1 (EC 1.1.1.-) (Short chain dehydrogenase/reductase family 19C member 1) (Protein SDR19C1)
-peve-mir-novel-39,Peve_00003392,2,0,0,2,0.997354196901045,N-acetylated-alpha-linked acidic dipeptidase 2 (EC 3.4.17.21) (Glutamate carboxypeptidase III) (GCPIII) (N-acetylated-alpha-linked acidic dipeptidase II) (NAALADase II)
-peve-mir-novel-39,Peve_00004523,2,0,0,2,0.999999085687885,Pentatricopeptide repeat domain-containing protein 3, mitochondrial
-peve-mir-novel-39,Peve_00004847,2,0,0,2,0.99704225336107,Sodium-coupled monocarboxylate transporter 2 (Electroneutral sodium monocarboxylate cotransporter) (Low-affinity sodium-lactate cotransporter) (Solute carrier family 5 member 12)
-peve-mir-novel-39,Peve_00006231,2,0,0,2,0.999963027291266,Deubiquitinating protein VCPIP1 (EC 3.4.19.12) (Valosin-containing protein p97/p47 complex-interacting protein 1) (Valosin-containing protein p97/p47 complex-interacting protein p135) (VCP/p47 complex-interacting 135-kDa protein)
-peve-mir-novel-39,Peve_00009466,2,0,0,2,0.999047644234391,Uromodulin (Tamm-Horsfall urinary glycoprotein) (THP) [Cleaved into: Uromodulin, secreted form]
-peve-mir-novel-39,Peve_00014228,2,0,2,0,0.997036573432838,NA
-peve-mir-novel-39,Peve_00016648,2,0,0,2,0.999756154929201,U11/U12 small nuclear ribonucleoprotein 35 kDa protein (U11/U12 snRNP 35 kDa protein) (U1 snRNP-binding protein homolog)
-peve-mir-novel-39,Peve_00020418,2,0,0,2,0.997336126674048,Synaptojanin-1 (EC 3.1.3.36) (Synaptic inositol 1,4,5-trisphosphate 5-phosphatase 1)
-peve-mir-novel-39,Peve_00021731,2,0,0,2,0.999642017056776,NA
-peve-mir-novel-39,Peve_00022876,2,0,0,2,0.999985553864935,Cytoplasmic dynein 1 heavy chain 1 (Cytoplasmic dynein heavy chain 1) (Dynein heavy chain, cytosolic)
-peve-mir-novel-39,Peve_00024262,2,0,0,2,0.999974516288872,Heterogeneous nuclear ribonucleoprotein A1-like 2 (hnRNP A1-like 2) (hnRNP core protein A1-like 2)
-peve-mir-novel-39,Peve_00026798,2,0,0,2,0.99891167795814,Long-chain-fatty-acid--CoA ligase 1 (EC 6.2.1.3) (Arachidonate--CoA ligase) (EC 6.2.1.15) (Long-chain acyl-CoA synthetase 1) (LACS 1) (Phytanate--CoA ligase) (EC 6.2.1.24)
-peve-mir-novel-39,Peve_00027141,2,0,0,2,-0.998668319889808,Acidic mammalian chitinase (AMCase) (EC 3.2.1.14) (Chitin-binding protein b04) (CBPb04)
-peve-mir-novel-39,Peve_00032506,2,0,0,2,-0.999036126103867,Rotatin
-peve-mir-novel-39,Peve_00035821,2,0,0,2,0.999361810020579,Protein furry
-peve-mir-novel-39,Peve_00037061,2,0,1,1,-0.999649545771953,Gamma-glutamyl hydrolase (EC 3.4.19.9) (Conjugase) (GH) (Gamma-Glu-X carboxypeptidase)
-peve-mir-novel-39,Peve_00039096,2,0,0,2,0.997430536559693,BRO1 domain-containing protein BROX (BRO1 domain- and CAAX motif-containing protein)
-peve-mir-novel-39,Peve_00041609,2,0,0,2,0.99948661934441,NA
-peve-mir-novel-39,Peve_00044098,2,0,0,2,0.998576798713468,NA
-peve-mir-novel-40,Peve_00004802,2,0,0,2,-0.999895927074034,NA
-peve-mir-novel-40,Peve_00007756,3,0,0,3,0.999962448044095,NA
-peve-mir-novel-40,Peve_00016793,2,0,0,2,0.998844137775377,NA
-peve-mir-novel-40,Peve_00017150,2,0,0,2,-0.999275446346948,Dimethylglycine dehydrogenase, mitochondrial (EC 1.5.8.4) (ME2GLYDH)
-peve-mir-novel-40,Peve_00024330,9,0,0,9,0.998712895978614,HEAT repeat-containing protein 1 (Protein BAP28)
-peve-mir-novel-40,Peve_00032395,2,0,0,2,-0.998857649878391,Polycystic kidney disease protein 1-like 2 (PC1-like 2 protein) (Polycystin-1L2)
-peve-mir-novel-40,Peve_00034569,2,1,0,1,0.999603958340296,NA
-peve-mir-novel-40,Peve_00041682,2,0,0,2,-0.998485426650187,Putative ankyrin repeat protein RF_0381
-peve-mir-novel-6,Peve_00000242,2,0,0,2,-0.996940885947183,IST1 homolog (hIST1) (Charged multivesicular body protein 8) (CHMP8) (Putative MAPK-activating protein PM28)
-peve-mir-novel-6,Peve_00001286,2,0,0,2,-0.999831516694319,26S proteasome non-ATPase regulatory subunit 1 (26S proteasome regulatory subunit RPN2) (26S proteasome regulatory subunit S1)
-peve-mir-novel-6,Peve_00001600,3,0,0,3,-0.999968762882795,CSC1-like protein 1 (Transmembrane protein 63A)
-peve-mir-novel-6,Peve_00003586,2,0,0,2,-0.998590344098593,Probable ATP-dependent RNA helicase DDX60 (EC 3.6.4.13) (DEAD box protein 60)
-peve-mir-novel-6,Peve_00006896,2,0,0,2,-0.999754770568984,Tetraspanin-31-B (Tspan-31-B) (Sarcoma-amplified sequence homolog B)
-peve-mir-novel-6,Peve_00009585,2,0,0,2,-0.999810478284584,Nephrocystin-3
-peve-mir-novel-6,Peve_00013326,2,0,0,2,-0.997240786263881,tRNA(Glu)-specific nuclease WapA (EC 3.1.-.-) (Cell wall-associated protein) (RNase WapA) (Toxin WapA)
-peve-mir-novel-6,Peve_00018009,2,0,0,2,-0.998541509666997,Dedicator of cytokinesis protein 7 (Protein moonlight)
-peve-mir-novel-6,Peve_00034689,2,0,0,2,-0.999903510444138,D-amino-acid oxidase (DAAO) (DAMOX) (DAO) (EC 1.4.3.3)
-peve-mir-novel-6,Peve_00040799,2,0,0,2,-0.99996501950937,Multiple PDZ domain protein (Multi-PDZ domain protein 1)
-peve-mir-novel-7,Peve_00015748,2,1,1,0,-0.999044377811527,Nephrocystin-3
-peve-mir-novel-7,Peve_00022405,2,0,0,2,-0.999648379930316,Pleckstrin homology domain-containing family M member 2 (PH domain-containing family M member 2)
-peve-mir-novel-9,Peve_00006584,4,0,0,4,-0.999747628800907,E3 ubiquitin-protein ligase rnf213-alpha (EC 2.3.2.27) (EC 3.6.4.-) (E3 ubiquitin-lipopolysaccharide ligase rnf213-alpha) (EC 2.3.2.-) (Mysterin-A) (Mysterin-alpha) (RING finger protein 213-A) (RING finger protein 213-alpha)
+given_miRNA_name,mRNA,total_binding_sites,sites_3UTR,sites_5UTR,sites_CDS,PCC.cor
+peve-mir-100,Peve_00000776,2,0,0,2,0.998287142619543
+peve-mir-100,Peve_00001544,2,0,1,1,0.999909726776791
+peve-mir-100,Peve_00003388,2,0,0,2,0.999335236615113
+peve-mir-100,Peve_00005214,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00005937,2,0,0,2,0.998112144659499
+peve-mir-100,Peve_00008800,2,0,0,2,0.997722603479927
+peve-mir-100,Peve_00011528,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00011810,3,0,0,3,0.997092796096673
+peve-mir-100,Peve_00012138,2,0,0,2,0.998405703354998
+peve-mir-100,Peve_00016327,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00017537,2,0,0,2,0.99996273202871
+peve-mir-100,Peve_00017626,2,0,1,1,0.999909726776791
+peve-mir-100,Peve_00018177,2,0,2,0,0.999909726776791
+peve-mir-100,Peve_00019304,3,0,0,3,0.999909726776791
+peve-mir-100,Peve_00021718,2,0,2,0,0.999909726776791
+peve-mir-100,Peve_00021789,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00022430,3,0,0,3,0.999909726776791
+peve-mir-100,Peve_00027965,2,1,0,1,0.999909726776791
+peve-mir-100,Peve_00031172,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00033720,2,0,0,2,0.999143976900459
+peve-mir-100,Peve_00034282,2,0,0,2,0.998864167162046
+peve-mir-100,Peve_00036304,2,0,0,2,0.998004045644015
+peve-mir-100,Peve_00036508,2,0,0,2,0.999909726776791
+peve-mir-100,Peve_00037343,2,0,1,1,0.999909726776791
+peve-mir-100,Peve_00043299,2,0,0,2,0.99767924235131
+peve-mir-100,Peve_00045265,2,0,0,2,0.998095362879249
+peve-mir-novel-1,Peve_00012313,2,0,0,2,-0.997746845316925
+peve-mir-novel-10,Peve_00011858,2,2,0,0,-0.999998482798634
+peve-mir-novel-2,Peve_00002096,2,0,0,2,-0.998981183536662
+peve-mir-novel-2,Peve_00010789,2,0,0,2,-0.999232776560249
+peve-mir-novel-2,Peve_00013326,4,0,0,4,-0.999852555868755
+peve-mir-novel-2,Peve_00013835,3,0,0,3,-0.999640099755155
+peve-mir-novel-2,Peve_00014560,2,0,0,2,-0.997728095293297
+peve-mir-novel-2,Peve_00020859,2,0,0,2,-0.996961236510919
+peve-mir-novel-2,Peve_00028312,2,0,0,2,-0.999574579742918
+peve-mir-novel-2,Peve_00028439,3,0,0,3,0.998146330451858
+peve-mir-novel-2,Peve_00031401,2,0,0,2,0.998108703054888
+peve-mir-novel-2,Peve_00035839,2,0,1,1,-0.999999999503679
+peve-mir-novel-2,Peve_00036365,2,0,0,2,-0.998965392859537
+peve-mir-novel-2,Peve_00037142,2,0,0,2,-0.997740919047806
+peve-mir-novel-2,Peve_00037538,3,0,0,3,-0.998807256137127
+peve-mir-novel-2,Peve_00038545,2,0,0,2,-0.999984274571916
+peve-mir-novel-2,Peve_00041178,2,0,0,2,0.998539575899744
+peve-mir-novel-2,Peve_00042937,2,0,0,2,-0.999999785578752
+peve-mir-novel-20,Peve_00026145,2,1,1,0,0.997253647308052
+peve-mir-novel-24,Peve_00026617,2,0,2,0,1
+peve-mir-novel-3,Peve_00001819,2,0,0,2,0.998906823578492
+peve-mir-novel-3,Peve_00003302,2,0,0,2,0.998226961786262
+peve-mir-novel-3,Peve_00007538,2,0,0,2,0.997223297346734
+peve-mir-novel-3,Peve_00013835,2,0,0,2,0.99796247257867
+peve-mir-novel-3,Peve_00021264,2,0,0,2,0.997162801221593
+peve-mir-novel-3,Peve_00031940,2,1,0,1,-0.999663016871668
+peve-mir-novel-3,Peve_00033364,2,1,0,1,0.999260034938896
+peve-mir-novel-3,Peve_00036728,2,0,0,2,0.997360080379969
+peve-mir-novel-3,Peve_00036964,2,0,1,1,0.997077513398696
+peve-mir-novel-3,Peve_00037461,11,0,0,11,0.999848047205772
+peve-mir-novel-3,Peve_00037776,2,0,0,2,0.999479239377096
+peve-mir-novel-3,Peve_00038927,3,1,0,2,0.999994129428633
+peve-mir-novel-3,Peve_00041750,2,0,0,2,0.99983472343522
+peve-mir-novel-3,Peve_00044304,2,0,0,2,0.999409654250644
+peve-mir-novel-39,Peve_00001847,2,0,0,2,0.99919831613102
+peve-mir-novel-39,Peve_00002221,2,0,0,2,0.999980672456975
+peve-mir-novel-39,Peve_00003392,2,0,0,2,0.997354196901045
+peve-mir-novel-39,Peve_00004523,2,0,0,2,0.999999085687885
+peve-mir-novel-39,Peve_00004847,2,0,0,2,0.99704225336107
+peve-mir-novel-39,Peve_00006231,2,0,0,2,0.999963027291266
+peve-mir-novel-39,Peve_00009466,2,0,0,2,0.999047644234391
+peve-mir-novel-39,Peve_00014228,2,0,2,0,0.997036573432838
+peve-mir-novel-39,Peve_00016648,2,0,0,2,0.999756154929201
+peve-mir-novel-39,Peve_00020418,2,0,0,2,0.997336126674048
+peve-mir-novel-39,Peve_00021731,2,0,0,2,0.999642017056776
+peve-mir-novel-39,Peve_00022876,2,0,0,2,0.999985553864935
+peve-mir-novel-39,Peve_00024262,2,0,0,2,0.999974516288872
+peve-mir-novel-39,Peve_00026798,2,0,0,2,0.99891167795814
+peve-mir-novel-39,Peve_00027141,2,0,0,2,-0.998668319889808
+peve-mir-novel-39,Peve_00032506,2,0,0,2,-0.999036126103867
+peve-mir-novel-39,Peve_00035821,2,0,0,2,0.999361810020579
+peve-mir-novel-39,Peve_00037061,2,0,1,1,-0.999649545771953
+peve-mir-novel-39,Peve_00039096,2,0,0,2,0.997430536559693
+peve-mir-novel-39,Peve_00041609,2,0,0,2,0.99948661934441
+peve-mir-novel-39,Peve_00044098,2,0,0,2,0.998576798713468
+peve-mir-novel-40,Peve_00004802,2,0,0,2,-0.999895927074034
+peve-mir-novel-40,Peve_00007756,3,0,0,3,0.999962448044095
+peve-mir-novel-40,Peve_00016793,2,0,0,2,0.998844137775377
+peve-mir-novel-40,Peve_00017150,2,0,0,2,-0.999275446346948
+peve-mir-novel-40,Peve_00024330,9,0,0,9,0.998712895978614
+peve-mir-novel-40,Peve_00032395,2,0,0,2,-0.998857649878391
+peve-mir-novel-40,Peve_00034569,2,1,0,1,0.999603958340296
+peve-mir-novel-40,Peve_00041682,2,0,0,2,-0.998485426650187
+peve-mir-novel-6,Peve_00000242,2,0,0,2,-0.996940885947183
+peve-mir-novel-6,Peve_00001286,2,0,0,2,-0.999831516694319
+peve-mir-novel-6,Peve_00001600,3,0,0,3,-0.999968762882795
+peve-mir-novel-6,Peve_00003586,2,0,0,2,-0.998590344098593
+peve-mir-novel-6,Peve_00006896,2,0,0,2,-0.999754770568984
+peve-mir-novel-6,Peve_00009585,2,0,0,2,-0.999810478284584
+peve-mir-novel-6,Peve_00013326,2,0,0,2,-0.997240786263881
+peve-mir-novel-6,Peve_00018009,2,0,0,2,-0.998541509666997
+peve-mir-novel-6,Peve_00034689,2,0,0,2,-0.999903510444138
+peve-mir-novel-6,Peve_00040799,2,0,0,2,-0.99996501950937
+peve-mir-novel-7,Peve_00015748,2,1,1,0,-0.999044377811527
+peve-mir-novel-7,Peve_00022405,2,0,0,2,-0.999648379930316
+peve-mir-novel-9,Peve_00006584,4,0,0,4,-0.999747628800907
