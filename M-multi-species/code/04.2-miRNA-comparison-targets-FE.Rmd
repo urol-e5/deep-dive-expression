@@ -1049,16 +1049,19 @@ Ptuh_binding_sum <- Ptuh_FA_df %>%
 ```
 
 ```{r}
+print("Apul: range, mean, and median # sites/target")
 range(Apul_binding_sum$total_binding_sites)
 mean(Apul_binding_sum$total_binding_sites)
 median(Apul_binding_sum$total_binding_sites)
 Apul_binding_sum %>% arrange(total_binding_sites) %>% tail(10)
 cat("\n")
+print("Peve: range, mean, and median # sites/target")
 range(Peve_binding_sum$total_binding_sites)
 mean(Peve_binding_sum$total_binding_sites)
 median(Peve_binding_sum$total_binding_sites)
 Peve_binding_sum %>% arrange(total_binding_sites) %>% tail(10)
 cat("\n")
+print("Ptuh: range, mean, and median # sites/target")
 range(Ptuh_binding_sum$total_binding_sites)
 mean(Ptuh_binding_sum$total_binding_sites)
 median(Ptuh_binding_sum$total_binding_sites)
@@ -1066,6 +1069,15 @@ Ptuh_binding_sum %>% arrange(total_binding_sites) %>% tail(10)
 ```
 
 The vast majority of putatively interacting miRNA-mRNA pairs across all three species are predicted to bind in only one location on the mRNA. A small subset are predicted to have multiple valid binding sites. These instances of multiple binding are usually limited to 2-3 binding sites, and are almost exclusively found in the CDS region of the mRNA. There are two notable exceptions in P.tuahiniensis where there are multiple binding sites predicted in the 3UTR. miR-100 exhibits multiple binding with targets in all three species, again largely via binding in the CDS region. Most notably, in A.pulchra, miR-100 is predicted to bind to one target (FUN_014449, an unannotated gene) in a remarkable *74* configurations!
+
+Save dfs showing instances of multiple binding sites between single miRNA-mRNA pairs for supplementary files
+
+```{r}
+write.csv(filter(Apul_binding_sum, total_binding_sites>1), "../output/04.2-miRNA-comparison-targets-FE/Apul_multibinding.csv", row.names = FALSE, quote = FALSE)
+write.csv(filter(Peve_binding_sum, total_binding_sites>1), "../output/04.2-miRNA-comparison-targets-FE/Peve_multibinding.csv", row.names = FALSE, quote = FALSE)
+write.csv(filter(Ptuh_binding_sum, total_binding_sites>1), "../output/04.2-miRNA-comparison-targets-FE/Ptuh_multibinding.csv", row.names = FALSE, quote = FALSE)
+```
+
 
 ```{r}
 ggplot(Apul_binding_sum, aes(x = total_binding_sites, y = abs(PCC.cor), color = as.factor(sign(PCC.cor)))) +
