@@ -1,0 +1,471 @@
+---
+title: "20-supplementary-files"
+author: "Kathleen Durkin"
+date: "2026-06-15"
+output: 
+  github_document:
+    toc: true
+    number_sections: true
+  bookdown::html_document2:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(readr)
+library(stringr)
+```
+
+Code for any compiling/formating of supplementary figures/tables for the DDE manuscript.
+
+
+# Alignment summary tables
+
+Compiling per-sample alignment and processing statistics for all three species
+
+## RNA-seq
+
+Set up the metadata
+```{r}
+species_meta <- tibble(
+  species = c("D-Apul", "E-Peve", "F-Ptuh"),
+  species_full = c("Acropora pulchra", "Porites evermanni",
+                   "Pocillopora tuahiniensis"),
+  genome = c("Apulcra-genome.fa", "Porites_evermanni_v1.fa",
+             "Pocillopora_meandrina_HIv1.assembly.fasta"),
+  rna_prefix = c("../../D-Apul", "../../E-Peve", "../../F-Ptuh")
+)
+species_meta
+```
+
+### 1.1 Raw reads
+
+from MultiQC FastQC on raw reads
+```{r}
+raw_reads <- rbind(
+  
+read_tsv("../../D-Apul/output/01-Apul-RNA-trimming-FastQC/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("../../E-Peve/output/01-Peve-RNA-trimming-FastQC/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("../../F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences')
+)
+
+raw_reads
+```
+
+### 1.2 Trimmed reads
+
+from MultiQC FastQC on trimmed reads
+```{r}
+trimmed_reads <- rbind(
+  
+read_tsv("../../D-Apul/output/01-Apul-RNA-trimming-FastQC/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("../../E-Peve/output/01-Peve-RNA-trimming-FastQC/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("../../F-Ptuh/output/01-Ptuh-RNA-trimming-FastQC/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences')
+)
+
+trimmed_reads
+```
+
+### 1.3 Retained after trimming (%)
+
+```{r}
+read_counts <- raw_reads %>%
+  left_join(trimmed_reads, by = c("Sample")) %>%
+  mutate(retained_pct = round(trimmed_reads$'Total Sequences' / raw_reads$'Total Sequences' * 100, 2))
+
+read_counts
+```
+
+### 1.4 MISSING HISAT2 alignment stats (overall rate, unique, multi)
+
+D-Apul has a consolidated log; E-Peve and F-Ptuh have per-sample stderr files.
+
+```{r, eval = FALSE}
+# Parse a single HISAT2 stderr block.
+# Returns a one-row tibble with reads, overall_rate, unique_pct, multi_pct.
+parse_hisat2_block <- function(lines) {
+  text <- paste(lines, collapse = "\n")
+
+  reads <- as.numeric(str_match(text, "^(\\d+) reads")[2])
+  overall <- as.numeric(str_match(text, "(\\S+)% overall alignment rate")[2])
+
+  # Concordant exactly 1 time  -> uniquely mapped
+  unique_line <- str_match(text,
+    "aligned concordantly exactly 1 time\n")[1]
+  unique_pct <- as.numeric(str_extract(unique_line, "\\d+\\.\\d+"))
+
+  # Concordant >1 times -> multi-mapped
+  multi_line <- str_match(text,
+    "aligned concordantly >1 times\n")[1]
+  multi_pct <- as.numeric(str_extract(multi_line, "\\d+\\.\\d+"))
+
+  tibble(
+    hisat2_reads   = reads,
+    overall_align  = overall,
+    unique_mapped  = unique_pct,
+    multi_mapped   = multi_pct
+  )
+}
+
+# D-Apul: consolidated log, 5 blocks separated by blank lines
+parse_hisat2_consolidated <- function(path, samples) {
+  lines <- readLines(path)
+  # Split into blocks at "N reads; of these:"
+  block_starts <- which(str_detect(lines, "^\\d+ reads; of these:"))
+  results <- list()
+  for (i in seq_along(block_starts)) {
+    end <- if (i < length(block_starts)) block_starts[i + 1] - 1 else length(lines)
+    block <- lines[block_starts[i]:end]
+    results[[i]] <- parse_hisat2_block(block) %>%
+      mutate(sample = samples[i])
+  }
+  bind_rows(results)
+}
+
+# E-Peve / F-Ptuh: one stderr file per sample
+parse_hisat2_per_file <- function(dir_path, sample_pattern, sample_replacement) {
+  files <- list.files(dir_path, pattern = sample_pattern, full.names = TRUE)
+  results <- list()
+  for (f in files) {
+    lines <- readLines(f)
+    # Extract sample name from filename: RNA-POR-71_hisat.stderr -> POR-71
+    sname <- basename(f) %>%
+      str_remove("_hisat.stderr") %>%
+      str_remove("^RNA-")
+    results[[sname]] <- parse_hisat2_block(lines) %>%
+      mutate(sample = sname)
+  }
+  bind_rows(results)
+}
+
+hisat2_stats <- bind_rows(
+  parse_hisat2_consolidated(
+    "../../D-Apul/output/07-Apul-Hisat/hisat.out",
+    samples = c("ACR-140", "ACR-145", "ACR-150", "ACR-173", "ACR-178")
+  ),
+  parse_hisat2_per_file(
+    "../../E-Peve/output/06-Peve-Hisat",
+    pattern = "_hisat.stderr$"
+  ),
+  parse_hisat2_per_file(
+    "../../F-Ptuh/output/06-Ptuh-Hisat",
+    pattern = "_hisat.stderr$"
+  )
+) %>%
+  mutate(species = case_when(
+    str_detect(sample, "^ACR") ~ "D-Apul",
+    str_detect(sample, "^POR") ~ "E-Peve",
+    str_detect(sample, "^POC") ~ "F-Ptuh"
+  )) %>%
+  select(species, sample, everything())
+
+hisat2_stats
+```
+
+### 1.5 MISSING Mapped reads (from featureCounts .summary)
+
+```{r, eval = FALSE}
+# featureCounts .summary: rows = Status (Assigned, Unassigned_Unmapped, etc.),
+# columns = BAM paths. Mapped reads = total - Unassigned_Unmapped.
+# Total reads per sample = sum of all rows.
+
+read_featurecounts_summary <- function(path, species_code) {
+  df <- read_tsv(path, show_col_types = FALSE)
+  # Column names are BAM paths; extract sample names
+  bam_cols <- colnames(df)[-1]  # first col is "Status"
+  samples <- str_extract(bam_cols, "(ACR|POR|POC)-\\d+")
+
+  assigned <- df %>% filter(Status == "Assigned") %>% select(-Status) %>% as.numeric()
+  unmapped <- df %>% filter(Status == "Unassigned_Unmapped") %>% select(-Status) %>% as.numeric()
+
+  # Total = sum of all status rows
+  total <- colSums(df %>% select(-Status) %>% mutate(across(everything, as.numeric)))
+
+  tibble(
+    species = species_code,
+    sample = samples,
+    mapped_reads = total - unmapped,
+    total_reads_fc = total
+  )
+}
+
+mapped_reads <- bind_rows(
+  read_featurecounts_summary("../../D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt.summary", "D-Apul"),
+  read_featurecounts_summary("../../E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt.summary", "E-Peve"),
+  read_featurecounts_summary("../../F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt.summary", "F-Ptuh")
+)
+mapped_reads
+```
+
+### 1.6 MISSING Mismatch rate (%)
+
+```{r, eval=FALSE}
+# NOTE: Mismatch rate is NOT available in this repository.
+# There are no samtools stats / flagstat / idxstats or Picard outputs.
+# The sorted BAMs are gitignored (available via the project wiki).
+#
+# To compute mismatch rate, run the following on the BAMs:
+#
+#   samtools stats <sample.sorted.bam> | grep "^SN" > <sample>.stats.txt
+#
+# Then parse the line:
+#   SN	mismatch rate:	X.XXe-XX
+# and convert to percentage.
+#
+# Placeholder:
+mismatch_rate <- tibble(
+  species = character(),
+  sample = character(),
+  mismatch_rate_pct = numeric()
+)
+# mismatch_rate  # leave empty — populate after running samtools stats on BAMs
+```
+
+### 1.7 Number of lncRNAs identified
+
+```{r}
+count_lncRNAs <- function(filepath) {
+  
+df <- read_tsv(filepath, col_names = TRUE)
+sample_cols <- grep(".sorted.bam$", colnames(df), value = TRUE)
+sample_names <- str_remove(sample_cols, ".*pipeline\\.RNA\\.") %>% str_remove("\\.sorted\\.bam$")
+
+# Count non-zero entries per sample column
+nonzero_counts <- sapply(sample_cols, function(col) {
+  sum(df[[col]] > 0, na.rm = TRUE)
+})
+
+# Build a summary tibble
+summary <- tibble(
+  sample = sample_names,
+  n_unique_lncRNA = nonzero_counts
+)
+print(summary)
+}
+
+lncRNA_counts <- rbind(
+count_lncRNAs("../output/01.6-lncRNA-pipeline/Apul-lncRNA-counts-filtered.txt"),
+count_lncRNAs("../output/01.6-lncRNA-pipeline/Peve-lncRNA-counts-filtered.txt"),
+count_lncRNAs("../output/01.6-lncRNA-pipeline/Ptuh-lncRNA-counts-filtered.txt")
+)
+lncRNA_counts
+```
+
+
+## sRNA-seq alignment statistics
+
+### 2.1 Species metadata (genome)
+
+```{r}
+# Genome files are referenced in the ShortStack Rmd scripts:
+srna_genomes <- tibble(
+  species = c("D-Apul", "E-Peve", "F-Ptuh"),
+  genome = c("Apulcra-genome.fa", "Porites_evermanni_v1.fa",
+             "Pocillopora_meandrina_HIv1.assembly.fasta")
+)
+srna_genomes
+```
+
+### 2.1 Raw reads
+
+```{r}
+s_raw_reads <- rbind(
+  
+read_tsv("~/deep-dive/D-Apul/output/08-Apul-sRNAseq-trimming/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("~/deep-dive/E-Peve/output/06-Peve-sRNAseq-trimming/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("~/deep-dive/F-Pmea/output/08-Pmea-sRNAseq-trimming/raw-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "RNA-")) %>% filter(str_detect(Sample, "_R1_001$")) %>% select(Sample, 'Total Sequences')
+)
+
+s_raw_reads$Sample <- str_remove(s_raw_reads$Sample, "_R1_001")
+
+s_raw_reads
+```
+
+### 2.2 Trimmed reads
+
+```{r}
+s_trimmed_reads <- rbind(
+  
+read_tsv("~/deep-dive/D-Apul/output/08.2-Apul-sRNAseq-trimming-31bp-fastp-merged/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "sRNA-")) %>% select(Sample, 'Total Sequences'), 
+
+read_tsv("~/deep-dive/E-Peve/output/06.2-Peve-sRNAseq-trimming-31bp-fastp-merged/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% select(Sample, 'Total Sequences') %>% mutate(Sample = paste0("sRNA-", Sample)), 
+
+read_tsv("~/deep-dive/F-Pmea/output/08.2-Pmea-sRNAseq-trimming-31bp-fastp-merged/trimmed-fastqc/multiqc_data/multiqc_fastqc.txt", col_names = TRUE) %>% filter(str_detect(Sample, "sRNA-")) %>% select(Sample, 'Total Sequences')
+)
+
+s_trimmed_reads$Sample <- str_remove(s_trimmed_reads$Sample, "-fastp-adapters-polyG-31bp-merged")
+
+s_trimmed_reads
+```
+
+### 2.3 Retained after trimming (%)
+
+```{r}
+s_read_counts <- s_raw_reads %>%
+  left_join(s_trimmed_reads, by = c("Sample")) %>%
+  mutate(retained_pct = round(s_trimmed_reads$'Total Sequences' / s_raw_reads$'Total Sequences' * 100, 2))
+
+s_read_counts
+```
+
+### 2.4 ShortStack alignment stats
+
+from alignment_details.tsv
+
+NOTE: the Github repo README.md states that the H tag means "H: Very highly multi-mapped read (>=50 hits)". However,the log from running ShortStack 4.1.0 (e.g., the file ~/deep-dive-expression/D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/shortstack.log) states that the tag represents "Very highly multi-mapped (>=20 hits)(H)". It looks like the >=50 threshold was used in previous versions of ShortStack (confirmed by looking at deep-dive ShortStack logs), but the updated 4.1.0 version switched to a >=20 threshold. The Github repo's README is out of date.
+```{r}
+# alignment_details.tsv columns:
+#   readfile  mapping_type  sequence_length  sequence_count  read_count
+# mapping_type (from https://github.com/MikeAxtell/ShortStack)
+# U: Uniquely mapped (not a multimapper).
+# P: Multimapper placed using the method set by option --mmap.
+# R: Multimapper placed at random.
+# H: Very highly multi-mapped read (>=20 hits).
+# N: Unmapped reads.
+
+read_alignment_details <- function(path, species_code) {
+  df <- read_tsv(path, show_col_types = FALSE)
+
+  # Extract sample name from readfile path
+  df <- df %>%
+    mutate(
+      sample = str_extract(readfile, "(ACR|POR|POC)-\\d+"),
+      species = species_code
+    )
+
+  # Aggregate by sample × mapping_type, sum sequence_count
+  agg <- df %>%
+    group_by(species, sample, mapping_type) %>%
+    summarise(seq_count = sum(read_count), .groups = "drop")
+
+  # Pivot to wide format
+  agg_wide <- agg %>%
+    pivot_wider(names_from = mapping_type, values_from = seq_count,
+                values_fill = 0)
+
+  # totals and percentages
+  # U=unique, P=guided, R=random, H=very-high, N=not mapped
+  agg_wide %>%
+    mutate(
+      total_reads = U + P + R + H + N,
+      mapped_reads = U + P + R + H,
+      overall_align_pct = round((mapped_reads) / total_reads * 100, 2),
+      unique_pct = round(U / total_reads * 100, 2),
+      guided_pct = round(P / total_reads * 100, 2),
+      random_pct = round(R / total_reads * 100, 2),
+      very_high_pct = round(H / total_reads * 100, 2),
+    ) %>%
+    select(
+      species, sample, total_reads, overall_align_pct, unique_pct, guided_pct, 
+      random_pct, very_high_pct, mapped_reads
+    ) %>%
+    rename(
+      `Overall alignment (%)` = overall_align_pct,
+      `Uniquely mapped reads (%)` = unique_pct,
+      `Multi-mapped reads placed with guidance (%)` = guided_pct,
+      `Multi-mapped reads placed randomly (%)` = random_pct,
+      `Very high multi-mapping reads (>=50 hits; %)` = very_high_pct,
+      `Mapped sRNA reads` = mapped_reads
+    )
+}
+
+srna_align <- bind_rows(
+  read_alignment_details("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/alignment_details.tsv", "D-Apul"),
+  read_alignment_details("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/alignment_details.tsv", "E-Peve"),
+  read_alignment_details("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/alignment_details.tsv", "F-Ptuh")
+)
+srna_align
+```
+
+### 2.5 Mapped miRNA reads
+
+from ShortStack Counts.txt
+```{r}
+# Counts.txt is a TSV: Coords, Name, MIRNA, <sample1>_condensed, ...
+# Filter rows where MIRNA == "Y", then sum each sample column.
+
+read_mirna_counts <- function(path, species_code) {
+  df <- read_tsv(path, show_col_types = FALSE)
+  sample_cols <- colnames(df)[-(1:3)]  # skip Coords, Name, MIRNA
+
+  # Extract clean sample names from column names
+  # e.g. "sRNA-ACR-140-S1-TP2-..._condensed" -> "ACR-140"
+  samples <- str_extract(sample_cols, "(ACR|POR|POC)-\\d+")
+
+  mirna_only <- df %>% filter(MIRNA == "Y")
+
+  # Sum each sample column across all miRNA rows
+  mapped_mirna <- colSums(mirna_only[, sample_cols])
+
+  tibble(
+    species = species_code,
+    sample = samples,
+    mapped_mirna_reads = mapped_mirna
+  )
+}
+
+srna_mirna_reads <- bind_rows(
+  read_mirna_counts("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Counts.txt", "D-Apul"),
+  read_mirna_counts("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Counts.txt", "E-Peve"),
+  read_mirna_counts("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Counts.txt", "F-Ptuh")
+)
+srna_mirna_reads
+```
+
+### 2.6 Number of miRNAs identified
+
+```{r}
+count_expressed_mirnas <- function(path) {
+  df <- read_tsv(path, show_col_types = FALSE)
+
+  sample_cols <- grep("merged_condensed", colnames(df), value = TRUE)
+
+  as.data.frame(t(df %>%
+    filter(MIRNA == "Y") %>%
+    summarise(across(all_of(sample_cols), ~ sum(.x > 0, na.rm = TRUE)))))
+}
+
+miRNA_counts <- rbind(
+count_expressed_mirnas("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Counts.txt"),
+count_expressed_mirnas("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Counts.txt"),
+count_expressed_mirnas("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Counts.txt")
+)
+colnames(miRNA_counts) <- c("miRNA_count")
+miRNA_counts$Sample <- rownames(miRNA_counts)
+miRNA_counts <- miRNA_counts %>% select(Sample, miRNA_count) %>% remove_rownames()
+miRNA_counts$Sample <- miRNA_counts$Sample %>% str_remove("-S1-TP2-fastp-adapters-polyG-31bp-merged_condensed") %>% str_remove("sRNA-")
+
+miRNA_counts
+```
+
+
+
+
+
+
+
+
+
+
+
