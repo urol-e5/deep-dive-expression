@@ -29,9 +29,751 @@ editor_options:
 library(tidyverse)
 library(readr)
 library(stringr)
+library(purrr)
 ```
 
 Code for any compiling/formating of supplementary figures/tables for the DDE manuscript.
+
+# Machinery.fasta reference table
+
+```{r build-machinery-table}
+protein_names <- c(
+  # DNA methylation
+  "DNMT1"  = "DNA (cytosine-5-)-methyltransferase 1",
+  "DNMT3A" = "DNA (cytosine-5-)-methyltransferase 3 alpha",
+  "DNMT3B" = "DNA (cytosine-5-)-methyltransferase 3 beta",
+  "DNMT3L" = "DNA (cytosine-5-)-methyltransferase 3 like",
+  # TET dioxygenases
+  "TET1" = "Methylcytosine dioxygenase TET1",
+  "TET2" = "Methylcytosine dioxygenase TET2",
+  "TET3" = "Methylcytosine dioxygenase TET3",
+  # Methyl-CpG binding domain
+  "MBD1" = "Methyl-CpG-binding domain protein 1",
+  "MBD2" = "Methyl-CpG-binding domain protein 2",
+  "MBD3" = "Methyl-CpG-binding domain protein 3",
+  "MBD4" = "Methyl-CpG-binding domain protein 4",
+  "MBD5" = "Methyl-CpG-binding domain protein 5",
+  "MBD6" = "Methyl-CpG-binding domain protein 6",
+  # UHRF
+  "UHRF1" = "E3 ubiquitin-protein ligase UHRF1",
+  "UHRF2" = "E3 ubiquitin-protein ligase UHRF2",
+  # ZBTB readers
+  "ZBTB33" = "Zinc finger and BTB domain-containing protein 33 (Kaiso)",
+  "ZBTB4"  = "Zinc finger and BTB domain-containing protein 4",
+  "ZBTB38" = "Zinc finger and BTB domain-containing protein 38",
+  "ZFP57"  = "Zinc finger protein 57",
+  "KLF4"   = "Krueppel-like factor 4",
+  "EGR1"   = "Early growth response protein 1",
+  "WT1"    = "Wilms tumor protein",
+  "CTCF"   = "CCCTC-binding factor",
+  # HDACs
+  "HDAC1"  = "Histone deacetylase 1",
+  "HDAC2"  = "Histone deacetylase 2",
+  "HDAC3"  = "Histone deacetylase 3",
+  "HDAC4"  = "Histone deacetylase 4",
+  "HDAC5"  = "Histone deacetylase 5",
+  "HDAC6"  = "Histone deacetylase 6",
+  "HDAC7"  = "Histone deacetylase 7",
+  "HDAC8"  = "Histone deacetylase 8",
+  "HDAC9"  = "Histone deacetylase 9",
+  "HDAC10" = "Histone deacetylase 10",
+  "HDAC11" = "Histone deacetylase 11",
+  # Sirtuins
+  "SIRT1" = "NAD-dependent protein deacetylase sirtuin-1",
+  "SIRT2" = "NAD-dependent protein deacetylase sirtuin-2",
+  "SIRT3" = "NAD-dependent protein deacetylase sirtuin-3",
+  "SIRT4" = "NAD-dependent protein lysine acylase sirtuin-4",
+  "SIRT5" = "NAD-dependent protein lysine desuccinylase sirtuin-5",
+  "SIRT6" = "NAD-dependent protein deacylase sirtuin-6",
+  "SIRT7" = "NAD-dependent protein desuccinylase sirtuin-7",
+  # KATs
+  "KAT1-HAT1"    = "Histone acetyltransferase type B catalytic subunit (HAT1/KAT1)",
+  "KAT2A"        = "Histone acetyltransferase KAT2A (GCN5)",
+  "KAT2B"        = "Histone acetyltransferase KAT2B (PCAF)",
+  "KAT3A-CREBBP" = "CREB-binding protein (CREBBP/KAT3A)",
+  "KAT3B-EP300"  = "Histone acetyltransferase p300 (EP300/KAT3B)",
+  "KAT4-TAF1"    = "Transcription initiation factor TFIID subunit 1 (TAF1/KAT4)",
+  "KAT5"         = "Histone acetyltransferase KAT5 (Tip60)",
+  "KAT6A"        = "Histone acetyltransferase KAT6A (MOZ)",
+  "KAT6B"        = "Histone acetyltransferase KAT6B (MORF)",
+  "KAT7"         = "Histone acetyltransferase KAT7 (HBO1)",
+  "KAT8"         = "Histone acetyltransferase KAT8 (MOF)",
+  "KAT9-ELP3"    = "Elongator complex protein 3 (ELP3/KAT9)",
+  "KAT12-GTF3C4" = "Transcription factor IIIC subunit 4 (GTF3C4/KAT12)",
+  "KAT13A-NCOA1" = "Nuclear receptor coactivator 1 (NCOA1/KAT13A)",
+  "KAT13B-NCOA3" = "Nuclear receptor coactivator 3 (NCOA3/KAT13B)",
+  "KAT13C-NCOA2" = "Nuclear receptor coactivator 2 (NCOA2/KAT13C)",
+  "KAT13D-CLOCK" = "Circadian locomoter output cycles protein kaput (CLOCK/KAT13D)",
+  "KAT14"        = "Histone acetyltransferase KAT14 (CSRP2BP)",
+  # KMTs
+  "KMT1C-EHMT2"   = "Histone-lysine N-methyltransferase EHMT2 (G9a/KMT1C)",
+  "KMT1D-EHMT1"   = "Histone-lysine N-methyltransferase EHMT1 (GLP/KMT1D)",
+  "KMT1E-SETDB1"  = "Histone-lysine N-methyltransferase SETDB1 (KMT1E)",
+  "KMT1F-SETDB2"  = "Histone-lysine N-methyltransferase SETDB2 (KMT1F)",
+  "SUV39H1-KMT1A" = "Histone-lysine N-methyltransferase SUV39H1 (KMT1A)",
+  "SUV39H2-KMT1B" = "Histone-lysine N-methyltransferase SUV39H2 (KMT1B)",
+  "KMT2A"         = "Histone-lysine N-methyltransferase 2A (MLL1)",
+  "KMT2B"         = "Histone-lysine N-methyltransferase 2B (MLL4)",
+  "KMT2C"         = "Histone-lysine N-methyltransferase 2C (MLL3)",
+  "KMT2D"         = "Histone-lysine N-methyltransferase 2D (MLL2)",
+  "KMT2E"         = "Histone-lysine N-methyltransferase 2E (MLL5)",
+  "KMT2F-SETD1A"  = "Histone-lysine N-methyltransferase SETD1A (KMT2F)",
+  "KMT2G-SETD1B"  = "Histone-lysine N-methyltransferase SETD1B (KMT2G)",
+  "KMT2H-ASH1L"   = "Histone-lysine N-methyltransferase ASH1L (KMT2H)",
+  "KMT3A-SETD2"   = "Histone-lysine N-methyltransferase SETD2 (KMT3A)",
+  "KMT3B-NSD1"    = "Histone-lysine N-methyltransferase NSD1 (KMT3B)",
+  "KMT3C-SMYD2"   = "SET and MYND domain-containing protein 2 (SMYD2/KMT3C)",
+  "KMT4-DOT1L"    = "Histone-lysine N-methyltransferase DOT1L (KMT4)",
+  "KMT5A\u2014SETD8" = "Histone-lysine N-methyltransferase SETD8 (KMT5A)",
+  "KMT5B"         = "Histone-lysine N-methyltransferase KMT5B (SUV420H1)",
+  "KMT5C"         = "Histone-lysine N-methyltransferase KMT5C (SUV420H2)",
+  "KMT6-EZH2"     = "Histone-lysine N-methyltransferase EZH2 (KMT6)",
+  "KMT7-SETD7/9"  = "Histone-lysine N-methyltransferase SETD7 (KMT7)",
+  "KMT8-PRDM2"    = "PR domain zinc finger protein 2 (PRDM2/KMT8)",
+  "ASH2L"         = "Set1/Ash2 histone methyltransferase complex subunit ASH2",
+  "WHSC1-NSD2"    = "Histone-lysine N-methyltransferase NSD2 (WHSC1/MMSET)",
+  "WHSC1L-NSD3"   = "Histone-lysine N-methyltransferase NSD3 (WHSC1L1)",
+  "EZH1"   = "Histone-lysine N-methyltransferase EZH1",
+  "SETD3"  = "Histone methyltransferase SETD3",
+  "SETD4"  = "SET domain-containing protein 4",
+  "SETD5"  = "SET domain-containing protein 5",
+  "SETD6"  = "N-lysine methyltransferase SETD6",
+  "SETMAR" = "Histone-lysine N-methyltransferase SETMAR (Metnase)",
+  "SMYD1"  = "SET and MYND domain-containing protein 1",
+  "SMYD3"  = "SET and MYND domain-containing protein 3",
+  "SMYD4"  = "SET and MYND domain-containing protein 4",
+  "SMYD5"  = "SET and MYND domain-containing protein 5",
+  # KDMs
+  "KDM1A"         = "Lysine-specific histone demethylase 1A (LSD1)",
+  "KDM1B"         = "Lysine-specific histone demethylase 1B (LSD2)",
+  "KDM2A"         = "Lysine-specific demethylase 2A",
+  "KDM2B"         = "Lysine-specific demethylase 2B",
+  "KDM3A"         = "Lysine-specific demethylase 3A",
+  "KDM3B"         = "Lysine-specific demethylase 3B",
+  "KDM3C-JMJD1C"  = "Lysine-specific demethylase JMJD1C (KDM3C)",
+  "KDM4A"         = "Lysine-specific demethylase 4A",
+  "KDM4B"         = "Lysine-specific demethylase 4B",
+  "KDM4C"         = "Lysine-specific demethylase 4C",
+  "KDM4D"         = "Lysine-specific demethylase 4D",
+  "KDM5A"         = "Lysine-specific demethylase 5A (JARID1A)",
+  "KDM5B"         = "Lysine-specific demethylase 5B (JARID1B)",
+  "KDM5C"         = "Lysine-specific demethylase 5C (JARID1C)",
+  "KDM5D"         = "Lysine-specific demethylase 5D (JARID1D)",
+  "KDM6A"         = "Lysine-specific demethylase 6A (UTX)",
+  "KDM6B"         = "Lysine-specific demethylase 6B (JMJD3)",
+  "KDM7A"         = "Lysine-specific demethylase 7A (JHDM1D/PHF8-related)",
+  "KDM8"          = "Lysine-specific demethylase 8 (JMJD5)",
+  "UTY"    = "Inactive histone demethylase UTY",
+  "PHF2"   = "PHD finger protein 2 (histone demethylase)",
+  "PHF8"   = "Histone lysine demethylase PHF8",
+  "JMJD6"  = "Bifunctional arginine demethylase and lysyl-hydroxylase JMJD6",
+  "JMJD7"  = "Lysine demethylase JMJD7",
+  "JMJD8"  = "JMJD8 protein",
+  "JARID2" = "Protein Jumonji (JARID2)",
+  "HR"     = "Lysine demethylase and nuclear receptor corepressor HR",
+  "RIOX1"  = "Ribosomal oxygenase 1 (NO66)",
+  "RIOX2"  = "Ribosomal oxygenase 2 (MINA53)",
+  "TYW5"   = "tRNA wybutosine-synthesizing protein 5",
+  # PRDM
+  "PRDM1"       = "PR domain zinc finger protein 1 (Blimp1)",
+  "MECOM-PRDM3" = "EVI1/MDS1 and EVI1 complex locus protein (MECOM/PRDM3)",
+  "PRDM4"  = "PR domain zinc finger protein 4",
+  "PRDM5"  = "PR domain zinc finger protein 5",
+  "PRDM6"  = "PR domain zinc finger protein 6",
+  "PRDM7"  = "PR domain zinc finger protein 7",
+  "PRDM8"  = "PR domain zinc finger protein 8",
+  "PRDM9"  = "PR domain zinc finger protein 9",
+  "PRDM10" = "PR domain zinc finger protein 10",
+  "PRDM11" = "PR domain zinc finger protein 11",
+  "PRDM12" = "PR domain zinc finger protein 12",
+  "PRDM13" = "PR domain zinc finger protein 13",
+  "PRDM14" = "PR domain zinc finger protein 14",
+  "PRDM15" = "PR domain zinc finger protein 15",
+  "PRDM16" = "PR domain zinc finger protein 16",
+  # PRMTs
+  "PRMT2" = "Protein arginine N-methyltransferase 2",
+  "PRMT3" = "Protein arginine N-methyltransferase 3",
+  "PRMT5" = "Protein arginine N-methyltransferase 5",
+  "PRMT6" = "Protein arginine N-methyltransferase 6",
+  "PRMT7" = "Protein arginine N-methyltransferase 7",
+  "PRMT8" = "Protein arginine N-methyltransferase 8",
+  "PRMT9" = "Protein arginine N-methyltransferase 9",
+  # PARPs
+  "PARP2"          = "Poly [ADP-ribose] polymerase 2",
+  "PARP3"          = "Poly [ADP-ribose] polymerase 3",
+  "PARP4"          = "Poly [ADP-ribose] polymerase 4",
+  "PARP5A-TNKS"    = "Tankyrase-1 (TNKS/PARP5A)",
+  "PARP5B-TNKS2"   = "Tankyrase-2 (TNKS2/PARP5B)",
+  "PARP6"          = "Poly [ADP-ribose] polymerase 6",
+  "PARP7-TIPARP"   = "TCDD-inducible poly [ADP-ribose] polymerase (TIPARP/PARP7)",
+  "PARP8"          = "Poly [ADP-ribose] polymerase 8",
+  "PARP9"          = "Poly [ADP-ribose] polymerase 9 (BAL1)",
+  "PARP10"         = "Poly [ADP-ribose] polymerase 10",
+  "PARP11"         = "Poly [ADP-ribose] polymerase 11",
+  "PARP12"         = "Poly [ADP-ribose] polymerase 12",
+  "PARP13-ZC3HAV1" = "Zinc finger CCCH-type antiviral protein 1 (ZAP/PARP13)",
+  "PARP14"         = "Poly [ADP-ribose] polymerase 14 (BAL2)",
+  "PARP15"         = "Poly [ADP-ribose] polymerase 15 (BAL3)",
+  "PARP16"         = "Poly [ADP-ribose] polymerase 16",
+  "PARG"           = "Poly(ADP-ribose) glycohydrolase",
+  "ARH1-ADPRH"     = "ADP-ribosylhydrolase ARH1",
+  "ARH3-ADPRS"     = "ADP-ribosylhydrolase ARH3",
+  "OGT"            = "UDP-N-acetylglucosamine--peptide N-acetylglucosaminyltransferase (OGT)",
+  # SUMO
+  "SUMO2" = "Small ubiquitin-related modifier 2",
+  "SUMO3" = "Small ubiquitin-related modifier 3",
+  "SENP1" = "Sentrin-specific protease 1",
+  "SENP2" = "Sentrin-specific protease 2",
+  "SENP3" = "Sentrin-specific protease 3",
+  "SENP5" = "Sentrin-specific protease 5",
+  "SENP6" = "Sentrin-specific protease 6",
+  "SENP7" = "Sentrin-specific protease 7",
+  "SENP8" = "Sentrin-specific protease 8 (NEDD8 deSUMOylation)",
+  # Ubiquitin E1/E2/E3
+  "UBA1"   = "Ubiquitin-activating enzyme E1",
+  "UBA2"   = "SUMO-activating enzyme subunit 2",
+  "UBA3"   = "NEDD8-activating enzyme E1 catalytic subunit",
+  "UBA5"   = "Ubiquitin-like modifier-activating enzyme 5",
+  "UBA6"   = "Ubiquitin-activating enzyme E1-like protein",
+  "UBA7"   = "Ubiquitin-activating enzyme E1-like protein 2 (UBE1L)",
+  "UBE2A"  = "Ubiquitin-conjugating enzyme E2 A",
+  "UBE2D1" = "Ubiquitin-conjugating enzyme E2 D1",
+  "UBE2D2" = "Ubiquitin-conjugating enzyme E2 D2",
+  "UBE2D3" = "Ubiquitin-conjugating enzyme E2 D3",
+  "UBE2V1" = "Ubiquitin-conjugating enzyme E2 variant 1",
+  "UBE2Z"  = "Ubiquitin-conjugating enzyme E2 Z",
+  "UBE3A"  = "Ubiquitin-protein ligase E3A",
+  "UBE4A"  = "Ubiquitin conjugation factor E4 A",
+  "UBR2"   = "E3 ubiquitin-protein ligase UBR2",
+  "BRCA1"  = "Breast cancer type 1 susceptibility protein (BRCA1)",
+  "HUWE1"  = "E3 ubiquitin-protein ligase HUWE1",
+  "RNF8"   = "E3 ubiquitin-protein ligase RNF8",
+  "RNF20"  = "E3 ubiquitin-protein ligase BRE1A (RNF20)",
+  "RNF40"  = "E3 ubiquitin-protein ligase BRE1B (RNF40)",
+  "RNF168" = "E3 ubiquitin-protein ligase RNF168",
+  "TRIM37" = "E3 ubiquitin-protein ligase TRIM37",
+  "DTX3L"  = "Deltex E3 ubiquitin ligase 3L (DTX3L)",
+  "CUL4A"  = "Cullin-4A",
+  "DDB1"   = "DNA damage-binding protein 1",
+  "TOM1"   = "Target of Myb protein 1 (TOM1)",
+  # USPs
+  "USP1"   = "Ubiquitin carboxyl-terminal hydrolase 1",
+  "USP2"   = "Ubiquitin carboxyl-terminal hydrolase 2",
+  "USP3"   = "Ubiquitin carboxyl-terminal hydrolase 3",
+  "USP4"   = "Ubiquitin carboxyl-terminal hydrolase 4",
+  "USP5"   = "Ubiquitin carboxyl-terminal hydrolase 5",
+  "USP6"   = "Ubiquitin carboxyl-terminal hydrolase 6",
+  "USP7"   = "Ubiquitin carboxyl-terminal hydrolase 7 (HAUSP)",
+  "USP8"   = "Ubiquitin carboxyl-terminal hydrolase 8",
+  "USP9Y"  = "Ubiquitin carboxyl-terminal hydrolase 9, Y-linked",
+  "USP10"  = "Ubiquitin carboxyl-terminal hydrolase 10",
+  "USP11"  = "Ubiquitin carboxyl-terminal hydrolase 11",
+  "USP12"  = "Ubiquitin carboxyl-terminal hydrolase 12",
+  "USP13"  = "Ubiquitin carboxyl-terminal hydrolase 13",
+  "USP14"  = "Ubiquitin carboxyl-terminal hydrolase 14",
+  "USP15"  = "Ubiquitin carboxyl-terminal hydrolase 15",
+  "USP16"  = "Ubiquitin carboxyl-terminal hydrolase 16",
+  "USP18"  = "Ubiquitin carboxyl-terminal hydrolase 18",
+  "USP19"  = "Ubiquitin carboxyl-terminal hydrolase 19",
+  "USP20"  = "Ubiquitin carboxyl-terminal hydrolase 20",
+  "USP21"  = "Ubiquitin carboxyl-terminal hydrolase 21",
+  "USP22"  = "Ubiquitin carboxyl-terminal hydrolase 22",
+  "USP24"  = "Ubiquitin carboxyl-terminal hydrolase 24",
+  "USP25"  = "Ubiquitin carboxyl-terminal hydrolase 25",
+  "USP26"  = "Ubiquitin carboxyl-terminal hydrolase 26",
+  "USP27X" = "Ubiquitin carboxyl-terminal hydrolase 27, X-linked",
+  "USP28"  = "Ubiquitin carboxyl-terminal hydrolase 28",
+  "USP29"  = "Ubiquitin carboxyl-terminal hydrolase 29",
+  "USP30"  = "Ubiquitin carboxyl-terminal hydrolase 30",
+  "USP31"  = "Ubiquitin carboxyl-terminal hydrolase 31",
+  "USP32"  = "Ubiquitin carboxyl-terminal hydrolase 32",
+  "USP33"  = "Ubiquitin carboxyl-terminal hydrolase 33",
+  "USP34"  = "Ubiquitin carboxyl-terminal hydrolase 34",
+  "USP35"  = "Ubiquitin carboxyl-terminal hydrolase 35",
+  "USP36"  = "Ubiquitin carboxyl-terminal hydrolase 36",
+  "USP37"  = "Ubiquitin carboxyl-terminal hydrolase 37",
+  "USP38"  = "Ubiquitin carboxyl-terminal hydrolase 38",
+  "USP39"  = "Ubiquitin carboxyl-terminal hydrolase 39",
+  "USP40"  = "Ubiquitin carboxyl-terminal hydrolase 40",
+  "USP41"  = "Ubiquitin carboxyl-terminal hydrolase 41",
+  "USP42"  = "Ubiquitin carboxyl-terminal hydrolase 42",
+  "USP43"  = "Ubiquitin carboxyl-terminal hydrolase 43",
+  "USP44"  = "Ubiquitin carboxyl-terminal hydrolase 44",
+  "USP45"  = "Ubiquitin carboxyl-terminal hydrolase 45",
+  "USP46"  = "Ubiquitin carboxyl-terminal hydrolase 46",
+  "USP47"  = "Ubiquitin carboxyl-terminal hydrolase 47",
+  "USP48"  = "Ubiquitin carboxyl-terminal hydrolase 48",
+  "USP49"  = "Ubiquitin carboxyl-terminal hydrolase 49",
+  "USP50"  = "Ubiquitin carboxyl-terminal hydrolase 50",
+  "USP51"  = "Ubiquitin carboxyl-terminal hydrolase 51",
+  "USP53"  = "Ubiquitin carboxyl-terminal hydrolase 53",
+  "USP54"  = "Ubiquitin carboxyl-terminal hydrolase 54",
+  "PAN2"   = "Poly(A)-specific ribonuclease subunit PAN2 (USP52)",
+  # UCH / OTU / other DUBs
+  "UCHL1"   = "Ubiquitin carboxyl-terminal hydrolase isozyme L1",
+  "UCHL3"   = "Ubiquitin carboxyl-terminal hydrolase isozyme L3",
+  "UCHL4"   = "Ubiquitin carboxyl-terminal hydrolase isozyme L4",
+  "UCHL5"   = "Ubiquitin carboxyl-terminal hydrolase isozyme L5 (UCH37)",
+  "OTUD1"   = "OTU domain-containing protein 1",
+  "OTUD3"   = "OTU domain-containing protein 3",
+  "OTUD4"   = "OTU domain-containing protein 4",
+  "OTUD5"   = "OTU domain-containing protein 5 (DUBA)",
+  "OTUD6A"  = "OTU domain-containing protein 6A",
+  "OTUD6B"  = "OTU domain-containing protein 6B",
+  "OTUD7A"  = "OTU domain-containing protein 7A (CEZANNE2)",
+  "OTUD7B"  = "OTU domain-containing protein 7B (CEZANNE)",
+  "BAP1"    = "Ubiquitin carboxyl-terminal hydrolase BAP1",
+  "BRCC3"   = "Lys-63-specific deubiquitinase BRCC3",
+  "MYSM1"   = "Histone H2A deubiquitinase MYSM1",
+  "ATXN3"   = "Ataxin-3 (Josephin domain deubiquitinase)",
+  "ATXN3L"  = "Ataxin-3-like protein",
+  "JOSD1"   = "Josephin domain-containing protein 1",
+  "JOSD2"   = "Josephin domain-containing protein 2",
+  "PSMD14"  = "26S proteasome non-ATPase regulatory subunit 14 (POH1/Rpn11)",
+  "PSMD7"   = "26S proteasome non-ATPase regulatory subunit 7 (Rpn8)",
+  "COPS5"   = "COP9 signalosome complex subunit 5 (JAB1/CSN5)",
+  "COPS6"   = "COP9 signalosome complex subunit 6 (CSN6)",
+  "STAMBPL1"= "Stam-binding protein-like 1 (AMSH-LP)",
+  "ZRANB1"  = "Zinc finger RANBP2-type and RING finger-containing protein 1 (TRABID)",
+  "VCPIP1"  = "Deubiquitinating protein VCPIP1",
+  "EIF3H"   = "Eukaryotic translation initiation factor 3 subunit H",
+  "EIF3F"   = "Eukaryotic translation initiation factor 3 subunit F",
+  "MPND"    = "MPN domain-containing protein",
+  "PRPF8"   = "Pre-mRNA-processing-splicing factor 8 (PRPF8/SNRNP220)",
+  "ARID1A"  = "AT-rich interactive domain-containing protein 1A",
+  "ARID1B"  = "AT-rich interactive domain-containing protein 1B",
+  # ADAR
+  "ADAR"   = "Double-stranded RNA-specific adenosine deaminase (ADAR1)",
+  "ADARB1" = "Double-stranded RNA-specific editase B1 (ADAR2)",
+  "ADARB2" = "Double-stranded RNA-specific editase B2 (ADAR3)",
+  # m6A writers / readers / erasers
+  "METTL14"   = "N6-adenosine-methyltransferase non-catalytic subunit (METTL14)",
+  "METTL16"   = "RNA N6-methyladenosine methyltransferase METTL16",
+  "METTL1"    = "tRNA (guanine(46)-N(7))-methyltransferase METTL1",
+  "METTL2A"   = "tRNA (cytosine(34)-N(4))-methyltransferase METTL2A",
+  "METTL2B"   = "tRNA (cytosine(34)-N(4))-methyltransferase METTL2B",
+  "METTL4"    = "N6-adenosine-methyltransferase METTL4",
+  "METTL5"    = "rRNA adenine N(6)-methyltransferase (METTL5)",
+  "METTL6"    = "Methyltransferase-like protein 6",
+  "METTL8"    = "Methyltransferase-like protein 8",
+  "WTAP"      = "pre-mRNA-splicing regulator WTAP (m6A writer complex)",
+  "VIRMA"     = "Vir-like m6A methyltransferase associated (KIAA1429)",
+  "CBLL1"     = "Hakai (CBLL1); E3 ubiquitin ligase, m6A writer complex",
+  "ZC3H13"    = "Zinc finger CCCH domain-containing protein 13 (m6A writer complex)",
+  "RBM15"     = "RNA-binding protein 15",
+  "RBM15B"    = "RNA-binding protein 15B",
+  "PCIF1"     = "mRNA cap-specific m6Am methyltransferase PCIF1",
+  "FTO"       = "Alpha-ketoglutarate-dependent dioxygenase FTO (m6A eraser)",
+  "ALKBH5"    = "mRNA demethylase ALKBH5 (m6A eraser)",
+  "ALKBH1"    = "tRNA N(1)-methyl adenine demethylase ALKBH1",
+  "ALKBH3"    = "tRNA demethylase ALKBH3",
+  "YTHDC1"    = "YTH domain-containing protein 1 (m6A nuclear reader)",
+  "YTHDC2"    = "YTH domain-containing protein 2 (m6A reader/helicase)",
+  "YTHDF1"    = "YTH domain-containing family protein 1 (m6A cytoplasmic reader)",
+  "YTHDF2"    = "YTH domain-containing family protein 2 (m6A decay reader)",
+  "YTHDF3"    = "YTH domain-containing family protein 3 (m6A reader)",
+  "HNRNPC"    = "Heterogeneous nuclear ribonucleoprotein C",
+  "HNRNPA2B1" = "Heterogeneous nuclear ribonucleoproteins A2/B1",
+  "RBMX"      = "RNA-binding motif protein, X-linked (HNRNPG)",
+  "IGF2BP1"   = "Insulin-like growth factor 2 mRNA-binding protein 1",
+  "IGF2BP2"   = "Insulin-like growth factor 2 mRNA-binding protein 2",
+  "IGF2BP3"   = "Insulin-like growth factor 2 mRNA-binding protein 3",
+  "FMR1"      = "Fragile X mental retardation protein 1",
+  "PRRC2A"    = "Proline-rich coiled-coil-containing protein 2A (m6A reader)",
+  "ELF3"      = "ETS-related transcription factor ELF3",
+  # RNA methylation (non-m6A)
+  "NSUN2"   = "tRNA (cytosine(34)-C(5))-methyltransferase NSUN2",
+  "NSUN3"   = "Methyltransferase-like protein NSUN3 (mitochondrial tRNA)",
+  "NSUN4"   = "Bifunctional methyltransferase/rRNA maturation factor NSUN4",
+  "NSUN5"   = "rRNA methyltransferase NSUN5",
+  "NSUN6"   = "tRNA methyltransferase NSUN6",
+  "TRDMT1"  = "tRNA (cytosine-5-)-methyltransferase TRDMT1 (DNMT2)",
+  "NOP2"    = "Ribosome biogenesis protein NOP2 (NSUN1)",
+  "DKC1"    = "H/ACA ribonucleoprotein complex subunit 4 (Dyskerin/DKC1)",
+  "TRMT1"   = "tRNA (guanine(26)-N(2))-methyltransferase TRMT1",
+  "TRMT61A" = "tRNA (adenine(58)-N(1))-methyltransferase TRMT61A",
+  "TRMT61B" = "rRNA (adenine(58)-N(1))-methyltransferase TRMT61B",
+  "TRMT10A" = "tRNA (guanine(9)-N(1))-methyltransferase TRMT10A",
+  "TRMT10C" = "Mitochondrial tRNA methyltransferase TRMT10C",
+  "TRMT112" = "tRNA methyltransferase subunit TRMT112",
+  "ALYREF"  = "THO complex subunit ALYREF (Aly/REF export factor)",
+  "ZCCHC4"  = "Zinc finger CCHC domain-containing protein 4 (rRNA m6A writer)",
+  "NAT10"   = "N-acetyltransferase 10 (RNA cytidine acetyltransferase)",
+  "DUS1L"   = "tRNA-dihydrouridine synthase 1-like",
+  # Pseudouridine synthases
+  "PUSL1"  = "Pseudouridine synthase 1-like",
+  "PUS1"   = "tRNA pseudouridine synthase A (PUS1)",
+  "PUS3"   = "tRNA pseudouridine synthase C (PUS3)",
+  "PUS7"   = "tRNA pseudouridine synthase G (PUS7)",
+  "PUS7L"  = "tRNA pseudouridine synthase 7-like",
+  "PUS10"  = "tRNA pseudouridine synthase 10 (RPUSD2-related)",
+  "RPUSD1" = "RNA pseudouridylate synthase domain-containing 1",
+  "RPUSD2" = "RNA pseudouridylate synthase domain-containing 2",
+  "RPUSD3" = "RNA pseudouridylate synthase domain-containing 3",
+  "RPUSD4" = "RNA pseudouridylate synthase domain-containing 4",
+  "TRUB1"  = "Probable tRNA pseudouridine synthase 1 (TRUB1)",
+  "TRUB2"  = "Probable tRNA pseudouridine synthase 2 (TRUB2)",
+  # NATs / acetyltransferases
+  "NAA10"   = "N-alpha-acetyltransferase 10 (NatA catalytic subunit)",
+  "NAA50"   = "N-alpha-acetyltransferase 50 (NatE catalytic subunit)",
+  "NAA60"   = "N-alpha-acetyltransferase 60 (NatF catalytic subunit)",
+  "NAT8"    = "N-acetyltransferase 8 (camello-like 1)",
+  "NAT8B"   = "N-acetyltransferase 8B (camello-like 2)",
+  "NAT8L"   = "N-acetyltransferase 8-like",
+  "ATAT1"   = "Alpha-tubulin acetyltransferase 1",
+  "GTF3C2"  = "Transcription factor IIIC 110 kDa subunit (TFIIIC110/GTF3C2)",
+  "GTF3C1"  = "Transcription factor IIIC 220 kDa subunit (TFIIIC220/GTF3C1)",
+  "DLAT"    = "Dihydrolipoyllysine-residue acetyltransferase (PDC-E2)",
+  "ATF2"    = "Cyclic AMP-dependent transcription factor ATF-2",
+  "MCM3AP"  = "Germinal-center associated nuclear protein (GANP/MCM3AP)",
+  "MAPT"    = "Microtubule-associated protein tau (MAPT)",
+  "BRD4"    = "Bromodomain-containing protein 4",
+  "ESCO1"   = "N-acetyltransferase ESCO1 (establishment of cohesion)",
+  "ESCO2"   = "N-acetyltransferase ESCO2",
+  "BLOC1S1" = "Biogenesis of lysosome-related organelles complex 1 subunit 1",
+  "ACAT1"   = "Acetyl-CoA acetyltransferase 1 (mitochondrial)",
+  "ACAT2"   = "Acetyl-CoA acetyltransferase 2 (cytoplasmic)",
+  # Histone variants / linker histones
+  "H1-0"  = "Histone H1.0",
+  "H1-1"  = "Histone H1.1 (HIST1H1A)",
+  "H1-2"  = "Histone H1.2 (HIST1H1C)",
+  "H1-3"  = "Histone H1.3 (HIST1H1D)",
+  "H1-4"  = "Histone H1.4 (HIST1H1E)",
+  "H1-5"  = "Histone H1.5 (HIST1H1B)",
+  "H1-6"  = "Histone H1t",
+  "H1-7"  = "Histone H1oo (oocyte-specific)",
+  "H1-8"  = "Histone H1.8 (H1foo)",
+  "H1-10" = "Histone H1.10",
+  "H2AX"  = "Histone H2A.x",
+  "H2AZ1" = "Histone H2A.z.1",
+  "H2AZ2" = "Histone H2A.z.2",
+  "H2AW"  = "Histone H2A.W",
+  "H2AP"  = "Histone H2A.P",
+  "H2AJ"  = "Histone H2A.J",
+  "H2AB1" = "Histone H2A-Bbd type 1 (H2A.Bbd)",
+  "H2AB2" = "Histone H2A-Bbd type 2",
+  "H2AB3" = "Histone H2A-Bbd type 3",
+  "MACROH2A1" = "Core histone macro-H2A.1 (macroH2A1/H2AFY)",
+  # Chromatin regulators
+  "BAZ1B" = "Bromodomain adjacent to zinc finger domain protein 1B (WSTF)",
+  "BAZ2B" = "Bromodomain adjacent to zinc finger domain protein 2B",
+  "HIRA"  = "Histone cell cycle regulator (HIRA)",
+  "WDR5"  = "WD repeat-containing protein 5 (H3K4 methyltransferase complex subunit)",
+  # EYA phosphatases
+  "EYA1" = "Eyes absent homolog 1 (H2AX phosphatase)",
+  "EYA2" = "Eyes absent homolog 2",
+  "EYA3" = "Eyes absent homolog 3",
+  "EYA4" = "Eyes absent homolog 4",
+  # Protein phosphatases
+  "PPM1D"    = "Protein phosphatase 1D (WIP1)",
+  "PPP6C"    = "Serine/threonine-protein phosphatase 6 catalytic subunit",
+  "PPP4C"    = "Serine/threonine-protein phosphatase 4 catalytic subunit",
+  "CDCA2"    = "Cell division cycle associated 2 (Repo-Man; PP1 targeting)",
+  "PPP1CA"   = "Serine/threonine-protein phosphatase PP1-alpha catalytic subunit",
+  "PPP1CB"   = "Serine/threonine-protein phosphatase PP1-beta catalytic subunit",
+  "PPP1CC"   = "Serine/threonine-protein phosphatase PP1-gamma catalytic subunit",
+  "PPP1R1B"  = "Protein phosphatase 1 regulatory subunit 1B (DARPP-32)",
+  "PPP1R1C"  = "Protein phosphatase 1 regulatory subunit 1C (I-3)",
+  "PPP1R2"   = "Protein phosphatase inhibitor 2",
+  "PPP1R3A"  = "Protein phosphatase 1 regulatory subunit 3A (GM)",
+  "PPP1R3B"  = "Protein phosphatase 1 regulatory subunit 3B (GL)",
+  "PPP1R3C"  = "Protein phosphatase 1 regulatory subunit 3C (PTG)",
+  "PPP1R3D"  = "Protein phosphatase 1 regulatory subunit 3D (R6)",
+  "PPP1R3E"  = "Protein phosphatase 1 regulatory subunit 3E",
+  "PPP1R3F"  = "Protein phosphatase 1 regulatory subunit 3F",
+  "PPP1R3G"  = "Protein phosphatase 1 regulatory subunit 3G",
+  "PPP1R7"   = "Protein phosphatase 1 regulatory subunit 7",
+  "PPP1R8"   = "Protein phosphatase 1 regulatory subunit 8 (NIPP1)",
+  "PPP1R9A"  = "Protein phosphatase 1 regulatory subunit 9A (neurabin-1)",
+  "PPP1R9B"  = "Protein phosphatase 1 regulatory subunit 9B (neurabin-2/spinophilin)",
+  "PPP1R10"  = "Protein phosphatase 1 regulatory subunit 10 (PNUTS)",
+  "PPP1R11"  = "Protein phosphatase 1 regulatory subunit 11 (PNUTS-like)",
+  "PPP1R12A" = "Protein phosphatase 1 regulatory subunit 12A (MYPT1)",
+  "PPP1R12B" = "Protein phosphatase 1 regulatory subunit 12B (MYPT2)",
+  "PPP1R12C" = "Protein phosphatase 1 regulatory subunit 12C (MBS85)",
+  "PPP1R13B" = "Protein phosphatase 1 regulatory subunit 13B (ASPP1)",
+  "PPP1R14A" = "Protein phosphatase 1 regulatory subunit 14A (CPI-17)",
+  "PPP1R14B" = "Protein phosphatase 1 regulatory subunit 14B (PHI-1)",
+  "PPP1R14C" = "Protein phosphatase 1 regulatory subunit 14C",
+  "PPP1R14D" = "Protein phosphatase 1 regulatory subunit 14D",
+  "PPP1R15B" = "Protein phosphatase 1 regulatory subunit 15B (GADD34-related)",
+  "PPP1R16A" = "Protein phosphatase 1 regulatory subunit 16A (MYPT3)",
+  "PPP1R16B" = "Protein phosphatase 1 regulatory subunit 16B (TA-MYPT)",
+  # Kinases
+  "AURKB"   = "Aurora kinase B",
+  "AURKA"   = "Aurora kinase A",
+  "AURKC"   = "Aurora kinase C",
+  "JAK2"    = "Tyrosine-protein kinase JAK2",
+  "HASPIN"  = "Serine/threonine-protein kinase haspin (GSG2)",
+  "BUB1"    = "Mitotic checkpoint serine/threonine-protein kinase BUB1",
+  "WEE1"    = "Wee1-like protein kinase",
+  "SGO2"    = "Shugoshin-like 2 (SGO2)",
+  "SGO1"    = "Shugoshin-like 1 (SGO1)",
+  "DLK1"    = "Protein delta homolog 1 (Preadipocyte factor 1/Pref-1)",
+  "DAPK3"   = "Death-associated protein kinase 3 (ZIPK)",
+  "PKN1"    = "Serine/threonine-protein kinase N1 (PKN1/PRK1)",
+  "PKM"     = "Pyruvate kinase PKM",
+  "STK4"    = "Serine/threonine-protein kinase 4 (MST1/STK4)",
+  "MST1"    = "Hepatocyte growth factor-like protein (MST1)",
+  "SLK"     = "STE20-like serine/threonine-protein kinase SLK",
+  "PRKAA1"  = "5'-AMP-activated protein kinase catalytic subunit alpha-1 (AMPKa1)",
+  "PRKAA2"  = "5'-AMP-activated protein kinase catalytic subunit alpha-2 (AMPKa2)",
+  "DBF4"    = "Protein DBF4 homolog A (Cdc7 kinase regulatory subunit)",
+  "DYRK1A"  = "Dual specificity tyrosine-phosphorylation-regulated kinase 1A",
+  "RPS6KA4" = "Ribosomal protein S6 kinase alpha-4 (MSK2)",
+  "RPS6KA5" = "Ribosomal protein S6 kinase alpha-5 (MSK1)",
+  "PRKCB"   = "Protein kinase C beta type (PKCb)",
+  "JKAMP"   = "JMJD8-associated regulatory complex component (JKAMP)",
+  "MAPK8"   = "Mitogen-activated protein kinase 8 (JNK1)",
+  "MAPK9"   = "Mitogen-activated protein kinase 9 (JNK2)",
+  "MDC1"    = "Mediator of DNA damage checkpoint protein 1",
+  "MCPH1"   = "Microcephalin (MCPH1; DNA damage sensor)",
+  "PAK2"    = "Serine/threonine-protein kinase PAK2",
+  "ATM"     = "Serine-protein kinase ATM (DNA damage checkpoint)",
+  "ATR"     = "Serine/threonine-protein kinase ATR",
+  "CSNK2B"  = "Casein kinase II subunit beta",
+  "PRKCD"   = "Protein kinase C delta type",
+  "MAP2K1"  = "Dual specificity mitogen-activated protein kinase kinase 1 (MEK1)",
+  "MAP3K12" = "Mitogen-activated protein kinase kinase kinase 12 (DLK/MUK)",
+  "MAP3K22" = "Mitogen-activated protein kinase kinase kinase 22",
+  "MAPK1"   = "Mitogen-activated protein kinase 1 (ERK2)",
+  "MAPK3"   = "Mitogen-activated protein kinase 3 (ERK1)",
+  "MAPK8B"  = "Mitogen-activated protein kinase 8b (JNK1b, zebrafish)",
+  "MAPK11"  = "Mitogen-activated protein kinase 11 (p38b)",
+  "MAPK12"  = "Mitogen-activated protein kinase 12 (p38g/ERK6)",
+  "MAPK13"  = "Mitogen-activated protein kinase 13 (p38d/SAPK4)",
+  "MAPK14"  = "Mitogen-activated protein kinase 14 (p38a)",
+  "PRKDC"   = "DNA-dependent protein kinase catalytic subunit (DNA-PKcs)",
+  "PIM1"    = "Proto-oncogene serine/threonine-protein kinase Pim-1",
+  "CDK8"    = "Cyclin-dependent kinase 8 (Mediator kinase)",
+  "CHUK"    = "Inhibitor of nuclear factor kappa-B kinase subunit alpha (IKKa)",
+  "CDK1"    = "Cyclin-dependent kinase 1 (CDC2)",
+  "CHEK1"   = "Serine/threonine-protein kinase Chk1",
+  "APBB1"   = "Amyloid precursor protein-binding family B member 1 (Fe65)",
+  "YWHAQ"   = "14-3-3 protein theta",
+  # ZC3H12 ribonucleases
+  "ZC3H12A" = "Endoribonuclease ZC3H12A (MCPIP1/Regnase-1)",
+  "ZC3H12B" = "Endoribonuclease ZC3H12B (Regnase-2)",
+  "ZC3H12C" = "Endoribonuclease ZC3H12C (Regnase-3)",
+  "ZC3H12D" = "Endoribonuclease ZC3H12D (Regnase-4)",
+  # Other
+  "DCP2"   = "mRNA-decapping enzyme subunit DCP2",
+  "YBX1"   = "Nuclease-sensitive element-binding protein 1 (YBX1/YB-1)",
+  "RAG1"   = "V(D)J recombination-activating protein 1 (RAG1)",
+  "ALG13"  = "UDP-N-acetylglucosamine transferase subunit ALG13",
+  "HSPBAP1"= "HSPA binding protein 1 (HSPBAP1)"
+)
+
+strip_isoform <- function(label) {
+  # Remove trailing isoform number, e.g. Dnmt1-201 -> Dnmt1
+  sub("-\\d+$", "", label)
+}
+
+species_from_id <- function(eid) {
+  dplyr::case_when(
+    startsWith(eid, "ENSMUSP") ~ "Mus musculus",
+    startsWith(eid, "ENSDARP") ~ "Danio rerio",
+    TRUE                       ~ "Homo sapiens"
+  )
+}
+
+lookup_protein_name <- function(gene_name) {
+  key <- toupper(gene_name)
+  if (!is.na(protein_names[key])) return(unname(protein_names[key]))
+  # Strip alias suffixes and try progressively shorter hyphen-joined prefixes
+  simplified <- gsub("[\u2014\u2013/].*", "", key)
+  parts <- strsplit(simplified, "-")[[1]]
+  for (i in seq(length(parts), 1)) {
+    candidate <- paste(parts[seq_len(i)], collapse = "-")
+    if (!is.na(protein_names[candidate])) return(unname(protein_names[candidate]))
+  }
+  ""
+}
+
+# Parse fasta and build table
+lines   <- readLines("../../data/Machinery.fasta")
+headers <- lines[startsWith(lines, ">")]
+parsed    <- regmatches(headers, regexec("^>(\\S+)\\s+peptide:\\s+(\\S+)", headers))
+label     <- sapply(parsed, `[`, 2)   # e.g. "Dnmt1-201"
+eid       <- sapply(parsed, `[`, 3)   # e.g. "ENSMUSP00000004202"
+gene_name     <- strip_isoform(label)
+protein_name  <- sapply(gene_name, lookup_protein_name, USE.NAMES = FALSE)
+
+machinery_ref <- data.frame(
+  accession     = eid,
+  protein_name  = protein_name,
+  gene_name     = gene_name,
+  species       = species_from_id(eid),
+  stringsAsFactors = FALSE
+)
+
+write.csv(machinery_ref, "../output/20-supplementary-files/Machinery_reference_table.csv", row.names = FALSE)
+```
+
+
+# Epimachinery category labels for Machinery.fasta table
+
+```{r}
+machinery <- read_csv("../output/20-supplementary-files/Machinery_reference_table.csv",
+                      show_col_types = FALSE)
+
+classify_gene <- function(gene) {
+  # Uppercase to handle mouse mixed-case gene names
+  gene <- toupper(gene)
+
+  cats <- list(
+    "ADP-ribosylation" = list(
+      prefix = c("PARP", "TNKS", "TARG", "MACROD", "OARD", "ADPRH", "ARH", "TIPARP"),
+      exact  = c("PARG", "ARTD1")
+    ),
+    "DNA methylation & reading" = list(
+      prefix = c("DNMT", "TET", "MBD", "UHRF", "MECP",
+                 "ZBTB"),
+      exact  = c("PRDM14",
+                 "ZFP57")
+    ),
+    "RNA modification" = list(
+      prefix = c("METTL", "YTHDF", "YTHDC", "ALKBH", "WTAP", "VIRMA", "ZC3H13",
+                 "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR",
+                 "TRUB", "RPUSD"),
+      exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
+                 "RBMX", "TRDMT1", "NOP2",
+                 "DUS1L",   # tRNA dihydrouridine synthase
+                 "TYW5",    # tRNA wybutosine-synthesizing protein (Supp. folder:
+                            # "Histone demethylation" — incorrect; TYW5 is a
+                            # tRNA modification enzyme, not a histone demethylase)
+                 "CBLL1")   # Hakai, E3 ubiquitin ligase component of the m6A
+                            # writer complex (Supp. folder: not present; was
+                            # left unclassified — but it is a bona fide m6A
+                            # writer complex member per Machitani et al. 2023)
+    ),
+    "ncRNA biogenesis & silencing" = list(
+      prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN",
+                 "TARBP", "PRKRA", "LIN28", "KHSRP", "ZCCHC", "DIS3", "INTS", "EXOSC",
+                 "PAN2", "PAN3", "DDX5", "DDX17", "DDX6", "EDC", "DCP", "XRN", "CNOT",
+                 "UPF", "SMG", "TUT", "MOV10", "FMR", "PUM", "STAU", "NCBP", "PHAX",
+                 "RBM7",
+                 "ZC3H12"),  # ZC3H12A-D are endoribonucleases (Regnase-1-4)
+                            # that degrade target mRNAs in the cytoplasm —
+                            # mRNA turnover/silencing machinery
+      exact  = c("RDRP", "MTREX", "SKIV2L2", "MTR4", "ZFC3H1", "SRRT", "ARS2", "XPO5",
+                 "XPO1", "CRM1", "RAN", "EWSR1", "FUS", "TARDBP", "HNRNPK", "PARN",
+                 "PABPC1", "PAPD5", "DZIP3", "NONO", "SFPQ", "PSPC1",
+                 "YBX1", "HSPA8", "HSP90AA1", "HSP90AB1", "PQBP1", "MCM3AP",
+                 "PRPF8",  # pre-mRNA splicing factor 8 — core spliceosome
+                           # component involved in snRNA processing
+                 "EIF3H",  # eIF3 subunit H — translation initiation factor
+                           # involved in mRNA silencing/regulation
+                 "EIF3F")  # eIF3 subunit F — translation initiation factor;
+                           # has MPN deubiquitinase fold but functions in
+                           # translation regulation and miRNA-mediated silencing
+    ),
+    "Histone modification and variants" = list(
+      prefix = c("KMT", "KDM", "SETD", "EZH", "SUV", "EHMT", "MLL", "ASH1", "DOT1",
+                 "JMJD", "HDAC", "SIRT", "KAT", "PRMT", "CARM", "NSD", "WHSC", "SMYD",
+                 "CDYL", "RIOX", "MINA", "NO66",
+                 "PRDM",
+                 "SUMO", "SENP",
+                 "H1-", "H2A", "H2B", "H3", "H4",  # histone variants
+                 "NAT"),  # NAT8, NAT8B, NAT8L — N-acetyltransferases (camello
+                         # family); Supp. folder groups all NATs under
+                         # "Histone acetylation"
+      exact  = c("CREBBP", "EP300", "HAT1", "ELP3", "PHF8", "PHF2", "JARID2", "PKN1",
+                 "HSPBAP1",
+                 "WDR5", "ASH2L", "SETMAR",
+                 "OGT", "OGA",
+                 "MACROH2A1",  # histone variant macro-H2A.1
+                 "ATAT1",      # alpha-tubulin acetyltransferase; Supp. folder:
+                               # "Histone acetylation" (grouped with KATs)
+                 "GTF3C1", "GTF3C2",  # TFIIIC subunits; Supp. folder:
+                                      # "Histone acetylation" (have HAT activity)
+                 "NAA10", "NAA50", "NAA60",  # N-alpha-acetyltransferases;
+                                             # Supp. folder: "Histone acetylation"
+                 "BRD4",       # bromodomain-containing protein 4; reads
+                               # acetylated histones; Supp. folder:
+                               # "Histone acetylation"
+                 "ESCO1", "ESCO2",  # N-acetyltransferases (cohesin establishment);
+                                   # Supp. folder: "Histone acetylation"
+                 "DLAT",       # dihydrolipoyllysine-residue acetyltransferase;
+                               # Supp. folder: "Histone acetylation"
+                 "ATF2",       # cyclic AMP-dependent TF; histone acetyltransferase
+                               # activity; Supp. folder: "Histone acetylation"
+                 "BLOC1S1",    # biogenesis of lysosome-related organelles;
+                               # GCN5L1; Supp. folder: "Histone acetylation"
+                 "ACAT1", "ACAT2",  # acetyl-CoA acetyltransferases; Supp. folder:
+                                   # "Histone acetylation"
+                 "UTY",        # inactive histone demethylase (KDM6 family homolog)
+                 "HR",         # lysine demethylase and nuclear receptor corepressor
+                 "MAPT",       # microtubule-associated protein tau; has histone
+                               # H3 binding / chromatin roles
+                 "BAZ2B")      # bromodomain adjacent to zinc finger; chromatin
+                               # remodeling reader (Supp. folder: not present,
+                               # but BAZ1B is in "Histone phosphorylation")
+    ),
+    "Ubiquitin signaling" = list(
+      prefix = c("USP", "UBE", "UBR", "UBA", "UCHL", "UCH", "RNF", "TRIM", "HUWE",
+                 "HERC", "MARCH", "RBX", "CUL", "FBX", "SKP", "SOCS", "OTU", "UBQLN",
+                 "PSMD", "JOSD", "DDB", "MIB"),
+      exact  = c("VCPIP1", "BAP1", "ATXN3",
+                 "ATXN3L",    # ataxin-3-like protein; Josephin domain DUB
+                 "COPS6", "COPS5", "PARK2", "ZRANB1",
+                 "BRCA1", "RAG1", "TOM1", "DTX3L",
+                 "BRCC3",     # Lys-63-specific deubiquitinase; Supp. folder:
+                              # "Histone Ubiquitination" (Deubiquitination)
+                 "MYSM1",     # histone H2A deubiquitinase; Supp. folder:
+                              # "Histone Ubiquitination" (Deubiquitination)
+                 "STAMBPL1",  # AMSH-LP; deubiquitinase; Supp. folder:
+                              # "Histone Ubiquitination" (Deubiquitination)
+                 "MPND",      # MPN domain-containing protein; DUB fold;
+                              # associated with ubiquitin signaling
+                 "ALG13")     # UDP-N-acetylglucosamine transferase subunit;
+                              # has deubiquitinase-like fold; Supp. folder:
+                              # not present, but classified here per its
+                              # role in ubiquitin-related pathways
+    ),
+    "Chromatin signaling" = list(
+      prefix = c("MAP3K", "MAP2K", "MAPK",
+                 "EYA",
+                 "PPP4", "PPP6"),
+      exact  = c("CHUK", "IKBKB", "IKBKG",
+                 "PPP1CB", "PPP1CA", "PPP1CC", "PPP1R7",
+                 "PPP1R10", "PPP1R8",
+                 "PPP2CA", "AURKB", "MSK1", "MSK2", "RPS6KA4", "RPS6KA5", "PARK7",
+                 "BUB1", "DLK1", "DAPK3", "PKM", "JAK2", "DBF4", "DYRK1A",
+                 "YWHAQ", "PRKCB", "PRKCD", "AURKA", "AURKC", "STK4", "MST1",
+                 "MDC1", "MCPH1", "PAK2", "HIRA", "ATM", "ATR", "CSNK2B",
+                 "PRKAA1", "PRKAA2", "PRKDC", "PIM1", "CDK8", "CDK1", "CHEK1",
+                 "PPM1D", "PPP6C", "PPP4C", "CDCA2",
+                 "APBB1", "BAZ1B", "JKAMP", "ARID1A", "ARID1B",
+                 "SLK",       # STE20-like kinase; Supp. folder:
+                              # "Histone phosphorylation" (slkb)
+                 "WEE1",      # Wee1-like kinase; Supp. folder:
+                              # "Histone phosphorylation"
+                 "HASPIN",    # histone H3T3 kinase (GSG2); chromatin signaling
+                 "SGO1", "SGO2")  # Shugoshin proteins; protect centromeric
+                                  # cohesion by recruiting PP2A; chromatin-
+                                  # associated signaling at kinetochores
+    )
+  )
+
+  for (cat_name in names(cats)) {
+    cat_def <- cats[[cat_name]]
+    if (gene %in% cat_def$exact) return(cat_name)
+    for (p in cat_def$prefix) {
+      if (str_starts(gene, fixed(p))) return(cat_name)
+    }
+  }
+  return("Unclassified")
+}
+
+# Apply classification and add category column
+machinery_categorized <- machinery %>%
+  mutate(epimachinery_category = vapply(gene_name, classify_gene, character(1)))
+
+machinery_categorized
+
+write_csv(machinery_categorized, "../output/20-supplementary-files/Machinery_categorized.csv")
+```
 
 
 # Alignment summary tables
@@ -95,63 +837,85 @@ read_counts <- raw_reads %>%
 read_counts
 ```
 
-### 1.4 MISSING HISAT2 alignment stats (overall rate, unique, multi)
 
-D-Apul has a consolidated log; E-Peve and F-Ptuh have per-sample stderr files.
+### 1.4 Alignment rate, unique %, multi %
 
-```{r, eval = FALSE}
-# Parse a single HISAT2 stderr block.
-# Returns a one-row tibble with reads, overall_rate, unique_pct, multi_pct.
-parse_hisat2_block <- function(lines) {
+```{r}
+parse_hisat2_log <- function(lines) {
   text <- paste(lines, collapse = "\n")
 
-  reads <- as.numeric(str_match(text, "^(\\d+) reads")[2])
-  overall <- as.numeric(str_match(text, "(\\S+)% overall alignment rate")[2])
+  total_pairs <- as.numeric(str_match(text, "^(\\d+) reads")[2])
+  total_reads <- total_pairs * 2
 
-  # Concordant exactly 1 time  -> uniquely mapped
-  unique_line <- str_match(text,
-    "aligned concordantly exactly 1 time\n")[1]
-  unique_pct <- as.numeric(str_extract(unique_line, "\\d+\\.\\d+"))
+  # Overall alignment rate
+  overall_rate <- as.numeric(str_match(text, "(\\S+)% overall alignment rate")[2])
 
-  # Concordant >1 times -> multi-mapped
-  multi_line <- str_match(text,
-    "aligned concordantly >1 times\n")[1]
-  multi_pct <- as.numeric(str_extract(multi_line, "\\d+\\.\\d+"))
+  # Concordant pairs 
+  conc_0  <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned concordantly 0 times")[2])
+  conc_1  <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned concordantly exactly 1 time")[2])
+  conc_gt1 <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned concordantly >1 times")[2])
+
+  # Discordant pairs (from concordant-0-times)
+  disc_1 <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned discordantly 1 time")[2])
+  disc_1 <- if (is.na(disc_1)) 0 else disc_1
+
+  # Individual mates (from pairs that aligned 0 times concordantly AND discordantly)
+  mates_total <- as.numeric(str_match(text, "(\\d+) mates make up the pairs")[2])
+  mates_total <- if (is.na(mates_total)) 0 else mates_total
+
+  mates_0  <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned 0 times\n")[2])
+  mates_0  <- if (is.na(mates_0)) 0 else mates_0
+
+  mates_1  <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned exactly 1 time\n")[2])
+  mates_1  <- if (is.na(mates_1)) 0 else mates_1
+
+  mates_gt1 <- as.numeric(str_match(text, "(\\d+) \\(\\S+%\\) aligned >1 times\n")[2])
+  mates_gt1 <- if (is.na(mates_gt1)) 0 else mates_gt1
+
+  # Compute READ-level unique/multi (combining all alignment levels)
+  # Each concordant pair = 2 reads; each discordant pair = 2 reads
+  unique_reads <- (conc_1 * 2) + (disc_1 * 2) + mates_1
+  multi_reads  <- (conc_gt1 * 2) + mates_gt1
+  unmapped_reads <- mates_0
+  mapped_reads <- unique_reads + multi_reads
+  mapped_read_pairs <- mapped_reads/2
+
+  # Sanity check: unique + multi + unmapped should ≈ total_reads
+  # (may not be exact due to mates from discordant pairs that also aligned individually)
 
   tibble(
-    hisat2_reads   = reads,
-    overall_align  = overall,
-    unique_mapped  = unique_pct,
-    multi_mapped   = multi_pct
+    total_pairs = total_pairs,
+    total_reads = total_reads,
+    overall_align_rate = overall_rate,
+    unique_pct = round(unique_reads / total_reads * 100, 2),
+    multi_pct = round(multi_reads / total_reads * 100, 2),
+    mapped_read_pairs = mapped_read_pairs
   )
 }
 
-# D-Apul: consolidated log, 5 blocks separated by blank lines
+# D-Apul: consolidated log (all 5 samples in one file)
 parse_hisat2_consolidated <- function(path, samples) {
   lines <- readLines(path)
-  # Split into blocks at "N reads; of these:"
   block_starts <- which(str_detect(lines, "^\\d+ reads; of these:"))
   results <- list()
   for (i in seq_along(block_starts)) {
     end <- if (i < length(block_starts)) block_starts[i + 1] - 1 else length(lines)
     block <- lines[block_starts[i]:end]
-    results[[i]] <- parse_hisat2_block(block) %>%
+    results[[i]] <- parse_hisat2_log(block) %>%
       mutate(sample = samples[i])
   }
   bind_rows(results)
 }
 
 # E-Peve / F-Ptuh: one stderr file per sample
-parse_hisat2_per_file <- function(dir_path, sample_pattern, sample_replacement) {
-  files <- list.files(dir_path, pattern = sample_pattern, full.names = TRUE)
+parse_hisat2_per_file <- function(dir_path) {
+  files <- list.files(dir_path, pattern = "_hisat\\.stderr$", full.names = TRUE)
   results <- list()
   for (f in files) {
-    lines <- readLines(f)
-    # Extract sample name from filename: RNA-POR-71_hisat.stderr -> POR-71
     sname <- basename(f) %>%
       str_remove("_hisat.stderr") %>%
       str_remove("^RNA-")
-    results[[sname]] <- parse_hisat2_block(lines) %>%
+    results[[sname]] <- parse_hisat2_log(readLines(f)) %>%
       mutate(sample = sname)
   }
   bind_rows(results)
@@ -162,14 +926,8 @@ hisat2_stats <- bind_rows(
     "../../D-Apul/output/07-Apul-Hisat/hisat.out",
     samples = c("ACR-140", "ACR-145", "ACR-150", "ACR-173", "ACR-178")
   ),
-  parse_hisat2_per_file(
-    "../../E-Peve/output/06-Peve-Hisat",
-    pattern = "_hisat.stderr$"
-  ),
-  parse_hisat2_per_file(
-    "../../F-Ptuh/output/06-Ptuh-Hisat",
-    pattern = "_hisat.stderr$"
-  )
+  parse_hisat2_per_file("../../E-Peve/output/06-Peve-Hisat"),
+  parse_hisat2_per_file("../../F-Ptuh/output/06-Ptuh-Hisat")
 ) %>%
   mutate(species = case_when(
     str_detect(sample, "^ACR") ~ "D-Apul",
@@ -181,66 +939,113 @@ hisat2_stats <- bind_rows(
 hisat2_stats
 ```
 
-### 1.5 MISSING Mapped reads (from featureCounts .summary)
+### 1.5 Mismatch %
 
-```{r, eval = FALSE}
-# featureCounts .summary: rows = Status (Assigned, Unassigned_Unmapped, etc.),
-# columns = BAM paths. Mapped reads = total - Unassigned_Unmapped.
-# Total reads per sample = sum of all rows.
+This requires collecting info from the full *.sorted.bam files, which are very large and live on Gannet (https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/).
 
-read_featurecounts_summary <- function(path, species_code) {
-  df <- read_tsv(path, show_col_types = FALSE)
-  # Column names are BAM paths; extract sample names
-  bam_cols <- colnames(df)[-1]  # first col is "Status"
-  samples <- str_extract(bam_cols, "(ACR|POR|POC)-\\d+")
+```{r, engine='bash', eval=FALSE}
 
-  assigned <- df %>% filter(Status == "Assigned") %>% select(-Status) %>% as.numeric()
-  unmapped <- df %>% filter(Status == "Unassigned_Unmapped") %>% select(-Status) %>% as.numeric()
+# The files are backed up to Steven's backup directory: 
+#     /volume/web/seashell/bu-github/deep-dive-expression
 
-  # Total = sum of all status rows
-  total <- colSums(df %>% select(-Status) %>% mutate(across(everything, as.numeric)))
+# The BAM paths are:
+#   D-Apul: D-Apul/output/07-Apul-Hisat/RNA-ACR-{140,145,150,173,178}.sorted.bam
+#   E-Peve: E-Peve/output/06-Peve-Hisat/RNA-POR-{71,73,76,79,82}.sorted.bam
+#   F-Ptuh: F-Ptuh/output/06-Ptuh-Hisat/RNA-POC-{47,48,50,53,57}.sorted.bam
 
-  tibble(
-    species = species_code,
-    sample = samples,
-    mapped_reads = total - unmapped,
-    total_reads_fc = total
-  )
+mkdir -p ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats
+
+# D-Apul BAMs
+wget -r -l1 -nd -nc -A "*.sorted.bam" \
+  -P ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats \
+  https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/D-Apul/output/07-Apul-Hisat/
+
+# E-Peve BAMs
+wget -r -l1 -nd -nc -A "*.sorted.bam" \
+  -P ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats \
+  https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/E-Peve/output/06-Peve-Hisat/
+
+# F-Ptuh BAMs
+wget -r -l1 -nd -nc -A "*.sorted.bam" \
+  -P ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats \
+  https://gannet.fish.washington.edu/seashell/bu-github/deep-dive-expression/F-Ptuh/output/06-Ptuh-Hisat/
+
+# Then run samtools on each BAM
+for bam in ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats/*.sorted.bam; do
+  base=$(basename "$bam" .sorted.bam)
+  /home/shared/samtools-1.12/samtools stats "$bam" > "../output/20-supplementary-files/RNAseq_HISAT_samtools_stats/${base}.stats.txt"
+  /home/shared/samtools-1.12/samtools flagstat "$bam" > "../output/20-supplementary-files/RNAseq_HISAT_samtools_stats/${base}.flagstat.txt"
+done
+```
+
+```{r, engine='bash', eval=FALSE}
+# Remove BAMs once done (they're quite large)
+rm ../output/20-supplementary-files/RNAseq_HISAT_samtools_stats/*.sorted.bam
+```
+
+Parse samtools stats output for mismatch rate
+```{r}
+
+samtools_dir <- "../output/20-supplementary-files/RNAseq_HISAT_samtools_stats"
+
+# Sample configuration
+samples_cfg <- list(
+  D_Apul = c("ACR-140", "ACR-145", "ACR-150", "ACR-173", "ACR-178"),
+  E_Peve = c("POR-71", "POR-73", "POR-76", "POR-79", "POR-82"),
+  F_Ptuh = c("POC-47", "POC-48", "POC-50", "POC-53", "POC-57")
+)
+species_map <- c(D_Apul = "D-Apul", E_Peve = "E-Peve", F_Ptuh = "F-Ptuh")
+
+# Parse a single samtools stats file
+parse_samtools_stats <- function(path, sample_name, species_code) {
+  if (!file.exists(path)) {
+    return(tibble(species = species_code, sample = sample_name,
+                  mapped_reads = NA, mismatch_rate_pct = NA))
+  }
+  lines <- readLines(path)
+
+  # Mapped reads: SN\treads mapped:\t28412345
+  mapped <- str_match(lines[grepl("^SN\\treads mapped:", lines)],
+                      "^SN\\treads mapped:\\t(\\d+)")[2]
+  mapped <- if (!is.na(mapped)) as.numeric(mapped) else NA
+
+  # Mismatch rate (reported as "error rate"):
+  # SN\terror rate:\t7.151265e-03\t# mismatches / bases mapped (cigar)
+  error_line <- lines[grepl("^SN\\terror rate:", lines)]
+  error_rate <- str_match(error_line, "^SN\\terror rate:\\t([\\d.eE+-]+)")[2]
+  mismatch_rate_pct <- if (!is.na(error_rate)) as.numeric(error_rate) * 100 else NA
+
+  tibble(species = species_code, sample = sample_name,
+         mapped_reads = mapped,
+         mismatch_rate_pct = round(mismatch_rate_pct, 4))
 }
 
-mapped_reads <- bind_rows(
-  read_featurecounts_summary("../../D-Apul/output/32-Apul-lncRNA-matrix/Apul-lncRNA-counts.txt.summary", "D-Apul"),
-  read_featurecounts_summary("../../E-Peve/output/18-Peve-lncRNA-matrix/Peve-lncRNA-counts.txt.summary", "E-Peve"),
-  read_featurecounts_summary("../../F-Ptuh/output/18-Ptuh-lncRNA-matrix/Ptuh-lncRNA-counts.txt.summary", "F-Ptuh")
-)
-mapped_reads
+# Build results from single directory
+samtools_results <- bind_rows(lapply(names(samples_cfg), function(sp) {
+  species_code <- species_map[sp]
+  bind_rows(lapply(samples_cfg[[sp]], function(s) {
+    parse_samtools_stats(
+      file.path(samtools_dir, paste0("RNA-", s, ".stats.txt")),
+      s, species_code
+    )
+  }))
+}))
+
+# Rename for final output
+samtools_summary <- samtools_results %>%
+  rename(
+    Species = species,
+    Sample = sample,
+    `Mapped reads` = mapped_reads,
+    `Mismatch rate (%)` = mismatch_rate_pct
+  )
+
+samtools_summary
 ```
 
-### 1.6 MISSING Mismatch rate (%)
 
-```{r, eval=FALSE}
-# NOTE: Mismatch rate is NOT available in this repository.
-# There are no samtools stats / flagstat / idxstats or Picard outputs.
-# The sorted BAMs are gitignored (available via the project wiki).
-#
-# To compute mismatch rate, run the following on the BAMs:
-#
-#   samtools stats <sample.sorted.bam> | grep "^SN" > <sample>.stats.txt
-#
-# Then parse the line:
-#   SN	mismatch rate:	X.XXe-XX
-# and convert to percentage.
-#
-# Placeholder:
-mismatch_rate <- tibble(
-  species = character(),
-  sample = character(),
-  mismatch_rate_pct = numeric()
-)
-# mismatch_rate  # leave empty — populate after running samtools stats on BAMs
-```
 
-### 1.7 Number of lncRNAs identified
+### 1.6 Number of lncRNAs identified
 
 ```{r}
 count_lncRNAs <- function(filepath) {
@@ -462,7 +1267,119 @@ miRNA_counts
 
 
 
+# Mature miRNA names and sequences for all species
 
+Already have per-species, just need to combine into single table
+```{r}
+
+miRNA_details <- rbind(
+  read.csv("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv", header = TRUE) %>% dplyr::select(-X),
+  # Including an NA filter here, because it looks like the Peve file has an extra row indicating miRNAs identified in 
+  # Ashey et al 2026 which were not also identified here using the new version of ShortStack (4.1.0)
+  read.csv("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv", header = TRUE) %>% dplyr::select(-X) %>% drop_na(Name),
+  read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv", header = TRUE) %>% dplyr::select(-X)
+)
+
+miRNA_details
+
+write.csv(miRNA_details, "../output/20-supplementary-files/AllSpecies_Results_mature_named_miRNAs.csv", col.names = TRUE, row.names = FALSE)
+```
+
+
+
+# miRanda binding information + PCC coexpression (miRNA-mRNA and miRNA-lncRNA)
+
+## miRNA-mRNA
+
+```{r}
+
+consolidate_regions <- function(path_3UTR, path_CDS, path_5UTR){
+# Load for each region
+data_3UTR <- read.csv(path_3UTR) %>% dplyr::select(-X, -X.1)
+data_CDS <- read.csv(path_CDS) %>% dplyr::select(-X)
+data_5UTR <- read.csv(path_5UTR) %>% dplyr::select(-X)
+
+# Format and combine into pooled targets
+data_3UTR$region <- "3UTR"
+
+colnames(data_CDS) <- c("miRNA", "mRNA_coord", "score", "energy", "query_start", "query_end", "subject_start", "subject_end", "total_bp_shared", "query_similar", "subject_similar", "mRNA", "PCC.cor", "p_value", "adjusted_p_value")
+data_CDS$query_start_end <- paste0(data_CDS$query_start, " ", data_CDS$query_end)
+data_CDS$subject_start_end <- paste0(data_CDS$subject_start, " ", data_CDS$subject_end)
+data_CDS$region <- "CDS"
+data_CDS <- data_CDS %>% dplyr::select(colnames(data_3UTR))
+
+colnames(data_5UTR) <- c("miRNA", "mRNA_coord", "score", "energy", "query_start", "query_end", "subject_start", "subject_end", "total_bp_shared", "query_similar", "subject_similar", "mRNA", "PCC.cor", "p_value", "adjusted_p_value")
+data_5UTR$query_start_end <- paste0(data_5UTR$query_start, " ", data_5UTR$query_end)
+data_5UTR$subject_start_end <- paste0(data_5UTR$subject_start, " ", data_5UTR$subject_end)
+data_5UTR$region <- "5UTR"
+data_5UTR <- data_5UTR %>% dplyr::select(colnames(data_3UTR))
+
+# Confirm all 3 region tables have same column names and orders
+ifelse(identical(colnames(data_3UTR), colnames(data_CDS)) == TRUE,
+       ifelse(identical(colnames(data_3UTR), colnames(data_5UTR)) == TRUE,
+              data <- rbind(data_3UTR, data_CDS, data_5UTR),
+              data <- NULL)
+)
+data
+}
+
+apul_miRanda_PCC_mRNA <- consolidate_regions(
+  "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv",
+  "../../D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv",
+  "../../D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv")
+
+peve_miRanda_PCC_mRNA <- consolidate_regions(
+  "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_miRNA_mRNA.csv",
+  "../../E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv",
+  "../../E-Peve/output/10.01-Peve-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv"
+)
+
+ptuh_miRanda_PCC_mRNA <- consolidate_regions(
+  "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_miRNA_mRNA.csv",
+  "../../F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv",
+  "../../F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv"
+)
+
+# Combine
+miRanda_PCC_mRNA <- rbind(apul_miRanda_PCC_mRNA, peve_miRanda_PCC_mRNA, ptuh_miRanda_PCC_mRNA)
+
+# Filter to only significant PCC (this consitutes our putative interaction set, which is both 
+# predicted to bind via miRanda and significantly coexpressed)
+miRanda_PCC_mRNA_sig <- miRanda_PCC_mRNA %>% filter(p_value < 0.05)
+
+# Save
+write.csv(miRanda_PCC_mRNA_sig, "../output/20-supplementary-files/miRanda_PCC_mRNA_sig.csv", row.names = FALSE)
+write.csv(miRanda_PCC_mRNA, "../output/20-supplementary-files/miRanda_PCC_mRNA.csv", row.names = FALSE)
+```
+
+## miRNA-lncRNA
+
+```{r}
+
+apul_miRanda_PCC_lncRNA <- read.csv("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv") %>% dplyr::select(-X, -X.1)
+peve_miRanda_PCC_lncRNA <- read.csv("../../E-Peve/output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv") %>% dplyr::select(-X, -X.1)
+ptuh_miRanda_PCC_lncRNA <- read.csv("../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv") %>% dplyr::select(-X, -X.1)
+
+# Ensure all three tables have matching column names and order
+identical(colnames(apul_miRanda_PCC_lncRNA), colnames(peve_miRanda_PCC_lncRNA))
+identical(colnames(apul_miRanda_PCC_lncRNA), colnames(ptuh_miRanda_PCC_lncRNA))
+
+# Combine
+miRanda_PCC_lncRNA <- rbind(apul_miRanda_PCC_lncRNA, peve_miRanda_PCC_lncRNA, ptuh_miRanda_PCC_lncRNA)
+
+# Reorder columns to have same order as miRNA-mRNA table (above)
+miRanda_PCC_lncRNA <- miRanda_PCC_lncRNA %>% dplyr::select(miRNA, lncRNA, PCC.cor, p_value, adjusted_p_value,
+                                                           score, energy, query_start_end, subject_start_end, 
+                                                           total_bp_shared, query_similar, subject_similar)
+
+# Filter to only significant PCC (this constitutes our putative interaction set, which is both 
+# predicted to bind via miRanda and significantly coexpressed)
+miRanda_PCC_lncRNA_sig <- miRanda_PCC_lncRNA %>% filter(p_value < 0.05)
+
+# Save
+write.csv(miRanda_PCC_lncRNA_sig, "../output/20-supplementary-files/miRanda_PCC_lncRNA_sig.csv", row.names = FALSE)
+write.csv(miRanda_PCC_lncRNA, "../output/20-supplementary-files/miRanda_PCC_lncRNA.csv", row.names = FALSE)
+```
 
 
 

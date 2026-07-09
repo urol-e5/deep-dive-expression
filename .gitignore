@@ -15,7 +15,7 @@ Apulchra-genome.fa
 *.bashvars
 *.bam
 data/*.fna
-data/*.fasta
+data/uniprot_sprot_r2024_11.fasta
 data/*.fasta.gz
 data/blastdb
 
