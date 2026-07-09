@@ -812,5 +812,5 @@ ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_corsp
 Save
 
 ``` r
-write.csv(all_data, "../output/12-miRNA-epimachinery/miRNAtargets_mach.csv", row.names = FALSE)
+write.csv(all_data_annotated, "../output/12-miRNA-epimachinery/miRNAtargets_mach.csv", row.names = FALSE)
 ```
