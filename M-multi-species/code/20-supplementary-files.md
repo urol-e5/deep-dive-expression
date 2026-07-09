@@ -648,15 +648,13 @@ classify_gene <- function(gene) {
                  "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR",
                  "TRUB", "RPUSD"),
       exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
-                 "RBMX", "TRDMT1", "NOP2",
+                 "RBMX", "TRDMT1", "NOP2", "HNRNPA2B1",
                  "DUS1L",   # tRNA dihydrouridine synthase
                  "TYW5",    # tRNA wybutosine-synthesizing protein (Supp. folder:
                             # "Histone demethylation" — incorrect; TYW5 is a
                             # tRNA modification enzyme, not a histone demethylase)
                  "CBLL1")   # Hakai, E3 ubiquitin ligase component of the m6A
-                            # writer complex (Supp. folder: not present; was
-                            # left unclassified — but it is a bona fide m6A
-                            # writer complex member per Machitani et al. 2023)
+                            # writer complex
     ),
     "ncRNA biogenesis & silencing" = list(
       prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN",
@@ -1217,20 +1215,20 @@ samtools_summary
     ##    Species Sample  `Mapped reads` `Mismatch rate (%)`
     ##    <chr>   <chr>            <dbl>               <dbl>
     ##  1 D-Apul  ACR-140       66166297               0.715
-    ##  2 D-Apul  ACR-145             NA              NA    
-    ##  3 D-Apul  ACR-150             NA              NA    
-    ##  4 D-Apul  ACR-173             NA              NA    
-    ##  5 D-Apul  ACR-178             NA              NA    
-    ##  6 E-Peve  POR-71              NA              NA    
-    ##  7 E-Peve  POR-73              NA              NA    
-    ##  8 E-Peve  POR-76              NA              NA    
-    ##  9 E-Peve  POR-79              NA              NA    
-    ## 10 E-Peve  POR-82              NA              NA    
-    ## 11 F-Ptuh  POC-47              NA              NA    
-    ## 12 F-Ptuh  POC-48              NA              NA    
-    ## 13 F-Ptuh  POC-50              NA              NA    
-    ## 14 F-Ptuh  POC-53              NA              NA    
-    ## 15 F-Ptuh  POC-57              NA              NA
+    ##  2 D-Apul  ACR-145       61488934               0.695
+    ##  3 D-Apul  ACR-150       47452375               0.668
+    ##  4 D-Apul  ACR-173       64013149               0.745
+    ##  5 D-Apul  ACR-178       60684881               0.760
+    ##  6 E-Peve  POR-71        87835896               0.338
+    ##  7 E-Peve  POR-73        89515483               0.268
+    ##  8 E-Peve  POR-76        85668912               0.293
+    ##  9 E-Peve  POR-79        89024198               0.226
+    ## 10 E-Peve  POR-82        82338762               0.351
+    ## 11 F-Ptuh  POC-47        69558951               0.954
+    ## 12 F-Ptuh  POC-48        62823383               0.928
+    ## 13 F-Ptuh  POC-50        68623296               1.08 
+    ## 14 F-Ptuh  POC-53        64638718               1.10 
+    ## 15 F-Ptuh  POC-57        43011432               1.16
 
 ### 3.1.6 1.6 Number of lncRNAs identified
 

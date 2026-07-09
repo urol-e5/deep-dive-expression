@@ -637,15 +637,13 @@ classify_gene <- function(gene) {
                  "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR",
                  "TRUB", "RPUSD"),
       exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
-                 "RBMX", "TRDMT1", "NOP2",
+                 "RBMX", "TRDMT1", "NOP2", "HNRNPA2B1",
                  "DUS1L",   # tRNA dihydrouridine synthase
                  "TYW5",    # tRNA wybutosine-synthesizing protein (Supp. folder:
                             # "Histone demethylation" — incorrect; TYW5 is a
                             # tRNA modification enzyme, not a histone demethylase)
                  "CBLL1")   # Hakai, E3 ubiquitin ligase component of the m6A
-                            # writer complex (Supp. folder: not present; was
-                            # left unclassified — but it is a bona fide m6A
-                            # writer complex member per Machitani et al. 2023)
+                            # writer complex
     ),
     "ncRNA biogenesis & silencing" = list(
       prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN",

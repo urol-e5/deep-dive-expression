@@ -668,7 +668,7 @@ epigenetic regulation:
 ### Plot
 
 ``` r
-library(tidyverse)
+# Combine species
 apul_results_spec <- apul_results
 apul_results_spec$species <- "A. pulchra"
 peve_results_spec <- peve_results
@@ -678,105 +678,53 @@ ptuh_results_spec$species <- "P. tuahiniensis"
 
 all_data <- bind_rows(apul_results_spec, peve_results_spec, ptuh_results_spec)
 
-classify_gene <- function(gene_str) {
-  if (is.na(gene_str) || gene_str == "") return("Unclassified")
-  # Split on ";" to handle multi-gene annotations, strip transcript
-  # suffixes (-201, -202, ..., or em-dash variants), and uppercase.
-  symbols <- strsplit(gene_str, "\\s*;\\s*")[[1]]
-  symbols <- sub("[-\u2014\u2013].*$", "", symbols)   # hyphen / em-dash / en-dash
-  symbols <- toupper(trimws(symbols))
-  symbols <- symbols[nzchar(symbols)]
-
-  #   prefix   : symbol starts with one of these (catches family members)
-  #   exact    : symbol matches one of these exactly
-  # I don't want to modify Steven/Hollie's epimachinery set (Machinery.fasta), but there are
-# some inclusions that are "edge cases" as to their epigenetic relevance/categorization. I'll
-# keep them in (to avoid a mis-match with other workflows using the Machinery.fasta file),
-# but I do want to note the discrepancy:
-# 
-#   - MCM3AP
-#       GANP/MCM3AP is the scaffold of the mammalian TREX-2 mRNA export
-#       complex; the MCM3-acetyltransferase activity is not a histone/DNA
-#       modification (Wickramasinghe et al. 2010 Curr Biol; Umlauf et al. 2013 NAR).
-#
-#   - PARK7 
-#       PARK7/DJ-1 is a glyoxalase/deglycase. It doesn't fit neatly anywhere, but its
-#       most chromatin-relevant roles are as a redox-sensitive transcriptional
-#       coactivator and DDR factor (DSB repair, Nrf2 stabilization, NONO/SFPQ
-#       interaction).
- 
-cats <- list(
-  "ADP-ribosylation" = list(
-    prefix = c("PARP", "TNKS", "TARG", "MACROD", "OARD", "ADPRH", "ARH", "TIPARP"),
-    exact  = c("PARG", "ARTD1")  # ARTD1 is redundant with PARP prefix (= PARP1)
-  ),
-  "DNA methylation & reading" = list(
-    prefix = c("DNMT", "TET", "MBD", "UHRF", "MECP"),
-    exact  = c("PRDM14")
-  ),
-  "RNA modification" = list(
-    prefix = c("METTL", "YTHDF", "YTHDC", "ALKBH", "WTAP", "VIRMA", "ZC3H13",
-               "IGF2BP", "NSUN", "DKC", "TRMT", "PUS", "NAT10", "ADAR", "APOBEC",
-               "DUS", "HNRNPC", "HNRNPA2B1", "HNRNPA1"),
-    exact  = c("FTO", "RBM15", "RBM15B", "PCIF1", "BUD23", "WDR4",
-               "RBMX", "TRDMT1")
-  ),
-  "ncRNA biogenesis & silencing" = list(
-    prefix = c("AGO", "TNRC6", "DICER", "DROSHA", "DGCR8", "PIWI", "EXPORTIN",
-               "TARBP", "PRKRA", "LIN28", "KHSRP", "ZCCHC", "DIS3", "INTS", "EXOSC",
-               "PAN2", "PAN3", "DDX5", "DDX17", "DDX6", "EDC", "DCP", "XRN", "CNOT",
-               "UPF", "SMG", "TUT", "MOV10", "FMR", "PUM", "STAU", "NCBP", "PHAX",
-               "RBM7"),
-    exact  = c("RDRP", "MTREX", "SKIV2L2", "MTR4", "ZFC3H1", "SRRT", "ARS2", "XPO5",
-               "XPO1", "CRM1", "RAN", "EWSR1", "FUS", "TARDBP", "HNRNPK", "PARN",
-               "PABPC1", "PAPD5", "DZIP3", "NONO", "SFPQ", "PSPC1",
-               "YBX1", "HSPA8", "HSP90AA1", "HSP90AB1", "PQBP1",
-               "MCM3AP") # NOTE: DZIP3 is also E3 ubiquitin ligases
-  ),
-  "Histone modification" = list(
-    prefix = c("KMT", "KDM", "SETD", "EZH", "SUV", "EHMT", "MLL", "ASH1", "DOT1",
-               "JMJD", "HDAC", "SIRT", "KAT", "PRMT", "CARM", "NSD", "WHSC", "SMYD",
-               "CDYL", "RIOX", "MINA", "NO66"),
-    exact  = c("CREBBP", "EP300", "HAT1", "ELP3", "PHF8", "PHF2", "JARID2", "PKN1",
-               "HSPBAP1")
-  ),
-  "Ubiquitin signaling" = list(
-    prefix = c("USP", "UBE", "UBR", "UBA", "UCHL", "UCH", "RNF", "TRIM", "HUWE",
-               "HERC", "MARCH", "RBX", "CUL", "FBX", "SKP", "SOCS", "OTU", "UBQLN",
-               "PSMD", "JOSD", "DDB", "MIB"),
-    exact  = c("VCPIP1", "BAP1", "ATXN3", "COPS6", "COPS5", "PARK2",
-               "ZRANB1")
-  ),
-  "Chromatin signaling" = list(
-    # NOTE: this bin is signaling proteins (kinases, phosphatases, and
-    # redox-sensitive nuclear factors) that act on chromatin substrates or
-    # chromatin-associated transcription factors, NOT chromatin-remodeling
-    # complexes.
-    prefix = c("MAP3K", "MAP2K", "MAPK"),
-    exact  = c("CHUK", "IKBKB", "IKBKG", "PPP1CB", "PPP1CA", "PPP1CC", "PPP1R7",
-               "PPP2CA", "AURKB", "MSK1", "MSK2", "RPS6KA4", "RPS6KA5",
-               "PARK7")
-  )
-)
-
-  for (cat in names(cats)) {
-    pats <- cats[[cat]]
-    for (s in symbols) {
-      if (s %in% pats$exact) return(cat)
-      if (any(startsWith(s, pats$prefix))) return(cat)
-    }
-  }
-  return("Unclassified")
-}
+# read supp table with assigne dcategories
+category_ref <- read.csv("../output/20-supplementary-files/Machinery_categorized.csv", header = TRUE)
 
 
-all_data <- all_data %>%
-  mutate(category = vapply(gene, classify_gene, character(1)))
+# reference lookup: gene symbol -> category (key upper-cased for matching)
+lookup <- category_ref %>%
+  transmute(gene_key = str_to_upper(gene_name), epimachinery_category) %>%
+  distinct()
+
+# annotate
+all_data_annotated <- all_data %>%
+  mutate(.row = row_number()) %>%                       # remember original rows
+  separate_rows(gene, sep = "\\s*;\\s*") %>%            # one gene per row
+  mutate(
+    gene_key = gene %>%
+      str_trim() %>%
+      str_remove("-\\d+$") %>%                          # drop trailing -201/-202 suffix 
+      str_to_upper()
+  ) %>%
+  left_join(lookup, by = "gene_key") %>%
+  mutate(                                               # if sourced from the ncRNA db, assign ncRNA category
+    epimachinery_category = if_else(
+      str_detect(type, fixed("ncRNA machinery")),
+      "ncRNA biogenesis & silencing", epimachinery_category)
+  ) %>%
+  group_by(.row) %>%                                    # collapse back to one row per transcript (some transcripts hit multiple genes)
+  summarise(
+    target           = dplyr::first(target),
+    PCC.cor          = dplyr::first(PCC.cor),
+    p_value          = dplyr::first(p_value),
+    given_miRNA_name = dplyr::first(given_miRNA_name),
+    gene             = paste(gene, collapse = "; "),    # If multiple genes, concatonate (; separated)
+    type             = dplyr::first(type),
+    species          = dplyr::first(species),
+    category = {
+      cats <- unique(na.omit(c(epimachinery_category))) # Unique category set, so if all same they get collapsed
+      if (length(cats) == 0) NA_character_ else paste(sort(cats), collapse = "; ")
+    },
+    .groups = "drop"
+  ) %>%
+  dplyr::select(-.row)
+
 
 cat_order <- c("ADP-ribosylation",
                "RNA modification",
                "Chromatin signaling",
-               "Histone modification",
+               "Histone modification and variants",
                "DNA methylation & reading",
                "ncRNA biogenesis & silencing",
                "Ubiquitin signaling")
@@ -815,7 +763,7 @@ targets_plot <- function(df, split_by_sign = FALSE){
   cat_colors <- c("ADP-ribosylation"             = "#D55E00",
                   "RNA modification"             = "#F0E442",
                   "Chromatin signaling"          = "#56B4E9",
-                  "Histone modification"         = "#CC79A7",
+                  "Histone modification and variants"         = "#CC79A7",
                   "DNA methylation & reading"    = "#009E73",
                   "ncRNA biogenesis & silencing" = "#E69F00",
                   "Ubiquitin signaling"          = "#0072B2")
@@ -843,13 +791,13 @@ targets_plot <- function(df, split_by_sign = FALSE){
   }
 }
 
-targets_plot(all_data)
+targets_plot(all_data_annotated)
 ```
 
 ![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
-targets_plot(all_data, split_by_sign = TRUE)
+targets_plot(all_data_annotated, split_by_sign = TRUE)
 ```
 
 ![](12-miRNA-epimachinery_files/figure-gfm/unnamed-chunk-23-2.png)<!-- -->
@@ -857,8 +805,8 @@ targets_plot(all_data, split_by_sign = TRUE)
 save plots
 
 ``` r
-ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", targets_plot(all_data), width = 9, height = 4.5, dpi = 300)
-ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_corsplit.png", targets_plot(all_data, split_by_sign = TRUE), width = 9, height = 4.5, dpi = 300)
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species.png", targets_plot(all_data_annotated), width = 9, height = 4.5, dpi = 300)
+ggsave("../output/12-miRNA-epimachinery/miRNA_target_categories_by_species_corsplit.png", targets_plot(all_data_annotated, split_by_sign = TRUE), width = 9, height = 4.5, dpi = 300)
 ```
 
 Save
