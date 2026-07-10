@@ -37,6 +37,7 @@ library(GO.db)
 library(knitr)
 library(tidyverse)
 library(ggsignif)
+library(patchwork)
 ```
 
 
@@ -1377,205 +1378,88 @@ fig3
 
 ```
 
-Fancy version for manuscript:
+Combined multipanel figure for manuscript:
 
 ```{r}
-# ---- HELPERS ----
+# Shared setup
+species_pal    <- c(Apul = "#408EC6", Peve = "#1E2761", Ptuh = "#7A2048")
+species_labels <- c(Apul = "A. pulchra",
+                    Peve = "P. evermanni",
+                    Ptuh = "P. tuahiniensis")
 
-# Significance label formatter
-sig_label <- function(p) {
-  star <- dplyr::case_when(
-    p < 0.001 ~ "***",
-    p < 0.01  ~ "**",
-    p < 0.05  ~ "*",
-    # p < 0.10  ~ ".",
-    TRUE      ~ "ns"
-  )
-  pp <- if (p < 0.001) format(p, scientific = TRUE, digits = 2) else sprintf("%.3f", p)
-  paste0("p = ", pp, "  ", star)
-}
+# Filter out any miRNA with fewer than 5 predicted target sites. A low total # of sites
+# may by chance have 0 CDS sites -> 0% CDS sites, could artificially deflate the proportion 
+# comparison. Essentially, trying to reduce weighting by site #.
+mir_props_filt <- mir_props %>% filter(n_sites >= 5)
 
-# Helper to pull a p-value out of the lower-triangular matrix returned by
-# pairwise.wilcox.test, regardless of factor-level order
-get_pw <- function(mat, a, b) {
-  if (a %in% rownames(mat) && b %in% colnames(mat) && !is.na(mat[a, b])) mat[a, b]
-  else                                                                    mat[b, a]
-}
+# Panel A: Region distribution (CDS vs UTR)
 
-# Cross-species omnibus + pairwise tests
-kw_CDS <- kruskal.test(prop_CDS ~ species, data = mir_props)
-pw_CDS <- pairwise.wilcox.test(mir_props_filt$prop_CDS, mir_props_filt$species,
-                               p.adjust.method = "BH")$p.value
-
-kw_pos <- kruskal.test(prop_pos ~ species, data = mir_props)
-pw_pos <- pairwise.wilcox.test(mir_props$prop_pos, mir_props$species,
-                               p.adjust.method = "BH")$p.value
-
-# Comparisons drawn on both fig1 and fig2
-comps <- list(c("Apul", "Peve"), c("Apul", "Ptuh"), c("Peve", "Ptuh"))
-
-
-# ---- PLOT 1 ----
-
-fig1_fancy <- ggplot(mir_props_filt, aes(species, prop_CDS, fill = species)) +
-  geom_hline(yintercept = 0.5, linetype = "dashed",
-             colour = "grey55", linewidth = 0.4) +
-  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
+fig1 <- ggplot(mir_props_filt, aes(species, prop_CDS, fill = species)) +
+  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.7,
                linewidth = 0.4) +
   geom_jitter(aes(colour = species),
-              width = 0.18, height = 0, size = 1.6, alpha = 0.7) +
-
-  # mean as a white-filled diamond
-  stat_summary(fun = mean, geom = "point",
-               shape = 23, size = 3, stroke = 0.8,
-               fill = "white", colour = "black") +
-
-  # pairwise significance brackets
-  geom_signif(
-    comparisons = comps,
-    annotations = c(sig_label(get_pw(pw_CDS, "Apul", "Peve")),
-                    sig_label(get_pw(pw_CDS, "Apul", "Ptuh")),
-                    sig_label(get_pw(pw_CDS, "Peve", "Ptuh"))),
-    y_position  = c(1.08, 1.20, 1.32),
-    tip_length  = 0.012, textsize = 3, vjust = -0.2
-  ) +
-  
-  scale_fill_manual(values = species_pal)  +
-  scale_colour_manual(values = species_pal) +
+              width = 0.18, height = 0, size = 1.6, alpha = 0.9) +
+  scale_fill_manual(values = species_pal, labels = species_labels, name = NULL)  +
+  scale_colour_manual(values = species_pal, guide = "none") +
   scale_x_discrete(labels = species_labels) +
-  scale_y_continuous(limits = c(0, 1.4),                   # extended to fit brackets
+  scale_y_continuous(limits = c(0, 1.02),
                      breaks = seq(0, 1, 0.25),
                      labels = scales::percent_format(accuracy = 1)) +
   labs(x = NULL, y = "Per-miRNA proportion of sites in CDS",
-       title = "Region distribution: CDS vs UTR") +
+       title = "A. Region distribution: CDS vs UTR") +
   theme(axis.text.x = element_text(face = "italic"),
         legend.position = "none")
 
-# ---- PLOT 2 ---- 
+# Panel B: Coexpression direction across species
 
-fig2_fancy <- ggplot(mir_props, aes(species, prop_pos, fill = species)) +
+fig2 <- ggplot(mir_props, aes(species, prop_pos, fill = species)) +
   geom_hline(yintercept = 0.5, linetype = "dashed",
              colour = "grey55", linewidth = 0.4) +
-  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.55,
+  geom_boxplot(width = 0.55, outlier.shape = NA, alpha = 0.7,
                linewidth = 0.4) +
   geom_jitter(aes(colour = species),
-              width = 0.18, height = 0, size = 1.6, alpha = 0.7) +
-  
-  stat_summary(fun = mean, geom = "point",
-               shape = 23, size = 3, stroke = 0.8,
-               fill = "white", colour = "black") +
-
-  geom_signif(
-    comparisons = comps,
-    annotations = c(sig_label(get_pw(pw_pos, "Apul", "Peve")),
-                    sig_label(get_pw(pw_pos, "Apul", "Ptuh")),
-                    sig_label(get_pw(pw_pos, "Peve", "Ptuh"))),
-    y_position  = c(1.08, 1.20, 1.32),
-    tip_length  = 0.012, textsize = 3, vjust = -0.2
-  ) +
-  
-  scale_fill_manual(values = species_pal)  +
-  scale_colour_manual(values = species_pal) +
+              width = 0.18, height = 0, size = 1.6, alpha = 0.9) +
+  scale_fill_manual(values = species_pal, labels = species_labels, name = NULL)  +
+  scale_colour_manual(values = species_pal, guide = "none") +
   scale_x_discrete(labels = species_labels) +
-  scale_y_continuous(limits = c(0, 1.4),
+  scale_y_continuous(limits = c(0, 1.02),
                      breaks = seq(0, 1, 0.25),
                      labels = scales::percent_format(accuracy = 1)) +
   labs(x = NULL, y = "Per-miRNA proportion of positively-coexpressed sites",
-       title = "Coexpression direction across species") +
+       title = "B. Coexpression direction across species") +
   theme(axis.text.x = element_text(face = "italic"),
         legend.position = "none")
 
-# ---- PLOT 3 ----
-# Per-species means & paired Wilcoxon
-paired_wide <- paired_data %>%
-  pivot_wider(id_cols     = c(species, given_miRNA_name),
-              names_from  = region,
-              values_from = prop_pos) %>%
-  tidyr::drop_na(CDS, UTR)
+# Panel C: Within-species paired CDS vs UTR comparison
 
-paired_stats <- paired_wide %>%
-  group_by(species) %>%
-  summarise(
-    n        = n(),
-    n_CDSgt  = sum(CDS > UTR),
-    mean_CDS = mean(CDS),
-    mean_UTR = mean(UTR),
-    p_val    = wilcox.test(CDS, UTR, paired = TRUE)$p.value,
-    .groups  = "drop"
-  ) %>%
-  mutate(sig_lab = vapply(p_val, sig_label, character(1)),
-         n_lab   = sprintf("%d of %d miRNAs CDS > UTR", n_CDSgt, n))
-
-# Long-format means table for geom_segment / geom_text
-paired_means_long <- paired_stats %>%
-  dplyr::select(species, mean_UTR, mean_CDS) %>%
-  pivot_longer(c(mean_UTR, mean_CDS),
-               names_to = "region", values_to = "mean_pp") %>%
-  mutate(region = factor(sub("mean_", "", region), levels = c("UTR", "CDS")))
-
-# Bracket annotation data — manual = TRUE in geom_signif uses these as-is
-signif_df <- paired_stats %>%
-  transmute(species,
-            xmin = "UTR", xmax = "CDS",
-            y_position  = 1.08,
-            annotations = sig_lab)
-
-# Plot
-fig3_fancy <- ggplot(paired_data,
-               aes(region, prop_pos, group = given_miRNA_name, colour = species)) +
+fig3 <- ggplot(paired_data,
+               aes(region, prop_pos, group = given_miRNA_name, colour = species, fill = species)) +
   geom_hline(yintercept = 0.5, linetype = "dashed",
              colour = "grey55", linewidth = 0.4) +
-  geom_line(alpha = 0.45, linewidth = 0.6) +
-  geom_point(size = 1.7, alpha = 0.85) +
-
-  # mean crossbar per region within each facet
-  geom_segment(data = paired_means_long,
-               aes(x    = as.numeric(region) - 0.22,
-                   xend = as.numeric(region) + 0.22,
-                   y    = mean_pp, yend = mean_pp),
-               inherit.aes = FALSE,
-               colour = "black", linewidth = 0.9) +
-
-  # # mean value as text just above the crossbar
-  # geom_text(data = paired_means_long,
-  #           aes(x = region, y = mean_pp,
-  #               label = sprintf("%.2f", mean_pp)),
-  #           inherit.aes = FALSE,
-  #           vjust = -0.7, size = 3, fontface = "bold", colour = "grey20") +
-
-  # per-facet paired Wilcoxon bracket
-  geom_signif(data        = signif_df,
-              aes(xmin = xmin, xmax = xmax,
-                  y_position = y_position, annotations = annotations),
-              inherit.aes = FALSE,
-              manual      = TRUE,
-              tip_length  = 0.012, textsize = 3, vjust = -0.2) +
-
-  # # small "X of N miRNAs" note above the bracket
-  # geom_text(data = paired_stats,
-  #           aes(x = 1.5, y = 1.18, label = n_lab),
-  #           inherit.aes = FALSE,
-  #           size = 2.8, fontface = "italic", colour = "grey35") +
-
+  geom_line(alpha = 0.55, linewidth = 0.6) +
+  geom_point(size = 1.7, alpha = 0.9, shape = 21, colour = "grey30") +
   facet_wrap(~ species, labeller = labeller(species = species_labels)) +
-  scale_colour_manual(values = species_pal) +
-  scale_y_continuous(limits = c(0, 1.1),                   # extended to fit bracket
+  scale_colour_manual(values = species_pal, guide = "none") +
+  scale_fill_manual(values = species_pal, labels = species_labels, name = NULL) +
+  scale_y_continuous(limits = c(0, 1.02),
                      breaks = seq(0, 1, 0.25),
                      labels = scales::percent_format(accuracy = 1)) +
   labs(x = NULL, y = "Per-miRNA proportion of positively-coexpressed sites",
-       title    = "Within-species CDS vs UTR comparison") +
-  theme(plot.subtitle = element_text(size = 9, colour = "grey30"),
-        strip.text    = element_text(face = "italic"),
-        legend.position = "none")
+       title = "C. Within-species CDS vs UTR comparison") +
+  theme(strip.text    = element_text(face = "italic"),
+        legend.position = "bottom",
+        legend.text = element_text(size = 9, face = "italic"))
 
-# ---- Output and save ----
-fig1_fancy
-fig2_fancy
-fig3_fancy
+# Assemble multipanel figure
 
-ggsave("../output/04.2-miRNA-comparison-targets-FE/region_distribution_fancy.png", fig1_fancy, width = 3.5, height = 4.6, dpi = 300, bg = "white")
-ggsave("../output/04.2-miRNA-comparison-targets-FE/direction_fancy.png", fig2_fancy, width = 3.5, height = 4.6, dpi = 300, bg = "white")
-ggsave("../output/04.2-miRNA-comparison-targets-FE/paired_CDS_vs_UTR_fancy.png", fig3_fancy, width = 5, height = 4.6, dpi = 300, bg = "white")
+fig1 + fig2 + fig3 +
+  plot_layout(ncol = 3, widths = c(1, 1, 1.4)) +
+  plot_annotation(
+    theme = theme(plot.background = element_rect(fill = "white", color = NA))
+  )
+
+ggsave("../output/04.2-miRNA-comparison-targets-FE/region_direction_combined.png",
+       width = 14, height = 6, dpi = 300, bg = "white")
 ```
 
 # Save files
