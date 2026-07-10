@@ -1,0 +1,79 @@
+<?xml version="1.0" standalone="no"?>
+
+<svg 
+     version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:ev="http://www.w3.org/2001/xml-events"
+     x="0px"
+     y="0px"
+     width="1742px"
+     height="1077px"
+     viewBox="0 0 1742 1077"
+     >
+<title></title>
+<desc>Creator: Creator: Cytoscape via FreeHEP Graphics2D Driver Producer: org.freehep.graphicsio.svg.SVGGraphics2D Source: </desc>
+<g stroke-dashoffset="0" stroke-linejoin="miter" stroke-dasharray="none" stroke-width="1" stroke-linecap="square" stroke-miterlimit="10">
+<g fill="#ffffff" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M 0 0 L 1742 0 L 1742 1077 L 0 1077 L 0 0 z"/>
+</g> <!-- drawing style -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g stroke-opacity="1" stroke-width="4" fill="none" stroke="#e31a1c" stroke-linecap="round">
+  <path d="M -992.67919921875 3253.87548828125 L -874.3368530273438 3163.5458984375"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g stroke-opacity="1" stroke-width="4" fill="none" stroke="#e31a1c" stroke-linecap="round">
+  <path d="M -1016.7598876953125 3252.2041015625 L -1017.4456787109375 3051.231689453125"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g stroke-opacity="1" stroke-width="4" fill="none" stroke="#e31a1c" stroke-linecap="round">
+  <path d="M -1038.8382568359375 3253.616455078125 L -1146.7239990234375 3163.0673828125"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g stroke-opacity="1" stroke-dasharray="16,8" stroke-width="4" fill="none" stroke="#33a02c" stroke-linecap="butt">
+  <path d="M -876.6783447265625 3127.249755859375 L -988.72412109375 3050.85986328125"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g stroke-opacity="1" stroke-dasharray="16,8" stroke-width="4" fill="none" stroke="#33a02c" stroke-linecap="butt">
+  <path d="M -1144.453857421875 3126.210693359375 L -1043.8294677734375 3050.92138671875"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g fill="#ff7f00" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M -956.691650390625 3272.2041015625 C -956.691650390625 3283.249796559116 -983.5545654007774 3292.2041015625 -1016.691650390625 3292.2041015625 C -1049.8287353804726 3292.2041015625 -1076.691650390625 3283.249796559116 -1076.691650390625 3272.2041015625 C -1076.691650390625 3261.158406565884 -1049.8287353804726 3252.2041015625 -1016.691650390625 3252.2041015625 C -983.5545654007774 3252.2041015625 -956.691650390625 3261.158406565884 -956.691650390625 3272.2041015625 z"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 665.2199791970565, 901.7053202408657)">
+<text font-weight="normal" font-size="12" font-family="Helvetica" font-style="normal" fill="#000000" fill-opacity="1" stroke="none" x="0" y="0">ptuh-mir-novel-4</text>
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g fill="#3690c0" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M -790.3244018554688 3145.21728515625 C -790.3244018554688 3156.262980152866 -817.1873168656211 3165.21728515625 -850.3244018554688 3165.21728515625 C -883.4614868453164 3165.21728515625 -910.3244018554688 3156.262980152866 -910.3244018554688 3145.21728515625 C -910.3244018554688 3134.171590159634 -883.4614868453164 3125.21728515625 -850.3244018554688 3125.21728515625 C -817.1873168656211 3125.21728515625 -790.3244018554688 3134.171590159634 -790.3244018554688 3145.21728515625 z"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 1076.8186307580593, 605.6716119696972)">
+<text font-weight="normal" font-size="12" font-family="Helvetica" font-style="normal" fill="#000000" fill-opacity="1" stroke="none" x="0" y="0">lncRNA_13992</text>
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g fill="#3690c0" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M -1108.87060546875 3144.479736328125 C -1108.87060546875 3155.525431324741 -1135.7335204789024 3164.479736328125 -1168.87060546875 3164.479736328125 C -1202.0076904585976 3164.479736328125 -1228.87060546875 3155.525431324741 -1228.87060546875 3144.479736328125 C -1228.87060546875 3133.434041331509 -1202.0076904585976 3124.479736328125 -1168.87060546875 3124.479736328125 C -1135.7335204789024 3124.479736328125 -1108.87060546875 3133.434041331509 -1108.87060546875 3144.479736328125 z"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 343.0631051969117, 603.9522262822699)">
+<text font-weight="normal" font-size="12" font-family="Helvetica" font-style="normal" fill="#000000" fill-opacity="1" stroke="none" x="0" y="0">lncRNA_4595</text>
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 3159.041225799856, -6737.081925394879)">
+<g fill="#a6cee3" fill-rule="nonzero" fill-opacity="1" stroke="none">
+  <path d="M -867.513916015625 3031.231689453125 C -867.513916015625 3042.277384449741 -934.671203541006 3051.231689453125 -1017.513916015625 3051.231689453125 C -1100.356628490244 3051.231689453125 -1167.513916015625 3042.277384449741 -1167.513916015625 3031.231689453125 C -1167.513916015625 3020.185994456509 -1100.356628490244 3011.231689453125 -1017.513916015625 3011.231689453125 C -934.671203541006 3011.231689453125 -867.513916015625 3020.185994456509 -867.513916015625 3031.231689453125 z"/>
+</g> <!-- drawing style -->
+</g> <!-- transform -->
+<g transform="matrix(2.3312160793456846, 0, 0, 2.3312160793456846, 450.3451455554137, 339.9465584527758)">
+<text font-weight="normal" font-size="12" font-family="Helvetica" font-style="normal" fill="#000000" fill-opacity="1" stroke="none" x="0" y="0">Pocillopora_meandrina_HIv1___RNAseq.g1120.t1 </text>
+</g> <!-- transform -->
+</g> <!-- default stroke -->
+</svg> <!-- bounding box -->
