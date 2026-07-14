@@ -1439,6 +1439,10 @@ fig1 <- ggplot(mir_props_filt, aes(species, prop_CDS, fill = species)) +
                linewidth = 0.4) +
   geom_jitter(aes(colour = species),
               width = 0.18, height = 0, size = 1.6, alpha = 1) +
+  # mean as a white-filled diamond
+  stat_summary(fun = mean, geom = "point",
+               shape = 23, size = 3, stroke = 0.8,
+               fill = "white", colour = "black") +
   scale_fill_manual(values = species_pal, labels = species_labels, name = NULL)  +
   scale_colour_manual(values = species_pal, guide = "none") +
   scale_x_discrete(labels = species_labels) +
@@ -1471,6 +1475,10 @@ fig2 <- ggplot(mir_props, aes(species, prop_pos, fill = species)) +
                linewidth = 0.4) +
   geom_jitter(aes(colour = species),
               width = 0.18, height = 0, size = 1.6, alpha = 1) +
+  # mean as a white-filled diamond
+  stat_summary(fun = mean, geom = "point",
+               shape = 23, size = 3, stroke = 0.8,
+               fill = "white", colour = "black") +
   scale_fill_manual(values = species_pal, labels = species_labels, name = NULL)  +
   scale_colour_manual(values = species_pal, guide = "none") +
   scale_x_discrete(labels = species_labels) +
@@ -1513,6 +1521,13 @@ paired_stats <- paired_wide %>%
   mutate(sig_lab = vapply(p_val, sig_label, character(1))) %>%
   filter(!is.na(sig_lab) & sig_lab != "")
 
+# Per-species per-region means for diamond annotation
+paired_means_long <- paired_wide %>%
+  group_by(species) %>%
+  summarise(mean_UTR = mean(UTR), mean_CDS = mean(CDS), .groups = "drop") %>%
+  pivot_longer(c(mean_UTR, mean_CDS), names_to = "region", values_to = "mean_pp") %>%
+  mutate(region = factor(sub("mean_", "", region), levels = c("UTR", "CDS")))
+
 # Bracket annotation data — manual = TRUE in geom_signif uses these as-is
 # (only includes species with significant p-values)
 signif_df <- if (nrow(paired_stats) > 0) {
@@ -1531,6 +1546,12 @@ fig3 <- ggplot(paired_data,
   #            colour = "grey55", linewidth = 0.4) +
   geom_line(alpha = 0.55, linewidth = 0.6) +
   geom_point(size = 1.7, alpha = 1, shape = 21) +
+  # mean as a white-filled diamond per region within each facet
+  geom_point(data = paired_means_long,
+             aes(x = region, y = mean_pp),
+             inherit.aes = FALSE,
+             shape = 23, size = 3, stroke = 0.8,
+             fill = "white", colour = "black") +
   facet_wrap(~ species, labeller = labeller(species = species_labels)) +
   scale_colour_manual(values = species_pal, guide = "none") +
   scale_fill_manual(values = species_pal, labels = species_labels, name = NULL) +
