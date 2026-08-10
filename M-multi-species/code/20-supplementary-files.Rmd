@@ -1280,6 +1280,10 @@ miRNA_details <- rbind(
   read.csv("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv", header = TRUE) %>% dplyr::select(-X)
 )
 
+miRNA_names_apul <-miRNA_details %>% dplyr::select(Name, given_miRNA_name) %>% filter(grepl("apul", given_miRNA_name))
+miRNA_names_peve <-miRNA_details %>% dplyr::select(Name, given_miRNA_name) %>% filter(grepl("peve", given_miRNA_name))
+miRNA_names_ptuh <-miRNA_details %>% dplyr::select(Name, given_miRNA_name) %>% filter(grepl("ptuh", given_miRNA_name))
+
 miRNA_details
 
 write.csv(miRNA_details, "../output/20-supplementary-files/AllSpecies_Results_mature_named_miRNAs.csv", col.names = TRUE, row.names = FALSE)
@@ -1323,6 +1327,7 @@ ifelse(identical(colnames(data_3UTR), colnames(data_CDS)) == TRUE,
 data
 }
 
+# Combine all 3 regions for each species
 apul_miRanda_PCC_mRNA <- consolidate_regions(
   "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv",
   "../../D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_CDS.csv",
@@ -1340,7 +1345,12 @@ ptuh_miRanda_PCC_mRNA <- consolidate_regions(
   "../../F-Ptuh/output/11.01-Ptuh-mRNA-miRNA-interactions-CDS_5UTR/miRanda_PCC_miRNA_5UTR.csv"
 )
 
-# Combine
+# Annotate with given miRNA names
+apul_miRanda_PCC_mRNA <- left_join(apul_miRanda_PCC_mRNA, miRNA_names_apul, by = c("miRNA" = "Name"))
+peve_miRanda_PCC_mRNA <- left_join(peve_miRanda_PCC_mRNA, miRNA_names_peve, by = c("miRNA" = "Name"))
+ptuh_miRanda_PCC_mRNA <- left_join(ptuh_miRanda_PCC_mRNA, miRNA_names_ptuh, by = c("miRNA" = "Name"))
+
+# Combine the three species
 miRanda_PCC_mRNA <- rbind(apul_miRanda_PCC_mRNA, peve_miRanda_PCC_mRNA, ptuh_miRanda_PCC_mRNA)
 
 # Filter to only significant PCC (this consitutes our putative interaction set, which is both 
@@ -1363,6 +1373,11 @@ ptuh_miRanda_PCC_lncRNA <- read.csv("../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PC
 # Ensure all three tables have matching column names and order
 identical(colnames(apul_miRanda_PCC_lncRNA), colnames(peve_miRanda_PCC_lncRNA))
 identical(colnames(apul_miRanda_PCC_lncRNA), colnames(ptuh_miRanda_PCC_lncRNA))
+
+# Annotate with given miRNA names
+apul_miRanda_PCC_lncRNA <- left_join(apul_miRanda_PCC_lncRNA, miRNA_names_apul, by = c("miRNA" = "Name"))
+peve_miRanda_PCC_lncRNA <- left_join(peve_miRanda_PCC_lncRNA, miRNA_names_peve, by = c("miRNA" = "Name"))
+ptuh_miRanda_PCC_lncRNA <- left_join(ptuh_miRanda_PCC_lncRNA, miRNA_names_ptuh, by = c("miRNA" = "Name"))
 
 # Combine
 miRanda_PCC_lncRNA <- rbind(apul_miRanda_PCC_lncRNA, peve_miRanda_PCC_lncRNA, ptuh_miRanda_PCC_lncRNA)
