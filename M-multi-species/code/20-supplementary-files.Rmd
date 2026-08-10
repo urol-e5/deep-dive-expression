@@ -1294,7 +1294,6 @@ parse_bismark_report <- function(path, species_code) {
   tibble(
     species             = species_code,
     sample              = sample,
-    report              = fname,
     mapping_efficiency  = mapping_eff,
     pct_meth_CpG        = pct("CpG context"),
     pct_meth_CHG        = pct("CHG context"),
