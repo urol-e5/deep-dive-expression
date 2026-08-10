@@ -1395,6 +1395,40 @@ write.csv(miRanda_PCC_lncRNA, "../output/20-supplementary-files/miRanda_PCC_lncR
 ```
 
 
+# ceRNA triads
+
+```{r}
+# Read in ceRNA triad files
+# These contain the triad members (miRNA, mRNA, and lncRNA) and the mRNA-lncRNA coexpression stats
+apul_ceRNA <- read.delim("../../D-Apul/output/33.1-Apul-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+peve_ceRNA <- read.delim("../../E-Peve/output/31.1-Peve-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+ptuh_ceRNA <- read.delim("../../F-Ptuh/output/31.1-Ptuh-ceRNA-network/pos_lncRNA_mRNA_hits.txt", header=TRUE, sep="\t")
+
+
+# Join to include miRNA-mRNA coexpression stats
+miRNA_mRNA <- miRanda_PCC_mRNA_sig %>% dplyr::select(given_miRNA_name, mRNA, PCC.cor, p_value, adjusted_p_value) %>% rename(PCC_miRNA_mRNA = PCC.cor, p_value_miRNA_mRNA = p_value, FDR_miRNA_mRNA = adjusted_p_value) %>% unique()
+
+apul_ceRNA_plus <- left_join(apul_ceRNA, miRNA_mRNA, by = c("miRNA" = "given_miRNA_name", "mRNA" = "mRNA"))
+peve_ceRNA_plus <- left_join(peve_ceRNA, miRNA_mRNA, by = c("miRNA" = "given_miRNA_name", "mRNA" = "mRNA"))
+ptuh_ceRNA_plus <- left_join(ptuh_ceRNA, miRNA_mRNA, by = c("miRNA" = "given_miRNA_name", "mRNA" = "mRNA"))
+
+
+# Join to include miRNA-lncRNA coexpression stats
+miRNA_lncRNA <- miRanda_PCC_lncRNA_sig %>% dplyr::select(given_miRNA_name, lncRNA, PCC.cor, p_value, adjusted_p_value) %>% rename(PCC_miRNA_lncRNA = PCC.cor, p_value_miRNA_lncRNA = p_value, FDR_miRNA_lncRNA = adjusted_p_value) %>% unique()
+
+apul_ceRNA_plus2 <- left_join(apul_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "given_miRNA_name", "lncRNA" = "lncRNA"))
+peve_ceRNA_plus2 <- left_join(peve_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "given_miRNA_name", "lncRNA" = "lncRNA"))
+ptuh_ceRNA_plus2 <- left_join(ptuh_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "given_miRNA_name", "lncRNA" = "lncRNA"))
+
+
+# Combine the three species
+ceRNA_triads_PCC <- rbind(apul_ceRNA_plus2, peve_ceRNA_plus2, ptuh_ceRNA_plus2)
+
+# Save
+write.csv(ceRNA_triads_PCC, "../output/20-supplementary-files/ceRNA_triads_PCC.csv", row.names = FALSE)
+```
+
+
 # Epigenetic landscape summary figure
 
 Multipanel figure summarizing the epigenetic landscape across the three species: (A) miRNA counts, (B) lncRNA counts, and (C) DNA methylation distribution by genomic feature.
