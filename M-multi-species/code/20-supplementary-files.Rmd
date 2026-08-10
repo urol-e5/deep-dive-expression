@@ -1266,6 +1266,81 @@ miRNA_counts
 
 
 
+# WGBS methylation summary stats
+
+Per-sample bisulfite sequencing methylation statistics for all three species, from the Bismark PE alignment reports (`*_PE_report.txt`) in each species' `bismark_cutadapt/` output directory.
+
+```{r}
+# Parse a single Bismark PE report for mapping efficiency and methylation calls
+parse_bismark_report <- function(path, species_code) {
+  lines <- readLines(path)
+
+  # Extract sample name from filename, e.g. trimmed_ACR-140-TP2_S5_PE_report.txt
+  fname <- basename(path)
+  sample <- str_extract(fname, "(ACR|POR|POC)-\\d+")
+
+  # Mapping efficiency
+  mapping_eff <- as.numeric(
+    str_match(lines[str_detect(lines, "^Mapping efficiency:")],
+              "^Mapping efficiency:\\t(\\S+)%")[2]
+  )
+
+  # C methylated in each C context (CpG, CHG, CHH)
+  pct <- function(context) {
+    pat <- paste0("^C methylated in ", context, ":\\t(\\S+)%")
+    as.numeric(str_match(lines[str_detect(lines, pat)], pat)[2])
+  }
+
+  tibble(
+    species             = species_code,
+    sample              = sample,
+    report              = fname,
+    mapping_efficiency  = mapping_eff,
+    pct_meth_CpG        = pct("CpG context"),
+    pct_meth_CHG        = pct("CHG context"),
+    pct_meth_CHH        = pct("CHH context"),
+    pct_meth_unknown    = pct("unknown context \\(CN or CHN\\)")
+  )
+}
+
+# Per-species report directories
+wgbs_report_dirs <- list(
+  "D-Apul" = "../../D-Apul/output/08-Apul-WGBS/bismark_cutadapt",
+  "E-Peve" = "../../E-Peve/output/12-Peve-WGBS/bismark_cutadapt",
+  "F-Ptuh" = "../../F-Ptuh/output/12-Ptuh-WGBS/bismark_cutadapt"
+)
+
+methylation_stats <- bind_rows(lapply(names(wgbs_report_dirs), function(sp) {
+  files <- list.files(wgbs_report_dirs[[sp]], pattern = "_PE_report\\.txt$",
+                      full.names = TRUE)
+  bind_rows(lapply(files, parse_bismark_report, species_code = sp))
+}))
+
+methylation_stats
+
+write.csv(methylation_stats, "../output/20-supplementary-files/WGBS_methylation_stats.csv", row.names = FALSE)
+```
+
+Per-species means across samples
+```{r}
+methylation_summary <- methylation_stats %>%
+  group_by(species) %>%
+  summarise(
+    mean_mapping_efficiency = round(mean(mapping_efficiency), 2),
+    mean_pct_meth_CpG       = round(mean(pct_meth_CpG), 2),
+    mean_pct_meth_CHG       = round(mean(pct_meth_CHG), 2),
+    mean_pct_meth_CHH       = round(mean(pct_meth_CHH), 2),
+    mean_pct_meth_unknown   = round(mean(pct_meth_unknown), 2),
+    .groups = "drop"
+  )
+
+methylation_summary
+
+write.csv(methylation_summary,
+          "../output/20-supplementary-files/WGBS_methylation_summary.csv",
+          row.names = FALSE)
+```
+
 
 # Mature miRNA names and sequences for all species
 
