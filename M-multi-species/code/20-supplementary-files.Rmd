@@ -1383,9 +1383,7 @@ ptuh_miRanda_PCC_lncRNA <- left_join(ptuh_miRanda_PCC_lncRNA, miRNA_names_ptuh, 
 miRanda_PCC_lncRNA <- rbind(apul_miRanda_PCC_lncRNA, peve_miRanda_PCC_lncRNA, ptuh_miRanda_PCC_lncRNA)
 
 # Reorder columns to have same order as miRNA-mRNA table (above)
-miRanda_PCC_lncRNA <- miRanda_PCC_lncRNA %>% dplyr::select(miRNA, lncRNA, PCC.cor, p_value, adjusted_p_value,
-                                                           score, energy, query_start_end, subject_start_end, 
-                                                           total_bp_shared, query_similar, subject_similar)
+miRanda_PCC_lncRNA <- miRanda_PCC_lncRNA %>% dplyr::select(miRNA, lncRNA, PCC.cor, p_value, adjusted_p_value, score, energy, query_start_end, subject_start_end, total_bp_shared, query_similar, subject_similar, given_miRNA_name)
 
 # Filter to only significant PCC (this constitutes our putative interaction set, which is both 
 # predicted to bind via miRanda and significantly coexpressed)
