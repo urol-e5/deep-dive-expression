@@ -1420,9 +1420,16 @@ apul_ceRNA_plus2 <- left_join(apul_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "g
 peve_ceRNA_plus2 <- left_join(peve_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "given_miRNA_name", "lncRNA" = "lncRNA"))
 ptuh_ceRNA_plus2 <- left_join(ptuh_ceRNA_plus, miRNA_lncRNA, by = c("miRNA" = "given_miRNA_name", "lncRNA" = "lncRNA"))
 
+# Give species labels
+apul_ceRNA_plus2$species <- "A. pulchra"
+peve_ceRNA_plus2$species <- "P. evermanni"
+ptuh_ceRNA_plus2$species <- "P. tuahiniensis"
 
 # Combine the three species
 ceRNA_triads_PCC <- rbind(apul_ceRNA_plus2, peve_ceRNA_plus2, ptuh_ceRNA_plus2)
+
+# Order so that first column is species ID
+ceRNA_triads_PCC <- ceRNA_triads_PCC %>% dplyr::select(species, colnames(ceRNA_triads_PCC %>% dplyr::select(-species)))
 
 # Save
 write.csv(ceRNA_triads_PCC, "../output/20-supplementary-files/ceRNA_triads_PCC.csv", row.names = FALSE)
