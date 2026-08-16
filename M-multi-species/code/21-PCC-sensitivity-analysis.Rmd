@@ -1,0 +1,592 @@
+---
+title: "21-PCC-sensitivity-analysis"
+author: "Kathleen Durkin"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+#bibliography: references.bib
+link-citations: true
+---
+
+Supplementary sensitivity analysis for the miRNA–mRNA and miRNA–lncRNA correlation-based interaction networks, to address coauthor comments on comments on the use of correlation-based network inference at small sample sizes.
+
+Want to produce plots showing:
+
+1. the distribution of all observed PCC values per dataset
+2. the same distributions faceted by whether the pair was predicted to bind by
+   miRanda
+3. a sensitivity table comparing pair counts under raw p < 0.05 vs
+   Benjamini–Hochberg FDR
+4. formal two-sample tests of whether predicted-binding pairs are enriched for
+   negative correlation relative to non-binding pairs.
+
+```{r setup, include=FALSE}
+# load libraries
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+# Compile inputs
+
+The full pairwise PCC files are too large to store on GitHub, so they first need to be read from Gannet (large-file storage). The pre-merged miRanda+PCC files (which already reconcile miRanda target IDs with the count-matrix IDs) are read from the repo and used only to define the set of *predicted-binding* pairs.
+
+Note: `n` is the number of biological replicates entering each correlation (5 for *A. pulchra* and *P. tuahiniensis*; 3 for *P. evermanni*, whose small-RNA libraries failed in 2 of 5 colonies).
+
+```{r datasets}
+# URL to large file storage of DDE materials
+gannet_url <- "https://gannet.fish.washington.edu/kdurkin1/ravenbackups/deep-dive-expression"
+
+# Compile full set of pointers to the miRNA-mRNA and miRNA-lncRNA PCC results for all 3 species
+datasets <- list(
+  list(name="Apul miRNA-mRNA",   n=5, target="mRNA",
+       full=file.path(gannet_url,"D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv"),
+       merged="../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv",
+       mi="miRNA", ti="mRNA"),
+  list(name="Apul miRNA-lncRNA", n=5, target="lncRNA",
+       full=file.path(gannet_url,"D-Apul/output/28-Apul-miRNA-lncRNA-interactions/Apul-PCC_miRNA_lncRNA.csv"),
+       merged="../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv",
+       mi="miRNA", ti="lncRNA"),
+  list(name="Ptuh miRNA-mRNA",   n=5, target="mRNA",
+       full=file.path(gannet_url,"F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-PCC_miRNA_mRNA.csv"),
+       merged="../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_miRNA_mRNA.csv",
+       mi="miRNA", ti="mRNA"),
+  list(name="Ptuh miRNA-lncRNA", n=5, target="lncRNA",
+       full=file.path(gannet_url,"F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"),
+       merged="../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv",
+       mi="miRNA", ti="lncRNA"),
+  list(name="Peve miRNA-mRNA",   n=3, target="mRNA",
+       full=file.path(gannet_url,"E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-PCC_miRNA_mRNA.csv"),
+       merged="../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_miRNA_mRNA.csv",
+       mi="miRNA", ti="mRNA"),
+  list(name="Peve miRNA-lncRNA", n=3, target="lncRNA",
+       full=file.path(gannet_url,"E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv"),
+       merged="../../E-Peve/output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv",
+       mi="miRNA", ti="lncRNA")
+)
+```
+
+```{r}
+# Function to calculate two-sided critical |r| for p < 0.05 at a given n (df = n - 2)
+# (For later use)
+rcrit <- function(n, alpha = 0.05) {
+  tc <- qt(1 - alpha/2, df = n - 2)
+  tc / sqrt(tc^2 + (n - 2))
+}
+```
+
+# Load, label predicted binding, and summarize
+
+NOTE: This will take a long time, all of the full PCC files loaded here are on the order of 100s of MB.
+```{r load-and-summarize}
+# permit longer download times (necessary for accessing v large files)
+options(timeout = 1000)
+
+# Function to, for an input dtaset, load in with standardized column names/order
+load_one <- function(d) {
+  f <- fread(d$full, showProgress = FALSE)
+  # Standardize the first four columns: rowindex, miRNA, target, PCC.cor, p_value, adjusted_p_value
+  setnames(f, 2:6, c("miRNA","target","PCC","p_value","adj_p"))
+  f <- f[!is.na(PCC)]
+  m <- fread(d$merged, showProgress = FALSE)
+  predset <- unique(paste(m[[d$mi]], m[[d$ti]]))
+  f[, bind := paste(miRNA, target) %in% predset]
+  f[, dataset := d$name][, n := d$n][, target_type := d$target]
+  f
+}
+
+dat <- lapply(datasets, load_one)
+names(dat) <- sapply(datasets, `[[`, "name")
+
+# Function to, for input dataset, summarize relevant stats
+summ <- rbindlist(lapply(datasets, function(d){
+  f <- dat[[d$name]]
+  rc <- rcrit(d$n)
+  data.table(
+    dataset          = d$name,
+    n                = d$n,
+    effective_cutoff = round(rc, 3),
+    tested_pairs     = nrow(f),
+    mean_r           = round(mean(f$PCC), 3),
+    sd_r             = round(sd(f$PCC), 3),
+    pct_abs_gt_0.5   = round(100*mean(abs(f$PCC) > 0.5), 1),
+    raw_p_lt_0.05    = sum(f$p_value < 0.05),
+    raw_pct          = round(100*mean(f$p_value < 0.05), 2),
+    fdr_q_lt_0.05    = sum(f$adj_p < 0.05),
+    raw_sig_pos_pct  = round(100*mean(f[p_value < 0.05]$PCC > 0), 1)
+  )
+}))
+
+fwrite(summ, file.path("../output/21-PCC-sensitivity-analysis", "Table_S-PCC-1_sensitivity.csv"))
+knitr::kable(summ)
+```
+
+Note two points the table makes explicit:
+
+- The nominal `|PCC| > 0.5` filter is **non-binding**: at n = 5 any pair with raw p < 0.05 already has |r| >= `r round(rcrit(5),3)`, and at n = 3, |r| >= `r round(rcrit(3),3)`. The operative pval threshold is the effective cutoff, not 0.5.
+
+- `raw_pct` (fraction of pairs passing raw p < 0.05) sits at ~5% — the value expected under the global null — and `fdr_q_lt_0.05` collapses to 0 for the n = 5 datasets. This is the sense in which the networks are **not robust** to multiple-testing correction and must be framed as a hypothesis-generating screen [@benjamini1995; @storey2003; @ballouz2015].
+
+# Why FDR retains no pairs at n = 5 but a residue at n = 3
+
+FDR-significance here is data-dependent. Benjamini–Hochberg [@benjamini1995] rejects the block `1..k` where `k = max{i : p(i) <= (i/m)*alpha}`; its most lenient point is the smallest rank, `alpha/m`. With m ~ 10^6 tests, `alpha/m ~ 4e-8`. Inverting the Pearson p-value (`t = r*sqrt(df)/sqrt(1-r^2)`, df = n-2) gives the |r| a pair must reach to clear that threshold.
+
+```{r fdr-mechanism}
+# Calculate, for a given df, correlation (r) needed to reach desired significance
+r_needed <- function(p, df){ tc <- qt(1 - p/2, df); tc/sqrt(tc^2 + df) }
+mech <- rbindlist(lapply(datasets, function(d){
+  f <- dat[[d$name]]; m <- nrow(f); df <- d$n - 2
+  data.table(dataset = d$name, n = d$n, m = m,
+             bonf_p        = signif(0.05/m, 3),
+             r_needed      = round(r_needed(0.05/m, df), 6),
+             max_abs_r_obs = round(max(abs(f$PCC)), 6),
+             fdr_survivors = sum(f$adj_p < 0.05))
+}))
+knitr::kable(mech)
+```
+
+At n = 5 (df = 3), clearing `alpha/m` requires |r| >= ~0.99999 (near-perfect collinearity). The strongest correlation among ~1.3M pairs reaches only ~0.99997, so no pair survives. At n = 3 (df = 1), r = +/-1 (and thus p = 0) occurs whenever three expression values are collinear, which is common for sparse count triples. As such, thousands of such pairs pull the BH line down and a block is rejected. **The *P. evermanni* FDR survivors are therefore a low-degrees-of-freedom artifact**, not evidence of stronger regulatory signal, and should *not* be interpreted as more reliable than the n = 5 results [@goeman2014; @fisher1915].
+
+# Distribution of all observed PCC values
+
+```{r fig-overall, fig.width=10, fig.height=6}
+allr <- rbindlist(lapply(dat, function(f) f[, .(PCC, dataset, n)]))
+allr[, dataset := factor(dataset, levels = sapply(datasets, `[[`, "name"))]
+cuts <- data.table(dataset = summ$dataset, rc = sapply(datasets, function(d) rcrit(d$n)))
+cuts[, dataset := factor(dataset, levels = levels(allr$dataset))]
+
+p1 <- ggplot(allr, aes(PCC)) +
+  geom_histogram(binwidth = 0.02, boundary = 0, fill = "#85B7EB", color = NA) +
+  geom_vline(data = cuts, aes(xintercept =  rc), linetype = "dashed", color = "#A32D2D") +
+  geom_vline(data = cuts, aes(xintercept = -rc), linetype = "dashed", color = "#A32D2D") +
+  facet_wrap(~ dataset, scales = "fixed", ncol = 2) +
+  scale_y_log10() +
+  labs(x = "Pearson correlation coefficient (r)",
+       y = "Number of pairs (log scale)",
+       caption = "Dashed lines: effective |r| cutoff for raw p < 0.05 at each dataset's n.") +
+  theme_bw(base_size = 11)
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-1_distributions.png"), p1, width = 10, height = 6, dpi = 300)
+p1
+```
+
+## distributions faceted by predicted binding (miRanda)
+
+Using densities (area-normalized within group), so that the (much smaller) predicted-binding set is comparable to the non-binding set.
+
+```{r fig-bybinding, fig.width=10, fig.height=6}
+allr2 <- rbindlist(lapply(dat, function(f) f[, .(PCC, bind, dataset)]))
+allr2[, dataset := factor(dataset, levels = sapply(datasets, `[[`, "name"))]
+allr2[, Binding := ifelse(bind, "predicted to bind (miRanda)", "not predicted to bind")]
+
+p2 <- ggplot(allr2, aes(PCC, color = Binding, fill = Binding)) +
+  geom_density(alpha = 0.12, adjust = 1) +
+  facet_wrap(~ dataset, scales = "fixed", ncol = 2) +
+  scale_color_manual(values = c("not predicted to bind" = "#185FA5",
+                                "predicted to bind (miRanda)" = "#D85A30")) +
+  scale_fill_manual(values  = c("not predicted to bind" = "#185FA5",
+                                "predicted to bind (miRanda)" = "#D85A30")) +
+  labs(x = "Pearson correlation coefficient (r)", y = "Density") +
+  theme_bw(base_size = 11) +
+  theme(legend.position = "top")
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-2_by_binding.png"), p2, width = 10, height = 6, dpi = 300)
+p2
+```
+
+# Formal test: are predicted-binding pairs enriched for negative correlation?
+
+Under canonical miRNA-mediated repression (or lncRNA sponging), pairs predicted to bind should be shifted toward **negative** correlation relative to non-binding pairs. We test this three ways. Because the non-binding group is very large, p-values are driven mainly by sample size, so we report effect sizes (KS D; Cliff's delta from the Mann–Whitney U, with positive delta meaning predicted binders are *more positively* correlated; difference in the negative-correlation rate).
+
+```{r formal-tests}
+tests <- rbindlist(lapply(dat, function(f){
+  b  <- f[bind == TRUE,  PCC]
+  nb <- f[bind == FALSE, PCC]
+  ks <- suppressWarnings(ks.test(b, nb))
+  w  <- suppressWarnings(wilcox.test(b, nb))
+  U  <- as.numeric(w$statistic)
+  cliff <- 2*U/(as.numeric(length(b))*as.numeric(length(nb))) - 1
+  pt <- prop.test(c(sum(b < 0), sum(nb < 0)), c(length(b), length(nb)))
+  data.table(
+    dataset       = f$dataset[1],
+    n_bind        = length(b),
+    n_notbind     = length(nb),
+    mean_r_bind   = round(mean(b), 3),
+    mean_r_notb   = round(mean(nb), 3),
+    Pneg_bind     = round(mean(b < 0), 3),
+    Pneg_notb     = round(mean(nb < 0), 3),
+    dPneg         = round(mean(b < 0) - mean(nb < 0), 3),
+    prop_p        = signif(pt$p.value, 3),
+    KS_D          = round(as.numeric(ks$statistic), 3),
+    KS_p          = signif(ks$p.value, 3),
+    cliffs_delta  = round(cliff, 3)
+  )
+}))
+fwrite(tests, file.path("../output/21-PCC-sensitivity-analysis", "Table_S-PCC-2_binding_tests.csv"))
+knitr::kable(tests)
+```
+
+**Interpretation:** In every dataset the effect is negligible (|Cliff's delta| < 0.09; KS D < 0.08) and, where directional, runs *opposite* to the repression prediction — predicted binders are marginally *more* positive, not more negative. Predicting binding via miRanda therefore does not meaningfully shift the correlation distribution, indicating that the sequence- based and correlation-based lines of evidence are largely independent rather than mutually corroborating (at these sample sizes).
+
+# Network sensitivity to |PCC| thresholds
+
+The networks defined here (`15-miRNA-mRNA-lncRNA-network-ceRNA`) retain miRNA-target edges whose PCC p-value is < 0.05. At n = 5 this corresponds to |r| >= 0.878; at n = 3, |r| >= 0.997. Let's ask how network size, epi-miRNA activity, and ceRNA structure change when a stricter |PCC| floor is applied to the combined network edge files.
+
+```{r network-sensitivity}
+library(patchwork)
+
+ceRNA_dir <- "../output/15-miRNA-mRNA-lncRNA-network-ceRNA"
+thresholds <- c(0.88, 0.90, 0.93, 0.95, 0.97, 0.99)
+species_map <- c(Apul = "A. pulchra", Peve = "P. evermanni", Ptuh = "P. tuahiniensis")
+
+# Load epimachinery annotations
+epi <- read.csv("../output/12-miRNA-epimachinery/miRNAtargets_mach.csv", stringsAsFactors = FALSE)
+
+summarize_network <- function(prefix) {
+  edges <- read.csv(file.path(ceRNA_dir, paste0(prefix, "_edges_miRNA_mRNA_lncRNA_ceRNA_network_p0.05.csv")),
+                    stringsAsFactors = FALSE)
+  sp_name <- species_map[prefix]
+  epi_sp  <- epi %>% filter(species == sp_name)
+  epi_mirnas <- unique(epi_sp$given_miRNA_name)
+  epi_mrnas  <- unique(epi_sp$target)
+
+  # Split edge types
+  mirna_mrna  <- edges %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
+  mirna_lncrna <- edges %>% filter(region == "lncRNA")
+  lncrna_mrna <- edges %>% filter(region == "lncRNA_mRNA")
+
+  rows <- list()
+  for (t in thresholds) {
+    mm <- mirna_mrna  %>% filter(abs(PCC.cor) >= t)
+    ml <- mirna_lncrna %>% filter(abs(PCC.cor) >= t)
+    lm <- lncrna_mrna %>% filter(abs(PCC.cor) >= t)
+    all_e <- rbind(mm, ml, lm)
+    nodes <- unique(c(all_e$source, all_e$target))
+    n_mirna  <- sum(grepl("mir", nodes))
+    n_lncrna <- sum(grepl("lncRNA", nodes))
+    n_mrna   <- length(nodes) - n_mirna - n_lncrna
+
+    # Epi-miRNA -> epi-machinery mRNA edges
+    epi_fb <- mm %>% filter(source %in% epi_mirnas & target %in% epi_mrnas)
+
+    # Epi-miRNAs with at least one edge of any type
+    epi_active <- all_e %>% filter(source %in% epi_mirnas)
+
+    rows[[as.character(t)]] <- data.frame(
+      species            = sp_name,
+      pcc_threshold      = t,
+      mirna_mrna_edges   = nrow(mm),
+      mirna_lncrna_edges = nrow(ml),
+      cerna_edges        = nrow(lm),
+      total_edges        = nrow(all_e),
+      net_nodes          = length(nodes),
+      net_miRNA          = n_mirna,
+      net_lncRNA         = n_lncrna,
+      net_mRNA           = n_mrna,
+      epi_mirna_active   = length(unique(epi_active$source)),
+      epi_mach_in_net    = sum(nodes %in% epi_mrnas),
+      epi_fb_edges       = nrow(epi_fb),
+      epi_fb_pairs       = nrow(distinct(epi_fb, source, target)),
+      epi_fb_mirnas      = length(unique(epi_fb$source)),
+      epi_fb_mrnas       = length(unique(epi_fb$target)),
+      stringsAsFactors   = FALSE
+    )
+  }
+  do.call(rbind, rows)
+}
+
+network_sensitivity <- rbind(
+  summarize_network("Apul"),
+  summarize_network("Peve"),
+  summarize_network("Ptuh")
+)
+
+fwrite(network_sensitivity, file.path("../output/21-PCC-sensitivity-analysis", "Table_S-PCC-3_network_sensitivity.csv"))
+knitr::kable(network_sensitivity)
+```
+
+## Proportion retained relative to |PCC| >= 0.878
+
+```{r network-sensitivity-pct}
+# Compute percentage retained
+pct_table <- network_sensitivity %>%
+  group_by(species) %>%
+  mutate(
+    across(c(mirna_mrna_edges, mirna_lncrna_edges, cerna_edges, total_edges,
+             net_nodes, net_miRNA, epi_mirna_active, epi_mach_in_net,
+             epi_fb_edges, epi_fb_pairs),
+           ~ round(100 * . / .[pcc_threshold == 0.878], 1))
+  )
+
+fwrite(pct_table, file.path("../output/21-PCC-sensitivity-analysis", "Table_S-PCC-3b_network_sensitivity_pct.csv"))
+knitr::kable(pct_table)
+```
+
+## Visualize retention curves
+
+```{r fig-retention, fig.width=10, fig.height=6}
+# Reshape for plotting
+plot_df <- network_sensitivity %>%
+  dplyr::select(species, pcc_threshold,
+         `miRNA-mRNA` = mirna_mrna_edges,
+         `miRNA-lncRNA` = mirna_lncrna_edges,
+         `ceRNA (lncRNA-mRNA)` = cerna_edges,
+         `epi-miRNA→epi-mach` = epi_fb_edges) %>%
+  pivot_longer(cols = c(`miRNA-mRNA`, `miRNA-lncRNA`, `ceRNA (lncRNA-mRNA)`, `epi-miRNA→epi-mach`),
+               names_to = "edge_type", values_to = "n_edges") %>%
+  mutate(species = factor(species, levels = c("A. pulchra", "P. evermanni", "P. tuahiniensis")))
+
+p3 <- ggplot(plot_df, aes(x = pcc_threshold, y = n_edges, color = edge_type, group = edge_type)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 2) +
+  facet_wrap(~ species, scales = "fixed") +
+  scale_x_continuous(breaks = thresholds, labels = sprintf("≥%.2f", thresholds)) +
+  scale_color_manual(values = c("miRNA-mRNA" = "#408EC6",
+                                "miRNA-lncRNA" = "#1E2761",
+                                "ceRNA (lncRNA-mRNA)" = "#7A2048",
+                                "epi-miRNA→epi-mach" = "#D95F02")) +
+  labs(x = "|PCC| threshold", y = "Number of edges retained", color = "Edge type",
+       title = "Network edge retention across |PCC| thresholds") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-3_retention.png"), p3, width = 10, height = 6, dpi = 300)
+p3
+```
+
+A logged y-axis makes the steep decline at higher thresholds easier to assess,
+particularly for edge types with very different magnitudes.
+
+```{r fig-retention-log, fig.width=10, fig.height=6}
+p3_log <- p3 +
+  scale_y_log10() +
+  labs(title = "Network edge retention across |PCC| thresholds (log scale)",
+       y = "Number of edges retained (log scale)")
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-3_retention_log.png"), p3_log, width = 10, height = 6, dpi = 300)
+p3_log
+```
+
+A percentage-retention version (relative to the |PCC|≥0.878 baseline) normalizes
+all edge types to the same starting point (100%), making cross-type comparisons
+of the rate of decline straightforward.
+
+```{r fig-retention-pct, fig.width=10, fig.height=6}
+plot_pct <- pct_table %>%
+  dplyr::select(species, pcc_threshold,
+         `miRNA-mRNA` = mirna_mrna_edges,
+         `miRNA-lncRNA` = mirna_lncrna_edges,
+         `ceRNA (lncRNA-mRNA)` = cerna_edges,
+         `epi-miRNA→epi-mach` = epi_fb_edges) %>%
+  pivot_longer(cols = c(`miRNA-mRNA`, `miRNA-lncRNA`, `ceRNA (lncRNA-mRNA)`, `epi-miRNA→epi-mach`),
+               names_to = "edge_type", values_to = "pct_retained") %>%
+  mutate(species = factor(species, levels = c("A. pulchra", "P. evermanni", "P. tuahiniensis")))
+
+p3_pct <- ggplot(plot_pct, aes(x = pcc_threshold, y = pct_retained, color = edge_type, group = edge_type)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 2) +
+  facet_wrap(~ species) +
+  scale_x_continuous(breaks = thresholds, labels = sprintf("≥%.2f", thresholds)) +
+  scale_color_manual(values = c("miRNA-mRNA" = "#408EC6",
+                                "miRNA-lncRNA" = "#1E2761",
+                                "ceRNA (lncRNA-mRNA)" = "#7A2048",
+                                "epi-miRNA→epi-mach" = "#D95F02")) +
+  labs(x = "|PCC| threshold", y = "% of baseline edges retained", color = "Edge type",
+       title = "Edge retention relative to baseline (|PCC| ≥ 0.878)") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-3_retention_pct.png"), p3_pct, width = 10, height = 6, dpi = 300)
+p3_pct
+```
+
+```{r fig-retention-pct-log, fig.width=10, fig.height=6}
+p3_pct_log <- p3_pct +
+  scale_y_log10() +
+  labs(title = "Edge retention relative to baseline (log scale)",
+       y = "% of baseline edges retained (log scale)")
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-3_retention_pct_log.png"), p3_pct_log, width = 10, height = 6, dpi = 300)
+p3_pct_log
+```
+
+# Epi-miRNA target interactions by category across |PCC| thresholds
+
+The `12-miRNA-epimachinery` analysis identified miRNA → epigenetic-machinery
+target interactions (predicted binding + significant coexpression) and
+categorized each target by functional category. Here we re-plot those same
+interactions, but progressively filtered by |PCC| threshold, to show which
+functional categories of epimachinery are retained or lost as stringency
+increases.
+
+```{r epi-category-by-threshold, fig.width=14, fig.height=12}
+# Category / species ordering and colors — identical to 12-miRNA-epimachinery.Rmd
+cat_order <- c("ADP-ribosylation",
+               "RNA modification",
+               "Chromatin signaling",
+               "Histone modification and variants",
+               "DNA methylation & reading",
+               "ncRNA biogenesis & silencing",
+               "Ubiquitin signaling")
+species_order <- c("A. pulchra", "P. evermanni", "P. tuahiniensis")
+
+cat_colors <- c("ADP-ribosylation"                     = "#D55E00",
+                "RNA modification"                     = "#F0E442",
+                "Chromatin signaling"                  = "#56B4E9",
+                "Histone modification and variants"    = "#CC79A7",
+                "DNA methylation & reading"            = "#009E73",
+                "ncRNA biogenesis & silencing"         = "#E69F00",
+                "Ubiquitin signaling"                  = "#0072B2")
+
+# Build per-threshold count table
+epi_threshold_counts <- epi %>%
+  filter(!is.na(category)) %>%
+  mutate(species  = factor(species,  levels = species_order),
+         category = factor(category, levels = cat_order))
+
+count_at_threshold <- function(df, t) {
+  df %>%
+    filter(abs(PCC.cor) >= t) %>%
+    count(species, category, name = "n_targets") %>%
+    complete(species = species_order, category = cat_order, fill = list(n_targets = 0)) %>%
+    mutate(pcc_threshold = t)
+}
+
+plot_df_epi <- do.call(rbind, lapply(thresholds, function(t) count_at_threshold(epi_threshold_counts, t))) %>%
+  mutate(category = factor(category, levels = cat_order),
+         species  = factor(species,  levels = rev(species_order)),
+         pcc_threshold = factor(pcc_threshold, levels = thresholds,
+                                labels = sprintf("|PCC| ≥ %.2f", thresholds)))
+
+# Individual stacked-bar plots per threshold
+epi_cat_plots <- lapply(thresholds, function(t) {
+  pd <- plot_df_epi %>% filter(pcc_threshold == sprintf("|PCC| ≥ %.2f", t))
+  ggplot(pd, aes(x = n_targets, y = species, fill = category)) +
+    geom_col(position = "stack", width = 0.65) +
+    scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
+    xlim(c(0, 35))+
+    labs(x = "Number of miRNA target interactions", y = NULL,
+         title = sprintf("|PCC| ≥ %.2f", t)) +
+    theme_minimal() +
+    theme(axis.text.y = element_text(face = "italic"))
+})
+
+# Combined patchwork figure
+p_epi_cat <- wrap_plots(epi_cat_plots, ncol = 2, guides = "collect") +
+  plot_annotation(title = "Epi-miRNA → epigenetic-machinery target interactions by category across |PCC| thresholds",
+                  tag_levels = "A") &
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 13, face = "bold"))
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-4_epi_category_by_threshold.png"),
+       p_epi_cat, width = 14, height = 12, dpi = 300)
+p_epi_cat
+```
+
+A signed (positive vs. negative PCC) version of the same plot, again matching
+the style of `12-miRNA-epimachinery.Rmd`:
+
+```{r epi-category-by-threshold-signed, fig.width=14, fig.height=12}
+count_signed_at_threshold <- function(df, t) {
+  df %>%
+    filter(abs(PCC.cor) >= t) %>%
+    mutate(direction = ifelse(PCC.cor >= 0, "Positive", "Negative")) %>%
+    count(species, category, direction, name = "n_targets") %>%
+    complete(species = species_order, category = cat_order,
+             direction = c("Negative", "Positive"), fill = list(n_targets = 0)) %>%
+    mutate(pcc_threshold = t)
+}
+
+plot_df_epi_signed <- do.call(rbind, lapply(thresholds, function(t) count_signed_at_threshold(epi_threshold_counts, t))) %>%
+  mutate(category  = factor(category,  levels = cat_order),
+         species   = factor(species,   levels = rev(species_order)),
+         direction = factor(direction, levels = c("Negative", "Positive")),
+         n_signed  = ifelse(direction == "Negative", -n_targets, n_targets),
+         pcc_threshold = factor(pcc_threshold, levels = thresholds,
+                                labels = sprintf("|PCC| ≥ %.2f", thresholds)))
+
+epi_cat_signed_plots <- lapply(thresholds, function(t) {
+  pd <- plot_df_epi_signed %>% filter(pcc_threshold == sprintf("|PCC| ≥ %.2f", t))
+  ggplot(pd, aes(x = n_signed, y = species, fill = category, alpha = direction)) +
+    geom_col(position = "stack", width = 0.65) +
+    geom_vline(xintercept = 0, linewidth = 0.4, colour = "grey30") +
+    scale_fill_manual(values = cat_colors, breaks = cat_order, name = NULL) +
+    scale_alpha_manual(values = c(Negative = 0.7, Positive = 1), name = "PCC sign",
+                       guide = guide_legend(override.aes = list(fill = "grey30"))) +
+    scale_x_continuous(labels = function(x) abs(x)) +
+    xlim(c(-15,15)) +
+    labs(x = "← negative PCC | positive PCC →", y = NULL,
+         title = sprintf("|PCC| ≥ %.2f", t)) +
+    theme_minimal() +
+    theme(axis.text.y = element_text(face = "italic"))
+})
+
+p_epi_cat_signed <- wrap_plots(epi_cat_signed_plots, ncol = 2, guides = "collect") +
+  plot_annotation(title = "Epi-miRNA → epigenetic-machinery target interactions by category and PCC sign across |PCC| thresholds",
+                  tag_levels = "A") &
+  theme(legend.position = "bottom",
+        plot.title = element_text(size = 13, face = "bold"))
+
+ggsave(file.path("../output/21-PCC-sensitivity-analysis", "Fig_S-PCC-4_epi_category_by_threshold_signed.png"),
+       p_epi_cat_signed, width = 14, height = 12, dpi = 300)
+p_epi_cat_signed
+```
+
+# Specific epi-miRNA → epi-machinery interactions across thresholds
+
+For each species, list the specific epi-miRNA → epi-machinery mRNA edges
+retained at each |PCC| threshold. This identifies which candidate feedback-loop
+interactions are most robust.
+
+```{r epi-feedback-detail}
+for (prefix in c("Apul", "Peve", "Ptuh")) {
+  edges <- read.csv(file.path(ceRNA_dir, paste0(prefix, "_edges_miRNA_mRNA_lncRNA_ceRNA_network_p0.05.csv")),
+                    stringsAsFactors = FALSE)
+  sp_name <- species_map[prefix]
+  epi_sp  <- epi %>% filter(species == sp_name)
+  epi_mirnas <- unique(epi_sp$given_miRNA_name)
+  epi_mrnas  <- unique(epi_sp$target)
+
+  mirna_mrna <- edges %>% filter(region %in% c("3UTR", "5UTR", "CDS"))
+
+  cat(sprintf("\n## %s\n\n", sp_name))
+
+  for (t in thresholds) {
+    fb <- mirna_mrna %>%
+      filter(abs(PCC.cor) >= t,
+             source %in% epi_mirnas,
+             target %in% epi_mrnas) %>%
+      distinct(source, target, .keep_all = TRUE) %>%
+      left_join(epi_sp %>% dplyr::select(target, gene) %>% distinct(), by = "target") %>%
+      arrange(source, gene)
+
+    cat(sprintf("\n**|PCC| >= %.2f** (%d edges, %d unique pairs):\n\n", t, nrow(fb), nrow(distinct(fb, source, target))))
+    if (nrow(fb) > 0) {
+      cat("| miRNA | mRNA | gene | |PCC| |\n|-------|------|------|------|\n")
+      for (i in 1:nrow(fb)) {
+        cat(sprintf("| %s | %s | %s | %.3f |\n",
+          fb$source[i], fb$target[i], fb$gene[i], abs(fb$PCC.cor[i])))
+      }
+    } else {
+      cat("*None retained.*\n")
+    }
+    cat("\n")
+  }
+}
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
