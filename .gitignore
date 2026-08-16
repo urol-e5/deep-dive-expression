@@ -43,6 +43,7 @@ D-Apul/output/08-Apul-WGBS/*/*.CpG_report.txt
 D-Apul/output/08-Apul-WGBS/*/*bed*
 D-Apul/output/08-Apul-WGBS/*/*tab*
 D-Apul/output/08-Apul-WGBS/methylkit/*.RData
+D-Apul/output/08-Apul-WGBS/CpG_miRNA_precursor_CountMat.csv
 D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-PCC_miRNA_mRNA.csv
 D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/Apul_mRNA_full.fa
 D-Apul/output/09.01-Apul-mRNA-miRNA-interactions-CDS_5UTR/*strict_all.tab
@@ -95,6 +96,7 @@ E-Peve/output/12-Peve-WGBS/*/*.CpG_report.txt
 E-Peve/output/12-Peve-WGBS/*/*bed*
 E-Peve/output/12-Peve-WGBS/*/*tab*
 E-Peve/output/12-Peve-WGBS/methylkit/*.RData
+E-Peve/output/12-Peve-WGBS/CpG_miRNA_precursor_CountMat.csv
 E-Peve/output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve_lncRNA.fasta
 E-Peve/output/14-Peve-miRNA-lncRNA-BLASTs-miRanda/Peve-miRanda-lncRNA-strict_all.tab
 E-Peve/output/15-Peve-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv
@@ -123,6 +125,7 @@ F-Ptuh/output/12-Ptuh-WGBS/*/*.CpG_report.txt
 F-Ptuh/output/12-Ptuh-WGBS/*/*bed*
 F-Ptuh/output/12-Ptuh-WGBS/*/*tab*
 F-Ptuh/output/12-Ptuh-WGBS/methylkit/*.RData
+F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_precursor_CountMat.csv
 F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh_lncRNA.fasta
 F-Ptuh/output/14-Ptuh-miRNA-lncRNA-BLASTs-miRanda/Ptuh-miRanda-lncRNA-strict_all.tab
 F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv
