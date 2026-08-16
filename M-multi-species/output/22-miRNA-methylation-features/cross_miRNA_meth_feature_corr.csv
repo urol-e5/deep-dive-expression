@@ -1,0 +1,16 @@
+species,feature,feature_label,r,p,n,signif,r_round,p_round
+A. pulchra,log2_rpm,log2(mean RPM + 1),-0.0517474941045712,0.797691406619763,27,"",-0.052,0.798
+A. pulchra,n_targets_all,# mRNA targets (all),0.134526159110573,0.503499953447154,27,"",0.135,0.503
+A. pulchra,n_targets_sig,# mRNA targets (p < 0.05),0.122080025064762,0.544112479646507,27,"",0.122,0.544
+A. pulchra,n_lncrna_targets,# lncRNA targets,0.184887148084724,0.355883776169706,27,"",0.185,0.356
+A. pulchra,Length,Precursor length (nt),-0.0308768465951972,0.878488914335533,27,"",-0.031,0.878
+P. evermanni,log2_rpm,log2(mean RPM + 1),-0.263865594408646,0.275021624022834,19,"",-0.264,0.275
+P. evermanni,n_targets_all,# mRNA targets (all),0.61558787678437,0.00501884317463363,19,*,0.616,0.00502
+P. evermanni,n_targets_sig,# mRNA targets (p < 0.05),0.452835792954832,0.0515445261055429,19,"",0.453,0.0515
+P. evermanni,n_lncrna_targets,# lncRNA targets,0.63765524454448,0.00331311894639226,19,*,0.638,0.00331
+P. evermanni,Length,Precursor length (nt),-0.193339091562752,0.427743860332579,19,"",-0.193,0.428
+P. tuahiniensis,log2_rpm,log2(mean RPM + 1),-0.0449049395997241,0.855159712240489,19,"",-0.045,0.855
+P. tuahiniensis,n_targets_all,# mRNA targets (all),0.23738423772354,0.327792343662968,19,"",0.237,0.328
+P. tuahiniensis,n_targets_sig,# mRNA targets (p < 0.05),0.0839580046004148,0.732558887116849,19,"",0.084,0.733
+P. tuahiniensis,n_lncrna_targets,# lncRNA targets,0.373809685555674,0.114896284731461,19,"",0.374,0.115
+P. tuahiniensis,Length,Precursor length (nt),-0.188133477829223,0.440524187810807,19,"",-0.188,0.441

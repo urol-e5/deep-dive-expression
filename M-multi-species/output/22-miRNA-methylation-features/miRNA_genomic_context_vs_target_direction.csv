@@ -1,0 +1,243 @@
+species,miRNA,target_type,n_targets,n_positive,n_negative,prop_positive,mean_pcc,predominant_direction,genomic_context
+A. pulchra,Cluster_10051,lncRNA,180,121,59,0.672222222222222,0.303281660432492,Predominantly positive,intronic
+A. pulchra,Cluster_10051,mRNA,84,48,36,0.571428571428571,0.211334084767108,Mixed,intronic
+A. pulchra,Cluster_10057,lncRNA,227,135,92,0.594713656387665,0.162949059456815,Mixed,intronic
+A. pulchra,Cluster_10057,mRNA,92,39,53,0.423913043478261,0.0218999728942929,Mixed,intronic
+A. pulchra,Cluster_10093,lncRNA,213,158,55,0.741784037558686,0.223275529509985,Predominantly positive,intronic
+A. pulchra,Cluster_10093,mRNA,105,67,38,0.638095238095238,0.108081464952501,Predominantly positive,intronic
+A. pulchra,Cluster_10207,lncRNA,122,56,66,0.459016393442623,-0.00190361110972716,Mixed,intronic
+A. pulchra,Cluster_10207,mRNA,57,37,20,0.649122807017544,0.193440425437576,Predominantly positive,intronic
+A. pulchra,Cluster_10228,lncRNA,186,95,91,0.510752688172043,-0.030113891866879,Mixed,intergenic
+A. pulchra,Cluster_10228,mRNA,88,35,53,0.397727272727273,-0.109956293619913,Predominantly negative,intergenic
+A. pulchra,Cluster_10419,lncRNA,124,48,76,0.387096774193548,-0.182645491581217,Predominantly negative,intronic
+A. pulchra,Cluster_10419,mRNA,71,28,43,0.394366197183099,-0.0648274380524553,Predominantly negative,intronic
+A. pulchra,Cluster_14402,lncRNA,397,266,131,0.670025188916877,0.177355495541608,Predominantly positive,intronic
+A. pulchra,Cluster_14402,mRNA,177,126,51,0.711864406779661,0.188332759154559,Predominantly positive,intronic
+A. pulchra,Cluster_14768,lncRNA,436,170,266,0.389908256880734,-0.176029966683181,Predominantly negative,intergenic
+A. pulchra,Cluster_14768,mRNA,283,118,165,0.41696113074205,-0.025060893324358,Mixed,intergenic
+A. pulchra,Cluster_15316,lncRNA,114,79,35,0.692982456140351,0.276638080808814,Predominantly positive,intergenic
+A. pulchra,Cluster_15316,mRNA,57,31,26,0.543859649122807,0.0859187555018609,Mixed,intergenic
+A. pulchra,Cluster_15340,lncRNA,780,537,243,0.688461538461539,0.22575400397564,Predominantly positive,intergenic
+A. pulchra,Cluster_15340,mRNA,488,300,188,0.614754098360656,0.116012640188782,Predominantly positive,intergenic
+A. pulchra,Cluster_15671,lncRNA,12,0,12,0,-0.245267713497205,Predominantly negative,intergenic
+A. pulchra,Cluster_15671,mRNA,7,3,4,0.428571428571429,-0.00175589586441333,Mixed,intergenic
+A. pulchra,Cluster_15775,lncRNA,344,136,208,0.395348837209302,0.0264969554864752,Predominantly negative,intergenic
+A. pulchra,Cluster_15775,mRNA,144,51,93,0.354166666666667,-0.0856442752822984,Predominantly negative,intergenic
+A. pulchra,Cluster_15851,lncRNA,59,45,14,0.76271186440678,0.317335637822237,Predominantly positive,intergenic
+A. pulchra,Cluster_15851,mRNA,25,18,7,0.72,0.256477229736828,Predominantly positive,intergenic
+A. pulchra,Cluster_15854,lncRNA,64,35,29,0.546875,0.0799069957963388,Mixed,intergenic
+A. pulchra,Cluster_15854,mRNA,35,12,23,0.342857142857143,-0.0650779641655878,Predominantly negative,intergenic
+A. pulchra,Cluster_15928,lncRNA,305,64,241,0.209836065573771,-0.205082603361976,Predominantly negative,intronic
+A. pulchra,Cluster_15928,mRNA,81,27,54,0.333333333333333,-0.140510448297885,Predominantly negative,intronic
+A. pulchra,Cluster_16409,lncRNA,206,86,120,0.41747572815534,-0.0359785086974742,Mixed,intergenic
+A. pulchra,Cluster_16409,mRNA,286,109,177,0.381118881118881,-0.0883018590426213,Predominantly negative,intergenic
+A. pulchra,Cluster_17776,lncRNA,313,138,175,0.440894568690096,0.00185179921484446,Mixed,intergenic
+A. pulchra,Cluster_17776,mRNA,162,65,97,0.401234567901235,-0.0627529578439229,Mixed,intergenic
+A. pulchra,Cluster_17791,lncRNA,74,37,37,0.5,0.000107277986707151,Mixed,intergenic
+A. pulchra,Cluster_17791,mRNA,25,13,12,0.52,-0.0202880966160855,Mixed,intergenic
+A. pulchra,Cluster_1826,lncRNA,76,51,25,0.671052631578947,0.121238058145701,Predominantly positive,intergenic
+A. pulchra,Cluster_1826,mRNA,50,27,23,0.54,0.09785316964437,Mixed,intergenic
+A. pulchra,Cluster_1832,lncRNA,75,16,59,0.213333333333333,-0.220925898386813,Predominantly negative,intronic
+A. pulchra,Cluster_1832,mRNA,47,21,26,0.446808510638298,-0.0261757566984599,Mixed,intronic
+A. pulchra,Cluster_1862,lncRNA,380,161,219,0.423684210526316,-0.00835486968411644,Mixed,intergenic
+A. pulchra,Cluster_1862,mRNA,192,85,107,0.442708333333333,0.0143771186046761,Mixed,intergenic
+A. pulchra,Cluster_18711,lncRNA,55,29,26,0.527272727272727,0.004137262750562,Mixed,intronic
+A. pulchra,Cluster_18711,mRNA,30,11,19,0.366666666666667,-0.236550914108498,Predominantly negative,intronic
+A. pulchra,Cluster_18723,lncRNA,189,114,75,0.603174603174603,0.0805033821091393,Predominantly positive,intronic
+A. pulchra,Cluster_18723,mRNA,80,31,49,0.3875,-0.0995432244088764,Predominantly negative,intronic
+A. pulchra,Cluster_18728,lncRNA,2349,307,2042,0.130693912303108,-0.291770001079457,Predominantly negative,intergenic
+A. pulchra,Cluster_18728,mRNA,185,88,97,0.475675675675676,-0.125384664405883,Mixed,intergenic
+A. pulchra,Cluster_18772,lncRNA,47,4,43,0.0851063829787234,-0.338860256005231,Predominantly negative,intergenic
+A. pulchra,Cluster_18772,mRNA,36,15,21,0.416666666666667,-0.0641541849208804,Mixed,intergenic
+A. pulchra,Cluster_19193,lncRNA,521,325,196,0.623800383877159,0.220508021472775,Predominantly positive,intronic
+A. pulchra,Cluster_19193,mRNA,190,101,89,0.531578947368421,0.0386013747681869,Mixed,intronic
+A. pulchra,Cluster_1951,lncRNA,112,54,58,0.482142857142857,0.0830106572631958,Mixed,intronic
+A. pulchra,Cluster_1951,mRNA,53,26,27,0.490566037735849,0.016545490400974,Mixed,intronic
+A. pulchra,Cluster_2463,lncRNA,140,94,46,0.671428571428571,0.237246808354204,Predominantly positive,intronic
+A. pulchra,Cluster_2463,mRNA,51,27,24,0.529411764705882,0.116446733021928,Mixed,intronic
+A. pulchra,Cluster_2859,lncRNA,346,271,75,0.783236994219653,0.238562455679839,Predominantly positive,intergenic
+A. pulchra,Cluster_2859,mRNA,91,64,27,0.703296703296703,0.19992865563231,Predominantly positive,intergenic
+A. pulchra,Cluster_3250,lncRNA,181,96,85,0.530386740331492,0.146112353993324,Mixed,intronic
+A. pulchra,Cluster_3250,mRNA,114,45,69,0.394736842105263,0.0257934996379041,Predominantly negative,intronic
+A. pulchra,Cluster_3366,lncRNA,492,249,243,0.50609756097561,0.0913779293095298,Mixed,intronic
+A. pulchra,Cluster_3366,mRNA,172,100,72,0.581395348837209,0.133137227250996,Mixed,intronic
+A. pulchra,Cluster_3367,lncRNA,466,309,157,0.663090128755365,0.0911328987915516,Predominantly positive,intronic
+A. pulchra,Cluster_3367,mRNA,159,94,65,0.591194968553459,0.0419154072862429,Mixed,intronic
+A. pulchra,Cluster_3437,lncRNA,55,11,44,0.2,-0.277747230622929,Predominantly negative,intronic
+A. pulchra,Cluster_3437,mRNA,31,12,19,0.387096774193548,-0.0589494916973685,Predominantly negative,intronic
+A. pulchra,Cluster_4220,lncRNA,755,447,308,0.59205298013245,0.0589147309456138,Mixed,intronic
+A. pulchra,Cluster_4220,mRNA,221,122,99,0.552036199095023,0.0363039802710632,Mixed,intronic
+A. pulchra,Cluster_4254,lncRNA,257,126,131,0.490272373540856,0.105710970110878,Mixed,intergenic
+A. pulchra,Cluster_4254,mRNA,94,48,46,0.51063829787234,0.0374225165609173,Mixed,intergenic
+A. pulchra,Cluster_5012,lncRNA,180,97,83,0.538888888888889,0.121986399999495,Mixed,intergenic
+A. pulchra,Cluster_5012,mRNA,48,24,24,0.5,0.0343884881574119,Mixed,intergenic
+A. pulchra,Cluster_5899,lncRNA,207,89,118,0.429951690821256,-0.110204397591196,Mixed,intronic
+A. pulchra,Cluster_5899,mRNA,58,22,36,0.379310344827586,-0.101197488382509,Predominantly negative,intronic
+A. pulchra,Cluster_5900,lncRNA,318,185,133,0.581761006289308,0.0128016727264087,Mixed,intronic
+A. pulchra,Cluster_5900,mRNA,114,60,54,0.526315789473684,0.101722343901257,Mixed,intronic
+A. pulchra,Cluster_5981,lncRNA,1033,648,385,0.62729912875121,0.161894577484666,Predominantly positive,intronic
+A. pulchra,Cluster_5981,mRNA,374,165,209,0.441176470588235,0.0141152034632824,Mixed,intronic
+P. evermanni,Cluster_10060,lncRNA,6,0,6,0,-0.721283412591785,Predominantly negative,intronic
+P. evermanni,Cluster_10060,mRNA,10,2,8,0.2,-0.405563796053302,Predominantly negative,intronic
+P. evermanni,Cluster_10061,lncRNA,46,3,43,0.0652173913043478,-0.293101760399814,Predominantly negative,intronic
+P. evermanni,Cluster_10061,mRNA,38,16,22,0.421052631578947,-0.072271333495222,Mixed,intronic
+P. evermanni,Cluster_10934,lncRNA,64,4,59,0.0625,-0.333084187542894,Predominantly negative,intronic
+P. evermanni,Cluster_10934,mRNA,80,28,52,0.35,-0.0524204719581164,Predominantly negative,intronic
+P. evermanni,Cluster_10965,lncRNA,14,1,13,0.0714285714285714,-0.572220001396413,Predominantly negative,intronic
+P. evermanni,Cluster_10965,mRNA,27,10,17,0.37037037037037,-0.203573382179046,Predominantly negative,intronic
+P. evermanni,Cluster_11134,lncRNA,262,147,113,0.561068702290076,0.0351699956537564,Mixed,intronic
+P. evermanni,Cluster_11134,mRNA,248,124,124,0.5,0.0833350701260015,Mixed,intronic
+P. evermanni,Cluster_11135,lncRNA,90,81,9,0.9,0.658555440875041,Predominantly positive,intronic
+P. evermanni,Cluster_11135,mRNA,88,74,14,0.840909090909091,0.464675348028253,Predominantly positive,intronic
+P. evermanni,Cluster_1140,lncRNA,5,1,4,0.2,-0.498055170183143,Predominantly negative,intronic
+P. evermanni,Cluster_1140,mRNA,6,2,4,0.333333333333333,-0.449445640452285,Predominantly negative,intronic
+P. evermanni,Cluster_1167,lncRNA,149,124,22,0.832214765100671,0.727604240443421,Predominantly positive,intronic
+P. evermanni,Cluster_1167,mRNA,147,111,36,0.755102040816326,0.489642320159624,Predominantly positive,intronic
+P. evermanni,Cluster_11997,lncRNA,10,0,10,0,-0.928511756585901,Predominantly negative,intronic
+P. evermanni,Cluster_11997,mRNA,12,1,11,0.0833333333333333,-0.786697080712482,Predominantly negative,intronic
+P. evermanni,Cluster_13502,lncRNA,36,4,32,0.111111111111111,-0.364989537369789,Predominantly negative,intergenic
+P. evermanni,Cluster_13502,mRNA,58,17,41,0.293103448275862,-0.148478472425085,Predominantly negative,intergenic
+P. evermanni,Cluster_14500,lncRNA,26,3,23,0.115384615384615,-0.533681904659813,Predominantly negative,intronic
+P. evermanni,Cluster_14500,mRNA,29,12,17,0.413793103448276,-0.198340947532748,Mixed,intronic
+P. evermanni,Cluster_14999,lncRNA,59,53,6,0.898305084745763,0.461946919675406,Predominantly positive,intergenic
+P. evermanni,Cluster_14999,mRNA,71,50,21,0.704225352112676,0.178757321480521,Predominantly positive,intergenic
+P. evermanni,Cluster_15726,lncRNA,118,13,100,0.110169491525424,-0.473364344229131,Predominantly negative,intergenic
+P. evermanni,Cluster_15726,mRNA,125,20,105,0.16,-0.421309806033571,Predominantly negative,intergenic
+P. evermanni,Cluster_15890,lncRNA,39,2,37,0.0512820512820513,-0.795163194750842,Predominantly negative,intergenic
+P. evermanni,Cluster_15890,mRNA,32,8,24,0.25,-0.464910003968953,Predominantly negative,intergenic
+P. evermanni,Cluster_16498,lncRNA,3,0,3,0,-0.548847010708033,Predominantly negative,intronic
+P. evermanni,Cluster_16498,mRNA,6,2,4,0.333333333333333,0.0793331245683329,Predominantly negative,intronic
+P. evermanni,Cluster_16738,lncRNA,69,3,65,0.0434782608695652,-0.497003644532902,Predominantly negative,intergenic
+P. evermanni,Cluster_16738,mRNA,58,13,45,0.224137931034483,-0.324086453895948,Predominantly negative,intergenic
+P. evermanni,Cluster_2787,lncRNA,249,221,21,0.887550200803213,0.733127817566067,Predominantly positive,intronic
+P. evermanni,Cluster_2787,mRNA,187,141,46,0.754010695187166,0.461839728675455,Predominantly positive,intronic
+P. evermanni,Cluster_2854,lncRNA,188,20,166,0.106382978723404,-0.454949073796959,Predominantly negative,intergenic
+P. evermanni,Cluster_2854,mRNA,127,22,105,0.173228346456693,-0.417036175056164,Predominantly negative,intergenic
+P. evermanni,Cluster_2882,lncRNA,125,10,102,0.08,-0.765066568992706,Predominantly negative,intronic
+P. evermanni,Cluster_2882,mRNA,98,26,72,0.26530612244898,-0.409178143582988,Predominantly negative,intronic
+P. evermanni,Cluster_29,lncRNA,62,12,49,0.193548387096774,-0.219430895890698,Predominantly negative,intronic
+P. evermanni,Cluster_29,mRNA,64,18,46,0.28125,-0.269147589153441,Predominantly negative,intronic
+P. evermanni,Cluster_4079,lncRNA,107,8,99,0.0747663551401869,-0.69504342311066,Predominantly negative,intronic
+P. evermanni,Cluster_4079,mRNA,69,19,50,0.27536231884058,-0.297074072319259,Predominantly negative,intronic
+P. evermanni,Cluster_4080,lncRNA,90,9,80,0.1,-0.354596511235339,Predominantly negative,intronic
+P. evermanni,Cluster_4080,mRNA,81,26,55,0.320987654320988,-0.139623620929675,Predominantly negative,intronic
+P. evermanni,Cluster_4115,lncRNA,52,9,43,0.173076923076923,-0.628910770351556,Predominantly negative,intronic
+P. evermanni,Cluster_4115,mRNA,54,18,36,0.333333333333333,-0.360714031229221,Predominantly negative,intronic
+P. evermanni,Cluster_4629,lncRNA,255,46,205,0.180392156862745,-0.275661912298505,Predominantly negative,intronic
+P. evermanni,Cluster_4629,mRNA,231,87,144,0.376623376623377,-0.0774826937719912,Predominantly negative,intronic
+P. evermanni,Cluster_4735,lncRNA,92,11,81,0.119565217391304,-0.476518619859101,Predominantly negative,intronic
+P. evermanni,Cluster_4735,mRNA,93,25,68,0.268817204301075,-0.266499423026073,Predominantly negative,intronic
+P. evermanni,Cluster_5563,lncRNA,20,17,3,0.85,0.221441701490749,Predominantly positive,intergenic
+P. evermanni,Cluster_5563,mRNA,16,13,3,0.8125,0.500092490428231,Predominantly positive,intergenic
+P. evermanni,Cluster_5882,lncRNA,83,27,56,0.325301204819277,-0.125021905766371,Predominantly negative,intronic
+P. evermanni,Cluster_5882,mRNA,93,32,61,0.344086021505376,-0.121261373229521,Predominantly negative,intronic
+P. evermanni,Cluster_589,lncRNA,223,19,203,0.0852017937219731,-0.788992363317895,Predominantly negative,intronic
+P. evermanni,Cluster_589,mRNA,211,68,143,0.322274881516588,-0.375004612202482,Predominantly negative,intronic
+P. evermanni,Cluster_6255,lncRNA,17,0,16,0,-0.718764215652007,Predominantly negative,intronic
+P. evermanni,Cluster_6255,mRNA,15,6,9,0.4,-0.249670369895614,Mixed,intronic
+P. evermanni,Cluster_6904,lncRNA,113,15,97,0.132743362831858,-0.663362133666127,Predominantly negative,intronic
+P. evermanni,Cluster_6904,mRNA,130,41,89,0.315384615384615,-0.381923078998455,Predominantly negative,intronic
+P. evermanni,Cluster_6905,lncRNA,184,11,172,0.0597826086956522,-0.814591162512393,Predominantly negative,intronic
+P. evermanni,Cluster_6905,mRNA,40,6,34,0.15,-0.595142716033354,Predominantly negative,intronic
+P. evermanni,Cluster_6906,lncRNA,153,17,136,0.111111111111111,-0.438976374608174,Predominantly negative,intronic
+P. evermanni,Cluster_6906,mRNA,130,36,94,0.276923076923077,-0.229891954007546,Predominantly negative,intronic
+P. evermanni,Cluster_6914,lncRNA,82,79,2,0.963414634146341,0.761644116275493,Predominantly positive,intergenic
+P. evermanni,Cluster_6914,mRNA,83,63,20,0.759036144578313,0.337273994224015,Predominantly positive,intergenic
+P. evermanni,Cluster_7053,lncRNA,46,9,37,0.195652173913043,-0.25938997221176,Predominantly negative,intronic
+P. evermanni,Cluster_7053,mRNA,53,22,31,0.415094339622642,-0.0431077579091787,Mixed,intronic
+P. evermanni,Cluster_7657,lncRNA,13,2,11,0.153846153846154,-0.39595043895814,Predominantly negative,intronic
+P. evermanni,Cluster_7657,mRNA,17,5,12,0.294117647058824,-0.163230711226957,Predominantly negative,intronic
+P. evermanni,Cluster_7658,lncRNA,13,5,8,0.384615384615385,-0.156710914579481,Predominantly negative,intronic
+P. evermanni,Cluster_7658,mRNA,17,5,12,0.294117647058824,-0.108561386764748,Predominantly negative,intronic
+P. evermanni,Cluster_7855,lncRNA,36,23,13,0.638888888888889,0.0327450306432019,Predominantly positive,intronic
+P. evermanni,Cluster_7855,mRNA,35,18,17,0.514285714285714,0.0265193048148715,Mixed,intronic
+P. evermanni,Cluster_796,lncRNA,146,132,11,0.904109589041096,0.767845959155588,Predominantly positive,intronic
+P. evermanni,Cluster_796,mRNA,140,108,32,0.771428571428571,0.477969547184967,Predominantly positive,intronic
+P. evermanni,Cluster_8634,lncRNA,42,37,4,0.880952380952381,0.712425468919726,Predominantly positive,intergenic
+P. evermanni,Cluster_8634,mRNA,33,25,8,0.757575757575758,0.565913602758735,Predominantly positive,intergenic
+P. evermanni,Cluster_8884,lncRNA,61,7,53,0.114754098360656,-0.766048412189327,Predominantly negative,intronic
+P. evermanni,Cluster_8884,mRNA,57,14,43,0.245614035087719,-0.479502518954996,Predominantly negative,intronic
+P. evermanni,Cluster_8887,lncRNA,91,3,87,0.032967032967033,-0.780624348280568,Predominantly negative,intergenic
+P. evermanni,Cluster_8887,mRNA,77,13,64,0.168831168831169,-0.449742565704339,Predominantly negative,intergenic
+P. evermanni,Cluster_8888,lncRNA,71,10,61,0.140845070422535,-0.310528408718898,Predominantly negative,intergenic
+P. evermanni,Cluster_8888,mRNA,48,14,34,0.291666666666667,-0.202015962281135,Predominantly negative,intergenic
+P. evermanni,Cluster_8988,lncRNA,70,59,11,0.842857142857143,0.201028636343401,Predominantly positive,intergenic
+P. evermanni,Cluster_8988,mRNA,72,48,24,0.666666666666667,0.0795560479093422,Predominantly positive,intergenic
+P. evermanni,Cluster_9149,lncRNA,414,21,390,0.0507246376811594,-0.50306043449522,Predominantly negative,intergenic
+P. evermanni,Cluster_9149,mRNA,291,74,217,0.254295532646048,-0.286933187746796,Predominantly negative,intergenic
+P. evermanni,Cluster_9983,lncRNA,22,20,2,0.909090909090909,0.553572662083681,Predominantly positive,intronic
+P. evermanni,Cluster_9983,mRNA,13,12,1,0.923076923076923,0.479232409601891,Predominantly positive,intronic
+P. tuahiniensis,Cluster_1015,lncRNA,577,84,493,0.145580589254766,-0.558209999232202,Predominantly negative,intronic
+P. tuahiniensis,Cluster_1015,mRNA,159,81,78,0.509433962264151,-0.00463921602275609,Mixed,intronic
+P. tuahiniensis,Cluster_1068,lncRNA,189,108,81,0.571428571428571,0.173211874318627,Mixed,intergenic
+P. tuahiniensis,Cluster_1068,mRNA,95,25,70,0.263157894736842,-0.188322887706466,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_1080,lncRNA,42,29,13,0.690476190476191,0.311691073738517,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_1080,mRNA,6,4,2,0.666666666666667,0.214194132121005,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_1116,lncRNA,14,10,4,0.714285714285714,0.328615822634798,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_1116,mRNA,20,6,14,0.3,-0.0900182770661872,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_1289,lncRNA,22,2,20,0.0909090909090909,-0.382432571315146,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_1289,mRNA,7,1,6,0.142857142857143,-0.194439077967141,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_1296,lncRNA,324,60,264,0.185185185185185,-0.340419347230783,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_1296,mRNA,85,55,30,0.647058823529412,0.059954768155139,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_1793,lncRNA,160,140,20,0.875,0.434971101710508,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_1793,mRNA,73,30,43,0.410958904109589,-0.17243753995635,Mixed,intergenic
+P. tuahiniensis,Cluster_1938,lncRNA,674,606,68,0.899109792284867,0.465149097695442,Predominantly positive,intronic
+P. tuahiniensis,Cluster_1938,mRNA,357,165,192,0.46218487394958,-0.119979118953062,Mixed,intronic
+P. tuahiniensis,Cluster_1952,lncRNA,888,138,750,0.155405405405405,-0.493417599508701,Predominantly negative,intronic
+P. tuahiniensis,Cluster_1952,mRNA,146,84,62,0.575342465753425,0.0429794447122479,Mixed,intronic
+P. tuahiniensis,Cluster_1953,lncRNA,252,28,224,0.111111111111111,-0.457922615209144,Predominantly negative,intronic
+P. tuahiniensis,Cluster_1953,mRNA,106,73,33,0.688679245283019,0.060588918688561,Predominantly positive,intronic
+P. tuahiniensis,Cluster_21,lncRNA,283,79,204,0.279151943462898,-0.257812512139319,Predominantly negative,intronic
+P. tuahiniensis,Cluster_21,mRNA,168,87,81,0.517857142857143,-0.003310958966596,Mixed,intronic
+P. tuahiniensis,Cluster_2793,lncRNA,69,36,33,0.521739130434783,-0.0874241403541459,Mixed,intronic
+P. tuahiniensis,Cluster_2793,mRNA,48,26,22,0.541666666666667,0.0236577183485342,Mixed,intronic
+P. tuahiniensis,Cluster_2837,lncRNA,221,91,130,0.411764705882353,-0.146734590529008,Mixed,intronic
+P. tuahiniensis,Cluster_2837,mRNA,62,39,23,0.629032258064516,0.077534444137706,Predominantly positive,intronic
+P. tuahiniensis,Cluster_2839,lncRNA,60,21,39,0.35,-0.117244446311008,Predominantly negative,intronic
+P. tuahiniensis,Cluster_2839,mRNA,29,12,17,0.413793103448276,-0.103822657678636,Mixed,intronic
+P. tuahiniensis,Cluster_2859,lncRNA,64,3,61,0.046875,-0.439714750792698,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_2859,mRNA,24,7,17,0.291666666666667,-0.0985222421617213,Predominantly negative,intergenic
+P. tuahiniensis,Cluster_2973,lncRNA,471,346,125,0.734607218683652,0.347004409286388,Predominantly positive,intronic
+P. tuahiniensis,Cluster_2973,mRNA,203,92,111,0.45320197044335,0.0425945504544851,Mixed,intronic
+P. tuahiniensis,Cluster_3392,lncRNA,188,149,39,0.792553191489362,0.427021065595419,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_3392,mRNA,70,38,32,0.542857142857143,0.0361347105723856,Mixed,intergenic
+P. tuahiniensis,Cluster_36,lncRNA,19,17,2,0.894736842105263,0.423400221612803,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_36,mRNA,14,6,8,0.428571428571429,0.0444707071424171,Mixed,intergenic
+P. tuahiniensis,Cluster_360,lncRNA,167,93,74,0.55688622754491,-0.00119436094645226,Mixed,intronic
+P. tuahiniensis,Cluster_360,mRNA,87,49,38,0.563218390804598,0.0247649367167034,Mixed,intronic
+P. tuahiniensis,Cluster_3661,lncRNA,264,82,182,0.310606060606061,-0.234634879482319,Predominantly negative,intronic
+P. tuahiniensis,Cluster_3661,mRNA,141,74,67,0.524822695035461,-0.0150036831029609,Mixed,intronic
+P. tuahiniensis,Cluster_390,lncRNA,257,215,42,0.836575875486381,0.417214160264781,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_390,mRNA,114,61,53,0.535087719298246,-0.0197823615209381,Mixed,intergenic
+P. tuahiniensis,Cluster_4039,lncRNA,76,69,7,0.907894736842105,0.402696710226125,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_4039,mRNA,45,20,25,0.444444444444444,-0.0869311785660918,Mixed,intergenic
+P. tuahiniensis,Cluster_4040,lncRNA,525,372,153,0.708571428571429,0.337029471687224,Predominantly positive,intronic
+P. tuahiniensis,Cluster_4040,mRNA,158,67,91,0.424050632911392,-0.0121631290552458,Mixed,intronic
+P. tuahiniensis,Cluster_4118,lncRNA,110,18,92,0.163636363636364,-0.398537348464259,Predominantly negative,intronic
+P. tuahiniensis,Cluster_4118,mRNA,32,14,18,0.4375,-0.0428254542666327,Mixed,intronic
+P. tuahiniensis,Cluster_4435,lncRNA,264,167,97,0.632575757575758,0.186318891306734,Predominantly positive,intronic
+P. tuahiniensis,Cluster_4435,mRNA,106,51,55,0.481132075471698,0.040917339914856,Mixed,intronic
+P. tuahiniensis,Cluster_4437,lncRNA,342,166,176,0.485380116959064,-0.042318408389892,Mixed,intronic
+P. tuahiniensis,Cluster_4437,mRNA,133,62,71,0.466165413533835,-0.0615117684697575,Mixed,intronic
+P. tuahiniensis,Cluster_4438,lncRNA,445,330,115,0.741573033707865,0.279459419891624,Predominantly positive,intronic
+P. tuahiniensis,Cluster_4438,mRNA,155,72,83,0.464516129032258,-0.0489243350514949,Mixed,intronic
+P. tuahiniensis,Cluster_4439,lncRNA,332,257,75,0.774096385542169,0.339609891026797,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_4439,mRNA,208,96,112,0.461538461538462,-0.110994437151533,Mixed,intergenic
+P. tuahiniensis,Cluster_4572,lncRNA,248,21,227,0.0846774193548387,-0.335528541058216,Predominantly negative,intronic
+P. tuahiniensis,Cluster_4572,mRNA,94,40,54,0.425531914893617,0.00391138031787083,Mixed,intronic
+P. tuahiniensis,Cluster_4754,lncRNA,113,76,37,0.672566371681416,0.169113918164261,Predominantly positive,intergenic
+P. tuahiniensis,Cluster_4754,mRNA,66,33,33,0.5,-0.0245356812036154,Mixed,intergenic
+P. tuahiniensis,Cluster_4823,lncRNA,202,154,48,0.762376237623762,0.211126116772535,Predominantly positive,intronic
+P. tuahiniensis,Cluster_4823,mRNA,140,78,62,0.557142857142857,0.0268867128231172,Mixed,intronic
+P. tuahiniensis,Cluster_5253,lncRNA,30,21,9,0.7,0.329167848203958,Predominantly positive,intronic
+P. tuahiniensis,Cluster_5253,mRNA,30,13,17,0.433333333333333,0.112362294642047,Mixed,intronic
+P. tuahiniensis,Cluster_5612,lncRNA,172,127,45,0.738372093023256,0.374906237194487,Predominantly positive,intronic
+P. tuahiniensis,Cluster_5612,mRNA,97,46,51,0.474226804123711,0.0191490163103062,Mixed,intronic
+P. tuahiniensis,Cluster_5740,lncRNA,63,24,39,0.380952380952381,-0.0142474045986158,Predominantly negative,intronic
+P. tuahiniensis,Cluster_5740,mRNA,20,5,15,0.25,-0.236048786735868,Predominantly negative,intronic
+P. tuahiniensis,Cluster_6382,lncRNA,10,5,5,0.5,0.0294139412284443,Mixed,intergenic
+P. tuahiniensis,Cluster_6382,mRNA,2,1,1,0.5,0.0936730427680075,Mixed,intergenic
+P. tuahiniensis,Cluster_757,lncRNA,106,54,52,0.509433962264151,-0.0637032870962406,Mixed,intronic
+P. tuahiniensis,Cluster_757,mRNA,30,14,16,0.466666666666667,-0.0240881313166448,Mixed,intronic
+P. tuahiniensis,Cluster_925,lncRNA,98,53,45,0.540816326530612,0.0836850899056383,Mixed,intronic
+P. tuahiniensis,Cluster_925,mRNA,59,33,26,0.559322033898305,0.0740374952976695,Mixed,intronic

@@ -1,0 +1,748 @@
+---
+title: "22-miRNA-methylation-features"
+author: "Kathleen Durkin"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+To make the ncRNA-methylation integration more complete, I want to evaluate the methylation of ncRNA-encoding genomic regions. Let's start with miRNA, since there's the most literature (in model systems) supporting methylation-driven regulation of their production (in comparison to lncRNA).
+
+For each species, we already have some basic methylation stats computed, including mean % methylation of mature miRNA coordinates (~22nt) (per-miRNA x per-sample; `CpG_miRNA_CountMat.csv`). Because mature miRNAs are so short, very few overlap a CpG. Here I want to recompute the overlap using **miRNA precursor (hairpin) coordinates** (~60–100 nt), which capture CpGs in the stem-loop region and proximal regulatory context. This yields methylation data for a much larger fraction of miRNAs, and also makes more biological sense, as this is the molocule originally transcribed from DNA before being processed down into the mature form.
+
+I then want to test whether miRNA-precursor methylation state is associated with relevant miRNA features, including:
+
+- **Expression level** (mean normalized RPM)
+- **Number of predicted mRNA targets** (miRanda + PCC)
+- **Number of predicted lncRNA targets** (miRanda + PCC)
+- **miRNA length** (precursor length from ShortStack)
+- **Known vs novel status** (whether the miRNA has a match in miRBase / published
+  cnidarian miRNA annotations)
+
+The precursor methylation matrices will be computed by downloading the Bismark `.cov.gz` files from Gannet (large file storage), applying the same coverage filters as the WGBS Rmds (≥ 5x coverage, ≤ 99.9th percentile, present in ≥ 4 of 5 samples), and overlapping with the `*_precursor.gff3` coordinates from ShortStack.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(data.table)
+
+# Use same colors as throughout repo
+species_palette <- c("A. pulchra" = "#408EC6",
+                     "P. evermanni" = "#1E2761",
+                     "P. tuahiniensis" = "#7A2048")
+```
+
+# Load data
+
+## miRNA precursor methylation (per-miRNA × per-sample % CpG methylation)
+
+```{r load-meth}
+load_meth <- function(path, species) {
+  df <- read.csv(path, stringsAsFactors = FALSE, row.names = 1)
+  # Precursor CSV: row names are "Cluster_XXXX" (no .mature/.precursor suffix)
+  df$miRNA_id <- rownames(df)
+  df$species  <- species
+  df
+}
+
+meth_apul <- load_meth("../../D-Apul/output/08-Apul-WGBS/CpG_miRNA_precursor_CountMat.csv", "A. pulchra")
+meth_peve <- load_meth("../../E-Peve/output/12-Peve-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. evermanni")
+meth_ptuh <- load_meth("../../F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. tuahiniensis")
+
+# Sample columns per species (Peve has 5 WGBS samples, but only 3 sRNA)
+meth_samples <- list(
+  "A. pulchra"        = c("ACR.140.TP2", "ACR.145.TP2", "ACR.150.TP2", "ACR.173.TP2", "ACR.178.TP2"),
+  "P. evermanni"      = c("POR.71.TP2", "POR.73.TP2", "POR.76.TP2", "POR.79.TP2", "POR.82.TP2"),
+  "P. tuahiniensis"   = c("POC.47.TP2", "POC.48.TP2", "POC.50.TP2", "POC.53.TP2", "POC.57.TP2")
+)
+
+# Long format
+meth_long <- bind_rows(
+  meth_apul, meth_peve, meth_ptuh
+) %>%
+  pivot_longer(cols = all_of(unique(unlist(meth_samples))),
+               names_to = "sample", values_to = "perc_meth") %>%
+  filter(!is.na(perc_meth))
+
+# Per-miRNA mean methylation
+meth_summary <- meth_long %>%
+  group_by(species, miRNA_id) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE),
+            sd_meth   = sd(perc_meth, na.rm = TRUE),
+            n_samples = n(),
+            .groups = "drop")
+
+cat("miRNAs with methylation data:\n")
+meth_summary %>% count(species, name = "n_miRNAs") %>% knitr::kable()
+```
+
+So in Apul, Peve, and Ptuh, there are **27, 19, and 19 miRNAs**, respectively, for whom we have methylation data coverage at the miRNA precursors coordinates (this filtering still permits miRNAs with 0% mean methylation).
+
+## miRNA expression (normalized RPM)
+
+```{r load-expr}
+load_expr <- function(path, species, sample_cols) {
+  df <- read.delim(path)
+  df$miRNA_id <- rownames(df)
+  df$species  <- species
+  df %>%
+    pivot_longer(cols = all_of(sample_cols), names_to = "sample_sRNA", values_to = "rpm") %>%
+    mutate(sample_sRNA = gsub("sample", "", sample_sRNA))
+}
+
+expr_apul <- load_expr("../../D-Apul/output/03.1-Apul-sRNA-summary/Apul_counts_miRNA_normalized.txt",
+                        "A. pulchra", c("sample140","sample145","sample150","sample173","sample178"))
+expr_peve <- load_expr("../../E-Peve/output/03.1-Peve-sRNA-summary/Peve_counts_miRNA_normalized.txt",
+                        "P. evermanni", c("sample73","sample79","sample82"))
+expr_ptuh <- load_expr("../../F-Ptuh/output/03.1-Ptuh-sRNA-summary/Ptuh_counts_miRNA_normalized.txt",
+                        "P. tuahiniensis", c("sample47","sample48","sample50","sample53","sample57"))
+
+expr_long <- bind_rows(expr_apul, expr_peve, expr_ptuh)
+
+# Per-miRNA mean expression
+expr_summary <- expr_long %>%
+  group_by(species, miRNA_id) %>%
+  summarise(mean_rpm = mean(rpm, na.rm = TRUE),
+            sd_rpm   = sd(rpm, na.rm = TRUE),
+            .groups = "drop")
+```
+
+## miRNA target counts (miRanda + PCC)
+
+```{r load-targets}
+# mRNA targets — all predicted binding pairs and p < 0.05 subset
+load_targets <- function(all_path, sig_path, species) {
+  all_df <- fread(all_path)
+  sig_df <- if (file.exists(sig_path)) fread(sig_path) else data.table()
+
+  all_counts <- all_df[, .(n_targets_all = uniqueN(mRNA)), by = .(miRNA)]
+
+  if (nrow(sig_df) > 0) {
+    sig_counts <- sig_df[, .(n_targets_sig = uniqueN(mRNA)), by = .(miRNA)]
+    all_counts <- merge(all_counts, sig_counts, by = "miRNA", all = TRUE)
+  } else {
+    all_counts$n_targets_sig <- 0L
+  }
+
+  all_counts$species <- species
+  all_counts[is.na(n_targets_sig), n_targets_sig := 0L]
+  all_counts
+}
+
+targets_apul <- load_targets(
+  "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/miranda_PCC_miRNA_mRNA.csv",
+  "../../D-Apul/output/09-Apul-mRNA-miRNA-interactions/Apul-miranda_PCC_sig_miRNA_mRNA.csv",
+  "A. pulchra"
+)
+targets_peve <- load_targets(
+  "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_miRNA_mRNA.csv",
+  "../../E-Peve/output/10-Peve-mRNA-miRNA-interactions/Peve-miranda_PCC_sig_miRNA_mRNA.csv",
+  "P. evermanni"
+)
+targets_ptuh <- load_targets(
+  "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_miRNA_mRNA.csv",
+  "../../F-Ptuh/output/11-Ptuh-mRNA-miRNA-interactions/three_prime_interaction/Ptuh-miranda_PCC_sig_miRNA_mRNA.csv",
+  "P. tuahiniensis"
+)
+
+# lncRNA targets
+load_lncrna_targets <- function(path, species) {
+  df <- fread(path)
+  df[, .(n_lncrna_targets = uniqueN(lncRNA)), by = .(miRNA = miRNA)][, species := species][]
+}
+
+lnc_targets_apul <- load_lncrna_targets("../../D-Apul/output/28-Apul-miRNA-lncRNA-interactions/miranda_PCC_miRNA_lncRNA.csv", "A. pulchra")
+lnc_targets_peve <- load_lncrna_targets("../../E-Peve/output/15-Peve-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv", "P. evermanni")
+lnc_targets_ptuh <- load_lncrna_targets("../../F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/miranda_PCC_miRNA_lncRNA.csv", "P. tuahiniensis")
+
+targets_summary <- bind_rows(targets_apul, targets_peve, targets_ptuh) %>%
+  left_join(bind_rows(lnc_targets_apul, lnc_targets_peve, lnc_targets_ptuh),
+            by = c("miRNA", "species")) %>%
+  mutate(n_lncrna_targets = replace_na(n_lncrna_targets, 0L))
+```
+
+## ShortStack features (length, known/novel, total reads)
+
+```{r load-shortstack}
+conserved_miRNAs <- c("apul-mir-100", "peve-mir-100", "ptuh-mir-100", 
+              "apul-mir-2036", "peve-mir-2036", "ptuh-mir-2036",
+              "apul-mir-2023", "peve-mir-2023", "ptuh-mir-2023",
+              "apul-mir-2025", "peve-mir-2025", "ptuh-mir-2025")
+
+load_shortstack <- function(path, species) {
+  df <- read.csv(path, stringsAsFactors = FALSE)
+  df %>%
+    select(Name, Length, Reads, DicerCall, MIRNA, known_miRNAs, given_miRNA_name) %>%
+    rename(miRNA_id = Name) %>%
+    mutate(
+      species = species,
+      known   = !is.na(known_miRNAs) & known_miRNAs != "" & known_miRNAs != "NA",
+      conserved = given_miRNA_name %in% conserved_miRNAs
+    )
+}
+
+ss_apul <- load_shortstack("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv", "A. pulchra")
+ss_peve <- load_shortstack("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv", "P. evermanni")
+ss_ptuh <- load_shortstack("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv", "P. tuahiniensis")
+
+ss_summary <- bind_rows(ss_apul, ss_peve, ss_ptuh)
+```
+
+# Merge into a single per-miRNA table
+
+```{r merge}
+# Only miRNAs with methylation data are retained (inner join on meth)
+master <- meth_summary %>%
+  left_join(expr_summary, by = c("species", "miRNA_id")) %>%
+  left_join(
+    targets_summary %>% rename(miRNA_id = miRNA),
+    by = c("species", "miRNA_id")
+  ) %>%
+  left_join(ss_summary, by = c("species", "miRNA_id")) %>%
+  mutate(
+    n_targets_all    = replace_na(n_targets_all, 0L),
+    n_targets_sig    = replace_na(n_targets_sig, 0L),
+    n_lncrna_targets = replace_na(n_lncrna_targets, 0L),
+    log2_rpm         = log2(mean_rpm + 1)
+  )
+
+fwrite(master, file.path("../output/22-miRNA-methylation-features", "miRNA_methylation_features_master.csv"))
+knitr::kable(master %>% select(species, miRNA_id, mean_meth, mean_rpm, n_targets_all, n_targets_sig, n_lncrna_targets, Length, known, given_miRNA_name))
+```
+
+# Within-miRNA methylation–expression correlation (across samples)
+
+For each miRNA that has methylation data in ≥ 3 samples, compute the
+within-miRNA Pearson correlation between % methylation and RPM across samples.
+This asks: does methylation fluctuate with expression *within* a given miRNA?
+
+```{r within-mirna-corr}
+# Build per-sample matched table
+# Apul: sRNA samples 140,145,150,173,178 ↔ WGBS ACR.140,145,150,173,178
+# Peve: sRNA samples 73,79,82 ↔ WGBS POR.73,79,82 (3 overlap → usable)
+# Ptuh: sRNA samples 47,48,50,53,57 ↔ WGBS POC.47,48,50,53,57
+
+build_matched <- function(meth_df, expr_df, meth_cols, expr_cols, species) {
+  meth_sub <- meth_df %>%
+    select(miRNA_id, all_of(meth_cols)) %>%
+    pivot_longer(cols = all_of(meth_cols), names_to = "sample_meth", values_to = "perc_meth") %>%
+    # Extract sample number from names like "ACR.140.TP2" → "140"
+    mutate(sample_num = sub(".*\\.(\\d+)\\.TP\\d+$", "\\1", sample_meth))
+
+  expr_sub <- expr_df %>%
+    select(miRNA_id, all_of(expr_cols)) %>%
+    pivot_longer(cols = all_of(expr_cols), names_to = "sample_expr", values_to = "rpm") %>%
+    mutate(sample_num = sample_expr)
+
+  inner_join(meth_sub, expr_sub, by = c("miRNA_id", "sample_num")) %>%
+    mutate(species = species) %>%
+    select(species, miRNA_id, sample_num, perc_meth, rpm)
+}
+
+matched_apul <- build_matched(
+  meth_apul, expr_apul %>% select(-species) %>% pivot_wider(names_from = sample_sRNA, values_from = rpm) %>% mutate(miRNA_id = miRNA_id),
+  meth_samples[["A. pulchra"]],
+  c("140","145","150","173","178"),
+  "A. pulchra"
+)
+
+matched_ptuh <- build_matched(
+  meth_ptuh, expr_ptuh %>% select(-species) %>% pivot_wider(names_from = sample_sRNA, values_from = rpm) %>% mutate(miRNA_id = miRNA_id),
+  meth_samples[["P. tuahiniensis"]],
+  c("47","48","50","53","57"),
+  "P. tuahiniensis"
+)
+
+# Peve: 3 overlapping samples (73, 79, 82) — just enough for correlation
+matched_peve <- build_matched(
+  meth_peve, expr_peve %>% select(-species) %>% pivot_wider(names_from = sample_sRNA, values_from = rpm) %>% mutate(miRNA_id = miRNA_id),
+  c("POR.73.TP2", "POR.79.TP2", "POR.82.TP2"),
+  c("73","79","82"),
+  "P. evermanni"
+)
+
+matched_all <- bind_rows(matched_apul, matched_peve, matched_ptuh)
+
+# Within-miRNA correlation (only for miRNAs with ≥ 3 matched samples)
+within_corr <- matched_all %>%
+  group_by(species, miRNA_id) %>%
+  filter(n() >= 3) %>%
+  summarise(
+    r = tryCatch(cor(perc_meth, rpm, method = "pearson", use = "pairwise.complete.obs"),
+                 error = function(e) NA_real_),
+    p = tryCatch(cor.test(perc_meth, rpm, method = "pearson")$p.value,
+                 error = function(e) NA_real_),
+    n_samples = n(),
+    .groups = "drop"
+  ) %>%
+  filter(!is.na(r)) %>%
+  mutate(direction = ifelse(r > 0, "Positive", "Negative"))
+
+fwrite(within_corr, file.path("../output/22-miRNA-methylation-features", "within_miRNA_meth_expr_corr.csv"))
+knitr::kable(within_corr)
+```
+
+`r if (exists("within_corr") && nrow(within_corr) > 0) paste0("Within-miRNA correlations are available for ", nrow(within_corr), " miRNAs across all three species (Peve has 3 overlapping sRNA/WGBS samples).")`
+
+# Cross-miRNA correlations (methylation vs features)
+
+For each species, test whether mean miRNA-precursor methylation correlates with: mean expression, number of mRNA targets (all and significant), number of lncRNA targets, and miRNA length. Also test whether methylation differs between known and novel miRNAs.
+
+```{r cross-mirna-corr}
+# Helper: correlation test with tidy output
+corr_test <- function(df, var_x, var_y) {
+  if (nrow(df) < 4) return(data.frame(r = NA_real_, p = NA_real_, n = nrow(df)))
+  t <- cor.test(df[[var_x]], df[[var_y]], method = "pearson")
+  data.frame(r = unname(t$estimate), p = t$p.value, n = nrow(df))
+}
+
+features <- c("log2_rpm", "n_targets_all", "n_targets_sig", "n_lncrna_targets", "Length")
+feature_labels <- c(log2_rpm = "log2(mean RPM + 1)",
+                    n_targets_all = "# mRNA targets (all)",
+                    n_targets_sig = "# mRNA targets (p < 0.05)",
+                    n_lncrna_targets = "# lncRNA targets",
+                    Length = "Precursor length (nt)")
+
+corr_results <- list()
+for (sp in unique(master$species)) {
+  sp_df <- master %>% filter(species == sp)
+  for (feat in features) {
+    ct <- corr_test(sp_df, "mean_meth", feat)
+    corr_results[[paste(sp, feat, sep = "__")]] <- data.frame(
+      species = sp, feature = feat, feature_label = feature_labels[feat],
+      r = ct$r, p = ct$p, n = ct$n
+    )
+  }
+}
+corr_results_df <- bind_rows(corr_results) %>%
+  mutate(signif = ifelse(p < 0.05, "*", ""),
+         r_round = round(r, 3),
+         p_round = signif(p, 3))
+
+fwrite(corr_results_df, file.path("../output/22-miRNA-methylation-features", "cross_miRNA_meth_feature_corr.csv"))
+knitr::kable(corr_results_df)
+```
+
+# Figures
+
+## Fig 1: Methylation vs expression (cross-miRNA, per species)
+
+```{r fig-meth-expr, fig.width=10, fig.height=4}
+p_expr <- ggplot(master, aes(x = mean_meth, y = log2_rpm, color = species)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.6) +
+  facet_wrap(~ species, scales = "free") +
+  scale_color_manual(values = species_palette) +
+  labs(x = "Mean CpG % methylation at miRNA precursor",
+       y = "log2(mean RPM + 1)",
+       title = "miRNA-precursor methylation vs expression") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "none")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_meth_vs_expr.png"), p_expr, width = 10, height = 4, dpi = 300)
+p_expr
+```
+
+## Fig 2: Methylation vs number of targets (cross-miRNA, per species)
+
+```{r fig-meth-targets, fig.width=12, fig.height=8}
+plot_target_data <- master %>%
+  select(species, miRNA_id, mean_meth,
+         `mRNA (all)` = n_targets_all,
+         `mRNA (p<0.05)` = n_targets_sig,
+         `lncRNA` = n_lncrna_targets) %>%
+  pivot_longer(cols = c(`mRNA (all)`, `mRNA (p<0.05)`, `lncRNA`),
+               names_to = "target_type", values_to = "n_targets")
+
+p_targets <- ggplot(plot_target_data, aes(x = mean_meth, y = n_targets, color = species)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.6) +
+  facet_grid(target_type ~ species, scales = "free_y") +
+  scale_color_manual(values = species_palette) +
+  labs(x = "Mean CpG % methylation at miRNA precursor",
+       y = "Number of predicted targets",
+       title = "miRNA-precursor methylation vs number of predicted targets") +
+  theme_bw(base_size = 11) +
+  theme(strip.text.y = element_text(face = "bold"),
+        strip.text.x = element_text(face = "italic"),
+        legend.position = "none")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_meth_vs_targets.png"), p_targets, width = 12, height = 8, dpi = 300)
+p_targets
+```
+
+## Fig 3: Methylation vs miRNA length and known/novel status
+
+```{r fig-meth-length-known, fig.width=10, fig.height=4}
+p_length <- ggplot(master, aes(x = mean_meth, y = Length, color = species)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.6) +
+  facet_wrap(~ species, scales = "free") +
+  scale_color_manual(values = species_palette) +
+  labs(x = "Mean CpG % methylation at miRNA precursor",
+       y = "Precursor length (nt)",
+       title = "miRNA-precursor methylation vs precursor length") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "none")
+
+p_known <- ggplot(master, aes(x = known, y = mean_meth, fill = species)) +
+  geom_boxplot(width = 0.5, outlier.shape = NA, alpha = 0.4) +
+  geom_jitter(width = 0.15, alpha = 0.7, size = 2, aes(color = species)) +
+  facet_wrap(~ species, scales = "free_x") +
+  scale_fill_manual(values = species_palette) +
+  scale_color_manual(values = species_palette) +
+  labs(x = "Known (annotated) vs Novel miRNA",
+       y = "Mean CpG % methylation",
+       title = "miRNA-precursor methylation: known vs novel miRNAs") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "none")
+
+p_conserved <- ggplot(master, aes(x = conserved, y = mean_meth, fill = species)) +
+  geom_boxplot(width = 0.5, outlier.shape = NA, alpha = 0.4) +
+  geom_jitter(width = 0.15, alpha = 0.7, size = 2, aes(color = species)) +
+  facet_wrap(~ species, scales = "free_x") +
+  scale_fill_manual(values = species_palette) +
+  scale_color_manual(values = species_palette) +
+  labs(x = "Conserved v species-specific miRNA",
+       y = "Mean CpG % methylation",
+       title = "miRNA-precursor methylation: conserved v species-specific miRNAs") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "none")
+
+p_length_known_conserved <- p_length / p_known / p_conserved
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_meth_vs_length_known_conserved.png"), p_length_known_conserved, width = 10, height = 10, dpi = 300)
+p_length_known_conserved
+```
+
+## Fig 4: Within-miRNA methylation–expression correlation (across samples)
+
+```{r fig-within-corr, fig.width=8, fig.height=4}
+if (exists("within_corr") && nrow(within_corr) > 0) {
+  p_within <- ggplot(within_corr, aes(x = r, fill = species)) +
+    geom_histogram(binwidth = 0.2, boundary = 0, color = "white", alpha = 0.8) +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "grey40") +
+    facet_wrap(~ species) +
+    scale_fill_manual(values = species_palette) +
+    labs(x = "Within-miRNA Pearson r (methylation vs expression, across samples)",
+         y = "Number of miRNAs",
+         title = "Within-miRNA methylation–expression correlation") +
+    theme_bw(base_size = 11) +
+    theme(strip.text = element_text(face = "italic"),
+          legend.position = "none")
+
+  ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_within_miRNA_corr.png"), p_within, width = 8, height = 4, dpi = 300)
+  p_within
+} else {
+  cat("No miRNAs with >= 3 matched samples for within-miRNA correlation.\n")
+}
+```
+
+## Fig 5: Per-sample scatter (methylation vs expression, all miRNAs pooled)
+
+This reproduces the plot from the WGBS Rmds but combines all three species.
+
+```{r fig-per-sample, fig.width=10, fig.height=4}
+# Build a combined per-sample table
+matched_combined <- bind_rows(
+  matched_apul %>% mutate(sample_label = paste0("ACR.", sample_num)),
+  matched_peve %>% mutate(sample_label = paste0("POR.", sample_num)),
+  matched_ptuh %>% mutate(sample_label = paste0("POC.", sample_num))
+) %>%
+  mutate(species = factor(species, levels = c("A. pulchra", "P. evermanni", "P. tuahiniensis")))
+
+p_per_sample <- ggplot(matched_combined, aes(x = perc_meth, y = log2(rpm + 1), color = species)) +
+  geom_point(alpha = 0.5, size = 1.5) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.6) +
+  facet_wrap(~ species, scales = "free") +
+  scale_color_manual(values = species_palette) +
+  labs(x = "CpG % methylation at miRNA precursor (per sample)",
+       y = "log2(RPM + 1)",
+       title = "Per-sample miRNA methylation vs expression (all methylated miRNAs pooled)") +
+  theme_bw(base_size = 11) +
+  theme(strip.text = element_text(face = "italic"),
+        legend.position = "none")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_per_sample_meth_expr.png"), p_per_sample, width = 10, height = 4, dpi = 300)
+p_per_sample
+```
+
+# Methylation level of all miRNAs per species (mature vs precursor)
+
+Dot plot and bar plot showing mean CpG % methylation for every miRNA with methylation data, faceted by species and feature type (mature vs precursor). Points are colored by conserved v species-specific status.
+
+```{r fig-methylation-by-species, fig.width=12, fig.height=7}
+# Load name annotations (already loaded as ss_summary, but rebuild for clarity)
+load_names <- function(path, species) {
+  df <- read.csv(path, stringsAsFactors = FALSE)
+  df %>% select(Name, known_miRNAs, given_miRNA_name) %>%
+    rename(miRNA_id = Name) %>%
+    mutate(species = species,
+           known = !is.na(known_miRNAs) & known_miRNAs != "" & known_miRNAs != "NA",
+           conserved = given_miRNA_name %in% conserved_miRNAs)
+}
+
+all_names <- bind_rows(
+  load_names("../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Apul_Results_mature_named_miRNAs.csv", "A. pulchra"),
+  load_names("../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Peve_Results_mature_named_miRNAs.csv", "P. evermanni"),
+  load_names("../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Ptuh_Results_mature_named_miRNAs.csv", "P. tuahiniensis")
+)
+
+# Load both mature and precursor methylation
+load_meth_both <- function(mature_path, precursor_path, species) {
+  # Mature
+  mat <- read.csv(mature_path, stringsAsFactors = FALSE, header = TRUE) %>% dplyr::select(-X)
+  mat$miRNA_id <- gsub("[.]mature$", "", mat$miRNA_id)
+  mat$species <- species
+  mat$feature_type <- "Mature"
+  # Precursor
+  prec <- read.csv(precursor_path, stringsAsFactors = FALSE, header = TRUE) 
+  prec$miRNA_id <- prec$precursor_id
+  prec <- prec %>% dplyr::select(-precursor_id)
+  prec$species <- species
+  prec$feature_type <- "Precursor"
+  bind_rows(mat, prec)
+}
+
+meth_both <- bind_rows(
+  load_meth_both("../../D-Apul/output/08-Apul-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../D-Apul/output/08-Apul-WGBS/CpG_miRNA_precursor_CountMat.csv", "A. pulchra"),
+  load_meth_both("../../E-Peve/output/12-Peve-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../E-Peve/output/12-Peve-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. evermanni"),
+  load_meth_both("../../F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. tuahiniensis")
+)
+
+# Long format and mean per miRNA
+meth_both_long <- meth_both %>%
+  pivot_longer(cols = matches("\\.TP2$"), names_to = "sample", values_to = "perc_meth") %>%
+  filter(!is.na(perc_meth)) %>%
+  group_by(species, feature_type, miRNA_id) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  left_join(all_names, by = c("species", "miRNA_id")) %>%
+  mutate(
+    known = ifelse(is.na(known), FALSE, known),
+    display_name = ifelse(is.na(given_miRNA_name) | given_miRNA_name == "NA", miRNA_id,
+                          sub("^[a-z]+-", "", given_miRNA_name)),
+    display_name = sub(";.*", "", display_name),
+    species = factor(species, levels = c("A. pulchra", "P. evermanni", "P. tuahiniensis")),
+    feature_type = factor(feature_type, levels = c("Mature", "Precursor"))
+  ) %>%
+  arrange(species, feature_type, mean_meth) %>%
+  group_by(species, feature_type) %>%
+  mutate(rank = row_number()) %>%
+  ungroup()
+
+# Dot plot
+p_meth <- ggplot(meth_both_long, aes(x = rank, y = mean_meth, color = conserved)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "grey60", linewidth = 0.4) +
+  facet_grid(feature_type ~ species, scales = "free_x") +
+  scale_color_manual(values = c("TRUE" = "#1B9E77", "FALSE" = "#D6604D"),
+                     labels = c("TRUE" = "Conserved", "FALSE" = "Species-specific"), name = NULL) +
+  labs(x = "miRNA (ranked by methylation)", y = "Mean CpG % methylation",
+       title = "miRNA methylation level per species",
+       subtitle = "Each point is one miRNA; green = conserved , red = species-specific") +
+  theme_bw(base_size = 11) +
+  theme(strip.text.x = element_text(face = "italic"),
+        strip.text.y = element_text(face = "bold"),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_miRNA_methylation_by_species.png"), p_meth, width = 12, height = 7, dpi = 300)
+p_meth
+```
+
+Interesting sort of bimodal pattern -- precursors are either ver lowly or very highly methylated. Also, all conserved miRNA are lowly methylated (both mature and precursor sequences).
+
+```{r fig-methylation-by-species-barplot, fig.width=16, fig.height=8}
+# Bar plot with miRNA names on x-axis
+p_meth_bar <- ggplot(meth_both_long, aes(x = reorder(display_name, mean_meth), y = mean_meth, fill = conserved)) +
+  geom_col(width = 0.7) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "grey60", linewidth = 0.4) +
+  facet_grid(feature_type ~ species, scales = "free_x") +
+  scale_fill_manual(values = c("TRUE" = "#1B9E77", "FALSE" = "#D6604D"),
+                    labels = c("TRUE" = "Conserved", "FALSE" = "Species-specific"), name = NULL) +
+  labs(x = NULL, y = "Mean CpG % methylation",
+       title = "miRNA methylation level per species",
+       subtitle = "Green = conserved, red = species-specific") +
+  theme_bw(base_size = 9) +
+  theme(strip.text.x = element_text(face = "italic"),
+        strip.text.y = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 60, hjust = 1, size = 6),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_miRNA_methylation_by_species_barplot.png"), p_meth_bar, width = 16, height = 8, dpi = 300)
+p_meth_bar
+```
+
+# Methylation class (Low <50% vs High >=50%) vs expression
+
+The methylation plots reveal a bimodal distribution, particularly in the precursor data: miRNAs cluster either near 0% or above 50% methylation. Here I want to test whether these two classes differ in expression level.
+
+```{r fig-methylation-class-vs-expression, fig.width=12, fig.height=7}
+# Build a combined table with both mature and precursor methylation + expression
+load_meth_both <- function(mature_path, precursor_path, species) {
+  # Mature: first col is row index, second col is miRNA_id
+  mat <- read.csv(mature_path, stringsAsFactors = FALSE)
+  mat$miRNA_id <- gsub("[.]mature$", "", mat$miRNA_id)
+  mat <- mat %>% select(-1)  # drop row index
+  mat$species <- species; mat$feature_type <- "Mature"
+  # Precursor: first col is precursor_id (row names)
+  prec <- read.csv(precursor_path, stringsAsFactors = FALSE, row.names = 1)
+  prec$miRNA_id <- rownames(prec)
+  prec$species <- species; prec$feature_type <- "Precursor"
+  bind_rows(mat, prec)
+}
+
+meth_both <- bind_rows(
+  load_meth_both("../../D-Apul/output/08-Apul-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../D-Apul/output/08-Apul-WGBS/CpG_miRNA_precursor_CountMat.csv", "A. pulchra"),
+  load_meth_both("../../E-Peve/output/12-Peve-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../E-Peve/output/12-Peve-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. evermanni"),
+  load_meth_both("../../F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_CountMat.csv",
+                 "../../F-Ptuh/output/12-Ptuh-WGBS/CpG_miRNA_precursor_CountMat.csv", "P. tuahiniensis")
+)
+
+meth_both_summary <- meth_both %>%
+  pivot_longer(cols = matches("[.]TP2$"), names_to = "sample", values_to = "perc_meth") %>%
+  filter(!is.na(perc_meth)) %>%
+  group_by(species, feature_type, miRNA_id) %>%
+  summarise(mean_meth = mean(perc_meth, na.rm = TRUE), .groups = "drop") %>%
+  left_join(all_names, by = c("species", "miRNA_id")) %>%
+  mutate(known = ifelse(is.na(known), FALSE, known)) %>%
+  # Join expression (already loaded as expr_summary earlier)
+  left_join(expr_summary, by = c("species", "miRNA_id")) %>%
+  mutate(log2_rpm = log2(mean_rpm + 1)) %>%
+  mutate(
+    meth_class = ifelse(mean_meth >= 50, "High (>=50%)", "Low (<50%)"),
+    display_name = ifelse(is.na(given_miRNA_name) | given_miRNA_name == "NA", miRNA_id,
+                          sub("^[a-z]+-", "", given_miRNA_name)),
+    display_name = sub(";.*", "", display_name),
+    species = factor(species, levels = c("A. pulchra", "P. evermanni", "P. tuahiniensis")),
+    feature_type = factor(feature_type, levels = c("Mature", "Precursor"))
+  )
+
+# Summary table
+cat("High vs Low methylation: expression comparison\n\n")
+print(meth_both_summary %>% filter(!is.na(log2_rpm)) %>%
+  group_by(species, feature_type, meth_class) %>%
+  summarise(n = n(), mean_log2_rpm = round(mean(log2_rpm), 2),
+            median_log2_rpm = round(median(log2_rpm), 2), .groups = "drop") %>%
+  as.data.frame(), row.names = FALSE)
+
+# Wilcoxon tests
+cat("\nWilcoxon tests (High vs Low):\n\n")
+for (sp in levels(meth_both_summary$species)) {
+  for (ft in c("Mature", "Precursor")) {
+    sub <- meth_both_summary %>% filter(species == sp, feature_type == ft, !is.na(log2_rpm))
+    if (nrow(sub) >= 4 && length(unique(sub$meth_class)) == 2) {
+      wt <- wilcox.test(log2_rpm ~ meth_class, data = sub)
+      cat(sprintf("  %s %s: W=%.1f, p=%.4f (n_high=%d, n_low=%d)\n",
+                  sp, ft, wt$statistic, wt$p.value,
+                  sum(sub$meth_class == "High (>=50%)"), sum(sub$meth_class == "Low (<50%)")))
+    } else {
+      cat(sprintf("  %s %s: skipped (n=%d, groups=%d)\n", sp, ft, nrow(sub), length(unique(sub$meth_class))))
+    }
+  }
+}
+
+# Boxplot
+p_class <- ggplot(meth_both_summary %>% filter(!is.na(log2_rpm)),
+                  aes(x = meth_class, y = log2_rpm, fill = meth_class)) +
+  geom_boxplot(width = 0.5, outlier.shape = NA, alpha = 0.6) +
+  geom_jitter(width = 0.15, alpha = 0.8, size = 2, aes(color = conserved)) +
+  facet_grid(feature_type ~ species, scales = "free_y") +
+  scale_fill_manual(values = c("Low (<50%)" = "#85C1E9", "High (>=50%)" = "#E74C3C"),
+                    name = "Methylation class") +
+  scale_color_manual(values = c("TRUE" = "#1B9E77", "FALSE" = "#D6604D"),
+                     labels = c("TRUE" = "Conserved", "FALSE" = "Species-specific"), name = NULL) +
+  labs(x = NULL, y = "log2(mean RPM + 1)",
+       title = "miRNA expression by methylation class (Low <50% vs High >=50%)",
+       subtitle = "Boxplots + individual points; green/red points = conserved/species-specific") +
+  theme_bw(base_size = 11) +
+  theme(strip.text.x = element_text(face = "italic"),
+        strip.text.y = element_text(face = "bold"),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_methylation_class_vs_expression.png"), p_class, width = 12, height = 7, dpi = 300)
+p_class
+```
+
+```{r fig-methylation-vs-expression-scatter, fig.width=12, fig.height=7}
+# Scatter with 50% threshold line
+p_scatter <- ggplot(meth_both_summary %>% filter(!is.na(log2_rpm)),
+                    aes(x = mean_meth, y = log2_rpm, color = conserved)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_vline(xintercept = 50, linetype = "dashed", color = "grey50") +
+  facet_grid(feature_type ~ species, scales = "free") +
+  scale_color_manual(values = c("TRUE" = "#1B9E77", "FALSE" = "#D6604D"),
+                     labels = c("TRUE" = "Conserved", "FALSE" = "Species-specific"), name = NULL) +
+  labs(x = "Mean CpG % methylation", y = "log2(mean RPM + 1)",
+       title = "miRNA methylation vs expression",
+       subtitle = "Dashed line at 50% marks the Low/High split") +
+  theme_bw(base_size = 11) +
+  theme(strip.text.x = element_text(face = "italic"),
+        strip.text.y = element_text(face = "bold"),
+        legend.position = "bottom")
+
+ggsave(file.path("../output/22-miRNA-methylation-features", "Fig_methylation_vs_expression_scatter.png"), p_scatter, width = 12, height = 7, dpi = 300)
+p_scatter
+```
+
+# Summary
+
+```{r summary-table}
+# Count how many miRNAs have methylation data per species
+n_table <- master %>%
+  group_by(species) %>%
+  summarise(
+    n_with_meth = n(),
+    n_conserved     = sum(conserved),
+    n_spec     = sum(!conserved),
+    mean_meth   = round(mean(mean_meth, na.rm = TRUE), 2),
+    range_meth  = paste0(round(min(mean_meth, na.rm = TRUE), 1), "–", round(max(mean_meth, na.rm = TRUE), 1)),
+    .groups = "drop"
+  )
+
+fwrite(n_table, file.path("../output/22-miRNA-methylation-features", "summary_methylated_miRNAs.csv"))
+knitr::kable(n_table)
+```
+
+```{r corr-summary}
+# Highlight any significant correlations
+sig_corrs <- corr_results_df %>% filter(p < 0.05)
+if (nrow(sig_corrs) > 0) {
+  cat("Significant cross-miRNA correlations (p < 0.05):\n\n")
+  knitr::kable(sig_corrs)
+} else {
+  cat("No significant cross-miRNA correlations (p < 0.05) detected.\n")
+}
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
