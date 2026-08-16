@@ -1,0 +1,7 @@
+dataset,n,effective_cutoff,tested_pairs,mean_r,sd_r,pct_abs_gt_0.5,raw_p_lt_0.05,raw_pct,fdr_q_lt_0.05,raw_sig_pos_pct
+Apul miRNA-mRNA,5,0.878,1311336,0.007,0.491,36.9,66154,5.04,0,70.4
+Apul miRNA-lncRNA,5,0.878,1228110,-0.004,0.485,35.7,62486,5.09,0,75.5
+Ptuh miRNA-mRNA,5,0.878,980796,-0.009,0.513,40.3,61866,6.31,0,61.4
+Ptuh miRNA-lncRNA,5,0.878,597624,0.012,0.528,43.2,41931,7.02,0,67.6
+Peve miRNA-mRNA,3,0.997,1327140,-0.125,0.694,66.7,69580,5.24,2094,52.8
+Peve miRNA-lncRNA,3,0.997,421290,-0.2,0.671,66.4,18565,4.41,436,53
