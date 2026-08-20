@@ -790,9 +790,16 @@ stacked_opacity_bar(Peve_FA_df, "#1E2761", ymin=-200 , ymax=250, cons_asterisk=T
 stacked_opacity_bar(Ptuh_FA_df, "#7A2048", ymin=-200 , ymax=250, cons_asterisk=TRUE)
 
 # Basic plotting, using all same color, for manuscript
-stacked_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=0 , ymax=250, cons_asterisk=TRUE)
-stacked_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=0 , ymax=250, cons_asterisk=TRUE)
-stacked_bar_simple(Ptuh_FA_df, "#408EC6", "P. tuahiniensis", ymin=0 , ymax=250, cons_asterisk=TRUE)
+p1 <- stacked_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=0 , ymax=250, cons_asterisk=TRUE)
+p2 <- stacked_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=0 , ymax=250, cons_asterisk=TRUE)
+p3 <- stacked_bar_simple(Ptuh_FA_df, "#408EC6", "P. tuahiniensis", ymin=0 , ymax=250, cons_asterisk=TRUE)
+p1
+p2
+p3
+ggsave("../output/04.2-miRNA-comparison-targets-FE/Apul_miRNA-mRNA_interactions.png", p1, width = 12, height = 8, dpi = 300)
+ggsave("../output/04.2-miRNA-comparison-targets-FE/Peve_miRNA-mRNA_interactions.png", p2, width = 12, height = 8, dpi = 300)
+ggsave("../output/04.2-miRNA-comparison-targets-FE/Ptuh_miRNA-mRNA_interactions.png", p3, width = 12, height = 8, dpi = 300)
+
 # Also plot stuff with <100 counts for better visibility of low counts
 stacked_bar_simple(Apul_FA_df, "#408EC6", "A. pulchra", ymin=0 , ymax=25, cons_asterisk=TRUE, max_targets=25)
 stacked_bar_simple(Peve_FA_df, "#408EC6", "P. evermanni", ymin=0 , ymax=25, cons_asterisk=TRUE, max_targets=25)

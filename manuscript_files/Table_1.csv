@@ -1,0 +1,12 @@
+Target Species,Reference Genome,Genome Size (Mbp),N50 (Mbp),Number of protein-coding genes
+Acropora pulchra,"Acropora pulchra
+(Conn et al., 2025)
+(GCA_044231415.1)",518,17.8,"40,518"
+Porites evermanni,"Porites_evermanni
+(Noel et al., 2023)
+(GCA_942486025.1)
+Accessed at https://www.genoscope.cns.fr/corals/genomes.html",497,0.17,"40,389"
+Pocillopora tuahiniensis,"Pocillopora meandrina 
+(Stephens et al., 2022)
+Accessed at
+https://doi.org/10.1093%2Fgigascience%2Fgiac098",377,10,"31,840"

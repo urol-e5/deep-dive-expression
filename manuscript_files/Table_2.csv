@@ -1,0 +1,67 @@
+miRNA,Target,Coexpression Direction,Category,# ceRNA Sponges
+apul-mir-100,USP,-,Ubiquitin signaling,10
+apul-mir-100,TRMT1,-,RNA modification,11
+apul-mir-2022,PSMD14,+,Ubiquitin signaling,3
+apul-mir-2023,CHUK,+,Chromatin signaling,
+apul-mir-2023,INTS6,+,ncRNA biogenesis & silencing,
+apul-mir-2030,MAP3K12,-,Chromatin signaling,
+apul-mir-2050,EXOSC6,-,ncRNA biogenesis & silencing,
+apul-mir-novel-4,PPP1CB,-,Chromatin signaling,3
+apul-mir-novel-5,ADAR,+,RNA modification,
+apul-mir-novel-7,PUS7L,+,RNA modification,
+apul-mir-novel-8a; apul-mir-novel-8b,JOSD,-,Ubiquitin signaling,1
+apul-mir-novel-9,ARH1-ADPRH,+,ADP-ribosylation,
+apul-mir-novel-9,KMT5A,+,Histone modification & variants,
+apul-mir-novel-9,PUS7L,+,RNA modification,
+apul-mir-novel-10,UBE4A,-,Ubiquitin signaling,3
+apul-mir-novel-13,PARP,+,ADP-ribosylation,
+apul-mir-novel-14,TET3,-,DNA methylation & reading,
+apul-mir-novel-15,USP7,+,Ubiquitin signaling,
+apul-mir-novel-15,PAN2,+,ncRNA biogenesis & silencing,
+apul-mir-novel-15,DDB1,+,Ubiquitin signaling,
+apul-mir-novel-17,PARP7-TIPARP,+,ADP-ribosylation,
+apul-mir-novel-19,USP19,+,Ubiquitin signaling,
+apul-mir-novel-23,PARP5-TNKS,+,ADP-ribosylation,
+apul-mir-novel-23,KDM3,+,Histone modification & variants,
+apul-mir-novel-23,KDM6,+,Histone modification & variants,
+apul-mir-novel-27,MBD,-,DNA methylation & reading,
+apul-mir-novel-28,PRMT7,+,Histone modification & variants,
+apul-mir-novel-28,RDRP,-,ncRNA biogenesis & silencing,3
+apul-mir-novel-29,PPP1R7,-,Chromatin signaling,22
+apul-mir-novel-30,DUS1L,+,RNA modification,
+apul-mir-novel-31,COPS6,+,Ubiquitin signaling,
+apul-mir-novel-31,KAT14,+,Histone modification & variants,
+apul-mir-novel-31,PQBP1,+,ncRNA biogenesis & silencing,
+apul-mir-novel-32,AGO,+,ncRNA biogenesis & silencing,
+apul-mir-novel-34,TRMT61A,-,RNA modification,
+peve-mir-100,UBE3A,+,Ubiquitin signaling,
+peve-mir-novel-2,MCM3AP,-,ncRNA biogenesis & silencing,1
+peve-mir-novel-2,UBE2D,-,Ubiquitin signaling,3
+peve-mir-novel-2,CUL4A,-,Ubiquitin signaling,1
+peve-mir-novel-2,ZFC3H1,-,ncRNA biogenesis & silencing,1
+peve-mir-novel-2,SRRT,-,ncRNA biogenesis & silencing,1
+peve-mir-novel-3,MCM3AP,+,ncRNA biogenesis & silencing,
+peve-mir-novel-6,RIOX1,-,Histone modification & variants,3
+peve-mir-novel-6,UBR2,-,Ubiquitin signaling,3
+peve-mir-novel-7,INTS4,-,ncRNA biogenesis & silencing,1
+peve-mir-novel-25,PRDM14,-,DNA methylation & reading,
+peve-mir-novel-39,VCPIP1,+,Ubiquitin signaling,
+peve-mir-novel-39,PSMD14,+,Ubiquitin signaling,
+peve-mir-novel-39,KAT6,+,Histone modification & variants,
+peve-mir-novel-40,MAP2K1,-,Chromatin signaling,
+ptuh-mir-novel-3,BAP1,+,Ubiquitin signaling,
+ptuh-mir-novel-4,TNRC6,-,ncRNA biogenesis & silencing,2
+ptuh-mir-novel-5,MTREX,+,ncRNA biogenesis & silencing,
+ptuh-mir-novel-6,HSPBAP1,+,Histone modification & variants,
+ptuh-mir-novel-6,AGO,+,ncRNA biogenesis & silencing,
+ptuh-mir-novel-6,KHSRP,-,ncRNA biogenesis & silencing,
+ptuh-mir-novel-7,USP48,+,Ubiquitin signaling,
+ptuh-mir-novel-7,LIN28A,+,ncRNA biogenesis & silencing,
+ptuh-mir-novel-10,UBR2,-,Ubiquitin signaling,
+ptuh-mir-novel-16,MCM3AP,+,ncRNA biogenesis & silencing,
+ptuh-mir-novel-24,HNRNPA2B1,+,RNA modification,
+ptuh-mir-novel-24,DIS3L,+,ncRNA biogenesis & silencing,
+ptuh-mir-novel-26,KAT2,+,Histone modification & variants,
+ptuh-mir-novel-32,HDAC,-,Histone modification & variants,
+ptuh-mir-novel-33,SIRT7,-,Histone modification & variants,
+ptuh-mir-novel-33,PKN1,-,Histone modification & variants,
