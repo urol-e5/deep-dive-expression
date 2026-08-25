@@ -1,0 +1,640 @@
+---
+title: "22.1-genomic-context-annotations"
+author: "Kathleen Durkin"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
+    number_sections: true
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+Here I've compiled a more complete genome annotation for each species (*A. pulchra*, *P. evermanni*, *P. tuahiniensis*) that brings together every genomic-context feature needed for downstream ncRNA-methylation analyses (miRNA (mature + precursor), lncRNA, 5'/3' UTRs, 
+TEs (split by exonic/intronic/intergenic context), exons, introns, and intergenic regions).
+
+The compiled annotations are also used here to (1) classify each miRNA as **intergenic** or **intragenic** based on whether its precursor overlaps a host gene, and (2) define **promoter regions** for every miRNA and lncRNA. Promoters are defined strand-aware as 1500 bp upstream and 400 bp downstream of the transcription start site (TSS). The TSS is defined as:
+
+- **lncRNA**: the 5' end of the lncRNA transcript itself
+- **Intragenic miRNA**: the 5' end of the host gene it sits inside
+- **Intergenic miRNA**: the 5' end of the miRNA precursor (hairpin)
+
+**Note**: in reality, the TSS for an intergenic miRNA would actually sit at the beginning of the primary miRNA sequence (pri-miRNA). However, these sequences are much longer than mature or precursor miRNA and are not captured in the sRNAseq data, nor are they identifiable using ShortStack. Since we don't have info on the length or start site of pri-miRNAs for our data, I'm going to be using the pre-miRNA start site as a proxy instead.
+
+**Note**: while I'm going to define promoter regions for all of our ncRNA for posterity (given the promoter-based regulatory role of DNA methylation in vertebrate systems), I don't necessarily expect that information to be useful in our analyses. There's no evidence for methylation of gene promoters having relevance for expression or physiology outcomes, and there's no reason to think that will be different for the promoters of ncRNAs.
+
+The context annotation logic mirrors the per-species WGBS Rmds (`D-Apul/code/08-Apul-WGBS.Rmd`, `E-Peve/code/12-Peve-WGBS.Rmd`, `F-Ptuh/code/12-Ptuh-WGBS.Rmd`) so that the region categories and priority scheme stay consistent with the rest of the repo. However, instead of using a heirarchical assignment strategy, I'll be using a proportional assignment strategy. Hierarchical assignment is perfectly sound logic when assigning individual cytosine nucleotides to a given context, but fails when applied to longer loci. Proportional assignment will more accurately reflect each feature's majority context.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(GenomicRanges)
+library(data.table)
+
+# Use same colors as throughout repo
+species_palette <- c("A. pulchra" = "#408EC6",
+                     "P. evermanni" = "#1E2761",
+                     "P. tuahiniensis" = "#7A2048")
+
+# Promoter definition (bp relative to TSS, strand-aware)
+PROM_UPSTREAM   <- 1500   # bp upstream of TSS
+PROM_DOWNSTREAM <- 400    # bp downstream of TSS
+```
+
+# Species metadata
+
+Per-species paths to every input file used below
+```{r species-meta}
+species_meta <- tibble::tribble(
+  ~species, ~display, ~genome_fai, ~gene_gtf, ~utr5_gff, ~utr3_gff, ~rmsk_out, ~mirna_mature_gff3, ~mirna_results_gff3, ~lncrna_gtf,
+  "Apul", "A. pulchra",
+  "../../D-Apul/data/Apulchra-genome.fa.fai",
+  "../../D-Apul/data/Apulchra-genome.gtf",
+  "../../D-Apul/output/15-Apul-annotate-UTRs/Apul.GFFannotation.5UTR_1kb_corrected.gff",
+  "../../D-Apul/output/15-Apul-annotate-UTRs/Apul.GFFannotation.3UTR_1kb_corrected.gff",
+  "../../D-Apul/data/apul.hifiasm.s55_pa.p_ctg.fa.k32.w100.z1000.ntLink.5rounds.fa.out",
+  "../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/Apul_ShortStack_4.1.0_mature.gff3",
+  "../../D-Apul/output/11-Apul-sRNA-ShortStack_4.1.0-pulchra_genome/ShortStack_out/Results.gff3",
+  "../../D-Apul/output/31-Apul-lncRNA/Apul-lncRNA.gtf",
+
+  "Peve", "P. evermanni",
+  "../../E-Peve/data/Porites_evermanni_v1.fa.fai",
+  "../../E-Peve/data/Porites_evermanni_validated.gtf",
+  "../../E-Peve/output/16-Peve-annotate-UTRs/Peve.GFFannotation.5UTR_1kb_corrected.gff",
+  "../../E-Peve/output/16-Peve-annotate-UTRs/Peve.GFFannotation.3UTR_1kb_corrected.gff",
+  "../../E-Peve/data/Porites_evermanni_v1.fa.out",
+  "../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/Peve_ShortStack_4.1.0_mature.gff3",
+  "../../E-Peve/output/05-Peve-sRNA-ShortStack_4.1.0/ShortStack_out/Results.gff3",
+  "../../E-Peve/output/17-Peve-lncRNA/Peve-lncRNA.gtf",
+
+  "Ptuh", "P. tuahiniensis",
+  "../../F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fasta.fai",
+  "../../F-Ptuh/data/Pocillopora_meandrina_HIv1.genes-validated.gtf",
+  "../../F-Ptuh/output/16-Ptuh-annotate-UTRs/Ptuh.GFFannotation.5UTR_1kb_corrected.gff",
+  "../../F-Ptuh/output/16-Ptuh-annotate-UTRs/Ptuh.GFFannotation.3UTR_1kb_corrected.gff",
+  "../../F-Ptuh/data/Pocillopora_meandrina_HIv1.assembly.fasta.out",
+  "../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/Ptuh_ShortStack_4.1.0_mature.gff3",
+  "../../F-Ptuh/output/05-Ptuh-sRNA-ShortStack_4.1.0/ShortStack_out/Results.gff3",
+  "../../F-Ptuh/output/17-Ptuh-lncRNA/Ptuh-lncRNA.gtf"
+)
+
+species_meta
+```
+
+# Helper GTF/GFF reader
+
+`genomation::gffToGRanges` failed on some of the Peve annotation files (the validated GTF has `##gtf-version` header lines and unquoted attributes that this built-in parser can't handle). Instead, I need to use a custom reader based on `read.delim` with `comment.char = "#"` to handle all three species uniformly.
+```{r helper-read-gtf}
+#' Read a GTF or GFF file into a GRanges object, optionally filtering by feature type
+#'
+#' Handles both GTF attributes (key "value"; or key value;) and GFF3 attributes
+#' (key=value;). Skips comment/header lines starting with #.
+#'
+#' @param path path to the GTF/GFF file
+#' @param filter optional character vector of feature types to keep (column 3)
+#' @return GRanges with mcols: type, source, and any parsed attributes
+#'   (gene_id, transcript_id, ID, Parent, etc.)
+read_gtf_granges <- function(path, filter = NULL) {
+  df <- read.delim(path, header = FALSE, sep = "\t", comment.char = "#",
+                   stringsAsFactors = FALSE, quote = "")
+  colnames(df)[1:9] <- c("seqid", "source", "type", "start", "end",
+                         "score", "strand", "phase", "attributes")
+
+  # Filter by feature type if requested
+  if (!is.null(filter)) {
+    df <- df[df$type %in% filter, ]
+  }
+  if (nrow(df) == 0) {
+    return(GRanges())
+  }
+
+  # Parse attributes from column 9
+  # Try GTF format first (key "value"; or key value;), then GFF3 (key=value;)
+  parse_attrs <- function(attr_str) {
+    # Split on semicolons
+    pairs <- strsplit(attr_str, ";")[[1]]
+    pairs <- trimws(pairs)
+    pairs <- pairs[pairs != ""]
+    result <- list()
+    for (p in pairs) {
+      # GFF3 style: key=value
+      if (grepl("=", p)) {
+        kv <- strsplit(p, "=", fixed = TRUE)[[1]]
+        if (length(kv) >= 2) {
+          result[[kv[1]]] <- paste(kv[-1], collapse = "=")
+        }
+      } else {
+        # GTF style: key "value" or key value
+        # Split on first whitespace only
+        sp_pos <- regexpr("\\s", p)
+        if (sp_pos > 0) {
+          kv <- c(substr(p, 1, sp_pos - 1), substr(p, sp_pos + 1, nchar(p)))
+          val <- gsub('^"|"$', "", kv[2])
+          result[[kv[1]]] <- val
+        }
+      }
+    }
+    result
+  }
+
+  parsed <- lapply(df$attributes, parse_attrs)
+  attr_names <- unique(unlist(lapply(parsed, names)))
+
+  # Skip attribute names that conflict with reserved GRanges column names
+  reserved <- c("seqnames", "ranges", "strand", "seqlevels", "seqlengths",
+                "isCircular", "start", "end", "width", "element", "type",
+                "source", "score", "phase")
+  attr_names <- setdiff(attr_names, reserved)
+
+  gr <- GRanges(
+    seqnames = df$seqid,
+    ranges   = IRanges(start = df$start, end = df$end),
+    strand   = df$strand
+  )
+  mcols(gr)$type <- df$type
+  mcols(gr)$source <- df$source
+
+  # Add parsed attributes as mcols
+  for (an in attr_names) {
+    mcols(gr)[[an]] <- sapply(parsed, function(x) {
+      v <- x[[an]]
+      if (is.null(v)) NA_character_ else v
+    })
+  }
+
+  gr
+}
+```
+
+# Helper to build per-species annotation set
+
+Trying to maintain annotation logic used in the original WGBS context annotations (e.g., in D-Apul/code/08...):
+
+- Exons and introns are derived from the gene GTF
+- UTRs are loaded from the corrected GFFs
+- TEs from the RepeatMasker `.out`
+- intergenic is computed as the genome minus all annotated features
+- TEs are further split into `TE_exonic`, `TE_intronic`, and `TE_intergenic` by overlapping with the exon/intron/intergenic partitions
+
+```{r helper-build-annotation}
+build_annotation <- function(sp_row) {
+  sp   <- sp_row$species
+  disp <- sp_row$display
+  message(">>> Building annotation for ", sp, " (", disp, ")")
+
+  # Genome sizes
+  chr_sizes <- read.table(sp_row$genome_fai, header = FALSE, stringsAsFactors = FALSE)[, 1:2]
+  colnames(chr_sizes) <- c("seqnames", "seqlengths")
+  genome_GR <- GRanges(seqnames = chr_sizes$seqnames,
+                       ranges   = IRanges(start = 1, end = chr_sizes$seqlengths))
+
+  # Gene models: exons, transcripts, introns
+  # Use the custom reader (handles Peve GTF header lines that gffToGRanges can't)
+  gtf.file <- sp_row$gene_gtf
+  transcripts <- read_gtf_granges(gtf.file, filter = "transcript")
+  exons       <- read_gtf_granges(gtf.file, filter = "exon")
+  # Introns = transcript span minus exons (per WGBS convention)
+  introns     <- GenomicRanges::setdiff(transcripts, exons)
+
+  # 5' and 3' UTRs
+  gff5UTR <- read_gtf_granges(sp_row$utr5_gff)
+  gff3UTR <- read_gtf_granges(sp_row$utr3_gff)
+
+  # Transposable elements / repeats (RepeatMasker .out)
+  rmsk <- read.table(sp_row$rmsk_out, skip = 3, fill = TRUE,
+                     stringsAsFactors = FALSE, quote = "") %>%
+    tidyr::drop_na()
+  colnames(rmsk)[c(5, 6, 7, 10)] <- c("seqname", "start", "end", "repeat_name")
+  TE <- GRanges(seqnames = rmsk$seqname,
+                ranges   = IRanges(start = as.numeric(rmsk$start),
+                                   end   = as.numeric(rmsk$end)),
+                strand   = "*",
+                repeat_name = rmsk$repeat_name)
+
+  # miRNAs: mature + precursor (hairpin)
+  miRNA_mature <- read_gtf_granges(sp_row$mirna_mature_gff3)
+  # Precursor hairpins come from ShortStack Results.gff3 (feature = MIRNA_hairpin)
+  miRNA_precursor <- read_gtf_granges(sp_row$mirna_results_gff3,
+                                      filter = "MIRNA_hairpin")
+
+  # lncRNAs
+  lncRNAs <- read_gtf_granges(sp_row$lncrna_gtf)
+
+  # Intergenic = genome - all annotated features
+  all_annotated <- suppressWarnings(GenomicRanges::reduce(c(gff5UTR, gff3UTR, exons, introns,
+                                           lncRNAs, miRNA_mature, miRNA_precursor)))
+  intergenic <- suppressWarnings(GenomicRanges::setdiff(genome_GR, all_annotated, ignore.strand = TRUE))
+
+  # TE context split (exonic / intronic / intergenic)
+  TE_exonic     <- IRanges::subsetByOverlaps(TE, exons,       ignore.strand = TRUE)
+  TE_intronic   <- IRanges::subsetByOverlaps(TE, introns,     ignore.strand = TRUE)
+  TE_intergenic <- IRanges::subsetByOverlaps(TE, intergenic,  ignore.strand = TRUE)
+
+  # Bundle into a named list
+  annot <- list(
+    genome         = genome_GR,
+    seqlengths     = setNames(chr_sizes$seqlengths, chr_sizes$seqnames),
+    transcripts    = transcripts,
+    exons          = exons,
+    introns        = introns,
+    `5UTR`         = gff5UTR,
+    `3UTR`         = gff3UTR,
+    TE             = TE,
+    TE_exonic      = TE_exonic,
+    TE_intronic    = TE_intronic,
+    TE_intergenic  = TE_intergenic,
+    miRNA_mature   = miRNA_mature,
+    miRNA_precursor = miRNA_precursor,
+    lncRNA         = lncRNAs,
+    intergenic     = intergenic
+  )
+
+  # Report feature counts
+  counts <- sapply(annot, function(x) length(x))
+  message("  Feature counts:")
+  for (nm in names(counts)) {
+    message("    ", nm, ": ", counts[nm])
+  }
+
+  annot
+}
+```
+
+# Build annotations for all three species
+
+```{r build-all}
+annotations <- list()
+for (i in seq_len(nrow(species_meta))) {
+  sp <- species_meta$species[i]
+  annotations[[sp]] <- build_annotation(species_meta[i, ])
+}
+
+# Summary table of feature counts per species
+count_summary <- do.call(rbind, lapply(names(annotations), function(sp) {
+  counts <- sapply(annotations[[sp]], length)
+  data.frame(species = sp, feature = names(counts), n = as.integer(counts),
+             stringsAsFactors = FALSE)
+}))
+
+count_summary %>%
+  tidyr::pivot_wider(names_from = feature, values_from = n) %>%
+  knitr::kable()
+```
+
+# Save compiled annotations
+
+Save each species' annotation set as an RDS (for direct reuse in downstream Rmds) and write each feature to a BED file (for inspection / bedtools use). (keep in mind, BED uses 0-based start coordinates)
+
+```{r save-annotations}
+gr_to_bed <- function(gr, path) {
+  bed <- data.frame(chr   = as.character(seqnames(gr)),
+                    start = start(gr) - 1,   # GRanges is 1-based; BED is 0-based
+                    end   = end(gr),
+                    name  = if (!is.null(gr$repeat_name)) gr$repeat_name else ".",
+                    score = ".",
+                    strand = as.character(strand(gr)),
+                    stringsAsFactors = FALSE)
+  # Use a stable name column where available
+  if (!is.null(names(gr))) bed$name <- names(gr)
+  data.table::fwrite(bed, path, sep = "\t", col.names = FALSE, quote = FALSE)
+}
+
+for (sp in names(annotations)) {
+  sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+  dir.create(sp_dir, showWarnings = FALSE, recursive = TRUE)
+
+  # RDS of the full annotation list
+  saveRDS(annotations[[sp]], file.path(sp_dir, paste0(sp, "_genome_annotation.rds")))
+
+  # BED per feature
+  bed_features <- c("exons", "introns", "5UTR", "3UTR",
+                    "TE", "TE_exonic", "TE_intronic", "TE_intergenic",
+                    "miRNA_mature", "miRNA_precursor", "lncRNA", "intergenic")
+  for (feat in bed_features) {
+    gr <- annotations[[sp]][[feat]]
+    if (length(gr) > 0) {
+      gr_to_bed(gr, file.path(sp_dir, paste0(sp, "_", feat, ".bed")))
+    }
+  }
+  message("Saved annotation files for ", sp, " to ", sp_dir)
+}
+```
+
+# Classify each miRNA as intergenic or intragenic
+
+A miRNA is **intragenic** if its precursor (hairpin) overlaps any gene transcript body; otherwise it is **intergenic**. We use the precursor coordinates (not the mature ~22 nt) because the precursor is the relevant proxy unit for genomic context, and better reflects where the pri-miRNA lives relative to gene structure.
+
+```{r classify-mirna}
+classify_mirna <- function(sp, annot) {
+  prec <- annot$miRNA_precursor
+  tx   <- annot$transcripts
+
+  if (length(prec) == 0) {
+    return(data.frame(species = sp, miRNA_id = character(0),
+                      chr = character(0), start = integer(0), end = integer(0),
+                      strand = character(0), genomic_class = character(0),
+                      host_gene_id = character(0), stringsAsFactors = FALSE))
+  }
+
+  # miRNA IDs from the gff3 ID attribute (ShortStack stores as "Cluster_XXXX")
+  # gffToGRanges parses GFF3 attributes into mcols columns
+  prec_id <- if ("ID" %in% colnames(mcols(prec))) as.character(prec$ID) else paste0("miRNA_", seq_along(prec))
+
+  # Find overlaps between precursors and transcript bodies
+  ol <- findOverlaps(prec, tx, ignore.strand = TRUE)
+  intragenic_idx <- unique(queryHits(ol))
+
+  # For each intragenic precursor, record the host gene (first hit)
+  # gffToGRanges parses GTF attributes into mcols (gene_id, transcript_id, etc.)
+  tx_gene_id <- if ("gene_id" %in% colnames(mcols(tx))) as.character(tx$gene_id) else as.character(seq_along(tx))
+  host_map <- tibble::tibble(
+    prec_idx   = queryHits(ol),
+    host_gene  = tx_gene_id[subjectHits(ol)]
+  ) %>%
+    dplyr::group_by(prec_idx) %>%
+    dplyr::summarise(host_gene_id = paste(unique(host_gene), collapse = ";"),
+                     .groups = "drop")
+
+  class_df <- data.frame(
+    species     = sp,
+    miRNA_id    = prec_id,
+    chr         = as.character(seqnames(prec)),
+    start       = start(prec),
+    end         = end(prec),
+    strand      = as.character(strand(prec)),
+    stringsAsFactors = FALSE
+  )
+  class_df$genomic_class <- ifelse(seq_len(nrow(class_df)) %in% intragenic_idx,
+                                   "intragenic", "intergenic")
+
+  # Attach host gene IDs for intragenic miRNAs
+  class_df$host_gene_id <- NA_character_
+  if (nrow(host_map) > 0) {
+    class_df$host_gene_id[host_map$prec_idx] <- host_map$host_gene_id
+  }
+
+  class_df
+}
+
+mirna_class <- do.call(rbind, lapply(names(annotations),
+                                     function(sp) classify_mirna(sp, annotations[[sp]])))
+
+fwrite(mirna_class, file.path(../output/22.1-genomic-context-annotations, "miRNA_genomic_class.csv"))
+
+cat("\nmiRNA genomic classification:\n")
+mirna_class %>%
+  group_by(species, genomic_class) %>%
+  summarise(n = n(), .groups = "drop") 
+```
+
+# Define promoter regions
+
+Promoters are defined strand-aware as **1500 bp upstream** and **400 bp downstream** of the TSS. The TSS is the 5' end of the feature:
+
+- `+` strand: TSS = `start`; promoter = `[start - 1500, start + 400]`
+- `-` strand: TSS = `end`;   promoter = `[end - 400, end + 1500]`
+
+All coordinates are clamped to `[1, chromosome_length]` to avoid running off chromosome ends.
+
+## Helper: TSS and promoter from a GRanges
+
+```{r promoter-helper}
+#' Build promoter GRanges from a set of feature coordinates
+#'
+#' @param gr GRanges with strand info (features whose TSS defines the promoter)
+#' @param upstream bp upstream of TSS (on the feature's strand)
+#' @param downstream bp downstream of TSS (on the feature's strand)
+#' @param seqlengths named integer vector of chromosome lengths, for clamping
+make_promoters <- function(gr, upstream = PROM_UPSTREAM, downstream = PROM_DOWNSTREAM,
+                           seqlengths = NULL) {
+  # promoters() from GenomicRanges is strand-aware by default:
+  #   + strand: [start - upstream, start + downstream - 1]
+  #   - strand: [end   - downstream + 1, end + upstream]
+  prom <- promoters(gr, upstream = upstream, downstream = downstream)
+
+  # Clamp to chromosome bounds (start >= 1)
+  start(prom) <- pmax(start(prom), 1L)
+
+  # Clamp end to seqlengths if provided
+  if (!is.null(seqlengths)) {
+    sl <- seqlengths[as.character(seqnames(prom))]
+    end(prom) <- pmin(end(prom), as.integer(sl))
+  }
+  prom
+}
+```
+
+## lncRNA promoters
+
+TSS = 5' end of each lncRNA transcript (from the lncRNA GTF).
+
+```{r lncrna-promoters}
+lncrna_promoters <- list()
+
+for (sp in names(annotations)) {
+  annot <- annotations[[sp]]
+  lnc   <- annot$lncRNA
+  if (length(lnc) == 0) next
+
+  # Use lncRNA gene_id as the name (gffToGRanges parses GTF attributes into mcols)
+  lnc_names <- if ("gene_id" %in% colnames(mcols(lnc))) as.character(lnc$gene_id) else paste0("lncRNA_", seq_along(lnc))
+
+  prom <- make_promoters(lnc,
+                         upstream   = PROM_UPSTREAM,
+                         downstream = PROM_DOWNSTREAM,
+                         seqlengths = annot$seqlengths)
+  # Strip inherited mcols for consistent structure across species
+  mcols(prom) <- NULL
+  names(prom) <- lnc_names
+  prom$feature_id <- lnc_names
+  prom$feature_type <- "lncRNA"
+  prom$species <- sp
+
+  lncrna_promoters[[sp]] <- prom
+
+  sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+  gr_to_bed(prom, file.path(sp_dir, paste0(sp, "_lncRNA_promoters.bed")))
+  message("  ", sp, ": ", length(prom), " lncRNA promoters defined")
+}
+
+lncrna_promoters_all <- do.call(c, unname(lncrna_promoters))
+```
+
+## miRNA promoters
+
+TSS depends on genomic class:
+
+- **Intergenic miRNA**: TSS = 5' end of the precursor (hairpin) itself — the precursor is the transcribed unit.
+- **Intragenic miRNA**: TSS = 5' end of the host gene it sits inside — the miRNA is processed from an intron (or exon) of the host transcript, so the host's TSS is the relevant regulatory point.
+
+```{r mirna-promoters}
+mirna_promoters <- list()
+
+for (sp in names(annotations)) {
+  annot   <- annotations[[sp]]
+  prec    <- annot$miRNA_precursor
+  tx      <- annot$transcripts
+  class_df <- mirna_class %>% dplyr::filter(species == sp)
+
+  if (length(prec) == 0) next
+
+  prec_id <- if ("ID" %in% colnames(mcols(prec))) as.character(prec$ID) else paste0("miRNA_", seq_along(prec))
+
+  # For each precursor, decide which TSS to use based on genomic class
+  prom_list <- list()
+  for (i in seq_along(prec)) {
+    pid   <- prec_id[i]
+    p_gr  <- prec[i]
+    row   <- class_df %>% dplyr::filter(miRNA_id == pid)
+
+    if (nrow(row) == 0) next
+    gclass <- row$genomic_class[1]
+
+    if (gclass == "intragenic") {
+      # Use the host gene's TSS. Find the overlapping transcript.
+      ol <- findOverlaps(p_gr, tx, ignore.strand = TRUE)
+      if (length(ol) == 0) next
+      host_idx <- subjectHits(ol)[1]
+      host_tx  <- tx[host_idx]
+      tss_gr   <- host_tx
+      # Use gene_id from mcols (gffToGRanges parses GTF attributes)
+      host_id  <- if ("gene_id" %in% colnames(mcols(tx))) as.character(tx$gene_id[host_idx]) else as.character(host_idx)
+    } else {
+      # Intergenic: use the precursor's own 5' end
+      tss_gr  <- p_gr
+      host_id <- NA_character_
+    }
+
+    prom <- make_promoters(tss_gr,
+                           upstream   = PROM_UPSTREAM,
+                           downstream = PROM_DOWNSTREAM,
+                           seqlengths = annot$seqlengths)
+    # Strip inherited mcols so all promoters have a consistent structure
+    # (intragenic promoters come from transcripts, intergenic from precursors —
+    # they carry different attribute columns that would break c())
+    mcols(prom) <- NULL
+    prom$feature_id   <- pid
+    prom$feature_type <- "miRNA"
+    prom$genomic_class <- gclass
+    prom$host_gene_id  <- host_id
+    prom$species       <- sp
+    prom_list[[pid]] <- prom
+  }
+
+  if (length(prom_list) > 0) {
+    sp_prom <- do.call(c, unname(prom_list))
+    mirna_promoters[[sp]] <- sp_prom
+
+    sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+    gr_to_bed(sp_prom, file.path(sp_dir, paste0(sp, "_miRNA_promoters.bed")))
+    message("  ", sp, ": ", length(sp_prom), " miRNA promoters defined")
+  }
+}
+
+mirna_promoters_all <- do.call(c, unname(mirna_promoters))
+```
+
+# Compiled promoter table
+
+A tidy table of every promoter defined above, with the source feature, genomic class, host gene (for intragenic miRNAs), and promoter coordinates.
+
+```{r promoter-table}
+promoter_table <- do.call(rbind, lapply(names(annotations), function(sp) {
+  rows <- list()
+  if (sp %in% names(lncrna_promoters)) {
+    p <- lncrna_promoters[[sp]]
+    rows[[length(rows) + 1]] <- data.frame(
+      species       = sp,
+      feature_type  = "lncRNA",
+      feature_id    = p$feature_id,
+      genomic_class = "lncRNA",
+      host_gene_id  = NA_character_,
+      chr           = as.character(seqnames(p)),
+      promoter_start = start(p),
+      promoter_end   = end(p),
+      strand         = as.character(strand(p)),
+      stringsAsFactors = FALSE
+    )
+  }
+  if (sp %in% names(mirna_promoters)) {
+    p <- mirna_promoters[[sp]]
+    rows[[length(rows) + 1]] <- data.frame(
+      species       = sp,
+      feature_type  = "miRNA",
+      feature_id    = p$feature_id,
+      genomic_class = p$genomic_class,
+      host_gene_id  = p$host_gene_id,
+      chr           = as.character(seqnames(p)),
+      promoter_start = start(p),
+      promoter_end   = end(p),
+      strand         = as.character(strand(p)),
+      stringsAsFactors = FALSE
+    )
+  }
+  do.call(rbind, rows)
+}))
+
+fwrite(promoter_table, file.path(../output/22.1-genomic-context-annotations, "promoter_regions.csv"))
+
+cat("\nPromoter counts by species and feature type:\n")
+promoter_table %>%
+  group_by(species, feature_type, genomic_class) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  knitr::kable()
+```
+
+# Summary
+
+```{r summary}
+cat("Genomic context annotation files written to:\n  ", normalizePath(../output/22.1-genomic-context-annotations), "\n\n")
+
+cat("Per-species feature counts:\n")
+count_summary %>%
+  filter(!feature %in% c("genome")) %>%
+  pivot_wider(names_from = feature, values_from = n) %>%
+  knitr::kable()
+
+cat("\nmiRNA genomic classification:\n")
+mirna_class %>%
+  count(species, genomic_class, name = "n_miRNAs") %>%
+  knitr::kable()
+
+cat("\nPromoter regions defined:\n")
+promoter_table %>%
+  count(species, feature_type, name = "n_promoters") %>%
+  knitr::kable()
+```
+
+## Output files
+
+For each species (`Apul`, `Peve`, `Ptuh`), the following are written to `M-multi-species/output/22.1-genomic-context-annotations/<species>/`:
+
+- `<species>_genome_annotation.rds` — RDS of the full `GRanges` annotation list (for direct loading in downstream Rmds)
+- `<species>_exons.bed`, `<species>_introns.bed` — gene-model partitions
+- `<species>_5UTR.bed`, `<species>_3UTR.bed` — UTR coordinates
+- `<species>_TE.bed` — all RepeatMasker intervals
+- `<species>_TE_exonic.bed`, `<species>_TE_intronic.bed`, `<species>_TE_intergenic.bed` — TE by gene-context
+- `<species>_miRNA_mature.bed`, `<species>_miRNA_precursor.bed` — ShortStack miRNA coordinates
+- `<species>_lncRNA.bed` — lncRNA transcript coordinates
+- `<species>_intergenic.bed` — genome minus all annotated features
+- `<species>_lncRNA_promoters.bed` — lncRNA promoter regions (TSS −1500 / +400)
+- `<species>_miRNA_promoters.bed` — miRNA promoter regions (TSS −1500 / +400)
+
+And at the top level of `M-multi-species/output/22.1-genomic-context-annotations/`:
+
+- `miRNA_genomic_class.csv` — intergenic vs intragenic classification per miRNA, with host gene IDs
+- `promoter_regions.csv` — tidy table of all promoter coordinates
+
+# Session info
+
+```{r}
+sessionInfo()
+```
