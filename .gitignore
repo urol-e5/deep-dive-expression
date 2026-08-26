@@ -132,6 +132,7 @@ F-Ptuh/output/15-Ptuh-miRNA-lncRNA-PCC/PCC_miRNA_lncRNA.csv
 F-Ptuh/data/17-Ptuh-*
 
 M-multi-species/output/01.63-lncRNA-pipeline-getFastas/*.fasta
+M-multi-species/output/22.2-ncRNA-methylation-genomic-context/cov_cache/*.gz
 
 .DS_Store
 **/.DS_Store

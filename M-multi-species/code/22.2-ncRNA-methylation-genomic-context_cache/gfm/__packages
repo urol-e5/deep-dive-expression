@@ -1,0 +1,12 @@
+dplyr
+tidyr
+ggplot2
+patchwork
+data.table
+generics
+BiocGenerics
+S4Vectors
+IRanges
+Seqinfo
+GenomicRanges
+methylKit

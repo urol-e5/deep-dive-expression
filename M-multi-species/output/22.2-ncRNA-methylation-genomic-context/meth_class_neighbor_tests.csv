@@ -1,0 +1,7 @@
+species,comparison,n_low,n_high,W,p,q,sig_fdr
+Apul,nearest_gene_meth,15316,1299,3695177.5,1.1199119292536e-308,1.1567869292536e-308,*
+Apul,nearest_gene_expr,17672,1443,13517059.5,0.0001375,0.000165,*
+Peve,nearest_gene_meth,4304,549,686487,1.09e-57,3.27e-57,*
+Peve,nearest_gene_expr,4827,605,1374352,0.01812,0.01812,*
+Ptuh,nearest_gene_meth,9950,223,655338,1.195e-25,2.39e-25,*
+Ptuh,nearest_gene_expr,10998,262,1222200.5,2.582e-05,3.873e-05,*

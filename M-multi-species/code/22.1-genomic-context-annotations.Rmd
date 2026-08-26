@@ -18,15 +18,15 @@ output:
 Here I've compiled a more complete genome annotation for each species (*A. pulchra*, *P. evermanni*, *P. tuahiniensis*) that brings together every genomic-context feature needed for downstream ncRNA-methylation analyses (miRNA (mature + precursor), lncRNA, 5'/3' UTRs, 
 TEs (split by exonic/intronic/intergenic context), exons, introns, and intergenic regions).
 
-The compiled annotations are also used here to (1) classify each miRNA as **intergenic** or **intragenic** based on whether its precursor overlaps a host gene, and (2) define **promoter regions** for every miRNA and lncRNA. Promoters are defined strand-aware as 1500 bp upstream and 400 bp downstream of the transcription start site (TSS). The TSS is defined as:
+The compiled annotations are also used here to (1) classify each miRNA as intergenic or intragenic based on whether its precursor overlaps a host gene, and (2) define promoter regions for every miRNA and lncRNA. Promoters are defined strand-aware as 1500 bp upstream and 400 bp downstream of the transcription start site (TSS). The TSS is defined as:
 
-- **lncRNA**: the 5' end of the lncRNA transcript itself
-- **Intragenic miRNA**: the 5' end of the host gene it sits inside
-- **Intergenic miRNA**: the 5' end of the miRNA precursor (hairpin)
+- lncRNA: the 5' end of the lncRNA transcript itself
+- Intragenic miRNA: the 5' end of the host gene it sits inside
+- Intergenic miRNA: the 5' end of the miRNA precursor (hairpin)
 
-**Note**: in reality, the TSS for an intergenic miRNA would actually sit at the beginning of the primary miRNA sequence (pri-miRNA). However, these sequences are much longer than mature or precursor miRNA and are not captured in the sRNAseq data, nor are they identifiable using ShortStack. Since we don't have info on the length or start site of pri-miRNAs for our data, I'm going to be using the pre-miRNA start site as a proxy instead.
+Note: in reality, the TSS for an intergenic miRNA would actually sit at the beginning of the primary miRNA sequence (pri-miRNA). However, these sequences are much longer than mature or precursor miRNA and are not captured in the sRNAseq data, nor are they identifiable using ShortStack. Since we don't have info on the length or start site of pri-miRNAs for our data, I'm going to be using the pre-miRNA start site as a proxy instead.
 
-**Note**: while I'm going to define promoter regions for all of our ncRNA for posterity (given the promoter-based regulatory role of DNA methylation in vertebrate systems), I don't necessarily expect that information to be useful in our analyses. There's no evidence for methylation of gene promoters having relevance for expression or physiology outcomes, and there's no reason to think that will be different for the promoters of ncRNAs.
+Note: while I'm going to define promoter regions for all of our ncRNA for posterity (given the promoter-based regulatory role of DNA methylation in vertebrate systems), I don't necessarily expect that information to be useful in our analyses. There's no evidence for methylation of gene promoters having relevance for expression or physiology outcomes, and there's no reason to think that will be different for the promoters of ncRNAs.
 
 The context annotation logic mirrors the per-species WGBS Rmds (`D-Apul/code/08-Apul-WGBS.Rmd`, `E-Peve/code/12-Peve-WGBS.Rmd`, `F-Ptuh/code/12-Ptuh-WGBS.Rmd`) so that the region categories and priority scheme stay consistent with the rest of the repo. However, instead of using a heirarchical assignment strategy, I'll be using a proportional assignment strategy. Hierarchical assignment is perfectly sound logic when assigning individual cytosine nucleotides to a given context, but fails when applied to longer loci. Proportional assignment will more accurately reflect each feature's majority context.
 
@@ -308,7 +308,7 @@ gr_to_bed <- function(gr, path) {
 }
 
 for (sp in names(annotations)) {
-  sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+  sp_dir <- file.path("../output/22.1-genomic-context-annotations", sp)
   dir.create(sp_dir, showWarnings = FALSE, recursive = TRUE)
 
   # RDS of the full annotation list
@@ -330,7 +330,7 @@ for (sp in names(annotations)) {
 
 # Classify each miRNA as intergenic or intragenic
 
-A miRNA is **intragenic** if its precursor (hairpin) overlaps any gene transcript body; otherwise it is **intergenic**. We use the precursor coordinates (not the mature ~22 nt) because the precursor is the relevant proxy unit for genomic context, and better reflects where the pri-miRNA lives relative to gene structure.
+A miRNA is intragenic if its precursor (hairpin) overlaps any gene transcript body; otherwise it is intergenic. We use the precursor coordinates (not the mature ~22 nt) because the precursor is the relevant proxy unit for genomic context, and better reflects where the pri-miRNA lives relative to gene structure.
 
 ```{r classify-mirna}
 classify_mirna <- function(sp, annot) {
@@ -387,7 +387,7 @@ classify_mirna <- function(sp, annot) {
 mirna_class <- do.call(rbind, lapply(names(annotations),
                                      function(sp) classify_mirna(sp, annotations[[sp]])))
 
-fwrite(mirna_class, file.path(../output/22.1-genomic-context-annotations, "miRNA_genomic_class.csv"))
+fwrite(mirna_class, file.path("../output/22.1-genomic-context-annotations", "miRNA_genomic_class.csv"))
 
 cat("\nmiRNA genomic classification:\n")
 mirna_class %>%
@@ -397,7 +397,7 @@ mirna_class %>%
 
 # Define promoter regions
 
-Promoters are defined strand-aware as **1500 bp upstream** and **400 bp downstream** of the TSS. The TSS is the 5' end of the feature:
+Promoters are defined strand-aware as 1500 bp upstream and 400 bp downstream of the TSS. The TSS is the 5' end of the feature:
 
 - `+` strand: TSS = `start`; promoter = `[start - 1500, start + 400]`
 - `-` strand: TSS = `end`;   promoter = `[end - 400, end + 1500]`
@@ -460,7 +460,7 @@ for (sp in names(annotations)) {
 
   lncrna_promoters[[sp]] <- prom
 
-  sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+  sp_dir <- file.path("../output/22.1-genomic-context-annotations", sp)
   gr_to_bed(prom, file.path(sp_dir, paste0(sp, "_lncRNA_promoters.bed")))
   message("  ", sp, ": ", length(prom), " lncRNA promoters defined")
 }
@@ -472,8 +472,8 @@ lncrna_promoters_all <- do.call(c, unname(lncrna_promoters))
 
 TSS depends on genomic class:
 
-- **Intergenic miRNA**: TSS = 5' end of the precursor (hairpin) itself — the precursor is the transcribed unit.
-- **Intragenic miRNA**: TSS = 5' end of the host gene it sits inside — the miRNA is processed from an intron (or exon) of the host transcript, so the host's TSS is the relevant regulatory point.
+- Intergenic miRNA: TSS = 5' end of the precursor (hairpin) itself - the precursor is the transcribed unit.
+- Intragenic miRNA: TSS = 5' end of the host gene it sits inside - the miRNA is processed from an intron (or exon) of the host transcript, so the host's TSS is the relevant regulatory point.
 
 ```{r mirna-promoters}
 mirna_promoters <- list()
@@ -518,7 +518,7 @@ for (sp in names(annotations)) {
                            downstream = PROM_DOWNSTREAM,
                            seqlengths = annot$seqlengths)
     # Strip inherited mcols so all promoters have a consistent structure
-    # (intragenic promoters come from transcripts, intergenic from precursors —
+    # (intragenic promoters come from transcripts, intergenic from precursors -
     # they carry different attribute columns that would break c())
     mcols(prom) <- NULL
     prom$feature_id   <- pid
@@ -533,7 +533,7 @@ for (sp in names(annotations)) {
     sp_prom <- do.call(c, unname(prom_list))
     mirna_promoters[[sp]] <- sp_prom
 
-    sp_dir <- file.path(../output/22.1-genomic-context-annotations, sp)
+    sp_dir <- file.path("../output/22.1-genomic-context-annotations", sp)
     gr_to_bed(sp_prom, file.path(sp_dir, paste0(sp, "_miRNA_promoters.bed")))
     message("  ", sp, ": ", length(sp_prom), " miRNA promoters defined")
   }
@@ -582,7 +582,7 @@ promoter_table <- do.call(rbind, lapply(names(annotations), function(sp) {
   do.call(rbind, rows)
 }))
 
-fwrite(promoter_table, file.path(../output/22.1-genomic-context-annotations, "promoter_regions.csv"))
+fwrite(promoter_table, file.path("../output/22.1-genomic-context-annotations", "promoter_regions.csv"))
 
 cat("\nPromoter counts by species and feature type:\n")
 promoter_table %>%
@@ -594,7 +594,7 @@ promoter_table %>%
 # Summary
 
 ```{r summary}
-cat("Genomic context annotation files written to:\n  ", normalizePath(../output/22.1-genomic-context-annotations), "\n\n")
+cat("Genomic context annotation files written to:\n  ", normalizePath("../output/22.1-genomic-context-annotations"), "\n\n")
 
 cat("Per-species feature counts:\n")
 count_summary %>%
@@ -617,21 +617,21 @@ promoter_table %>%
 
 For each species (`Apul`, `Peve`, `Ptuh`), the following are written to `M-multi-species/output/22.1-genomic-context-annotations/<species>/`:
 
-- `<species>_genome_annotation.rds` — RDS of the full `GRanges` annotation list (for direct loading in downstream Rmds)
-- `<species>_exons.bed`, `<species>_introns.bed` — gene-model partitions
-- `<species>_5UTR.bed`, `<species>_3UTR.bed` — UTR coordinates
-- `<species>_TE.bed` — all RepeatMasker intervals
-- `<species>_TE_exonic.bed`, `<species>_TE_intronic.bed`, `<species>_TE_intergenic.bed` — TE by gene-context
-- `<species>_miRNA_mature.bed`, `<species>_miRNA_precursor.bed` — ShortStack miRNA coordinates
-- `<species>_lncRNA.bed` — lncRNA transcript coordinates
-- `<species>_intergenic.bed` — genome minus all annotated features
-- `<species>_lncRNA_promoters.bed` — lncRNA promoter regions (TSS −1500 / +400)
-- `<species>_miRNA_promoters.bed` — miRNA promoter regions (TSS −1500 / +400)
+- `<species>_genome_annotation.rds` - RDS of the full `GRanges` annotation list (for direct loading in downstream Rmds)
+- `<species>_exons.bed`, `<species>_introns.bed` - gene-model partitions
+- `<species>_5UTR.bed`, `<species>_3UTR.bed` - UTR coordinates
+- `<species>_TE.bed` - all RepeatMasker intervals
+- `<species>_TE_exonic.bed`, `<species>_TE_intronic.bed`, `<species>_TE_intergenic.bed` - TE by gene-context
+- `<species>_miRNA_mature.bed`, `<species>_miRNA_precursor.bed` - ShortStack miRNA coordinates
+- `<species>_lncRNA.bed` - lncRNA transcript coordinates
+- `<species>_intergenic.bed` - genome minus all annotated features
+- `<species>_lncRNA_promoters.bed` - lncRNA promoter regions (TSS -1500 / +400)
+- `<species>_miRNA_promoters.bed` - miRNA promoter regions (TSS -1500 / +400)
 
 And at the top level of `M-multi-species/output/22.1-genomic-context-annotations/`:
 
-- `miRNA_genomic_class.csv` — intergenic vs intragenic classification per miRNA, with host gene IDs
-- `promoter_regions.csv` — tidy table of all promoter coordinates
+- `miRNA_genomic_class.csv` - intergenic vs intragenic classification per miRNA, with host gene IDs
+- `promoter_regions.csv` - tidy table of all promoter coordinates
 
 # Session info
 

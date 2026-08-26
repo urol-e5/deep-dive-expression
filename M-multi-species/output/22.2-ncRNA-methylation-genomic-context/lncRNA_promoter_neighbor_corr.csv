@@ -1,0 +1,7 @@
+species,comparison,r,p,n
+Apul,lncRNA_prom_meth vs gene_meth,0.476832703277751,0,22664
+Peve,lncRNA_prom_meth vs gene_meth,0.294504729206545,3.68590567903543e-124,6193
+Ptuh,lncRNA_prom_meth vs gene_meth,0.251111397288579,8.50470229198623e-179,12483
+Apul,lncRNA_prom_meth vs gene_expr,-0.0200299356103759,0.00111142453103779,26498
+Peve,lncRNA_prom_meth vs gene_expr,0.0199477628331896,0.0961281419478921,6959
+Ptuh,lncRNA_prom_meth vs gene_expr,0.0654252187995277,1.3058886956709e-14,13843

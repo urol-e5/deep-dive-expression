@@ -1,0 +1,6 @@
+Apul,Peve,Ptuh
+Apul|Apul|Apul,Peve|Peve|Peve,Ptuh|Ptuh|Ptuh
+lncRNA_body_meth vs gene_meth|lncRNA_body_meth vs gene_expr_magnitude|lncRNA_body_meth vs gene_expr_variability,lncRNA_body_meth vs gene_meth|lncRNA_body_meth vs gene_expr_magnitude|lncRNA_body_meth vs gene_expr_variability,lncRNA_body_meth vs gene_meth|lncRNA_body_meth vs gene_expr_magnitude|lncRNA_body_meth vs gene_expr_variability
+0.433043172681511|-0.0281858024763092|0.0449580087669677,0.291325369916161|0.0163189060925889|-0.0416841268932567,0.180164808483331|0.0133902641665084|-0.00702091855431033
+0|1.5921234791589e-05|4.05857679103327e-10,2.32519269570028e-110|0.194330093969919|0.00220442741327222,2.56988288943523e-81|0.13766437350051|0.468732713310341
+20261|23436|19320,5620|6327|5391,11057|12293|10652
