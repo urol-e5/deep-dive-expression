@@ -1,6 +1,6 @@
 # deep-dive-expression
 
-[![DOI](https://img.shields.io/badge/DOI-pending-blue)]()
+[![DOI](https://zenodo.org/badge/843573185.svg)](https://doi.org/10.5281/zenodo.21983407)
 
 A comprehensive multi-omics bioinformatics pipeline for analyzing gene expression, ncRNA co-expression, and DNA methylation interactions in three species of stony corals. This work builds on the ncRNA landscape analysis from the [deep-dive](https://github.com/urol-e5/deep-dive) project, and is currently available as a preprint on bioRxiv: 
 
